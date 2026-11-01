@@ -1,6 +1,6 @@
 # Images
 
-Still to add: your photo.
+Still to add: your photo (a `RHYS TO SUPPLY` comment sits next to each photo slot).
 
 | Save as | Size (w x h) | Shape | Where it shows |
 |---|---|---|---|

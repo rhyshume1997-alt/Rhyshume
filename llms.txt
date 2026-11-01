@@ -1,0 +1,18 @@
+# Rhys Hume
+
+> Rhys Hume is based in Glasgow and builds websites and simple admin automation for engineering firms (fabrication, machining and manufacturing businesses). His background is in computer system validation engineering at Terumo Aortic, and he also offers computer system validation consulting to regulated manufacturers in Scotland.
+
+## Services
+
+- [Websites](https://www.rhyshume.co.uk/websites): mobile-friendly websites with quote request forms and local search visibility for engineering and manufacturing firms
+- [Automation](https://www.rhyshume.co.uk/automation): admin automation around the tools a firm already uses, delivered as a pilot of 2 to 4 weeks on one process, with optional monthly care afterwards
+- [Tolra](https://www.rhyshume.co.uk/tolra): job management for small CNC and fabrication shops, currently in pilot with local shops
+- [Computer system validation](https://www.rhyshume.co.uk/csv): validation planning, risk assessment, IQ/OQ/PQ protocols, traceability and validation reports for regulated manufacturers
+
+## Work and more
+
+- [JNR Engineering case study](https://www.rhyshume.co.uk/work/jnr-engineering): website and backend systems for a machining and fabrication firm in Hamilton
+- [Council digital grants](https://www.rhyshume.co.uk/council-digital-grants): a detailed project quote to support a council digital grant application in East Dunbartonshire or North Lanarkshire
+- [About](https://www.rhyshume.co.uk/about)
+- [Contact](https://www.rhyshume.co.uk/contact): phone 07908 041480, email rhys@rhyshume.co.uk, or book a free 20-minute chat
+- [Privacy](https://www.rhyshume.co.uk/privacy)
