@@ -10,3 +10,4 @@ Pages: `index.html`, `websites.html`, `automation.html`, `tolra.html`, `csv.html
 - `[BOOKING LINK]` in `contact.html`
 - Swap the placeholder images, see `images/README.md`
 - Read through `csv.html`, the wording is a first draft
+- Open Graph image: add `og:image` (full URL) once the domain is live

@@ -3,30 +3,42 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Automation | Rhys Hume</title>
+<title>Admin automation for engineering firms | Rhys Hume</title>
 <meta name="description" content="Simple admin automation for engineering and trade firms, set up around the tools you already use.">
 <meta name="theme-color" content="#0b2a5b">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Rhys Hume">
+<meta property="og:locale" content="en_GB">
+<meta property="og:title" content="Admin automation for engineering firms | Rhys Hume">
+<meta property="og:description" content="Simple admin automation for engineering and trade firms, set up around the tools you already use.">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
 <header class="site-header">
   <div class="wrap">
-    <a class="brand" href="index.html">Rhys Hume</a>
+    <a class="brand" href="index.html"><svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="#0b2a5b"/><text x="32" y="43" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="30" font-weight="700" fill="#fff">RH</text></svg><span>Rhys Hume</span></a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Open the menu">
+    <label for="nav-toggle" class="burger" aria-hidden="true"><span></span><span></span><span></span></label>
     <nav class="nav" aria-label="Main">
-      <a href="index.html">Home</a>
-      <a href="websites.html">Websites</a>
-      <a href="automation.html" aria-current="page">Automation</a>
-      <a href="tolra.html">Tolra</a>
-      <a href="csv.html">CSV</a>
-      <a href="about.html">About</a>
-      <a href="contact.html">Contact</a>
+        <a href="index.html">Home</a>
+        <a href="websites.html">Websites</a>
+        <a href="automation.html" aria-current="page">Automation</a>
+        <a href="tolra.html">Tolra</a>
+        <a href="csv.html">CSV</a>
+        <a href="about.html">About</a>
+        <a class="nav-cta" href="contact.html">Book a chat</a>
     </nav>
   </div>
 </header>
 
 <main>
-  <section class="hero">
+  <section class="page-hero">
     <div class="wrap">
       <span class="eyebrow">Automation</span>
       <h1>Admin automation for engineering and trade firms</h1>
@@ -36,8 +48,10 @@
 
   <section>
     <div class="wrap">
-      <span class="eyebrow">What it covers</span>
-      <h2>The jobs that eat your admin time</h2>
+      <div class="section-head">
+        <span class="eyebrow">What it covers</span>
+        <h2>The jobs that eat your admin time</h2>
+      </div>
       <ul class="ticks">
         <li>Enquiry and quote intake</li>
         <li>Quote, certificate and job documents from templates</li>
@@ -48,29 +62,41 @@
     </div>
   </section>
 
-  <section class="alt">
+  <section class="grey">
     <div class="wrap">
-      <span class="eyebrow">How it works</span>
-      <h2>Start small, on one process</h2>
+      <div class="section-head">
+        <span class="eyebrow">How it works</span>
+        <h2>Start small, on one process</h2>
+      </div>
       <div class="note">
         <p>A pilot of 2 to 4 weeks on one process. Optional monthly care afterwards.</p>
       </div>
     </div>
   </section>
 
-  <section class="cta-band">
+  <section class="cta-band on-navy">
     <div class="wrap">
       <h2>Want to talk it through?</h2>
       <p>Twenty minutes, no pressure.</p>
-      <a class="btn" href="contact.html">Book a 20-minute chat</a>
+      <div class="btn-row"><a class="btn" href="contact.html">Book a 20-minute chat</a></div>
     </div>
   </section>
 </main>
 
 <footer class="site-footer">
   <div class="wrap">
-    <p>&copy; 2026 Rhys Hume. Glasgow.</p>
-    <p><a href="tel:+447908041480">07908 041480</a></p>
+    <div>
+      <p>&copy; 2026 Rhys Hume. Glasgow.</p>
+      <p><a href="tel:+447908041480">07908 041480</a></p>
+    </div>
+    <nav class="footer-links" aria-label="Footer">
+      <a href="websites.html">Websites</a>
+      <a href="automation.html">Automation</a>
+      <a href="tolra.html">Tolra</a>
+      <a href="csv.html">CSV</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
   </div>
 </footer>
 
