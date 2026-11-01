@@ -6,8 +6,6 @@ Pages: `council-digital-grants/index.html`, `index.html`, `websites.html`, `auto
 
 ## To fill in before going live
 
-- `[BOOKING LINK]` in `contact.html`
 - `YOUR_FORM_ID` in the form action in `council-digital-grants/index.html` (Formspree form ID)
 - Swap the placeholder images, see `images/README.md`
 - Read through `csv.html`, the wording is a first draft
-- `[YOUR DOMAIN]` in the `og:image` and `twitter:image` tags on every page (full URL to `images/og-image.png`)
