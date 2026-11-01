@@ -206,6 +206,39 @@ a.card:hover { transform: translateY(-6px); box-shadow: var(--shadow-up); border
   .strip { grid-template-columns: 1fr auto; padding: var(--s4) var(--s5); }
 }
 
+/* Council grants page */
+.grants { display: grid; gap: var(--s3); }
+.grants .card h3 a { color: var(--navy); text-decoration-thickness: 2px; }
+.grants .card h3 a:hover { color: var(--blue); }
+.facts { list-style: none; margin: var(--s2) 0 0; padding: 0; }
+.facts li { padding: var(--s2) 0; border-top: 1px solid var(--grey-line); color: var(--ink); }
+.facts strong { display: block; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue); }
+.grants .card p { margin: var(--s2) 0 0; }
+.grants + .note { margin-top: var(--s4); margin-bottom: 0; }
+.smallprint { background: var(--white); border: 1px solid var(--navy); border-left-width: 6px; border-radius: var(--radius); padding: var(--s3); max-width: 42rem; }
+.smallprint p { margin: 0 0 var(--s2); }
+.smallprint p:last-child { margin-bottom: 0; }
+.grant-form { max-width: 36rem; }
+.grant-form label { display: block; font-weight: 700; margin-bottom: var(--s1); color: var(--navy); }
+.grant-form .field { margin-bottom: var(--s3); }
+.grant-form input, .grant-form select, .grant-form textarea {
+  width: 100%;
+  font: inherit;
+  color: var(--ink);
+  background: var(--white);
+  border: 2px solid var(--grey-line);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 0.9rem;
+  min-height: 3rem;
+}
+.grant-form input:focus, .grant-form select:focus, .grant-form textarea:focus { border-color: var(--blue); outline: none; box-shadow: 0 0 0 4px var(--blue-soft); }
+.grant-form textarea { min-height: 8rem; resize: vertical; }
+.hp { position: absolute; left: -9999px; }
+.fine { color: var(--ink-soft); font-size: 0.95rem; margin: var(--s3) 0 0; }
+@media (min-width: 48rem) {
+  .grants { grid-template-columns: repeat(2, 1fr); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; }
   a.card:hover, .btn:hover { transform: none; }
