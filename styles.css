@@ -190,6 +190,22 @@ a.card:hover { transform: translateY(-6px); box-shadow: var(--shadow-up); border
   .nav a { border: 0; padding: 0.4rem 0; font-size: 0.97rem; }
   .nav a.nav-cta { margin: 0 0 0 var(--s1); padding: 0.6rem 1.3rem; }
 }
+.strip {
+  display: grid;
+  gap: var(--s3);
+  align-items: center;
+  background: var(--white);
+  border: 1px solid var(--blue-line);
+  border-radius: var(--radius);
+  padding: var(--s4);
+  box-shadow: var(--shadow);
+}
+.strip h2 { font-size: 1.4rem; margin-bottom: var(--s2); }
+.strip p { margin: 0; color: var(--ink-soft); }
+@media (min-width: 48rem) {
+  .strip { grid-template-columns: 1fr auto; padding: var(--s4) var(--s5); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; }
   a.card:hover, .btn:hover { transform: none; }
