@@ -6,6 +6,6 @@ Pages: `index.html`, `websites.html`, `automation.html`, `tolra.html`, `csv.html
 
 SEO files: `sitemap.xml`, `robots.txt`, `llms.txt`.
 
-## To fill in
+## Notes
 
-Search the repo for `RHYS TO SUPPLY` (HTML comments). Images are listed in `images/README.md`.
+Images are listed in `images/README.md`.
