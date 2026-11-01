@@ -6,7 +6,7 @@
 
 - [Websites](https://www.rhyshume.co.uk/websites): mobile-friendly websites with quote request forms and local search visibility for engineering and manufacturing firms
 - [Automation](https://www.rhyshume.co.uk/automation): admin automation around the tools a firm already uses, delivered as a pilot of 2 to 4 weeks on one process, with optional monthly care afterwards
-- [Tolra](https://www.rhyshume.co.uk/tolra): job management for small CNC and fabrication shops, currently in pilot with local shops
+- [Tolra](https://www.rhyshume.co.uk/tolra): job management for small CNC and fabrication shops, in pilot in two working shops, JNR Engineering and Marpet Fabrications
 - [Computer system validation](https://www.rhyshume.co.uk/csv): validation planning, risk assessment, IQ/OQ/PQ protocols, traceability and validation reports for regulated manufacturers
 
 ## Work and more
