@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rhys Hume | Websites and automation for engineering firms in Glasgow</title>
 <meta name="description" content="Clear, mobile-friendly websites and simple admin automation for fabrication, machining and manufacturing businesses in Glasgow.">
-<meta name="theme-color" content="#0f1f33">
-
+<meta name="theme-color" content="#0b2a5b">
+<link rel="stylesheet" href="styles.css">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -14,353 +14,90 @@
   "name": "Rhys Hume",
   "description": "Websites and admin automation for fabrication, machining and manufacturing businesses, plus computer system validation services.",
   "telephone": "+447908041480",
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "Glasgow",
-    "addressCountry": "GB"
-  },
-  "areaServed": {
-    "@type": "City",
-    "name": "Glasgow"
-  }
+  "address": {"@type": "PostalAddress", "addressLocality": "Glasgow", "addressCountry": "GB"},
+  "areaServed": {"@type": "City", "name": "Glasgow"}
 }
 </script>
-
-<style>
-:root {
-  --navy: #0f1f33;
-  --navy-2: #172c47;
-  --steel: #5b6b7c;
-  --steel-light: #c9d1d9;
-  --mist: #eef1f4;
-  --white: #ffffff;
-  --amber: #f5a623;
-  --amber-dark: #c77f00;
-}
-
-*, *::before, *::after { box-sizing: border-box; }
-
-html { scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
-
-body {
-  margin: 0;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  font-size: 1.0625rem;
-  line-height: 1.6;
-  color: var(--navy);
-  background: var(--white);
-}
-
-a { color: inherit; }
-a:focus-visible, .btn:focus-visible {
-  outline: 3px solid var(--amber);
-  outline-offset: 3px;
-}
-
-.wrap { width: 100%; max-width: 62rem; margin: 0 auto; padding: 0 1.25rem; }
-
-/* Header and nav */
-.site-header {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: var(--navy);
-  color: var(--white);
-  border-bottom: 3px solid var(--amber);
-}
-.site-header .wrap {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.25rem 1rem;
-  padding-top: 0.6rem;
-  padding-bottom: 0.6rem;
-}
-.brand {
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  text-decoration: none;
-  font-size: 1.1rem;
-}
-.nav { display: flex; flex-wrap: wrap; gap: 0.1rem 0.9rem; }
-.nav a {
-  text-decoration: none;
-  color: var(--steel-light);
-  font-size: 0.95rem;
-  padding: 0.4rem 0;
-}
-.nav a:hover { color: var(--amber); }
-
-/* Buttons */
-.btn {
-  display: inline-block;
-  background: var(--amber);
-  color: var(--navy);
-  font-weight: 700;
-  text-decoration: none;
-  padding: 0.85rem 1.4rem;
-  border-radius: 0.35rem;
-  border: 2px solid var(--amber);
-}
-.btn:hover { background: var(--white); border-color: var(--white); }
-
-/* Sections */
-section { padding: 3.25rem 0; }
-h1, h2, h3 { line-height: 1.2; margin: 0 0 0.9rem; }
-h1 { font-size: 2rem; }
-h2 { font-size: 1.6rem; }
-h3 { font-size: 1.1rem; }
-p { margin: 0 0 1rem; }
-
-.hero {
-  background: linear-gradient(160deg, var(--navy) 0%, var(--navy-2) 100%);
-  color: var(--white);
-  padding: 3.5rem 0 4rem;
-}
-.hero p.sub { color: var(--steel-light); font-size: 1.15rem; max-width: 36rem; margin-bottom: 1.75rem; }
-
-.eyebrow {
-  display: block;
-  color: var(--amber-dark);
-  font-weight: 700;
-  font-size: 0.8rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-bottom: 0.5rem;
-}
-.hero .eyebrow { color: var(--amber); }
-
-.alt { background: var(--mist); }
-.lead { max-width: 40rem; font-size: 1.1rem; }
-
-/* Cards */
-.cards { display: grid; gap: 1rem; margin: 1.75rem 0; }
-.card {
-  background: var(--white);
-  border: 1px solid var(--steel-light);
-  border-top: 4px solid var(--amber);
-  border-radius: 0.35rem;
-  padding: 1.25rem;
-}
-.card h3 { margin-bottom: 0.4rem; }
-.card p { margin: 0; color: var(--steel); }
-
-.examples { display: grid; gap: 1rem; margin-top: 1.5rem; }
-.example {
-  background: var(--navy);
-  color: var(--white);
-  border-radius: 0.35rem;
-  padding: 1.25rem;
-}
-.example h3 { margin-bottom: 0.3rem; }
-.example p { margin: 0 0 0.3rem; color: var(--steel-light); }
-.example a { color: var(--amber); }
-
-/* Lists */
-.ticks { list-style: none; padding: 0; margin: 1.25rem 0 1.5rem; }
-.ticks li {
-  position: relative;
-  padding: 0.55rem 0 0.55rem 1.8rem;
-  border-bottom: 1px solid var(--steel-light);
-}
-.ticks li::before {
-  content: "";
-  position: absolute;
-  left: 0.15rem;
-  top: 1.05rem;
-  width: 0.7rem;
-  height: 0.7rem;
-  background: var(--amber);
-  border-radius: 50%;
-}
-
-.pilot {
-  background: var(--navy);
-  color: var(--white);
-  border-left: 5px solid var(--amber);
-  padding: 1rem 1.25rem;
-  border-radius: 0.35rem;
-  max-width: 40rem;
-}
-.pilot p { margin: 0; }
-
-.todo {
-  border: 2px dashed var(--steel);
-  border-radius: 0.35rem;
-  padding: 1rem 1.25rem;
-  color: var(--steel);
-  max-width: 40rem;
-}
-
-/* Contact */
-.contact { background: var(--navy); color: var(--white); }
-.contact dl { margin: 1.25rem 0 1.75rem; }
-.contact dt {
-  color: var(--amber);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-.contact dd { margin: 0 0 1rem; font-size: 1.2rem; }
-.contact dd a { text-decoration: none; border-bottom: 2px solid var(--steel); }
-.contact dd a:hover { border-color: var(--amber); }
-
-footer {
-  background: #0a1626;
-  color: var(--steel-light);
-  padding: 1.25rem 0;
-  font-size: 0.9rem;
-}
-footer p { margin: 0; }
-
-/* Larger screens */
-@media (min-width: 48rem) {
-  body { font-size: 1.125rem; }
-  h1 { font-size: 3rem; max-width: 40rem; }
-  h2 { font-size: 2rem; }
-  section { padding: 4.5rem 0; }
-  .hero { padding: 5.5rem 0 6rem; }
-  .cards { grid-template-columns: repeat(3, 1fr); }
-  .examples { grid-template-columns: repeat(2, 1fr); }
-  .nav { gap: 0.1rem 1.5rem; }
-}
-</style>
 </head>
-
 <body>
 
 <header class="site-header">
   <div class="wrap">
-    <a class="brand" href="#top">Rhys Hume</a>
+    <a class="brand" href="index.html">Rhys Hume</a>
     <nav class="nav" aria-label="Main">
-      <a href="#websites">Websites</a>
-      <a href="#automation">Automation</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
+      <a href="index.html" aria-current="page">Home</a>
+      <a href="websites.html">Websites</a>
+      <a href="automation.html">Automation</a>
+      <a href="tolra.html">Tolra</a>
+      <a href="csv.html">CSV</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
     </nav>
   </div>
 </header>
 
-<main id="top">
-
-  <!-- 1. Hero -->
+<main>
   <section class="hero">
     <div class="wrap">
       <span class="eyebrow">Glasgow</span>
       <h1>Websites and automation for engineering firms in Glasgow</h1>
       <p class="sub">Clear, mobile-friendly websites and simple admin automation for fabrication, machining and manufacturing businesses.</p>
-      <a class="btn" href="#contact">Book a 20-minute chat</a>
+      <a class="btn" href="contact.html">Book a 20-minute chat</a>
     </div>
   </section>
 
-  <!-- 2. Websites -->
-  <section id="websites">
+  <section>
     <div class="wrap">
-      <span class="eyebrow">Websites</span>
-      <h2>Websites built for engineering and manufacturing firms</h2>
-      <p class="lead">Websites built for engineering and manufacturing firms, so customers can find you and get in touch easily.</p>
-
+      <span class="eyebrow">What I do</span>
+      <h2>Pick the bit you need</h2>
       <div class="cards">
-        <div class="card">
-          <h3>Mobile-friendly sites</h3>
-        </div>
-        <div class="card">
-          <h3>Quote forms with drawing upload</h3>
-        </div>
-        <div class="card">
-          <h3>Local search visibility</h3>
-        </div>
-      </div>
-
-      <h3>Examples</h3>
-      <div class="examples">
-        <div class="example">
-          <h3>JNR Engineering (Hamilton)</h3>
-          <p>Website and backend systems</p>
-          <p><a href="https://jnrengineering.co.uk">jnrengineering.co.uk</a></p>
-        </div>
-        <div class="example">
-          <h3>Marpet Fabrications</h3>
-          <p>New website in progress</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 3. Automation -->
-  <section id="automation" class="alt">
-    <div class="wrap">
-      <span class="eyebrow">Automation</span>
-      <h2>Admin automation for engineering and trade firms</h2>
-      <p class="lead">Too much of your week goes on chasing enquiries, retyping quote requests and sending the same documents again. I set up simple automations around the tools you already use.</p>
-
-      <ul class="ticks">
-        <li>Enquiry and quote intake</li>
-        <li>Quote, certificate and job documents from templates</li>
-        <li>Reminders</li>
-        <li>CRM updates and simple dashboards</li>
-        <li>Connecting systems</li>
-      </ul>
-
-      <div class="pilot">
-        <p>A fixed-price pilot of 2 to 4 weeks on one process. Optional monthly care afterwards.</p>
+        <a class="card" href="websites.html">
+          <h3>Websites</h3>
+          <p>Built for engineering and manufacturing firms, so customers can find you and get in touch easily.</p>
+          <span class="more">See websites</span>
+        </a>
+        <a class="card" href="automation.html">
+          <h3>Automation</h3>
+          <p>Simple admin automation around the tools you already use.</p>
+          <span class="more">See automation</span>
+        </a>
+        <a class="card" href="tolra.html">
+          <h3>Tolra</h3>
+          <p>A simple ERP for small CNC shops, currently in pilot with local shops.</p>
+          <span class="more">See Tolra</span>
+        </a>
+        <a class="card" href="csv.html">
+          <h3>Computer system validation</h3>
+          <p>Validation support for computerised systems in regulated manufacturing.</p>
+          <span class="more">See CSV</span>
+        </a>
+        <a class="card" href="about.html">
+          <h3>About</h3>
+          <p>Based in Glasgow, with a background in computer system validation engineering.</p>
+          <span class="more">About me</span>
+        </a>
+        <a class="card" href="contact.html">
+          <h3>Contact</h3>
+          <p>Phone, email or a 20-minute chat.</p>
+          <span class="more">Get in touch</span>
+        </a>
       </div>
     </div>
   </section>
 
-  <!-- 4. CSV -->
-  <section id="csv">
+  <section class="cta-band">
     <div class="wrap">
-      <span class="eyebrow">Computer system validation</span>
-      <h2>Computer system validation</h2>
-      <!-- TODO: replace this block once the CSV wording is ready -->
-      <div class="todo">
-        <p>[CSV SERVICES WORDING TO FOLLOW]</p>
-      </div>
+      <h2>Want to talk it through?</h2>
+      <p>Twenty minutes, no pressure.</p>
+      <a class="btn" href="contact.html">Book a 20-minute chat</a>
     </div>
   </section>
-
-  <!-- 5. About -->
-  <section id="about" class="alt">
-    <div class="wrap">
-      <span class="eyebrow">About</span>
-      <h2>About</h2>
-      <p class="lead">I'm Rhys Hume, based in Glasgow. My background is in computer system validation engineering at Terumo Aortic, and I now build websites and systems for engineering firms.</p>
-    </div>
-  </section>
-
-  <!-- 6. Tolra -->
-  <section id="tolra">
-    <div class="wrap">
-      <span class="eyebrow">Tolra</span>
-      <h2>Tolra</h2>
-      <p class="lead">A simple ERP for small CNC shops, currently in pilot with local shops.</p>
-      <p><a class="btn" href="[TOLRA URL]">Visit Tolra</a></p>
-    </div>
-  </section>
-
-  <!-- 7. Contact -->
-  <section id="contact" class="contact">
-    <div class="wrap">
-      <span class="eyebrow">Contact</span>
-      <h2>Contact</h2>
-      <dl>
-        <dt>Phone</dt>
-        <dd><a href="tel:+447908041480">07908 041480</a></dd>
-        <dt>Email</dt>
-        <dd><a href="mailto:[YOUR EMAIL]">[YOUR EMAIL]</a></dd>
-      </dl>
-      <a class="btn" href="[BOOKING LINK]">Book a 20-minute chat</a>
-    </div>
-  </section>
-
 </main>
 
-<footer>
+<footer class="site-footer">
   <div class="wrap">
-    <p>&copy; 2026 Rhys Hume.</p>
+    <p>&copy; 2026 Rhys Hume. Glasgow.</p>
+    <p><a href="tel:+447908041480">07908 041480</a></p>
   </div>
 </footer>
 

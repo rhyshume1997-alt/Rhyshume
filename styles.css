@@ -1,0 +1,223 @@
+/* Rhys Hume site: blue and white only. One stylesheet for every page. */
+:root {
+  --blue-deep: #0b2a5b;
+  --blue: #1d5fd1;
+  --blue-mid: #4a82e0;
+  --blue-soft: #eaf1fc;
+  --blue-line: #c5d6f2;
+  --white: #ffffff;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: var(--blue-deep);
+  background: var(--white);
+}
+
+a { color: var(--blue); }
+a:focus-visible, .btn:focus-visible {
+  outline: 3px solid var(--blue-mid);
+  outline-offset: 3px;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+.wrap { width: 100%; max-width: 62rem; margin: 0 auto; padding: 0 1.25rem; }
+
+/* Header and nav */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--white);
+  border-bottom: 1px solid var(--blue-line);
+}
+.site-header .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.15rem 1rem;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+}
+.brand {
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  color: var(--blue-deep);
+}
+.nav { display: flex; flex-wrap: wrap; gap: 0 0.95rem; }
+.nav a {
+  text-decoration: none;
+  color: var(--blue-deep);
+  font-size: 0.95rem;
+  padding: 0.4rem 0;
+  border-bottom: 3px solid transparent;
+}
+.nav a:hover { color: var(--blue); }
+.nav a[aria-current="page"] { color: var(--blue); border-bottom-color: var(--blue); font-weight: 600; }
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  background: var(--blue);
+  color: var(--white);
+  font-weight: 700;
+  text-decoration: none;
+  padding: 0.85rem 1.5rem;
+  border-radius: 0.4rem;
+  border: 2px solid var(--blue);
+}
+.btn:hover { background: var(--blue-deep); border-color: var(--blue-deep); }
+.hero .btn, .cta-band .btn, .btn-light { background: var(--white); color: var(--blue-deep); border-color: var(--white); }
+.hero .btn:hover, .cta-band .btn:hover, .btn-light:hover { background: var(--blue-soft); border-color: var(--blue-soft); color: var(--blue-deep); }
+
+/* Sections */
+section { padding: 3.25rem 0; }
+h1, h2, h3 { line-height: 1.2; margin: 0 0 0.9rem; }
+h1 { font-size: 2.1rem; }
+h2 { font-size: 1.6rem; }
+h3 { font-size: 1.15rem; }
+p { margin: 0 0 1rem; }
+
+.hero {
+  background: linear-gradient(160deg, var(--blue-deep) 0%, var(--blue) 100%);
+  color: var(--white);
+  padding: 3.5rem 0 4rem;
+}
+.hero p.sub { font-size: 1.15rem; max-width: 36rem; margin-bottom: 1.75rem; color: var(--blue-soft); }
+.hero p.sub:last-child { margin-bottom: 0; }
+
+.eyebrow {
+  display: block;
+  color: var(--blue);
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+.hero .eyebrow { color: var(--blue-line); }
+
+.alt { background: var(--blue-soft); }
+.lead { max-width: 40rem; font-size: 1.1rem; }
+
+/* Cards */
+.cards { display: grid; gap: 1rem; margin: 1.5rem 0; }
+.card {
+  display: block;
+  background: var(--white);
+  border: 1px solid var(--blue-line);
+  border-top: 4px solid var(--blue);
+  border-radius: 0.4rem;
+  padding: 1.25rem;
+  text-decoration: none;
+  color: var(--blue-deep);
+}
+.card h3 { margin-bottom: 0.4rem; }
+.card p { margin: 0 0 0.6rem; }
+.card .more { color: var(--blue); font-weight: 700; font-size: 0.95rem; }
+a.card:hover { border-color: var(--blue); box-shadow: 0 4px 14px rgba(29, 95, 209, 0.15); }
+a.card:hover .more { text-decoration: underline; }
+.alt .card { background: var(--white); }
+
+/* Examples */
+.examples { display: grid; gap: 1rem; margin-top: 1.25rem; }
+.example {
+  background: var(--white);
+  border: 1px solid var(--blue-line);
+  border-radius: 0.4rem;
+  padding: 1.25rem;
+}
+.example h3 { margin-bottom: 0.3rem; }
+.example p { margin: 0 0 0.4rem; }
+
+/* Image placeholder slots */
+.slot { margin: 1rem 0 0; }
+.slot img { width: 100%; border-radius: 0.4rem; border: 1px solid var(--blue-line); background: var(--blue-soft); }
+.slot figcaption { font-size: 0.85rem; margin-top: 0.4rem; color: var(--blue); }
+
+/* Lists */
+.ticks { list-style: none; padding: 0; margin: 1.25rem 0 1.5rem; max-width: 40rem; }
+.ticks li {
+  position: relative;
+  padding: 0.6rem 0 0.6rem 1.8rem;
+  border-bottom: 1px solid var(--blue-line);
+}
+.ticks li::before {
+  content: "";
+  position: absolute;
+  left: 0.15rem;
+  top: 1.1rem;
+  width: 0.7rem;
+  height: 0.7rem;
+  background: var(--blue);
+  border-radius: 50%;
+}
+.chips { list-style: none; padding: 0; margin: 1.25rem 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.chips li {
+  background: var(--blue-soft);
+  border: 1px solid var(--blue-line);
+  border-radius: 2rem;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.note {
+  background: var(--white);
+  border-left: 5px solid var(--blue);
+  border-radius: 0.4rem;
+  padding: 1rem 1.25rem;
+  max-width: 40rem;
+  margin-bottom: 1.5rem;
+}
+.note p { margin: 0; }
+
+/* Call to action band */
+.cta-band { background: var(--blue-deep); color: var(--white); text-align: left; }
+.cta-band p { color: var(--blue-line); }
+
+/* About layout */
+.about { display: grid; gap: 1.5rem; }
+
+/* Contact */
+.contact dl { margin: 0 0 1.75rem; }
+.contact dt {
+  color: var(--blue);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.contact dd { margin: 0 0 1.1rem; font-size: 1.25rem; }
+.contact dd a { text-decoration: none; border-bottom: 2px solid var(--blue-line); }
+.contact dd a:hover { border-color: var(--blue); }
+.contact .btn-light { background: var(--blue); color: var(--white); border-color: var(--blue); }
+.contact .btn-light:hover { background: var(--blue-deep); border-color: var(--blue-deep); color: var(--white); }
+
+/* Footer */
+.site-footer { background: var(--blue-deep); color: var(--blue-line); padding: 1.25rem 0; font-size: 0.9rem; }
+.site-footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.25rem 1rem; }
+.site-footer p { margin: 0; }
+.site-footer a { color: var(--white); text-decoration: none; }
+
+/* Larger screens */
+@media (min-width: 48rem) {
+  body { font-size: 1.125rem; }
+  h1 { font-size: 3rem; max-width: 40rem; }
+  h2 { font-size: 2rem; }
+  section { padding: 4.5rem 0; }
+  .hero { padding: 5.5rem 0 6rem; }
+  .cards { grid-template-columns: repeat(3, 1fr); }
+  .examples { grid-template-columns: repeat(2, 1fr); }
+  .about { grid-template-columns: 1.4fr 1fr; align-items: start; }
+  .nav { gap: 0 1.4rem; }
+}
