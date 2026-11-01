@@ -129,6 +129,22 @@ a.card:hover { transform: translateY(-6px); box-shadow: var(--shadow-up); border
 .slot { margin: 0; }
 .slot img { width: 100%; border-radius: var(--radius); box-shadow: var(--shadow); background: var(--blue-soft); }
 .slot figcaption { font-size: 0.85rem; color: var(--ink-soft); margin-top: var(--s1); }
+.soon {
+  aspect-ratio: 1150 / 783;
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--s1);
+  text-align: center;
+  padding: var(--s3);
+  box-shadow: var(--shadow);
+}
+.soon-label { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #9ec0ff; }
+.soon-text { font-size: clamp(1.4rem, 4vw, 2rem); font-weight: 800; letter-spacing: -0.02em; }
 .work { display: grid; gap: var(--s3); }
 .work-item h3 { margin: var(--s2) 0 0.2rem; }
 .work-item p { color: var(--ink-soft); margin: 0; }

@@ -6,6 +6,5 @@ Pages: `council-digital-grants/index.html`, `index.html`, `websites.html`, `auto
 
 ## To fill in before going live
 
-- `YOUR_FORM_ID` in the form action in `council-digital-grants/index.html` (Formspree form ID)
-- Swap the placeholder images, see `images/README.md`
+- Add `rhys.jpg`, see `images/README.md`
 - Read through `csv.html`, the wording is a first draft
