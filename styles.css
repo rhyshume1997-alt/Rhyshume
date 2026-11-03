@@ -292,6 +292,13 @@ h3 {
   color: var(--ink-2);
 }
 .tb-main .actions { margin-top: 2rem; }
+.doc-rev {
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-3);
+}
+.tb-main > .doc-rev + h1 { margin-top: 0.6rem; }
 .tb-side { font-size: 0.9375rem; min-width: 0; }
 
 @media (min-width: 64rem) {
@@ -517,15 +524,31 @@ table.doc tbody tr:last-child > * { border-bottom: 0; }
   min-width: 0;
 }
 .door + .door { border-top: 1px solid var(--rule); }
-.door h3 { font-size: clamp(1.5rem, 1.25rem + 0.9vw, 2rem); line-height: 1.12; }
+.door h2, .door h3 { font-size: clamp(1.5rem, 1.25rem + 0.9vw, 2rem); line-height: 1.12; letter-spacing: 0; font-variation-settings: "opsz" 36; }
 .door h3 .no { font-size: 0.75rem; vertical-align: 0.5em; }
-.door .for { font-size: 0.9375rem; color: var(--ink-3); }
+.for { font-size: 0.9375rem; color: var(--ink-3); }
 .door .ticks { font-size: 0.9375rem; }
 .door .actions { margin-top: auto; padding-top: 0.75rem; }
 @media (min-width: 52rem) {
   .doors { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .door { padding: 2rem 2.25rem 2.25rem 0; }
   .door + .door { border-top: 0; border-left: 1px solid var(--rule); padding-left: 2.25rem; padding-right: 0; }
+}
+
+/* the home page hero: one line, then the two doors, both above the fold on a phone */
+.home-hero h1 { max-width: 22ch; }
+.home-hero .standfirst { margin-top: 1rem; }
+.home-hero { padding-bottom: 0; }
+.hero-doors { margin-top: 1.5rem; border-bottom: 0; }
+@media (max-width: 51.99rem) {
+  .home-hero { padding-top: 1.25rem; }
+  .home-hero h1 { font-size: clamp(2rem, 1.3rem + 3.2vw, 2.5rem); }
+  .home-hero .standfirst { margin-top: 0.75rem; font-size: 1.0625rem; }
+  .hero-doors { margin-top: 1.1rem; }
+  .hero-doors .door { gap: 0.55rem; padding: 1rem 0 1.15rem; }
+  .hero-doors .door h2 { font-size: 1.375rem; }
+  .hero-doors .door p { font-size: 0.9375rem; line-height: 1.5; color: var(--ink-2); }
+  .hero-doors .door .actions { padding-top: 0.35rem; }
 }
 
 /* ------------------------------------------------------------ the flowchart */
@@ -717,6 +740,20 @@ figure.exhibit img {
 .form .btn { margin-top: 1.5rem; }
 .fine { margin-top: 0.9rem; font-size: 0.875rem; color: var(--ink-3); }
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+/* what the visitor sees after sending: /api/contact sends them back to #sent or #not-sent */
+.form-state {
+  display: none;
+  max-width: 36rem;
+  padding: 0.9rem 1.1rem 1rem;
+  border: 1px solid var(--ink);
+  background: var(--accent-soft);
+}
+.form-state:target { display: block; }
+.form-state p + p { margin-top: 0.2rem; }
+.form-state .note-label { color: var(--ink-2); }
+.form-state.is-error { border-color: var(--error); background: #f6e9e7; }
+.form-state.is-error .note-label { color: var(--error); }
 
 .contact-lines { border-top: 1px solid var(--ink); }
 .contact-lines div { padding: 0.75rem 0; border-bottom: 1px solid var(--rule); }

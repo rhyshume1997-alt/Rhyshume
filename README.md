@@ -8,6 +8,14 @@ Fonts are self-hosted in `fonts/` (Newsreader, IBM Plex Sans, IBM Plex Mono, lat
 
 SEO files: `sitemap.xml`, `robots.txt`, `llms.txt`.
 
+## Contact forms
+
+The contact form and the council digital grants form post to `api/contact.js`, a Vercel function that emails the enquiry through Resend and sends the visitor back to the page with `#sent` or `#not-sent`. Set these in Vercel (Project Settings, Environment Variables) before deploying:
+
+- `RESEND_API_KEY` (required): API key from resend.com
+- `CONTACT_TO` (required): where enquiries go, `rhyshume1997@gmail.com`
+- `CONTACT_FROM` (optional): a sender address on a domain verified in Resend. Without it the function sends from `onboarding@resend.dev`, which Resend only delivers to the address the Resend account was opened with
+
 ## Notes
 
 Images are listed in `images/README.md`. Slots still waiting on content are marked with `RHYS TO SUPPLY` or `RHYS TO CONFIRM` comments in the HTML.
