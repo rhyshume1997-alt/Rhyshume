@@ -10,7 +10,7 @@ Systems that win work and run the job: a site that gets found and takes the quot
 
 - [Websites](https://www.rhyshume.co.uk/websites): mobile-friendly websites with quote request forms and local search set-up, the front of the system
 - [Automation](https://www.rhyshume.co.uk/automation): quote intake, documents, follow-ups and CRM updates around the tools a firm already uses, delivered as a short pilot on one process, with optional monthly care afterwards
-- [Tolra](https://www.rhyshume.co.uk/tolra): job management for small CNC and fabrication shops, in pilot at JNR Engineering and Marpet Fabrications
+- [Tolra](https://www.rhyshume.co.uk/tolra): job management for small CNC and fabrication shops, in pilot in two working shops, JNR Engineering and Marpet Fabrications
 - [Computer system validation](https://www.rhyshume.co.uk/csv): validation plans, risk assessments, IQ/OQ/PQ protocols, traceability, data migration, validation reports and periodic review for regulated manufacturers. "I work to GAMP® 5 Second Edition, EU Annex 11 and 21 CFR Part 11 principles"
 
 ## Work and more
