@@ -793,7 +793,7 @@ figure.exhibit img {
 .fine { margin-top: 0.9rem; font-size: 0.875rem; color: var(--ink-3); }
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 
-/* what the visitor sees after sending: /api/contact sends them back to #sent or #not-sent */
+/* what the visitor sees after sending: /api/contact sends them back to ?sent=1#sent or ?error=1#not-sent */
 .form-state {
   display: none;
   max-width: 36rem;

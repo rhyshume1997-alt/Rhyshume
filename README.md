@@ -10,11 +10,11 @@ SEO files: `sitemap.xml`, `robots.txt`, `llms.txt`.
 
 ## Contact forms
 
-The contact form and the council digital grants form post to `api/contact.js`, a Vercel function that emails the enquiry through Resend and sends the visitor back to the page with `#sent` or `#not-sent`. Set these in Vercel (Project Settings, Environment Variables) before deploying:
+The contact form and the council digital grants form post to `api/contact.js`, a Vercel function that emails the enquiry through Resend and sends the visitor back to the page with `?sent=1#sent` (only once Resend has accepted the email) or `?error=1#not-sent`. Set these in Vercel (Project Settings, Environment Variables) before deploying:
 
 - `RESEND_API_KEY` (required): API key from resend.com
 - `CONTACT_TO` (required): where enquiries go, `rhyshume1997@gmail.com`
-- `CONTACT_FROM` (optional): a sender address on a domain verified in Resend. Without it the function sends from `onboarding@resend.dev`, which Resend only delivers to the address the Resend account was opened with
+- `CONTACT_FROM` (optional): the sender, on the domain verified in Resend. Defaults to `Rhys Hume <hello@rhyshume.co.uk>`.
 
 ## Notes
 

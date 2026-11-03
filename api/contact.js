@@ -8,12 +8,11 @@
   Environment variables (set in Vercel, Project Settings, Environment Variables):
     RESEND_API_KEY  required  API key from resend.com
     CONTACT_TO      required  where enquiries go. Intended value: rhyshume1997@gmail.com (comma separate for more than one)
-    CONTACT_FROM    optional  sender address on a domain verified in Resend. Defaults to onboarding@resend.dev,
-                              which Resend only delivers to the email address the Resend account was opened with
+    CONTACT_FROM    optional  sender on a domain verified in Resend, e.g. "Rhys Hume <hello@rhyshume.co.uk>" (the default)
 */
 
-// RHYS TO SUPPLY: an address on a domain verified in Resend (for example on rhyshume.co.uk), set as CONTACT_FROM in Vercel
-const DEFAULT_FROM = 'onboarding@resend.dev';
+// rhyshume.co.uk is the domain verified in Resend. Resend rejects a from address on any other domain.
+const DEFAULT_FROM = 'Rhys Hume <hello@rhyshume.co.uk>';
 const MAX_BODY_BYTES = 64 * 1024;
 
 // The two forms. Each sets a hidden field "form" to one of these keys. The subject and the
@@ -75,7 +74,8 @@ function wantsJson(req) {
   return String(req.headers.accept || '').indexOf('application/json') !== -1;
 }
 
-// Form posts get a 303 back to the page, where #sent or #not-sent shows the matching note (CSS :target, no JS).
+// Form posts get a 303 back to the page: ?sent=1#sent only once Resend has accepted the email, otherwise ?error=1#not-sent.
+// The hash shows the matching note (CSS :target, no JS).
 // fetch callers asking for JSON get JSON.
 function send(req, res, status, body, redirectTo) {
   if (!wantsJson(req) && redirectTo) {
@@ -178,6 +178,9 @@ function enquiryEmail(rows) {
   return { text: text, html: html };
 }
 
+const SENT = '?sent=1#sent';
+const NOT_SENT = '?error=1#not-sent';
+
 async function resendSend(payload) {
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
@@ -187,8 +190,11 @@ async function resendSend(payload) {
   if (!res.ok) {
     let detail = '';
     try { detail = await res.text(); } catch (e) { /* ignore */ }
-    throw new Error('Resend ' + res.status + ' ' + detail.slice(0, 300));
+    throw new Error('Resend ' + res.status + ' ' + detail);
   }
+  let id = '';
+  try { id = (await res.json()).id || ''; } catch (e) { /* ignore */ }
+  return id;
 }
 
 module.exports = async function handler(req, res) {
@@ -199,7 +205,7 @@ module.exports = async function handler(req, res) {
 
   const ip = clientIp(req);
   if (rateLimited(ip)) {
-    return send(req, res, 429, { ok: false, error: 'You’ve sent a few messages in a short time. Please wait a few minutes and try again.' }, '/contact#not-sent');
+    return send(req, res, 429, { ok: false, error: 'You’ve sent a few messages in a short time. Please wait a few minutes and try again.' }, '/contact' + NOT_SENT);
   }
 
   let fields;
@@ -208,32 +214,37 @@ module.exports = async function handler(req, res) {
     if (type.indexOf('application/x-www-form-urlencoded') === -1) throw { status: 415, message: 'Please use the contact form.' };
     fields = await readBody(req);
   } catch (err) {
-    return send(req, res, (err && err.status) || 400, { ok: false, error: (err && err.message) || 'That request could not be read.' }, '/contact#not-sent');
+    return send(req, res, (err && err.status) || 400, { ok: false, error: (err && err.message) || 'That request could not be read.' }, '/contact' + NOT_SENT);
   }
 
   const form = FORMS[oneLine(fields.form, 20)] || FORMS.contact;
 
   // Spam: a hidden field people never see. Bots that fill it get a normal-looking success and nothing is sent
   if (clean(fields.company_website, 200)) {
-    return send(req, res, 200, { ok: true }, form.page + '#sent');
+    return send(req, res, 200, { ok: true }, form.page + SENT);
   }
 
   const checked = validate(form, fields);
   if (Object.keys(checked.errors).length) {
-    return send(req, res, 400, { ok: false, errors: checked.errors, error: 'Some details need another look.' }, form.page + '#not-sent');
+    return send(req, res, 400, { ok: false, errors: checked.errors, error: 'Some details need another look.' }, form.page + NOT_SENT);
   }
 
   const to = String(process.env.CONTACT_TO || '').split(',').map(function (s) { return s.trim(); }).filter(Boolean);
-  if (!process.env.RESEND_API_KEY || !to.length) {
-    console.error('contact: RESEND_API_KEY or CONTACT_TO is not set');
-    return send(req, res, 500, { ok: false, error: 'The form isn’t working right now.' }, form.page + '#not-sent');
+  const missing = [];
+  if (!process.env.RESEND_API_KEY) missing.push('RESEND_API_KEY');
+  if (!to.length) missing.push('CONTACT_TO');
+  if (missing.length) {
+    // Names only, never values.
+    console.error('contact: missing env var(s): ' + missing.join(', '));
+    return send(req, res, 500, { ok: false, error: 'The form isn’t working right now.' }, form.page + NOT_SENT);
   }
 
   const d = checked.data;
   const mail = enquiryEmail(checked.rows);
+  let id;
   try {
-    await resendSend({
-      from: '"rhyshume.co.uk" <' + (process.env.CONTACT_FROM || DEFAULT_FROM) + '>',
+    id = await resendSend({
+      from: String(process.env.CONTACT_FROM || '').trim() || DEFAULT_FROM,
       to: to,
       reply_to: d.email,
       subject: form.subject + ' – ' + d.company,
@@ -241,9 +252,10 @@ module.exports = async function handler(req, res) {
       html: mail.html
     });
   } catch (err) {
-    console.error('contact: email failed', err && err.message);
-    return send(req, res, 502, { ok: false, error: 'Your message didn’t send.' }, form.page + '#not-sent');
+    console.error('contact: Resend send failed:', err && err.stack ? err.stack : err);
+    return send(req, res, 502, { ok: false, error: 'Your message didn’t send.' }, form.page + NOT_SENT);
   }
 
-  return send(req, res, 200, { ok: true }, form.page + '#sent');
+  console.log('contact: sent via Resend, id ' + id + ', form ' + (fields.form === 'grants' ? 'grants' : 'contact'));
+  return send(req, res, 200, { ok: true }, form.page + SENT);
 };
