@@ -1,21 +1,21 @@
 # Rhys Hume
 
-> Rhys Hume is a systems consultant based in Glasgow. He connects the website, quoting, job management and validation of engineering and manufacturing firms (fabrication, machining and manufacturing businesses) into one joined-up system, so enquiries turn into orders faster and less time goes on admin. His background is in computer system validation engineering at Terumo Aortic.
+> Rhys Hume is a systems consultant based in Glasgow. He builds the website, quoting and job management of engineering and manufacturing firms (fabrication, machining and manufacturing businesses), and validates computerised systems for regulated manufacturers. His background is in computer system validation engineering at Terumo Aortic, a medical device manufacturer.
 
 ## The idea
 
-Systems that win work and run the job: a site that gets found and takes the quote request, automation that drafts quotes and chases them, job management in Tolra, and validation for regulated manufacturers as the quality layer underneath. Outcomes: win more work, save time, cut costs and risk.
+Systems that win work and run the job: a site that gets found and takes the quote request, automation that drafts quotes for a person to approve and chases them, job management in Tolra, and computer system validation for regulated manufacturers underneath.
 
 ## Services
 
 - [Websites](https://www.rhyshume.co.uk/websites): mobile-friendly websites with quote request forms and local search set-up, the front of the system
-- [Automation](https://www.rhyshume.co.uk/automation): quote intake, documents, follow-ups and CRM updates around the tools a firm already uses, delivered as a pilot of 2 to 4 weeks on one process, with optional monthly care afterwards
-- [Tolra](https://www.rhyshume.co.uk/tolra): job management for small CNC and fabrication shops, in pilot in two working shops, JNR Engineering and Marpet Fabrications
-- [Computer system validation](https://www.rhyshume.co.uk/csv): validation planning, risk assessment, IQ/OQ/PQ protocols, traceability and validation reports for regulated manufacturers
+- [Automation](https://www.rhyshume.co.uk/automation): quote intake, documents, follow-ups and CRM updates around the tools a firm already uses, delivered as a short pilot on one process, with optional monthly care afterwards
+- [Tolra](https://www.rhyshume.co.uk/tolra): job management for small CNC and fabrication shops, in pilot at JNR Engineering and Marpet Fabrications
+- [Computer system validation](https://www.rhyshume.co.uk/csv): validation plans, risk assessments, IQ/OQ/PQ protocols, traceability, data migration, validation reports and periodic review for regulated manufacturers. "I work to GAMP® 5 Second Edition, EU Annex 11 and 21 CFR Part 11 principles"
 
 ## Work and more
 
-- [JNR Engineering case study](https://www.rhyshume.co.uk/work/jnr-engineering): website and the systems behind it for a machining and fabrication firm in Hamilton
+- [JNR Engineering case study](https://www.rhyshume.co.uk/work/jnr-engineering): the website and the systems behind it for a machining and fabrication firm in Hamilton
 - [Council digital grants](https://www.rhyshume.co.uk/council-digital-grants): a detailed project quote to support a council digital grant application in East Dunbartonshire or North Lanarkshire
 - [Insights](https://www.rhyshume.co.uk/insights): practical notes for engineering firms, starting with [what to put on an engineering firm's website to win more RFQs](https://www.rhyshume.co.uk/insights/what-to-put-on-an-engineering-firms-website)
 - [About](https://www.rhyshume.co.uk/about)

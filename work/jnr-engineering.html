@@ -3,10 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>document.documentElement.className+=' js'</script>
 <title>JNR Engineering website and the systems behind it | Rhys Hume</title>
 <meta name="description" content="Case study: the website and the systems behind it built for JNR Engineering, a machining and fabrication firm in Hamilton.">
-<meta name="theme-color" content="#0b2a5b">
+<meta name="theme-color" content="#f4f4f0">
 <link rel="canonical" href="https://www.rhyshume.co.uk/work/jnr-engineering">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Rhys Hume">
@@ -17,15 +16,14 @@
 <meta property="og:image" content="https://www.rhyshume.co.uk/images/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Rhys Hume: websites and automation for engineering firms in Glasgow">
+<meta property="og:image:alt" content="Rhys Hume: systems for engineering and manufacturing firms, Glasgow">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="JNR Engineering website and the systems behind it | Rhys Hume">
 <meta name="twitter:description" content="Case study: the website and the systems behind it built for JNR Engineering, a machining and fabrication firm in Hamilton.">
 <meta name="twitter:image" content="https://www.rhyshume.co.uk/images/og-image.png">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap">
+<link rel="preload" href="/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/styles.css">
 <script type="application/ld+json">
 {
@@ -36,7 +34,7 @@
       "@id": "https://www.rhyshume.co.uk/#rhys",
       "name": "Rhys Hume",
       "url": "https://www.rhyshume.co.uk/",
-      "description": "Builds connected systems for engineering and manufacturing firms in Glasgow: websites, quoting automation, job management and computer system validation.",
+      "description": "Builds websites, quoting automation and job management for engineering and manufacturing firms in Glasgow, and computer system validation for regulated manufacturers.",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Glasgow",
@@ -99,118 +97,112 @@
 <body>
 <a class="skip" href="#main">Skip to content</a>
 
-<header class="site-header">
-  <div class="wrap bar">
-    <a class="logo" href="/" aria-label="Rhys Hume, home"><svg viewBox="0 0 176 44" role="img" aria-label="Rhys Hume" focusable="false"><rect width="44" height="44" rx="10" fill="#0b2a5b"/><text x="22" y="30" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="21" font-weight="800" fill="#ffffff" letter-spacing="-1">RH</text><text x="56" y="29.5" font-family="Inter,Arial,sans-serif" font-size="19" font-weight="800" fill="currentColor" letter-spacing="-0.5">Rhys Hume</text></svg></a>
-    <button class="nav-btn" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
-    <nav class="nav" id="site-nav" aria-label="Main">
-        <a href="/websites">Websites</a>
-        <a href="/automation">Automation</a>
-        <a href="/tolra">Tolra</a>
-        <a href="/csv">CSV</a>
-        <a href="/about">About</a>
-        <a href="/contact">Contact</a>
-        <a class="nav-cta" href="https://calendar.google.com/calendar/appointments/AcZssZ35nSQ_2lobUifPsul__TiweHpPV1aRWuWbssQ=" target="_blank" rel="noopener">Book a free 20-minute chat</a>
+<header class="masthead">
+  <div class="sheet">
+    <a class="wordmark" href="/" aria-label="Rhys Hume, home">Rhys Hume</a>
+    <nav class="nav" aria-label="Main">
+      <a href="/websites">Websites</a>
+      <a href="/automation">Automation</a>
+      <a href="/tolra">Tolra</a>
+      <a href="/csv">Validation</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
     </nav>
+    <a class="btn" href="https://calendar.google.com/calendar/appointments/AcZssZ35nSQ_2lobUifPsul__TiweHpPV1aRWuWbssQ=" target="_blank" rel="noopener">Book a free 20-minute chat<span class="visually-hidden"> (opens in a new tab)</span></a>
   </div>
 </header>
 
 <main id="main">
-  <section class="page-hero on-navy">
-    <div class="wrap">
-      <p class="crumbs"><a href="/">Home</a> / <a href="/websites">Websites</a> / JNR Engineering</p>
-      <span class="eyebrow">Case study</span>
-      <h1>JNR Engineering: a website and the systems behind it</h1>
-      <p class="lead">A website and the systems behind it for a machining and fabrication firm in Hamilton</p>
+<div class="sheet">
+<header class="titleblock">
+  <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/websites">Websites</a></li><li aria-current="page">JNR Engineering</li></ol></nav>
+  <dl class="tb-meta" aria-label="Document control"><div><dt>Doc ref</dt><dd>RH-000-A</dd></div><div><dt>Rev</dt><dd>A</dd></div><div><dt>Date</dt><dd>03 Nov 2026</dd></div><div><dt>Status</dt><dd>Issued</dd></div><div><dt>Subject</dt><dd>Case study</dd></div></dl>
+  <div class="tb-body">
+    <div class="tb-main">
+      <h1>Appendix A: JNR Engineering, a website and the systems behind it</h1>
+      <p class="standfirst">A website and the systems behind it for a machining and fabrication firm in Hamilton</p>
+      <div class="actions"><a class="btn" href="https://calendar.google.com/calendar/appointments/AcZssZ35nSQ_2lobUifPsul__TiweHpPV1aRWuWbssQ=" target="_blank" rel="noopener">Book a free 20-minute chat<span class="visually-hidden"> (opens in a new tab)</span></a></div>
     </div>
-  </section>
+    <div class="tb-side"><dl class="contact-lines">
+  <div><dt>Firm</dt><dd>JNR Engineering</dd></div>
+  <div><dt>Location</dt><dd>Hamilton</dd></div>
+  <div><dt>Work</dt><dd>Website and the systems behind it</dd></div>
+  <div><dt>Live site</dt><dd><a href="https://jnrengineering.co.uk" target="_blank" rel="noopener">jnrengineering.co.uk<span class="visually-hidden"> (opens in a new tab)</span></a></dd></div>
+</dl></div>
+  </div>
+</header>
 
-  <section>
-    <div class="wrap">
-      <div class="duo">
-        <div>
-          <span class="eyebrow">At a glance</span>
-          <h2>JNR Engineering, Hamilton</h2>
-          <p class="lead">Website and the systems behind it</p>
-          <p><a href="https://jnrengineering.co.uk" target="_blank" rel="noopener">jnrengineering.co.uk</a></p>
-        </div>
-        <figure class="mock">
-      <div class="mock-bar" aria-hidden="true"><i></i><i></i><i></i><span class="mock-url">jnrengineering.co.uk</span></div>
-      <img src="/images/jnr-engineering.jpg" alt="JNR Engineering website home page with the headline 'Made to your drawing, checked before it ships' over a CNC milling machine cutting metal" width="1150" height="783" decoding="async">
-    </figure>
-      </div>
-    </div>
-  </section>
+<section class="clause" id="exhibit" aria-labelledby="exhibit-h">
+  <h2 id="exhibit-h"><span class="no">A.1</span> <span>Exhibit</span></h2>
+  <div class="clause-body">
+<figure class="exhibit">
+  <img src="/images/jnr-engineering.jpg" alt="JNR Engineering website home page with the headline &#x27;Made to your drawing, checked before it ships&#x27; over a CNC milling machine cutting metal" width="1150" height="783" decoding="async">
+  <figcaption><span class="fig-no">Fig. A.1</span>The JNR Engineering home page I built, live at jnrengineering.co.uk</figcaption>
+</figure>
+</div>
+  
+  
+</section>
 
-  <section class="grey">
-    <div class="wrap">
-      <div class="cols">
-        <div class="col-box">
-          <h3>The brief</h3>
-          <p>A website that lets customers find a machining and fabrication firm in Hamilton and get in touch easily</p>
-        </div>
-        <div class="col-box">
-          <h3>What I built</h3>
-          <p>The website, with a clear get a quote button and a phone number for urgent jobs at the top of the home page, quote requests that go straight to the firm's email, SEO and a Google Business Profile, plus Tolra for jobs and quotes</p>
-        </div>
-      </div>
-      <p class="lead" style="margin-top: 2rem">JNR Engineering also runs Tolra, my job management app for CNC shops, in the workshop and in the office <a class="textlink" href="/tolra">See Tolra</a></p>
-    </div>
-  </section>
+<section class="clause" id="brief" aria-labelledby="brief-h">
+  <h2 id="brief-h"><span class="no">A.2</span> <span>The brief</span></h2>
+  <div class="clause-body">
+<p class="lead">A website that lets customers find a machining and fabrication firm in Hamilton and get in touch easily</p>
+</div>
+  
+  
+</section>
 
-  <section class="cta-band on-navy">
-    <div class="wrap">
-      <h2>Want something like this for your firm?</h2>
-      <p>Talk me through your current site and the enquiries you want</p>
-      <a class="btn btn-lg" href="https://calendar.google.com/calendar/appointments/AcZssZ35nSQ_2lobUifPsul__TiweHpPV1aRWuWbssQ=" target="_blank" rel="noopener">Book a free 20-minute chat</a>
-    </div>
-  </section>
+<section class="clause" id="built" aria-labelledby="built-h">
+  <h2 id="built-h"><span class="no">A.3</span> <span>What I built</span></h2>
+  <div class="clause-body">
+<dl class="register"><div><dt><span class="no">A.3.1</span>The website</dt><dd>A clear get a quote button and a phone number for urgent jobs at the top of the home page</dd></div><div><dt><span class="no">A.3.2</span>Quote requests</dt><dd>Quote requests that go straight to the firm’s email</dd></div><div><dt><span class="no">A.3.3</span>Local search</dt><dd>SEO and a Google Business Profile</dd></div><div><dt><span class="no">A.3.4</span>Tolra</dt><dd>Tolra, my job management app for CNC shops, for jobs and quotes, used in the workshop and in the office, <a href="/tolra">see Tolra</a></dd></div></dl>
+</div>
+  <aside class="margin" aria-label="Notes to What I built">
+<p><span class="note-label">Related</span><a href="/insights/what-to-put-on-an-engineering-firms-website">What to put on an engineering firm’s website</a>, which uses this site as its example</p>
+</aside>
+  
+</section>
+
+<section class="clause next" id="next" aria-labelledby="next-h">
+  <h2 id="next-h"><span class="no">A.4</span> <span>Want something like this for your firm?</span></h2>
+  <div class="clause-body">
+<p class="lead">Talk me through your current site and the enquiries you want</p>
+<div class="actions"><a class="btn" href="https://calendar.google.com/calendar/appointments/AcZssZ35nSQ_2lobUifPsul__TiweHpPV1aRWuWbssQ=" target="_blank" rel="noopener">Book a free 20-minute chat<span class="visually-hidden"> (opens in a new tab)</span></a></div>
+
+</div>
+  
+  
+</section>
+</div>
 </main>
 
-<footer class="site-footer">
-  <div class="wrap">
-    <div class="foot-grid">
+<footer class="colophon">
+  <div class="sheet">
+    <div class="ctrl">
       <div>
-        <a class="foot-logo" href="/" aria-label="Rhys Hume, home"><svg viewBox="0 0 176 44" role="img" aria-label="Rhys Hume" focusable="false"><rect width="44" height="44" rx="10" fill="#ffffff"/><text x="22" y="30" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="21" font-weight="800" fill="#0b2a5b" letter-spacing="-1">RH</text><text x="56" y="29.5" font-family="Inter,Arial,sans-serif" font-size="19" font-weight="800" fill="#ffffff" letter-spacing="-0.5">Rhys Hume</text></svg></a>
-        <p>Systems that win work and run the job, for engineering and manufacturing firms</p>
+        <a class="wordmark" href="/" aria-label="Rhys Hume, home">Rhys Hume</a>
+        <p class="about-line">Systems that win work and run the job, for engineering and manufacturing firms, from Glasgow</p>
       </div>
       <div>
-        <h2>Pages</h2>
-        <ul>
-          <li><a href="/websites">Websites</a></li>
-          <li><a href="/automation">Automation</a></li>
-          <li><a href="/tolra">Tolra</a></li>
-          <li><a href="/csv">Computer system validation</a></li>
-          <li><a href="/council-digital-grants">Council digital grants</a></li>
-          <li><a href="/insights">Insights</a></li>
-          <li><a href="/about">About</a></li>
-        </ul>
+        <h2>Contents</h2>
+        <ul><li><a href="/websites">Websites</a></li><li><a href="/automation">Automation</a></li><li><a href="/tolra">Tolra</a></li><li><a href="/csv">Computer system validation</a></li><li><a href="/work/jnr-engineering">Appendix A: JNR Engineering</a></li><li><a href="/council-digital-grants">Council digital grants</a></li><li><a href="/insights">Insights</a></li><li><a href="/about">About</a></li></ul>
       </div>
       <div>
         <h2>Contact</h2>
         <ul>
           <li><a href="tel:+447908041480">07908 041480</a></li>
           <li><a href="mailto:rhyshume1997@gmail.com">rhyshume1997@gmail.com</a></li>
-          <li><a href="https://www.linkedin.com/in/rhys-hume-701284171" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="https://www.linkedin.com/in/rhys-hume-701284171" target="_blank" rel="noopener">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
           <li>Glasgow</li>
         </ul>
       </div>
     </div>
-  </div>
-  <div class="foot-bar">
-    <div class="wrap">
-      <p>&copy; 2026 Rhys Hume, Glasgow</p>
-      <p><a href="/privacy">Privacy</a></p>
+    <div class="endline">
+      <span>RH-000-A &middot; Rev A &middot; End of document</span>
+      <span>&copy; 2026 Rhys Hume, Glasgow &middot; <a href="/privacy">Privacy</a></span>
     </div>
   </div>
 </footer>
-
-<script>
-(function(){var b=document.querySelector('.nav-btn'),n=document.getElementById('site-nav');if(!b||!n)return;
-function set(o){n.classList.toggle('open',o);b.setAttribute('aria-expanded',o?'true':'false');b.textContent=o?'Close':'Menu'}
-b.addEventListener('click',function(){set(!n.classList.contains('open'))});
-document.addEventListener('keydown',function(e){if(e.key==='Escape'&&n.classList.contains('open')){set(false);b.focus()}});
-n.addEventListener('click',function(e){if(e.target.tagName==='A')set(false)})})();
-</script>
 </body>
 </html>
