@@ -178,14 +178,13 @@ h3 {
 .nav {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: center;
   gap: 0.25rem 1.5rem;
   font-size: 0.9375rem;
 }
 .nav a {
   text-decoration: none;
   color: var(--ink-2);
-  padding-block: 0.35rem;
 }
 .nav a:hover { color: var(--ink); text-decoration: underline; text-decoration-color: var(--accent); }
 .nav a[aria-current="page"] {
@@ -210,6 +209,64 @@ h3 {
   }
   .tb-meta { grid-template-columns: 1fr 1fr; }
   .tb-meta div:last-child:nth-child(odd) { grid-column: 1 / -1; }
+}
+
+/* the phone menu: a disclosure button, only when nav.js has run (html.js).
+   Without the script the nav above stays visible. */
+.menu-btn { display: none; }
+.nw { white-space: nowrap; }
+
+@media (max-width: 44.99rem) {
+  .js .masthead .sheet {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 0 0.5rem;
+    padding-block: 0.75rem;
+  }
+  .js .masthead .wordmark { grid-area: 1 / 1; white-space: nowrap; }
+  .js .menu-btn {
+    grid-area: 1 / 3;
+    display: inline-flex;
+    padding: 0 0.85rem;
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--ink);
+    border-radius: 0;
+    font-family: var(--sans);
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.2;
+    cursor: pointer;
+  }
+  .js .menu-btn:hover, .js .menu-btn[aria-expanded="true"] { background: var(--paper-2); }
+  .js .masthead .btn {
+    grid-area: 1 / 4;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.8125rem;
+    line-height: 1.2;
+  }
+  .js .nav {
+    grid-area: 2 / 1 / 3 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    width: auto;
+    margin-top: 0.75rem;
+    padding-top: 0;
+    border-top: 1px solid var(--ink);
+    font-size: 1rem;
+  }
+  .js .nav a { padding-inline: 0.1rem; border-bottom: 1px solid var(--rule); }
+  .js .nav a:last-child { border-bottom: 0; }
+  .js .menu-btn[aria-expanded="false"] + .nav { display: none; }
+}
+/* the narrowest phones: tighten the header row so it still fits */
+@media (max-width: 23.5rem) {
+  .js .masthead .wordmark { font-size: 1.25rem; }
+  .js .menu-btn { padding-inline: 0.6rem; }
+  .js .masthead .btn { padding-inline: 0.6rem; }
 }
 
 /* ------------------------------------------------------------ buttons */
@@ -292,13 +349,6 @@ h3 {
   color: var(--ink-2);
 }
 .tb-main .actions { margin-top: 2rem; }
-.doc-rev {
-  font-family: var(--mono);
-  font-size: 0.8125rem;
-  font-variant-numeric: tabular-nums;
-  color: var(--ink-3);
-}
-.tb-main > .doc-rev + h1 { margin-top: 0.6rem; }
 .tb-side { font-size: 0.9375rem; min-width: 0; }
 
 @media (min-width: 64rem) {
@@ -365,14 +415,17 @@ h3 {
 
 /* margin notes */
 .margin {
-  border-left: 1px solid var(--rule);
-  padding-left: 1.1rem;
+  background: rgba(11, 42, 91, 0.04);
+  border-left: 2px solid var(--ink);
+  padding: 12px 16px;
   font-size: 0.9375rem;
   line-height: 1.55;
   color: var(--ink-2);
   min-width: 0;
 }
 .margin > * + * { margin-top: 1.1rem; }
+/* a portrait in the margin is a figure, not a note: no box */
+.margin:has(> .portrait:only-child) { background: none; border-left: 0; padding: 0; }
 .note-label {
   display: block;
   font-family: var(--mono);
@@ -624,7 +677,6 @@ figure.exhibit figcaption, .flowchart figcaption {
   line-height: 1.5;
   color: var(--ink-3);
 }
-.fig-no { font-family: var(--mono); font-size: 0.8125rem; color: var(--ink); margin-right: 0.5rem; }
 
 @media (min-width: 60rem) {
   .fc-line { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2.25rem; }
@@ -799,10 +851,10 @@ figure.exhibit img {
   font-variation-settings: normal;
 }
 .ctrl ul { list-style: none; padding: 0; }
-.ctrl li { padding-block: 0.15rem; }
+.ctrl li { padding-block: 0; }
 .ctrl a { text-decoration-color: var(--rule); overflow-wrap: anywhere; }
 .ctrl .about-line { max-width: 22rem; color: var(--ink-2); }
-.ctrl .wordmark { display: inline-block; margin-bottom: 0.6rem; font-size: 1.5rem; }
+.ctrl .wordmark { display: inline-flex; margin-bottom: 0.3rem; font-size: 1.5rem; }
 .endline {
   display: flex;
   flex-wrap: wrap;
@@ -814,10 +866,78 @@ figure.exhibit img {
   font-family: var(--mono);
   font-size: 0.75rem;
   color: var(--ink-3);
+  align-items: center;
 }
 .endline a { color: var(--ink-3); }
 @media (min-width: 48rem) {
   .ctrl { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr); }
+}
+
+/* ------------------------------------------------------------ insights list */
+
+.posts { list-style: none; padding: 0; border-top: 1px solid var(--ink); }
+.posts li { padding: 1.25rem 0 1.4rem; border-bottom: 1px solid var(--rule); }
+.posts h3 {
+  font-size: clamp(1.4rem, 1.2rem + 0.8vw, 1.75rem);
+  line-height: 1.2;
+  font-variation-settings: "opsz" 36;
+}
+.post-date {
+  margin-top: 0.35rem;
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-3);
+}
+.post-summary { margin-top: 0.5rem; max-width: 40rem; color: var(--ink-2); }
+
+/* ------------------------------------------------------------ tap targets
+   44px for controls and for links that stand alone: buttons, the nav, the footer,
+   breadcrumbs, links in an .actions row, a paragraph that is only a link (p.solo),
+   a list that is only links (.ticks.links),
+   register terms, contact lines and post titles. Links inside running text stay
+   inline so the paragraph keeps its line height. */
+
+.btn, button, .skip,
+.wordmark, .nav a,
+.colophon a,
+.crumbs a,
+.actions a,
+.solo > a,
+.ticks.links a,
+.register dt > a,
+.contact-lines dd > a,
+.posts h3 > a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+.crumbs ol { align-items: center; }
+.ticks.links li { padding-block: 0; }
+.ticks.links li::before { top: 50%; }
+
+/* ------------------------------------------------------------ notes on phones and tablets
+   In one column, a margin note sits after the first paragraph of its section rather
+   than at the end. Done with grid order, so nothing is duplicated. A section with no
+   top-level paragraph keeps its note at the end. */
+
+@media (max-width: 63.99rem) {
+  .clause:has(> .margin) { row-gap: 0; }
+  .clause:has(> .margin) > h2 { margin-bottom: 1.5rem; }
+  .clause:has(> .margin) > .clause-body,
+  .clause:has(> .margin) > .clause-body > .article { display: contents; }
+  .clause:has(> .margin) > .clause-body > .article > * { max-width: 40rem; }
+  .clause:has(> .margin) :is(.clause-body, .article) > * { order: 3; }
+  .clause:has(> .margin) :is(.clause-body, .article) > :is(p:first-of-type, :has(~ p:first-of-type)),
+  .clause:has(> .margin) :is(.clause-body, .article):not(:has(> p)) > * { order: 1; }
+  .clause > .margin { order: 2; margin-top: 1.25rem; }
+  .clause:has(> .margin) > .clause-wide { order: 4; margin-top: 1.5rem; }
+
+  .tb-body:has(> .tb-side > .margin) { row-gap: 0; }
+  .tb-body:has(> .tb-side > .margin) > :is(.tb-main, .tb-side) { display: contents; }
+  .tb-body:has(> .tb-side > .margin) > .tb-main > * { order: 3; }
+  .tb-body:has(> .tb-side > .margin) > .tb-main > :is(p:first-of-type, :has(~ p:first-of-type)) { order: 1; }
+  .tb-side > .margin { order: 2; margin-top: 1.5rem; }
 }
 
 /* ------------------------------------------------------------ utilities */
@@ -831,7 +951,7 @@ figure.exhibit img {
 
 @media print {
   body { background: #fff; font-size: 10.5pt; }
-  .masthead .nav, .masthead .btn, .skip, .actions, .clause.next, .form { display: none !important; }
+  .masthead .nav, .masthead .btn, .menu-btn, .skip, .actions, .clause.next, .form { display: none !important; }
   .clause { break-inside: avoid-page; padding-block: 1.5rem; }
   a { text-decoration: none; }
 }

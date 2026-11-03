@@ -24,7 +24,9 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<script>document.documentElement.classList.add("js")</script>
 <link rel="stylesheet" href="/styles.css">
+<script src="/nav.js" defer></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -166,7 +168,8 @@
 <header class="masthead">
   <div class="sheet">
     <a class="wordmark" href="/" aria-label="Rhys Hume, home">Rhys Hume</a>
-    <nav class="nav" aria-label="Main">
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="nav" id="site-nav" aria-label="Main">
       <a href="/websites">Websites</a>
       <a href="/automation">Automation</a>
       <a href="/tolra" aria-current="page">Tolra</a>
@@ -174,7 +177,7 @@
       <a href="/about">About</a>
       <a href="/contact">Contact</a>
     </nav>
-    <a class="btn" href="https://calendar.google.com/calendar/appointments/AcZssZ35nSQ_2lobUifPsul__TiweHpPV1aRWuWbssQ=" target="_blank" rel="noopener">Book a free 20-minute chat<span class="visually-hidden"> (opens in a new tab)</span></a>
+    <a class="btn" href="https://calendar.google.com/calendar/appointments/AcZssZ35nSQ_2lobUifPsul__TiweHpPV1aRWuWbssQ=" target="_blank" rel="noopener"><span>Book a free <span class="nw">20-minute chat</span></span><span class="visually-hidden"> (opens in a new tab)</span></a>
   </div>
 </header>
 
@@ -231,12 +234,12 @@
   <div class="clause-wide">
 <figure class="exhibit">
   <img src="/images/tolra-1.jpg" alt="Tolra dashboard on a Today tab showing counts for quotes with no reply, enquiries not quoted, jobs running late, jobs waiting to be checked and money late" width="1523" height="784" loading="lazy" decoding="async">
-  <figcaption><span class="fig-no">Fig. 1</span>The Today view: quotes with no reply, enquiries not quoted, jobs running late, jobs waiting to be checked and money that’s late (demo data).</figcaption>
+  <figcaption>The Today view: quotes with no reply, enquiries not quoted, jobs running late, jobs waiting to be checked and money that’s late (demo data).</figcaption>
 </figure>
 <div style="height:2.5rem"></div>
 <figure class="exhibit">
   <img src="/images/tolra-2.jpg" alt="Tolra job board with job cards for open, running, waiting for inspection and complete work, and filters for type, due date and stage" width="1523" height="784" loading="lazy" decoding="async">
-  <figcaption><span class="fig-no">Fig. 2</span>The job board: cards for open, running, waiting for inspection and complete work, with filters for type, due date and stage (demo data).</figcaption>
+  <figcaption>The job board: cards for open, running, waiting for inspection and complete work, with filters for type, due date and stage (demo data).</figcaption>
 </figure>
 </div>
 </section>
@@ -294,7 +297,7 @@
       </div>
     </div>
     <div class="endline">
-      <span>RH-130 &middot; Rev A &middot; End of document</span>
+      <span>End of document</span>
       <span>&copy; 2026 Rhys Hume, Glasgow &middot; <a href="/privacy">Privacy</a></span>
     </div>
   </div>

@@ -24,7 +24,9 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<script>document.documentElement.classList.add("js")</script>
 <link rel="stylesheet" href="/styles.css">
+<script src="/nav.js" defer></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -94,7 +96,8 @@
 <header class="masthead">
   <div class="sheet">
     <a class="wordmark" href="/" aria-label="Rhys Hume, home">Rhys Hume</a>
-    <nav class="nav" aria-label="Main">
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="nav" id="site-nav" aria-label="Main">
       <a href="/websites">Websites</a>
       <a href="/automation">Automation</a>
       <a href="/tolra">Tolra</a>
@@ -102,7 +105,7 @@
       <a href="/about">About</a>
       <a href="/contact">Contact</a>
     </nav>
-    <a class="btn" href="https://calendar.google.com/calendar/appointments/AcZssZ35nSQ_2lobUifPsul__TiweHpPV1aRWuWbssQ=" target="_blank" rel="noopener">Book a free 20-minute chat<span class="visually-hidden"> (opens in a new tab)</span></a>
+    <a class="btn" href="https://calendar.google.com/calendar/appointments/AcZssZ35nSQ_2lobUifPsul__TiweHpPV1aRWuWbssQ=" target="_blank" rel="noopener"><span>Book a free <span class="nw">20-minute chat</span></span><span class="visually-hidden"> (opens in a new tab)</span></a>
   </div>
 </header>
 
@@ -123,9 +126,9 @@
 <section class="clause" id="register" aria-labelledby="register-h">
   <h2 id="register-h"><span class="no">1.0</span> <span>Register of notes</span></h2>
   <div class="clause-body">
-<table class="doc stack"><thead><tr><th scope="col" class="ref">Ref</th><th scope="col">Date</th><th scope="col">Title</th></tr></thead><tbody>
-<tr><td class="ref">RH-401</td><td><span class="status"><time datetime="2026-11-01">01 Nov 2026</time></span></td><td><a href="/insights/what-to-put-on-an-engineering-firms-website">What to put on an engineering firm’s website to win more RFQs</a><br>A practical checklist for what to put on the site so buyers can find you and send you the job</td></tr>
-</tbody></table>
+<ol class="posts">
+<li><h3><a href="/insights/what-to-put-on-an-engineering-firms-website">What to put on an engineering firm’s website to win more RFQs</a></h3><p class="post-date"><time datetime="2026-11-01">01 Nov 2026</time></p><p class="post-summary">A practical checklist for what to put on the site so buyers can find you and send you the job</p></li>
+</ol>
 </div>
   
   
@@ -166,7 +169,7 @@
       </div>
     </div>
     <div class="endline">
-      <span>RH-400 &middot; Rev A &middot; End of document</span>
+      <span>End of document</span>
       <span>&copy; 2026 Rhys Hume, Glasgow &middot; <a href="/privacy">Privacy</a></span>
     </div>
   </div>

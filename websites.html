@@ -24,7 +24,9 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<script>document.documentElement.classList.add("js")</script>
 <link rel="stylesheet" href="/styles.css">
+<script src="/nav.js" defer></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -160,7 +162,8 @@
 <header class="masthead">
   <div class="sheet">
     <a class="wordmark" href="/" aria-label="Rhys Hume, home">Rhys Hume</a>
-    <nav class="nav" aria-label="Main">
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="nav" id="site-nav" aria-label="Main">
       <a href="/websites" aria-current="page">Websites</a>
       <a href="/automation">Automation</a>
       <a href="/tolra">Tolra</a>
@@ -168,7 +171,7 @@
       <a href="/about">About</a>
       <a href="/contact">Contact</a>
     </nav>
-    <a class="btn" href="https://calendar.google.com/calendar/appointments/AcZssZ35nSQ_2lobUifPsul__TiweHpPV1aRWuWbssQ=" target="_blank" rel="noopener">Book a free 20-minute chat<span class="visually-hidden"> (opens in a new tab)</span></a>
+    <a class="btn" href="https://calendar.google.com/calendar/appointments/AcZssZ35nSQ_2lobUifPsul__TiweHpPV1aRWuWbssQ=" target="_blank" rel="noopener"><span>Book a free <span class="nw">20-minute chat</span></span><span class="visually-hidden"> (opens in a new tab)</span></a>
   </div>
 </header>
 
@@ -180,9 +183,9 @@
     <div class="tb-main">
       <h1>Websites built to be found and to take the enquiry</h1>
       <p class="standfirst">Buyers search before they call. A firm that is hard to find, or awkward to contact from a phone, loses enquiries before the conversation starts.</p>
-      <div class="actions"><a class="btn" href="https://calendar.google.com/calendar/appointments/AcZssZ35nSQ_2lobUifPsul__TiweHpPV1aRWuWbssQ=" target="_blank" rel="noopener">Book a free 20-minute chat<span class="visually-hidden"> (opens in a new tab)</span></a><a href="/work/jnr-engineering">Appendix A: the JNR Engineering site</a></div>
+      <div class="actions"><a class="btn" href="https://calendar.google.com/calendar/appointments/AcZssZ35nSQ_2lobUifPsul__TiweHpPV1aRWuWbssQ=" target="_blank" rel="noopener">Book a free 20-minute chat<span class="visually-hidden"> (opens in a new tab)</span></a><a href="/work/jnr-engineering">Case study: the JNR Engineering site</a></div>
     </div>
-    <div class="tb-side"><div class="margin"><p><span class="note-label">Live example:</span><a href="https://jnrengineering.co.uk" target="_blank" rel="noopener">jnrengineering.co.uk<span class="visually-hidden"> (opens in a new tab)</span></a></p><p><span class="note-label">Note:</span>The website is the front of the system (see <a href="/#system">Fig. 1 on the home page</a>).</p></div></div>
+    <div class="tb-side"><div class="margin"><p class="solo"><span class="note-label">Live example:</span><a href="https://jnrengineering.co.uk" target="_blank" rel="noopener">jnrengineering.co.uk<span class="visually-hidden"> (opens in a new tab)</span></a></p><p><span class="note-label">Note:</span>The website is the front of the system (see <a href="/#system">the diagram on the home page</a>).</p></div></div>
   </div>
 </header>
 
@@ -218,7 +221,7 @@
     <div class="row"><span class="lbl">Drawing</span><span class="box"></span></div>
     <span class="send">Send</span>
   </div>
-  <figcaption id="fig1-cap"><span class="fig-no">Fig. 1</span>An example quote request form (illustration, not a live form).</figcaption>
+  <figcaption id="fig1-cap">An example quote request form (illustration, not a live form).</figcaption>
 </figure>
 </div>
   
@@ -240,10 +243,10 @@
   <div class="clause-body">
 <figure class="exhibit">
   <img src="/images/jnr-engineering.jpg" alt="JNR Engineering website home page with the headline &#x27;Made to your drawing, checked before it ships&#x27; over a CNC milling machine cutting metal" width="1150" height="783" loading="lazy" decoding="async">
-  <figcaption><span class="fig-no">Fig. 2</span>JNR Engineering, Hamilton, live at jnrengineering.co.uk.</figcaption>
+  <figcaption>JNR Engineering, Hamilton, live at jnrengineering.co.uk.</figcaption>
 </figure>
 <p>The website and the systems behind it for a machining and fabrication firm in Hamilton.</p>
-<p><a href="/work/jnr-engineering">Read Appendix A: JNR Engineering</a></p>
+<p class="solo"><a href="/work/jnr-engineering">Read the case study: JNR Engineering</a></p>
 </div>
   <aside class="margin" aria-label="Notes to Work">
 <p><span class="note-label">Note:</span>Marpet Fabrications: new site coming soon.</p><p><span class="note-label">Note:</span>I also built the website for RDH Coaching.</p>
@@ -295,7 +298,7 @@
       </div>
     </div>
     <div class="endline">
-      <span>RH-110 &middot; Rev A &middot; End of document</span>
+      <span>End of document</span>
       <span>&copy; 2026 Rhys Hume, Glasgow &middot; <a href="/privacy">Privacy</a></span>
     </div>
   </div>

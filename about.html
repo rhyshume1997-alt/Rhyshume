@@ -24,7 +24,9 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<script>document.documentElement.classList.add("js")</script>
 <link rel="stylesheet" href="/styles.css">
+<script src="/nav.js" defer></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -94,7 +96,8 @@
 <header class="masthead">
   <div class="sheet">
     <a class="wordmark" href="/" aria-label="Rhys Hume, home">Rhys Hume</a>
-    <nav class="nav" aria-label="Main">
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="nav" id="site-nav" aria-label="Main">
       <a href="/websites">Websites</a>
       <a href="/automation">Automation</a>
       <a href="/tolra">Tolra</a>
@@ -102,7 +105,7 @@
       <a href="/about" aria-current="page">About</a>
       <a href="/contact">Contact</a>
     </nav>
-    <a class="btn" href="https://calendar.google.com/calendar/appointments/AcZssZ35nSQ_2lobUifPsul__TiweHpPV1aRWuWbssQ=" target="_blank" rel="noopener">Book a free 20-minute chat<span class="visually-hidden"> (opens in a new tab)</span></a>
+    <a class="btn" href="https://calendar.google.com/calendar/appointments/AcZssZ35nSQ_2lobUifPsul__TiweHpPV1aRWuWbssQ=" target="_blank" rel="noopener"><span>Book a free <span class="nw">20-minute chat</span></span><span class="visually-hidden"> (opens in a new tab)</span></a>
   </div>
 </header>
 
@@ -116,7 +119,7 @@
       <p class="standfirst">Systems for engineering and manufacturing firms, built by one person who stays accountable from start to finish.</p>
       <div class="actions"><a class="btn" href="https://calendar.google.com/calendar/appointments/AcZssZ35nSQ_2lobUifPsul__TiweHpPV1aRWuWbssQ=" target="_blank" rel="noopener">Book a free 20-minute chat<span class="visually-hidden"> (opens in a new tab)</span></a><a class="big-link" href="https://www.linkedin.com/in/rhys-hume-701284171" target="_blank" rel="noopener">Find me on LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></div>
     </div>
-    <div class="tb-side"><figure class="portrait"><img src="/images/rhys.jpg" alt="Rhys Hume, smiling, in glasses and a white shirt" width="952" height="1190" decoding="async"><figcaption><span class="fig-no">Fig. 1</span>Rhys Hume, Glasgow.</figcaption></figure></div>
+    <div class="tb-side"><figure class="portrait"><img src="/images/rhys.jpg" alt="Rhys Hume, smiling, in glasses and a white shirt" width="952" height="1190" decoding="async"><figcaption>Rhys Hume, Glasgow.</figcaption></figure></div>
   </div>
 </header>
 
@@ -131,7 +134,7 @@
 <p>Now I build for engineering firms. I built the JNR Engineering website and the systems behind it, and Tolra, my job management app for CNC shops. In pilot in two working shops, JNR Engineering and Marpet Fabrications.</p>
 </div>
   <aside class="margin" aria-label="Notes to Profile">
-<p><span class="note-label">LinkedIn:</span><a href="https://www.linkedin.com/in/rhys-hume-701284171" target="_blank" rel="noopener">linkedin.com/in/rhys-hume-701284171<span class="visually-hidden"> (opens in a new tab)</span></a></p><p><span class="note-label">Contact:</span><a href="mailto:rhyshume1997@gmail.com">rhyshume1997@gmail.com</a></p>
+<p class="solo"><span class="note-label">LinkedIn:</span><a href="https://www.linkedin.com/in/rhys-hume-701284171" target="_blank" rel="noopener">linkedin.com/in/rhys-hume-701284171<span class="visually-hidden"> (opens in a new tab)</span></a></p><p class="solo"><span class="note-label">Contact:</span><a href="mailto:rhyshume1997@gmail.com">rhyshume1997@gmail.com</a></p>
 </aside>
   
 </section>
@@ -149,7 +152,7 @@
   <h2 id="history-h"><span class="no">3.0</span> <span>Revision history</span></h2>
   <div class="clause-body">
 <!-- RHYS TO SUPPLY: dates (years) and role titles for each revision. Add a Date column (<th scope="col">Date</th> and a <td> per row) once you supply them. Nothing here is dated until then. -->
-<table class="doc"><caption>Career so far, earliest first</caption><thead><tr><th scope="col" class="ref">Rev</th><th scope="col">Description of change</th></tr></thead><tbody><tr><td class="ref">Rev A</td><td>Studied chemistry at university</td></tr><tr><td class="ref">Rev B</td><td>Thermo Fisher and the labs, moving up through method development, QC and QA work</td></tr><tr><td class="ref">Rev C</td><td>Method validation and machine validation, run start to finish, improving the process and saving money along the way</td></tr><tr><td class="ref">Rev D</td><td>Computer system validation at Terumo Aortic: protocols, data migration, project work and periodic reviews, Power BI reports, AI agents, and helping other departments use AI</td></tr><tr><td class="ref">Rev E</td><td>Building for engineering firms: the JNR Engineering website and the systems behind it, and Tolra. In pilot in two working shops, JNR Engineering and Marpet Fabrications.</td></tr></tbody></table>
+<table class="doc"><caption>Career so far, earliest first</caption><thead><tr><th scope="col">Description of change</th></tr></thead><tbody><tr><td>Studied chemistry at university</td></tr><tr><td>Thermo Fisher and the labs, moving up through method development, QC and QA work</td></tr><tr><td>Method validation and machine validation, run start to finish, improving the process and saving money along the way</td></tr><tr><td>Computer system validation at Terumo Aortic: protocols, data migration, project work and periodic reviews, Power BI reports, AI agents, and helping other departments use AI</td></tr><tr><td>Building for engineering firms: the JNR Engineering website and the systems behind it, and Tolra. In pilot in two working shops, JNR Engineering and Marpet Fabrications.</td></tr></tbody></table>
 </div>
   
   
@@ -179,8 +182,8 @@
 <section class="clause" id="work" aria-labelledby="work-h">
   <h2 id="work-h"><span class="no">6.0</span> <span>Work</span></h2>
   <div class="clause-body">
-<p>Appendix A is the JNR Engineering case study: the website and systems I built for a machining and fabrication firm in Hamilton.</p>
-<p><a href="/work/jnr-engineering">Read Appendix A: JNR Engineering</a></p>
+<p>The JNR Engineering case study: the website and systems I built for a machining and fabrication firm in Hamilton.</p>
+<p class="solo"><a href="/work/jnr-engineering">Read the case study: JNR Engineering</a></p>
 </div>
   
   
@@ -221,7 +224,7 @@
       </div>
     </div>
     <div class="endline">
-      <span>RH-300 &middot; Rev A &middot; End of document</span>
+      <span>End of document</span>
       <span>&copy; 2026 Rhys Hume, Glasgow &middot; <a href="/privacy">Privacy</a></span>
     </div>
   </div>

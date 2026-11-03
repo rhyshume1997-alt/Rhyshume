@@ -24,7 +24,9 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<script>document.documentElement.classList.add("js")</script>
 <link rel="stylesheet" href="/styles.css">
+<script src="/nav.js" defer></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -176,7 +178,8 @@
 <header class="masthead">
   <div class="sheet">
     <a class="wordmark" href="/" aria-label="Rhys Hume, home">Rhys Hume</a>
-    <nav class="nav" aria-label="Main">
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="nav" id="site-nav" aria-label="Main">
       <a href="/websites">Websites</a>
       <a href="/automation">Automation</a>
       <a href="/tolra">Tolra</a>
@@ -184,7 +187,7 @@
       <a href="/about">About</a>
       <a href="/contact">Contact</a>
     </nav>
-    <a class="btn" href="https://calendar.google.com/calendar/appointments/AcZssZ35nSQ_2lobUifPsul__TiweHpPV1aRWuWbssQ=" target="_blank" rel="noopener">Book a free 20-minute chat<span class="visually-hidden"> (opens in a new tab)</span></a>
+    <a class="btn" href="https://calendar.google.com/calendar/appointments/AcZssZ35nSQ_2lobUifPsul__TiweHpPV1aRWuWbssQ=" target="_blank" rel="noopener"><span>Book a free <span class="nw">20-minute chat</span></span><span class="visually-hidden"> (opens in a new tab)</span></a>
   </div>
 </header>
 
@@ -194,7 +197,6 @@
   <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li aria-current="page">Computer system validation</li></ol></nav>
   <div class="tb-body">
     <div class="tb-main">
-      <p class="doc-rev">Rev A &middot; 03 Nov 2026</p>
       <h1>Computer system validation for regulated manufacturers</h1>
       <p class="standfirst">I’m a CSV Engineer at Terumo Aortic, validating computer systems for medical device manufacturing. I write and run validation for computerised systems: plans, risk assessments, IQ/OQ/PQ, traceability, data migration and periodic review.</p>
       <div class="actions"><a class="btn" href="https://calendar.google.com/calendar/appointments/AcZssZ35nSQ_2lobUifPsul__TiweHpPV1aRWuWbssQ=" target="_blank" rel="noopener">Book a free 20-minute chat<span class="visually-hidden"> (opens in a new tab)</span></a><a href="https://calendar.google.com/calendar/appointments/AcZssZ35nSQ_2lobUifPsul__TiweHpPV1aRWuWbssQ=" target="_blank" rel="noopener">Tell me the system and I’ll tell you what validation it needs<span class="visually-hidden"> (opens in a new tab)</span></a></div>
@@ -221,7 +223,7 @@
 <p>I’ve validated systems including MES, Polarion and a range of equipment systems.</p>
 </div>
   <aside class="margin" aria-label="Notes to Background">
-<p><span class="note-label">See also:</span><a href="/about#history">My revision history, on the About page</a></p>
+<p class="solo"><span class="note-label">See also:</span><a href="/about#history">My revision history, on the About page</a></p>
 </aside>
   
 </section>
@@ -293,7 +295,7 @@
       </div>
     </div>
     <div class="endline">
-      <span>RH-200 &middot; Rev A &middot; End of document</span>
+      <span>End of document</span>
       <span>&copy; 2026 Rhys Hume, Glasgow &middot; <a href="/privacy">Privacy</a></span>
     </div>
   </div>

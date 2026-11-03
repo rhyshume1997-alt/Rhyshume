@@ -24,7 +24,9 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<script>document.documentElement.classList.add("js")</script>
 <link rel="stylesheet" href="/styles.css">
+<script src="/nav.js" defer></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -77,7 +79,8 @@
 <header class="masthead">
   <div class="sheet">
     <a class="wordmark" href="/" aria-label="Rhys Hume, home">Rhys Hume</a>
-    <nav class="nav" aria-label="Main">
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="nav" id="site-nav" aria-label="Main">
       <a href="/websites">Websites</a>
       <a href="/automation">Automation</a>
       <a href="/tolra">Tolra</a>
@@ -85,7 +88,7 @@
       <a href="/about">About</a>
       <a href="/contact">Contact</a>
     </nav>
-    <a class="btn" href="https://calendar.google.com/calendar/appointments/AcZssZ35nSQ_2lobUifPsul__TiweHpPV1aRWuWbssQ=" target="_blank" rel="noopener">Book a free 20-minute chat<span class="visually-hidden"> (opens in a new tab)</span></a>
+    <a class="btn" href="https://calendar.google.com/calendar/appointments/AcZssZ35nSQ_2lobUifPsul__TiweHpPV1aRWuWbssQ=" target="_blank" rel="noopener"><span>Book a free <span class="nw">20-minute chat</span></span><span class="visually-hidden"> (opens in a new tab)</span></a>
   </div>
 </header>
 
@@ -115,7 +118,7 @@
 <h3><span class="no">1.2</span>Regulated manufacturers</h3>
 <p class="for">Medical device and other regulated manufacturers working under a quality system.</p>
 <ul class="ticks"><li>Validation plans and risk assessments</li><li>IQ/OQ/PQ protocols and traceability</li><li>Data migration and periodic review</li></ul>
-<p><a href="/csv">Read the validation scope</a></p>
+<p class="solo"><a href="/csv">Read the validation scope</a></p>
 </div>
   <aside class="margin" aria-label="Notes to Scope">
 <p>Background in computer system validation for regulated medical device manufacturing.</p><p>Tolra, my job management app. In pilot in two working shops, JNR Engineering and Marpet Fabrications.</p>
@@ -140,7 +143,7 @@
     <p>For regulated manufacturers, I validate the systems that hold these records, and keep them validated as things change.</p>
     <p class="by">Handled by <a href="/csv">Computer system validation</a></p>
   </div>
-  <figcaption id="fig1-cap"><span class="fig-no">Fig. 1</span>One job from enquiry to invoice, with validation underneath.</figcaption>
+  <figcaption id="fig1-cap">One job from enquiry to invoice, with validation underneath.</figcaption>
 </figure>
 </div>
 </section>
@@ -150,10 +153,10 @@
   <div class="clause-body">
 <figure class="exhibit">
   <img src="/images/jnr-engineering.jpg" alt="JNR Engineering website home page with the headline &#x27;Made to your drawing, checked before it ships&#x27; over a CNC milling machine cutting metal" width="1150" height="783" loading="lazy" decoding="async">
-  <figcaption><span class="fig-no">Fig. 2</span>JNR Engineering, Hamilton: the home page I built.</figcaption>
+  <figcaption>JNR Engineering, Hamilton: the home page I built.</figcaption>
 </figure>
 <p>I built the JNR Engineering website and the systems behind it. A quote button and a number for urgent jobs sit at the top of the home page. Quote requests go straight to the firm’s email. There’s also SEO, a Google Business Profile and Tolra for jobs and quotes.</p>
-<p><a href="/work/jnr-engineering">Read the JNR Engineering case study</a></p>
+<p class="solo"><a href="/work/jnr-engineering">Read the JNR Engineering case study</a></p>
 </div>
   <aside class="margin" aria-label="Notes to Work">
 <p><span class="note-label">Note:</span>Marpet Fabrications: new site coming soon.</p>
@@ -177,7 +180,7 @@
   <div class="clause-body">
 <p class="lead">I’m Rhys Hume, based in Glasgow. I’m a CSV Engineer at Terumo Aortic, validating computer systems for medical device manufacturing. I also build websites and systems for engineering firms.</p>
 <ul class="ticks"><li>A validation engineering background in regulated medical device manufacturing.</li><li>Tolra, my job management app for CNC shops. In pilot in two working shops, JNR Engineering and Marpet Fabrications.</li><li>One person accountable from the first chat to handover.</li></ul>
-<p><a href="/about">About me, with my revision history</a></p>
+<p class="solo"><a href="/about">About me, with my revision history</a></p>
 </div>
   <aside class="margin" aria-label="Notes to Who you'd work with">
 <figure class="portrait"><img src="/images/rhys.jpg" alt="Rhys Hume, smiling, in glasses and a white shirt" width="952" height="1190" loading="lazy" decoding="async"><figcaption>Rhys Hume, Glasgow.</figcaption></figure>
@@ -189,7 +192,7 @@
   <h2 id="grants-h"><span class="no">6.0</span> <span>Council digital grants</span></h2>
   <div class="clause-body">
 <p>In East Dunbartonshire or North Lanarkshire? You might qualify for a council digital grant towards a website or automation project. I can give you a detailed project quote to support your application.</p>
-<p><a href="/council-digital-grants">See the grants I quote for</a></p>
+<p class="solo"><a href="/council-digital-grants">See the grants I quote for</a></p>
 </div>
   
   
@@ -230,7 +233,7 @@
       </div>
     </div>
     <div class="endline">
-      <span>RH-000 &middot; Rev A &middot; End of document</span>
+      <span>End of document</span>
       <span>&copy; 2026 Rhys Hume, Glasgow &middot; <a href="/privacy">Privacy</a></span>
     </div>
   </div>
