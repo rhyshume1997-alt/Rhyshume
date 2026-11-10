@@ -15,6 +15,10 @@ The contact form and the council digital grants form post to `api/contact.js`, a
 - `RESEND_API_KEY` (required): API key from resend.com
 - `CONTACT_TO` (required): where enquiries go, `rhyshume1997@gmail.com`
 - `CONTACT_FROM` (optional): the sender, on the domain verified in Resend. Defaults to `Rhys Hume <hello@rhyshume.co.uk>`.
+- `TURNSTILE_SECRET_KEY` (required): secret key of the Cloudflare Turnstile widget for rhyshume.co.uk. Mark it Sensitive. Without it the form refuses every send.
+- `CONTACT_QUARANTINE_TO` (optional): where suspected sales pitches are emailed for review, marked `[SPAM REVIEW]`. If it is not set they come to `CONTACT_TO`.
+
+Spam protection is described in `docs/anti-spam.md`. Names only are listed in `.env.example`.
 
 ## Notes
 
