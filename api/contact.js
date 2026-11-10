@@ -9,11 +9,26 @@
     RESEND_API_KEY  required  API key from resend.com
     CONTACT_TO      required  where enquiries go. Intended value: rhyshume1997@gmail.com (comma separate for more than one)
     CONTACT_FROM    optional  sender on a domain verified in Resend, e.g. "Rhys Hume <hello@rhyshume.co.uk>" (the default)
+    TURNSTILE_SECRET_KEY  required  secret key of the Cloudflare Turnstile widget for rhyshume.co.uk (mark Sensitive in Vercel).
+                                    Without it the form refuses every send (fails closed).
+    CONTACT_QUARANTINE_TO optional  where suspected sales pitches are emailed for review, marked [SPAM REVIEW].
+                                    If it is not set they come to CONTACT_TO instead, so nothing is lost.
+
+  Order of checks: rate limit, honeypot, Turnstile, field validation, spam score, send.
+  Spam helpers live in api/_lib (antispam.js is shared across sites and not edited here, contact-words.js is this site's word list).
 */
+
+const antispam = require('./_lib/antispam');
+const contactWords = require('./_lib/contact-words');
 
 // rhyshume.co.uk is the domain verified in Resend. Resend rejects a from address on any other domain.
 const DEFAULT_FROM = 'Rhys Hume <hello@rhyshume.co.uk>';
 const MAX_BODY_BYTES = 64 * 1024;
+
+// Both forms use one Turnstile widget, with data-action="contact" in the page.
+const TURNSTILE_ACTION = 'contact';
+const TURNSTILE_HOSTNAMES = ['rhyshume.co.uk', 'www.rhyshume.co.uk'];
+const QUARANTINE_THRESHOLD = 4;
 
 // The two forms. Each sets a hidden field "form" to one of these keys. The subject and the
 // page the visitor goes back to come from here, never from the request.
@@ -180,6 +195,35 @@ function enquiryEmail(rows) {
 
 const SENT = '?sent=1#sent';
 const NOT_SENT = '?error=1#not-sent';
+const CHECK_FAILED = '?error=1#check-failed';
+
+const FALLBACK = 'call 07908 041480 or email rhyshume1997@gmail.com';
+
+// The security check did not pass. Fails closed: nothing is emailed.
+// 503 when the check itself is down or not set up (the visitor can do nothing about it), 403 when this attempt was refused.
+function refuseCheck(req, res, form, check) {
+  const down = check.reason === 'not_configured' || check.reason === 'unavailable';
+  if (check.reason === 'not_configured') {
+    console.error('contact: missing env var(s): TURNSTILE_SECRET_KEY'); // name only, never the value
+  } else {
+    console.warn('contact: security check refused, reason ' + check.reason +
+      (check.codes && check.codes.length ? ', codes ' + check.codes.join(' ') : ''));
+  }
+  if (down) {
+    return send(req, res, 503, { ok: false, error: 'The form can’t send right now. Please ' + FALLBACK + '.' }, form.page + CHECK_FAILED);
+  }
+  return send(req, res, 403, { ok: false, error: 'The security check didn’t go through. Please try again, or ' + FALLBACK + '.' }, form.page + CHECK_FAILED);
+}
+
+// Held enquiries get a note at the top of the review email saying why.
+function quarantineBanner(verdict, separate) {
+  const where = separate
+    ? 'This was held back and NOT sent to your normal enquiries inbox.'
+    : 'CONTACT_QUARANTINE_TO is not set, so this came to the normal enquiries inbox.';
+  const text = 'SPAM REVIEW: scored ' + verdict.score + ' (' + verdict.reasons.join('; ') + '). ' + where +
+    ' If it is a real customer, reply to them. The sender saw the normal thank you and was sent no confirmation.';
+  return { text: text + '\n\n', html: '<p style="color:#9b2c2c"><b>' + escapeHtml(text) + '</b></p>' };
+}
 
 async function resendSend(payload) {
   const res = await fetch('https://api.resend.com/emails', {
@@ -224,6 +268,16 @@ module.exports = async function handler(req, res) {
     return send(req, res, 200, { ok: true }, form.page + SENT);
   }
 
+  // Turnstile: proves a real browser sent the form. The widget alone does nothing, this server check is what protects it.
+  const check = await antispam.verifyTurnstile({
+    secret: process.env.TURNSTILE_SECRET_KEY,
+    token: fields['cf-turnstile-response'],
+    ip: ip,
+    expectedAction: TURNSTILE_ACTION,
+    allowedHostnames: TURNSTILE_HOSTNAMES
+  });
+  if (!check.ok) return refuseCheck(req, res, form, check);
+
   const checked = validate(form, fields);
   if (Object.keys(checked.errors).length) {
     return send(req, res, 400, { ok: false, errors: checked.errors, error: 'Some details need another look.' }, form.page + NOT_SENT);
@@ -240,14 +294,34 @@ module.exports = async function handler(req, res) {
   }
 
   const d = checked.data;
-  const mail = enquiryEmail(checked.rows);
+  let mail = enquiryEmail(checked.rows);
+  let target = to;
+  let subject = form.subject + ' – ' + d.company;
+
+  // Spam score. A suspected sales pitch is emailed for review, not dropped, and the sender still sees the normal thank you.
+  // The sender is never emailed (this function sends no confirmation), so a pitch gets nothing back.
+  const verdict = contactWords.classifyEnquiry(antispam, {
+    name: d.name,
+    company: d.company,
+    message: d.message || d.what_you_want_built,
+    service: d.service || d.council_area
+  }, { threshold: QUARANTINE_THRESHOLD });
+  if (verdict.quarantine) {
+    // antispam.quarantineTarget reads QUOTE_QUARANTINE_TO, so this site's clearer name is passed in under that key.
+    const held = antispam.quarantineTarget({ QUOTE_QUARANTINE_TO: process.env.CONTACT_QUARANTINE_TO }, to);
+    const banner = quarantineBanner(verdict, held.separate);
+    target = held.to;
+    subject = antispam.quarantineSubject(subject, verdict);
+    mail = { text: banner.text + mail.text, html: banner.html + mail.html };
+  }
+
   let id;
   try {
     id = await resendSend({
       from: String(process.env.CONTACT_FROM || '').trim() || DEFAULT_FROM,
-      to: to,
+      to: target,
       reply_to: d.email,
-      subject: form.subject + ' – ' + d.company,
+      subject: subject,
       text: mail.text,
       html: mail.html
     });
@@ -256,6 +330,6 @@ module.exports = async function handler(req, res) {
     return send(req, res, 502, { ok: false, error: 'Your message didn’t send.' }, form.page + NOT_SENT);
   }
 
-  console.log('contact: sent via Resend, id ' + id + ', form ' + (fields.form === 'grants' ? 'grants' : 'contact'));
+  console.log('contact: ' + (verdict.quarantine ? 'held for review (score ' + verdict.score + ') via Resend' : 'sent via Resend') + ', id ' + id + ', form ' + (fields.form === 'grants' ? 'grants' : 'contact'));
   return send(req, res, 200, { ok: true }, form.page + SENT);
 };

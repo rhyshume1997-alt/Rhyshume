@@ -133,6 +133,7 @@
   <div class="clause-body">
 <div class="form-state" id="sent"><p class="note-label">Sent</p><p>Thank you. Your message has reached me, and I’ll reply by email or phone.</p></div>
 <div class="form-state is-error" id="not-sent"><p class="note-label">Not sent</p><p>Something went wrong, email <a href="mailto:rhyshume1997@gmail.com">rhyshume1997@gmail.com</a></p></div>
+<div class="form-state is-error" id="check-failed"><p class="note-label">Not sent</p><p>The security check didn’t go through. Try again, or call <a href="tel:+447908041480">07908 041480</a> or email <a href="mailto:rhyshume1997@gmail.com">rhyshume1997@gmail.com</a></p></div>
 <form class="form" action="/api/contact" method="POST">
   <input type="hidden" name="form" value="contact">
   <div class="field"><label for="name">Name</label><input id="name" name="name" type="text" autocomplete="name" required></div>
@@ -142,9 +143,18 @@
   <div class="field"><label for="service">What do you need?</label><select id="service" name="service" required><option value="" selected disabled>Choose one</option><option>Website</option><option>Admin automation</option><option>Tolra</option><option>Computer system validation</option><option>Something else</option></select></div>
   <div class="field"><label for="message">Message</label><textarea id="message" name="message" required></textarea></div>
   <div class="hp" aria-hidden="true"><label for="company_website">Leave this empty</label><input id="company_website" name="company_website" type="text" tabindex="-1" autocomplete="off"></div>
+  <div class="check">
+    <div class="cf-turnstile" data-sitekey="0x4AAAAAAF7ONWeir1MBB-v7" data-action="contact" data-theme="light" data-callback="rhCheckOk" data-expired-callback="rhCheckExpired" data-error-callback="rhCheckError"></div>
+    <script>if(window.matchMedia&&window.matchMedia("(max-width:359px)").matches){document.currentScript.previousElementSibling.setAttribute("data-size","compact")}</script>
+    <p class="check-ok" id="check-ok" role="status" hidden>Security check passed</p>
+    <p class="check-msg" id="check-msg" role="status" hidden></p>
+    <noscript><p class="check-msg">This form needs JavaScript for its security check. Please call <a href="tel:+447908041480">07908 041480</a> or email <a href="mailto:rhyshume1997@gmail.com">rhyshume1997@gmail.com</a>.</p></noscript>
+  </div>
   <button class="btn" type="submit">Send</button>
   <p class="fine">I’ll reply by email or phone. See the <a href="/privacy">privacy page</a> for what happens to what you send.</p>
 </form>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script src="/form-check.js" defer></script>
 </div>
   <aside class="margin" aria-label="Notes to Send a message">
 <p><span class="note-label">Email:</span>Prefer email? Write to <a href="mailto:rhyshume1997@gmail.com">rhyshume1997@gmail.com</a>.</p>
