@@ -464,3 +464,53 @@ test('words: the verdict lists the reasons so the lists can be tuned', function 
   assert.ok(Array.isArray(v.reasons) && v.reasons.length > 0);
   assert.strictEqual(typeof v.score, 'number');
 });
+
+// ---------------------------------------------------------------- local business form (/local-business)
+
+const localEnquiry = {
+  form: 'local',
+  name: 'Kirsty Boyd',
+  company: 'Boyd Bakery',
+  email: 'kirsty@boydbakery.co.uk',
+  phone: '',
+  service: 'Domain and email set up',
+  message: 'We are a bakery in Motherwell and need a domain and business email set up.',
+  'cf-turnstile-response': 'good-token'
+};
+
+test('local: a real enquiry is sent with the local business subject and goes back to /local-business', async function () {
+  await scenario({}, async function (calls) {
+    const res = await post(localEnquiry);
+    assert.strictEqual(res.statusCode, 303);
+    assert.strictEqual(res.headers.location, '/local-business?sent=1#sent');
+    assert.strictEqual(calls.resend.length, 1);
+    assert.strictEqual(calls.resend[0].subject, 'New local business enquiry from rhyshume.co.uk – Boyd Bakery');
+    assert.deepStrictEqual(calls.resend[0].to, ['me@example.com']);
+  });
+});
+
+test('local: it needs the same security check, and a missing token goes back to /local-business', async function () {
+  await scenario({}, async function (calls) {
+    const res = await post(Object.assign({}, localEnquiry, { 'cf-turnstile-response': '' }));
+    assert.strictEqual(res.statusCode, 303);
+    assert.strictEqual(res.headers.location, '/local-business?error=1#check-failed');
+    assert.strictEqual(calls.resend.length, 0);
+  });
+});
+
+test('local: the honeypot still gets a normal-looking success and nothing is sent', async function () {
+  await scenario({}, async function (calls) {
+    const res = await post(Object.assign({}, localEnquiry, { company_website: 'https://spam.example' }));
+    assert.strictEqual(res.headers.location, '/local-business?sent=1#sent');
+    assert.strictEqual(calls.resend.length, 0);
+    assert.strictEqual(calls.verify.length, 0);
+  });
+});
+
+test('local: a missing required field goes back to /local-business with the not sent note', async function () {
+  await scenario({}, async function (calls) {
+    const res = await post(Object.assign({}, localEnquiry, { service: '' }));
+    assert.strictEqual(res.headers.location, '/local-business?error=1#not-sent');
+    assert.strictEqual(calls.resend.length, 0);
+  });
+});

@@ -2,7 +2,7 @@
 
 /*
   POST /api/contact
-  Takes the contact form (/contact) and the council digital grants form (/council-digital-grants),
+  Takes the contact form (/contact), the local business form (/local-business) and the council digital grants form (/council-digital-grants),
   sent as application/x-www-form-urlencoded, and emails the enquiry to Rhys with Resend.
 
   Environment variables (set in Vercel, Project Settings, Environment Variables):
@@ -25,12 +25,12 @@ const contactWords = require('./_lib/contact-words');
 const DEFAULT_FROM = 'Rhys Hume <hello@rhyshume.co.uk>';
 const MAX_BODY_BYTES = 64 * 1024;
 
-// Both forms use one Turnstile widget, with data-action="contact" in the page.
+// All forms use one Turnstile widget, with data-action="contact" in the page.
 const TURNSTILE_ACTION = 'contact';
 const TURNSTILE_HOSTNAMES = ['rhyshume.co.uk', 'www.rhyshume.co.uk'];
 const QUARANTINE_THRESHOLD = 4;
 
-// The two forms. Each sets a hidden field "form" to one of these keys. The subject and the
+// The three forms. Each sets a hidden field "form" to one of these keys. The subject and the
 // page the visitor goes back to come from here, never from the request.
 const FORMS = {
   contact: {
@@ -39,6 +39,18 @@ const FORMS = {
     fields: [
       ['name', 'Name', 100, true],
       ['company', 'Company', 120, true],
+      ['email', 'Email', 200, true],
+      ['phone', 'Phone', 30, false],
+      ['service', 'What do you need?', 60, true],
+      ['message', 'Message', 5000, true, 'multi']
+    ]
+  },
+  local: {
+    page: '/local-business',
+    subject: 'New local business enquiry from rhyshume.co.uk',
+    fields: [
+      ['name', 'Name', 100, true],
+      ['company', 'Business name', 120, true],
       ['email', 'Email', 200, true],
       ['phone', 'Phone', 30, false],
       ['service', 'What do you need?', 60, true],
@@ -330,6 +342,6 @@ module.exports = async function handler(req, res) {
     return send(req, res, 502, { ok: false, error: 'Your message didn’t send.' }, form.page + NOT_SENT);
   }
 
-  console.log('contact: ' + (verdict.quarantine ? 'held for review (score ' + verdict.score + ') via Resend' : 'sent via Resend') + ', id ' + id + ', form ' + (fields.form === 'grants' ? 'grants' : 'contact'));
+  console.log('contact: ' + (verdict.quarantine ? 'held for review (score ' + verdict.score + ') via Resend' : 'sent via Resend') + ', id ' + id + ', form ' + (FORMS[oneLine(fields.form, 20)] ? oneLine(fields.form, 20) : 'contact'));
   return send(req, res, 200, { ok: true }, form.page + SENT);
 };
