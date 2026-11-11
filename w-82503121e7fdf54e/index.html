@@ -2093,7 +2093,7 @@ function quoteText(q, diff) {
 
 /* ---------- screens ---------- */
 function vPriceBook() {
-  const rows = S.pb.map((p, i) => { const k = 'pb.' + i + '.'; return `<div class="q"><div class="grid3">${field('Name', k + 'name')}<label class="f"><span class="fl">Unit</span>${select(k + 'unit', UNITS, p.unit)}</label>${field('Price, £, blank until you set it', k + 'price', { ph: 'blank' })}<label class="f"><span class="fl">Tag</span>${select(k + 'tag', TAGS, p.tag)}</label><label class="f"><span class="fl">How often</span>${select(k + 'freq', FREQS2, p.freq)}</label><label class="f"><span class="fl">Pick it for the quote</span>${select(k + 'when', PB_RULES, p.when || '')}</label></div>${field('Plain description, the client sees this', k + 'desc')}${p.allow !== undefined ? field('Included edit time each month, minutes, blank until you set it', k + 'allow', { ph: 'e.g. 30 to 60' }) : ''}${p.hint ? '<p class="hint" style="color:#8a909c">' + esc(p.hint) + '</p>' : ''}<div class="row">${fund() ? `<label class="f" style="min-width:220px"><span class="fl">Grant category, from the active pack</span><select data-k="${k}cat"><option value="">Not set</option>${Object.values(costCats()).map(c => `<option value="${esc(c.id)}" ${p.cat === c.id ? 'selected' : ''}>${esc(c.label)}</option>`).join('')}</select></label>` : ''}<button class="btn sm2" data-act="pbrm" data-i="${i}">Remove this line</button></div></div>`; }).join('');
+  const rows = S.pb.map((p, i) => { const k = 'pb.' + i + '.'; return `<div class="q"><div class="grid3">${field('Name', k + 'name')}<label class="f"><span class="fl">Unit</span>${select(k + 'unit', UNITS, p.unit)}</label>${field('Price, £, blank until you set it', k + 'price', { ph: 'blank' })}<label class="f"><span class="fl">Tag</span>${select(k + 'tag', TAGS, p.tag)}</label><label class="f"><span class="fl">How often</span>${select(k + 'freq', FREQS2, p.freq)}</label><label class="f"><span class="fl">Pick it for the quote</span>${select(k + 'when', PB_RULES, p.when || '')}</label></div>${field('Plain description, the client sees this', k + 'desc')}<div class="grid2">${field('Group, optional. Lines with the same group name are tiers, a quote takes one', k + 'group', { ph: 'e.g. Website, Care plan, Filming' })}${p.group ? chk(k + 'dflt', 'This is the default tier, otherwise the middle one is') : ''}</div>${p.allow !== undefined ? field('Included edit time each month, minutes, blank until you set it', k + 'allow', { ph: 'e.g. 30 to 60' }) : ''}${p.hint ? '<p class="hint" style="color:#8a909c">' + esc(p.hint) + '</p>' : ''}<div class="row">${fund() ? `<label class="f" style="min-width:220px"><span class="fl">Grant category, from the active pack</span><select data-k="${k}cat"><option value="">Not set</option>${Object.values(costCats()).map(c => `<option value="${esc(c.id)}" ${p.cat === c.id ? 'selected' : ''}>${esc(c.label)}</option>`).join('')}</select></label>` : ''}<button class="btn sm2" data-act="pbrm" data-i="${i}">Remove this line</button></div></div>`; }).join('');
   return `${head('Price book', 'Your own prices, typed once and kept on this device. My public prices are prefilled, everything else starts blank. Export it as a file to keep a copy', 'pricebook')}
   ${note('Never cut a price without cutting scope, and ask before any discount', 'stop', 'Rule:')}
   ${note('Grey hints are only suggested ranges from advisers, not market averages, the price is always your choice', '', 'Note:')}
@@ -2133,6 +2133,7 @@ function vQuote() {
   ${sec('3.0', 'What it adds up to', '<div data-live="qlist"></div><div data-live="qtot"></div>')}
   ${fund() ? sec('3.5', 'Grant eligible total, kept apart', '<div data-live="qelig"></div><p class="row"><button class="btn sm2" data-act="qsendfund">Send these lines to the funding quote screen</button></p><p class="hint">This replaces the lines on the funding quote screen with these one off lines, ex VAT</p>' + chk('quote2.showGrant', 'Show the grant totals in the client view').replace('data-k=', 'data-full="1" data-k=')) : ''}
   ${sec('4.0', 'Deposit and stage payments', `<div class="grid3">${field('Deposit, %', 'quote2.depPct', { ph: 'you set it' })}</div>${q.stages.map((s, i) => `<div class="grid2">${field('Stage ' + (i + 1) + ' name', 'quote2.stages.' + i + '.n', { ph: 'e.g. on design approval' })}${field('Stage ' + (i + 1) + ', %', 'quote2.stages.' + i + '.p')}</div>`).join('')}<p class="row"><button class="btn sm2" data-add="quote2.stages" data-fk="n">Add a stage</button></p><p class="hint">The balance on completion is whatever percentage is left</p>`)}
+  ${sec('4.5', 'Terms shown on the quote and contract', note('The deposit and licensing wording is NOT YET CHECKED by a professional. It shows [Not yet checked by a professional] on the quote and contract until you tick the box below', 'stop', 'Not yet checked:') + '<p class="hint">No VAT is charged. Deposit 50% before work starts, refunded on cancelling minus 350 pounds per day of work completed as shown in your work log, no refund once completed work equals or exceeds the deposit. Alcohol licensing is the client\'s responsibility. International shipping is not included</p>' + chk('quote2.termsOk', 'A professional has checked the deposit and licensing wording') + chk('quote2.noLic', 'Leave out the alcohol licensing wording, this client does not sell alcohol'))}
   ${sec('5.0', 'Ongoing monthly and yearly costs, never in the build total', '<div data-live="qongoing"></div>')}
   ${sec('6.0', 'Assumptions, exclusions and revisions', `${field('Assumptions, one per line, starting wording, edit it', 'quote2.assume', { area: true, rows: 5 })}${field('Extra exclusions, one per line. Scope items marked not included, and lines tagged not included, are added for you', 'quote2.excl', { area: true, rows: 3 })}<div class="grid2">${field('Rounds of revisions included', 'quote2.rounds', { ph: 'you set it' })}${field('What counts as a revision', 'quote2.revNote', { ph: 'one line' })}</div>`)}
   ${cr}
@@ -2498,11 +2499,21 @@ function reqModel(src) {
   m.payload = { rev: src.rev, date: src.date, supersedes: src.supersedes, log: src.log, lead: src.lead, sections: src.sections, quote: src.quote };
   if (src.sign) m.sigs['req:client'] = src.sign; return finish(m);
 }
+const TERMS_FLAG = ' [Not yet checked by a professional]';
+function termsItems(q) {
+  const ok = !!S.quote2.termsOk, f = ok ? '' : TERMS_FLAG, a = [];
+  a.push(['VAT', q.vatOn ? 'VAT is added to the prices where this quote says so.' : 'No VAT is charged. I am not VAT registered.']);
+  a.push(['Deposit', 'A deposit of 50% is due before work starts. If you cancel, I refund the deposit minus 350 pounds for each day of work completed up to the cancellation, as shown in my work log. Once the work completed equals or exceeds the deposit, no refund is due and any further work is invoiced.' + f]);
+  if (!S.quote2.noLic) a.push(['Licensing', 'You are responsible for holding and complying with any licences needed to sell alcohol, including online, click and collect and delivery sales, and for confirming this with the local licensing authority. I add age verification wording and checkout prompts as you instruct, and I do not give legal or licensing advice or accept responsibility for licensing compliance.' + f]);
+  a.push(['International shipping', 'International shipping is not included. It may be available later, subject to licence checks.']);
+  return a;
+}
+const termsSec = q => ({ h: 'Terms for this quote', tag: 'solicitor', ul: termsItems(q).map(x => x[0] + ': ' + x[1]) });
 function quoteModel() {
   const m = modelBase('quote'), q = pubQuote(qSnap()); m.date = q.date || m.date; if ((S.quote2.lines || []).some(l => l.from === 'client' && !l.ok)) m.banner = 'DRAFT, not approved yet. Do not send this as a quote'; m.agree = 'I have read and accept this quote and its payment terms';
   const d = (S.cr.on && S.cr.base) ? quoteDiff(S.cr.base.quote, q) : null;
   const ex = Fv('examples').split('\n').map(x => x.trim()).filter(Boolean);
-  m.body = secHtml(summarySec('quote', q)) + `<section class="ds">${quoteHtml(q, { grant: !!S.quote2.showGrant, diff: d })}</section>${ex.length ? secHtml({ h: 'Examples of my work', ul: ex }) : ''}<section class="ds"><h3>Acceptance</h3><p>By signing below, I accept this quote for the work, the price and the payment terms shown above.</p></section>`;
+  m.body = secHtml(summarySec('quote', q)) + `<section class="ds">${quoteHtml(q, { grant: !!S.quote2.showGrant, diff: d })}</section>${ex.length ? secHtml({ h: 'Examples of my work', ul: ex }) : ''}${secHtml(termsSec(q))}<section class="ds"><h3>Acceptance</h3><p>By signing below, I accept this quote for the work, the price and the payment terms shown above.</p></section>`;
   m.payload = { quote: q }; return finish(m);
 }
 const payerOf = id => { const v = (S.own.items[id] || {}).payer; return ({ client: 'the client', us: 'me', provider: 'the provider', other: 'someone else' }[v]) || '[to fill: who pays]'; };
@@ -2536,6 +2547,7 @@ function contractModel() {
     { h: 'Timeline and milestones', tag: 'job', rows: [['Start', S.prop.start ? fmtDate(S.prop.start) : '[to fill: start date]'], ['Finish', S.prop.finish ? fmtDate(S.prop.finish) : '[to fill: finish date]']], ul: Fv('milestones') ? Fv('milestones').split('\n').filter(x => x.trim()) : ['[to fill: milestones and dates]'], p: ['The dates depend on the client supplying what is needed on time.'] },
     { h: 'Client responsibilities and deadlines', tag: 'job', rows: [['The words', FV('supplyCopy', 'who supplies the words')], ['Photos', FV('supplyPhotos', 'who supplies photos')], ['Product information', FV('supplyProducts', 'who supplies product information')], ['Account access', FV('supplyAccess', 'how access is shared')], ['Approvals and feedback', 'Within ' + FV('feedbackDays', 'days for feedback') + ' days of each request']], p: ['If the client is late, the dates move by the same time. Work that has to be redone or held because of a delay is a change request.'] },
     { h: 'Fees, deposit, stage payments and late payment', tag: 'job', rows: quoteRows(q), ul: ['Invoices are payable within ' + FV('payDays', 'days to pay') + ' days', 'Late payment: ' + FV('lateRate', 'late payment charge, if any'), 'Quote ' + (q.no || '[to fill: quote number]') + ' is the price for the work in this contract', 'Deposit if the grant is refused or the client cancels: ' + FV('depositRule', 'what happens to the deposit')] },
+    termsSec(q),
     { h: 'VAT', tag: 'solicitor', p: [q.vatOn ? 'VAT is added to the prices where the quote says so' + (q.vatRate > 0 ? ', at ' + q.vatRate + '%.' : ', at a rate to confirm. [to fill: VAT rate]') : 'I am not VAT registered, so no VAT has been added to the prices in the quote.', 'VAT registration status: ' + q.vatStatus, 'Check the official source for the current rules and rate, then confirm with the solicitor.'] },
     { h: 'Grant funded jobs', tag: 'job', p: P2 ? ['If this job is part of a grant application to ' + P2.name + ' (' + P2.funder + '), the client pays first and then claims the money back. The grant outcome is not guaranteed and I do not promise it.', 'The client should not spend or sign anything before approval where the funder\'s rules say so. Check the official source for the funder\'s rules, then confirm.', grantOut] : ['Not used on this job.', 'If the job becomes grant funded, the client pays first and claims back, the outcome is not guaranteed, and nothing is spent before approval where the funder says so.', grantOut] },
     { h: 'Revisions and change requests', tag: 'job', p: [(q.rounds ? q.rounds + ' rounds of changes are included. ' : '[to fill: rounds of changes included] ') + (q.revNote || ''), 'After sign off, any change to what is included is made through a change request, priced for the difference only and signed before the work starts.'] },
@@ -2628,7 +2640,7 @@ function consistency() {
   });
   if (types().includes('shop') && st('f-shop') !== 'inc') w.push('The client wants a shop, but the scope does not include the online shop');
   const pl = L.find(l => /^pages$/i.test(l.name)); if (pl && Number(pl.qty) !== pageCount()) w.push('The quote counts ' + pl.qty + ' pages, the scope lists ' + pageCount());
-  if (q.vatOn && !(q.vatRate > 0)) w.push('VAT is switched on with no rate, the quote and contract show a blank'); if (S.docs.rev > 1 && !logFor(S.docs.rev).some(l => (l.what || '').trim())) w.push('Rev ' + S.docs.rev + ' has no logged changes, record what changed and why on the Revisions screen'); if (q.vatOn && /not/i.test(q.vatStatus)) w.push('VAT is switched on but the status still says not registered, update the status');
+  if (!S.quote2.termsOk) w.push('The deposit and licensing wording is not yet checked by a professional, the quote and contract show that marker'); if (S.quote2.depPct && Number(S.quote2.depPct) !== 50) w.push('The deposit wording says 50% but the deposit box says ' + S.quote2.depPct + '%'); if (q.vatOn && !(q.vatRate > 0)) w.push('VAT is switched on with no rate, the quote and contract show a blank'); if (S.docs.rev > 1 && !logFor(S.docs.rev).some(l => (l.what || '').trim())) w.push('Rev ' + S.docs.rev + ' has no logged changes, record what changed and why on the Revisions screen'); if (q.vatOn && /not/i.test(q.vatStatus)) w.push('VAT is switched on but the status still says not registered, update the status');
   { const nop = S.assets.filter(x => x.useDoc && !x.perm).length; if (nop) w.push(nop + ' image' + (nop === 1 ? ' is' : 's are') + ' ticked for client documents without permission, so they will be left out'); contrastWarns().forEach(x => w.push('Brand colours: ' + x)); const bh = S.brand.colours.filter(c => c.hex && !hexOk(normHex(c.hex))).length; if (bh) w.push(bh + ' brand colour' + (bh === 1 ? '' : 's') + ' not a valid hex code like #0b2a5b'); const nl = S.assets.filter(x => usable(x) && x.type !== 'logo' && !(x.licence || '').trim()).length; if (nl) w.push(nl + ' image' + (nl === 1 ? '' : 's') + ' going into client documents with no licence note'); }
   if ((S.quote2.lines || []).some(l => l.from === 'client' && !l.ok)) w.push('The quote has lines that came from the client ticks and are not approved yet, the client quote is marked Draft until you approve them');
   if (q.valid && q.date && q.valid < q.date) w.push('The quote is valid until a date before the quote date');
@@ -3123,11 +3135,12 @@ function clLoginHtml() {
 function clListHtml() {
   const local = clSafe(() => { const r = localStorage.getItem(KEY); const o = r ? JSON.parse(r) : null; return o && o.client ? o : null; }, null);
   const rows = (CL.list || []).map(c => `<tr><td><b>${esc(c.client_name || 'New client')}</b>${c.waiting ? ' <span class="tag ask">Waiting for Rhys</span>' : ''}</td><td>${esc(typeof statusLabel === 'function' ? statusLabel(c.status || 'enquiry') : '')}</td><td>${esc(clTime(c.updated_at))}</td><td><button class="btn sm2" data-act="clopen" data-id="${esc(c.id)}">Open</button></td></tr>`).join('');
+  const lrows = (CL.leads || []).map(l => `<tr><td><b>${esc(l.business || l.name)}</b> <span class="tag ask">Waiting for Rhys</span><div class="hint">New request from ${esc(l.name)}, ${esc(clTime(l.created_at))}</div></td><td>New lead</td><td>${esc(clTime(l.created_at))}</td><td><button class="btn sm2" data-act="leadmk" data-id="${esc(l.id)}" ${CL.busy ? 'disabled' : ''}>Make into a client</button></td></tr>`).join('');
   return clFrame('Online saving', `<h1>Clients</h1><p class="hint">Signed in as ${esc((CL.session && CL.session.email) || '')}</p>
   ${CL.msg ? '<div class="note"><b>Note:</b>' + esc(CL.msg) + '</div>' : ''}
   <p class="row"><button class="btn pri" data-act="clnew" ${CL.busy ? 'disabled' : ''}>New client</button><button class="btn" data-act="clfile">Add a client from a saved file</button>${local ? '<button class="btn" data-act="cldevice">Add the project on this device' + (local.client.business ? ', ' + esc(local.client.business) : '') + '</button>' : ''}<button class="btn" data-act="clreload">Refresh the list</button></p>
   ${CL.busy ? '<p class="hint">' + esc(CL.busy) + '</p>' : ''}
-  ${CL.list == null ? '' : (rows ? '<table class="tbl" style="width:100%"><thead><tr><th>Client</th><th>Status</th><th>Last saved</th><th></th></tr></thead><tbody>' + rows + '</tbody></table>' : '<p class="hint">No clients yet, press New client</p>')}
+  ${CL.list == null ? '' : ((rows || lrows) ? '<table class="tbl" style="width:100%"><thead><tr><th>Client</th><th>Status</th><th>Last saved</th><th></th></tr></thead><tbody>' + lrows + rows + '</tbody></table>' : '<p class="hint">No clients yet, press New client</p>')}
   <p class="hint" style="margin-top:18px">The price book stays on this device, it is never saved online</p>`, true);
 }
 function cloudGate() { if (!CL.on || CL.offline || CL.screen === 'work') return ''; return CL.screen === 'list' ? clListHtml() : clLoginHtml(); }
@@ -3138,6 +3151,7 @@ async function clLoadList() {
   try {
     CL.list = await clRest('?select=id,client_name,updated_at,status:data->client->>status,seen:data->portal->>seen&order=updated_at.desc'); CL.busy = '';
     try { const ps = await clRest('?select=workbook_id,submitted_at', { table: 'client_portals' }); const sub = {}; (ps || []).forEach(p => { if (p.submitted_at && (!sub[p.workbook_id] || p.submitted_at > sub[p.workbook_id])) sub[p.workbook_id] = p.submitted_at; }); CL.list.forEach(c => { const s = sub[c.id]; c.waiting = !!(s && (!c.seen || Date.parse(s) > Date.parse(c.seen))); }); CL.list.sort((a, b) => (b.waiting ? 1 : 0) - (a.waiting ? 1 : 0)); } catch (e2) { }
+    try { CL.leads = await clRest('?handled=eq.false&select=id,created_at,name,business,email,phone,message,picks&order=created_at.desc', { table: 'leads' }) || []; } catch (e3) { CL.leads = []; }
   }
   catch (e) { CL.busy = ''; clFail(e, 'I could not load the client list'); }
   if (CL.screen !== 'work') render();
@@ -3154,8 +3168,8 @@ function clEnter(row, fresh) {
 }
 async function clCreate(data, name) {
   CL.busy = 'Creating'; render();
-  try { const rows = await clRest('', { method: 'POST', body: [{ id: clUuid(), client_name: name || 'New client', data }] }); CL.busy = ''; clEnter(rows[0], true); }
-  catch (e) { CL.busy = ''; clFail(e, 'I could not create the client'); render(); }
+  try { const rows = await clRest('', { method: 'POST', body: [{ id: clUuid(), client_name: name || 'New client', data }] }); CL.busy = ''; clEnter(rows[0], true); return rows[0]; }
+  catch (e) { CL.busy = ''; clFail(e, 'I could not create the client'); render(); return null; }
 }
 async function clOpen(id) {
   CL.busy = 'Opening'; render();
@@ -3206,6 +3220,15 @@ Object.assign(ACTS2, {
   cloffline: () => { CL.offline = true; render(); },
   clout: () => { if (!confirm('Sign out? The copy on this device stays, nothing is deleted online')) return; clStoreSession(null); clSafe(() => sessionStorage.removeItem(RESKEY)); CL.screen = 'login'; CL.sent = ''; CL.list = null; CL.msg = ''; render(); },
   clreload: () => clLoadList(),
+  leadmk: async (t, d) => {
+    const l = (CL.leads || []).find(x => x.id === d.id); if (!l || CL.busy) return;
+    S = blank(); ensurePackState();
+    S.client.business = l.business || ''; S.client.contact = l.name || ''; S.client.status = 'enquiry';
+    const R = REQ(); Object.keys(l.picks || {}).forEach(k => { if (l.picks[k] === 'need' || l.picks[k] === 'unsure') { R.picks[k] = l.picks[k]; if (l.picks[k] === 'need') R.fromClient[k] = true; } });
+    R.note = l.message || ''; S.lead = { email: l.email || '', phone: l.phone || '', at: l.created_at };
+    const row = await clCreate(JSON.parse(clJson()), l.business || l.name || 'New lead');
+    if (row) { try { await clRest('?id=eq.' + encodeURIComponent(l.id), { table: 'leads', method: 'PATCH', body: { handled: true, workbook_id: row.id } }); CL.leads = (CL.leads || []).filter(x => x.id !== l.id); } catch (e) { CL.msg = 'The client was made, but I could not mark the request as handled. It may show again in the list'; } }
+  },
   clnew: () => { S = blank(); ensurePackState(); clCreate(JSON.parse(clJson()), 'New client'); },
   clopen: (t, d) => clOpen(d.id),
   clback: async () => { if (CL.timer || CL.dirty) await cloudSave(false); if (CL.conflict || CL.status === 'signedout' || CL.status === 'error' || CL.status === 'offline') { if (!confirm('The latest changes are not saved online yet. Go to the client list anyway? They stay on this device only')) return; } CL.screen = 'list'; clSafe(() => sessionStorage.removeItem(RESKEY)); render(); clLoadList(); },
@@ -3244,7 +3267,9 @@ const PS = () => { if (!S.portal) S.portal = { sections: { needs: true, discover
 const pSections = () => { const p = PS(); return PSECS.map(x => x[0]).filter(k => p.sections[k] && (fund() || (k !== 'eligibility' && k !== 'evidence'))); };
 function pOptions() {
   const sp = !!PS().showPrices;
-  return S.pb.filter(pbOffer).map(p => { const o = { id: p.id, label: p.name || 'Item', help: /^(Description to confirm|Basis to confirm)$/.test(p.desc || '') ? '' : (p.desc || ''), unit: p.unit, freq: p.freq }; const n = num(p.price); if (sp && p.price !== '' && p.price != null && n > 0) o.from = String(n); return o; });
+  const one = p => { const o = { id: p.id, label: p.name || 'Item', help: /^(Description to confirm|Basis to confirm)$/.test(p.desc || '') ? '' : (p.desc || ''), unit: p.unit, freq: p.freq }; const n = num(p.price); if (sp && p.price !== '' && p.price != null && n > 0) o.from = String(n); return o; };
+  const gs = pbGroups().filter(g => g.tiers.some(pbOffer)).map(g => ({ id: g.id, label: g.name, help: '', unit: 'fixed', freq: 'once', tiers: g.tiers.map(one), dflt: grpDefault(g).id }));
+  return gs.concat(S.pb.filter(p => pbOffer(p) && !grpOf(p)).map(one));
 }
 const pCfg = () => { const s = pSections(); return { v: 2, sections: s, options: s.includes('needs') ? pOptions() : [] }; };
 const pLink = () => location.origin + PORTAL_PATH + '#t=' + PT.token;
@@ -3287,7 +3312,9 @@ function pItems() {
   const add = (key, group, label, mine, theirs, apply, show) => { theirs = pStr(theirs); mine = pStr(mine); if (!theirs.trim() || theirs === mine) return; out.push({ key, group, label, mine, theirs, show: show || (v => v), apply }); };
   if (has('needs') && A.discovery && A.discovery._req && typeof A.discovery._req === 'object') {
     const r = A.discovery._req, pk = r.picks || {}, W = { need: 'Needs it', unsure: 'Not sure' }, R = REQ();
-    S.pb.filter(pbOffer).forEach(p => { if (pk[p.id] === 'need' || pk[p.id] === 'unsure') add('req.' + p.id, 'Quote request', p.name, W[R.picks[p.id]] || '', W[pk[p.id]], () => { R.picks[p.id] = pk[p.id]; R.fromClient[p.id] = pk[p.id] === 'need'; }); });
+    S.pb.filter(p => pbOffer(p) && !grpOf(p)).forEach(p => { if (pk[p.id] === 'need' || pk[p.id] === 'unsure') add('req.' + p.id, 'Quote request', p.name, W[R.picks[p.id]] || '', W[pk[p.id]], () => { R.picks[p.id] = pk[p.id]; R.fromClient[p.id] = pk[p.id] === 'need'; }); });
+    const tn = (g, id) => { const t = g.tiers.find(x => x.id === id) || grpDefault(g); return t ? ', ' + (t.name || 'Tier') : ''; };
+    pbGroups().forEach(g => { const v = pk[g.id]; if (v === 'need' || v === 'unsure') { const tid = r.tiers && r.tiers[g.id]; add('req.' + g.id, 'Quote request', g.name + ' (pick one)', R.picks[g.id] ? (W[R.picks[g.id]] + (R.picks[g.id] === 'need' ? tn(g, R.tier[g.id]) : '')) : '', W[v] + (v === 'need' ? tn(g, tid) : ''), () => { R.picks[g.id] = v; R.fromClient[g.id] = v === 'need'; if (tid && g.tiers.some(x => x.id === tid)) R.tier[g.id] = tid; }); } });
     add('req.note', 'Quote request', 'Their note about what they need', R.note, r.note, v => { R.note = v; });
   }
   if (has('discovery') && A.discovery) {
@@ -3372,7 +3399,7 @@ Object.assign(ACTS2, {
   },
   psp: () => { PS().showPrices = !PS().showPrices; save(); if (pOnline() && PT.portal) ACTS2.psync(); else render(); },
   psync: async () => { if (!pOnline() || PT.busy) return; PT.busy = 'Updating'; PT.err = ''; render(); try { await pSeedCfg(); PT.msg = 'Their page now shows the current list' + (PS().showPrices ? ', with starting prices' : ', with no prices'); } catch (e) { PT.err = e instanceof TypeError ? 'No connection, try again' : 'Could not update. ' + String(e.message).slice(0, 120); } PT.busy = ''; await pLoad(); render(); },
-  preq: () => { const A = PT.row && PT.row.answers, r = A && A.discovery && A.discovery._req; if (!r || !r.picks) return; const R = REQ(); let n = 0, u = 0; S.pb.filter(pbOffer).forEach(p => { const v = r.picks[p.id]; if (v === 'need' || v === 'unsure') { R.picks[p.id] = v; R.fromClient[p.id] = v === 'need'; if (v === 'need') n++; else u++; } }); if (r.note && !R.note) R.note = String(r.note).slice(0, 2000); if (!u && n && ['', 'enquiry', 'discovery'].includes(S.client.status || '')) S.client.status = 'quote_drafted'; else if (u && !S.client.status) S.client.status = 'enquiry'; save(); render(); },
+  preq: () => { const A = PT.row && PT.row.answers, r = A && A.discovery && A.discovery._req; if (!r || !r.picks) return; const R = REQ(); let n = 0, u = 0; S.pb.filter(p => pbOffer(p) && !grpOf(p)).forEach(p => { const v = r.picks[p.id]; if (v === 'need' || v === 'unsure') { R.picks[p.id] = v; R.fromClient[p.id] = v === 'need'; if (v === 'need') n++; else u++; } }); pbGroups().forEach(g => { const v = r.picks[g.id], tid = r.tiers && r.tiers[g.id]; if (v === 'need' || v === 'unsure') { R.picks[g.id] = v; R.fromClient[g.id] = v === 'need'; if (tid && g.tiers.some(x => x.id === tid)) R.tier[g.id] = tid; if (v === 'need') n++; else u++; } }); if (r.note && !R.note) R.note = String(r.note).slice(0, 2000); if (!u && n && ['', 'enquiry', 'discovery'].includes(S.client.status || '')) S.client.status = 'quote_drafted'; else if (u && !S.client.status) S.client.status = 'enquiry'; save(); render(); },
   poff: async () => {
     if (!pOnline() || PT.busy) return; if (!confirm('Switch the link off? The client will no longer be able to open or save anything')) return;
     PT.busy = 'Switching off'; PT.err = ''; PT.token = ''; render();
@@ -3388,22 +3415,34 @@ Object.assign(ACTS2, {
 <script>/* ---------- what they need, statuses, live quote ---------- */
 const STATUSES = [['enquiry', 'Enquiry'], ['discovery', 'Discovery'], ['quote_drafted', 'Quote drafted'], ['quote_sent', 'Quote sent'], ['accepted', 'Accepted'], ['building', 'Building']];
 const statusLabel = k => (STATUSES.find(x => x[0] === k) || [0, 'Not set'])[1];
-const OFFER_DEF = ['site1', 'site2', 'qform', 'booking', 'shop', 'catalogue', 'copy', 'photo', 'seo', 'care', 'carePlus', 'seocare', 'landing', 'xpages'];
+const OFFER_DEF = ['site1', 'site2', 'qform', 'booking', 'shop', 'catalogue', 'copy', 'seo', 'care', 'carePlus', 'seocare', 'landing', 'xpages'];
 const pbOffer = p => p.offer === undefined ? OFFER_DEF.includes(p.id) : !!p.offer;
-const REQ = () => { if (!S.req) S.req = { picks: {}, note: '', fromClient: {} }; if (!S.req.picks) S.req.picks = {}; if (!S.req.fromClient) S.req.fromClient = {}; return S.req; };
+const REQ = () => { if (!S.req) S.req = { picks: {}, note: '', fromClient: {}, tier: {} }; if (!S.req.tier) S.req.tier = {}; if (!S.req.picks) S.req.picks = {}; if (!S.req.fromClient) S.req.fromClient = {}; return S.req; };
 const reqNeed = id => !!(S.req && S.req.picks && S.req.picks[id] === 'need');
-function qWant(p) { return p.tag !== 'not' && !((S.quote2.dismiss || []).includes(p.id)) && ((p.when && ruleMatch(p.when)) || reqNeed(p.id)); }
+/* tier groups: price book lines sharing a Group name, one tier per quote, middle is the default */
+const gSlug = g => 'g-' + String(g).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 26);
+function pbGroups() { const m = {}, out = []; (S.pb || []).forEach(p => { const g = String(p.group || '').trim(); if (!g || p.tag === 'not') return; if (!m[g]) { m[g] = { name: g, id: gSlug(g), tiers: [] }; out.push(m[g]); } m[g].tiers.push(p); }); return out.filter(x => x.tiers.length > 1); }
+const grpOf = p => pbGroups().find(g => g.tiers.includes(p));
+const grpDefault = g => g.tiers.find(p => p.dflt) || g.tiers[Math.floor(g.tiers.length / 2)];
+const grpChosen = g => { const id = REQ().tier[g.id]; return g.tiers.find(p => p.id === id) || grpDefault(g); };
+const grpWanted = g => reqNeed(g.id) || g.tiers.some(p => p.when && ruleMatch(p.when));
+const reqKey = p => { const g = grpOf(p); return g ? g.id : p.id; };
+function qWant(p) {
+  if (p.tag === 'not' || (S.quote2.dismiss || []).includes(p.id)) return false;
+  const g = grpOf(p); if (g) return grpWanted(g) && grpChosen(g) === p;
+  return !!((p.when && ruleMatch(p.when)) || reqNeed(p.id));
+}
 function qLive() {
   const q = S.quote2; if (!q || !q.auto || !Array.isArray(q.lines) || !Array.isArray(S.pb)) return;
   S.pb.forEach(p => {
     const i = q.lines.findIndex(l => l.plId === p.id), have = i >= 0 ? q.lines[i] : null;
     if (qWant(p)) {
-      if (!have) { const l = Object.assign(qSnapLine(p), { auto: true, sync: p.price }); if (reqNeed(p.id) && REQ().fromClient[p.id]) { l.from = 'client'; l.ok = false; } q.lines.push(l); }
+      if (!have) { const l = Object.assign(qSnapLine(p), { auto: true, sync: p.price }); if (reqNeed(reqKey(p)) && REQ().fromClient[reqKey(p)]) { l.from = 'client'; l.ok = false; } q.lines.push(l); }
       else if (have.auto) { if (p.when === 'pages' && have.qty !== String(pageCount())) have.qty = String(pageCount()); if (have.price === (have.sync == null ? '' : have.sync) && p.price !== have.price) { have.price = p.price; have.sync = p.price; } }
     } else if (have && have.auto && have.price === (have.sync == null ? p.price : have.sync) && have.name === p.name) q.lines.splice(i, 1);
   });
 }
-const reqQuestions = () => Object.keys(REQ().picks).filter(id => REQ().picks[id] === 'unsure').map(id => { const p = (S.pb || []).find(x => x.id === id); return p ? { id: 'req-' + id, text: 'Client not sure about ' + (p.name || 'an item') + ', ask them' } : null; }).filter(Boolean);
+const reqQuestions = () => Object.keys(REQ().picks).filter(id => REQ().picks[id] === 'unsure').map(id => { const p = (S.pb || []).find(x => x.id === id) || (pbGroups().find(g => g.id === id) ? { id, name: pbGroups().find(g => g.id === id).name } : null); return p ? { id: 'req-' + id, text: 'Client not sure about ' + (p.name || 'an item') + ', ask them' } : null; }).filter(Boolean);
 const statusSel = () => '<label class="chip noprint" style="display:inline-flex;gap:6px;align-items:center">Status <select data-k="client.status" aria-label="Client status" style="width:auto;min-height:0;padding:2px 4px">' + STATUSES.map(s => '<option value="' + s[0] + '"' + ((S.client.status || 'enquiry') === s[0] ? ' selected' : '') + '>' + s[1] + '</option>').join('') + '</select></label>';
 
 LIVE.runtot = () => {
@@ -3413,20 +3452,23 @@ LIVE.runtot = () => {
 };
 
 function vNeeds() {
-  const R = REQ(), offered = S.pb.filter(pbOffer);
+  const R = REQ(), grps = pbGroups(), offered = S.pb.filter(p => pbOffer(p) && !grpOf(p));
   const seg = (id, cur) => [['need', 'Needs it'], ['unsure', 'Not sure'], ['', 'Not needed']].map(o => '<button class="btn sm2' + ((cur || '') === o[0] ? ' pri' : '') + '" data-act="rpick" data-id="' + esc(id) + '" data-v="' + o[0] + '" aria-pressed="' + ((cur || '') === o[0]) + '">' + o[1] + '</button>').join(' ');
   const cards = offered.map(p => '<div class="q"><b>' + esc(p.name) + '</b>' + (p.freq !== 'once' ? ', ' + esc(freqWord(p.freq)) : '') + ' <span class="hint">' + ((p.price === '' || p.price == null) ? '<span class="tag ask">Price to enter</span>' : money(num(p.price)) + (p.unit === 'page' ? ' per page' : (p.unit === 'hour' ? ' per hour' : ''))) + (R.fromClient[p.id] ? ', <span class="tag">From the client</span>' : '') + '</span><p class="hint">' + esc(p.desc || '') + '</p><p class="row">' + seg(p.id, R.picks[p.id]) + '</p></div>').join('');
+  const gcards = grps.map(g => { const cur = R.picks[g.id] || '', ch = grpChosen(g), def = grpDefault(g); return '<div class="q"><b>' + esc(g.name) + '</b> <span class="hint">pick one' + (R.fromClient[g.id] ? ', <span class="tag">From the client</span>' : '') + '</span><p class="row">' + seg(g.id, cur) + '</p>' + (cur === 'need' ? '<p class="row" role="group" aria-label="' + esc(g.name) + ' tier">' + g.tiers.map(t => '<button class="btn sm2' + (t === ch ? ' pri' : '') + '" data-act="rtier" data-g="' + esc(g.id) + '" data-id="' + esc(t.id) + '" aria-pressed="' + (t === ch) + '">' + esc(t.name || 'Tier') + (t === def ? ' (default)' : '') + ' ' + ((t.price === '' || t.price == null) ? '<span class="tag ask">Price to enter</span>' : money(num(t.price))) + '</button>').join(' ') + '</p>' : '') + '</div>'; }).join('');
   const unsure = reqQuestions();
-  const offers = S.pb.map(p => '<div class="row"><label><input type="checkbox" data-act="pboffer" data-id="' + esc(p.id) + '" ' + (pbOffer(p) ? 'checked' : '') + '> ' + esc(p.name || 'Item') + '</label></div>').join('');
+  const offers = S.pb.filter(p => !grpOf(p)).map(p => '<div class="row"><label><input type="checkbox" data-act="pboffer" data-id="' + esc(p.id) + '" ' + (pbOffer(p) ? 'checked' : '') + '> ' + esc(p.name || 'Item') + '</label></div>').join('');
   return `${head('What they need', 'Used two ways. In person, tick things as you talk. Self serve, the client ticks on their page and you bring it in. Every tick adds the matching price book line to the quote, and the total updates as you go', 'needs')}
+  ${S.lead ? '<div class="note"><b>From the public request form:</b>' + esc(S.lead.email || 'no email') + (S.lead.phone ? ', ' + esc(S.lead.phone) : '') + '</div>' : ''}
   ${note('Their ticks only ever make a draft for you. Nothing goes to a client as a quote until you approve it and send it yourself', '', 'Rule:')}
   ${sec('1.0', 'Status', '<p class="row">' + statusSel() + '</p><p class="hint">Enquiry, Discovery, Quote drafted, Quote sent, Accepted, Building. You set this by hand, except that bringing in a request with nothing unsure moves an Enquiry to Quote drafted</p>')}
-  ${sec('2.0', 'What they need', (offered.length ? cards : '<p class="hint">No price book lines are offered yet, tick some in 5.0</p>') + (unsure.length ? note(unsure.length + ' marked Not sure. This stays an enquiry, and each one is in your open questions: ' + unsure.map(x => esc(x.text.replace('Client not sure about ', '').replace(', ask them', ''))).join(', '), 'stop', 'Open:') : ''))}
+  ${sec('2.0', 'What they need', ((offered.length || grps.length) ? gcards + cards : '<p class="hint">No price book lines are offered yet, tick some in 5.0</p>') + (unsure.length ? note(unsure.length + ' marked Not sure. This stays an enquiry, and each one is in your open questions: ' + unsure.map(x => esc(x.text.replace('Client not sure about ', '').replace(', ask them', ''))).join(', '), 'stop', 'Open:') : ''))}
   ${sec('3.0', 'Quote so far', '<div data-live="qlist"></div><div data-live="qtot"></div>')}
   ${sec('4.0', 'Their note', field('Anything they said about what they need', 'req.note', { area: true, rows: 3 }))}
   ${sec('5.0', 'Which price book lines the client can tick', '<p class="hint">Only the name and the plain description go to the client page. Prices never do unless you switch on Show starting prices for this client in Client portal</p>' + offers)}`;
 }
 Object.assign(ACTS2, {
+  rtier: (t, d) => { const R = REQ(); R.tier[d.g] = d.id; delete R.fromClient[d.g]; save(); render(); },
   rpick: (t, d) => { const R = REQ(); if (d.v) R.picks[d.id] = d.v; else delete R.picks[d.id]; delete R.fromClient[d.id]; save(); render(); },
   pboffer: (t, d) => { const p = S.pb.find(x => x.id === d.id); if (p) { p.offer = !pbOffer(p); save(); render(); } },
   qapprove: () => { S.quote2.lines.forEach(l => { if (l.from === 'client') l.ok = true; }); save(); render(); }
