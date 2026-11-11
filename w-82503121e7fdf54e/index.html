@@ -797,6 +797,8 @@ const openQs = () => allQuestions().filter(q => q.status !== 'answered');
 const SCREEN_DEFS = [
   { id: 'setup', g: 'Client', label: 'Your client' },
   { id: 'brand', g: 'Client', label: 'Brand and images', w: 'any' },
+  { id: 'portal', g: 'Client', label: 'Client portal', w: 'any' },
+  { id: 'bringin', g: 'Client', label: 'Bring in client answers', w: 'any' },
   { id: 'open', g: 'Funding', label: 'The programme in plain words', w: 'fund' },
   { id: 'elig', g: 'Funding', label: 'Eligibility', w: 'fund' },
   { id: 'evid', g: 'Funding', label: 'Evidence', w: 'fund' },
@@ -834,7 +836,7 @@ function visible() {
     out.push(s);
   });
   const int = out.filter(s => (s.a || 'int') === 'int'), cli = out.filter(s => s.a === 'cli');
-  return S.ui && S.ui.cv ? cli : int.concat(cli);
+  return int.concat(cli);
 }
 const screenLabel = id => { const s = visible().find(x => x.id === id); return s ? s.label : id; };
 
@@ -1014,10 +1016,10 @@ function done(id) {
 /* ---------- shell ---------- */
 function view() {
   const s = S.screen; if (s.startsWith('gate:')) return vGate(s.slice(5));
-  return ({ pricebook: vPriceBook, brand: vBrand, revs: vRevs, quote: vQuote, build: vBuild, docs: vDocs, bundle: vBundle, setup: vSetup, open: vOpen, elig: vElig, evid: vEvid, proj: vProj, cost: vCost, dead: vDead, disc: vDisc, taste: vTaste, scope: vScope, comp: vComp, own: vOwn, prop: vProp, after: vAfter, seo: vSeo, seotest: vSeoTest, seointake: vSeoIntake, seoplan: vSeoPlan, close: vClose, final: vFinal, facts: vFacts, packs: vPacks }[s] || vSetup)();
+  return ({ pricebook: vPriceBook, portal: vPortal, bringin: vBringin, brand: vBrand, revs: vRevs, quote: vQuote, build: vBuild, docs: vDocs, bundle: vBundle, setup: vSetup, open: vOpen, elig: vElig, evid: vEvid, proj: vProj, cost: vCost, dead: vDead, disc: vDisc, taste: vTaste, scope: vScope, comp: vComp, own: vOwn, prop: vProp, after: vAfter, seo: vSeo, seotest: vSeoTest, seointake: vSeoIntake, seoplan: vSeoPlan, close: vClose, final: vFinal, facts: vFacts, packs: vPacks }[s] || vSetup)();
 }
 function shell() {
-  const vs = visible(); const call = S.call; const bs = call.on ? callPlan() : []; const cb = call.on ? bs[call.idx] : null; let lastG = '', lastA = ''; const cvw = !!S.ui.cv;
+  const vs = visible(); const call = S.call; const bs = call.on ? callPlan() : []; const cb = call.on ? bs[call.idx] : null; let lastG = '', lastA = ''; const cvw = false;
   const rail = vs.map((s, i) => {
     const ar = (s.a || 'int'); const ah = ar !== lastA ? `<div class="ra">${ar === 'cli' ? 'Client documents' : 'Internal (me only)'}</div>` : ''; lastA = ar;
     const g = ah + (s.g !== lastG ? `<div class="rg">${esc(s.g)}</div>` : ''); lastG = s.g;
@@ -1028,9 +1030,8 @@ function shell() {
   const callbar = call.on && cb && !cvw ? `<div class="callbar noprint" id="callbar" role="region" aria-label="Call timer"><div><span class="lab">Call left</span><span class="big" id="ct-total">30:00</span></div><div><span class="lab">${esc(cb.label)}, ${cb.start / 60} to ${cb.end / 60} min</span><span class="big" id="ct-block">0:00</span><div class="bar"><i id="ct-bar"></i></div></div><div class="acts"><button data-act="pause">${call.paused ? 'Resume' : 'Pause'}</button><button data-act="next">${call.idx >= bs.length - 1 ? 'Finish call' : 'Next block'}</button><button data-act="parking">Parking lot</button><button data-act="endcall">End call mode</button></div><div class="rule">${esc(RULE)}</div></div>` : '';
   return `<a class="skip" href="#main">Skip to the content</a>
   <header class="top noprint"><div><div class="wm">${esc(SETTINGS.appName)}</div><div class="sm">${fund() ? esc(P().name) + ' · ' + esc(P().funder) : 'Website project'}</div></div>
-   <div class="topr"><span class="chip revchip" data-live="revchip"></span><span class="chip" data-live="cloudchip"></span>${typeof cloudBtns === 'function' ? cloudBtns() : ''}${cvw ? '<span class="chip">Client view</span><button class="btn sm2" data-act="cvoff">Back to my view</button>' : '<span class="chip" data-live="deadchip"></span><button class="btn sm2" data-act="parking">Open questions <b data-live="qcount"></b></button><button class="btn sm2" data-act="save">Save to file</button><button class="btn sm2" data-act="open">Open saved file</button><button class="btn sm2" data-act="cvon">Client view</button>'}</div></header>
+   <div class="topr"><span class="chip revchip" data-live="revchip"></span><span class="chip" data-live="cloudchip"></span>${typeof cloudBtns === 'function' ? cloudBtns() : ''}${cvw ? '<span class="chip">Client view</span><button class="btn sm2" data-act="cvoff">Back to my view</button>' : '<span class="chip" data-live="deadchip"></span><button class="btn sm2" data-act="parking">Open questions <b data-live="qcount"></b></button><button class="btn sm2" data-act="save">Save to file</button><button class="btn sm2" data-act="open">Open saved file</button><button class="btn sm2" data-act="pview">View as client</button>'}</div></header>
   ${cvw ? '' : '<div class="savebar noprint"><span>' + ((typeof cloudSaveText === 'function' && cloudSaveText()) || '<b>Your work lives in this browser.</b> Browser storage can be cleared and your data lost, so save to a file often. No passwords are stored in the file, never type one in') + '</span><button class="btn sm2" data-act="save">Save to file</button><button class="btn sm2" data-act="open">Open saved file</button></div><div data-live="remind"></div><div data-live="revbar"></div><div data-live="cloudbar" style="margin:0 20px"></div>'}
-  ${cvw ? '<div class="note noprint" style="margin:0 20px"><b>Client view:</b>Internal screens are hidden. This switch is not security, anyone holding this working file can open it. To keep things private, send clients only the exported client documents and keep this working file to yourself</div>' : ''}
   ${callbar}
   <div class="wrap"><nav class="rail noprint" aria-label="Steps">${rail}</nav><main id="main" tabindex="-1" class="main">${view()}</main></div>
   <div class="corner">${esc(SETTINGS.corner)}</div>${cvw ? '' : drawer() + overlay()}`;
@@ -1058,7 +1059,7 @@ function overlay() {
 function focusKey(el) { if (!el || !el.dataset) return null; if (el.dataset.k) return '[data-k="' + el.dataset.k + '"]'; if (el.dataset.draft) return '[data-draft="' + el.dataset.draft + '"]'; if (el.dataset.pick) return '[data-pick="' + el.dataset.pick + '"][data-v="' + el.dataset.v + '"]'; if (el.id) return '#' + el.id; return null; }
 function render() {
   if (typeof cloudGate === 'function') { const g = cloudGate(); if (g) { $('#app').innerHTML = g; window.scrollTo(0, 0); return; } }
-  const vs = visible(); if (!vs.some(s => s.id === S.screen)) S.screen = S.ui.cv ? 'docs' : 'setup';
+  const vs = visible(); if (!vs.some(s => s.id === S.screen)) S.screen = 'setup';
   const ae = document.activeElement, fk = focusKey(ae); let caret = null; try { caret = ae && ae.selectionStart != null ? [ae.selectionStart, ae.selectionEnd] : null; } catch (e) { }
   const sy = window.scrollY; $('#app').innerHTML = shell();
   if (fk && !S.ui.noRefocus) { const el = $(fk); if (el) { el.focus({ preventScroll: true }); try { if (caret) el.setSelectionRange(caret[0], caret[1]); } catch (e) { } } }
@@ -2760,7 +2761,7 @@ function docPanel(t) {
   return `<div class="nopd">${sec('A', 'Edit this document, only you see this area', x.replace(/data-k=/g, 'data-full="1" data-k='))}</div>`;
 }
 function vDocs() {
-  const t = S.docs.tab || 'quote', cv = !!S.ui.cv, m = docModel(t);
+  const t = S.docs.tab || 'quote', cv = false, m = docModel(t);
   const tabs = `<div class="tabs nopd" role="tablist">${docList().map(d => `<button class="${t === d[0] ? 'on' : ''}" data-act="doctab" data-t="${d[0]}">${esc(d[1])}</button>`).join('')}</div>`;
   return `<div class="nopd">${head('Documents', 'Six documents for the client, each one prints, saves as its own file and carries a footer with the title, revision, date and page numbers', 'docs')}${cv ? '' : note('A switch in a file is not security. Anyone holding this working file can open it. For real privacy, send the client only the exported documents and keep this working file to yourself', '', 'Honest note:')}</div>${tabs}${cv ? '' : docPanel(t)}<div class="row noprint nopd" style="margin:12px 0"><button class="btn pri" data-act="docprint">Print or save as PDF</button><button class="btn" data-act="docdl">Download this document as a file</button></div><div class="nopd" data-live="scan"></div>${cv ? '' : '<div class="nopd" data-live="consist"></div>'}${docHtml(m)}`;
 }
@@ -2770,7 +2771,7 @@ function vBundle() {
   return `<div class="nopd">${head('Documents for the client', 'Choose the documents, then export them as one printable pack with a cover page and contents', 'bundle')}
   ${sec('1.0', 'What goes in the pack', docList().map(d => '<div class="row">' + chk('docs.pick.' + d[0], esc(d[1])) + '</div>').join(''))}
   ${sec('2.0', 'Export', `<p class="row"><button class="btn pri" data-act="bundleeach" ${ms.length ? '' : 'disabled'}>Export each as its own file, recommended</button><button class="btn" data-act="bundledl" ${ms.length ? '' : 'disabled'}>Export one combined pack</button><button class="btn" data-act="bundleprint" ${ms.length ? '' : 'disabled'}>Print the pack</button><button class="btn" data-act="bundleshow">${S.ui.pack ? 'Hide the preview' : 'Show the preview'}</button></p><p class="hint">Separate files are the default, so one wrong send cannot leak a document the client should not see. Use the combined pack only for one client who wants everything together</p><div data-live="scan"></div><div data-live="consist"></div>`)}
-  ${sec('3.0', 'Keeping things private', note('The Client view switch only hides screens, it is not security. Send clients only the exported documents, and keep this working file to yourself. Every export is scanned for internal words and your private notes, and warns you', '', 'Honest note:'))}</div>
+  ${sec('3.0', 'Keeping things private', note('Send clients only the exported documents or the client portal link, and keep this working file to yourself. Every export is scanned for internal words and your private notes, and warns you', '', 'Honest note:'))}</div>
   ${S.ui.pack && ms.length ? coverHtml(ms, seoName()) + ms.map(m => docHtml(m, { noSend: true })).join('') : ''}`;
 }
 function setPrint(ms) { let st = document.getElementById('pgs'); if (!st) { st = document.createElement('style'); st.id = 'pgs'; document.head.appendChild(st); } st.textContent = pageCss(ms); }
@@ -2787,8 +2788,6 @@ Object.assign(ACTS2, {
   bundleshow: () => { S.ui.pack = !S.ui.pack; render(); },
   bundleprint: () => { S.ui.pack = true; render(); doPrint(pickedModels().concat([{ kind: 'cover', title: 'Documents for ' + seoName(), rev: S.docs.rev, date: revDate(S.docs.rev) }])); },
   sigclear: (t, d) => { delete S.docs.sig[d.id]; save(); render(); },
-  cvon: () => { S.ui.cv = true; S.screen = 'docs'; render(); window.scrollTo(0, 0); },
-  cvoff: () => { S.ui.cv = false; render(); window.scrollTo(0, 0); },
   freeze: () => {
     const s = reqSrc(); S.docs.revs.push({ rev: s.rev, date: s.date, supersedes: s.supersedes, log: s.log, lead: s.lead, sections: s.sections, quote: s.quote, sign: s.sign });
     delete S.docs.sig['req:client']; S.docs.rev = s.rev + 1; S.docs.f.revNote = ''; S.cr = { on: false, base: null, items: [], time: '' }; save(); render();
@@ -2834,7 +2833,7 @@ function revBlocked(path) {
   if (m) { const l = S.rv.log[Number(m[1])]; return !!l && (l.rev !== S.docs.rev || isLocked()); }
   return isLocked() && !OPEN_PATHS.test(path);
 }
-const GUARD_ACTS = ['qaddpb', 'qrm', 'qpick', 'qnumber', 'qsendfund', 'coladd', 'colrm', 'fontadd', 'fontrm', 'assetrm', 'pairadd', 'pairrm', 'suggpick', 'crclear', 'crload', 'revbase', 'chgadd', 'chgrm'];
+const GUARD_ACTS = ['qaddpb', 'qrm', 'qpick', 'qnumber', 'qsendfund', 'coladd', 'colrm', 'fontadd', 'fontrm', 'assetrm', 'pairadd', 'pairrm', 'suggpick', 'crclear', 'crload', 'revbase', 'chgadd', 'chgrm', 'pacc', 'pall', 'pimg'];
 function revGuardClick(d) {
   if (!isLocked()) return false;
   const hit = d.pick || d.want || d.rm || (d.add && !/^rv\./.test(d.add)) || GUARD_ACTS.includes(d.act);
@@ -3065,10 +3064,11 @@ async function clRest(path, o) {
   o = o || {};
   for (let tries = 0; tries < 2; tries++) {
     const tok = await clToken();
-    const r = await fetch(CLOUD.url + '/rest/v1/' + CLOUD.table + path, { method: o.method || 'GET', headers: { apikey: CLOUD.key, Authorization: 'Bearer ' + tok, 'Content-Type': 'application/json', Prefer: 'return=representation' }, body: o.body == null ? undefined : (typeof o.body === 'string' ? o.body : JSON.stringify(o.body)) });
+    const r = await fetch(CLOUD.url + '/rest/v1/' + (o.rpc ? 'rpc/' + o.rpc : (o.table || CLOUD.table) + path), { method: o.method || (o.rpc ? 'POST' : 'GET'), headers: Object.assign({ apikey: CLOUD.key, Authorization: 'Bearer ' + tok, 'Content-Type': 'application/json' }, o.rpc ? {} : { Prefer: 'return=representation' }), body: o.body == null ? undefined : (typeof o.body === 'string' ? o.body : JSON.stringify(o.body)) });
     if (r.status === 401 && tries === 0) { CL.session.expires_at = 0; continue; }
     if (!r.ok) { const t = await r.text(); throw new Error('http ' + r.status + ' ' + t.slice(0, 140)); }
-    return r.status === 204 ? [] : r.json();
+    if (r.status === 204) return [];
+    { const t = await r.text(); return t ? JSON.parse(t) : null; }
   }
   throw new Error('nosession');
 }
@@ -3216,6 +3216,139 @@ async function clResume(rs) {
     else clOpen(row.id);
   } catch (e) { CL.busy = ''; clFail(e, 'I could not reopen the client'); clLoadList(); }
 }
+</script>
+<script>/* ---------- client portal, workbook side ---------- */
+const PORTAL_PATH = '/c-09b37e50c043baaa/';
+const PT = { id: '', loaded: false, busy: '', msg: '', err: '', token: '', row: null, portal: null, view: false };
+const PSECS = [['discovery', 'Discovery questions'], ['eligibility', 'Eligibility questions'], ['evidence', 'Evidence checklist, ticks only'], ['brand', 'Brand and images']];
+const PS = () => { if (!S.portal) S.portal = { sections: { discovery: true, brand: true, eligibility: !!fund(), evidence: !!fund() }, skip: {} }; if (!S.portal.skip) S.portal.skip = {}; return S.portal; };
+const pSections = () => { const p = PS(); return PSECS.map(x => x[0]).filter(k => p.sections[k] && (fund() || (k !== 'eligibility' && k !== 'evidence'))); };
+const pLink = () => location.origin + PORTAL_PATH + '#t=' + PT.token;
+const pOnline = () => CL.on && !CL.offline && CL.screen === 'work' && !!CL.id;
+function pReset() { if (PT.id !== CL.id) { PT.id = CL.id; PT.loaded = false; PT.row = null; PT.portal = null; PT.token = ''; PT.msg = ''; PT.err = ''; } }
+async function pLoad() {
+  pReset(); if (!pOnline()) return; PT.busy = 'Loading'; PT.err = '';
+  try {
+    const q = encodeURIComponent(CL.id);
+    const a = await clRest('?workbook_id=eq.' + q + '&select=answers,updated_at', { table: 'client_answers' });
+    const p = await clRest('?workbook_id=eq.' + q + '&select=active,created_at,last_opened_at,submitted_at&order=created_at.desc&limit=1', { table: 'client_portals' });
+    PT.row = a && a[0] ? a[0] : null; PT.portal = p && p[0] ? p[0] : null; PT.loaded = true;
+  } catch (e) { PT.err = e instanceof TypeError ? 'No connection, try again' : 'Could not load the portal status. ' + String(e.message).slice(0, 120); }
+  PT.busy = ''; if (S.screen === 'portal' || S.screen === 'bringin') render();
+}
+async function pSeedCfg() {
+  const cfg = { sections: pSections() }, q = encodeURIComponent(CL.id);
+  const a = await clRest('?workbook_id=eq.' + q + '&select=answers', { table: 'client_answers' });
+  if (a && a[0]) { const ans = a[0].answers && typeof a[0].answers === 'object' ? a[0].answers : {}; ans.discovery = Object.assign({}, ans.discovery || {}, { _cfg: cfg }); await clRest('?workbook_id=eq.' + q, { table: 'client_answers', method: 'PATCH', body: { answers: ans } }); }
+  else await clRest('', { table: 'client_answers', method: 'POST', body: { workbook_id: CL.id, answers: { discovery: { _cfg: cfg } } } });
+}
+const pDate = t => t ? clTime(t) : 'never';
+function vPortal() {
+  pReset(); if (pOnline() && !PT.loaded && !PT.busy && !PT.err) pLoad();
+  if (!pOnline()) return sec('1.0', 'Client portal', note('The portal needs the online workbook. Open the online page, sign in, and open this client from the list. Nothing here works from a saved file', 'stop', 'Not available:'));
+  const p = PT.portal, st = !p ? 'No link made yet' : (p.active ? 'Link is on' : 'Link is switched off');
+  const secs = PSECS.filter(x => fund() || (x[0] !== 'eligibility' && x[0] !== 'evidence')).map(x => '<div class="row"><label><input type="checkbox" ' + (PS().sections[x[0]] ? 'checked' : '') + ' data-act="psec" data-s="' + x[0] + '"> ' + esc(x[1]) + '</label></div>').join('');
+  const tokBox = PT.token ? '<div class="note"><b>Copy this link now:</b>It is shown once and is not saved anywhere. If you lose it, make a new one<div class="mono" style="word-break:break-all;margin:8px 0;user-select:all" id="p-link">' + esc(pLink()) + '</div><p class="row"><button class="btn pri" data-act="pcopy">Copy the link</button><button class="btn" data-act="phide">Hide it</button></p></div>' : '';
+  return sec('1.0', 'What the client will see', '<p class="hint">Plain English questions only. No prices, notes or other clients ever reach the client page. They never upload bank statements, only tick the evidence list</p>' + secs + '<p class="hint">If the client already has the page open, they may need to refresh to see a changed list</p>')
+    + sec('2.0', 'The link', tokBox + '<p class="row"><button class="btn pri" data-act="pcreate" ' + (PT.busy ? 'disabled' : '') + '>' + (p ? 'Make a new link' : 'Create link') + '</button><button class="btn" data-act="poff" ' + (p && p.active ? '' : 'disabled') + '>Switch off link</button><button class="btn" data-act="prefresh">Refresh status</button></p><p class="hint">Making a new link switches the old one off straight away. Whoever has the old link will see it stop working</p>' + (PT.busy ? '<p class="hint">' + esc(PT.busy) + '</p>' : '') + (PT.err ? note(esc(PT.err), 'stop', 'Problem:') : '') + (PT.msg ? '<p class="hint">' + esc(PT.msg) + '</p>' : ''))
+    + sec('3.0', 'Status', '<table class="tbl"><tr><th>Link</th><td>' + st + '</td></tr><tr><th>Made</th><td>' + (p ? pDate(p.created_at) : 'not yet') + '</td></tr><tr><th>Last opened</th><td>' + (p ? pDate(p.last_opened_at) : 'not yet') + '</td></tr><tr><th>Sent to you</th><td>' + (p && p.submitted_at ? pDate(p.submitted_at) : 'not yet') + '</td></tr><tr><th>Answers last saved</th><td>' + (PT.row ? pDate(PT.row.updated_at) : 'not yet') + '</td></tr></table><p class="row"><button class="btn" data-go="bringin">Bring in client answers</button><button class="btn" data-act="pview">View as client</button></p>');
+}
+
+/* ---- compare and bring in ---- */
+const pStr = v => v == null ? '' : String(v);
+function pItems() {
+  const A = PT.row && PT.row.answers; if (!A || typeof A !== 'object') return [];
+  const out = [], secs = pSections(), has = k => secs.indexOf(k) >= 0, items = [];
+  const add = (key, group, label, mine, theirs, apply, show) => { theirs = pStr(theirs); mine = pStr(mine); if (!theirs.trim() || theirs === mine) return; out.push({ key, group, label, mine, theirs, show: show || (v => v), apply }); };
+  if (has('discovery') && A.discovery) {
+    const a = A.discovery.a || {}, g = A.discovery.goals || {};
+    DISC.forEach(q => add('disc.a.' + q.id, 'Discovery', q.q || q.id, S.disc.a[q.id], a[q.id], v => set('disc.a.' + q.id, v)));
+    GOALS.forEach(x => add('disc.goals.' + x[0], 'What matters most', 'Rank for ' + x[1], S.disc.goals[x[0]], g[x[0]], v => set('disc.goals.' + x[0], v), v => v ? 'Rank ' + v : 'Not ranked'));
+  }
+  if (has('eligibility') && A.eligibility && fund()) {
+    const a = A.eligibility.a || {}, W = { yes: 'Yes', no: 'No', unsure: 'Not sure' };
+    (P().eligibility || []).forEach(q => add('elig.' + q.id, 'Eligibility', T(q.q), S.elig[q.id], a[q.id], v => set('elig.' + q.id, v), v => W[v] || v));
+  }
+  if (has('evidence') && A.evidence && fund()) {
+    const a = A.evidence.a || {};
+    (P().evidence || []).forEach(e => { if (a[e.id] === true && ((S.evid[e.id] || {}).status || '') !== 'have') add('evid.' + e.id, 'Evidence', e.label, ((S.evid[e.id] || {}).status || '') === 'asked' ? 'asked for' : '', 'client says they have it', () => set('evid.' + e.id + '.status', 'have')); });
+  }
+  if (has('brand') && A.brand) {
+    const B = A.brand;
+    (B.colours || []).forEach(c => { const mine = (S.brand.colours.find(x => c.role !== 'other' && x.role === c.role) || {}).hex || '', n = normHex(c.hex); if (/^#[0-9a-f]{6}$/.test(n)) add('col.' + c.role + '.' + n, 'Colours', 'Colour: ' + (ROLES.find(r => r[0] === c.role) || [0, 'Other'])[1], mine ? normHex(mine) : '', n, () => putColour(n, c.role)); });
+    ['head', 'body'].forEach(k => { const f = (B.fonts || {})[k] || {}, m = S.brand[k] || {}; add('font.' + k, 'Fonts', k === 'head' ? 'Heading font' : 'Body font', [m.name, m.from, m.licence].filter(Boolean).join(', '), [f.name, f.from, f.licence].filter(Boolean).join(', '), () => { S.brand[k] = { name: f.name || '', from: f.from || '', licence: f.licence || '' }; }); });
+    ['tone', 'use', 'avoid', 'social', 'notes'].forEach(k => add('bn.' + k, 'Brand notes', { tone: 'How the business should sound', use: 'Words to use', avoid: 'Words to avoid', social: 'Social media links', notes: 'Anything else' }[k], S.brand[k], (B.notes || {})[k], v => { S.brand[k] = v; }));
+    (B.assets || []).forEach(a => { if (!a || !a.data || S.assets.some(x => x.data === a.data)) return; const key = 'img.' + a.id; out.push({ key, group: 'Pictures', label: (a.name || 'Picture') + ', ' + (a.type || 'photo'), mine: '', theirs: '', img: a, apply: () => pAddImg(a) }); });
+  }
+  return out;
+}
+function pAddImg(a) {
+  const m = /^data:(image\/[\w+]+);base64,/.exec(a.data || ''); if (!m) return;
+  const type = ['logo', 'brand', 'photo'].includes(a.type) ? a.type : 'other';
+  S.assets.push({ id: uid(), type, name: String(a.name || 'Client picture').slice(0, 200), note: a.note || '', licence: a.licence || '', perm: !!a.perm, useDoc: false, orig: a.orig || a.name || 'from client', origBytes: a.bytes || 0, added: isoToday(), mime: m[1], data: a.data, w: a.w || 0, h: a.h || 0, bytes: a.bytes || Math.round(a.data.length * 0.75) });
+  S.ui.assetsDirty = true;
+}
+const pHash = s => { let h = 0; s = String(s); for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0; return String(h); };
+const pSig = it => it.img ? pHash(it.img.data.length + it.img.id) : pHash(it.theirs);
+function vBringin() {
+  pReset(); if (pOnline() && !PT.loaded && !PT.busy && !PT.err) pLoad();
+  if (!pOnline()) return sec('1.0', 'Bring in client answers', note('This needs the online workbook, signed in, with this client open', 'stop', 'Not available:'));
+  if (!PT.row) return sec('1.0', 'Bring in client answers', '<p>' + (PT.busy ? 'Loading' : 'The client has not saved anything yet') + '</p><p class="row"><button class="btn" data-act="prefresh">Refresh</button></p>');
+  const all = pItems(), skip = PS().skip, list = all.filter(it => skip[it.key] !== pSig(it)), hid = all.length - list.length;
+  const empties = list.filter(it => !it.mine && !it.img).length;
+  const row = it => '<div class="card" style="margin:10px 0;padding:10px;border:1px solid var(--rule)"><b>' + esc(it.label) + '</b>' + (it.img ? '<div class="row"><img src="' + it.img.data + '" alt="" style="max-width:180px;max-height:140px;border:1px solid var(--rule)"><span class="hint">' + (it.img.perm ? 'Client ticked that they own it or have permission' : 'No permission tick yet') + '. It comes in with Use in documents switched off</span></div>' : '<div class="grid2"><div><span class="fl">Mine</span><div style="white-space:pre-wrap">' + (it.mine ? esc(it.show(it.mine)) : '<i>empty</i>') + '</div></div><div><span class="fl">Theirs</span><div style="white-space:pre-wrap">' + esc(it.show(it.theirs)) + '</div></div></div>') + '<p class="row"><button class="btn ' + (it.mine ? '' : 'pri') + ' sm2" data-act="' + (it.img ? 'pimg' : 'pacc') + '" data-key="' + esc(it.key) + '">' + (it.img ? 'Add to my images' : (it.mine ? 'Replace mine with theirs' : 'Use theirs')) + '</button><button class="btn sm2" data-act="pskip" data-key="' + esc(it.key) + '">Keep mine</button></p></div>';
+  const groups = []; list.forEach(it => { if (!groups.includes(it.group)) groups.push(it.group); });
+  return sec('1.0', 'Client answers', '<p class="hint">Their answers saved ' + pDate(PT.row.updated_at) + (PT.portal && PT.portal.submitted_at ? ', sent to you ' + pDate(PT.portal.submitted_at) : ', not sent yet') + '. Nothing changes in your fields until you accept it</p><p class="row"><button class="btn" data-act="prefresh">Refresh</button>' + (empties ? '<button class="btn pri" data-act="pall">Fill ' + empties + ' empty field' + (empties === 1 ? '' : 's') + ' only</button>' : '') + '</p>' + (hid ? '<p class="hint">' + hid + ' kept as mine, they show again if the client changes them</p>' : '') + (list.length ? '' : '<p>Nothing new to bring in</p>'))
+    + groups.map((g, i) => sec(String(i + 2) + '.0', esc(g), list.filter(it => it.group === g).map(row).join(''))).join('');
+}
+
+/* ---- view as client ---- */
+function pCloseView() { const o = document.getElementById('pview'); if (o) o.remove(); window.removeEventListener('message', pViewMsg); PT.view = false; }
+function pViewMsg(e) {
+  if (e.origin !== location.origin) return; const f = document.getElementById('pviewf'); if (!f || e.source !== f.contentWindow) return;
+  if (e.data && e.data.type === 'cw-view-ready') e.source.postMessage({ type: 'cw-view', client_name: ((S.client.business || '').trim() || 'New client'), answers: (PT.row && PT.row.answers) || {}, cfg: { sections: pSections() }, submitted_at: PT.portal && PT.portal.submitted_at }, location.origin);
+}
+async function pOpenView() {
+  if (!CL.on) { alert('View as client needs the online workbook, because the client page lives online'); return; }
+  if (!pOnline()) { alert('Open a client from the list first'); return; }
+  pReset(); if (!PT.loaded) await pLoad();
+  pCloseView(); PT.view = true; window.addEventListener('message', pViewMsg);
+  const o = document.createElement('div'); o.id = 'pview'; o.style.cssText = 'position:fixed;inset:0;z-index:50;background:#f4f4f0;display:flex;flex-direction:column';
+  o.innerHTML = '<div style="padding:8px 14px;border-bottom:3px double #0b2a5b;display:flex;justify-content:space-between;align-items:center;gap:10px"><span><b>View as client.</b> Read only. This is a preview of what they see, not a security setting</span><button class="btn pri" data-act="pviewx">Close</button></div><iframe id="pviewf" title="Client page preview" style="flex:1;border:0;width:100%" src="' + PORTAL_PATH + '#view"></iframe>';
+  document.body.appendChild(o);
+}
+Object.assign(ACTS2, {
+  pview: () => { pOpenView(); },
+  pviewx: () => pCloseView(),
+  psec: (t, d) => { const p = PS(); p.sections[d.s] = !p.sections[d.s]; save(); render(); },
+  prefresh: () => { PT.loaded = false; PT.msg = ''; pLoad(); },
+  phide: () => { PT.token = ''; render(); },
+  pcopy: (t) => { copyText(pLink()).then(() => flash(t, 'Copied')); },
+  pcreate: async () => {
+    if (!pOnline() || PT.busy) return; pReset();
+    if (!pSections().length) { alert('Tick at least one section first'); return; }
+    if (PT.portal && PT.portal.active && !confirm('This switches the old link off for good. Whoever has it will see it stop working. Make a new link?')) return;
+    PT.busy = 'Making the link'; PT.err = ''; PT.msg = ''; PT.token = ''; render();
+    try {
+      await pSeedCfg();
+      const r = await clRest('', { rpc: 'portal_create', body: { p_workbook_id: CL.id } });
+      const tok = typeof r === 'string' ? r : (r && (r.token || r.portal_create)) || '';
+      if (!/^[0-9a-f]{48}$/.test(tok)) throw new Error('unexpected reply');
+      PT.token = tok;
+    } catch (e) { PT.err = e instanceof TypeError ? 'No connection, try again' : 'Could not make the link. ' + String(e.message).slice(0, 120); }
+    PT.busy = ''; await pLoad(); render();
+  },
+  poff: async () => {
+    if (!pOnline() || PT.busy) return; if (!confirm('Switch the link off? The client will no longer be able to open or save anything')) return;
+    PT.busy = 'Switching off'; PT.err = ''; PT.token = ''; render();
+    try { await clRest('', { rpc: 'portal_revoke', body: { p_workbook_id: CL.id } }); PT.msg = 'Link switched off'; } catch (e) { PT.err = e instanceof TypeError ? 'No connection, try again' : 'Could not switch it off. ' + String(e.message).slice(0, 120); }
+    PT.busy = ''; await pLoad(); render();
+  },
+  pacc: (t, d) => { const it = pItems().find(x => x.key === d.key); if (!it) return; if (it.mine && !confirm('Replace yours with theirs?\n\nMine: ' + it.show(it.mine).slice(0, 200) + '\n\nTheirs: ' + it.show(it.theirs).slice(0, 200))) return; it.apply(it.theirs); save(); render(); },
+  pimg: (t, d) => { const it = pItems().find(x => x.key === d.key); if (!it) return; it.apply(); save(); render(); },
+  pskip: (t, d) => { const it = pItems().find(x => x.key === d.key); if (!it) return; PS().skip[it.key] = pSig(it); save(); render(); },
+  pall: () => { const l = pItems().filter(it => !it.mine && !it.img && PS().skip[it.key] !== pSig(it)); if (!l.length) return; l.forEach(it => it.apply(it.theirs)); save(); render(); }
+});
 </script>
 <script>init();</script>
 </body></html>
