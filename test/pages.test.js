@@ -90,7 +90,7 @@ test('the new page has all the sections, the seven from prices and no tier names
     assert.ok(new RegExp(p[0] + '<span class="status">' + p[1] + '</span>').test(html), p.join(' ') + ' missing');
   });
   assert.ok(!/\b(good|better|best)\b/i.test(visibleText(html).replace(/Good(?= morning)/g, '')), 'tier names found');
-  assert.ok(html.includes('No one can guarantee rankings in Google or AI tools. I make sure your information is complete, accurate and easy to find.'));
+  assert.ok(html.includes('No one can guarantee rankings in Google or AI tools. What I can do is make sure your information is complete, accurate and easy to find, which is the part you control.'));
   assert.ok(!/AI tools, I make sure/.test(html), 'comma splice is back');
   assert.ok(!/AI visibility/i.test(html));
 });
@@ -137,7 +137,7 @@ test('go-live fixes: no Marpet screenshot or coming soon note, button goes to th
   assert.ok(!/marpet-fabrications/.test(html) && !/coming soon/i.test(html));
   assert.ok(!fs.existsSync(path.join(ROOT, 'images/marpet-fabrications-top.jpg')));
   assert.ok(html.includes('<a class="btn" href="#enquiry">Send an enquiry</a>'));
-  assert.ok(html.includes('If you’re applying for a grant, payment timing is agreed in your quote.'));
+  assert.ok(html.includes('You pay a 50% deposit to start. If you’re applying for a grant, nothing is paid until your grant is approved. The timing is set out in your quote.'));
   publicPages.filter(function (f) { return read(f).includes('about-line'); }).forEach(function (f) {
     const h = read(f);
     assert.ok(h.includes('for engineering firms and local businesses, from Glasgow.'), f + ' footer line');
@@ -151,7 +151,7 @@ test('home page prices match the local business page and do not say Google searc
   assert.ok(h.includes('Quote-ready site <span class="status">from £1,500 one-off'));
   assert.ok(h.includes('Care plan <span class="status">from £35 a month'));
   assert.ok(!/2,200|£60 a month/.test(h));
-  assert.ok(/A fast site on your own domain and a quote form that takes drawings\./.test(h));
+  assert.ok(/A fast site on your own domain with a quote form that takes drawings\./.test(h));
   assert.ok(!/Quote-ready site[\s\S]{0,400}Google search set up/.test(h.replace(/<[^>]*>/g, ' ')));
 });
 
