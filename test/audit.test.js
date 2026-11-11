@@ -57,6 +57,17 @@ test('price table has a space between the item name and its price', function () 
   assert.ok(/Care plan /.test(text(h)));
 });
 
+test('home page: invoice drafting and the Tolra site offer are labelled pilot, no half price, and no years claim anywhere', function () {
+  const h = read('index.html');
+  assert.ok(h.includes('In pilot: AI drafts the invoice'));
+  assert.ok(h.includes('Pilot only, ask me.'));
+  assert.ok(!/half price/i.test(h));
+  publicFiles('.', []).forEach(function (f) { assert.ok(!/nearly three years/i.test(read(f)), f + ' still has the years claim'); });
+  assert.ok(read('index.html').includes('I come from a computer system validation background.'));
+  assert.ok(read('csv.html').includes('I come from a computer system validation background.'));
+  assert.ok(read('llms.txt').includes('He comes from a computer system validation background.'));
+});
+
 test('copy rules on the files changed: no em dashes, none of the banned words', function () {
   ['index.html', 'about.html', 'csv.html', 'automation.html', 'websites.html', 'council-digital-grants/index.html', 'llms.txt'].forEach(function (f) {
     const s = read(f);

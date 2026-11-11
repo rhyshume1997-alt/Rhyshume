@@ -1,6 +1,6 @@
 # Rhys Hume
 
-> Rhys Hume is a systems consultant based in Glasgow. He builds the website, quoting and job management of engineering and manufacturing firms (fabrication, machining and manufacturing businesses), and validates computerised systems for regulated manufacturers. He has nearly three years of experience in computer system validation for medical device manufacturing.
+> Rhys Hume is a systems consultant based in Glasgow. He builds the website, quoting and job management of engineering and manufacturing firms (fabrication, machining and manufacturing businesses), and validates computerised systems for regulated manufacturers. He comes from a computer system validation background.
 
 ## The idea
 
