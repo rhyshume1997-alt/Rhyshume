@@ -971,3 +971,29 @@ figure.exhibit img {
 .check-ok[hidden], .check-msg[hidden] { display: none; }
 .check-ok::before { content: ""; position: absolute; left: 0.2rem; top: 0.3rem; width: 0.4rem; height: 0.7rem; border: solid #1f6b3a; border-width: 0 2px 2px 0; transform: rotate(45deg); }
 .check-msg { margin-top: 0.6rem; font-size: 0.9375rem; color: var(--ink-2); }
+
+/* Websites and digital for local business page: services list */
+.svc { list-style: none; padding: 0; border-top: 1px solid var(--ink); }
+.svc > li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.2rem 1.5rem;
+  padding: 1rem 0 1.05rem;
+  border-bottom: 1px solid var(--rule);
+}
+.svc h3 { font-size: 1.1875rem; line-height: 1.3; font-weight: 500; }
+.svc h3 .no { font-size: 0.75rem; margin-right: 0.6rem; color: var(--accent-ink); vertical-align: 0.15em; }
+.svc .status { display: block; margin-top: 0.25rem; }
+.svc p { margin: 0; color: var(--ink-2); }
+.svc > li.svc-note { display: block; padding: 1.1rem 0; }
+.svc > li.svc-note .boxed { color: var(--ink); }
+.svc-actions { margin-top: 1.5rem; }
+@media (min-width: 40rem) {
+  .svc > li { grid-template-columns: 16rem minmax(0, 1fr); }
+  .svc > li.svc-note { display: block; }
+}
+
+/* Tablet widths: the longer menu label would stack the header, so the menu takes its own row under the wordmark and button */
+@media (min-width: 45rem) and (max-width: 67.99rem) {
+  .nav { order: 3; width: 100%; display: flex; flex-wrap: wrap; gap: 0.25rem 1.1rem; font-size: 0.875rem; border-top: 1px solid var(--rule); padding-top: 0.5rem; }
+}
