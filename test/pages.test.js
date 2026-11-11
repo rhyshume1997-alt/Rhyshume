@@ -155,6 +155,12 @@ test('home page prices match the local business page and do not say Google searc
   assert.ok(!/Quote-ready site[\s\S]{0,400}Google search set up/.test(h.replace(/<[^>]*>/g, ' ')));
 });
 
+test('no public page or llms.txt shows the old Gmail address', function () {
+  publicPages.concat(['llms.txt']).forEach(function (f) {
+    assert.ok(!read(f).includes('rhyshume1997@gmail.com'), f + ' still shows the old Gmail address');
+  });
+});
+
 test('grants page keeps the three set up costs and the softer wording together', function () {
   const g = read('council-digital-grants/index.html');
   assert.ok(g.includes('Set up costs that may be eligible'));
