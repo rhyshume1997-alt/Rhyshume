@@ -111,7 +111,8 @@ input:focus,textarea:focus,select:focus,button:focus{outline:3px solid #7aa2f7;o
     GOALS.forEach(function (g) { var v = d.goals && d.goals[g[0]]; A.discovery.goals[g[0]] = /^[1-5]$/.test(String(v)) ? String(v) : ''; });
     if (d._cfg && typeof d._cfg === 'object') A.discovery._cfg = d._cfg;
     var ids = {}; optsOf(A.discovery._cfg).forEach(function (o) { ids[o.id] = 1; });
-    var rq = d._req && typeof d._req === 'object' ? d._req : {}; A.discovery._req = { picks: {}, note: str(rq.note), requested: !!rq.requested, at: str(rq.at).slice(0, 40) };
+    var rq = d._req && typeof d._req === 'object' ? d._req : {}; A.discovery._req = { picks: {}, tiers: {}, note: str(rq.note), requested: !!rq.requested, at: str(rq.at).slice(0, 40) };
+    optsOf(A.discovery._cfg).forEach(function (o) { var tv = rq.tiers && typeof rq.tiers === 'object' ? rq.tiers[o.id] : ''; if (o.tiers.length && o.tiers.some(function (t) { return t.id === tv; })) A.discovery._req.tiers[o.id] = tv; });
     Object.keys(rq.picks && typeof rq.picks === 'object' ? rq.picks : {}).forEach(function (k) { if (ids[k] && (rq.picks[k] === 'need' || rq.picks[k] === 'unsure')) A.discovery._req.picks[k] = rq.picks[k]; });
     var e = raw.eligibility || {}; ELIG.forEach(function (q) { var v = e.a && e.a[q[0]]; A.eligibility.a[q[0]] = (v === 'yes' || v === 'no' || v === 'unsure') ? v : ''; });
     var v = raw.evidence || {}; EVID.forEach(function (q) { A.evidence.a[q[0]] = !!(v.a && v.a[q[0]]); });
@@ -122,9 +123,12 @@ input:focus,textarea:focus,select:focus,button:focus{outline:3px solid #7aa2f7;o
     ['tone', 'use', 'avoid', 'social', 'notes'].forEach(function (k) { A.brand.notes[k] = str(b.notes && b.notes[k]); });
     return A;
   }
+  function tiersOf(a) { var t = []; if (!Array.isArray(a)) return t; a.slice(0, 8).forEach(function (x) { if (!x || typeof x.id !== 'string' || !/^[\w-]{1,30}$/.test(x.id)) return; t.push({ id: x.id, label: str(x.label).slice(0, 120), help: str(x.help).slice(0, 300), unit: x.unit === 'page' || x.unit === 'hour' ? x.unit : 'fixed', freq: x.freq === 'month' || x.freq === 'year' ? x.freq : 'once', from: /^\d{1,7}(\.\d{1,2})?$/.test(String(x.from || '')) ? String(x.from) : '' }); }); return t.length > 1 ? t : []; }
+  function tierOf(o) { var id = P.A.discovery._req.tiers[o.id] || o.dflt, i; for (i = 0; i < o.tiers.length; i++) if (o.tiers[i].id === id) return o.tiers[i]; return o.tiers[Math.floor(o.tiers.length / 2)]; }
+  function tiersHtml(o) { if (!o.tiers.length || P.A.discovery._req.picks[o.id] !== 'need') return ''; var cur = tierOf(o); return '<div class="seg" role="group" aria-label="' + esc(o.label) + ', pick one">' + o.tiers.map(function (t) { return '<button type="button" data-tier="' + esc(o.id) + '" data-t="' + esc(t.id) + '" aria-pressed="' + (t === cur) + '"' + dis() + '>' + esc(t.label) + (t.from ? ', ' + esc(fromText(t)) : '') + '</button>'; }).join('') + '</div>' + (cur.help ? '<p class="hint">' + esc(cur.help) + '</p>' : ''); }
   function optsOf(cfg) {
     var out = []; if (!cfg || !Array.isArray(cfg.options)) return out;
-    cfg.options.slice(0, 60).forEach(function (o) { if (!o || typeof o.id !== 'string' || !/^[\w-]{1,30}$/.test(o.id)) return; out.push({ id: o.id, label: str(o.label).slice(0, 120), help: str(o.help).slice(0, 300), unit: o.unit === 'page' || o.unit === 'hour' ? o.unit : 'fixed', freq: o.freq === 'month' || o.freq === 'year' ? o.freq : 'once', from: /^\d{1,7}(\.\d{1,2})?$/.test(String(o.from || '')) ? String(o.from) : '' }); });
+    cfg.options.slice(0, 60).forEach(function (o) { if (!o || typeof o.id !== 'string' || !/^[\w-]{1,30}$/.test(o.id)) return; out.push({ id: o.id, label: str(o.label).slice(0, 120), help: str(o.help).slice(0, 300), unit: o.unit === 'page' || o.unit === 'hour' ? o.unit : 'fixed', freq: o.freq === 'month' || o.freq === 'year' ? o.freq : 'once', from: /^\d{1,7}(\.\d{1,2})?$/.test(String(o.from || '')) ? String(o.from) : '', tiers: tiersOf(o.tiers), dflt: str(o.dflt).slice(0, 30) }); });
     return out;
   }
   function getp(path) { var o = P.A, ks = path.split('.'); for (var i = 0; i < ks.length - 1; i++) o = o[ks[i]]; return o[ks[ks.length - 1]]; }
@@ -150,14 +154,14 @@ input:focus,textarea:focus,select:focus,button:focus{outline:3px solid #7aa2f7;o
   function fromText(o) { return o.from ? 'From ' + money(o.from) + (o.unit === 'page' ? ' per page' : (o.unit === 'hour' ? ' per hour' : '')) + (o.freq === 'month' ? ' a month' : (o.freq === 'year' ? ' a year' : '')) : ''; }
   function needsTotal() {
     var pk = P.A.discovery._req.picks, once = 0, mon = 0, any = false, unpriced = 0, per = 0;
-    P.opts.forEach(function (o) { if (pk[o.id] !== 'need') return; if (!o.from) { unpriced++; return; } any = true; if (o.unit !== 'fixed') { per++; return; } if (o.freq === 'month') mon += +o.from; else if (o.freq === 'once') once += +o.from; });
-    if (!P.opts.some(function (o) { return o.from; })) return '';
+    P.opts.forEach(function (o0) { var o = o0.tiers.length ? Object.assign({}, o0, tierOf(o0), { id: o0.id }) : o0; if (pk[o.id] !== 'need') return; if (!o.from) { unpriced++; return; } any = true; if (o.unit !== 'fixed') { per++; return; } if (o.freq === 'month') mon += +o.from; else if (o.freq === 'once') once += +o.from; });
+    if (!P.opts.some(function (o) { return o.from || o.tiers.some(function (t) { return t.from; }); })) return '';
     return '<div class="note"><b>Your starting total so far, from my starting prices. It is not a quote.</b><br>' + (any ? 'From ' + money(once) + ' to start' + (mon ? ', and from ' + money(mon) + ' a month' : '') : 'Nothing priced yet') + (per ? '<br>Some ticks are priced per page or per hour, so I leave them out of the total' : '') + (unpriced ? '<br>' + unpriced + ' of your ticks I will price with you' : '') + '</div>';
   }
   function vNeeds() {
     var rq = P.A.discovery._req, pk = rq.picks;
-    return '<section class="sec" id="s-needs"><h2>What do you need?</h2><div class="cnt" data-cnt="needs"></div><p class="hint">Tick what sounds right. This is a request, not a quote. I will look at it, then send you a quote. Not sure is fine, we will talk it through</p>' + P.opts.map(function (o) {
-      var v = pk[o.id] || ''; return '<div class="card"><b>' + esc(o.label) + '</b>' + (o.from ? ' <span class="hint">' + esc(fromText(o)) + '</span>' : '') + (o.help ? '<p class="hint">' + esc(o.help) + '</p>' : '') + '<div class="seg" role="group" aria-label="' + esc(o.label) + '">' + [['need', 'I need this'], ['unsure', 'Not sure']].map(function (b) { return '<button type="button" data-segq="' + esc(o.id) + '" data-v="' + b[0] + '" aria-pressed="' + (v === b[0]) + '"' + dis() + '>' + b[1] + '</button>'; }).join('') + '</div></div>';
+    return '<section class="sec" id="s-needs"><h2>What do you need?</h2><div class="cnt" data-cnt="needs"></div><p class="hint">Only tick what you need. If you think you might need it, hit Not sure and we can chat about it. Anything you leave alone, I will take as not needed. This is a request, not a quote, I will look at it and then send you a quote</p>' + P.opts.map(function (o) {
+      var v = pk[o.id] || ''; return '<div class="card"><b>' + esc(o.label) + '</b>' + (o.from ? ' <span class="hint">' + esc(fromText(o)) + '</span>' : '') + (o.help ? '<p class="hint">' + esc(o.help) + '</p>' : '') + '<div class="seg" role="group" aria-label="' + esc(o.label) + '">' + [['need', 'I need this'], ['unsure', 'Not sure']].map(function (b) { return '<button type="button" data-segq="' + esc(o.id) + '" data-v="' + b[0] + '" aria-pressed="' + (v === b[0]) + '"' + dis() + '>' + b[1] + '</button>'; }).join('') + '</div><div id="tr-' + esc(o.id) + '">' + tiersHtml(o) + '</div></div>';
     }).join('') + '<div id="ntot">' + needsTotal() + '</div><div class="q"><label class="ql" for="n-req">Anything else you want me to know?</label><textarea id="n-req" data-p="discovery._req.note"' + dis() + '>' + esc(rq.note) + '</textarea></div>' + (P.ro ? '' : '<p><button type="button" class="btn pri" data-do="sendreq">Send my quote request</button></p><div class="hint" id="reqmsg" role="status">' + (rq.requested ? 'Sent to Rhys. You can still change things and send again' : '') + '</div>') + '</section>';
   }
   function vDisc() {
@@ -259,8 +263,9 @@ input:focus,textarea:focus,select:focus,button:focus{outline:3px solid #7aa2f7;o
   function asset(el) { var id = el.closest('[data-asset]').dataset.asset; return P.A.brand.assets.filter(function (a) { return a.id === id; })[0]; }
   function col(el) { var id = el.closest('[data-col]').dataset.col; return P.A.brand.colours.filter(function (a) { return a.id === id; })[0]; }
   document.addEventListener('click', function (e) {
-    var t = e.target.closest('[data-seg],[data-segq],[data-do]'); if (!t || P.ro) return;
-    if (t.dataset.segq) { var pk = P.A.discovery._req.picks, id = t.dataset.segq; if (pk[id] === t.dataset.v) delete pk[id]; else pk[id] = t.dataset.v; Array.prototype.forEach.call(t.parentNode.children, function (b) { b.setAttribute('aria-pressed', String(pk[id] === b.dataset.v)); }); var nt = $('#ntot'); if (nt) nt.innerHTML = needsTotal(); touch(); return; }
+    var t = e.target.closest('[data-seg],[data-segq],[data-tier],[data-do]'); if (!t || P.ro) return;
+    if (t.dataset.segq) { var pk = P.A.discovery._req.picks, id = t.dataset.segq; if (pk[id] === t.dataset.v) delete pk[id]; else pk[id] = t.dataset.v; Array.prototype.forEach.call(t.parentNode.children, function (b) { b.setAttribute('aria-pressed', String(pk[id] === b.dataset.v)); }); var tr = document.getElementById('tr-' + id); P.opts.forEach(function (o) { if (o.id === id && tr) tr.innerHTML = tiersHtml(o); }); var nt = $('#ntot'); if (nt) nt.innerHTML = needsTotal(); touch(); return; }
+    if (t.dataset.tier) { P.A.discovery._req.tiers[t.dataset.tier] = t.dataset.t; Array.prototype.forEach.call(t.parentNode.children, function (b) { b.setAttribute('aria-pressed', String(b === t)); }); var nt2 = $('#ntot'); if (nt2) nt2.innerHTML = needsTotal(); touch(); return; }
     if (t.dataset.seg) { var cur = getp(t.dataset.seg), v = t.dataset.v; setp(t.dataset.seg, cur === v ? '' : v); Array.prototype.forEach.call(t.parentNode.children, function (b) { b.setAttribute('aria-pressed', String(getp(t.dataset.seg) === b.dataset.v)); }); touch(); return; }
     var d = t.dataset.do;
     if (d === 'addcol') { P.A.brand.colours.push({ id: uid(), role: 'primary', hex: '#0b2a5b' }); $('#cols').innerHTML = vColours(); touch(); }
