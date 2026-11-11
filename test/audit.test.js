@@ -63,8 +63,9 @@ test('home page: invoice drafting and the Tolra site offer are labelled pilot, n
   assert.ok(h.includes('Pilot only, ask me.'));
   assert.ok(!/half price/i.test(h));
   publicFiles('.', []).forEach(function (f) { assert.ok(!/nearly three years/i.test(read(f)), f + ' still has the years claim'); });
-  assert.ok(read('index.html').includes('I come from a computer system validation background.'));
-  assert.ok(read('csv.html').includes('I come from a computer system validation background.'));
+  assert.ok(read('index.html').includes('My background is in computer system validation, where you learn to ask what could go wrong before anything is built.'));
+  const csv = read('csv.html');
+  assert.strictEqual(csv.split('I come from a computer system validation background.').length - 1, 1);
   assert.ok(read('llms.txt').includes('He comes from a computer system validation background.'));
 });
 
