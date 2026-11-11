@@ -90,7 +90,8 @@ test('the new page has all the sections, the seven from prices and no tier names
     assert.ok(new RegExp(p[0] + '<span class="status">' + p[1] + '</span>').test(html), p.join(' ') + ' missing');
   });
   assert.ok(!/\b(good|better|best)\b/i.test(visibleText(html).replace(/Good(?= morning)/g, '')), 'tier names found');
-  assert.ok(html.includes('No one can guarantee rankings in Google or AI tools, I make sure your information is complete, accurate and easy to find.'));
+  assert.ok(html.includes('No one can guarantee rankings in Google or AI tools. I make sure your information is complete, accurate and easy to find.'));
+  assert.ok(!/AI tools, I make sure/.test(html), 'comma splice is back');
   assert.ok(!/AI visibility/i.test(html));
 });
 
@@ -129,4 +130,35 @@ test('the grants page lists only website, Google search set up, and domain and e
   assert.strictEqual((s.match(/<li>/g) || []).length, 3);
   assert.ok(/<li>A website/.test(s) && /<li>Google search set up/.test(s) && /<li>Domain and email set up/.test(s));
   assert.ok(!/automation|e-commerce|CRM/i.test(s));
+});
+
+test('go-live fixes: no Marpet screenshot or coming soon note, button goes to the form, deposit line, footer', function () {
+  const html = read(PAGE);
+  assert.ok(!/marpet-fabrications/.test(html) && !/coming soon/i.test(html));
+  assert.ok(!fs.existsSync(path.join(ROOT, 'images/marpet-fabrications-top.jpg')));
+  assert.ok(html.includes('<a class="btn" href="#enquiry">Send an enquiry</a>'));
+  assert.ok(html.includes('If you’re applying for a grant, payment timing is agreed in your quote.'));
+  publicPages.filter(function (f) { return read(f).includes('about-line'); }).forEach(function (f) {
+    const h = read(f);
+    assert.ok(h.includes('for engineering firms and local businesses, from Glasgow.'), f + ' footer line');
+    assert.ok(!h.includes('for engineering and manufacturing firms, from Glasgow'), f + ' old footer line');
+    assert.ok(h.includes('<li><a href="/local-business">Websites and digital for local business</a></li>'), f + ' footer link');
+  });
+});
+
+test('home page prices match the local business page and do not say Google search is included', function () {
+  const h = read('index.html');
+  assert.ok(h.includes('Quote-ready site <span class="status">from £1,500 one-off'));
+  assert.ok(h.includes('Care plan <span class="status">from £35 a month'));
+  assert.ok(!/2,200|£60 a month/.test(h));
+  assert.ok(/A fast site on your own domain and a quote form that takes drawings\./.test(h));
+  assert.ok(!/Quote-ready site[\s\S]{0,400}Google search set up/.test(h.replace(/<[^>]*>/g, ' ')));
+});
+
+test('grants page keeps the three set up costs and the softer wording together', function () {
+  const g = read('council-digital-grants/index.html');
+  assert.ok(g.includes('Set up costs that may be eligible'));
+  assert.ok(g.includes('Delivery planned around the claim deadline.'));
+  assert.ok(g.includes('How it pays out depends on the scheme'));
+  assert.ok(g.includes('href="/local-business"'));
 });
