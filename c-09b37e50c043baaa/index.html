@@ -92,8 +92,8 @@ input:focus,textarea:focus,select:focus,button:focus{outline:3px solid #7aa2f7;o
   var TYPES = [['logo', 'Logo'], ['photo', 'Photo of the shop or products'], ['brand', 'Brand guidelines'], ['other', 'Something else']];
   var ROLES = [['primary', 'Main colour'], ['secondary', 'Second colour'], ['accent', 'Accent colour'], ['background', 'Background'], ['text', 'Text'], ['other', 'Other']];
   var FROMS = [['', 'Where is it from?'], ['client', 'I already use it'], ['google', 'Google Fonts'], ['system', 'Comes with my computer'], ['other', 'Somewhere else']];
-  var SECS = ['discovery', 'eligibility', 'evidence', 'brand'];
-  var P = { token: '', ro: false, name: '', sections: ['discovery', 'brand'], submittedAt: null, dirty: false, afterSend: false, status: '', saving: false, again: false, savedAt: 0, A: null, cfg: null, msg: '', dead: false, timer: 0, pics: '' };
+  var SECS = ['needs', 'discovery', 'eligibility', 'evidence', 'brand'];
+  var P = { token: '', ro: false, name: '', sections: ['discovery', 'brand'], submittedAt: null, dirty: false, afterSend: false, status: '', saving: false, again: false, savedAt: 0, A: null, cfg: null, opts: [], msg: '', dead: false, timer: 0, pics: '' };
 
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
@@ -110,6 +110,9 @@ input:focus,textarea:focus,select:focus,button:focus{outline:3px solid #7aa2f7;o
     var d = raw.discovery || {}; DISC.forEach(function (q) { A.discovery.a[q[0]] = str(d.a && d.a[q[0]]); });
     GOALS.forEach(function (g) { var v = d.goals && d.goals[g[0]]; A.discovery.goals[g[0]] = /^[1-5]$/.test(String(v)) ? String(v) : ''; });
     if (d._cfg && typeof d._cfg === 'object') A.discovery._cfg = d._cfg;
+    var ids = {}; optsOf(A.discovery._cfg).forEach(function (o) { ids[o.id] = 1; });
+    var rq = d._req && typeof d._req === 'object' ? d._req : {}; A.discovery._req = { picks: {}, note: str(rq.note), requested: !!rq.requested, at: str(rq.at).slice(0, 40) };
+    Object.keys(rq.picks && typeof rq.picks === 'object' ? rq.picks : {}).forEach(function (k) { if (ids[k] && (rq.picks[k] === 'need' || rq.picks[k] === 'unsure')) A.discovery._req.picks[k] = rq.picks[k]; });
     var e = raw.eligibility || {}; ELIG.forEach(function (q) { var v = e.a && e.a[q[0]]; A.eligibility.a[q[0]] = (v === 'yes' || v === 'no' || v === 'unsure') ? v : ''; });
     var v = raw.evidence || {}; EVID.forEach(function (q) { A.evidence.a[q[0]] = !!(v.a && v.a[q[0]]); });
     var b = raw.brand || {};
@@ -119,8 +122,14 @@ input:focus,textarea:focus,select:focus,button:focus{outline:3px solid #7aa2f7;o
     ['tone', 'use', 'avoid', 'social', 'notes'].forEach(function (k) { A.brand.notes[k] = str(b.notes && b.notes[k]); });
     return A;
   }
+  function optsOf(cfg) {
+    var out = []; if (!cfg || !Array.isArray(cfg.options)) return out;
+    cfg.options.slice(0, 60).forEach(function (o) { if (!o || typeof o.id !== 'string' || !/^[\w-]{1,30}$/.test(o.id)) return; out.push({ id: o.id, label: str(o.label).slice(0, 120), help: str(o.help).slice(0, 300), unit: o.unit === 'page' || o.unit === 'hour' ? o.unit : 'fixed', freq: o.freq === 'month' || o.freq === 'year' ? o.freq : 'once', from: /^\d{1,7}(\.\d{1,2})?$/.test(String(o.from || '')) ? String(o.from) : '' }); });
+    return out;
+  }
   function getp(path) { var o = P.A, ks = path.split('.'); for (var i = 0; i < ks.length - 1; i++) o = o[ks[i]]; return o[ks[ks.length - 1]]; }
   function setp(path, v) { var o = P.A, ks = path.split('.'); for (var i = 0; i < ks.length - 1; i++) o = o[ks[i]]; o[ks[ks.length - 1]] = v; }
+  function money(n) { return '\u00a3' + Number(n).toLocaleString('en-GB', { maximumFractionDigits: 2 }); }
   function outAnswers() { var o = JSON.parse(JSON.stringify(P.A)); if (P.cfg) o.discovery._cfg = P.cfg; else delete o.discovery._cfg; return o; }
   function picTotal() { return P.A.brand.assets.reduce(function (n, a) { return n + a.data.length; }, 0); }
 
@@ -138,6 +147,19 @@ input:focus,textarea:focus,select:focus,button:focus{outline:3px solid #7aa2f7;o
   var dis = function () { return P.ro ? ' disabled' : ''; };
   var has = function (s) { return P.sections.indexOf(s) >= 0; };
   function qText(q, i) { var id = q[0], v = P.A.discovery.a[id]; return '<div class="q"><label class="ql" for="d-' + id + '">' + esc(q[1]) + '</label>' + (q[2] ? '<input type="text" id="d-' + id + '" data-p="discovery.a.' + id + '" value="' + esc(v) + '"' + dis() + '>' : '<textarea id="d-' + id + '" data-p="discovery.a.' + id + '"' + dis() + '>' + esc(v) + '</textarea>') + '</div>'; }
+  function fromText(o) { return o.from ? 'From ' + money(o.from) + (o.unit === 'page' ? ' per page' : (o.unit === 'hour' ? ' per hour' : '')) + (o.freq === 'month' ? ' a month' : (o.freq === 'year' ? ' a year' : '')) : ''; }
+  function needsTotal() {
+    var pk = P.A.discovery._req.picks, once = 0, mon = 0, any = false, unpriced = 0, per = 0;
+    P.opts.forEach(function (o) { if (pk[o.id] !== 'need') return; if (!o.from) { unpriced++; return; } any = true; if (o.unit !== 'fixed') { per++; return; } if (o.freq === 'month') mon += +o.from; else if (o.freq === 'once') once += +o.from; });
+    if (!P.opts.some(function (o) { return o.from; })) return '';
+    return '<div class="note"><b>Your starting total so far, from my starting prices. It is not a quote.</b><br>' + (any ? 'From ' + money(once) + ' to start' + (mon ? ', and from ' + money(mon) + ' a month' : '') : 'Nothing priced yet') + (per ? '<br>Some ticks are priced per page or per hour, so I leave them out of the total' : '') + (unpriced ? '<br>' + unpriced + ' of your ticks I will price with you' : '') + '</div>';
+  }
+  function vNeeds() {
+    var rq = P.A.discovery._req, pk = rq.picks;
+    return '<section class="sec" id="s-needs"><h2>What do you need?</h2><div class="cnt" data-cnt="needs"></div><p class="hint">Tick what sounds right. This is a request, not a quote. I will look at it, then send you a quote. Not sure is fine, we will talk it through</p>' + P.opts.map(function (o) {
+      var v = pk[o.id] || ''; return '<div class="card"><b>' + esc(o.label) + '</b>' + (o.from ? ' <span class="hint">' + esc(fromText(o)) + '</span>' : '') + (o.help ? '<p class="hint">' + esc(o.help) + '</p>' : '') + '<div class="seg" role="group" aria-label="' + esc(o.label) + '">' + [['need', 'I need this'], ['unsure', 'Not sure']].map(function (b) { return '<button type="button" data-segq="' + esc(o.id) + '" data-v="' + b[0] + '" aria-pressed="' + (v === b[0]) + '"' + dis() + '>' + b[1] + '</button>'; }).join('') + '</div></div>';
+    }).join('') + '<div id="ntot">' + needsTotal() + '</div><div class="q"><label class="ql" for="n-req">Anything else you want me to know?</label><textarea id="n-req" data-p="discovery._req.note"' + dis() + '>' + esc(rq.note) + '</textarea></div>' + (P.ro ? '' : '<p><button type="button" class="btn pri" data-do="sendreq">Send my quote request</button></p><div class="hint" id="reqmsg" role="status">' + (rq.requested ? 'Sent to Rhys. You can still change things and send again' : '') + '</div>') + '</section>';
+  }
   function vDisc() {
     var g = GOALS.map(function (x) { var v = P.A.discovery.goals[x[0]]; return '<div class="q"><label class="ql" for="g-' + x[0] + '">' + esc(x[1]) + '</label><select id="g-' + x[0] + '" data-p="discovery.goals.' + x[0] + '"' + dis() + '>' + [['', 'Not ranked'], ['1', '1, most important'], ['2', '2'], ['3', '3'], ['4', '4'], ['5', '5']].map(function (o) { return '<option value="' + o[0] + '"' + (o[0] === v ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select></div>'; }).join('');
     return '<section class="sec" id="s-discovery"><h2>About your plans</h2><div class="cnt" data-cnt="discovery"></div><p class="hint">Answer what you can, skip what you cannot. Short answers are fine</p><h3>What matters most?</h3><p class="hint">Pick 1 for the most important and leave the rest blank</p>' + g + '<h3 style="margin-top:22px">In your own words</h3>' + DISC.map(qText).join('') + '</section>';
@@ -183,13 +205,14 @@ input:focus,textarea:focus,select:focus,button:focus{outline:3px solid #7aa2f7;o
     var ban = P.ro ? '<div class="ro-banner">Read only view of what your client sees. Nothing here is saved</div>' : '';
     var sub = P.submittedAt ? '<div class="note ok" id="subnote">' + subText() + '</div>' : '';
     app().innerHTML = ban + shell('<main><div class="intro"><p>Hi, I\'m Rhys. These are the things that help me build your website. Answer what you can and skip what you cannot. It saves as you go, and you can come back to this same link any time. When you are ready, press <b>Send to Rhys</b>. You can still change things after that.</p><p class="hint">Please do not type passwords or bank details anywhere on this page</p></div>' + sub +
-      (has('discovery') ? vDisc() : '') + (has('eligibility') ? vElig() : '') + (has('evidence') ? vEvid() : '') + (has('brand') ? vBrand() : '') + '</main><div class="corner">Prepared with Rhys Hume</div>' +
+      (has('needs') && P.opts.length ? vNeeds() : '') + (has('discovery') ? vDisc() : '') + (has('eligibility') ? vElig() : '') + (has('evidence') ? vEvid() : '') + (has('brand') ? vBrand() : '') + '</main><div class="corner">Prepared with Rhys Hume</div>' +
       (P.ro ? '' : '<div class="bar noprint"><div class="st" id="st" role="status"></div><button type="button" class="btn pri" data-do="send" id="sendbtn">Send to Rhys</button></div>'));
     counts(); status();
   }
   function subText() { var d = P.submittedAt ? new Date(P.submittedAt) : null; return 'Sent to Rhys on ' + (d ? d.toLocaleString('en-GB', { day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }) : '') + '. You can keep editing. ' + (P.afterSend ? '<b>You have changed things since you sent them, press Send to Rhys again.</b>' : 'If you change anything, press Send to Rhys again.'); }
   function counts() {
     var A = P.A, c = {};
+    var pq = A.discovery._req.picks; c.needs = Object.keys(pq).filter(function (k) { return pq[k] === 'need'; }).length + ' picked, ' + Object.keys(pq).filter(function (k) { return pq[k] === 'unsure'; }).length + ' not sure';
     c.discovery = DISC.filter(function (q) { return A.discovery.a[q[0]].trim(); }).length + ' of ' + DISC.length + ' answered';
     c.eligibility = ELIG.filter(function (q) { return A.eligibility.a[q[0]]; }).length + ' of ' + ELIG.length + ' answered';
     c.evidence = EVID.filter(function (q) { return A.evidence.a[q[0]]; }).length + ' of ' + EVID.length + ' ticked';
@@ -236,13 +259,15 @@ input:focus,textarea:focus,select:focus,button:focus{outline:3px solid #7aa2f7;o
   function asset(el) { var id = el.closest('[data-asset]').dataset.asset; return P.A.brand.assets.filter(function (a) { return a.id === id; })[0]; }
   function col(el) { var id = el.closest('[data-col]').dataset.col; return P.A.brand.colours.filter(function (a) { return a.id === id; })[0]; }
   document.addEventListener('click', function (e) {
-    var t = e.target.closest('[data-seg],[data-do]'); if (!t || P.ro) return;
+    var t = e.target.closest('[data-seg],[data-segq],[data-do]'); if (!t || P.ro) return;
+    if (t.dataset.segq) { var pk = P.A.discovery._req.picks, id = t.dataset.segq; if (pk[id] === t.dataset.v) delete pk[id]; else pk[id] = t.dataset.v; Array.prototype.forEach.call(t.parentNode.children, function (b) { b.setAttribute('aria-pressed', String(pk[id] === b.dataset.v)); }); var nt = $('#ntot'); if (nt) nt.innerHTML = needsTotal(); touch(); return; }
     if (t.dataset.seg) { var cur = getp(t.dataset.seg), v = t.dataset.v; setp(t.dataset.seg, cur === v ? '' : v); Array.prototype.forEach.call(t.parentNode.children, function (b) { b.setAttribute('aria-pressed', String(getp(t.dataset.seg) === b.dataset.v)); }); touch(); return; }
     var d = t.dataset.do;
     if (d === 'addcol') { P.A.brand.colours.push({ id: uid(), role: 'primary', hex: '#0b2a5b' }); $('#cols').innerHTML = vColours(); touch(); }
     else if (d === 'rmcol') { P.A.brand.colours = P.A.brand.colours.filter(function (c) { return c.id !== t.dataset.id; }); $('#cols').innerHTML = vColours(); touch(); }
     else if (d === 'rmasset') { P.A.brand.assets = P.A.brand.assets.filter(function (c) { return c.id !== t.dataset.id; }); $('#assets').innerHTML = vAssets(); touch(); }
     else if (d === 'send') save(true);
+    else if (d === 'sendreq') { var rq = P.A.discovery._req; if (!Object.keys(rq.picks).length) { $('#reqmsg').textContent = 'Tick at least one thing first'; return; } rq.requested = true; rq.at = new Date().toISOString(); touch(); save(true); }
   });
   window.addEventListener('beforeunload', function (e) { if (!P.ro && (P.dirty || P.saving) && !P.dead) { e.preventDefault(); e.returnValue = ''; } });
   document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden' && P.dirty && !P.saving && !P.dead && !P.ro) save(false); });
@@ -329,7 +354,7 @@ input:focus,textarea:focus,select:focus,button:focus{outline:3px solid #7aa2f7;o
         if (e.origin !== location.origin || !(e.source === window.parent || e.source === window.opener)) return;
         var m = e.data; if (!m || m.type !== 'cw-view') return;
         P.name = String(m.client_name || '').slice(0, 200); P.A = normalise(m.answers); P.cfg = (m.cfg && typeof m.cfg === 'object') ? m.cfg : (P.A.discovery._cfg || null);
-        P.sections = sectionsOf(P.cfg); P.submittedAt = m.submitted_at || null; render();
+        P.opts = optsOf(P.cfg); P.A = normalise(m.answers && Object.assign({}, m.answers, { discovery: Object.assign({}, (m.answers && m.answers.discovery) || {}, { _cfg: P.cfg }) })); P.sections = sectionsOf(P.cfg); P.submittedAt = m.submitted_at || null; render();
       });
       var tgt = window.parent !== window ? window.parent : window.opener; if (tgt) tgt.postMessage({ type: 'cw-view-ready' }, location.origin);
       return;
@@ -339,7 +364,7 @@ input:focus,textarea:focus,select:focus,button:focus{outline:3px solid #7aa2f7;o
     P.token = m[1]; bigMsg('Loading', 'One moment');
     rpc('portal_open', { p_token: P.token }).then(function (r) {
       if (!r) { bigMsg('This link is not working', 'It may be incomplete or switched off. Please ask Rhys to send it again'); return; }
-      P.name = String(r.client_name || '').slice(0, 200); P.A = normalise(r.answers); P.cfg = P.A.discovery._cfg || null; P.sections = sectionsOf(P.cfg);
+      P.name = String(r.client_name || '').slice(0, 200); P.A = normalise(r.answers); P.cfg = P.A.discovery._cfg || null; P.opts = optsOf(P.cfg); P.sections = sectionsOf(P.cfg);
       P.submittedAt = r.submitted_at ? Date.parse(r.submitted_at) : null; render();
     }).catch(function () { bigMsg('I could not load this page', 'Check your connection and try again', '<p><button type="button" class="btn pri" onclick="location.reload()">Try again</button></p>'); });
   }
