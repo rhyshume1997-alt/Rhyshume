@@ -59,31 +59,31 @@ input:focus,textarea:focus,select:focus,button:focus{outline:3px solid #7aa2f7;o
   'use strict';
   var SB = 'https://vkpdrqkwxkokolphmkbh.supabase.co', KEY = 'sb_publishable_GL24QszG4OiwuzdL9QecwQ_ePysbKgx';
   var OPTS = [
-    ['site1', 'A quote-ready website', ''],
-    ['site2', 'A website with a quote workflow', ''],
-    ['landing', 'A designed landing page', 'A designed landing page with more than standard content'],
-    ['qform', 'An enquiry or quote form', 'A form with steps, choices or a quote workflow'],
-    ['booking', 'Online booking', 'Online booking set up and tested'],
-    ['shop', 'An online shop', 'Products, basket, checkout and the payment connection'],
-    ['copy', 'Writing the words for your pages', ''],
-    ['seo', 'Local search and AI visibility set up', ''],
-    ['care', 'Ongoing care for the website', 'Hosting, fixes and small edits']
+    ['site1', 'A website', 'Pages about your business and a way to get in touch'],
+    ['site2', 'A website that gives quotes', 'People can ask for a quote on the site'],
+    ['landing', 'One special page', 'A single page made to get people to act'],
+    ['qform', 'A form', 'For enquiries or quotes, with steps or choices'],
+    ['booking', 'Online booking', 'People book a time on the site'],
+    ['shop', 'An online shop', 'Sell products and take payment'],
+    ['copy', 'Help with the writing', 'I write the words for your pages'],
+    ['seo', 'Help being found online', 'Set up so people can find you on Google and AI tools'],
+    ['care', 'Looking after the website', 'Hosting, fixes and small changes each month']
   ];
   var picks = {}, busy = false;
   var $ = function (s) { return document.querySelector(s); };
   var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
   function draw() {
-    $('#app').innerHTML = '<header class="top"><div class="wm">Rhys Hume</div><h1>Request a quote</h1></header><main><div class="intro"><p>Tell me what you are after and I will come back to you with a quote. Only tick what you need. If you think you might need it, hit Not sure and we can chat about it. Anything you leave alone, I will take as not needed. You can also just write it in the box.</p></div>' +
+    $('#app').innerHTML = '<header class="top"><div class="wm">Rhys Hume</div><h1>Request a quote</h1></header><main><div class="intro"><p>Only tick what you need. Not sure? Hit Not sure and we can chat about it. Anything you leave alone, I will take as not needed. You can also just write it in the box.</p></div>' +
       '<form id="f" novalidate><section class="sec"><h2>What do you need?</h2>' + OPTS.map(function (o) {
         return '<div class="card"><b>' + esc(o[1]) + '</b>' + (o[2] ? '<p class="hint">' + esc(o[2]) + '</p>' : '') + '<div class="seg" role="group" aria-label="' + esc(o[1]) + '">' + [['need', 'I need this'], ['unsure', 'Not sure']].map(function (b) { return '<button type="button" data-p="' + o[0] + '" data-v="' + b[0] + '" aria-pressed="false">' + b[1] + '</button>'; }).join('') + '</div></div>';
       }).join('') + '</section><section class="sec"><h2>About you</h2>' +
-      fld('name', 'Your name', 'text', 'name', 1) + fld('business', 'Your business', 'text', 'organization') + fld('email', 'Your email', 'email', 'email', 1) + fld('phone', 'Phone, only if you want a call', 'text', 'tel') +
-      '<div class="q"><label class="ql" for="message">Anything else I should know?</label><textarea id="message" maxlength="4000"></textarea></div>' +
+      fld('name', 'Your name', 'text', 'name', 1, 'e.g. Sam Taylor') + fld('business', 'Your business', 'text', 'organization', 0, 'e.g. Taylor and Sons Bakery') + fld('email', 'Your email', 'email', 'email', 1, 'Where I send your quote') + fld('phone', 'Phone', 'text', 'tel', 0, 'Only if you would like a call') +
+      '<div class="q"><label class="ql" for="message">Anything else?</label><span class="hint">Tell me in your own words</span><textarea id="message" maxlength="4000"></textarea></div>' +
       '<div style="position:absolute;left:-9999px" aria-hidden="true"><label>Leave this empty<input type="text" id="website" tabindex="-1" autocomplete="off"></label></div>' +
       '<label class="chk"><input type="checkbox" id="consent"><span>I am happy for Rhys Hume to contact me about this request, using the details above</span></label>' +
       '<p class="hint">This is a request, not an order. Nothing is agreed until I send you a quote and you accept it.</p><div id="msg" role="status" class="note" style="display:none"></div><p><button type="submit" class="btn pri" id="go">Send my request</button></p></section></form></main>';
   }
-  function fld(id, label, type, ac, req) { return '<div class="q"><label class="ql" for="' + id + '">' + label + (req ? '' : ' <span class="hint">(optional)</span>') + '</label><input type="' + type + '" id="' + id + '" autocomplete="' + ac + '" maxlength="200"></div>'; }
+  function fld(id, label, type, ac, req, h) { return '<div class="q"><label class="ql" for="' + id + '">' + label + (req ? '' : ' <span class="hint">(optional)</span>') + '</label>' + (h ? '<span class="hint">' + h + '</span>' : '') + '<input type="' + type + '" id="' + id + '" autocomplete="' + ac + '" maxlength="200"></div>'; }
   function say(t, bad) { var m = $('#msg'); m.style.display = 'block'; m.className = 'note ' + (bad ? 'bad' : 'ok'); m.textContent = t; m.scrollIntoView({ block: 'center' }); }
   document.addEventListener('click', function (e) {
     var b = e.target.closest('[data-p]'); if (!b) return;
