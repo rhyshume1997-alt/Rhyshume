@@ -1052,7 +1052,8 @@ async function run(opts) {
 
   fs.writeFileSync(path.join(dir, 'index.html'), html);
   fs.writeFileSync(path.join(dir, 'notes.md'), notes);
-  return { dir: dir, html: html, notes: notes, content: content, warnings: warnings, points: points };
+  const brand = require('./brand').extractBrand(cssTexts, home.html);
+  return { dir: dir, html: html, notes: notes, content: content, warnings: warnings, points: points, brand: brand };
 }
 
 async function main(argv) {
