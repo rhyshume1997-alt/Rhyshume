@@ -1,0 +1,29 @@
+{
+  "name": "rhyshume",
+  "version": "1.0.0",
+  "description": "Static site for Rhys Hume, Glasgow, hosted on Vercel at https://www.rhyshume.co.uk. HTML and CSS, no framework. One small script, `nav.js`, opens and closes the menu on phones; without it the nav stays visible.",
+  "main": "form-check.js",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rhyshume1997-alt/Rhyshume.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rhyshume1997-alt/Rhyshume/issues"
+  },
+  "homepage": "https://github.com/rhyshume1997-alt/Rhyshume#readme",
+  "private": "true",
+  "dependencies": {
+    "@ui-sdk/core": "^0.1.0-beta.1",
+    "@ui-sdk/web": "^0.1.0-beta.1"
+  }
+}
