@@ -1,0 +1,75 @@
+# Build a concept preview from the GitHub website, no computer tools needed.
+# Actions tab > "Build preview" > Run workflow. Needs the repository secret ANTHROPIC_API_KEY.
+# Writes preview/<slug>/ to a new branch called preview-<slug>. It never touches main.
+name: Build preview
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: Their website, for example https://example.co.uk
+        required: true
+      slug:
+        description: Short name, lower case, hyphens only, for example example-firm
+        required: true
+      competitor:
+        description: Competitor website (optional)
+        required: false
+      name:
+        description: Firm name, only if the tool gets it wrong (optional)
+        required: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: preview-${{ inputs.slug }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Build the preview
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          IN_URL: ${{ inputs.url }}
+          IN_SLUG: ${{ inputs.slug }}
+          IN_COMPETITOR: ${{ inputs.competitor }}
+          IN_NAME: ${{ inputs.name }}
+        run: |
+          set -eu
+          args=("$IN_URL" "$IN_SLUG")
+          if [ -n "$IN_COMPETITOR" ]; then args+=("$IN_COMPETITOR"); fi
+          if [ -n "$IN_NAME" ]; then args+=(--name "$IN_NAME"); fi
+          node tools/preview.js "${args[@]}"
+
+      - name: Run the tests
+        run: node --test
+
+      - name: Save to a new branch
+        env:
+          IN_SLUG: ${{ inputs.slug }}
+        run: |
+          set -eu
+          git config user.name "preview-bot"
+          git config user.email "preview-bot@users.noreply.github.com"
+          git checkout -b "preview-$IN_SLUG"
+          git add "preview/$IN_SLUG"
+          git commit -m "Concept preview: $IN_SLUG"
+          git push --force origin "preview-$IN_SLUG"
+          {
+            echo "### Preview saved"
+            echo ""
+            echo "Branch: \`preview-$IN_SLUG\`"
+            echo ""
+            echo "Read \`preview/$IN_SLUG/notes.md\` on that branch and check every line against their live site."
+            echo "Nothing has been merged or published."
+          } >> "$GITHUB_STEP_SUMMARY"
