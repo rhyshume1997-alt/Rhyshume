@@ -43,6 +43,25 @@ function hueDistance(a, b) { const d = Math.abs(a - b) % 360; return d > 180 ? 3
 
 const DEFAULT = { primary: '#1f3a5f', accent: '#c8562a', found: false };
 
+// Google Fonts the firm already uses (so we can load them again). Generic, overused families are skipped.
+const SKIP_FONTS = /^(inter|roboto|arial|helvetica|open sans|system-ui|sans-serif|serif|lato|montserrat|poppins)$/i;
+function extractFonts(cssTexts, homeHtml) {
+  const text = (cssTexts || []).map(function (c) { return c.text || ''; }).join('\n') + '\n' + String(homeHtml || '');
+  const out = [];
+  const linkRe = /fonts\.googleapis\.com\/css2?\?([^"')\s>]*)/gi;
+  let m;
+  while ((m = linkRe.exec(text))) {
+    const famRe = /family=([^:&;|]+)/g;
+    let f;
+    while ((f = famRe.exec(m[1]))) {
+      let name;
+      try { name = decodeURIComponent(f[1].replace(/\+/g, ' ')).trim(); } catch (e) { continue; }
+      if (/^[A-Za-z0-9 ]{2,30}$/.test(name) && !SKIP_FONTS.test(name) && out.indexOf(name) === -1) out.push(name);
+    }
+  }
+  return { display: out[0] || null, body: out[1] || out[0] || null };
+}
+
 function extractBrand(cssTexts, homeHtml) {
   const text = (cssTexts || []).map(function (c) { return c.text || ''; }).join('\n') + '\n' + String(homeHtml || '');
   const counts = Object.create(null);
@@ -70,14 +89,14 @@ function extractBrand(cssTexts, homeHtml) {
   }).filter(function (c) {
     return c.hsl.s >= 0.22 && c.hsl.l >= 0.12 && c.hsl.l <= 0.78; // skip greys, near white and near black
   });
-  if (!list.length) return Object.assign({}, DEFAULT, derive(DEFAULT.primary, DEFAULT.accent));
+  if (!list.length) return Object.assign({}, DEFAULT, derive(DEFAULT.primary, DEFAULT.accent), { fonts: extractFonts(cssTexts, homeHtml) });
 
   // most used colour that is clearly a colour, weighted a little toward stronger colours
   list.sort(function (a, b) { return (b.n * (0.6 + b.hsl.s)) - (a.n * (0.6 + a.hsl.s)); });
   const primary = list[0];
   const second = list.find(function (c) { return c !== primary && hueDistance(c.hsl.h, primary.hsl.h) > 35; });
   const accentHex = second ? '#' + second.hex : null;
-  return Object.assign({ found: true }, derive('#' + primary.hex, accentHex));
+  return Object.assign({ found: true }, derive('#' + primary.hex, accentHex), { fonts: extractFonts(cssTexts, homeHtml) });
 }
 
 function derive(primaryHex, accentHex) {
@@ -103,4 +122,4 @@ function derive(primaryHex, accentHex) {
   };
 }
 
-module.exports = { extractBrand, derive, contrast, toRgb };
+module.exports = { extractBrand, extractFonts, derive, contrast, toRgb };
