@@ -69,7 +69,7 @@ async function generate(reply, extra) {
   const net = fakeNetwork(Array.isArray(reply) ? reply : [reply]);
   const outRoot = tmp();
   const r = await gen.run(Object.assign({
-    url: SITE + '/', slug: 'hartley-metalwork', apiKey: 'test-key', fetchImpl: net.fetchImpl, outRoot: outRoot, today: '2026-11-11'
+    url: SITE + '/', slug: 'hartley-metalwork', apiKey: 'test-key', fetchImpl: net.fetchImpl, outRoot: outRoot, today: '2026-11-11', measure: false
   }, extra || {}));
   r.net = net; r.outRoot = outRoot;
   return r;
@@ -208,7 +208,7 @@ test('if the retry still breaks the rules, nothing is written', async function (
 
 test('the checker catches phones, emails, addresses, prices and ranking promises in AI copy', function () {
   const source = 'Milling and turning in Hamilton. Prices from 120 pounds.';
-  const base = { headline: 'Milling in Hamilton', intro: 'Milling and turning.', area: '', about: '', comparison: '', services: [{ title: 'Milling', text: '' }] };
+  const base = { headline: 'Milling in Hamilton', intro: 'Milling and turning.', area: '', about: '', comparison: '', fileTypes: '', replyTime: '', proof: [], services: [{ title: 'Milling', text: '', detail: '' }] };
   function problems(patch) { return gen.checkCopy(Object.assign({}, base, patch), source).problems.join('\n'); }
   assert.strictEqual(problems({}), '');
   assert.match(problems({ intro: 'Ring 0141 555 0100.' }), /phone number, email or web address/);
@@ -226,10 +226,10 @@ test('the checker catches phones, emails, addresses, prices and ranking promises
 });
 
 test('their own fixed template lines pass the same word rules', function () {
-  const facts = { name: 'Test Firm', host: 'test.example', logo: '', phones: [], emails: [], photos: [] };
-  const content = gen.buildContent(facts, { headline: 'A', intro: 'B', area: '', about: '', services: [{ title: 'C', text: '' }], comparison: '' });
+  const facts = { name: 'Test Firm', host: 'test.example', logo: '', phones: [], emails: [], photos: [], text: '' };
+  const content = gen.buildContent(facts, { headline: 'A', intro: 'B', area: '', about: '', proof: [], fileTypes: '', replyTime: '', services: [{ title: 'C', text: '', detail: '' }], comparison: '' }, 'test-firm');
   const fixed = [content.banner, content.quoteButton, content.servicesHeading, content.quoteHeading, content.quoteIntro, content.send,
-    content.demoNote, content.demoStatus, content.contactHeading, content.phoneLabel, content.emailLabel].concat(Object.values(content.labels));
+    content.demoNote, content.demoStatus, content.contactHeading, content.phoneLabel, content.emailLabel, content.placeholder, content.quoteHeading].concat(Object.values(content.labels));
   fixed.forEach(function (t) {
     assert.ok(!gen.BANNED.test(t), 'banned word in: ' + t);
     assert.ok(!/—/.test(t), 'em dash in: ' + t);
@@ -320,4 +320,111 @@ test('the Action opens a pull request to main, never merges, and keeps the notes
   assert.ok(!/gh pr merge|--auto|--admin/.test(yml), 'the Action must never merge');
   assert.ok(!/vercel|VERCEL/i.test(yml.replace(/rhyshume\.co\.uk/g, '').replace(/#.*$/gm, '')), 'the Action must not touch Vercel');
   assert.match(read('.vercelignore'), /^preview\/\*\/notes\.md$/m);
+});
+
+// ---------------------------------------------------------------- PR B: logo, photos, proof, compare
+
+const pg = function (url, html) { return { url: url, html: html }; };
+
+test('logo: picks the one that shows on a pale page, not the white one', function () {
+  const home = 'https://jnr.test/';
+  const html = '<img class="logo" src="/img/logo-white.png" alt="logo"><img src="/img/logo-navy.png" alt="JNR logo">';
+  const r = gen.pickLogo([pg(home, html)], home);
+  assert.strictEqual(r.logo, 'https://jnr.test/img/logo-navy.png');
+  assert.match(r.note, /Skipped/);
+});
+
+test('logo: only a white logo means no image, name shown as text', function () {
+  const home = 'https://jnr.test/';
+  const r = gen.pickLogo([pg(home, '<img src="/img/logo-white.png" alt="logo">')], home);
+  assert.strictEqual(r.logo, '');
+  assert.match(r.note, /white or light logo/);
+});
+
+test('logo: a domain name with "light" in it is not treated as a pale logo', function () {
+  const home = 'https://light-engineering.test/';
+  const r = gen.pickLogo([pg(home, '<img src="/img/logo.png" alt="logo">')], home);
+  assert.strictEqual(r.logo, 'https://light-engineering.test/img/logo.png');
+});
+
+test('photos: CSS backgrounds, inline styles, linked CSS and next/image are found, off-site ones skipped', function () {
+  const home = 'https://shop.test/';
+  const html = '<style>.hero{background-image:url(/img/hero-bg.jpg)}</style>' +
+    '<div style="background:url(\'/img/inline-bg.jpg\')"></div>' +
+    '<img src="/_next/image?url=%2Fimg%2Fnext-photo.jpg&w=640&q=75" alt="">' +
+    '<div style="background-image:url(https://cdn.other.test/x.jpg)"></div>';
+  const out = gen.collectImages([pg(home, html)], home, [{ url: 'https://shop.test/css/site.css', text: '.team{background:url(/img/from-css.png)}' }]);
+  const srcs = out.photos.map(function (p) { return p.src; });
+  ['hero-bg.jpg', 'inline-bg.jpg', 'next-photo.jpg', 'from-css.png'].forEach(function (f) {
+    assert.ok(srcs.some(function (s) { return s.endsWith('/img/' + f); }), f + ' missing: ' + srcs.join(' '));
+  });
+  assert.ok(!srcs.some(function (s) { return s.includes('cdn.other.test'); }));
+});
+
+test('no photos found means a clearly marked placeholder, not a stock photo', async function () {
+  const saved = {}; Object.keys(PAGES).forEach(function (k) { saved[k] = PAGES[k]; });
+  Object.keys(PAGES).forEach(function (k) { PAGES[k] = PAGES[k].replace(/<img[^>]*>/g, ''); });
+  try {
+    const r = await generate(GOOD);
+    assert.match(r.html, /Placeholder: your (workshop )?photo here/);
+    assert.ok(/pv-placeholder/.test(r.html));
+  } finally { Object.keys(saved).forEach(function (k) { PAGES[k] = saved[k]; }); }
+});
+
+test('the sticky call bar is a tel link and the body carries the has-call class', async function () {
+  const r = await generate(GOOD);
+  assert.match(r.html, /<a class="pv-call" href="tel:\+441698123456">/);
+  assert.match(r.html, /<body id="top" class="pv has-call">/);
+});
+
+test('the quote form heading follows their site: "Send us your drawing" only if they mention drawings', async function () {
+  const r = await generate(GOOD);
+  assert.ok(r.html.includes('Send us your drawing')); // their pages say "from your drawings"
+  const saved = PAGES[SITE + '/']; PAGES[SITE + '/'] = saved.replace(/drawings/g, 'plans');
+  const keep = PAGES[SITE + '/about-us']; PAGES[SITE + '/about-us'] = keep.replace(/drawings/g, 'plans');
+  try {
+    const g = Object.assign({}, GOOD, { intro: 'A workshop in Hamilton, South Lanarkshire.', about: 'Hartley Metalwork is a workshop in Hamilton.' });
+    const r2 = await generate(g);
+    assert.ok(!r2.html.includes('Send us your drawing'));
+  } finally { PAGES[SITE + '/'] = saved; PAGES[SITE + '/about-us'] = keep; }
+});
+
+test('proof strip, file types and reply time are rejected when they are not on their site', function () {
+  const facts = 'Family run workshop in Hamilton. We make parts from drawings.';
+  const base = Object.assign({}, GOOD, { proof: ['Family run', 'Hamilton'], fileTypes: '', replyTime: '', services: [{ title: 'Milling', text: '', detail: '' }] });
+  const bad = gen.checkCopy(Object.assign({}, base, { proof: ['Family run', 'Started in 1987'] }), facts);
+  assert.ok(bad.problems.length > 0, 'an invented year must be rejected');
+  const bad2 = gen.checkCopy(Object.assign({}, base, { fileTypes: 'DXF, STEP and PDF' }), facts);
+  assert.ok(bad2.problems.length > 0, 'file types not on the site must be rejected');
+  const bad3 = gen.checkCopy(Object.assign({}, base, { replyTime: 'Within 2 hours' }), facts);
+  assert.ok(bad3.problems.length > 0, 'a reply time not on the site must be rejected');
+});
+
+test('buildChangeNotes only reports what was measured, max 5, numbered pins', function () {
+  const their = { vw: 390, vh: 844, scrollW: 656, sideways: true, tel: { x: 10, y: 1500, w: 100, h: 20 }, quote: null, h1: { text: 'Welcome', box: { x: 0, y: 100, w: 300, h: 40 } }, fileInput: false };
+  const concept = { vw: 390, vh: 844, sideways: false, tel: { x: 10, y: 10, w: 100, h: 20 }, quote: { x: 10, y: 50, w: 100, h: 40 }, fileInput: true };
+  const facts = { phones: [{ display: '01698 123456' }], hasUpload: false };
+  const n = gen.buildChangeNotes(their, concept, {}, facts, { from: 900, to: 120 }, 'Milling in Hamilton');
+  assert.ok(n.length >= 3 && n.length <= 5);
+  assert.ok(n.some(function (x) { return /wider than a phone screen/.test(x.text); }));
+  assert.ok(n.some(function (x) { return /screens down/.test(x.text); }));
+  n.forEach(function (x) { assert.ok(!/—/.test(x.text)); });
+  const none = gen.buildChangeNotes(Object.assign({}, their, { sideways: false }), concept, {}, { phones: [], hasUpload: true }, { from: 100, to: 100 }, 'X');
+  assert.ok(!none.some(function (x) { return /wider than a phone screen/.test(x.text); }), 'no invented findings');
+});
+
+test('buildTable shows "Not measured" when there is no Lighthouse result, never a made up number', function () {
+  const m = { vw: 390, vh: 844, tel: null, quote: null, sideways: false, fileInput: false };
+  const t = gen.buildTable([{ title: 'Their site', m: m, lh: null }, { title: 'Concept', m: m, lh: { score: 93, lcp: 2.1 } }, { title: 'Rival', m: m, lh: { error: 'x' } }]);
+  const row = t.rows.find(function (r) { return /Lighthouse/.test(r.label); });
+  assert.deepStrictEqual(row.values, ['Not measured', '93 out of 100', 'Not measured']);
+  assert.deepStrictEqual(t.cols, ['Their site', 'Concept', 'Rival']);
+});
+
+test('the Action installs the browser tools at pinned versions and gives the build enough time', function () {
+  const yml = read('.github/workflows/preview.yml');
+  assert.match(yml, /playwright-core@1\.65\.0/);
+  assert.match(yml, /lighthouse@13\.6\.0/);
+  assert.match(yml, /chrome-launcher@1\.2\.3/);
+  assert.match(read('.gitignore'), /^node_modules\/$/m);
 });

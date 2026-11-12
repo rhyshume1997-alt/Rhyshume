@@ -32,13 +32,19 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+
+      - name: Install the browser tools (for the phone screenshots and speed scores)
+        run: |
+          set -eu
+          npm install --no-save --no-package-lock playwright-core@1.65.0 lighthouse@13.6.0 chrome-launcher@1.2.3
+          npx playwright-core install --with-deps chromium
 
       - name: Build the preview
         env:
