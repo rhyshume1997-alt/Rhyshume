@@ -61,5 +61,11 @@
         }
       ]
     }
-  ]
+  ],
+  "functions": {
+    "api/upgrade-live.js": {
+      "maxDuration": 120,
+      "includeFiles": "{styles.css,preview/preview.css}"
+    }
+  }
 }
