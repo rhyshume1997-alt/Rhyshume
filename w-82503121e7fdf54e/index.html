@@ -2014,6 +2014,10 @@ const PLAIN = [[/e-?commerce/gi, m => m[0] === 'E' ? 'Online shop' : 'online sho
 const plainTxt = t => PLAIN.reduce((s, r) => String(s).replace(r[0], r[1]), t == null ? '' : t);
 const SUG = 'Suggested by advisers 10 Nov 2026, not verified market averages, my choice: ';
 const pbl = (id, name, desc, unit, tag, freq, cat, when, price, hint) => ({ id, name, desc, unit, price: price || '', tag, freq, cat, when, hint: hint ? SUG + hint : '', allow: id === 'care' ? '' : undefined });
+/* A tiered group: three lines sharing a Group name. Names are the item then the tier in brackets: Basic, Essential, Plus. Prices are left empty for Rhys to type */
+const PB_TIERS = ['Basic', 'Essential', 'Plus'];
+const pbSlug = n => n.toLowerCase().replace(/[^a-z0-9]+/g, '');
+const pbTiers = (name, descs) => PB_TIERS.map((t, i) => Object.assign(pbl(pbSlug(name) + t.toLowerCase(), name + ' (' + t + ')', descs[i], 'fixed', 'addon', 'once', '', ''), { group: name }));
 function defaultPB() {
   return [
     pbl('site1', 'Quote-ready site', 'Description to confirm', 'fixed', 'base', 'once', 'web', '', '2200'),
@@ -2035,6 +2039,22 @@ function defaultPB() {
     pbl('copy', 'Writing the words', 'I write the words for your pages', 'page', 'addon', 'once', '', 'copy', '', '£75 to £200 per page'),
     pbl('photo', 'Photography', 'A photo shoot for the site', 'hour', 'addon', 'once', '', 'photo'),
     pbl('seo', 'Being found on Google and AI tools', 'A 90 day plan to get you found. I can\'t promise rankings', 'fixed', 'addon', 'once', '', 'seo', '', '£350 to £900, extensive £900 to £1,500'),
+    ...pbTiers('Domain and email set up', [
+      'Your web address registered or pointed to your site, in your name, and one email address on it',
+      'Your web address registered or pointed to your site, in your name, email addresses for you and your team, and the settings that help your email reach inboxes',
+      'Your web address registered or pointed to your site, in your name, email addresses for you and your team, the settings that help your email reach inboxes, and your email set up on your phone and computer']),
+    ...pbTiers('Google search set up', [
+      'Your Google Business Profile set up or tidied, in your name, and a page title and description written for your main page',
+      'Your Google Business Profile set up or tidied, in your name, a page title and description for every page, and your site sent to Google and Bing',
+      'Your Google Business Profile set up or tidied, in your name, a page title and description for every page, your site sent to Google and Bing, and a short written plan for the next 90 days. I can\'t promise rankings']),
+    ...pbTiers('Online listings', [
+      'Your business listed with the same name, address and phone number on a few of the main online directories, chosen with you',
+      'Your business listed with the same name, address and phone number on more directories, with your opening hours and photos added',
+      'Your business listed with the same name, address and phone number on more directories, with your opening hours and photos added, and checked again a month later']),
+    ...pbTiers('Automation', [
+      'One automatic task set up for you, like an email sent to you when someone fills in your form',
+      'Automatic tasks for new enquiries: an email to you and a confirmation email to the customer',
+      'Automatic tasks for new enquiries and bookings or orders: emails to you and to the customer, reminders, and everything tested from start to finish']),
     pbl('care', 'Care plan', 'Hosting, fixes and small edits', 'fixed', 'addon', 'month', '', '', '60'),
     pbl('carePlus', 'Enhanced website care', 'A fuller monthly care plan', 'fixed', 'addon', 'month', '', '', '', '£90 to £150 a month'),
     pbl('seocare', 'Being found online, monthly care', 'A monthly routine to keep it going after the first 90 days', 'fixed', 'addon', 'month', '', '', '', '£100 to £250 a month'),
@@ -2692,6 +2712,11 @@ function consistency() {
   const op = [1, 2, 3].map(n => num(S.prop.opt[n].price)).filter(x => x > 0); if (op.length && !op.some(x => Math.abs(x - q.sub) < 1 || Math.abs(x - q.total) < 1)) w.push('The prices on the Plan for the site screen do not match the quote total of ' + money(q.total));
   if (q.dep.pct + q.stages.reduce((t, x) => t + x.p, 0) > 100) w.push('Payment percentages add up to more than 100');
   { const nd = q.lines.filter(l => l.tag !== 'not' && (!(l.desc || '').trim() || /^(description|basis) to confirm$/i.test(l.desc.trim()))).map(l => l.name); if (nd.length) w.push('These quote lines do not say in plain words what the client gets: ' + nd.join(', ') + '. Add a short plain description in My prices'); }
+  { const old = x => /(^|[\s(])(good|better|best)(\)|\s*$)/i.test(String(x || '').trim()) || /\b(good|better|best) plus\b/i.test(String(x || '')); const bad = [];
+    (q.lines || []).forEach(l => { if (l.tag !== 'not' && (old(l.name) || old(l.desc))) bad.push('quote line "' + l.name + '"'); });
+    [1, 2, 3].forEach(n => { const o = S.prop && S.prop.opt && S.prop.opt[n]; if (o && old(o.name)) bad.push('proposal line "' + o.name + '"'); });
+    (S.pb || []).forEach(p => { if (old(p.name) || old(p.desc) || old(p.group)) bad.push('My prices item "' + p.name + '"'); });
+    if (bad.length) w.push('These still use Good, Better or Best as a tier name: ' + bad.join(', ') + '. Rename to Basic, Essential or Plus in brackets after the item, and say what is included in plain words'); }
   if (q.blanks) w.push(q.blanks + ' quote lines have no price yet, so they add £0 for now');
   const bp = S.drafts['build:main']; if (bp && bp.edited) { const head = bp.text.split('NOT INCLUDED')[0].toLowerCase(); scopeNot().forEach(x => { if (x.length > 3 && head.includes(x.toLowerCase())) w.push('The build instructions were edited by hand and mention "' + x + '", which is not included. Press Rebuild'); }); w.push('The build instructions were edited by hand. Press Rebuild to make sure they match the quote'); }
   if (fund() && q.elig) { if (q.elig.elig > (q.elig.max || Infinity)) w.push('The lines the grant may pay for come to more than the grant can cover. The client pays the rest, say so clearly'); q.lines.forEach(l => { if (l.freq !== 'once' && l.el === 'yes') w.push('The monthly line "' + plainTxt(l.name) + '" is marked as something the grant pays for, but grants do not pay ongoing costs'); }); }
