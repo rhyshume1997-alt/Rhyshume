@@ -1,6 +1,8 @@
-# Build a concept preview from the GitHub website, no computer tools needed.
+# Build concept previews from the GitHub website, no computer tools needed.
 # Actions tab > "Build preview" > Run workflow. Needs the repository secret ANTHROPIC_API_KEY.
-# Writes preview/<slug>/ to a new branch called preview-<slug> and opens a pull request to main.
+# Safe for many cold prospects: manual start only, one run at a time, at most 20 runs a day,
+# at most 3 prospects per run, and a slug that already has a preview folder is never rebuilt.
+# Writes preview/<slug>/ to a new branch called preview-<slug> and opens a pull request to main, once per prospect.
 # Nothing is merged here. Merging that pull request is what puts the page live at
 # rhyshume.co.uk/preview/<slug>/ (open to anyone, noindex). Vercel protection settings are not touched.
 name: Build preview
@@ -8,17 +10,14 @@ name: Build preview
 on:
   workflow_dispatch:
     inputs:
-      url:
-        description: Their website, for example https://example.co.uk
-        required: true
-      slug:
-        description: Short name, lower case, hyphens only, for example example-firm
+      prospects:
+        description: 'Up to 3, each as slug=website, separated by spaces. Example: example-firm=https://example.co.uk other-firm=https://other.co.uk'
         required: true
       competitor:
-        description: Competitor website (optional)
+        description: Competitor website (optional, only when there is one prospect)
         required: false
       name:
-        description: Firm name, only if the tool gets it wrong (optional)
+        description: Firm name, only if the tool gets it wrong (optional, only when there is one prospect)
         required: false
       niche:
         description: Type of firm, adds the moves for that type
@@ -30,11 +29,12 @@ on:
           - engineering
 
 permissions:
+  actions: read
   contents: write
   pull-requests: write
 
 concurrency:
-  group: preview-${{ inputs.slug }}
+  group: build-preview
   cancel-in-progress: false
 
 jobs:
@@ -42,6 +42,23 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
+      - name: Stop if 20 or more runs have already started today
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -eu
+          today="$(date -u +%F)"
+          count="$(gh run list --workflow preview.yml --created ">=$today" --limit 200 --json databaseId --jq "[.[] | select(.databaseId != $GITHUB_RUN_ID)] | length")"
+          echo "Runs of this workflow started today (UTC, not counting this one): $count"
+          if [ "$count" -ge 20 ]; then
+            msg="Stopped. This workflow has already run $count times today (UTC), and the limit is 20 a day. Nothing was built and no API call was made. Try again after midnight UTC."
+            echo "::error::$msg"
+            echo "### Stopped: daily limit reached" >> "$GITHUB_STEP_SUMMARY"
+            echo "$msg" >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
@@ -54,50 +71,70 @@ jobs:
           npm install --no-save --no-package-lock playwright-core@1.65.0 lighthouse@13.6.0 chrome-launcher@1.2.3
           npx playwright-core install --with-deps chromium
 
-      - name: Build the preview
+      - name: Build each preview and open its pull request
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          IN_URL: ${{ inputs.url }}
-          IN_SLUG: ${{ inputs.slug }}
+          GH_TOKEN: ${{ github.token }}
+          IN_PROSPECTS: ${{ inputs.prospects }}
           IN_COMPETITOR: ${{ inputs.competitor }}
           IN_NAME: ${{ inputs.name }}
           IN_NICHE: ${{ inputs.niche }}
         run: |
           set -eu
-          args=("$IN_URL" "$IN_SLUG")
-          if [ -n "$IN_COMPETITOR" ]; then args+=("$IN_COMPETITOR"); fi
-          if [ -n "$IN_NAME" ]; then args+=(--name "$IN_NAME"); fi
-          if [ -n "$IN_NICHE" ] && [ "$IN_NICHE" != "none" ]; then args+=(--niche "$IN_NICHE"); fi
-          node tools/preview.js "${args[@]}"
-
-      - name: Run the tests
-        run: node --test
-
-      - name: Save to a new branch and open a pull request
-        env:
-          IN_SLUG: ${{ inputs.slug }}
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -eu
+          read -r -a items <<< "$IN_PROSPECTS"
+          total="${#items[@]}"
+          fail() {
+            echo "::error::$1"
+            { echo "### Stopped"; echo "$1"; } >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          }
+          if [ "$total" -lt 1 ] || [ "$total" -gt 3 ]; then fail "Give between 1 and 3 prospects per run. You gave $total. Nothing was built and no API call was made."; fi
+          if [ "$total" -gt 1 ] && { [ -n "$IN_COMPETITOR" ] || [ -n "$IN_NAME" ]; }; then fail "Competitor and Firm name only work with one prospect. Clear them, or run the prospects one at a time. Nothing was built and no API call was made."; fi
+          # Check every prospect before spending anything.
+          seen=" "
+          for item in "${items[@]}"; do
+            slug="${item%%=*}"
+            url="${item#*=}"
+            if ! [[ "$item" == *=* ]] || ! [[ "$slug" =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]] || ! [[ "$url" =~ ^https?://[^[:space:]]+$ ]]; then fail "'$item' is not in the form slug=https://their-site (lower case slug, hyphens only). Nothing was built and no API call was made."; fi
+            case "$seen" in *" $slug "*) fail "The slug $slug is in the list twice. Nothing was built and no API call was made." ;; esac
+            seen="$seen$slug "
+            if [ -e "preview/$slug" ]; then fail "preview/$slug already exists, so it was not rebuilt. Pick a different slug or remove that folder first. Nothing was built and no API call was made."; fi
+          done
+          start="$(git rev-parse HEAD)"
           git config user.name "preview-bot"
           git config user.email "preview-bot@users.noreply.github.com"
-          git checkout -b "preview-$IN_SLUG"
-          git add "preview/$IN_SLUG"
-          git commit -m "Concept preview: $IN_SLUG"
-          git push --force origin "preview-$IN_SLUG"
-          body="Concept preview for $IN_SLUG. Read preview/$IN_SLUG/notes.md and check every line against their live site before merging. Merging puts the page live at https://www.rhyshume.co.uk/preview/$IN_SLUG/ (open to anyone, noindex)."
-          if gh pr create --base main --head "preview-$IN_SLUG" --title "Concept preview: $IN_SLUG" --body "$body" > pr.txt 2> pr.err; then
-            pr_line="Pull request: $(cat pr.txt)"
-          else
-            pr_line="Could not open the pull request (GitHub may need Settings > Actions > General > Allow GitHub Actions to create pull requests). Open it by hand: https://github.com/$GITHUB_REPOSITORY/compare/main...preview-$IN_SLUG?expand=1"
-          fi
-          {
-            echo "### Preview saved"
-            echo ""
-            echo "Branch: \`preview-$IN_SLUG\`"
-            echo ""
-            echo "$pr_line"
-            echo ""
-            echo "Read \`preview/$IN_SLUG/notes.md\` and check every line against their live site."
-            echo "Nothing has been merged. Merging the pull request makes the page public."
-          } >> "$GITHUB_STEP_SUMMARY"
+          for item in "${items[@]}"; do
+            SLUG="${item%%=*}"
+            URL="${item#*=}"
+            # Checked again right before building, in case something changed since the first check.
+            if [ -e "preview/$SLUG" ]; then fail "preview/$SLUG already exists, so it was not rebuilt. Stopped before building it."; fi
+            git checkout -q "$start"
+            args=("$URL" "$SLUG")
+            if [ -n "$IN_COMPETITOR" ]; then args+=("$IN_COMPETITOR"); fi
+            if [ -n "$IN_NAME" ]; then args+=(--name "$IN_NAME"); fi
+            if [ -n "$IN_NICHE" ] && [ "$IN_NICHE" != "none" ]; then args+=(--niche "$IN_NICHE"); fi
+            node tools/preview.js "${args[@]}"
+            node --test
+            git checkout -b "preview-$SLUG"
+            git add "preview/$SLUG"
+            git commit -m "Concept preview: $SLUG"
+            git push --force origin "preview-$SLUG"
+            body="Concept preview for $SLUG. Read preview/$SLUG/notes.md and check every line against their live site before merging. Merging puts the page live at https://www.rhyshume.co.uk/preview/$SLUG/ (open to anyone, noindex)."
+            if gh pr create --base main --head "preview-$SLUG" --title "Concept preview: $SLUG" --body "$body" > pr.txt 2> pr.err; then
+              pr_line="Pull request: $(cat pr.txt)"
+            else
+              pr_line="Could not open the pull request (GitHub may need Settings > Actions > General > Allow GitHub Actions to create pull requests). Open it by hand: https://github.com/$GITHUB_REPOSITORY/compare/main...preview-$SLUG?expand=1"
+            fi
+            {
+              echo "### Preview saved: $SLUG"
+              echo ""
+              echo "Branch: \`preview-$SLUG\`"
+              echo ""
+              echo "$pr_line"
+              echo ""
+              echo "Read \`preview/$SLUG/notes.md\` and check every line against their live site."
+              echo "Nothing has been merged. Merging the pull request makes the page public."
+              echo ""
+            } >> "$GITHUB_STEP_SUMMARY"
+            rm -f pr.txt pr.err
+          done

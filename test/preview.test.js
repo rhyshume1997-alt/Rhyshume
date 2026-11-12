@@ -316,7 +316,7 @@ test('the GitHub Action only passes inputs through env, never straight into a sh
 test('the Action opens a pull request to main, never merges, and keeps the notes out of the site', function () {
   const yml = read('.github/workflows/preview.yml');
   assert.match(yml, /pull-requests: write/);
-  assert.match(yml, /gh pr create --base main --head "preview-\$IN_SLUG"/);
+  assert.match(yml, /gh pr create --base main --head "preview-\$SLUG"/);
   assert.ok(!/gh pr merge|--auto|--admin/.test(yml), 'the Action must never merge');
   assert.ok(!/vercel|VERCEL/i.test(yml.replace(/rhyshume\.co\.uk/g, '').replace(/#.*$/gm, '')), 'the Action must not touch Vercel');
   assert.match(read('.vercelignore'), /^preview\/\*\/notes\.md$/m);
@@ -474,4 +474,31 @@ test('the hard rule "left out, never filled" is in the AI instructions and in do
   assert.match(doc, /switches on only when the facts it needs were found/);
   assert.match(doc, /Never show holes/);
   assert.ok(!/—/.test(doc), 'the rules doc has an em dash');
+});
+
+test('Action safety: manual only, one run at a time, 20 a day, up to 3 prospects, never rebuild an existing slug', function () {
+  const yml = read('.github/workflows/preview.yml');
+  // 1) manual trigger only
+  assert.match(yml, /on:\n  workflow_dispatch:/);
+  assert.ok(!/schedule:|pull_request|push:|workflow_run|repository_dispatch/.test(yml.split('jobs:')[0]));
+  // 2) one run at a time, queued runs wait and are not cancelled
+  assert.match(yml, /concurrency:\n  group: build-preview\n  cancel-in-progress: false/);
+  // 3) the very first step counts today's runs and stops at 20 or more
+  const firstStep = yml.split('    steps:\n')[1].split('\n      - ')[0];
+  assert.match(firstStep, /Stop if 20 or more runs/);
+  assert.match(firstStep, /gh run list --workflow preview\.yml --created ">=\$today"/);
+  assert.match(firstStep, /-ge 20/);
+  assert.match(firstStep, /exit 1/);
+  assert.ok(!/ANTHROPIC_API_KEY/.test(firstStep), 'the counting step must not touch the key');
+  assert.match(yml, /actions: read/);
+  // 4) up to 3 prospects per run
+  assert.match(yml, /prospects:/);
+  assert.match(yml, /-gt 3/);
+  // 5) an existing preview folder stops the build, checked up front and again right before building
+  const checks = yml.match(/if \[ -e "preview\/\$(slug|SLUG)" \]/g) || [];
+  assert.strictEqual(checks.length, 2);
+  assert.ok(yml.indexOf('-e "preview/$slug"') < yml.indexOf('node tools/preview.js'));
+  // the key still comes from the repo secret, only on the build step
+  assert.match(yml, /ANTHROPIC_API_KEY: \$\{\{ secrets\.ANTHROPIC_API_KEY \}\}/);
+  assert.strictEqual((yml.match(/secrets\.ANTHROPIC_API_KEY/g) || []).length, 1);
 });
