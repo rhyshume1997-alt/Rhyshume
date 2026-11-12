@@ -9,7 +9,8 @@ Set 12 Nov 2026 by Rhys. These apply to every preview the tool builds, now and g
 
 ## 2. Never show holes
 - No empty halves, no "[PLACEHOLDER]" text, no unfinished-looking blocks.
-- The one allowed stand-in is a clean block labelled "Your job photo here" (or "your workshop photo here"), only where a photo would go and none was found.
+- The one allowed stand-in is a clean block labelled "Your job photo here", only where a photo would go and none was found. The same words for every preview and every niche, never the word "Placeholder".
+- A named person's email never appears on a preview. Only a generic address (info@, enquiries@, sales@, office@ and the like) is shown, and only if the site has one. Otherwise the phone number is shown alone. The notes say a named address was left off, without printing it.
 - A section with too little to show is hidden completely, not shown thin.
 
 ## 3. Hooks (plain HTML, CSS and vanilla JS only, no libraries, no build step)

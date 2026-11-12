@@ -366,7 +366,8 @@ test('no photos found means a clearly marked placeholder, not a stock photo', as
   Object.keys(PAGES).forEach(function (k) { PAGES[k] = PAGES[k].replace(/<img[^>]*>/g, ''); });
   try {
     const r = await generate(GOOD);
-    assert.match(r.html, /Placeholder: your (workshop )?photo here/);
+    assert.ok(r.html.includes('Your job photo here'));
+    assert.ok(!/Placeholder:/i.test(r.html), 'the word Placeholder never shows on the page');
     assert.ok(/pv-placeholder/.test(r.html));
   } finally { Object.keys(saved).forEach(function (k) { PAGES[k] = saved[k]; }); }
 });
@@ -563,4 +564,39 @@ test('motion: the standing rule is written in docs/PREVIEW-RULES.md', function (
   assert.match(doc, /Years never count/);
   assert.match(doc, /Everything is off when the visitor asks for reduced motion/);
   assert.ok(!/—/.test(doc));
+});
+
+test('rule: the photo stand-in always reads "Your job photo here", never the word Placeholder, in the content and the notes', async function () {
+  const saved = {}; Object.keys(PAGES).forEach(function (k) { saved[k] = PAGES[k]; });
+  Object.keys(PAGES).forEach(function (k) { PAGES[k] = PAGES[k].replace(/<img[^>]*>/g, ''); });
+  try {
+    const r = await generate(GOOD);
+    assert.strictEqual(r.content.placeholder, 'Your job photo here');
+    assert.ok(!/Placeholder:/i.test(r.notes));
+    assert.ok(r.notes.includes('Your job photo here'));
+  } finally { Object.keys(saved).forEach(function (k) { PAGES[k] = saved[k]; }); }
+});
+
+test('rule: a named person\'s email never appears on a preview, only a generic address if the site has one', async function () {
+  const key = SITE + '/contact';
+  const saved = PAGES[key];
+  try {
+    PAGES[key] = '<html><body><h1>Contact</h1><p>Ask for Jo: <a href="mailto:jo.smith@hartley-metalwork.test">jo.smith@hartley-metalwork.test</a> or ring 01698 123456.</p></body></html>';
+    let r = await generate(GOOD);
+    assert.ok(!/jo\.smith/i.test(r.html), 'named email is not on the page');
+    assert.ok(!/jo\.smith/i.test(r.notes), 'named email is not in the notes');
+    assert.ok(!/mailto:/i.test(r.html));
+    assert.match(r.notes, /named address left off on purpose/);
+    PAGES[key] = '<html><body><h1>Contact</h1><p>Jo: jo.smith@hartley-metalwork.test, or <a href="mailto:enquiries@hartley-metalwork.test">enquiries@hartley-metalwork.test</a>. Ring 01698 123456.</p></body></html>';
+    r = await generate(GOOD);
+    assert.ok(!/jo\.smith/i.test(r.html));
+    assert.ok(r.html.includes('mailto:enquiries@hartley-metalwork.test'));
+  } finally { PAGES[key] = saved; }
+});
+
+test('docs: the photo stand-in and named email rules are written into the standing rules', function () {
+  const d = require('fs').readFileSync(require('path').join(__dirname, '..', 'docs', 'PREVIEW-RULES.md'), 'utf8');
+  assert.match(d, /Your job photo here/);
+  assert.match(d, /never the word "Placeholder"/);
+  assert.match(d, /named person's email never appears/i);
 });

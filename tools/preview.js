@@ -52,6 +52,8 @@ const NUM_RE = /\d[\d,]*(?:\.\d+)?/g;
 // the same patterns without the g flag, for yes/no tests
 const PHONE_T = new RegExp(PHONE_RE.source);
 const EMAIL_T = new RegExp(EMAIL_RE.source);
+// Only role addresses count as generic. Anything else is treated as a named person and never shown.
+const GENERIC_EMAIL = /^(info|enquiries|enquiry|sales|office|admin|hello|contact|mail|post|quotes|quote|estimating|estimates|accounts|general|reception|support|team|service|orders|works)@/i;
 const URL_T = new RegExp(URL_RE.source, 'i');
 
 // ---------------------------------------------------------------- small helpers
@@ -363,9 +365,12 @@ function extractFacts(pages, nameOverride, cssTexts) {
 
   // emails
   const emails = [];
+  const namedSkipped = [];
   function addEmail(e) {
     e = e.trim().toLowerCase().replace(/[.,;]+$/, '');
     if (/\.(png|jpe?g|gif|webp|svg)$/.test(e) || /@(example|domain|sentry)\./.test(e)) return;
+    // Standing rule: a named person's email never goes on a preview. Only a generic address does.
+    if (!GENERIC_EMAIL.test(e)) { if (!namedSkipped.includes(e)) namedSkipped.push(e); return; }
     if (!emails.includes(e)) emails.push(e);
   }
   pages.forEach(function (p) {
@@ -384,6 +389,7 @@ function extractFacts(pages, nameOverride, cssTexts) {
     homeUrl: home.url,
     phones: phones.slice(0, 2),
     emails: emails.slice(0, 2),
+    namedEmailsSkipped: namedSkipped.length,
     logo: logoPick.logo,
     logoNote: logoPick.note,
     photos: found.photos.slice(0, 6),
@@ -609,7 +615,7 @@ async function writeCopy(facts, pageTexts, competitor, opts) {
 // All the words on the page live here, so notes.md can show every line.
 function buildContent(facts, ai, slug) {
   const phone = facts.phones[0] || null;
-  const email = facts.emails[0] || null;
+  const email = facts.emails.find(function (e) { return GENERIC_EMAIL.test(e); }) || null;
   const photos = facts.photos.map(function (p) { return { src: p.src, alt: p.alt || 'Photo from the ' + facts.name + ' website' }; });
   const drawingSite = /drawing/i.test(facts.text);
   return {
@@ -631,7 +637,7 @@ function buildContent(facts, ai, slug) {
     services: ai.services,
     heroPhoto: photos[0] || null,
     photos: photos.slice(1),
-    placeholder: /workshop/i.test(facts.text) ? 'Placeholder: your workshop photo here' : 'Placeholder: your photo here',
+    placeholder: 'Your job photo here',
     aboutHeading: ai.about ? 'About' : '',
     about: ai.about,
     quoteHeading: drawingSite ? 'Send us your drawing' : 'Get a quote',
@@ -895,7 +901,7 @@ function renderNotes(c, facts, sources, points, comparison, competitorHost, warn
   out.push('## Facts taken from their site', '');
   out.push('- Pages read: ' + sources.join(', '));
   out.push('- Phone: ' + (c.phone ? c.phone.display : 'none found'));
-  out.push('- Email: ' + (c.email ? c.email : 'none found'));
+  out.push('- Email: ' + (c.email ? c.email : 'none shown' + (facts.namedEmailsSkipped ? ' (' + facts.namedEmailsSkipped + ' named address left off on purpose)' : '')));
   out.push('- ' + facts.logoNote);
   out.push('- Photos (linked from their site, not copied): ' + (c.heroPhoto || c.photos.length ? '' : 'none found, a marked photo space is shown'));
   (c.heroPhoto ? [c.heroPhoto].concat(c.photos) : []).forEach(function (p) { out.push('  - ' + p.src + ' (alt text: ' + p.alt + ')'); });
