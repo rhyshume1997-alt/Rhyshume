@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Upgrade my site | Rhys Hume</title>
+<meta name="description" content="Ask Rhys Hume for a free concept of an improved version of your website, built from what is already on your site.">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#f4f4f0">
+<link rel="canonical" href="https://www.rhyshume.co.uk/upgrade">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Rhys Hume">
+<meta property="og:locale" content="en_GB">
+<meta property="og:url" content="https://www.rhyshume.co.uk/upgrade">
+<meta property="og:title" content="Upgrade my site | Rhys Hume">
+<meta property="og:description" content="Ask Rhys Hume for a free concept of an improved version of your website, built from what is already on your site.">
+<meta property="og:image" content="https://www.rhyshume.co.uk/images/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Rhys Hume: systems for engineering and manufacturing firms, Glasgow">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Upgrade my site | Rhys Hume">
+<meta name="twitter:description" content="Ask Rhys Hume for a free concept of an improved version of your website, built from what is already on your site.">
+<meta name="twitter:image" content="https://www.rhyshume.co.uk/images/og-image.png">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="/styles.css">
+<script src="/nav.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <div class="sheet">
+    <a class="wordmark" href="/" aria-label="Rhys Hume, home">Rhys Hume</a>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="nav" id="site-nav" aria-label="Main">
+      <a href="/websites">Websites</a>
+      <a href="/local-business">Websites and digital for local business</a>
+      <a href="/automation">Automation</a>
+      <a href="/tolra">Tolra</a>
+      <a href="/csv">Validation</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+    </nav>
+    <a class="btn" href="https://calendar.google.com/calendar/appointments/AcZssZ35nSQ_2lobUifPsul__TiweHpPV1aRWuWbssQ=" target="_blank" rel="noopener"><span>Book a free <span class="nw">20-minute chat</span></span><span class="visually-hidden"> (opens in a new tab)</span></a>
+  </div>
+</header>
+
+<main id="main">
+<div class="sheet">
+<header class="titleblock">
+  <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li aria-current="page">Upgrade my site</li></ol></nav>
+  <div class="tb-body">
+    <div class="tb-main">
+      <h1>Upgrade my site</h1>
+      <p class="standfirst">Type your website address and your work email. I’ll build a concept of an improved version of your site, using only what’s already on it, and email you a private link with a before and after.</p>
+    </div>
+  </div>
+</header>
+
+<section class="clause" id="request" aria-labelledby="request-h">
+  <h2 id="request-h"><span class="no">1.0</span> <span>Ask for your concept</span></h2>
+  <div class="clause-body">
+<div class="form-state" id="sent"><p class="note-label">Received</p><p>Thank you. I check every request myself before I build it, then I’ll email you the link.</p></div>
+<div class="form-state is-error" id="already"><p class="note-label">Already asked</p><p>There’s already a request for this website or email, or today’s requests are full. Email <a href="mailto:rhys@rhyshume.co.uk">rhys@rhyshume.co.uk</a> if you need a hand.</p></div>
+<div class="form-state is-error" id="email-mismatch"><p class="note-label">Not sent</p><p>Please use a work email on the same domain as your website, for example you@yourfirm.co.uk for yourfirm.co.uk.</p></div>
+<div class="form-state is-error" id="not-sent"><p class="note-label">Not sent</p><p>Something went wrong, email <a href="mailto:rhys@rhyshume.co.uk">rhys@rhyshume.co.uk</a></p></div>
+<div class="form-state is-error" id="check-failed"><p class="note-label">Not sent</p><p>The security check didn’t go through. Try again, or call <a href="tel:+447908041480">07908 041480</a> or email <a href="mailto:rhys@rhyshume.co.uk">rhys@rhyshume.co.uk</a></p></div>
+<form class="form" action="/api/upgrade" method="POST">
+  <div class="field"><label for="website">Your website address</label><input id="website" name="website" type="url" inputmode="url" autocomplete="url" placeholder="https://yourfirm.co.uk" required></div>
+  <div class="field"><label for="email">Your work email</label><input id="email" name="email" type="email" autocomplete="email" placeholder="you@yourfirm.co.uk" required></div>
+  <div class="field"><label><input type="checkbox" name="marketing" value="yes"> You can also email me about website options after the concept. <span class="opt">(optional, you can say stop at any time)</span></label></div>
+  <div class="hp" aria-hidden="true"><label for="company_website">Leave this empty</label><input id="company_website" name="company_website" type="text" tabindex="-1" autocomplete="off"></div>
+  <div class="check">
+    <div class="cf-turnstile" data-sitekey="0x4AAAAAAF7ONWeir1MBB-v7" data-action="upgrade" data-theme="light" data-callback="rhCheckOk" data-expired-callback="rhCheckExpired" data-error-callback="rhCheckError"></div>
+    <script>if(window.matchMedia&&window.matchMedia("(max-width:359px)").matches){document.currentScript.previousElementSibling.setAttribute("data-size","compact")}</script>
+    <p class="check-ok" id="check-ok" role="status" hidden>Security check passed</p>
+    <p class="check-msg" id="check-msg" role="status" hidden></p>
+    <noscript><p class="check-msg">This form needs JavaScript for its security check. Please email <a href="mailto:rhys@rhyshume.co.uk">rhys@rhyshume.co.uk</a>.</p></noscript>
+  </div>
+  <button class="btn" type="submit">Upgrade my site</button>
+  <p class="fine">One concept per business. It’s a concept, not a live site. See the <a href="/privacy">privacy page</a> for what happens to what you send.</p>
+</form>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script src="/form-check.js" defer></script>
+</div>
+  <aside class="margin" aria-label="Notes to Ask for your concept">
+<p><span class="note-label">Note:</span>I only use what’s on your current website. Nothing is made up, and I leave your customers’ names and logos out.</p>
+</aside>
+</section>
+</div>
+</main>
+
+<footer class="colophon">
+  <div class="sheet">
+    <div class="ctrl">
+      <div>
+        <a class="wordmark" href="/" aria-label="Rhys Hume, home">Rhys Hume</a>
+        <p class="about-line">Systems that win work and run the job, for engineering firms and local businesses, from Glasgow.</p>
+      </div>
+      <div>
+        <h2>Contents</h2>
+        <ul><li><a href="/websites">Websites</a></li><li><a href="/local-business">Websites and digital for local business</a></li><li><a href="/automation">Automation</a></li><li><a href="/tolra">Tolra</a></li><li><a href="/csv">Computer system validation</a></li><li><a href="/work/jnr-engineering">JNR Engineering case study</a></li><li><a href="/council-digital-grants">Council digital grants</a></li><li><a href="/insights">Insights</a></li><li><a href="/about">About</a></li></ul>
+      </div>
+      <div>
+        <h2>Contact</h2>
+        <ul>
+          <li><a href="tel:+447908041480">07908 041480</a></li>
+          <li><a href="mailto:rhys@rhyshume.co.uk">rhys@rhyshume.co.uk</a></li>
+          <li><a href="https://www.linkedin.com/in/rhys-hume-701284171" target="_blank" rel="noopener">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+          <li>Glasgow</li>
+        </ul>
+      </div>
+    </div>
+    <div class="endline">
+      <span>End of document</span>
+      <span>&copy; 2026 Rhys Hume, Glasgow &middot; <a href="/privacy">Privacy</a></span>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
