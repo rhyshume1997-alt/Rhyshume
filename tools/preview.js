@@ -1052,7 +1052,7 @@ async function run(opts) {
 
   fs.writeFileSync(path.join(dir, 'index.html'), html);
   fs.writeFileSync(path.join(dir, 'notes.md'), notes);
-  return { dir: dir, html: html, notes: notes, content: content, warnings: warnings };
+  return { dir: dir, html: html, notes: notes, content: content, warnings: warnings, points: points };
 }
 
 async function main(argv) {

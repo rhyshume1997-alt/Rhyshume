@@ -47,6 +47,25 @@
           "value": "no-referrer"
         }
       ]
+    },
+    {
+      "source": "/upgrade",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
     }
-  ]
+  ],
+  "functions": {
+    "api/upgrade-live.js": {
+      "maxDuration": 120,
+      "includeFiles": "{styles.css,preview/preview.css}"
+    }
+  }
 }
