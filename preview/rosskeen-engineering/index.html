@@ -11,6 +11,65 @@
 <link rel="preload" href="/fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/styles.css">
 <link rel="stylesheet" href="/preview/preview.css">
+<style id="pv-motion">
+/* motion pack */
+.mo-n { display: inline-block; font-variant-numeric: tabular-nums; text-align: right; }
+.pv-list h3 a { color: inherit; text-decoration: none; }
+.pv-list h3 a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+/* before and after slider, built by the page JS only when both screenshots are there */
+.pv-compare.mo-on { display: block; max-width: 22rem; margin-inline: auto; }
+.mo-slider { --v: 0.5; --x: calc(1.375rem + (100% - 2.75rem) * var(--v)); position: relative; width: 100%; overflow: hidden; border: 1px solid var(--ink); background: #fff; touch-action: pan-y; }
+.mo-slider .pv-shotbox { position: absolute; inset: 0; border: 0; }
+.mo-slider .pv-shotbox img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.mo-slider .mo-top { clip-path: inset(0 calc(100% - var(--x)) 0 0); }
+.mo-range { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; touch-action: pan-y; -webkit-appearance: none; appearance: none; background: transparent; }
+.mo-range::-webkit-slider-thumb { -webkit-appearance: none; width: 2.75rem; height: 100%; }
+.mo-range::-moz-range-thumb { width: 2.75rem; height: 100%; border: 0; background: transparent; }
+.mo-handle { position: absolute; top: 0; bottom: 0; left: var(--x); width: 0; pointer-events: none; }
+.mo-handle::before { content: ""; position: absolute; top: 0; bottom: 0; left: -1px; width: 2px; background: var(--ink); box-shadow: 0 0 0 1px #fff; }
+.mo-knob { position: absolute; top: 50%; left: 0; width: 2.75rem; height: 2.75rem; margin: -1.375rem 0 0 -1.375rem; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 3px #fff; }
+.mo-knob::before, .mo-knob::after { content: ""; position: absolute; top: 50%; margin-top: -6px; border: 6px solid transparent; }
+.mo-knob::before { left: 7px; border-right-color: #fff; border-left-width: 0; }
+.mo-knob::after { right: 7px; border-left-color: #fff; border-right-width: 0; }
+.mo-range:focus-visible ~ .mo-handle .mo-knob { outline: 3px solid var(--accent); outline-offset: 3px; }
+.mo-caps { display: flex; justify-content: space-between; gap: 1rem; margin-top: 0.5rem; font-size: 0.875rem; color: var(--ink-2); }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* scroll reveal: sections and cards fade up once, 400ms, staggered 60ms by the page JS */
+  .mo .mo-r { opacity: 0; transform: translateY(14px); }
+  .mo .mo-r.in { opacity: 1; transform: none; transition: opacity 400ms ease-out, transform 400ms ease-out, translate 200ms ease; }
+  .mo .mo-r.mo-now { transition: none; }
+
+  /* header: stays put, shrinks a little and gains a shadow after the first scroll (transform only, so no layout shift) */
+  html.mo { scroll-padding-top: 5rem; }
+  .mo .masthead { position: sticky; top: 0; z-index: 30; background: var(--paper); }
+  .mo .masthead::after { content: ""; position: absolute; inset: 0; box-shadow: 0 8px 18px -10px rgba(11, 42, 91, 0.5); opacity: 0; transition: opacity 200ms ease; pointer-events: none; }
+  .mo .masthead.is-stuck::after { opacity: 1; }
+  .mo .masthead .sheet { transform-origin: left center; transition: transform 220ms ease; }
+  .mo .masthead.is-stuck .sheet { transform: scale(0.95); }
+
+  /* service cards: gentle lift and a line that grows under the title, on hover and on keyboard focus */
+  .pv-list li { transition: translate 200ms ease; }
+  .pv-list li:hover, .pv-list li:focus-within { translate: 0 -3px; }
+  .pv-list h3::after { content: ""; display: block; height: 2px; margin-top: 0.4rem; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform 280ms ease; }
+  .pv-list li:hover h3::after, .pv-list li:focus-within h3::after { transform: scaleX(1); }
+
+  /* hero: a slow soft colour drift behind the headline, no video */
+  .titleblock { position: relative; isolation: isolate; }
+  .mo .titleblock::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background: radial-gradient(28rem 16rem at 18% 30%, var(--accent-soft), transparent 70%), radial-gradient(24rem 14rem at 82% 72%, var(--paper-2), transparent 70%);
+    animation: mo-drift 26s ease-in-out infinite alternate; }
+  @keyframes mo-drift { from { transform: translate3d(-2%, 1%, 0) scale(1); } to { transform: translate3d(2%, -1%, 0) scale(1.04); } }
+
+  /* Get a quote buttons: a soft ring pulses once every 8 seconds, until the visitor interacts */
+  .mo a.btn[href="#quote"] { position: relative; }
+  .mo a.btn[href="#quote"]::after { content: ""; position: absolute; inset: -1px; border: 2px solid var(--accent); opacity: 0; pointer-events: none; animation: mo-pulse 8s ease-out 2s infinite; }
+  .mo.mo-calm a.btn[href="#quote"]::after { animation: none; }
+  @keyframes mo-pulse { 0% { opacity: 0.6; transform: scale(1); } 9% { opacity: 0; transform: scale(1.14, 1.35); } 100% { opacity: 0; transform: scale(1.14, 1.35); } }
+}
+</style>
+<script>(function(){var d=document.documentElement;try{if(!window.matchMedia||!matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('mo');setTimeout(function(){if(!window.__moOK)d.classList.remove('mo')},4000)}}catch(e){}})();</script>
 </head>
 <body id="top" class="pv has-call">
 <a class="skip" href="#main">Skip to content</a>
@@ -32,12 +91,12 @@
       <p class="standfirst">A medium sized engineering company at Invergordon. We provide machining, fabrication, welding and mechanical fitting services.</p>
       <p>Based at Auchintoul, Invergordon.</p>
       <div class="actions"><a class="btn" href="#quote">Get a quote</a></div>
-      <ul class="pv-proof"><li>Based in Invergordon</li><li>Started in 2005</li><li>Fabrication shop 120m x 40m</li><li>Machining up to 10 te</li></ul>
+      <ul class="pv-proof"><li>Based in Invergordon</li><li>Started in 2005</li><li>Fabrication shop <span class="mo-n" data-n="120" style="min-width:3ch">120</span>m x <span class="mo-n" data-n="40" style="min-width:2ch">40</span>m</li><li>Machining up to <span class="mo-n" data-n="10" style="min-width:2ch">10</span> te</li></ul>
     </div>
   </div>
 </header>
 
-<section class="clause" id="compare" aria-labelledby="compare-h">
+<section class="clause mo-r" id="compare" aria-labelledby="compare-h">
   <h2 id="compare-h">Before and after</h2>
   <div class="clause-body">
 <div class="pv-compare"><figure class="pv-shot"><div class="pv-shotbox"><img src="/preview/rosskeen-engineering/before.jpg" alt="Screenshot of rosskeenengineering.co.uk on a phone, taken 2026-11-12" width="390" height="844" decoding="async"><span class="pv-pin" aria-hidden="true" style="left:44.4%;top:24.8%">1</span><span class="pv-pin" aria-hidden="true" style="left:41%;top:47.9%">3</span></div><figcaption>Their site today</figcaption></figure><figure class="pv-shot"><div class="pv-shotbox"><img src="/preview/rosskeen-engineering/after.jpg" alt="Screenshot of the concept on a phone" width="390" height="844" decoding="async"><span class="pv-pin" aria-hidden="true" style="left:81.5%;top:8.7%">1</span><span class="pv-pin" aria-hidden="true" style="left:17.6%;top:15.1%">2</span><span class="pv-pin" aria-hidden="true" style="left:50%;top:31.8%">3</span></div><figcaption>The concept</figcaption></figure></div>
@@ -50,31 +109,31 @@
 <tr><th scope="row">Lighthouse mobile performance score</th><td>73 out of 100</td><td>100 out of 100</td></tr>
 <tr><th scope="row">Largest contentful paint</th><td>5 s</td><td>0.9 s</td></tr>
 </tbody></table>
-<p class="pv-note">Scores come from Lighthouse, the tool behind PageSpeed, run on GitHub’s computer on 2026-11-12 with phone settings, median of 3 runs. The concept was served from a test server before going live, so check the live address on PageSpeed Insights once it is published.</p>
+<p class="pv-note">Their site’s scores come from Lighthouse, the tool behind PageSpeed, run on GitHub’s computer on 2026-11-12 with phone settings, median of 3 runs. The concept’s scores, with its animations on, come from the same tool run on a different computer on 2026-11-12, median of 3 runs, so the two columns are not a like for like test. Check the live address on PageSpeed Insights once it is published.</p>
 </div>
 </section>
 
 <div class="pv-hero"><div class="pv-placeholder" role="note">Placeholder: your workshop photo here</div>
 </div>
 
-<section class="clause" id="services" aria-labelledby="services-h">
+<section class="clause mo-r" id="services" aria-labelledby="services-h">
   <h2 id="services-h">What we do</h2>
   <div class="clause-body">
 <ul class="pv-list">
-<li><h3>Machining and mechanical fitting</h3><p>Machining in a large, well equipped shop, with C.N.C turning and milling for batch runs.</p><p class="pv-detail">Components up to 10 te</p></li>
-<li><h3>Fabrication, welding and sheet metal</h3><p>Pipework and structures in carbon and stainless steel, from small components to large assemblies.</p><p class="pv-detail">Fabrication shop 120m x 40m</p></li>
-<li><h3>Insulation, cladding and ductwork</h3><p>Sheet metal and insulation work, including foam glass, rockwool and foam insulations.</p></li>
-<li><h3>Hydraulic ram refurbishment and installations</h3><p>Rebuild of hydraulic rams and installation of hydraulic systems on site.</p></li>
+<li class="mo-r"><h3><a href="#quote">Machining and mechanical fitting</a></h3><p>Machining in a large, well equipped shop, with C.N.C turning and milling for batch runs.</p><p class="pv-detail">Components up to <span class="mo-n" data-n="10" style="min-width:2ch">10</span> te</p></li>
+<li class="mo-r"><h3><a href="#quote">Fabrication, welding and sheet metal</a></h3><p>Pipework and structures in carbon and stainless steel, from small components to large assemblies.</p><p class="pv-detail">Fabrication shop <span class="mo-n" data-n="120" style="min-width:3ch">120</span>m x <span class="mo-n" data-n="40" style="min-width:2ch">40</span>m</p></li>
+<li class="mo-r"><h3><a href="#quote">Insulation, cladding and ductwork</a></h3><p>Sheet metal and insulation work, including foam glass, rockwool and foam insulations.</p></li>
+<li class="mo-r"><h3><a href="#quote">Hydraulic ram refurbishment and installations</a></h3><p>Rebuild of hydraulic rams and installation of hydraulic systems on site.</p></li>
 </ul>
 
 </div>
 </section>
 
-<section class="clause" id="about" aria-labelledby="about-h">
+<section class="clause mo-r" id="about" aria-labelledby="about-h">
   <h2 id="about-h">About</h2>
   <div class="clause-body"><p class="lead">Rosskeen Engineering Limited started in 2005 as the result of a management buyout. The management and workforce are well respected for their depth of knowledge and quality of service.</p></div>
 </section>
-<section class="clause next" id="quote" aria-labelledby="quote-h">
+<section class="clause next mo-r" id="quote" aria-labelledby="quote-h">
   <h2 id="quote-h">Send us your drawing</h2>
   <div class="clause-body">
 <p class="lead">Tell us what you need. Attach your drawings or photos.</p>
@@ -100,5 +159,115 @@
 <footer class="pv-foot"><div class="sheet"><p>Rosskeen Engineering. Concept by Rhys Hume, not a live site. The text and photos come from rosskeenengineering.co.uk.</p></div></footer>
 <a class="pv-call" href="tel:+441349854100">Call 01349854100</a>
 <script>document.getElementById("q-send").addEventListener("click",function(){document.getElementById("q-status").hidden=false;});</script>
+<script>
+(function () {
+  var d = document.documentElement;
+  window.__moOK = 1;
+  var motion = d.classList.contains('mo');
+  var vh = window.innerHeight || 800;
+  var IO = 'IntersectionObserver' in window;
+
+  /* before and after slider: only when both screenshots are on the page. The range input gives touch, mouse and arrow keys. */
+  (function () {
+    var wrap = document.querySelector('.pv-compare');
+    if (!wrap) return;
+    var shots = wrap.querySelectorAll('.pv-shot');
+    if (shots.length !== 2) return;
+    var boxes = [shots[0].querySelector('.pv-shotbox'), shots[1].querySelector('.pv-shotbox')];
+    var imgs = [boxes[0] && boxes[0].querySelector('img'), boxes[1] && boxes[1].querySelector('img')];
+    var caps = [shots[0].querySelector('figcaption'), shots[1].querySelector('figcaption')];
+    if (!imgs[0] || !imgs[1] || !imgs[0].getAttribute('src') || !imgs[1].getAttribute('src') || !caps[0] || !caps[1]) return;
+    var w = imgs[0].getAttribute('width'), h = imgs[0].getAttribute('height');
+    if (!w || !h) return;
+    var saved = wrap.innerHTML;
+    var slider = document.createElement('div');
+    slider.className = 'mo-slider';
+    slider.style.aspectRatio = w + ' / ' + h;
+    boxes[0].classList.add('mo-top');
+    slider.appendChild(boxes[1]);
+    slider.appendChild(boxes[0]);
+    var range = document.createElement('input');
+    range.type = 'range'; range.min = '0'; range.max = '100'; range.step = '1'; range.value = '50';
+    range.className = 'mo-range';
+    range.setAttribute('aria-label', 'Compare their site today with the concept. Use the left and right arrow keys.');
+    var handle = document.createElement('div');
+    handle.className = 'mo-handle'; handle.setAttribute('aria-hidden', 'true');
+    var knob = document.createElement('div'); knob.className = 'mo-knob'; handle.appendChild(knob);
+    slider.appendChild(range); slider.appendChild(handle);
+    var row = document.createElement('div'); row.className = 'mo-caps';
+    var a = document.createElement('span'); a.textContent = caps[0].textContent;
+    var b = document.createElement('span'); b.textContent = caps[1].textContent;
+    row.appendChild(a); row.appendChild(b);
+    wrap.textContent = '';
+    wrap.classList.add('mo-on');
+    wrap.appendChild(slider); wrap.appendChild(row);
+    range.addEventListener('input', function () { slider.style.setProperty('--v', String(range.value / 100)); });
+    var undo = function () { wrap.innerHTML = saved; wrap.classList.remove('mo-on'); };
+    imgs[0].addEventListener('error', undo, { once: true });
+    imgs[1].addEventListener('error', undo, { once: true });
+  })();
+
+  if (!motion) return;
+
+  /* header: shrink and shadow after the first scroll */
+  (function () {
+    var mh = document.querySelector('.masthead');
+    if (!mh) return;
+    var queued = false, on = false;
+    function check() { queued = false; var s = (window.pageYOffset || d.scrollTop || 0) > 8; if (s !== on) { on = s; mh.classList.toggle('is-stuck', s); } }
+    window.addEventListener('scroll', function () { if (!queued) { queued = true; requestAnimationFrame(check); } }, { passive: true });
+    check();
+  })();
+
+  /* scroll reveal, once, staggered 60ms. Anything already in view when the page loads just shows. */
+  (function () {
+    var items = document.querySelectorAll('.mo-r');
+    if (!IO) { items.forEach(function (el) { el.classList.add('in', 'mo-now'); }); return; }
+    var io = new IntersectionObserver(function (entries) {
+      var n = 0;
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        e.target.style.transitionDelay = (n * 60) + 'ms';
+        n += 1;
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    items.forEach(function (el) {
+      if (el.getBoundingClientRect().top < vh * 0.92) el.classList.add('in', 'mo-now');
+      else io.observe(el);
+    });
+  })();
+
+  /* count up quantities found on their site, once. Years are never wrapped, so they never count. */
+  (function () {
+    var nums = document.querySelectorAll('.mo-n');
+    if (!IO || !nums.length) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        io.unobserve(e.target);
+        var el = e.target, raw = el.getAttribute('data-n'), to = parseFloat(raw), dec = (raw.split('.')[1] || '').length, final = el.getAttribute('data-final'), t0 = performance.now();
+        (function tick(now) {
+          var p = Math.min(1, (now - t0) / 900), k = 1 - Math.pow(1 - p, 3);
+          el.textContent = p < 1 ? (to * k).toFixed(dec) : final;
+          if (p < 1) requestAnimationFrame(tick);
+        })(t0);
+      });
+    }, { threshold: 0.6 });
+    nums.forEach(function (el) {
+      el.setAttribute('data-final', el.textContent);
+      el.textContent = (0).toFixed((el.getAttribute('data-n').split('.')[1] || '').length);
+      io.observe(el);
+    });
+  })();
+
+  /* the Get a quote pulse stops for good at the first touch, click or key press */
+  (function () {
+    function calm() { d.classList.add('mo-calm'); }
+    ['pointerdown', 'keydown', 'touchstart'].forEach(function (ev) { window.addEventListener(ev, calm, { once: true, passive: true }); });
+  })();
+})();
+</script>
 </body>
 </html>

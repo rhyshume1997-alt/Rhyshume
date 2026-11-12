@@ -53,7 +53,7 @@ Made on 2026-11-12 from the pages listed below. Nobody has checked this yet. Rea
 | Table row | Largest contentful paint |
 | Table value | 5 s |
 | Table value | 0.9 s |
-| Speed note | Scores come from Lighthouse, the tool behind PageSpeed, run on GitHub’s computer on 2026-11-12 with phone settings, median of 3 runs. The concept was served from a test server before going live, so check the live address on PageSpeed Insights once it is published. |
+| Speed note | Their site’s scores come from Lighthouse, the tool behind PageSpeed, run on GitHub’s computer on 2026-11-12 with phone settings, median of 3 runs. The concept’s scores, with its animations on, come from the same tool run on a different computer on 2026-11-12, median of 3 runs, so the two columns are not a like for like test. Check the live address on PageSpeed Insights once it is published. |
 | Photo space | Placeholder: your workshop photo here |
 | Services heading | What we do |
 | Service 1 title | Machining and mechanical fitting |
@@ -107,3 +107,17 @@ Made on 2026-11-12 from the pages listed below. Nobody has checked this yet. Rea
 - The screenshot of their current site is shown on the page. Check you are happy for it to be public.
 - Compare each line above with their live site. Anything you cannot find there comes out.
 - Photos, logo and the screenshot of their current site belong to them. This page is open to anyone once merged, so do not merge it without their say so.
+
+## Motion (on by default, every niche)
+
+Plain CSS and a little vanilla JS, written into the page. No libraries, no build step, no extra requests. It adds no words.
+- Scroll reveal: sections and service cards fade up once, 400ms, staggered 60ms. Anything in view on load just shows.
+- Before and after: a drag slider with arrow keys, only when both screenshots are on the page.
+- Facts row: quantities on their site (not years) count up once when scrolled into view.
+- Header: stays at the top, shrinks slightly and gains a shadow after the first scroll.
+- Service cards: a small lift and a line that grows under the title on hover and keyboard focus. The titles link to the quote form so the cards can take keyboard focus.
+- Hero: a slow soft colour drift behind the headline, no video.
+- Get a quote buttons: a soft ring every 8 seconds, until the first touch, click or key press.
+- Everything above is off when the visitor asks for reduced motion (the slider still works), and with JavaScript off the page shows all content normally.
+
+One thing to check: the fourth proof line reads "Machining up to 10 te" as it does on their site. I have not confirmed that "te" means tonnes. Unverified, ask them before it goes anywhere.
