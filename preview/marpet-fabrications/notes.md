@@ -1,13 +1,13 @@
-# Marpet Fabrications concept: notes
+# Marpet Fabrications concept v2: notes
 
-Built by hand from the facts Rhys supplied. No AI copy, no site fetch, no invented numbers.
+Built by hand from the facts Rhys supplied. No AI copy, no stats, no placeholder text, no stock photos.
 
-## What I did and why
-1. Phone and email bar at the very top, and a Get a quote button in the header and after every section.
-2. One line about food and drink fabrication in the hero, with the ten customer names Rhys listed as a strip directly under it.
-3. Three big numbers as placeholders only: [YEARS TRADING], [JOBS DONE], [SITE INSTALLS].
-4. Six service cards from the services list, one short line each, with a grey "job photo" block where a photo will go.
-5. Closing block with a direct ask and a demo form. The form posts nowhere.
+## What changed from v1
+1. Numbers row removed completely.
+2. Hero has the headline and two buttons on the left and a panel listing the six services on the right.
+3. Customer names are bordered chips labelled "As listed on your site".
+4. Photo spots are clean blocks labelled "Your job photo here".
+5. Quote form has name, email, phone and what you need built. No file upload. A small line says it is a demo.
 
 ## Facts used as given
 - Unit 04 Clyde Workshops, Fullarton Road, Glasgow, G32 8YL
@@ -18,10 +18,8 @@ Built by hand from the facts Rhys supplied. No AI copy, no site fetch, no invent
 - Customers: Warburtons, Diageo, Barrs, Lightbody, Lees of Scotland, Aulds, Pinneys of Annan, Walter Black Foods, Scotbeef, Vion
 
 ## To check by hand
-- The one-line card text and the hero line are my wording around those facts. Marpet should confirm them.
-- Placeholders must be replaced with real figures from Marpet, or removed.
-- Customer names are used as supplied. Marpet should agree to them being shown.
-- No photos used. No stock photos.
+- The hero headline and the one-line text on each service card are my wording around those facts. Marpet should confirm them.
+- Customer names are shown as supplied. Marpet should agree to that.
 
 ## Every line of copy
 - Skip to content
@@ -33,7 +31,16 @@ Built by hand from the facts Rhys supplied. No AI copy, no site fetch, no invent
 - Sheet metal and stainless steel fabrication for food and drink
 - Marpet Fabrications, Glasgow. We design, manufacture and install on site.
 - Get a quote
-- Customers named on the Marpet site
+- Call 0141 641 1778
+- What we make
+- Production lines
+- Conveyor belts
+- Access platforms
+- Catering fabrication
+- Pipework
+- General fabrication
+- Materials: stainless steel, mild steel and aluminium.
+- As listed on your site
 - Warburtons
 - Diageo
 - Barrs
@@ -44,46 +51,35 @@ Built by hand from the facts Rhys supplied. No AI copy, no site fetch, no invent
 - Walter Black Foods
 - Scotbeef
 - Vion
-- Marpet in numbers
-- [YEARS TRADING]
-- Years trading
-- [JOBS DONE]
-- Jobs done
-- [SITE INSTALLS]
-- Installs on customer sites
-- Placeholders. Marpet to confirm these before anything goes live.
-- Get a quote
-- What we make
+- Services
 - Each job is designed, made and installed on site by Marpet.
-- job photo
+- Your job photo here
 - Production lines
-- For food and drink sites.
-- job photo
+- Designed, made and installed for food and drink sites.
+- Your job photo here
 - Conveyor belts
-- Made to fit your line.
-- job photo
+- Designed and made to suit your line.
+- Your job photo here
 - Access platforms
 - Made and installed on site.
-- job photo
+- Your job photo here
 - Catering fabrication
-- Made and installed by Marpet.
-- job photo
+- Designed and made by Marpet.
+- Your job photo here
 - Pipework
-- Fitted on site.
-- job photo
+- Made and fitted on site.
+- Your job photo here
 - General fabrication
 - Tell us what you need made.
-- Materials: stainless steel, mild steel and aluminium.
 - Get a quote
 - Need something built for your line? Tell us.
-- Say what you need and where it goes. Add a drawing if you have one.
-- Your name
+- Say what you need and where it goes.
+- Name
 - Email
 - Phone
 - What do you need built
-- Drawings or photos
-- Send to Marpet
-- Demo form. Nothing is sent anywhere.
+- Get a quote
+- Demo form, nothing is sent
 - This is a concept. Nothing was sent.
 - Contact
 - Marpet Fabrications

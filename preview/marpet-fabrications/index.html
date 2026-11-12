@@ -19,47 +19,38 @@
 <main id="main">
 <section class="hero" aria-labelledby="h1">
   <div class="wrap">
-    <h1 id="h1">Sheet metal and stainless steel fabrication for food and drink</h1>
-    <p class="sub">Marpet Fabrications, Glasgow. We design, manufacture and install on site.</p>
-    <p class="after"><a class="btn" href="#quote">Get a quote</a></p>
+    <div>
+      <h1 id="h1">Sheet metal and stainless steel fabrication for food and drink</h1>
+      <p class="sub">Marpet Fabrications, Glasgow. We design, manufacture and install on site.</p>
+      <div class="hero-actions"><a class="btn" href="#quote">Get a quote</a><a class="btn ghost" href="tel:+441416411778">Call 0141 641 1778</a></div>
+    </div>
+    <aside class="panel" aria-labelledby="panel-h">
+      <h2 id="panel-h">What we make</h2>
+      <ul><li><a href="#production-lines">Production lines</a></li><li><a href="#conveyor-belts">Conveyor belts</a></li><li><a href="#access-platforms">Access platforms</a></li><li><a href="#catering-fabrication">Catering fabrication</a></li><li><a href="#pipework">Pipework</a></li><li><a href="#general-fabrication">General fabrication</a></li></ul>
+      <p class="mat">Materials: stainless steel, mild steel and aluminium.</p>
+    </aside>
   </div>
 </section>
 
-<section class="customers" aria-labelledby="cust-h">
+<section class="chips" aria-labelledby="cust-h">
   <div class="wrap">
-    <h2 id="cust-h">Customers named on the Marpet site</h2>
-    <ul>
-      <li>Warburtons</li><li>Diageo</li><li>Barrs</li><li>Lightbody</li><li>Lees of Scotland</li><li>Aulds</li><li>Pinneys of Annan</li><li>Walter Black Foods</li><li>Scotbeef</li><li>Vion</li>
-    </ul>
-  </div>
-</section>
-
-<section class="block" aria-labelledby="nums-h">
-  <div class="wrap">
-    <h2 id="nums-h">Marpet in numbers</h2>
-    <ul class="stats">
-      <li><span class="n">[YEARS TRADING]</span><span class="l">Years trading</span></li>
-      <li><span class="n">[JOBS DONE]</span><span class="l">Jobs done</span></li>
-      <li><span class="n">[SITE INSTALLS]</span><span class="l">Installs on customer sites</span></li>
-    </ul>
-    <p class="stat-note">Placeholders. Marpet to confirm these before anything goes live.</p>
-    <p class="after"><a class="btn" href="#quote">Get a quote</a></p>
+    <h2 id="cust-h">As listed on your site</h2>
+    <ul><li>Warburtons</li><li>Diageo</li><li>Barrs</li><li>Lightbody</li><li>Lees of Scotland</li><li>Aulds</li><li>Pinneys of Annan</li><li>Walter Black Foods</li><li>Scotbeef</li><li>Vion</li></ul>
   </div>
 </section>
 
 <section class="block alt" id="services" aria-labelledby="svc-h">
   <div class="wrap">
-    <h2 id="svc-h">What we make</h2>
+    <h2 id="svc-h">Services</h2>
     <p class="lead">Each job is designed, made and installed on site by Marpet.</p>
     <ul class="cards">
-      <li><div class="photo">job photo</div><div class="txt"><h3>Production lines</h3><p>For food and drink sites.</p></div></li>
-      <li><div class="photo">job photo</div><div class="txt"><h3>Conveyor belts</h3><p>Made to fit your line.</p></div></li>
-      <li><div class="photo">job photo</div><div class="txt"><h3>Access platforms</h3><p>Made and installed on site.</p></div></li>
-      <li><div class="photo">job photo</div><div class="txt"><h3>Catering fabrication</h3><p>Made and installed by Marpet.</p></div></li>
-      <li><div class="photo">job photo</div><div class="txt"><h3>Pipework</h3><p>Fitted on site.</p></div></li>
-      <li><div class="photo">job photo</div><div class="txt"><h3>General fabrication</h3><p>Tell us what you need made.</p></div></li>
+      <li id="production-lines"><div class="photo"><span>Your job photo here</span></div><div class="txt"><h3>Production lines</h3><p>Designed, made and installed for food and drink sites.</p></div></li>
+      <li id="conveyor-belts"><div class="photo"><span>Your job photo here</span></div><div class="txt"><h3>Conveyor belts</h3><p>Designed and made to suit your line.</p></div></li>
+      <li id="access-platforms"><div class="photo"><span>Your job photo here</span></div><div class="txt"><h3>Access platforms</h3><p>Made and installed on site.</p></div></li>
+      <li id="catering-fabrication"><div class="photo"><span>Your job photo here</span></div><div class="txt"><h3>Catering fabrication</h3><p>Designed and made by Marpet.</p></div></li>
+      <li id="pipework"><div class="photo"><span>Your job photo here</span></div><div class="txt"><h3>Pipework</h3><p>Made and fitted on site.</p></div></li>
+      <li id="general-fabrication"><div class="photo"><span>Your job photo here</span></div><div class="txt"><h3>General fabrication</h3><p>Tell us what you need made.</p></div></li>
     </ul>
-    <p class="materials">Materials: stainless steel, mild steel and aluminium.</p>
     <p class="after"><a class="btn" href="#quote">Get a quote</a></p>
   </div>
 </section>
@@ -68,15 +59,14 @@
   <div class="wrap grid">
     <div>
       <h2 id="quote-h">Need something built for your line? Tell us.</h2>
-      <p class="lead">Say what you need and where it goes. Add a drawing if you have one.</p>
+      <p class="lead">Say what you need and where it goes.</p>
       <form class="form" id="quote-form" onsubmit="return false" style="margin-top:1.75rem">
-        <div class="field"><label for="q-name">Your name</label><input id="q-name" type="text" autocomplete="name"></div>
+        <div class="field"><label for="q-name">Name</label><input id="q-name" type="text" autocomplete="name"></div>
         <div class="field"><label for="q-email">Email</label><input id="q-email" type="email" autocomplete="email"></div>
         <div class="field"><label for="q-phone">Phone</label><input id="q-phone" type="tel" autocomplete="tel"></div>
         <div class="field"><label for="q-need">What do you need built</label><textarea id="q-need"></textarea></div>
-        <div class="field"><label for="q-files">Drawings or photos</label><input id="q-files" type="file" multiple></div>
-        <button class="btn" type="button" id="q-send">Send to Marpet</button>
-        <p class="demo-note">Demo form. Nothing is sent anywhere.</p>
+        <button class="btn" type="button" id="q-send">Get a quote</button>
+        <p class="demo-note">Demo form, nothing is sent</p>
         <p class="status" id="q-status" role="status" hidden>This is a concept. Nothing was sent.</p>
       </form>
     </div>
