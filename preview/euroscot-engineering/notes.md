@@ -63,7 +63,7 @@ Made on 2026-11-12 from the pages listed below. Nobody has checked this yet. Rea
 | Service 3 text | High accuracy complex components with lights out capability. |
 | Service 3 sizes | Up to 20mm diameter |
 | Service 4 title | Cell Manufacturing |
-| Service 4 text | A dedicated cell for 24/7 high volume production, with CMM and SPC. |
+| Service 4 text | Space to set up a dedicated cell for 24/7 high volume production. |
 | Service 5 title | Surface Treatments |
 | Service 5 text | A wide range of plating and coatings through its Approved Partners Scheme. |
 | Service 6 title | Fabrication |
