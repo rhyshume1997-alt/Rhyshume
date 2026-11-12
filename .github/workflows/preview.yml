@@ -1,6 +1,8 @@
 # Build a concept preview from the GitHub website, no computer tools needed.
 # Actions tab > "Build preview" > Run workflow. Needs the repository secret ANTHROPIC_API_KEY.
-# Writes preview/<slug>/ to a new branch called preview-<slug>. It never touches main.
+# Writes preview/<slug>/ to a new branch called preview-<slug> and opens a pull request to main.
+# Nothing is merged here. Merging that pull request is what puts the page live at
+# rhyshume.co.uk/preview/<slug>/ (open to anyone, noindex). Vercel protection settings are not touched.
 name: Build preview
 
 on:
@@ -21,6 +23,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: preview-${{ inputs.slug }}
@@ -54,9 +57,10 @@ jobs:
       - name: Run the tests
         run: node --test
 
-      - name: Save to a new branch
+      - name: Save to a new branch and open a pull request
         env:
           IN_SLUG: ${{ inputs.slug }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -eu
           git config user.name "preview-bot"
@@ -65,11 +69,19 @@ jobs:
           git add "preview/$IN_SLUG"
           git commit -m "Concept preview: $IN_SLUG"
           git push --force origin "preview-$IN_SLUG"
+          body="Concept preview for $IN_SLUG. Read preview/$IN_SLUG/notes.md and check every line against their live site before merging. Merging puts the page live at https://www.rhyshume.co.uk/preview/$IN_SLUG/ (open to anyone, noindex)."
+          if gh pr create --base main --head "preview-$IN_SLUG" --title "Concept preview: $IN_SLUG" --body "$body" > pr.txt 2> pr.err; then
+            pr_line="Pull request: $(cat pr.txt)"
+          else
+            pr_line="Could not open the pull request (GitHub may need Settings > Actions > General > Allow GitHub Actions to create pull requests). Open it by hand: https://github.com/$GITHUB_REPOSITORY/compare/main...preview-$IN_SLUG?expand=1"
+          fi
           {
             echo "### Preview saved"
             echo ""
             echo "Branch: \`preview-$IN_SLUG\`"
             echo ""
-            echo "Read \`preview/$IN_SLUG/notes.md\` on that branch and check every line against their live site."
-            echo "Nothing has been merged or published."
+            echo "$pr_line"
+            echo ""
+            echo "Read \`preview/$IN_SLUG/notes.md\` and check every line against their live site."
+            echo "Nothing has been merged. Merging the pull request makes the page public."
           } >> "$GITHUB_STEP_SUMMARY"

@@ -312,3 +312,12 @@ test('the GitHub Action only passes inputs through env, never straight into a sh
   assert.ok(/secrets\.ANTHROPIC_API_KEY/.test(yml));
   assert.ok(!/git push[^\n]*\bmain\b/.test(yml), 'it must never push to main');
 });
+
+test('the Action opens a pull request to main, never merges, and keeps the notes out of the site', function () {
+  const yml = read('.github/workflows/preview.yml');
+  assert.match(yml, /pull-requests: write/);
+  assert.match(yml, /gh pr create --base main --head "preview-\$IN_SLUG"/);
+  assert.ok(!/gh pr merge|--auto|--admin/.test(yml), 'the Action must never merge');
+  assert.ok(!/vercel|VERCEL/i.test(yml.replace(/rhyshume\.co\.uk/g, '').replace(/#.*$/gm, '')), 'the Action must not touch Vercel');
+  assert.match(read('.vercelignore'), /^preview\/\*\/notes\.md$/m);
+});
