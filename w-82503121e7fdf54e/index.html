@@ -705,7 +705,7 @@ const ptwo = n => ({ id: n });
 function blank() {
   return {
     v: 2,
-    client: { status: 'enquiry', contact: '', business: '', town: '', loom: '', email: '', phone: '', address: '',  types: [], flags: {}, ageRestricted: '', modes: { funding: true, website: true, seo: false }, packId: PACKS[0] ? PACKS[0].id : '' },
+    client: { status: 'enquiry', contact: '', business: '', town: '', loom: '', shop: { has: '', name: '' }, email: '', phone: '', address: '',  types: [], flags: {}, ageRestricted: '', modes: { funding: true, website: true, seo: false }, packId: PACKS[0] ? PACKS[0].id : '' },
     facts: { tick: {} }, prep: {}, elig: {}, turnover: { recent: '', last: '' }, evid: {}, crit: {}, gate: {},
     quote: { scope: '', lines: [], vat: '', held: '' },
     plan: { build: '', decision: '', start: '', submit: '' },
@@ -1204,6 +1204,7 @@ function vSetup() {
   ${sec('1.0', 'The client', `<div class="grid2">${field('Business name', 'client.business', { full: true, hint: 'e.g. Taylor and Sons Bakery' })}${field('Main contact', 'client.contact', { hint: 'e.g. Sam Taylor' })}${field('Town', 'client.town', { hint: 'e.g. Milngavie' })}${field('Email', 'client.email', { hint: 'Copied into every document that needs it' })}${field('Phone', 'client.phone', { hint: 'e.g. 07700 900123' })}${field('Address', 'client.address', { full: true, hint: 'Street, town, postcode' })}</div><p class="hint">Type these once. The contract, domain and care screens copy them for you</p>`)}
   ${sec('1.5', 'Where are we', `${seg('client.status', STATUSES, c.status)}<p class="hint">Move this on as the job moves on</p>`)}
   ${sec('1.8', 'Usual dates and deposit', `<div class="q"><div class="ql">Start</div>${seg('prop.startMode', START_MODES(), S.prop.startMode)}</div><div class="grid2">${field('Finish by', 'prop.finish', { type: 'date', hint: fund() ? 'Filled from the programme end date' : 'The date you promise to finish' })}${field('Deposit %', 'quote2.depPct', { hint: 'e.g. 50' })}</div><p class="row"><button class="btn" data-act="usual">Fill in my usual details</button></p><p class="hint">Fills blanks only, from the programme and your last quote. It never overwrites what you typed</p>`)}
+  ${sec('1.9', 'Do they already have an online shop?', `${seg('client.shop.has', [['yes', 'Yes'], ['no', 'No']], (c.shop || {}).has)}${(c.shop || {}).has === 'yes' ? field('Which one', 'client.shop.name', { hint: 'e.g. Shopify' }) : ''}<p class="hint">Yes: the quote says we link it at no extra cost. No: the quote says we price and build it later. Leave blank if you are not sure yet</p>`)}
   ${sec('2.0', 'What do they want done?', `<p class="hint">Tick all that apply, it changes the cost lines, the checklist and the examples</p>${typeBoxes}`)}
   ${sec('3.0', 'What are we doing?', `${chk('client.modes.funding', '<b>A funding application</b><span class="hint">Eligibility, evidence, project answers, quote, deadlines</span>').replace('data-k=', 'data-full="1" data-k=')}
      ${c.modes.funding ? `<label class="f"><span class="fl">Programme</span>${select('client.packId', packOpts, c.packId).replace('<select ', '<select data-full="1" ')}<span class="hint">One pack per programme, see "How to add a programme"</span></label>` : ''}
@@ -1987,32 +1988,34 @@ const UNITS = [['fixed', 'One price'], ['page', 'Per page'], ['hour', 'Per hour'
 const TAGS = [['base', 'Included'], ['addon', 'Extra'], ['not', 'Left out']];
 const FREQS2 = [['once', 'One off'], ['month', 'Monthly'], ['year', 'Yearly']];
 const PB_RULES = [['', 'Never, I add it'], ['always', 'Always'], ['pages', 'Per page they want'], ['shop', 'They want a shop'], ['seo', 'Search and AI visibility is on'], ['form', 'They want a form'], ['book', 'They want bookings'], ['copy', 'They want copywriting'], ['photo', 'They want photos'], ['train', 'They want training']];
+const PLAIN = [[/e-?commerce/gi, m => m[0] === 'E' ? 'Online shop' : 'online shop'], [/\bSEO\b/g, 'Google search set up'], [/\bDNS records\b/gi, 'email delivery settings'], [/\bDNS\b/g, 'domain settings'], [/landing page/gi, m => m[0] === 'L' ? 'Single page' : 'single page'], [/workflow/gi, 'process'], [/\bintegration\b/gi, 'connection'], [/catalogue import/gi, 'Product list upload'], [/copywriting/gi, m => m[0] === 'C' ? 'Writing the words' : 'writing the words'], [/local search and AI visibility/gi, m => m[0] === 'L' ? 'Being found on Google and AI tools' : 'being found on Google and AI tools'], [/\bCMS\b/g, 'editing area'], [/\btiers?\b/gi, 'option']];
+const plainTxt = t => PLAIN.reduce((s, r) => String(s).replace(r[0], r[1]), t == null ? '' : t);
 const SUG = 'Suggested by advisers 10 Nov 2026, not verified market averages, my choice: ';
 const pbl = (id, name, desc, unit, tag, freq, cat, when, price, hint) => ({ id, name, desc, unit, price: price || '', tag, freq, cat, when, hint: hint ? SUG + hint : '', allow: id === 'care' ? '' : undefined });
 function defaultPB() {
   return [
     pbl('site1', 'Quote-ready site', 'Description to confirm', 'fixed', 'base', 'once', 'web', '', '2200'),
-    pbl('site2', 'Site plus quote workflow', 'Description to confirm', 'fixed', 'base', 'once', 'web', '', '3800'),
+    pbl('site2', 'Site plus quote process', 'Description to confirm', 'fixed', 'base', 'once', 'web', '', '3800'),
     pbl('tolra', 'Tolra half price site deal', 'Basis to confirm', 'fixed', 'base', 'once', 'web', '', ''),
     pbl('design', 'Design', 'Visual design of the pages, to the agreed direction', 'fixed', 'base', 'once', 'web', ''),
     pbl('build', 'Build', 'Building the site from the agreed design', 'fixed', 'base', 'once', 'web', ''),
     pbl('pages', 'Pages', 'Each page built and filled with the content supplied', 'page', 'base', 'once', 'web', ''),
     pbl('forms', 'Forms', 'Forms set up and tested, like contact or enquiry', 'fixed', 'base', 'once', 'web', ''),
-    pbl('hostset', 'Hosting set up', 'Setting up the hosting account in the client\'s name', 'fixed', 'base', 'once', '', ''),
-    pbl('domainset', 'Domain set up', 'Registering or pointing the domain, in the client\'s name', 'fixed', 'base', 'once', '', ''),
+    pbl('hostset', 'Hosting set up', 'Setting up the place your site lives, in your name', 'fixed', 'base', 'once', '', ''),
+    pbl('domainset', 'Web address set up', 'Registering or pointing your web address, in your name', 'fixed', 'base', 'once', '', ''),
     pbl('training', 'Training', 'Showing the client how to edit the site', 'hour', 'base', 'once', '', 'train'),
     pbl('xpages', 'Extra standard page', 'A page beyond the agreed number', 'page', 'addon', 'once', 'web', '', '', '£100 to £250'),
-    pbl('landing', 'Complex landing page', 'A designed landing page with more than standard content', 'fixed', 'addon', 'once', 'web', '', '', '£250 to £500'),
-    pbl('qform', 'Advanced enquiry or quote form', 'A form with steps, choices or a quote workflow', 'fixed', 'addon', 'once', 'web', '', '', '£300 to £800'),
-    pbl('booking', 'Booking integration', 'Online booking set up and tested', 'fixed', 'addon', 'once', 'tools', 'book', '', '£250 to £750'),
-    pbl('shop', 'Basic e-commerce set up', 'Products, basket, checkout and the payment connection', 'fixed', 'addon', 'once', 'ecom', 'shop', '', '£800 to £2,000 extra'),
-    pbl('catalogue', 'Catalogue import', 'Loading a product list into the shop', 'fixed', 'addon', 'once', 'ecom', '', '', '£150 to £600'),
-    pbl('copy', 'Copywriting', 'Writing the words for the pages', 'page', 'addon', 'once', '', 'copy', '', '£75 to £200 per page'),
+    pbl('landing', 'Complex single page', 'A single page made to get people to act, with more than the usual content', 'fixed', 'addon', 'once', 'web', '', '', '£250 to £500'),
+    pbl('qform', 'Advanced enquiry or quote form', 'A form with steps and choices, or one that works out a quote', 'fixed', 'addon', 'once', 'web', '', '', '£300 to £800'),
+    pbl('booking', 'Online booking', 'Customers book a time on the site. Set up and tested', 'fixed', 'addon', 'once', 'tools', 'book', '', '£250 to £750'),
+    pbl('shop', 'Online shop, we build it', 'A new online shop with products, a basket, checkout and taking payment', 'fixed', 'addon', 'once', 'ecom', 'shop', '', '£800 to £2,000 extra'),
+    pbl('catalogue', 'Product list upload', 'Loading your product list into the shop', 'fixed', 'addon', 'once', 'ecom', '', '', '£150 to £600'),
+    pbl('copy', 'Writing the words', 'I write the words for your pages', 'page', 'addon', 'once', '', 'copy', '', '£75 to £200 per page'),
     pbl('photo', 'Photography', 'A photo shoot for the site', 'hour', 'addon', 'once', '', 'photo'),
-    pbl('seo', 'Local search and AI visibility set up', 'The 90 day set up plan, as described in the proposal', 'fixed', 'addon', 'once', '', 'seo', '', '£350 to £900, extensive £900 to £1,500'),
+    pbl('seo', 'Being found on Google and AI tools', 'A 90 day plan to set you up so people can find you. I cannot promise rankings', 'fixed', 'addon', 'once', '', 'seo', '', '£350 to £900, extensive £900 to £1,500'),
     pbl('care', 'Care plan', 'Hosting, fixes and small edits', 'fixed', 'addon', 'month', '', '', '60'),
     pbl('carePlus', 'Enhanced website care', 'A fuller monthly care plan', 'fixed', 'addon', 'month', '', '', '', '£90 to £150 a month'),
-    pbl('seocare', 'Local search and AI visibility, monthly care', 'The monthly routine after day 90', 'fixed', 'addon', 'month', '', '', '', '£100 to £250 a month'),
+    pbl('seocare', 'Being found online, monthly care', 'A monthly routine to keep it going after the first 90 days', 'fixed', 'addon', 'month', '', '', '', '£100 to £250 a month'),
     pbl('hourly', 'Changes outside a plan', 'Small changes, charged by the hour', 'hour', 'addon', 'once', '', '', '', '£50 to £100 per hour')
   ];
 }
@@ -2050,7 +2053,7 @@ function qCalc() {
 const scopeNot = () => scopeItems().filter(i => S.scope.st[i.id] === 'not').map(i => i.label || 'New item');
 function qSnap() {
   const q = S.quote2, c = qCalc(), cats = fund() ? costCats() : {};
-  const lines = q.lines.map(l => { const t = lineTot(l), once = l.freq === 'once' && l.tag !== 'not'; const ct = cats[l.cat]; return { id: l.id, name: l.name || 'Item', desc: l.desc || '', unit: l.unit, qty: l.qty === '' ? '1' : l.qty, price: l.price, tag: l.tag, freq: l.freq, total: t, c: once ? t : 0, mo: (l.freq === 'month' && l.tag !== 'not') ? t : 0, yr: (l.freq === 'year' && l.tag !== 'not') ? t : 0, el: fund() ? (!ct || ct.eligible === null ? 'ask' : (ct.eligible ? 'yes' : 'no')) : '' }; });
+  const lines = q.lines.map(l => { const t = lineTot(l), once = l.freq === 'once' && l.tag !== 'not'; const ct = cats[l.cat]; return { id: l.id, free: l.sync === 'shoplink', name: plainTxt(l.name || 'Item'), desc: plainTxt(l.desc || ''), unit: l.unit, qty: l.qty === '' ? '1' : l.qty, price: l.price, tag: l.tag, freq: l.freq, total: t, c: once ? t : 0, mo: (l.freq === 'month' && l.tag !== 'not') ? t : 0, yr: (l.freq === 'year' && l.tag !== 'not') ? t : 0, el: fund() ? (!ct || ct.eligible === null ? 'ask' : (ct.eligible ? 'yes' : 'no')) : '' }; });
   const excl = scopeNot().concat(q.lines.filter(l => l.tag === 'not').map(l => l.name || 'Item')).concat((q.excl || '').split('\n').map(s => s.trim()).filter(Boolean));
   return { no: q.no, date: q.date, valid: q.valid, business: seoName(), vatStatus: (q.vatStatus || '').trim() || 'Not VAT registered', vatOn: c.vatOn, vatRate: c.vatRate, vatMissing: c.vatMissing, lines, base: c.base, add: c.add, sub: c.sub, vat: c.vat, total: c.total, dep: c.dep, stages: c.stages, balPct: c.balPct, balAmt: c.balAmt, month: c.month, year: c.year, own: c.own, assumptions: (q.assume || '').split('\n').map(s => s.trim()).filter(Boolean), exclusions: excl, rounds: q.rounds || '', revNote: q.revNote || '', elig: c.elig, blanks: c.blanks };
 }
@@ -2068,7 +2071,7 @@ function quoteDiff(b, c) {
 const unitLabel = u => ({ fixed: 'fixed', page: 'per page', hour: 'per hour' }[u] || u);
 const freqWord = f => ({ month: 'per month', year: 'per year', once: 'one off' }[f] || f);
 function quoteHtml(q, o) {
-  o = o || {}; const row = l => `<tr><td><b>${esc(l.name)}</b>${l.desc ? '<br><span class="hint">' + esc(l.desc) + '</span>' : ''}</td><td>${esc(l.qty)} ${esc(unitLabel(l.unit))}</td><td class="r">${l.price === '' || l.price == null ? 'price to confirm' : money(num(l.price))}</td><td class="r">${l.price === '' || l.price == null ? '' : money(l.total)}</td></tr>`;
+  o = o || {}; const row = l => `<tr><td><b>${esc(l.name)}</b>${l.desc ? '<br><span class="hint">' + esc(l.desc) + '</span>' : ''}</td><td>${esc(l.qty)} ${esc(unitLabel(l.unit))}</td><td class="r">${l.free ? 'No extra cost' : l.price === '' || l.price == null ? 'price to confirm' : money(num(l.price))}</td><td class="r">${l.free ? '' : l.price === '' || l.price == null ? '' : money(l.total)}</td></tr>`;
   const once = t => q.lines.filter(l => l.freq === 'once' && l.tag === t);
   const tbl = (title, arr) => arr.length ? `<h3>${title}</h3><table><thead><tr><th>Item</th><th>Quantity</th><th class="r">Price</th><th class="r">Line total</th></tr></thead><tbody>${arr.map(row).join('')}</tbody></table>` : '';
   const pay = (q.dep.pct || q.stages.length) ? `<h3>Payments</h3><table><tbody>${q.dep.pct ? `<tr><td>Deposit, ${q.dep.pct}%</td><td class="r">${money(q.dep.amt)}</td></tr>` : ''}${q.stages.map(s => `<tr><td>${esc(s.n || 'Stage payment')}, ${s.p}%</td><td class="r">${money(s.amt)}</td></tr>`).join('')}<tr><td>Balance on completion, ${q.balPct}%</td><td class="r">${money(q.balAmt)}</td></tr></tbody></table>` : '';
@@ -2091,7 +2094,7 @@ function diffHtml(d) {
 }
 function quoteText(q, diff) {
   const l = ['QUOTE ' + (q.no || '(number to add)') + ', ' + (q.date ? fmtDate(q.date) : 'date to add') + ', valid until ' + (q.valid ? fmtDate(q.valid) : 'to confirm'), 'For ' + q.business, ''];
-  [['Included in the base price', 'base'], ['Add-ons', 'addon']].forEach(([t, k]) => { const a = q.lines.filter(x => x.freq === 'once' && x.tag === k); if (a.length) { l.push(t); a.forEach(x => l.push('- ' + x.name + ', ' + x.qty + ' ' + unitLabel(x.unit) + ', ' + (x.price === '' ? 'price to confirm' : money(x.total)))); l.push(''); } });
+  [['Included in the base price', 'base'], ['Add-ons', 'addon']].forEach(([t, k]) => { const a = q.lines.filter(x => x.freq === 'once' && x.tag === k); if (a.length) { l.push(t); a.forEach(x => l.push('- ' + x.name + ', ' + x.qty + ' ' + unitLabel(x.unit) + ', ' + (x.free ? 'no extra cost' : x.price === '' ? 'price to confirm' : money(x.total)))); l.push(''); } });
   l.push('Base total: ' + money(q.base), 'Add-ons total: ' + money(q.add), 'Total before VAT: ' + money(q.sub), q.vatOn ? 'VAT: ' + (q.vatRate > 0 ? q.vatRate + '%, ' + money(q.vat) : 'rate to confirm') : 'Not VAT registered, no VAT added', 'VAT registration status: ' + q.vatStatus, 'Total to pay: ' + money(q.total));
   if (q.dep.pct || q.stages.length) { l.push('', 'Payments'); if (q.dep.pct) l.push('- Deposit ' + q.dep.pct + '%: ' + money(q.dep.amt)); q.stages.forEach(s => l.push('- ' + (s.n || 'Stage') + ' ' + s.p + '%: ' + money(s.amt))); l.push('- Balance on completion ' + q.balPct + '%: ' + money(q.balAmt)); }
   const onl = q.lines.filter(x => x.freq !== 'once' && x.tag !== 'not'); if (onl.length || q.own.length) { l.push('', 'Ongoing costs, kept apart from the price above'); onl.forEach(x => l.push('- ' + x.name + ', ' + freqWord(x.freq) + ': ' + (x.price === '' ? 'price to confirm' : money(x.total)))); q.own.forEach(x => l.push('- ' + x.label + ', ' + freqWord(x.freq) + ': ' + money(x.price))); l.push('Every month: ' + money(q.month), 'Every year: ' + money(q.year)); }
@@ -2121,13 +2124,13 @@ function vPriceBook() {
 }
 LIVE.qlist = () => {
   const c = qCalc(), cats = fund() ? costCats() : {}; if (!S.quote2.lines.length) return '<p class="hint">No lines yet, pick from the price book above</p>';
-  return `<table class="t"><thead><tr><th>Line</th><th>Type</th><th>Total</th>${fund() ? '<th>Grant</th>' : ''}</tr></thead><tbody>${S.quote2.lines.map(l => { const ct = cats[l.cat]; const el = fund() ? (!ct || ct.eligible === null ? '<span class="tag ask">Ask the funder</span>' : (ct.eligible ? '<span class="tag">Eligible</span>' : '<span class="tag bad">Not eligible</span>')) : ''; return `<tr><td>${esc(l.name || 'Item')}${l.freq !== 'once' ? ', ' + esc(freqWord(l.freq)) : ''}${l.from === 'client' && !l.ok ? ' <span class="tag ask">From client, draft</span>' : ''}</td><td>${esc((TAGS.find(t => t[0] === l.tag) || [0, ''])[1])}</td><td>${(l.price === '' || l.price == null) ? '<span class="tag ask">Price to enter</span>' : money(lineTot(l))}</td>${fund() ? '<td>' + el + '</td>' : ''}</tr>`; }).join('')}</tbody></table>${S.quote2.lines.some(l => l.from === 'client' && !l.ok) ? '<p class="row"><button class="btn pri" data-act="qapprove">I have checked the client lines, approve them</button></p><p class="hint">Until you approve them the client quote is marked Draft</p>' : ''}`;
+  return `<table class="t"><thead><tr><th>Line</th><th>Type</th><th>Total</th>${fund() ? '<th>Grant</th>' : ''}</tr></thead><tbody>${S.quote2.lines.map(l => { const ct = cats[l.cat]; const el = fund() ? (!ct || ct.eligible === null ? '<span class="tag ask">Ask the funder</span>' : (ct.eligible ? '<span class="tag">Eligible</span>' : '<span class="tag bad">Not eligible</span>')) : ''; return `<tr><td>${esc(plainTxt(l.name || 'Item'))}${l.freq !== 'once' ? ', ' + esc(freqWord(l.freq)) : ''}${l.from === 'client' && !l.ok ? ' <span class="tag ask">From client, draft</span>' : ''}</td><td>${esc((TAGS.find(t => t[0] === l.tag) || [0, ''])[1])}</td><td>${(l.price === '' || l.price == null) ? '<span class="tag ask">Price to enter</span>' : money(lineTot(l))}</td>${fund() ? '<td>' + el + '</td>' : ''}</tr>`; }).join('')}</tbody></table>${S.quote2.lines.some(l => l.from === 'client' && !l.ok) ? '<p class="row"><button class="btn pri" data-act="qapprove">I have checked the client lines, approve them</button></p><p class="hint">Until you approve them the client quote is marked Draft</p>' : ''}`;
 };
 LIVE.qtot = () => {
   const c = qCalc(); const w = [];
   if (c.vatMissing) w.push('VAT is on but no rate is entered, check the current rate on GOV.UK, then type it in');
   if (c.over) w.push('The payment percentages add up to more than 100');
-  if (c.blanks) w.push(c.blanks + (c.blanks === 1 ? ' line has' : ' lines have') + ' no price yet. ' + (c.blanks === 1 ? 'It is' : 'They are') + ' shown as Price to enter and are not in the totals below: ' + S.quote2.lines.filter(l => l.tag !== 'not' && (l.price === '' || l.price == null)).map(l => l.name || 'Item').join(', '));
+  if (c.blanks) w.push(c.blanks + (c.blanks === 1 ? ' line has' : ' lines have') + ' no price yet. ' + (c.blanks === 1 ? 'It is' : 'They are') + ' shown as Price to enter and are not in the totals below: ' + S.quote2.lines.filter(l => l.tag !== 'not' && (l.price === '' || l.price == null)).map(l => plainTxt(l.name || 'Item')).join(', '));
   return `<div class="tot"><div><span>Base total, priced lines</span><span>${money(c.base)}</span></div><div><span>Add-ons total, priced lines</span><span>${money(c.add)}</span></div><div><span>One off total before VAT, priced lines</span><span>${money(c.sub)}</span></div><div><span>VAT ${c.vatOn ? (c.vatRate > 0 ? 'at ' + c.vatRate + '%' : '(rate to enter)') : 'switched off'}</span><span>${money(c.vat)}</span></div><div><span><b>Total to pay</b></span><span class="big">${money(c.total)}</span></div><div><span>Every month, kept apart</span><span>${money(c.month)}</span></div>${c.blanks ? `<div><span>Lines still to price</span><span class="tag ask">${c.blanks} Price to enter</span></div>` : ''}${c.dep.pct ? `<div><span>Deposit ${c.dep.pct}%</span><span>${money(c.dep.amt)}</span></div>` : ''}${c.stages.map(s => `<div><span>${esc(s.n || 'Stage')} ${s.p}%</span><span>${money(s.amt)}</span></div>`).join('')}${(c.dep.pct || c.stages.length) ? `<div><span>Balance on completion ${c.balPct}%</span><span>${money(c.balAmt)}</span></div>` : ''}</div>${w.map(x => '<div class="hint"><span class="tag ask">Check</span> ' + esc(x) + '</div>').join('')}`;
 };
 LIVE.qelig = () => { const c = qCalc(); if (!c.elig) return ''; return `<div class="tot"><div><span>Eligible lines, ex VAT</span><span class="big">${money(c.elig.elig)}</span></div><div><span>Not eligible</span><span>${money(c.elig.not)}</span></div><div><span>Ask the funder</span><span>${money(c.elig.unsure)}</span></div></div><p class="hint">From the active pack${c.elig.max ? ', which shows a maximum of ' + fmt(c.elig.max) : ''}${c.elig.pct ? ' and ' + c.elig.pct + '%' : ''}. the funding screen works out the grant, and the funder decides what is eligible</p>`; };
@@ -2653,22 +2656,24 @@ function consistency() {
   const has = rx => L.some(l => rx.test(l.name));
   [['f-shop', /shop|e-?commerce/i, 'an online shop'], ['f-book', /book/i, 'booking'], ['f-form', /form/i, 'forms'], ['c-copy', /copy/i, 'copywriting'], ['c-photo', /photo/i, 'photography'], ['s-seo', /search|seo/i, 'local search and AI visibility'], ['s-train', /train/i, 'training']].forEach(([id, rx, lab]) => {
     const quoted = has(rx), inScope = st(id) === 'inc' || st(id) === 'extra';
-    if (quoted && !inScope) w.push('The quote prices ' + lab + ', but the scope does not include it. The requirements, contract and build prompt will not mention it');
-    if (!quoted && st(id) === 'inc' && ['f-shop', 'f-book', 's-seo'].includes(id)) w.push('The scope includes ' + lab + ', but no quote line prices it, check it is not meant to be an add-on');
+    if (quoted && !inScope) w.push('The quote charges for ' + lab + ', but the What is in list does not include it. The contract and build instructions will not mention it');
+    if (!quoted && st(id) === 'inc' && ['f-shop', 'f-book', 's-seo'].includes(id)) w.push(lab + ' is listed as included, but no quote line charges for it. Check if it should be an extra');
   });
-  if (types().includes('shop') && st('f-shop') !== 'inc') w.push('The client wants a shop, but the scope does not include the online shop');
-  const pl = L.find(l => /^pages$/i.test(l.name)); if (pl && Number(pl.qty) !== pageCount()) w.push('The quote counts ' + pl.qty + ' pages, the scope lists ' + pageCount());
-  if (!S.quote2.termsOk) w.push('The deposit and licensing wording is not yet checked by a professional, the quote and contract show that marker'); if (S.quote2.depPct && Number(S.quote2.depPct) !== 50) w.push('The deposit wording says 50% but the deposit box says ' + S.quote2.depPct + '%'); if (q.vatOn && !(q.vatRate > 0)) w.push('VAT is switched on with no rate, the quote and contract show a blank'); if (S.docs.rev > 1 && !logFor(S.docs.rev).some(l => (l.what || '').trim())) w.push('Rev ' + S.docs.rev + ' has no logged changes, record what changed and why on the Revisions screen'); if (q.vatOn && /not/i.test(q.vatStatus)) w.push('VAT is switched on but the status still says not registered, update the status');
-  { const nop = S.assets.filter(x => x.useDoc && !x.perm).length; if (nop) w.push(nop + ' image' + (nop === 1 ? ' is' : 's are') + ' ticked for client documents without permission, so they will be left out'); contrastWarns().forEach(x => w.push('Brand colours: ' + x)); const bh = S.brand.colours.filter(c => c.hex && !hexOk(normHex(c.hex))).length; if (bh) w.push(bh + ' brand colour' + (bh === 1 ? '' : 's') + ' not a valid hex code like #0b2a5b'); const nl = S.assets.filter(x => usable(x) && x.type !== 'logo' && !(x.licence || '').trim()).length; if (nl) w.push(nl + ' image' + (nl === 1 ? '' : 's') + ' going into client documents with no licence note'); }
-  if ((S.quote2.lines || []).some(l => l.from === 'client' && !l.ok)) w.push('The quote has lines that came from the client ticks and are not approved yet, the client quote is marked Draft until you approve them');
+  if (types().includes('shop') && st('f-shop') !== 'inc' && !shopRuleOn()) w.push('They want an online shop but the What is in list does not include one. On the Client screen, say whether they already have one');
+  if (shopWanted() && !shopHas()) w.push('Do they already have an online shop, like Shopify? Say yes or no on the Client screen. It changes what the quote says');
+  const pl = L.find(l => /^pages$/i.test(l.name)); if (pl && Number(pl.qty) !== pageCount()) w.push('The quote says ' + pl.qty + ' pages but the What is in list has ' + pageCount());
+  if (!S.quote2.termsOk) w.push('The deposit and licence wording has not been checked by a professional yet. The quote and contract say so'); if (S.quote2.depPct && Number(S.quote2.depPct) !== 50) w.push('The deposit wording says 50% but the deposit box says ' + S.quote2.depPct + '%'); if (q.vatOn && !(q.vatRate > 0)) w.push('VAT is switched on with no rate, the quote and contract show a blank'); if (S.docs.rev > 1 && !logFor(S.docs.rev).some(l => (l.what || '').trim())) w.push('Version ' + S.docs.rev + ' has no change notes. Say what changed and why on the Versions screen'); if (q.vatOn && /not/i.test(q.vatStatus)) w.push('VAT is switched on but the status still says not registered, update the status');
+  { const nop = S.assets.filter(x => x.useDoc && !x.perm).length; if (nop) w.push(nop + ' image' + (nop === 1 ? ' is' : 's are') + ' marked for client documents but you have not said you have permission, so they will be left out'); contrastWarns().forEach(x => w.push('Brand colours: ' + x)); const bh = S.brand.colours.filter(c => c.hex && !hexOk(normHex(c.hex))).length; if (bh) w.push(bh + ' brand colour' + (bh === 1 ? '' : 's') + ' not a colour code like #0b2a5b'); const nl = S.assets.filter(x => usable(x) && x.type !== 'logo' && !(x.licence || '').trim()).length; if (nl) w.push(nl + ' image' + (nl === 1 ? '' : 's') + ' going into client documents and nobody has said we may use them. See Look and feel'); }
+  if ((S.quote2.lines || []).some(l => l.from === 'client' && !l.ok)) w.push('Some lines come from what the client ticked and you have not approved them. The quote says Draft until you do');
   if (q.valid && q.date && q.valid < q.date) w.push('The quote is valid until a date before the quote date');
   if (S.prop.start && S.prop.finish && S.prop.finish < S.prop.start) w.push('The project finishes before it starts'); if (Fv('launchDate') && S.prop.finish && Fv('launchDate') > S.prop.finish) w.push('The launch date is after the project finish date');
-  const op = [1, 2, 3].map(n => num(S.prop.opt[n].price)).filter(x => x > 0); if (op.length && !op.some(x => Math.abs(x - q.sub) < 1 || Math.abs(x - q.total) < 1)) w.push('The proposal option prices do not match the quote total of ' + money(q.total));
+  const op = [1, 2, 3].map(n => num(S.prop.opt[n].price)).filter(x => x > 0); if (op.length && !op.some(x => Math.abs(x - q.sub) < 1 || Math.abs(x - q.total) < 1)) w.push('The prices on the Plan for the site screen do not match the quote total of ' + money(q.total));
   if (q.dep.pct + q.stages.reduce((t, x) => t + x.p, 0) > 100) w.push('Payment percentages add up to more than 100');
-  if (q.blanks) w.push(q.blanks + ' quote lines have no price yet, they count as £0');
-  const bp = S.drafts['build:main']; if (bp && bp.edited) { const head = bp.text.split('NOT INCLUDED')[0].toLowerCase(); scopeNot().forEach(x => { if (x.length > 3 && head.includes(x.toLowerCase())) w.push('The build prompt was edited by hand and mentions "' + x + '", which the scope excludes'); }); w.push('The build prompt was edited by hand, press Rebuild to make sure it matches the quote'); }
-  if (fund() && q.elig) { if (q.elig.elig > (q.elig.max || Infinity)) w.push('Eligible lines are above the grant cap, the client pays the rest, say so clearly'); q.lines.forEach(l => { if (l.freq !== 'once' && l.el === 'yes') w.push('The ongoing line "' + l.name + '" is tagged eligible, ongoing costs are not'); }); }
-  const nb = JSON.stringify(contractModel().secs).split('[to fill').length - 1; if (nb) w.push('The contract still has ' + nb + ' blanks to fill');
+  { const nd = q.lines.filter(l => l.tag !== 'not' && (!(l.desc || '').trim() || /^(description|basis) to confirm$/i.test(l.desc.trim()))).map(l => l.name); if (nd.length) w.push('These quote lines do not say in plain words what the client gets: ' + nd.join(', ') + '. Add a short plain description in My prices'); }
+  if (q.blanks) w.push(q.blanks + ' quote lines have no price yet, so they add £0 for now');
+  const bp = S.drafts['build:main']; if (bp && bp.edited) { const head = bp.text.split('NOT INCLUDED')[0].toLowerCase(); scopeNot().forEach(x => { if (x.length > 3 && head.includes(x.toLowerCase())) w.push('The build instructions were edited by hand and mention "' + x + '", which is not included. Press Rebuild'); }); w.push('The build instructions were edited by hand. Press Rebuild to make sure they match the quote'); }
+  if (fund() && q.elig) { if (q.elig.elig > (q.elig.max || Infinity)) w.push('The lines the grant may pay for come to more than the grant can cover. The client pays the rest, say so clearly'); q.lines.forEach(l => { if (l.freq !== 'once' && l.el === 'yes') w.push('The monthly line "' + plainTxt(l.name) + '" is marked as something the grant pays for, but grants do not pay ongoing costs'); }); }
+  const nb = JSON.stringify(contractModel().secs).split('[to fill').length - 1; if (nb) w.push('The contract still has ' + nb + ' blank spaces to fill in');
   return w;
 }
 LIVE.consist = () => { const w = consistency(); return w.length ? `<div class="note stop"><b>Consistency check:</b>${w.length} things to look at before you send<ul>${w.map(x => '<li>' + esc(x) + '</li>').join('')}</ul></div>` : '<div class="hint">Consistency check: no contradictions found between the quote, scope and documents</div>'; };
@@ -3513,10 +3518,24 @@ const reqKey = p => { const g = grpOf(p); return g ? g.id : p.id; };
 function qWant(p) {
   if (p.tag === 'not' || (S.quote2.dismiss || []).includes(p.id)) return false;
   const g = grpOf(p); if (g) return grpWanted(g) && grpChosen(g) === p;
+  if (p.when === 'shop' && shopRuleOn()) return false;
   return !!((p.when && ruleMatch(p.when)) || reqNeed(p.id));
+}
+const shopHas = () => (S.client.shop && S.client.shop.has) || '';
+const shopRuleOn = () => shopHas() === 'yes' || shopHas() === 'no';
+const shopWanted = () => ruleMatch('shop') || reqNeed('shop');
+const shopName = () => ((S.client.shop && S.client.shop.name) || '').trim() || 'online';
+function qShopLines() {
+  const q = S.quote2, want = shopWanted() ? shopHas() : '', nm = shopName();
+  const mk = (sync, name, desc, tag, price) => ({ id: 'ql-' + uid(), plId: '', sync, auto: true, name, desc, unit: 'fixed', qty: '1', price, tag, freq: 'once', cat: '', note: '' });
+  const have = k => q.lines.find(l => l.sync === k);
+  [['yes', 'shoplink', 'Online shop: we link your existing ' + (nm === 'online' ? 'shop' : nm + ' shop') + ', no extra cost', 'We connect the new website to the shop you already run. There is nothing to pay for this', 'base', '0'], ['no', 'shoplater', 'Online shop: not part of this quote. We price and build it later, when you are ready', 'You do not have an online shop yet. We agree a price when you want one', 'not', '']].forEach(([st, k, name, desc, tag, price]) => {
+    const l = have(k); if (want === st) { if (!l) q.lines.push(mk(k, name, desc, tag, price)); else if (l.auto) { l.name = name; l.desc = desc; } } else if (l) q.lines.splice(q.lines.indexOf(l), 1);
+  });
 }
 function qLive() {
   const q = S.quote2; if (!q || !q.auto || !Array.isArray(q.lines) || !Array.isArray(S.pb)) return;
+  qShopLines();
   S.pb.forEach(p => {
     const i = q.lines.findIndex(l => l.plId === p.id), have = i >= 0 ? q.lines[i] : null;
     if (qWant(p)) {
@@ -3593,7 +3612,7 @@ function proposalBody(d) {
   const list = a => '<ul>' + a.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul>';
   h.push('<section><h2>What you asked for</h2>' + (d.asked.length ? list(d.asked) : '<p>To add from our chat.</p>') + '</section>');
   h.push('<section><h2>What is included</h2>' + (d.inc.length ? '<p>The work covers:</p>' + list(d.inc) : '') + (d.once.length ? '<p>In the price below:</p>' + list(d.once.map(l => l.name + (l.desc ? ': ' + l.desc : ''))) : '<p>To add.</p>') + (d.notInc.length ? '<h3>Not included</h3>' + list(d.notInc) : '') + '</section>');
-  const row = l => '<tr><td><b>' + esc(l.name) + '</b>' + (l.desc ? '<br><span class="sm">' + esc(l.desc) + '</span>' : '') + (prTierNote(l) ? '<br><span class="sm">' + esc(prTierNote(l)) + '</span>' : '') + '</td><td class="r">' + (prLine(l) ? 'Price to confirm' : esc(money(l.total))) + (l.unit !== 'fixed' && !prLine(l) ? '<br><span class="sm">' + esc(l.qty + ' ' + unitLabel(l.unit) + ' at ' + money(num(l.price))) + '</span>' : '') + '</td></tr>';
+  const row = l => '<tr><td><b>' + esc(l.name) + '</b>' + (l.desc ? '<br><span class="sm">' + esc(l.desc) + '</span>' : '') + (prTierNote(l) ? '<br><span class="sm">' + esc(prTierNote(l)) + '</span>' : '') + '</td><td class="r">' + (l.free ? 'No extra cost' : prLine(l) ? 'Price to confirm' : esc(money(l.total))) + (l.unit !== 'fixed' && !prLine(l) ? '<br><span class="sm">' + esc(l.qty + ' ' + unitLabel(l.unit) + ' at ' + money(num(l.price))) + '</span>' : '') + '</td></tr>';
   h.push('<section><h2>The price, line by line</h2>' + (d.once.length ? '<table><tbody>' + d.once.map(row).join('') + '<tr class="tot"><td>Total</td><td class="r">' + esc(money(q.sub)) + '</td></tr></tbody></table>' : '<p>To add.</p>') + '<p>' + esc(q.vatOn ? 'VAT is added where shown.' : 'No VAT is charged. I am not VAT registered.') + (d.blanks ? ' ' + d.blanks + (d.blanks === 1 ? ' line is' : ' lines are') + ' still to be priced, so the total will go up when they are.' : '') + '</p></section>');
   const own = q.own || [];
   h.push('<section><h2>Monthly and yearly costs, kept apart</h2>' + ((d.rec.length || own.length) ? '<table><tbody>' + d.rec.map(l => '<tr><td><b>' + esc(l.name) + '</b>' + (l.desc ? '<br><span class="sm">' + esc(l.desc) + '</span>' : '') + (prTierNote(l) ? '<br><span class="sm">' + esc(prTierNote(l)) + '</span>' : '') + '</td><td class="r">' + (prLine(l) ? 'Price to confirm' : esc(money(l.total)) + ' ' + esc(freqWord(l.freq))) + '</td></tr>').join('') + own.map(o => '<tr><td>' + esc(o.label) + '<br><span class="sm">Paid to the provider, not to me</span></td><td class="r">' + esc(money(o.price)) + ' ' + esc(freqWord(o.freq)) + '</td></tr>').join('') + '</tbody></table><p>These are not in the price above.</p>' : '<p>None listed yet.</p>') + '</section>');
