@@ -54,7 +54,7 @@ Made on 2026-11-12 from the pages listed below. Nobody has checked this yet. Rea
 | Table value | 5 s |
 | Table value | 0.9 s |
 | Speed note | Their site’s scores come from Lighthouse, the tool behind PageSpeed, run on GitHub’s computer on 2026-11-12 with phone settings, median of 3 runs. The concept’s scores, with its animations on, come from the same tool run on a different computer on 2026-11-12, median of 3 runs, so the two columns are not a like for like test. Check the live address on PageSpeed Insights once it is published. |
-| Photo space | Placeholder: your workshop photo here |
+| Photo space | Your job photo here |
 | Services heading | What we do |
 | Service 1 title | Machining and mechanical fitting |
 | Service 1 text | Machining in a large, well equipped shop, with C.N.C turning and milling for batch runs. |
@@ -64,7 +64,7 @@ Made on 2026-11-12 from the pages listed below. Nobody has checked this yet. Rea
 | Service 2 sizes | Fabrication shop 120m x 40m |
 | Service 3 title | Insulation, cladding and ductwork |
 | Service 3 text | Sheet metal and insulation work, including foam glass, rockwool and foam insulations. |
-| Service 4 title | Hydraulic ram refurbishment and installations |
+| Service 4 title | Hydraulic ram refurbishment and hydraulic installations |
 | Service 4 text | Rebuild of hydraulic rams and installation of hydraulic systems on site. |
 | About heading | About |
 | About | Rosskeen Engineering Limited started in 2005 as the result of a management buyout. The management and workforce are well respected for their depth of knowledge and quality of service. |
@@ -81,8 +81,6 @@ Made on 2026-11-12 from the pages listed below. Nobody has checked this yet. Rea
 | Contact heading | Contact |
 | Contact label | Phone: |
 | Contact phone | 01349854100 |
-| Contact label | Email: |
-| Contact email | davie.wood@rosskeenengineering.co.uk |
 | Footer | Rosskeen Engineering. Concept by Rhys Hume, not a live site. The text and photos come from rosskeenengineering.co.uk. |
 | Sticky call bar (phones only) | Call 01349854100 |
 
@@ -90,7 +88,7 @@ Made on 2026-11-12 from the pages listed below. Nobody has checked this yet. Rea
 
 - Pages read: https://www.rosskeenengineering.co.uk/
 - Phone: 01349854100
-- Email: davie.wood@rosskeenengineering.co.uk
+- Email: none shown (1 named address left off on purpose)
 - Logo: none found, the name is shown as text
 - Photos (linked from their site, not copied): none found, a marked photo space is shown
 - Skipped 14 photo(s) hosted somewhere other than their own site.
