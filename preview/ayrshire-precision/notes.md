@@ -18,13 +18,12 @@ Made on 2026-11-12 from the pages listed below. Nobody has checked this yet. Rea
 | Header | 01292 570 450 |
 | Header button | Get a quote |
 | Headline | Precision machining for oil and gas, aerospace and nuclear, in Ayrshire |
-| Intro | Sub-contract manufacture of machined parts for oil and gas, aerospace, nuclear and general engineering. Based in Coylton, South Ayrshire. |
-| Area | Based in Coylton, South Ayrshire. We supply customers across the UK. |
+| Intro | Sub-contract manufacture of machined parts for oil and gas, aerospace, nuclear and general engineering. Based in Coylton, Ayrshire. |
+| Area | Based in Coylton, Ayrshire. We supply customers across the UK. |
 | Hero button | Get a quote |
 | Proof strip 1 | Established in 1969 |
-| Proof strip 2 | Coylton, South Ayrshire |
+| Proof strip 2 | Coylton, Ayrshire |
 | Proof strip 3 | CNC CMM inspection |
-| Proof strip 4 | 2-shift system, 24/7 possible |
 | Before and after heading | Before and after |
 | Before and after left caption | Their site today |
 | Before and after right caption | The concept |
@@ -64,7 +63,7 @@ Made on 2026-11-12 from the pages listed below. Nobody has checked this yet. Rea
 | Service 4 title | Programming |
 | Service 4 text | Offline and on-machine programming by trained, skilled machinists. |
 | About heading | About |
-| About | Ayrshire Precision was first established in 1969 and is based in Coylton, South Ayrshire. Its skilled team includes many who came through the four-year Apprenticeship Programme. |
+| About | Ayrshire Precision was first established in 1969 and is based in Coylton, Ayrshire. Its skilled team includes many who came through the four-year Apprenticeship Programme. |
 | Quote heading | Get a quote |
 | Quote intro | Tell us what you need. Attach your drawings or photos. |
 | Form label | Name |
@@ -79,7 +78,7 @@ Made on 2026-11-12 from the pages listed below. Nobody has checked this yet. Rea
 | Contact label | Phone: |
 | Contact phone | 01292 570 450 |
 | Contact label | Email: |
-| Contact email | //info@ayrshireprecision.co.uk |
+| Contact email | info@ayrshire-precision.co.uk |
 | Footer | Ayrshire Precision. Concept by Rhys Hume, not a live site. The text and photos come from ayrshire-precision.co.uk. |
 | Sticky call bar (phones only) | Call 01292 570 450 |
 
@@ -87,7 +86,7 @@ Made on 2026-11-12 from the pages listed below. Nobody has checked this yet. Rea
 
 - Pages read: https://www.ayrshire-precision.co.uk/, https://www.ayrshire-precision.co.uk/capabilities/, https://www.ayrshire-precision.co.uk/about-us/, https://www.ayrshire-precision.co.uk/contact/
 - Phone: 01292 570 450
-- Email: //info@ayrshireprecision.co.uk
+- Email: info@ayrshire-precision.co.uk
 - Logo: https://www.ayrshire-precision.co.uk/wp-content/uploads/2023/12/We-are-a-Living-Wage-Employer-logo.png (the colour is not stated in the file name, so check it shows on the pale page)
 - Photos (linked from their site, not copied): 
   - https://www.ayrshire-precision.co.uk/wp-content/uploads/2019/10/ayrshire-precision-heavy-duty-machining.jpg (alt text: Photo from the Ayrshire Precision website)
