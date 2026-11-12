@@ -3,7 +3,7 @@
 
 // Preview generator.
 //
-//   node tools/preview.js <prospect-url> <firm-slug> [competitor-url] [--name "Firm Name"] [--no-browser]
+//   node tools/preview.js <prospect-url> <firm-slug> [competitor-url] [--name "Firm Name"] [--niche engineering] [--no-browser]
 //
 // Fetches the prospect's home page plus up to 3 linked pages (services, about, contact),
 // asks the Claude API to write the new home page copy from that text only, checks the copy
@@ -417,6 +417,27 @@ const SYSTEM = [
   '- "comparison": only if a competitor text is given: one to three short sentences comparing what the two sites state (for example what each says it does, and what one states that the other does not). Compare only what is written on both sites. If there is nothing fair to compare, write "No fair comparison from the text alone." If no competitor text is given, return "".'
 ].join('\n');
 
+// Per-niche blocks, added to the end of SYSTEM when a niche is chosen. Every existing rule above still applies.
+const NICHES = {
+  engineering: [
+    '',
+    'Niche: engineering, fabrication and manufacturing firms. Use these moves. Each one is used only if the site text gives the facts for it. If it does not, leave that part out (empty string or empty list).',
+    '- Hero line: say what they make and who it is for, using only what the site says (for example the work and the sectors or customers\' trades it names). If the site does not say who it is for, say only what they make and where.',
+    '- Service cards: one short line each, from what the site says about that service. No filler lines.',
+    '- Closing ask: the page ends with a direct ask to send what they need built. You do not write it. The page adds it.',
+    '- The page itself adds the phone and email bar, the Get a quote buttons (header and after each section) and the closing ask block. Do not write copy for them.',
+    '- Never name or describe any customer, client, partner, brand or accreditation body of the firm. No third party names or logos on a cold preview. Describe the work, never who it was done for.'
+  ].join('\n')
+};
+
+function buildSystem(niche) {
+  if (!niche || niche === 'none') return SYSTEM;
+  if (!Object.prototype.hasOwnProperty.call(NICHES, niche)) {
+    throw new Error('Unknown niche "' + niche + '". Use one of: ' + Object.keys(NICHES).join(', ') + ' (or leave it out).');
+  }
+  return SYSTEM + NICHES[niche];
+}
+
 function buildUserMessage(facts, pageTexts, competitorText, competitorHost) {
   const parts = ['Firm name found on the site: ' + facts.name, ''];
   pageTexts.forEach(function (p) {
@@ -433,7 +454,7 @@ async function callClaude(messages, opts) {
   const res = await opts.fetchImpl('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: { 'content-type': 'application/json', 'x-api-key': opts.apiKey, 'anthropic-version': '2023-06-01' },
-    body: JSON.stringify({ model: opts.model, max_tokens: 2000, system: SYSTEM, messages: messages }),
+    body: JSON.stringify({ model: opts.model, max_tokens: 2000, system: opts.system || SYSTEM, messages: messages }),
     signal: AbortSignal.timeout(90000)
   });
   if (!res.ok) {
@@ -1000,7 +1021,7 @@ async function run(opts) {
   const pageTexts = pages.map(function (p) { return { url: p.url, text: htmlToText(p.html) }; });
 
   log('Writing copy with Claude');
-  const written = await writeCopy(facts, pageTexts, competitor, { fetchImpl: fetchImpl, apiKey: opts.apiKey, model: opts.model || DEFAULT_MODEL });
+  const written = await writeCopy(facts, pageTexts, competitor, { fetchImpl: fetchImpl, apiKey: opts.apiKey, model: opts.model || DEFAULT_MODEL, system: buildSystem(opts.niche) });
   const content = buildContent(facts, written.ai, slug);
 
   const outRoot = opts.outRoot || path.join(ROOT, 'preview');
@@ -1039,15 +1060,18 @@ async function main(argv) {
   let name;
   const i = args.indexOf('--name');
   if (i !== -1) { name = args[i + 1]; args.splice(i, 2); }
+  let niche;
+  const n = args.indexOf('--niche');
+  if (n !== -1) { niche = args[n + 1]; args.splice(n, 2); }
   const noBrowser = args.indexOf('--no-browser');
   if (noBrowser !== -1) args.splice(noBrowser, 1);
   if (args.length < 2 || args.length > 3) {
-    console.error('Usage: node tools/preview.js <prospect-url> <firm-slug> [competitor-url] [--name "Firm Name"]');
+    console.error('Usage: node tools/preview.js <prospect-url> <firm-slug> [competitor-url] [--name "Firm Name"] [--niche engineering]');
     process.exit(1);
   }
   try {
     const r = await run({
-      url: args[0], slug: args[1], competitor: args[2], name: name, measure: noBrowser === -1,
+      url: args[0], slug: args[1], competitor: args[2], name: name, niche: niche, measure: noBrowser === -1,
       apiKey: process.env.ANTHROPIC_API_KEY, model: process.env.ANTHROPIC_MODEL,
       log: function (m) { console.log(m); }
     });
@@ -1061,7 +1085,7 @@ async function main(argv) {
 }
 
 module.exports = {
-  BANNER, BANNED, esc, plain, htmlToText, pickLinks, extractFacts, checkCopy, normaliseAi,
+  NICHES, buildSystem, SYSTEM, BANNER, BANNED, esc, plain, htmlToText, pickLinks, extractFacts, checkCopy, normaliseAi,
   buildContent, copyLines, renderPage, renderNotes, buildPoints, assertPublicUrl, assertSlug, run,
   pickLogo, collectImages, cssUrls, bestSrcset, unwrapImageUrl, pickStylesheets, buildChangeNotes, buildTable, speedNote
 };

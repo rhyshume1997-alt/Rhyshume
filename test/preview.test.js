@@ -429,6 +429,44 @@ test('the Action installs the browser tools at pinned versions and gives the bui
   assert.match(read('.gitignore'), /^node_modules\/$/m);
 });
 
+// ---------------------------------------------------------------- niche blocks
+
+test('niche: no niche leaves the instructions exactly as they were', function () {
+  assert.strictEqual(gen.buildSystem(), gen.SYSTEM);
+  assert.strictEqual(gen.buildSystem('none'), gen.SYSTEM);
+});
+
+test('niche: engineering adds the moves, keeps every existing hard rule, bans third party names', function () {
+  const sys = gen.buildSystem('engineering');
+  assert.ok(sys.startsWith(gen.SYSTEM), 'existing rules must come first and be unchanged');
+  ['Hero line', 'Service cards', 'Closing ask', 'Get a quote buttons', 'phone and email bar'].forEach(function (k) {
+    assert.ok(sys.toLowerCase().includes(k.toLowerCase()), 'missing move: ' + k);
+  });
+  assert.match(sys, /only if the site text gives the facts/);
+  assert.match(sys, /Never name or describe any customer, client, partner, brand or accreditation body/);
+  assert.match(sys, /No third party names or logos on a cold preview/);
+  assert.ok(!/—/.test(sys));
+});
+
+test('niche: an unknown niche is refused', function () {
+  assert.throws(function () { gen.buildSystem('plumbing'); }, /Unknown niche/);
+  assert.throws(function () { gen.buildSystem('constructor'); }, /Unknown niche/);
+});
+
+test('niche: the chosen niche is what the API call sends', async function () {
+  const plain = await generate(GOOD);
+  assert.strictEqual(plain.net.calls.api[0].system, gen.SYSTEM);
+  const eng = await generate(GOOD, { niche: 'engineering' });
+  assert.strictEqual(eng.net.calls.api[0].system, gen.buildSystem('engineering'));
+});
+
+test('niche: the Action passes the niche through env only', function () {
+  const yml = read('.github/workflows/preview.yml');
+  assert.match(yml, /IN_NICHE: \$\{\{ inputs\.niche \}\}/);
+  assert.match(yml, /--niche "\$IN_NICHE"/);
+  assert.match(yml, /- engineering/);
+});
+
 test('the hard rule "left out, never filled" is in the AI instructions and in docs/PREVIEW-RULES.md', function () {
   const src = read('tools/preview.js');
   assert.match(src, /Hard rule for every part of the page: a part that needs a fact the site does not state is left out, never filled/);
