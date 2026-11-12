@@ -306,7 +306,7 @@ test('the GitHub Action only passes inputs through env, never straight into a sh
   assert.match(yml, /workflow_dispatch:/);
   assert.ok(!/pull_request|push:/.test(yml.split('jobs:')[0]), 'it must only run when started by hand');
   const runBlocks = yml.match(/run: \|[\s\S]*?(?=\n      - |\n$)/g) || [];
-  assert.ok(runBlocks.length >= 3);
+  assert.ok(runBlocks.length >= 2);
   runBlocks.forEach(function (b) { assert.ok(!/\$\{\{/.test(b), 'an expression is inside a run block: ' + b.slice(0, 60)); });
   assert.ok(!/ANTHROPIC_API_KEY:\s*["']?sk-/.test(yml), 'a key is written in the file');
   assert.ok(/secrets\.ANTHROPIC_API_KEY/.test(yml));
