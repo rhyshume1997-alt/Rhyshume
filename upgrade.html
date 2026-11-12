@@ -83,7 +83,13 @@
 <div class="form-state" id="live-progress" role="status" aria-live="polite"><p class="note-label">Building</p><p id="live-progress-text">Reading your site</p><p class="fine">This takes about a minute. Please keep this page open.</p></div>
 <div id="live-result" hidden>
   <p class="note-label" id="live-result-label">Your concept</p>
-  <iframe id="live-frame" title="Your concept" sandbox="allow-scripts" loading="eager" style="width:100%;height:80vh;min-height:520px;border:1px solid #c9c9c2;background:#fff"></iframe>
+  <div class="vw-toggle" role="group" aria-label="Preview size" style="display:flex;gap:8px;margin:0 0 12px">
+    <button type="button" class="btn" id="vw-desk" aria-pressed="true" style="padding:8px 16px">Desktop</button>
+    <button type="button" class="btn" id="vw-phone" aria-pressed="false" style="padding:8px 16px;opacity:.6">Phone</button>
+  </div>
+  <div id="vw-stage" style="background:#e8e8e2;border:1px solid #c9c9c2;padding:0;display:flex;justify-content:center">
+    <iframe id="live-frame" title="Your concept" sandbox="allow-scripts" loading="eager" style="width:100%;height:80vh;min-height:520px;border:0;background:#fff;transition:width .25s"></iframe>
+  </div>
   <h3>What I changed and why</h3>
   <ul id="live-points"></ul>
   <p>Want to talk it through? <a href="https://calendar.google.com/calendar/appointments/AcZssZ35nSQ_2lobUifPsul__TiweHpPV1aRWuWbssQ=" target="_blank" rel="noopener">Book a free 20-minute chat<span class="visually-hidden"> (opens in a new tab)</span></a> or email <a href="mailto:rhys@rhyshume.co.uk">rhys@rhyshume.co.uk</a>.</p>

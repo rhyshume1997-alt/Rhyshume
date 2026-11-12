@@ -15,6 +15,22 @@
   var frame = document.getElementById('live-frame');
   var points = document.getElementById('live-points');
   var label = button.textContent;
+  var deskBtn = document.getElementById('vw-desk');
+  var phoneBtn = document.getElementById('vw-phone');
+  var stage = document.getElementById('vw-stage');
+  function view(phone) {
+    if (!deskBtn || !phoneBtn) return;
+    frame.style.width = phone ? '390px' : '100%';
+    frame.style.maxWidth = '100%';
+    frame.style.height = phone ? '780px' : '80vh';
+    stage.style.padding = phone ? '24px 0' : '0';
+    deskBtn.setAttribute('aria-pressed', phone ? 'false' : 'true'); deskBtn.style.opacity = phone ? '.6' : '1';
+    phoneBtn.setAttribute('aria-pressed', phone ? 'true' : 'false'); phoneBtn.style.opacity = phone ? '1' : '.6';
+  }
+  if (deskBtn && phoneBtn) {
+    deskBtn.addEventListener('click', function () { view(false); });
+    phoneBtn.addEventListener('click', function () { view(true); });
+  }
   var steps = ['Reading your site', 'Finding your services and contact details', 'Writing the new copy from what is on your site', 'Checking every line against your site', 'Putting the page together'];
   var timer = null;
   var waiting = false;
@@ -59,6 +75,7 @@
     stopTimer();
     progress.style.display = 'none';
     document.getElementById('live-result-label').textContent = 'Your concept for ' + data.host;
+    view(false);
     frame.srcdoc = data.html;
     points.textContent = '';
     (data.points || []).forEach(function (p) { var li = document.createElement('li'); li.textContent = p; points.appendChild(li); });
