@@ -84,7 +84,7 @@ test('the honeypot looks like success and saves nothing', async function () {
 test('the page is noindex, out of the sitemap, uses Turnstile with its own action, and the marketing box starts unticked', function () {
   const html = fs.readFileSync(path.join(ROOT, 'upgrade.html'), 'utf8');
   assert.match(html, /<meta name="robots" content="noindex,nofollow">/);
-  assert.ok(html.includes('action="/api/upgrade"') && html.includes('data-action="upgrade"'));
+  assert.ok(html.includes('action="/api/upgrade-live"') && html.includes('data-action="upgrade"'));
   assert.ok(/name="marketing" value="yes">/.test(html) && !/name="marketing"[^>]*checked/.test(html));
   assert.ok(!/—/.test(html), 'em dash');
   assert.ok(!fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8').includes('/upgrade'));

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Upgrade my site | Rhys Hume</title>
-<meta name="description" content="Ask Rhys Hume for a free concept of an improved version of your website, built from what is already on your site.">
+<meta name="description" content="See a free concept of an improved version of your website, built from what is already on your site.">
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#f4f4f0">
 <link rel="canonical" href="https://www.rhyshume.co.uk/upgrade">
@@ -13,14 +13,14 @@
 <meta property="og:locale" content="en_GB">
 <meta property="og:url" content="https://www.rhyshume.co.uk/upgrade">
 <meta property="og:title" content="Upgrade my site | Rhys Hume">
-<meta property="og:description" content="Ask Rhys Hume for a free concept of an improved version of your website, built from what is already on your site.">
+<meta property="og:description" content="See a free concept of an improved version of your website, built from what is already on your site.">
 <meta property="og:image" content="https://www.rhyshume.co.uk/images/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Rhys Hume: systems for engineering and manufacturing firms, Glasgow">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Upgrade my site | Rhys Hume">
-<meta name="twitter:description" content="Ask Rhys Hume for a free concept of an improved version of your website, built from what is already on your site.">
+<meta name="twitter:description" content="See a free concept of an improved version of your website, built from what is already on your site.">
 <meta name="twitter:image" content="https://www.rhyshume.co.uk/images/og-image.png">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -56,38 +56,42 @@
   <div class="tb-body">
     <div class="tb-main">
       <h1>Upgrade my site</h1>
-      <p class="standfirst">Type your website address and your work email. I’ll build a concept of an improved version of your site, using only what’s already on it, and email you a private link with a before and after.</p>
+      <p class="standfirst">Type your website address and press the button. I’ll build a concept of an improved version of your site, right here, using only what’s already on it.</p>
     </div>
   </div>
 </header>
 
 <section class="clause" id="request" aria-labelledby="request-h">
-  <h2 id="request-h"><span class="no">1.0</span> <span>Ask for your concept</span></h2>
+  <h2 id="request-h"><span class="no">1.0</span> <span>See your site upgraded</span></h2>
   <div class="clause-body">
-<div class="form-state" id="sent"><p class="note-label">Received</p><p>Thank you. I check every request myself before I build it, then I’ll email you the link.</p></div>
-<div class="form-state is-error" id="already"><p class="note-label">Already asked</p><p>There’s already a request for this website or email, or today’s requests are full. Email <a href="mailto:rhys@rhyshume.co.uk">rhys@rhyshume.co.uk</a> if you need a hand.</p></div>
-<div class="form-state is-error" id="email-mismatch"><p class="note-label">Not sent</p><p>Please use a work email on the same domain as your website, for example you@yourfirm.co.uk for yourfirm.co.uk.</p></div>
-<div class="form-state is-error" id="not-sent"><p class="note-label">Not sent</p><p>Something went wrong, email <a href="mailto:rhys@rhyshume.co.uk">rhys@rhyshume.co.uk</a></p></div>
-<div class="form-state is-error" id="check-failed"><p class="note-label">Not sent</p><p>The security check didn’t go through. Try again, or call <a href="tel:+447908041480">07908 041480</a> or email <a href="mailto:rhys@rhyshume.co.uk">rhys@rhyshume.co.uk</a></p></div>
-<form class="form" action="/api/upgrade" method="POST">
-  <div class="field"><label for="website">Your website address</label><input id="website" name="website" type="url" inputmode="url" autocomplete="url" placeholder="https://yourfirm.co.uk" required></div>
-  <div class="field"><label for="email">Your work email</label><input id="email" name="email" type="email" autocomplete="email" placeholder="you@yourfirm.co.uk" required></div>
-  <div class="field"><label><input type="checkbox" name="marketing" value="yes"> You can also email me about website options after the concept. <span class="opt">(optional, you can say stop at any time)</span></label></div>
+<div class="form-state is-error" id="live-error" role="alert"><p class="note-label">Not built</p><p id="live-error-text">Something went wrong. Email <a href="mailto:rhys@rhyshume.co.uk">rhys@rhyshume.co.uk</a></p></div>
+<form class="form" id="live-form" action="/api/upgrade-live" method="POST">
+  <div class="field"><label for="website">Your website address</label><input id="website" name="website" type="text" inputmode="url" autocomplete="url" placeholder="yourfirm.co.uk" required></div>
+  <div class="field"><label for="email">Your work email <span class="opt">(optional, so I can follow up)</span></label><input id="email" name="email" type="email" autocomplete="email" placeholder="you@yourfirm.co.uk"></div>
+  <div class="field"><label><input type="checkbox" name="marketing" value="yes"> You can also email me about website options. <span class="opt">(optional, you can say stop at any time)</span></label></div>
   <div class="hp" aria-hidden="true"><label for="company_website">Leave this empty</label><input id="company_website" name="company_website" type="text" tabindex="-1" autocomplete="off"></div>
   <div class="check">
     <div class="cf-turnstile" data-sitekey="0x4AAAAAAF7ONWeir1MBB-v7" data-action="upgrade" data-theme="light" data-callback="rhCheckOk" data-expired-callback="rhCheckExpired" data-error-callback="rhCheckError"></div>
     <script>if(window.matchMedia&&window.matchMedia("(max-width:359px)").matches){document.currentScript.previousElementSibling.setAttribute("data-size","compact")}</script>
     <p class="check-ok" id="check-ok" role="status" hidden>Security check passed</p>
     <p class="check-msg" id="check-msg" role="status" hidden></p>
-    <noscript><p class="check-msg">This form needs JavaScript for its security check. Please email <a href="mailto:rhys@rhyshume.co.uk">rhys@rhyshume.co.uk</a>.</p></noscript>
+    <noscript><p class="check-msg">This needs JavaScript for its security check. Please email <a href="mailto:rhys@rhyshume.co.uk">rhys@rhyshume.co.uk</a>.</p></noscript>
   </div>
-  <button class="btn" type="submit">Upgrade my site</button>
+  <button class="btn" id="live-go" type="submit">Upgrade my site</button>
   <p class="fine">One concept per business. It’s a concept, not a live site. See the <a href="/privacy">privacy page</a> for what happens to what you send.</p>
 </form>
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-<script src="/form-check.js" defer></script>
+<div class="form-state" id="live-progress" role="status" aria-live="polite"><p class="note-label">Building</p><p id="live-progress-text">Reading your site</p><p class="fine">This takes about a minute. Please keep this page open.</p></div>
+<div id="live-result" hidden>
+  <p class="note-label" id="live-result-label">Your concept</p>
+  <iframe id="live-frame" title="Your concept" sandbox="allow-scripts" loading="eager" style="width:100%;height:80vh;min-height:520px;border:1px solid #c9c9c2;background:#fff"></iframe>
+  <h3>What I changed and why</h3>
+  <ul id="live-points"></ul>
+  <p>Want to talk it through? <a href="https://calendar.google.com/calendar/appointments/AcZssZ35nSQ_2lobUifPsul__TiweHpPV1aRWuWbssQ=" target="_blank" rel="noopener">Book a free 20-minute chat<span class="visually-hidden"> (opens in a new tab)</span></a> or email <a href="mailto:rhys@rhyshume.co.uk">rhys@rhyshume.co.uk</a>.</p>
 </div>
-  <aside class="margin" aria-label="Notes to Ask for your concept">
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script src="/upgrade-live.js" defer></script>
+</div>
+  <aside class="margin" aria-label="Notes to See your site upgraded">
 <p><span class="note-label">Note:</span>I only use what’s on your current website. Nothing is made up, and I leave your customers’ names and logos out.</p>
 </aside>
 </section>
