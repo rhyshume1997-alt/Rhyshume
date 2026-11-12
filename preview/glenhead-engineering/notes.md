@@ -1,4 +1,4 @@
-# Concept notes: website
+# Concept notes: Glenhead Engineering
 
 Made on 2026-11-12 from the pages listed below. Nobody has checked this yet. Read every line of copy before it goes anywhere.
 
@@ -14,7 +14,7 @@ Made on 2026-11-12 from the pages listed below. Nobody has checked this yet. Rea
 | --- | --- |
 | Skip link | Skip to content |
 | Banner | Concept by Rhys Hume, not a live site |
-| Header | website |
+| Header | Glenhead Engineering |
 | Header | 0141 952 9945 |
 | Header button | Get a quote |
 | Headline | Precision engineering and CNC machining in Clydebank, Glasgow |
@@ -60,7 +60,7 @@ Made on 2026-11-12 from the pages listed below. Nobody has checked this yet. Rea
 | Service 2 title | CNC Machining & Multi Axis Machining |
 | Service 2 text | High precision tooling, jigs, fixtures, press and mould tools and special purpose machines, with a focus on small batch jobs. |
 | Service 3 title | Fabrication & Structural Steel |
-| Service 3 text | Fabrication, welding and structural steel work. |
+| Service 3 text | Fabrication, welding and structural steel work, through their sister company on the same site, West of Scotland Fabrication. |
 | Service 4 title | Precision Toolmaking & Grinding |
 | Service 4 text | Precision tooling and grinding at our Clydebank premises. |
 | Service 5 title | Special Purpose Tooling |
@@ -85,7 +85,7 @@ Made on 2026-11-12 from the pages listed below. Nobody has checked this yet. Rea
 | Contact phone | 0141 952 9945 |
 | Contact label | Email: |
 | Contact email | info@glenheadengineering.co.uk |
-| Footer | website. Concept by Rhys Hume, not a live site. The text and photos come from glenheadengineering.co.uk. |
+| Footer | Glenhead Engineering. Concept by Rhys Hume, not a live site. The text and photos come from glenheadengineering.co.uk. |
 | Sticky call bar (phones only) | Call 0141 952 9945 |
 
 ## Facts taken from their site
@@ -95,12 +95,12 @@ Made on 2026-11-12 from the pages listed below. Nobody has checked this yet. Rea
 - Email: info@glenheadengineering.co.uk
 - Logo: https://www.glenheadengineering.co.uk/images/glenhead-mob-logo.png (the colour is not stated in the file name, so check it shows on the pale page)
 - Photos (linked from their site, not copied): 
-  - https://www.glenheadengineering.co.uk/media/mldldzgu/home-cutter-image.jpg?anchor=center&mode=crop&width=700&height=500&rnd=132696019225700000 (alt text: Photo from the website website)
-  - https://www.glenheadengineering.co.uk/media/nvdg0cbp/home-services-bg.jpg?anchor=center&mode=crop&width=700&height=500&rnd=132696019235700000 (alt text: Photo from the website website)
-  - https://www.glenheadengineering.co.uk/media/2oil4zdp/glenhead-ben-lomond-team.jpg?anchor=center&mode=crop&width=700&height=450&rnd=133001953900330000 (alt text: Photo from the website website)
-  - https://www.glenheadengineering.co.uk/media/mkuipj3e/2016_two_new_machines_dnm500.jpg?anchor=center&mode=crop&width=700&height=450&rnd=133004798982270000 (alt text: Photo from the website website)
-  - https://www.glenheadengineering.co.uk/media/451dc0jh/glenhead_07.jpg?anchor=center&mode=crop&width=700&height=500&rnd=133001931417030000 (alt text: Photo from the website website)
-  - https://www.glenheadengineering.co.uk/media/orofxv2e/handyscan-black-elite-angle-front-left-450x582.jpg?anchor=center&mode=crop&width=400&height=350&rnd=133740028152070000 (alt text: Photo from the website website)
+  - https://www.glenheadengineering.co.uk/media/mldldzgu/home-cutter-image.jpg?anchor=center&mode=crop&width=700&height=500&rnd=132696019225700000 (alt text: Photo from the Glenhead Engineering website)
+  - https://www.glenheadengineering.co.uk/media/nvdg0cbp/home-services-bg.jpg?anchor=center&mode=crop&width=700&height=500&rnd=132696019235700000 (alt text: Photo from the Glenhead Engineering website)
+  - https://www.glenheadengineering.co.uk/media/2oil4zdp/glenhead-ben-lomond-team.jpg?anchor=center&mode=crop&width=700&height=450&rnd=133001953900330000 (alt text: Photo from the Glenhead Engineering website)
+  - https://www.glenheadengineering.co.uk/media/mkuipj3e/2016_two_new_machines_dnm500.jpg?anchor=center&mode=crop&width=700&height=450&rnd=133004798982270000 (alt text: Photo from the Glenhead Engineering website)
+  - https://www.glenheadengineering.co.uk/media/451dc0jh/glenhead_07.jpg?anchor=center&mode=crop&width=700&height=500&rnd=133001931417030000 (alt text: Photo from the Glenhead Engineering website)
+  - https://www.glenheadengineering.co.uk/media/orofxv2e/handyscan-black-elite-angle-front-left-450x582.jpg?anchor=center&mode=crop&width=400&height=350&rnd=133740028152070000 (alt text: Photo from the Glenhead Engineering website)
 
 ## Measured
 
