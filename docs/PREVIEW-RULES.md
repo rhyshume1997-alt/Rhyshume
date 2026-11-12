@@ -28,3 +28,26 @@ Each hook has a gate. Below the gate, it is off.
 - Works at 320px and 375px with no sideways scroll.
 - Plain UK English, no em dashes, no banned words, no rule of three.
 - Logo: use the version that shows on a pale background.
+
+## 5. Motion pack (standing rule, on by default for every preview and every niche)
+Added 12 Nov 2026 by Rhys. A static page reads like a brochure, so every preview gets the motion pack unless it is switched off
+(`--no-motion` on the command line, or "motion: off" in the Build preview Action).
+It lives in one shared file, `tools/preview-motion.js`, and is written into each page. Plain CSS and a little vanilla JS.
+No libraries, no build step, no extra files or requests, and it adds no words.
+
+Same gates as everything else. A piece is on only when its facts exist, and is left out otherwise:
+- Scroll reveal: sections and service cards fade up once, 400ms long, staggered 60ms. Anything already in view on load just shows.
+- Before and after slider: only if both screenshots exist. Drag, touch and arrow keys. Otherwise the two screenshots stay side by side.
+- Facts row count-up: only quantities found on their site (for example 120, 40, 10). Years never count (2005 stays 2005). Phone numbers never count.
+- Header: stays at the top, shrinks slightly and gains a shadow after the first scroll. The Get a quote button stays visible.
+- Service cards: a small lift and a line that grows under the title on hover and on keyboard focus. Titles link to the quote form so keyboard focus works.
+- Hero: a slow soft colour drift behind the headline. No video.
+- Get a quote buttons: a soft pulse every 8 seconds that stops at the first touch, click or key press.
+
+Hard limits:
+- Everything is off when the visitor asks for reduced motion. The slider still works, because it is a control and not an animation.
+- With JavaScript off, the page shows all content normally. Nothing is hidden unless the page JS has switched motion on, and it switches itself off again after 4 seconds if the JS did not start.
+- Animations use only transform and opacity, so there is no layout shift.
+- The speed score must stay near 100 on mobile. Measure it with Lighthouse and report the real number. If motion lowers it, say so.
+- All the other rules above still apply: only things found or measured, no customer names or third party logos, banner stays, forms post nowhere.
+- The motion pack overrides the older "no gradients" house style for the hero drift only.

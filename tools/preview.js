@@ -3,7 +3,7 @@
 
 // Preview generator.
 //
-//   node tools/preview.js <prospect-url> <firm-slug> [competitor-url] [--name "Firm Name"] [--niche engineering] [--no-browser]
+//   node tools/preview.js <prospect-url> <firm-slug> [competitor-url] [--name "Firm Name"] [--niche engineering] [--no-motion] [--no-browser]
 //
 // Fetches the prospect's home page plus up to 3 linked pages (services, about, contact),
 // asks the Claude API to write the new home page copy from that text only, checks the copy
@@ -27,6 +27,7 @@
 // Word overlap with the site is reported as a warning in notes.md, not a failure.
 
 const fs = require('node:fs');
+const motionPack = require('./preview-motion.js');
 const path = require('node:path');
 
 const ROOT = path.join(__dirname, '..');
@@ -1027,7 +1028,10 @@ async function run(opts) {
   const outRoot = opts.outRoot || path.join(ROOT, 'preview');
   const dir = path.join(outRoot, slug);
   fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(path.join(dir, 'index.html'), renderPage(content)); // first copy, without the before and after, for the screenshots
+  // Motion pack: on by default for every preview, switched off with opts.motion === false (CLI --no-motion).
+  const withMotion = opts.motion !== false;
+  const draw = function (c) { return withMotion ? motionPack.applyMotion(renderPage(c)) : renderPage(c); };
+  fs.writeFileSync(path.join(dir, 'index.html'), draw(content)); // first copy, without the before and after, for the screenshots
 
   const copyWords = wordCount([content.headline, content.intro, content.area, content.about].concat(content.services.map(function (s) { return s.title + ' ' + s.text; })).join(' '));
   const homeWords = wordCount(pageTexts[0].text);
@@ -1042,13 +1046,14 @@ async function run(opts) {
   }
   content.compare = steps.compare;
 
-  const html = renderPage(content);
+  const html = draw(content);
   const points = buildPoints(facts, homeWords, content, copyWords);
   const warnings = written.warnings.slice();
   if (!content.heroPhoto) warnings.push('No photos were found on their site, so the page shows a marked photo space. Ask them for one, or leave the space.');
   if (steps.compare) warnings.push('The screenshot of their current site is shown on the page. Check you are happy for it to be public.');
   if (competitor) warnings.push('The competitor appears only as a column of measured yes and no answers and scores. The written comparison above stays in this file and is not on the page.');
-  const notes = renderNotes(content, facts, pageTexts.map(function (p) { return p.url; }), points, written.ai.comparison, competitor && competitor.host, warnings, today, steps.measured);
+  let notes = renderNotes(content, facts, pageTexts.map(function (p) { return p.url; }), points, written.ai.comparison, competitor && competitor.host, warnings, today, steps.measured);
+  if (withMotion) notes += '\n' + motionPack.motionNotes();
 
   fs.writeFileSync(path.join(dir, 'index.html'), html);
   fs.writeFileSync(path.join(dir, 'notes.md'), notes);
@@ -1060,18 +1065,20 @@ async function main(argv) {
   let name;
   const i = args.indexOf('--name');
   if (i !== -1) { name = args[i + 1]; args.splice(i, 2); }
+  const noMotion = args.indexOf('--no-motion');
+  if (noMotion !== -1) args.splice(noMotion, 1);
   let niche;
   const n = args.indexOf('--niche');
   if (n !== -1) { niche = args[n + 1]; args.splice(n, 2); }
   const noBrowser = args.indexOf('--no-browser');
   if (noBrowser !== -1) args.splice(noBrowser, 1);
   if (args.length < 2 || args.length > 3) {
-    console.error('Usage: node tools/preview.js <prospect-url> <firm-slug> [competitor-url] [--name "Firm Name"] [--niche engineering]');
+    console.error('Usage: node tools/preview.js <prospect-url> <firm-slug> [competitor-url] [--name "Firm Name"] [--niche engineering] [--no-motion]');
     process.exit(1);
   }
   try {
     const r = await run({
-      url: args[0], slug: args[1], competitor: args[2], name: name, niche: niche, measure: noBrowser === -1,
+      url: args[0], slug: args[1], competitor: args[2], name: name, niche: niche, motion: noMotion === -1, measure: noBrowser === -1,
       apiKey: process.env.ANTHROPIC_API_KEY, model: process.env.ANTHROPIC_MODEL,
       log: function (m) { console.log(m); }
     });
@@ -1085,7 +1092,7 @@ async function main(argv) {
 }
 
 module.exports = {
-  NICHES, buildSystem, SYSTEM, BANNER, BANNED, esc, plain, htmlToText, pickLinks, extractFacts, checkCopy, normaliseAi,
+  motionPack, NICHES, buildSystem, SYSTEM, BANNER, BANNED, esc, plain, htmlToText, pickLinks, extractFacts, checkCopy, normaliseAi,
   buildContent, copyLines, renderPage, renderNotes, buildPoints, assertPublicUrl, assertSlug, run,
   pickLogo, collectImages, cssUrls, bestSrcset, unwrapImageUrl, pickStylesheets, buildChangeNotes, buildTable, speedNote
 };
