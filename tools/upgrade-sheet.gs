@@ -17,7 +17,7 @@
 var TAB = 'Requests';
 var REPO = 'rhyshume1997-alt/Rhyshume';
 var WORKFLOW = 'preview.yml';
-var HEADERS = ['Received', 'Website', 'Domain', 'Email', 'Marketing OK', 'Slug', 'Niche', 'Approve', 'Status', 'Preview link', 'Send link', 'Link sent', 'Notes'];
+var HEADERS = ['Received', 'Website', 'Domain', 'Email', 'Marketing OK', 'Slug', 'Niche', 'Approve', 'Status', 'Preview link', 'Send link', 'Link sent', 'Notes', 'Visitor'];
 var COL = {};
 HEADERS.forEach(function (h, i) { COL[h] = i + 1; });
 
@@ -45,6 +45,9 @@ function doPost(e) {
   var data;
   try { data = JSON.parse(e.postData.contents); } catch (err) { return reply({ ok: false, reason: 'bad_json' }); }
   if (!prop('SHARED_SECRET') || data.secret !== prop('SHARED_SECRET')) return reply({ ok: false, reason: 'bad_secret' });
+
+  if (data.action === 'claim') return claimLive(data);
+  if (data.action === 'finish') return finishLive(data);
 
   var website = String(data.website || '').slice(0, 300);
   var domain = String(data.domain || '').toLowerCase().slice(0, 253);
@@ -96,6 +99,86 @@ function doPost(e) {
       '\n\nOpen the Requests tab, check it, set Niche if it is an engineering firm, then tick Approve.');
   }
   return reply({ ok: true });
+}
+
+// Instant button. The website asks permission here before it builds anything, and tells us how it went.
+// One build per website, VISITOR_LIMIT per visitor per day (default 2), DAILY_LIMIT in total per day (default 10).
+function claimLive(data) {
+  var website = String(data.website || '').slice(0, 300);
+  var domain = String(data.domain || '').toLowerCase().slice(0, 253);
+  var email = String(data.email || '').toLowerCase().slice(0, 200);
+  var visitor = String(data.visitor || '').replace(/[^a-f0-9]/g, '').slice(0, 16);
+  if (!/^https:\/\/[a-z0-9.-]+\/$/.test(website) || !domain || !visitor) return reply({ ok: false, reason: 'bad_fields' });
+
+  var lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+  try {
+    var sh = sheet();
+    var last = sh.getLastRow();
+    var rows = last > 1 ? sh.getRange(2, 1, last - 1, HEADERS.length).getValues() : [];
+    var today = Utilities.formatDate(new Date(), 'Europe/London', 'yyyy-MM-dd');
+    var countToday = 0, visitorToday = 0;
+    for (var i = 0; i < rows.length; i++) {
+      // A website that already has a build is refused. One whose last build failed can try again.
+      if (String(rows[i][COL['Domain'] - 1]).toLowerCase() === domain && String(rows[i][COL['Status'] - 1]) !== 'Instant: Failed') return reply({ ok: false, reason: 'duplicate' });
+      var when = rows[i][COL['Received'] - 1];
+      if (when instanceof Date && Utilities.formatDate(when, 'Europe/London', 'yyyy-MM-dd') === today) {
+        countToday++;
+        if (String(rows[i][COL['Visitor'] - 1]) === visitor) visitorToday++;
+      }
+    }
+    if (countToday >= (parseInt(prop('DAILY_LIMIT'), 10) || 10)) return reply({ ok: false, reason: 'daily_limit' });
+    if (visitorToday >= (parseInt(prop('VISITOR_LIMIT'), 10) || 2)) return reply({ ok: false, reason: 'visitor_limit' });
+
+    var row = [];
+    row[COL['Received'] - 1] = new Date();
+    row[COL['Website'] - 1] = website;
+    row[COL['Domain'] - 1] = domain;
+    row[COL['Email'] - 1] = email;
+    row[COL['Marketing OK'] - 1] = data.marketing === 'yes' ? 'yes' : 'no';
+    row[COL['Slug'] - 1] = '';
+    row[COL['Niche'] - 1] = 'none';
+    row[COL['Approve'] - 1] = false;
+    row[COL['Status'] - 1] = 'Instant: building';
+    row[COL['Preview link'] - 1] = '';
+    row[COL['Send link'] - 1] = false;
+    row[COL['Link sent'] - 1] = '';
+    row[COL['Notes'] - 1] = '';
+    row[COL['Visitor'] - 1] = visitor;
+    sh.appendRow(row);
+    var r = sh.getLastRow();
+    sh.getRange(r, COL['Approve']).insertCheckboxes();
+    sh.getRange(r, COL['Send link']).insertCheckboxes();
+  } finally {
+    lock.releaseLock();
+  }
+  if (prop('NOTIFY_EMAIL')) {
+    MailApp.sendEmail(prop('NOTIFY_EMAIL'), 'Instant upgrade started: ' + domain, 'Website: ' + website + (email ? '\nEmail: ' + email : '\nNo email given') + '\n\nSee the Requests tab for how it went.');
+  }
+  return reply({ ok: true });
+}
+
+function finishLive(data) {
+  var domain = String(data.domain || '').toLowerCase().slice(0, 253);
+  var visitor = String(data.visitor || '').replace(/[^a-f0-9]/g, '').slice(0, 16);
+  var lock = LockService.getScriptLock();
+  lock.waitLock(20000);
+  try {
+    var sh = sheet();
+    var last = sh.getLastRow();
+    if (last < 2) return reply({ ok: false, reason: 'not_found' });
+    var rows = sh.getRange(2, 1, last - 1, HEADERS.length).getValues();
+    for (var i = rows.length - 1; i >= 0; i--) {
+      if (String(rows[i][COL['Domain'] - 1]).toLowerCase() === domain && String(rows[i][COL['Visitor'] - 1]) === visitor) {
+        sh.getRange(i + 2, COL['Status']).setValue('Instant: ' + String(data.status || 'done').slice(0, 20));
+        if (data.note) sh.getRange(i + 2, COL['Notes']).setValue(String(data.note).slice(0, 200));
+        return reply({ ok: true });
+      }
+    }
+    return reply({ ok: false, reason: 'not_found' });
+  } finally {
+    lock.releaseLock();
+  }
 }
 
 // Slug for the Build preview Action: lower case, hyphens only, plus 4 random characters so it cannot be guessed.
