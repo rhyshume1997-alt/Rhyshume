@@ -2653,7 +2653,7 @@ function grantevModel() {
 }
 function consistency() {
   const w = [], q = qSnap(), L = q.lines.filter(l => l.tag !== 'not'), st = id => S.scope.st[id];
-  const has = rx => L.some(l => rx.test(l.name));
+  const has = rx => L.some(l => !l.free && rx.test(l.name));
   [['f-shop', /shop|e-?commerce/i, 'an online shop'], ['f-book', /book/i, 'booking'], ['f-form', /form/i, 'forms'], ['c-copy', /copy/i, 'copywriting'], ['c-photo', /photo/i, 'photography'], ['s-seo', /search|seo/i, 'local search and AI visibility'], ['s-train', /train/i, 'training']].forEach(([id, rx, lab]) => {
     const quoted = has(rx), inScope = st(id) === 'inc' || st(id) === 'extra';
     if (quoted && !inScope) w.push('The quote charges for ' + lab + ', but the What is in list does not include it. The contract and build instructions will not mention it');
@@ -3529,6 +3529,7 @@ function qShopLines() {
   const q = S.quote2, want = shopWanted() ? shopHas() : '', nm = shopName();
   const mk = (sync, name, desc, tag, price) => ({ id: 'ql-' + uid(), plId: '', sync, auto: true, name, desc, unit: 'fixed', qty: '1', price, tag, freq: 'once', cat: '', note: '' });
   const have = k => q.lines.find(l => l.sync === k);
+  if (shopRuleOn()) { const sp = (S.pb || []).filter(p => p.when === 'shop').map(p => p.id); for (let i = q.lines.length - 1; i >= 0; i--) { const l = q.lines[i]; if (l.auto && sp.includes(l.plId) && (l.price === '' || l.price == null || l.price === l.sync)) q.lines.splice(i, 1); } }
   [['yes', 'shoplink', 'Online shop: we link your existing ' + (nm === 'online' ? 'shop' : nm + ' shop') + ', no extra cost', 'We connect the new website to the shop you already run. There is nothing to pay for this', 'base', '0'], ['no', 'shoplater', 'Online shop: not part of this quote. We price and build it later, when you are ready', 'You do not have an online shop yet. We agree a price when you want one', 'not', '']].forEach(([st, k, name, desc, tag, price]) => {
     const l = have(k); if (want === st) { if (!l) q.lines.push(mk(k, name, desc, tag, price)); else if (l.auto) { l.name = name; l.desc = desc; } } else if (l) q.lines.splice(q.lines.indexOf(l), 1);
   });
@@ -3789,6 +3790,40 @@ function enquiryPrefill(l) {
   const low = msg.toLowerCase(), hit = [['phone', /\b(phone|call us|ring)\b/], ['walk in', /\b(walk in|walk-in|in store|in the shop)\b/], ['Shopify or online shop', /\b(shopify|online shop|web ?shop)\b/], ['Social messages', /\b(instagram|facebook|social|dm|dms)\b/], ['Email', /\bemail\b/]].filter(x => x[1].test(low)).map(x => x[0] === 'phone' ? 'Phone' : x[0] === 'walk in' ? 'Walk in' : x[0]);
   if (hit.length) { S.disc.c = S.disc.c || {}; S.disc.c.today = hit; dcSync('today'); S.disc.pre.today = true; }
 }
+</script>
+<script>/* ---------- Client view: the quote as the client sees it, step by step, read only ---------- */
+const CV = { id: 'cur', step: 0, cache: {}, msg: '' };
+const cvCss = prCss.split('}').filter(r => r.indexOf('.pp') >= 0).map(r => r + '}').join('') + '.cvbar{position:sticky;top:0;z-index:2;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:10px 16px;background:#0b2a5b;color:#fff}.cvbar select{max-width:260px;min-height:44px}.cvbar .big{min-height:48px;padding:10px 22px;font-size:17px;font-weight:700}.cvnav{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:22px 0 6px}.cvdots{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0}.cvdots button{border:1px solid #0b2a5b;background:#fff;color:#0b2a5b;border-radius:999px;padding:4px 11px;font-size:13px;cursor:pointer}.cvdots button.on{background:#0b2a5b;color:#fff}.pp .cvstep{color:#52627f;font-size:14px;margin:0 0 8px}';
+function proposalSections(d) { return proposalBody(d).split('<section>').filter(Boolean).map(x => '<section>' + x).map(h => ({ title: (/<h2>(.*?)<\/h2>/.exec(h) || [0, ''])[1], html: h })); }
+function cvPages() {
+  const d = prData(), pages = [], l = loomInfo(), first = String(S.client.contact || '').trim().split(' ')[0];
+  if (l) pages.push({ title: 'Watch my video', html: loomBlock(true) });
+  proposalSections(d).forEach(s => pages.push(s));
+  const last = pages[pages.length - 1]; if (last) last.html = last.html + prSig(d.q.date || isoToday()) + '<p class="sm">This is a proposal for us to talk through. It is not a contract, and nothing is agreed until you accept my quote.</p>';
+  return { pages, d, biz: seoName(), first, date: d.q.date || isoToday() };
+}
+function cvWith(id, fn) {
+  const real = S;
+  try { const src = id === 'cur' || !CV.cache[id] ? JSON.parse(JSON.stringify(Object.assign({}, real, { assets: [], ui: {} }))) : CV.cache[id]; S = merge(blank(), src); S.ui = {}; S.assets = []; S.pb = real.pb; try { ensurePackState(); qLive(); } catch (e) { } return fn(); } finally { S = real; }
+}
+function cvRender() {
+  const o = document.getElementById('cview'); if (!o) return; const R = cvWith(CV.id, cvPages), n = R.pages.length; CV.step = Math.max(0, Math.min(CV.step, n - 1)); const p = R.pages[CV.step] || { title: '', html: '<p>Nothing to show yet.</p>' };
+  const opts = ['<option value="cur"' + (CV.id === 'cur' ? ' selected' : '') + '>This client, on my screen</option>'].concat((CL.list || []).filter(c => c.client_name).map(c => '<option value="' + esc(c.id) + '"' + (CV.id === c.id ? ' selected' : '') + '>' + esc(c.client_name) + '</option>')).join('');
+  o.innerHTML = '<style>' + cvCss + '</style><div class="cvbar"><span><b>Client view, nothing saved</b></span><label style="display:flex;gap:6px;align-items:center">Show <select id="cvsel" aria-label="Show another client">' + opts + '</select></label><button class="btn big" data-act="cvx">Back to my side</button></div>'
+    + '<div class="pp">' + (R.d.draft ? '<div class="draft">DRAFT, not approved yet</div>' : '') + '<h1>Proposal for ' + esc(R.biz) + '</h1><p class="by">Prepared by Rhys Hume, ' + esc(fmtDate(R.date)) + (R.first ? '. For ' + esc(R.first) : '') + '</p>' + (CV.msg ? '<p class="sm">' + esc(CV.msg) + '</p>' : '')
+    + '<p class="cvstep">Step ' + (CV.step + 1) + ' of ' + n + '</p>' + (p.html.indexOf('<h2') >= 0 ? '' : '<h2>' + esc(p.title) + '</h2>') + p.html
+    + '<div class="cvnav"><button class="btn" data-act="cvprev"' + (CV.step ? '' : ' disabled') + '>Back</button><button class="btn pri" data-act="cvnext"' + (CV.step < n - 1 ? '' : ' disabled') + '>Next</button>' + (CV.step === n - 1 && CL.on && typeof pOnline === 'function' && pOnline() ? '<button class="btn" data-act="cvform">See their question page</button>' : '') + '</div>'
+    + '<div class="cvdots">' + R.pages.map((x, i) => '<button data-act="cvgo" data-i="' + i + '" class="' + (i === CV.step ? 'on' : '') + '" aria-label="Go to ' + esc(x.title) + '">' + (i + 1) + '. ' + esc(x.title) + '</button>').join('') + '</div></div>';
+  const sel = o.querySelector('#cvsel'); if (sel) sel.onchange = () => cvSwitch(sel.value); o.scrollTop = 0;
+}
+async function cvSwitch(id) {
+  CV.step = 0; CV.msg = ''; if (id === 'cur') { CV.id = 'cur'; return cvRender(); }
+  if (!CV.cache[id]) { CV.msg = 'Loading...'; cvRender(); try { const rows = await clRest('?id=eq.' + encodeURIComponent(id) + '&select=data'); if (!rows || !rows[0] || !rows[0].data) throw new Error('empty'); CV.cache[id] = rows[0].data; CV.msg = ''; } catch (e) { CV.msg = 'Could not load that client'; CV.id = 'cur'; return cvRender(); } }
+  CV.id = id; cvRender();
+}
+function cvOpen() { cvClose(); CV.id = 'cur'; CV.step = 0; CV.msg = ''; CV.cache = {}; const o = document.createElement('div'); o.id = 'cview'; o.style.cssText = 'position:fixed;inset:0;z-index:40;background:#fff;overflow:auto'; document.body.appendChild(o); cvRender(); }
+function cvClose() { const o = document.getElementById('cview'); if (o) o.remove(); }
+Object.assign(ACTS2, { pview: () => cvOpen(), cvx: () => cvClose(), cvnext: () => { CV.step++; cvRender(); }, cvprev: () => { CV.step--; cvRender(); }, cvgo: (t, d) => { CV.step = Number(d.i) || 0; cvRender(); }, cvform: () => { pOpenView(); } });
 </script>
 <script>init();</script>
 </body></html>
