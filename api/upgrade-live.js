@@ -34,6 +34,7 @@ const path = require('node:path');
 const antispam = require('./_lib/antispam');
 const upgrade = require('./upgrade');
 const preview = require('../tools/preview');
+const rich = require('../tools/concept-rich');
 
 const TURNSTILE_ACTION = 'upgrade';
 const TURNSTILE_HOSTNAMES = ['rhyshume.co.uk', 'www.rhyshume.co.uk'];
@@ -193,6 +194,13 @@ async function callSheet(payload) {
   }
 }
 
+// The richer page: the firm's own colours, animation, three.js hero, React quote form. If anything about it fails,
+// the plain concept page (made stand-alone) is shown instead, so a visitor always sees something.
+function richHtml(result) {
+  try { return rich.renderRich(result.content, result.brand); }
+  catch (e) { console.error('upgrade-live: rich page failed, using the plain concept: ' + (e && e.message)); return standAlone(result.html); }
+}
+
 // ---------------------------------------------------------------- making the page stand alone
 
 // The concept page links the site's stylesheets by address. Inside the frame there is no site to load them
@@ -307,7 +315,7 @@ module.exports = async function handler(req, res) {
       ok: true,
       host: site.host,
       url: site.url,
-      html: standAlone(result.html),
+      html: richHtml(result),
       points: result.points,
       warnings: result.warnings.filter(function (w) { return !/screenshot|competitor/i.test(w); })
     });
