@@ -366,7 +366,8 @@ test('no photos found means a clearly marked placeholder, not a stock photo', as
   Object.keys(PAGES).forEach(function (k) { PAGES[k] = PAGES[k].replace(/<img[^>]*>/g, ''); });
   try {
     const r = await generate(GOOD);
-    assert.match(r.html, /Placeholder: your (workshop )?photo here/);
+    assert.ok(r.html.includes('Your job photo here'));
+    assert.ok(!/Placeholder:/i.test(r.html), 'the word Placeholder never shows on the page');
     assert.ok(/pv-placeholder/.test(r.html));
   } finally { Object.keys(saved).forEach(function (k) { PAGES[k] = saved[k]; }); }
 });
@@ -474,4 +475,128 @@ test('the hard rule "left out, never filled" is in the AI instructions and in do
   assert.match(doc, /switches on only when the facts it needs were found/);
   assert.match(doc, /Never show holes/);
   assert.ok(!/—/.test(doc), 'the rules doc has an em dash');
+});
+
+// ---------------------------------------------------------------- motion pack (default for every preview)
+
+const motion = require('../tools/preview-motion.js');
+const SAMPLE_PAGE = '<!DOCTYPE html><html><head><title>x</title></head><body>' +
+  '<ul class="pv-proof"><li>Started in 2005</li><li>Fabrication shop 120m x 40m</li><li>Machining up to 10 te</li><li>Call 01349854100</li></ul>' +
+  '<section class="clause" id="a"><h2>A</h2></section>' +
+  '<ul class="pv-list"><li><h3>Milling</h3><p>Text.</p><p class="pv-detail">Bed 1,200 mm</p></li><li><h3>Turning</h3></li></ul>' +
+  '<section class="clause next" id="quote"><h2>Q</h2></section></body></html>';
+
+test('motion: adds the pack once, is safe to run twice, and adds no words', function () {
+  const once = motion.applyMotion(SAMPLE_PAGE);
+  assert.strictEqual(motion.applyMotion(once), once);
+  assert.match(once, /<style id="pv-motion">/);
+  assert.strictEqual((once.match(/id="pv-motion"/g) || []).length, 1);
+  assert.deepStrictEqual(visibleChunks(once).join(' ').replace(/\s+/g, ''), visibleChunks(SAMPLE_PAGE).join(' ').replace(/\s+/g, ''));
+  assert.ok(!/—/.test(once));
+});
+
+test('motion: counts quantities, never years or phone numbers', function () {
+  const out = motion.applyMotion(SAMPLE_PAGE);
+  ['120', '40', '10'].forEach(function (n) { assert.ok(out.includes('data-n="' + n + '"'), n + ' should count'); });
+  assert.ok(!out.includes('data-n="2005"') && !/data-n="200"/.test(out), 'a year or a thousands number must not count');
+  assert.ok(!/data-n="0?1349/.test(out) && !out.includes('data-n="01349854100"'), 'a phone number must not count');
+  assert.ok(out.includes('Started in 2005'));
+  assert.ok(out.includes('Call 01349854100'));
+});
+
+test('motion: nothing is hidden unless JS has set the "mo" class, and reduced motion turns it all off', function () {
+  const css = motion.MOTION_CSS;
+  const hiding = css.split('\n').filter(function (l) { return !/@keyframes/.test(l) && (/opacity:\s*0\b/.test(l) && !/::after|::before|mo-range/.test(l.split('{')[0]) || /\.mo-r\s*\{/.test(l)); });
+  hiding.forEach(function (l) { assert.ok(/^\s*\.mo\s/.test(l), 'a hiding rule is not scoped to .mo: ' + l); });
+  const mq = css.indexOf('@media (prefers-reduced-motion: no-preference)');
+  assert.ok(mq > 0);
+  ['animation:', 'transition:', 'position: sticky', 'translate:', '@keyframes'].forEach(function (k) {
+    css.split('\n').forEach(function (l, i) {
+      if (l.indexOf(k) !== -1) assert.ok(css.indexOf(l) > mq || /mo-range|mo-caps/.test(l), 'motion outside the reduced-motion guard: ' + l.trim());
+    });
+  });
+  assert.match(motion.HEAD_JS, /prefers-reduced-motion: reduce/);
+  assert.match(motion.HEAD_JS, /setTimeout\(function\(\)\{if\(!window\.__moOK\)d\.classList\.remove\('mo'\)\},4000\)/);
+});
+
+test('motion: only transform and opacity are animated, timings are as specified', function () {
+  const css = motion.MOTION_CSS;
+  assert.match(css, /transition: opacity 400ms ease-out, transform 400ms ease-out/);
+  assert.match(motion.MOTION_JS, /\(n \* 60\) \+ 'ms'/);
+  assert.match(css, /animation: mo-pulse 8s /);
+  assert.ok(!/(width|height|margin|padding|top|left)\s*:[^;]*;\s*\}?\s*$/m.test(css.slice(css.indexOf('@keyframes mo-drift'), css.indexOf('@keyframes mo-drift') + 200)));
+  ['pointerdown', 'keydown', 'touchstart'].forEach(function (ev) { assert.ok(motion.MOTION_JS.includes(ev)); });
+});
+
+test('motion: the tool turns it on by default for every niche and --no-motion turns it off', async function () {
+  const on = await generate(GOOD);
+  assert.ok(on.html.includes('id="pv-motion"'));
+  assert.match(on.notes, /## Motion/);
+  const eng = await generate(GOOD, { niche: 'engineering' });
+  assert.ok(eng.html.includes('id="pv-motion"'));
+  const off = await generate(GOOD, { motion: false });
+  assert.ok(!off.html.includes('pv-motion') && !/\bmo-r\b/.test(off.html));
+  assert.ok(!/## Motion/.test(off.notes));
+  assert.match(read('tools/preview.js'), /--no-motion/);
+});
+
+test('motion: services get a quote link, the form still posts nowhere, banner and noindex stay', async function () {
+  const r = await generate(GOOD);
+  assert.match(r.html, /<li class="mo-r"><h3><a href="#quote">Milling<\/a><\/h3>/);
+  assert.match(r.html, /<meta name="robots" content="noindex,nofollow,noarchive">/);
+  assert.ok(r.html.includes('Concept by Rhys Hume, not a live site'));
+  const form = r.html.match(/<form[\s\S]*?<\/form>/)[0];
+  assert.ok(!/\baction=/i.test(form) && !/type="submit"/i.test(form));
+  visibleChunks(r.html).forEach(function (c) { assert.ok(r.notes.includes(c), 'notes.md is missing "' + c + '"'); });
+});
+
+test('motion: the Action has an on/off input passed through env only, default on', function () {
+  const yml = read('.github/workflows/preview.yml');
+  assert.match(yml, /IN_MOTION: \$\{\{ inputs\.motion \}\}/);
+  assert.match(yml, /--no-motion/);
+  assert.match(yml, /default: 'on'/);
+});
+
+test('motion: the standing rule is written in docs/PREVIEW-RULES.md', function () {
+  const doc = read('docs/PREVIEW-RULES.md');
+  assert.match(doc, /## 5\. Motion pack \(standing rule, on by default for every preview and every niche\)/);
+  assert.match(doc, /tools\/preview-motion\.js/);
+  assert.match(doc, /Years never count/);
+  assert.match(doc, /Everything is off when the visitor asks for reduced motion/);
+  assert.ok(!/—/.test(doc));
+});
+
+test('rule: the photo stand-in always reads "Your job photo here", never the word Placeholder, in the content and the notes', async function () {
+  const saved = {}; Object.keys(PAGES).forEach(function (k) { saved[k] = PAGES[k]; });
+  Object.keys(PAGES).forEach(function (k) { PAGES[k] = PAGES[k].replace(/<img[^>]*>/g, ''); });
+  try {
+    const r = await generate(GOOD);
+    assert.strictEqual(r.content.placeholder, 'Your job photo here');
+    assert.ok(!/Placeholder:/i.test(r.notes));
+    assert.ok(r.notes.includes('Your job photo here'));
+  } finally { Object.keys(saved).forEach(function (k) { PAGES[k] = saved[k]; }); }
+});
+
+test('rule: a named person\'s email never appears on a preview, only a generic address if the site has one', async function () {
+  const key = SITE + '/contact';
+  const saved = PAGES[key];
+  try {
+    PAGES[key] = '<html><body><h1>Contact</h1><p>Ask for Jo: <a href="mailto:jo.smith@hartley-metalwork.test">jo.smith@hartley-metalwork.test</a> or ring 01698 123456.</p></body></html>';
+    let r = await generate(GOOD);
+    assert.ok(!/jo\.smith/i.test(r.html), 'named email is not on the page');
+    assert.ok(!/jo\.smith/i.test(r.notes), 'named email is not in the notes');
+    assert.ok(!/mailto:/i.test(r.html));
+    assert.match(r.notes, /named address left off on purpose/);
+    PAGES[key] = '<html><body><h1>Contact</h1><p>Jo: jo.smith@hartley-metalwork.test, or <a href="mailto:enquiries@hartley-metalwork.test">enquiries@hartley-metalwork.test</a>. Ring 01698 123456.</p></body></html>';
+    r = await generate(GOOD);
+    assert.ok(!/jo\.smith/i.test(r.html));
+    assert.ok(r.html.includes('mailto:enquiries@hartley-metalwork.test'));
+  } finally { PAGES[key] = saved; }
+});
+
+test('docs: the photo stand-in and named email rules are written into the standing rules', function () {
+  const d = require('fs').readFileSync(require('path').join(__dirname, '..', 'docs', 'PREVIEW-RULES.md'), 'utf8');
+  assert.match(d, /Your job photo here/);
+  assert.match(d, /never the word "Placeholder"/);
+  assert.match(d, /named person's email never appears/i);
 });

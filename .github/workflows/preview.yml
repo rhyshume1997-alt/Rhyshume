@@ -28,6 +28,14 @@ on:
         options:
           - none
           - engineering
+      motion:
+        description: Motion pack (scroll reveal, slider, count-up). On unless you switch it off
+        required: false
+        type: choice
+        default: 'on'
+        options:
+          - 'on'
+          - 'off'
 
 permissions:
   contents: write
@@ -62,12 +70,14 @@ jobs:
           IN_COMPETITOR: ${{ inputs.competitor }}
           IN_NAME: ${{ inputs.name }}
           IN_NICHE: ${{ inputs.niche }}
+          IN_MOTION: ${{ inputs.motion }}
         run: |
           set -eu
           args=("$IN_URL" "$IN_SLUG")
           if [ -n "$IN_COMPETITOR" ]; then args+=("$IN_COMPETITOR"); fi
           if [ -n "$IN_NAME" ]; then args+=(--name "$IN_NAME"); fi
           if [ -n "$IN_NICHE" ] && [ "$IN_NICHE" != "none" ]; then args+=(--niche "$IN_NICHE"); fi
+          if [ "$IN_MOTION" = "off" ]; then args+=(--no-motion); fi
           node tools/preview.js "${args[@]}"
 
       - name: Run the tests
