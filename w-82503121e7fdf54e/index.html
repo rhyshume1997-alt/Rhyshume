@@ -207,6 +207,7 @@ details.gl summary{cursor:pointer;font-weight:500}
 @media print{.rsig{break-inside:avoid}.rsig .rsig-s{color:#0b2a5b;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 
 details.more{margin:8px 0 4px;border-top:1px dashed var(--line,#c9d0dc);padding-top:6px}details.more>summary{cursor:pointer;font:500 12.5px 'IBM Plex Mono',monospace;letter-spacing:.06em;color:var(--ink2);padding:4px 0}details.more[open]>summary{margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.chipb{border:1px solid var(--ink);background:var(--paper);color:var(--ink);padding:6px 13px;border-radius:999px;font:500 13px 'IBM Plex Sans',sans-serif;cursor:pointer}.chipb.on{background:var(--ink);color:var(--bg)}
 
 </style></head><body><script type="text/plain" id="font-licences">Great Vibes, Copyright 2010 The Great Vibes Pro Project Authors (https://github.com/googlefonts/great-vibes), SIL Open Font License 1.1, https://openfontlicense.org
 Full licence text, base64 encoded so it travels with the file unchanged:
@@ -704,7 +705,7 @@ const ptwo = n => ({ id: n });
 function blank() {
   return {
     v: 2,
-    client: { status: 'enquiry', contact: '', business: '', town: '', loom: '', types: [], flags: {}, ageRestricted: '', modes: { funding: true, website: true, seo: false }, packId: PACKS[0] ? PACKS[0].id : '' },
+    client: { status: 'enquiry', contact: '', business: '', town: '', loom: '', email: '', phone: '', address: '',  types: [], flags: {}, ageRestricted: '', modes: { funding: true, website: true, seo: false }, packId: PACKS[0] ? PACKS[0].id : '' },
     facts: { tick: {} }, prep: {}, elig: {}, turnover: { recent: '', last: '' }, evid: {}, crit: {}, gate: {},
     quote: { scope: '', lines: [], vat: '', held: '' },
     plan: { build: '', decision: '', start: '', submit: '' },
@@ -1200,7 +1201,9 @@ function vSetup() {
   const planRows = plan.map(b => `<tr><td class="mono">${b.start / 60} to ${b.end / 60} min</td><td>${esc(b.label)}</td><td>${b.screens.map(s => esc(screenLabel(s))).join(', ')}</td></tr>`).join('');
   const packOpts = PACKS.map(x => [x.id, x.name + ', ' + x.funder]);
   return `${head('Tell us about your client', 'A few short questions, they set up the checklist, the cost tips and the wording for everything after', 'setup')}
-  ${sec('1.0', 'The client', `<div class="grid2">${field('Business name', 'client.business', { full: true })}${field('Main contact', 'client.contact')}${field('Town', 'client.town')}${field('Loom video link, for the proposal page', 'client.loom', { full: true })}</div>`)}
+  ${sec('1.0', 'The client', `<div class="grid2">${field('Business name', 'client.business', { full: true, hint: 'e.g. Taylor and Sons Bakery' })}${field('Main contact', 'client.contact', { hint: 'e.g. Sam Taylor' })}${field('Town', 'client.town', { hint: 'e.g. Milngavie' })}${field('Email', 'client.email', { hint: 'Copied into every document that needs it' })}${field('Phone', 'client.phone', { hint: 'e.g. 07700 900123' })}${field('Address', 'client.address', { full: true, hint: 'Street, town, postcode' })}</div><p class="hint">Type these once. The contract, domain and care screens copy them for you</p>`)}
+  ${sec('1.5', 'Where are we', `${seg('client.status', STATUSES, c.status)}<p class="hint">Move this on as the job moves on</p>`)}
+  ${sec('1.8', 'Usual dates and deposit', `<div class="q"><div class="ql">Start</div>${seg('prop.startMode', START_MODES(), S.prop.startMode)}</div><div class="grid2">${field('Finish by', 'prop.finish', { type: 'date', hint: fund() ? 'Filled from the programme end date' : 'The date you promise to finish' })}${field('Deposit %', 'quote2.depPct', { hint: 'e.g. 50' })}</div><p class="row"><button class="btn" data-act="usual">Fill in my usual details</button></p><p class="hint">Fills blanks only, from the programme and your last quote. It never overwrites what you typed</p>`)}
   ${sec('2.0', 'What do they want done?', `<p class="hint">Tick all that apply, it changes the cost lines, the checklist and the examples</p>${typeBoxes}`)}
   ${sec('3.0', 'What are we doing?', `${chk('client.modes.funding', '<b>A funding application</b><span class="hint">Eligibility, evidence, project answers, quote, deadlines</span>').replace('data-k=', 'data-full="1" data-k=')}
      ${c.modes.funding ? `<label class="f"><span class="fl">Programme</span>${select('client.packId', packOpts, c.packId).replace('<select ', '<select data-full="1" ')}<span class="hint">One pack per programme, see "How to add a programme"</span></label>` : ''}
@@ -1374,7 +1377,7 @@ function vDead() {
 const goalsRanked = () => GOALS.filter(g => S.disc.goals[g[0]]).sort((a, b) => Number(S.disc.goals[a[0]]) - Number(S.disc.goals[b[0]]));
 function vDisc() {
   const goals = GOALS.map(g => `<div class="row" style="margin:3px 0"><label style="min-width:180px">${esc(g[1])}</label>${select('disc.goals.' + g[0], [['', 'Not ranked'], ['1', '1, most important'], ['2', '2'], ['3', '3'], ['4', '4'], ['5', '5']], S.disc.goals[g[0]] || '').replace('<select ', '<select style="width:auto" ')}</div>`).join('');
-  const rest = DISC.map(d => field(esc(d.q), 'disc.a.' + d.id, d.line ? {} : { area: true, rows: 2 })).join('');
+  const rest = DISC.map(discQ).join('');
   return `${head('Discovery', 'What the client really needs, in their own words. Ask, listen, type what they say. Nothing here is guessed', 'disc')}
   ${sec('1.0', 'Goals, ranked', `<p class="hint">Rank what matters, 1 is most important, leave the rest blank</p>${goals}`)}
   ${sec('2.0', 'In their words', rest)}`;
@@ -1530,7 +1533,7 @@ function vProp() {
   return `${head('Proposal', 'Starts from their goals in their words, then the problem, three options, the cost after launch, a next step with a date. No invented figures, no fake proof, no pressure', 'prop')}
   ${note('Prices, the why me and the next date are yours to fill in. Nothing here is guessed, and what they gave you is copied as they said it', '', 'Rule:')}
   ${sec('1.0', 'Your three options', opts)}
-  ${sec('2.0', 'Dates and next step', `<div class="grid2">${field('Project start', 'prop.start', { type: 'date' })}${field('Project finish', 'prop.finish', { type: 'date' })}${field('Next step', 'prop.nextStep', { ph: 'e.g. a short call to confirm the scope' })}${field('By what date', 'prop.nextDate', { type: 'date' })}</div>`)}
+  ${sec('2.0', 'Dates and next step', `<div class="grid2"><div class="q full"><div class="ql">Start</div>${seg('prop.startMode', START_MODES(), S.prop.startMode)}<span class="hint">Pick one. Only a set date needs the date below</span></div>${field('Set start date', 'prop.start', { type: 'date', hint: 'Only if you picked A set date' })}${field('Project finish', 'prop.finish', { type: 'date' })}${field('Next step', 'prop.nextStep', { ph: 'e.g. a short call to confirm the scope' })}${field('By what date', 'prop.nextDate', { type: 'date' })}</div>`)}
   ${seoProposalHtml()}
   ${secs}
   ${sec('9.0', 'Why me', field('Only things you can show: real work, real clients, how you work', 'prop.why', { area: true, rows: 4, ph: 'No testimonials or numbers you can\'t show' }))}
@@ -2284,10 +2287,10 @@ function assetCard(a, i) {
   const k = 'assets.' + i + '.', w = [];
   if (a.useDoc && !a.perm) w.push('Ticked for client documents but permission is not ticked, so it will not be included');
   if (a.type === 'ref') w.push('Reference screenshot of another site, inspiration only, do not copy. Do not put it in a client document');
-  if ((a.type === 'photo' || a.type === 'logo') && a.useDoc && !(a.licence || '').trim()) w.push('Write where it came from or its licence in the licence note');
+  if ((a.type === 'photo' || a.type === 'logo') && a.useDoc && (!(a.licence || '').trim() || a.licSel === 'check')) w.push('Pick the licence, or write where it came from. Need to check means it is not ready yet');
   const th = isImg(a) ? `<img class="athumb" src="${a.data}" alt="${esc(a.name)}">` : '<div class="athumb pdf">PDF file, no preview</div>';
   const dim = a.w ? a.w + ' by ' + a.h + ' px, ' : '';
-  return `<div class="acard"><div>${th}${a.type === 'ref' ? '<span class="dnc">Do not copy</span>' : ''}</div><div><div class="grid3"><label class="f"><span class="fl">Type</span>${select(k + 'type', ASSET_TYPES, a.type).replace('data-k=', 'data-full="1" data-k=')}</label>${field('Plain name', k + 'name')}${field('Licence note, where it came from', k + 'licence', { ph: 'e.g. client own photo, or stock site and licence' })}</div>${field('Note, never printed in client documents', k + 'note', { area: true, rows: 2 })}<p class="hint">Original file name, ${esc(a.orig)}. ${dim}${kbs(a.bytes || 0)} kept, ${kbs(a.origBytes || 0)} original</p><div class="row">${chk(k + 'perm', 'Client gave me permission to use this').replace('data-k=', 'data-full="1" data-k=')}${chk(k + 'useDoc', 'Use in client documents').replace('data-k=', 'data-full="1" data-k=')}</div>${w.map(x => '<p class="hint" style="color:var(--stop)">' + esc(x) + '</p>').join('')}<div class="row"><button class="btn sm2" data-act="assetdl" data-i="${i}">Download this one</button><button class="btn sm2" data-act="assetrm" data-i="${i}">Remove</button></div></div></div>`;
+  return `<div class="acard"><div>${th}${a.type === 'ref' ? '<span class="dnc">Do not copy</span>' : ''}</div><div><div class="grid3"><label class="f"><span class="fl">Type</span>${select(k + 'type', ASSET_TYPES, a.type).replace('data-k=', 'data-full="1" data-k=')}</label>${field('Plain name', k + 'name')}${(a.licOther === undefined && a.licence && !a.licSel ? (a.licOther = a.licence, '') : '')}<label class="f"><span class="fl">Licence</span>${select(k + 'licSel', LIC, a.licSel || '')}<span class="hint">Who can say we may use it</span></label>${field('Other, or where it came from', k + 'licOther', { ph: 'e.g. stock site name', hint: 'Only if the list above is not enough' })}</div>${field('Note, never printed in client documents', k + 'note', { area: true, rows: 2 })}<p class="hint">Original file name, ${esc(a.orig)}. ${dim}${kbs(a.bytes || 0)} kept, ${kbs(a.origBytes || 0)} original</p><div class="row">${chk(k + 'perm', 'Client gave me permission to use this').replace('data-k=', 'data-full="1" data-k=')}${chk(k + 'useDoc', 'Use in client documents').replace('data-k=', 'data-full="1" data-k=')}</div>${w.map(x => '<p class="hint" style="color:var(--stop)">' + esc(x) + '</p>').join('')}<div class="row"><button class="btn sm2" data-act="assetdl" data-i="${i}">Download this one</button><button class="btn sm2" data-act="assetrm" data-i="${i}">Remove</button></div></div></div>`;
 }
 /* ---- colours ---- */
 const ROLES = [['', 'Choose a role'], ['primary', 'Primary'], ['secondary', 'Secondary'], ['accent', 'Accent'], ['background', 'Background'], ['text', 'Text'], ['other', 'Other']];
@@ -2559,7 +2562,7 @@ function contractModel() {
     { h: 'Parties and business details', tag: 'job', rows: [['Supplier', FV('myCompany', 'your business name and status')], ['Supplier address and contact', FV('myAddress', 'your address and contact details')], ['Client', S.client.business || '[to fill: business name]'], ['Client contact', S.client.contact || '[to fill: contact name]'], ['Client address', FV('clientAddress', 'client address')], ['Client company number', FV('clientNo', 'client company number, if any')]] },
     { h: 'The services and deliverables', tag: 'job', p: ['I will provide the services in the signed Statement of requirements, Rev ' + req.rev + (req.sign ? ', signed on ' + req.sign.local : ', once signed') + '. In short:'], ul: inc.length ? inc : ['[to fill: what is included]'] },
     { h: 'What is not included', tag: 'job', ul: not.length ? not : ['Nothing listed yet'] },
-    { h: 'Timeline and milestones', tag: 'job', rows: [['Start', S.prop.start ? fmtDate(S.prop.start) : '[to fill: start date]'], ['Finish', S.prop.finish ? fmtDate(S.prop.finish) : '[to fill: finish date]']], ul: Fv('milestones') ? Fv('milestones').split('\n').filter(x => x.trim()) : ['[to fill: milestones and dates]'], p: ['The dates depend on the client supplying what is needed on time.'] },
+    { h: 'Timeline and milestones', tag: 'job', rows: [['Start', startText() || '[to fill: start date]'], ['Finish', S.prop.finish ? fmtDate(S.prop.finish) : '[to fill: finish date]']], ul: Fv('milestones') ? Fv('milestones').split('\n').filter(x => x.trim()) : ['[to fill: milestones and dates]'], p: ['The dates depend on the client supplying what is needed on time.'] },
     { h: 'Client responsibilities and deadlines', tag: 'job', rows: [['The words', FV('supplyCopy', 'who supplies the words')], ['Photos', FV('supplyPhotos', 'who supplies photos')], ['Product information', FV('supplyProducts', 'who supplies product information')], ['Account access', FV('supplyAccess', 'how access is shared')], ['Approvals and feedback', 'Within ' + FV('feedbackDays', 'days for feedback') + ' days of each request']], p: ['If the client is late, the dates move by the same time. Work that has to be redone or held because of a delay is a change request.'] },
     { h: 'Fees, deposit, stage payments and late payment', tag: 'job', rows: quoteRows(q), ul: ['Invoices are payable within ' + FV('payDays', 'days to pay') + ' days', 'Late payment: ' + FV('lateRate', 'late payment charge, if any'), 'Quote ' + (q.no || '[to fill: quote number]') + ' is the price for the work in this contract', 'Deposit if the grant is refused or the client cancels: ' + FV('depositRule', 'what happens to the deposit')] },
     termsSec(q),
@@ -3265,11 +3268,11 @@ Object.assign(ACTS2, {
     S = blank(); ensurePackState();
     S.client.business = l.business || ''; S.client.contact = l.name || ''; S.client.status = 'enquiry';
     const R = REQ(); Object.keys(l.picks || {}).forEach(k => { if (l.picks[k] === 'need' || l.picks[k] === 'unsure') { R.picks[k] = l.picks[k]; if (l.picks[k] === 'need') R.fromClient[k] = true; } });
-    R.note = l.message || ''; S.lead = { email: l.email || '', phone: l.phone || '', at: l.created_at };
+    R.note = l.message || ''; S.lead = { email: l.email || '', phone: l.phone || '', at: l.created_at }; S.client.email = l.email || ''; S.client.phone = l.phone || ''; enquiryPrefill(l); applyDefaults(true);
     const row = await clCreate(JSON.parse(clJson()), l.business || l.name || 'New lead');
     if (row) { try { await clRest('?id=eq.' + encodeURIComponent(l.id), { table: 'leads', method: 'PATCH', body: { handled: true, workbook_id: row.id } }); CL.leads = (CL.leads || []).filter(x => x.id !== l.id); } catch (e) { CL.msg = 'The client was made, but I could not mark the request as handled. It may show again in the list'; } }
   },
-  clnew: () => { S = blank(); ensurePackState(); clCreate(JSON.parse(clJson()), 'New client'); },
+  clnew: () => { S = blank(); ensurePackState(); applyDefaults(true); clCreate(JSON.parse(clJson()), 'New client'); },
   clopen: (t, d) => clOpen(d.id),
   clback: async () => { if (CL.timer || CL.dirty) await cloudSave(false); if (CL.conflict || CL.status === 'signedout' || CL.status === 'error' || CL.status === 'offline') { if (!confirm('The latest changes are not saved online yet. Go to the client list anyway? They stay on this device only')) return; } CL.screen = 'list'; clSafe(() => sessionStorage.removeItem(RESKEY)); render(); clLoadList(); },
   clfile: () => pickFile('.json,application/json', txt => { try { const o = JSON.parse(txt); if (!o || !o.client) throw 0; const b = merge(blank(), o); S = b; ensurePackState(); clCreate(JSON.parse(clJson()), (o.client.business || '').trim() || 'Imported client'); } catch (e) { CL.msg = 'That file could not be read as a client workbook'; render(); } }),
@@ -3387,7 +3390,7 @@ function pItems() {
   }
   if (has('discovery') && A.discovery) {
     const a = A.discovery.a || {}, g = A.discovery.goals || {};
-    DISC.forEach(q => add('disc.a.' + q.id, 'Discovery', q.q || q.id, S.disc.a[q.id], a[q.id], v => set('disc.a.' + q.id, v)));
+    DISC.forEach(q => add('disc.a.' + q.id, 'Plans questions', q.q || q.id, S.disc.a[q.id], a[q.id], v => set('disc.a.' + q.id, v)));
     GOALS.forEach(x => add('disc.goals.' + x[0], 'What matters most', 'Rank for ' + x[1], S.disc.goals[x[0]], g[x[0]], v => set('disc.goals.' + x[0], v), v => v ? 'Rank ' + v : 'Not ranked'));
   }
   if (has('eligibility') && A.eligibility && fund()) {
@@ -3596,8 +3599,8 @@ function proposalBody(d) {
   h.push('<section><h2>Monthly and yearly costs, kept apart</h2>' + ((d.rec.length || own.length) ? '<table><tbody>' + d.rec.map(l => '<tr><td><b>' + esc(l.name) + '</b>' + (l.desc ? '<br><span class="sm">' + esc(l.desc) + '</span>' : '') + (prTierNote(l) ? '<br><span class="sm">' + esc(prTierNote(l)) + '</span>' : '') + '</td><td class="r">' + (prLine(l) ? 'Price to confirm' : esc(money(l.total)) + ' ' + esc(freqWord(l.freq))) + '</td></tr>').join('') + own.map(o => '<tr><td>' + esc(o.label) + '<br><span class="sm">Paid to the provider, not to me</span></td><td class="r">' + esc(money(o.price)) + ' ' + esc(freqWord(o.freq)) + '</td></tr>').join('') + '</tbody></table><p>These are not in the price above.</p>' : '<p>None listed yet.</p>') + '</section>');
   h.push('<section><h2>How you pay</h2>' + ((q.dep.pct || q.stages.length) ? '<table><tbody>' + (q.dep.pct ? '<tr><td>Deposit, ' + esc(q.dep.pct) + '%, before work starts</td><td class="r">' + esc(money(q.dep.amt)) + '</td></tr>' : '') + q.stages.map(s => '<tr><td>' + esc(s.n || 'Stage payment') + ', ' + esc(s.p) + '%</td><td class="r">' + esc(money(s.amt)) + '</td></tr>').join('') + '<tr><td>The rest when the work is finished, ' + esc(q.balPct) + '%</td><td class="r">' + esc(money(q.balAmt)) + '</td></tr></tbody></table>' : '<p>To agree with you.</p>') + '<p>The quote has the full terms, including what happens to the deposit if you cancel.</p></section>');
   const tl = [];
-  if (S.prop.start) tl.push(['Start', fmtDate(S.prop.start)]); if (S.prop.finish) tl.push(['Finished by', fmtDate(S.prop.finish)]);
-  if (!S.prop.start && prHas((S.disc.a || {}).deadline)) tl.push(['Timing you gave me', prClean(S.disc.a.deadline)]);
+  if (startText()) tl.push(['Start', startText()]); if (S.prop.finish) tl.push(['Finished by', fmtDate(S.prop.finish)]);
+  if (!startText() && prHas((S.disc.a || {}).deadline)) tl.push(['Timing you gave me', prClean(S.disc.a.deadline)]);
   if (P2) (P2.dates || []).forEach(x => { if (x.value) tl.push([x.label, fmtDate(x.value)]); });
   h.push('<section><h2>Timeline</h2>' + (tl.length ? '<table><tbody>' + tl.map(r => '<tr><td>' + esc(r[0]) + '</td><td class="r">' + esc(r[1]) + '</td></tr>').join('') + '</tbody></table>' : '<p>To agree with you.</p>') + '<p>The dates depend on you getting me what I need on time.</p></section>');
   if (P2) {
@@ -3682,6 +3685,91 @@ Object.assign(ACTS2, {
   prcopy: async () => { const d = prData(), l = loomInfo(), body = '<h1>Proposal for ' + esc(seoName()) + '</h1>' + (l ? '<p>Video walkthrough: <a href="' + l.link + '">' + l.link + '</a></p>' : '') + proposalBody(d) + '<p>Rhys Hume</p>', tmp = document.createElement('div'); tmp.innerHTML = body; const txt = tmp.innerText || tmp.textContent; S.ui.scan = { hits: scanExport('<html><body>' + body + '</body></html>'), what: 'the copied proposal' };
     try { await navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([body], { type: 'text/html' }), 'text/plain': new Blob([txt], { type: 'text/plain' }) })]); } catch (e) { try { await navigator.clipboard.writeText(txt); } catch (e2) { } } render(); }
 });
+</script>
+<script>/* ---------- Autofill, tap chips and "use last time" (generic, nothing client specific) ---------- */
+const LASTK = 'client-workbook-last-v1';
+const lastGet = () => { let o = {}; try { o = JSON.parse(localStorage.getItem(LASTK) || '{}') || {}; } catch (e) { } return Object.assign({ a: {}, comps: [], q: null, packId: '', startMode: '', startDate: '' }, o); };
+const lastPut = o => { try { localStorage.setItem(LASTK, JSON.stringify(o)); } catch (e) { } };
+const curKey = () => String(S.client.business || '').trim().toLowerCase();
+const adClip = (t, n) => { t = String(t || ''); return t.length > n ? t.slice(0, n - 1) + '...' : t; };
+const CHIPS = {
+  customers: ['Local shoppers', 'Tourists', 'Other businesses', 'Gift buyers', 'Mixed'],
+  success: ['More online orders', 'More footfall', 'Fewer phone calls', 'Look more credible'],
+  today: ['Phone', 'Walk in', 'Shopify or online shop', 'Social messages', 'Email', 'Nothing yet']
+};
+const FORMLBL = { site1: 'a website', site2: 'a website that gives quotes', landing: 'one special page', qform: 'a form', booking: 'online booking', shop: 'an online shop', copy: 'help with the writing', seo: 'help being found online', care: 'looking after the website' };
+const LIC = [['', 'Pick one'], ['owns', 'Client owns it'], ['free', 'Free licence'], ['paid', 'Paid stock licence'], ['check', 'Need to check']];
+const licLabel = v => (LIC.find(x => x[0] === v) || [0, ''])[1];
+const START_MODES = () => [['approval', fund() ? 'On grant approval' : 'When they say yes'], ['date', 'A set date'], ['asap', 'As soon as possible']];
+function startText() {
+  const m = S.prop.startMode; if (m === 'date') return S.prop.start ? fmtDate(S.prop.start) : '';
+  if (m === 'approval') return fund() ? 'Once the grant is approved' : 'Once you accept the quote';
+  if (m === 'asap') return 'As soon as the deposit is paid'; return S.prop.start ? fmtDate(S.prop.start) : '';
+}
+/* chip answers: disc.c[id] = ticked chips, disc.o[id] = other text, disc.a[id] = the joined text everything else reads */
+function dcSync(id) { S.disc.c = S.disc.c || {}; S.disc.o = S.disc.o || {}; S.disc.a[id] = (S.disc.c[id] || []).concat((S.disc.o[id] || '').trim() ? [S.disc.o[id].trim()] : []).join(', '); }
+function lastRem(id) { const v = String((S.disc.a || {})[id] || '').trim(); if (!v) return; const L = lastGet(); L.a[id] = { v, c: (S.disc.c || {})[id] || [], o: (S.disc.o || {})[id] || '', by: curKey() }; lastPut(L); }
+const preHint = id => (S.disc.pre || {})[id] ? 'Filled from their enquiry. Check it and change what is wrong' : '';
+const lastBtn = id => { const l = lastGet().a[id]; if (!l || !l.v || l.by === curKey() || l.v === S.disc.a[id]) return ''; return '<p class="row"><button class="btn sm2" data-act="uselast" data-q="' + id + '">Use last time: ' + esc(adClip(l.v, 48)) + '</button></p>'; };
+function chipQ(d) {
+  const id = d.id, L = lastGet(); S.disc.c = S.disc.c || {}; S.disc.o = S.disc.o || {};
+  if (S.disc.o[id] === undefined && !(S.disc.c[id] || []).length && S.disc.a[id]) S.disc.o[id] = S.disc.a[id];
+  const opts = id === 'locals' ? L.comps : CHIPS[id], sel = S.disc.c[id] || [];
+  const chips = opts.concat(sel.filter(x => !opts.includes(x))).map(o => '<button type="button" class="chipb ' + (sel.includes(o) ? 'on' : '') + '" aria-pressed="' + sel.includes(o) + '" data-act="chip" data-q="' + id + '" data-v="' + esc(o) + '">' + esc(o) + '</button>').join('');
+  const add = id === 'locals' ? '<div class="row" style="margin:6px 0"><input id="cmp-new" placeholder="Add a competitor to my list" style="max-width:280px"><button class="btn sm2" data-act="cmpadd">Add to my list</button></div>' + (L.comps.length ? '' : '<p class="hint">Your list is empty. Add the names you come across and they stay here for every client</p>') : '';
+  return '<div class="q"><div class="ql">' + esc(d.q) + '</div><div class="chips">' + chips + '</div>' + add + field('Other', 'disc.o.' + id, { hint: preHint(id) || 'Anything not above, in their words' }) + lastBtn(id) + '</div>';
+}
+const DHINT = { goalsOwn: 'e.g. Let people order online. In their words', musts: 'e.g. Click and collect', content: 'e.g. Product photos, no words yet', updates: 'e.g. Me, or a member of staff', deadline: 'e.g. 31 January, and why', budget: 'Only if they want to say, e.g. around 2000', nothing: 'Only numbers the client gave', nothingSrc: 'e.g. Their sales records', brand: 'e.g. A logo, no fonts yet' };
+function discQ(d) { if (CHIPS[d.id] || d.id === 'locals') return chipQ(d); return field(esc(d.q), 'disc.a.' + d.id, Object.assign(d.line ? {} : { area: true, rows: 2 }, { hint: preHint(d.id) || DHINT[d.id] || '' })) + lastBtn(d.id); }
+
+/* ---- client details copied into every screen that asks for them ---- */
+function cSync() {
+  const c = S.client; if (!c) return; if (S.lead) { if (!c.email && S.lead.email) c.email = S.lead.email; if (!c.phone && S.lead.phone) c.phone = S.lead.phone; }
+  const f = S.docs.f || (S.docs.f = {}), parts = [c.business, c.address].filter(x => (x || '').trim()).join(', '), ct = [c.email ? 'Email ' + c.email : '', c.phone ? 'Phone ' + c.phone : ''].filter(Boolean).join('. '), auto = [parts, ct].filter(Boolean).join('. ');
+  if (auto && (!(f.clientAddress || '').trim() || f.clientAddress === f.clientAddressAuto)) { f.clientAddress = auto; f.clientAddressAuto = auto; }
+  if (S.own && S.own.domain) { if (!(S.own.domain.owner || '').trim() && c.business) S.own.domain.owner = c.business; if (!(S.own.domain.email || '').trim() && c.email) S.own.domain.email = c.email; }
+  if (S.care && !(S.care.who || '').trim() && c.contact) S.care.who = c.contact;
+  if (S.owners && !(S.owners.client || '').trim() && c.contact) S.owners.client = c.contact;
+  (S.assets || []).forEach(a => { if (a.licSel !== undefined || a.licOther !== undefined) a.licence = [licLabel(a.licSel), (a.licOther || '').trim()].filter(Boolean).join(', '); });
+}
+/* ---- usual defaults, from the last job ---- */
+function applyDefaults(isNew) {
+  const L = lastGet(), c = S.client; if (isNew && L.packId && PACKS.some(p => p.id === L.packId)) c.packId = L.packId;
+  if (!S.prop.startMode) S.prop.startMode = L.startMode || (fund() ? 'approval' : '');
+  if (S.prop.startMode === 'date' && !S.prop.start && L.startDate) S.prop.start = L.startDate;
+  const dt = k => ((fund() ? P().dates || [] : []).find(x => x.kind === k) || {}).value || '';
+  if (!S.prop.finish && dt('end')) S.prop.finish = dt('end');
+  if (S.plan && !S.plan.submit && dt('deadline')) S.plan.submit = dt('deadline');
+  if (!String(S.quote2.depPct || '').trim()) S.quote2.depPct = (L.q && L.q.depPct) || '50';
+  if (!(S.quote2.stages || []).length && L.q && (L.q.stages || []).length) S.quote2.stages = L.q.stages.map(s => ({ n: s.n, p: s.p }));
+  cSync();
+}
+function lastNote() {
+  if (!S.ui || !S.ui.changedSince) return; const L = lastGet(), before = JSON.stringify(L);
+  if (S.client.packId) L.packId = S.client.packId; if (S.prop.startMode) { L.startMode = S.prop.startMode; if (S.prop.startMode === 'date' && S.prop.start) L.startDate = S.prop.start; }
+  if ((S.quote2.lines || []).some(l => l.price !== '' && l.price != null)) L.q = { depPct: S.quote2.depPct, stages: (S.quote2.stages || []).map(s => ({ n: s.n, p: s.p })) };
+  if (JSON.stringify(L) !== before) lastPut(L);
+}
+const adSave = save; save = function () { try { cSync(); lastNote(); } catch (e) { } return adSave.apply(this, arguments); };
+document.addEventListener('input', e => {
+  const k = e.target && e.target.dataset && e.target.dataset.k; if (!k) return; let m;
+  if ((m = /^disc\.o\.(\w+)$/.exec(k))) { dcSync(m[1]); save(); }
+  if ((m = /^disc\.(?:a|o)\.(\w+)$/.exec(k))) { if (S.disc.pre) delete S.disc.pre[m[1]]; lastRem(m[1]); }
+});
+Object.assign(ACTS2, {
+  chip: (t, d) => { const id = d.q; S.disc.c = S.disc.c || {}; const a = S.disc.c[id] || (S.disc.c[id] = []), i = a.indexOf(d.v); if (i < 0) a.push(d.v); else a.splice(i, 1); if (S.disc.pre) delete S.disc.pre[id]; dcSync(id); lastRem(id); save(); render(); },
+  cmpadd: () => { const el = document.getElementById('cmp-new'), v = el ? el.value.trim() : ''; if (!v) return; const L = lastGet(); if (!L.comps.includes(v)) L.comps.push(v); lastPut(L); S.disc.c = S.disc.c || {}; const a = S.disc.c.locals || (S.disc.c.locals = []); if (!a.includes(v)) a.push(v); dcSync('locals'); lastRem('locals'); save(); render(); },
+  uselast: (t, d) => { const l = lastGet().a[d.q]; if (!l) return; S.disc.a[d.q] = l.v; S.disc.c = S.disc.c || {}; S.disc.o = S.disc.o || {}; S.disc.c[d.q] = (l.c || []).slice(); S.disc.o[d.q] = l.o || (l.c && l.c.length ? '' : l.v); if (S.disc.pre) delete S.disc.pre[d.q]; save(); render(); },
+  usual: () => { applyDefaults(false); save(); render(); }
+});
+/* ---- a new client from the request form: fill what we can from the enquiry ---- */
+function enquiryPrefill(l) {
+  const msg = String(l.message || '').trim(), wants = Object.keys(l.picks || {}).filter(k => l.picks[k] === 'need').map(k => FORMLBL[k]).filter(Boolean), maybe = Object.keys(l.picks || {}).filter(k => l.picks[k] === 'unsure').map(k => FORMLBL[k]).filter(Boolean);
+  const g = [wants.length ? 'Wants ' + wants.join(', ') : '', maybe.length ? 'Not sure about ' + maybe.join(', ') : '', msg].filter(Boolean).join('. ');
+  S.disc.pre = S.disc.pre || {}; if (g) { S.disc.a.goalsOwn = g; S.disc.pre.goalsOwn = true; }
+  const low = msg.toLowerCase(), hit = [['phone', /\b(phone|call us|ring)\b/], ['walk in', /\b(walk in|walk-in|in store|in the shop)\b/], ['Shopify or online shop', /\b(shopify|online shop|web ?shop)\b/], ['Social messages', /\b(instagram|facebook|social|dm|dms)\b/], ['Email', /\bemail\b/]].filter(x => x[1].test(low)).map(x => x[0] === 'phone' ? 'Phone' : x[0] === 'walk in' ? 'Walk in' : x[0]);
+  if (hit.length) { S.disc.c = S.disc.c || {}; S.disc.c.today = hit; dcSync('today'); S.disc.pre.today = true; }
+}
 </script>
 <script>init();</script>
 </body></html>
