@@ -466,3 +466,12 @@ test('niche: the Action passes the niche through env only', function () {
   assert.match(yml, /--niche "\$IN_NICHE"/);
   assert.match(yml, /- engineering/);
 });
+
+test('the hard rule "left out, never filled" is in the AI instructions and in docs/PREVIEW-RULES.md', function () {
+  const src = read('tools/preview.js');
+  assert.match(src, /Hard rule for every part of the page: a part that needs a fact the site does not state is left out, never filled/);
+  const doc = read('docs/PREVIEW-RULES.md');
+  assert.match(doc, /switches on only when the facts it needs were found/);
+  assert.match(doc, /Never show holes/);
+  assert.ok(!/—/.test(doc), 'the rules doc has an em dash');
+});
