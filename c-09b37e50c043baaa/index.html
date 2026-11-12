@@ -53,6 +53,15 @@ input:focus,textarea:focus,select:focus,button:focus{outline:3px solid #7aa2f7;o
 .meter>i{display:block;height:100%;background:var(--ink)}
 @media (min-width:700px){h1{font-size:38px}body{font-size:18px}.bar{padding:12px 24px}}
 @media print{.bar{display:none}}
+.pqmain{max-width:820px;margin:0 auto;padding:14px 12px 90px}
+.pqdoc{margin:10px 0}
+.pqcanvas{display:block;width:100%;max-width:560px;height:auto;aspect-ratio:3/1;background:#fff;border:2px solid var(--ink);touch-action:none;cursor:crosshair}
+.pqsay{font-size:17px;line-height:1.5;padding:12px 14px;background:var(--tint);border-left:4px solid var(--ink)}
+.pqsigned{margin-top:14px;padding:12px 14px;border:2px solid var(--ok);background:#fff;break-inside:avoid}
+.pqsigned h3{margin:0 0 6px;color:var(--ok)}
+.pqsig{display:block;max-width:300px;width:100%;height:auto;border-bottom:1px solid var(--ink)}
+.err{color:var(--stop);font-weight:600;min-height:1.2em}
+@media print{body.pq header.top,body.pq .corner,body.pq .noprint{display:none!important}body.pq,body.pq #app{background:#fff!important}body.pq .pqmain{padding:0}@page{size:A4;margin:12mm}}
 
 </style></head><body><div id="app"><div style="padding:40px 18px">Loading</div></div>
 <script>(function () {
@@ -211,8 +220,8 @@ input:focus,textarea:focus,select:focus,button:focus{outline:3px solid #7aa2f7;o
   }
   function render() {
     var ban = P.ro ? '<div class="ro-banner">Read only view of what your client sees. Nothing here is saved</div>' : '';
-    var sub = P.submittedAt ? '<div class="note ok" id="subnote">' + subText() + '</div>' : '';
-    app().innerHTML = ban + shell('<main><div class="intro"><p>Hi, I\'m Rhys. These are the things that help me build your website. Answer what you can and skip what you cannot. It saves as you go, and you can come back to this same link any time. When you are ready, press <b>Send to Rhys</b>. You can still change things after that.</p><p class="hint">Please do not type passwords or bank details anywhere on this page</p></div>' + sub +
+    var qb = P.ro ? '' : qBanner(); var sub = P.submittedAt ? '<div class="note ok" id="subnote">' + subText() + '</div>' : '';
+    app().innerHTML = ban + shell('<main>' + qb + '<div class="intro"><p>Hi, I\'m Rhys. These are the things that help me build your website. Answer what you can and skip what you cannot. It saves as you go, and you can come back to this same link any time. When you are ready, press <b>Send to Rhys</b>. You can still change things after that.</p><p class="hint">Please do not type passwords or bank details anywhere on this page</p></div>' + sub +
       vVideos() + (has('needs') && P.opts.length ? vNeeds() : '') + (has('discovery') ? vDisc() : '') + (has('eligibility') ? vElig() : '') + (has('evidence') ? vEvid() : '') + (has('brand') ? vBrand() : '') + '</main><div class="corner">Prepared with Rhys Hume</div>' +
       (P.ro ? '' : '<div class="bar noprint"><div class="st" id="st" role="status"></div><button type="button" class="btn pri" data-do="send" id="sendbtn">Send to Rhys</button></div>'));
     counts(); status();
@@ -353,6 +362,89 @@ input:focus,textarea:focus,select:focus,button:focus{outline:3px solid #7aa2f7;o
     if (P.again) { P.again = false; var s = P.wantSend; P.wantSend = false; if (P.dirty || s) save(!!s); }
   }
 
+  /* ---- Accept this quote ---- */
+  var gbp = function (n) { n = Math.round(Number(n || 0) * 100) / 100; return '£' + n.toLocaleString('en-GB', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }); };
+  var when = function (t) { var d = new Date(t); return isNaN(d) ? '' : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) + ' at ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }); };
+  function clean(html) {
+    var t = document.createElement('template'); t.innerHTML = String(html || '');
+    Array.prototype.forEach.call(t.content.querySelectorAll('script,iframe,object,embed,link,meta,form,input,button,textarea,select,base'), function (n) { n.remove(); });
+    Array.prototype.forEach.call(t.content.querySelectorAll('*'), function (n) { Array.prototype.slice.call(n.attributes).forEach(function (a) { if (/^on/i.test(a.name) || /^\s*(javascript|data):/i.test(a.value)) n.removeAttribute(a.name); }); });
+    var d = document.createElement('div'); d.appendChild(t.content); return d.innerHTML;
+  }
+  function cssClean(c) { return String(c || '').replace(/<\/?style/gi, '').replace(/@import[^;]*;?/gi, '').replace(/url\s*\(/gi, 'u('); }
+  function quoteDoc(s) { return '<div class="pqdoc"><style>' + cssClean(s.css) + '</style>' + clean(s.html) + '</div>'; }
+  function viewQuote() {
+    var r = P.q; P.view = 'quote'; document.body.classList.remove('pq');
+    if (!r || r.state === 'none') { P.view = ''; render(); return; }
+    if (r.state === 'replaced') { bigMsg('This quote has been replaced', 'Ask Rhys for the new one'); return; }
+    var s = r.snapshot || {}, nm = P.name;
+    if (r.state === 'accepted') {
+      var a = r.accepted || {}; document.body.classList.add('pq');
+      app().innerHTML = shell('<main class="pqmain"><div class="note ok noprint"><b>Thank you, ' + esc(a.name) + '.</b> Your approval is saved. Rhys will see it on his side. You can print or save this signed copy for your records.</div>' +
+        '<p class="noprint"><button type="button" class="btn pri" data-qdo="print">Print or save as PDF</button> <button type="button" class="btn" data-qdo="back">Back to my page</button></p>' + quoteDoc(s) +
+        '<div class="pqsigned"><h3>Approved</h3><p>Quote ' + esc(r.ref) + ', version ' + esc(r.version) + ', ' + esc(gbp(s.once)) + ' one off' + (Number(s.monthly) > 0 ? ' and ' + esc(gbp(s.monthly)) + ' a month' : '') + (Number(s.deposit) > 0 ? ', ' + esc(gbp(s.deposit)) + ' deposit before work starts' : '') + '.</p>' +
+        '<img class="pqsig" alt="Drawn signature of ' + esc(a.name) + '" src="' + (/^data:image\/png;base64,[A-Za-z0-9+\/=]+$/.test(a.signature || '') ? a.signature : '') + '"><p><b>' + esc(a.name) + '</b><br>Approved on ' + esc(when(a.at)) + '<br>Agreement between ' + esc(s.client || nm) + ' and Rhys Hume' + (a.hash ? '<br><span class="hint">Record ' + esc(String(a.hash).slice(0, 12)) + '</span>' : '') + '</p>' +
+        '<p class="hint">This is an electronic record of the approval. It is not legal advice.</p></div></main>');
+      return;
+    }
+    app().innerHTML = shell('<main class="pqmain"><p class="noprint"><button type="button" class="btn" data-qdo="back">Back to my page</button></p>' + quoteDoc(s) +
+      '<div class="bar noprint"><div class="st">Quote ' + esc(r.ref) + ', ' + esc(gbp(s.once)) + ' one off' + (Number(s.monthly) > 0 ? ', ' + esc(gbp(s.monthly)) + ' a month' : '') + '</div><button type="button" class="btn pri" data-qdo="accept">Accept this quote</button></div></main>');
+  }
+  function viewConfirm() {
+    var r = P.q, s = r.snapshot || {};
+    var sent = 'You are accepting Quote ' + esc(r.ref) + ' for ' + esc(gbp(s.once)) + ' one off' + (Number(s.monthly) > 0 ? ' and ' + esc(gbp(s.monthly)) + ' a month' : '') + (Number(s.deposit) > 0 ? ', with a ' + esc(gbp(s.deposit)) + ' deposit before work starts' : '') + '. This agreement is between ' + esc(s.client || P.name) + ' and Rhys Hume.';
+    app().innerHTML = shell('<main class="pqmain"><div class="sec"><h2>Accept this quote</h2><p class="pqsay" id="pqsay">' + sent + '</p>' +
+      '<div class="q"><label class="ql" for="pq-name">Your full name</label><input type="text" id="pq-name" autocomplete="name" maxlength="120"></div>' +
+      '<label class="chk"><input type="checkbox" id="pq-ok"><span>I have read the quote and I approve it</span></label>' +
+      '<div class="q"><span class="ql">Draw your signature</span><canvas id="pq-sig" class="pqcanvas" width="720" height="240" aria-label="Signature box. Draw with your finger or mouse"></canvas><p><button type="button" class="btn sm" data-qdo="clear">Clear</button></p></div>' +
+      '<p class="hint">This saves your name, your drawn signature, and the date and time as an electronic record of your approval. It is not legal advice.</p>' +
+      '<p class="err" id="pq-err" role="alert"></p><p><button type="button" class="btn pri" data-qdo="yes" id="pq-yes" disabled>Yes, I approve this quote</button> <button type="button" class="btn" data-qdo="viewq">Back to the quote</button></p></div></main>');
+    sigInit();
+  }
+  var SIG = { drawn: false, down: false, lx: 0, ly: 0 };
+  function sigOk() { var n = $('#pq-name'), c = $('#pq-ok'), b = $('#pq-yes'); if (b) b.disabled = !(n && n.value.trim().length >= 2 && c && c.checked && SIG.drawn); }
+  function sigInit() {
+    var cv = $('#pq-sig'); if (!cv) return; SIG.drawn = false; SIG.down = false;
+    var x = cv.getContext('2d'); x.lineWidth = 4; x.lineCap = 'round'; x.lineJoin = 'round'; x.strokeStyle = '#0b2a5b';
+    function pt(e) { var r = cv.getBoundingClientRect(); return [(e.clientX - r.left) * cv.width / r.width, (e.clientY - r.top) * cv.height / r.height]; }
+    cv.addEventListener('pointerdown', function (e) { e.preventDefault(); try { cv.setPointerCapture(e.pointerId); } catch (z) { } var p = pt(e); SIG.down = true; SIG.lx = p[0]; SIG.ly = p[1]; x.beginPath(); x.moveTo(p[0], p[1]); x.lineTo(p[0] + .1, p[1] + .1); x.stroke(); });
+    cv.addEventListener('pointermove', function (e) { if (!SIG.down) return; e.preventDefault(); var p = pt(e); x.beginPath(); x.moveTo(SIG.lx, SIG.ly); x.lineTo(p[0], p[1]); x.stroke(); SIG.lx = p[0]; SIG.ly = p[1]; SIG.drawn = true; sigOk(); });
+    ['pointerup', 'pointercancel', 'pointerleave'].forEach(function (n) { cv.addEventListener(n, function () { SIG.down = false; sigOk(); }); });
+  }
+  document.addEventListener('input', function (e) { if (e.target && (e.target.id === 'pq-name')) sigOk(); });
+  document.addEventListener('change', function (e) { if (e.target && e.target.id === 'pq-ok') sigOk(); });
+  function loadQuote(go) {
+    return rpc('portal_quote', { p_token: P.token, p_quote_id: P.qid || null }).then(function (r) {
+      P.q = r && r.state && r.state !== 'none' ? r : null;
+      if (P.q && P.q.id) { try { history.replaceState(null, '', location.pathname + '#t=' + P.token + '&q=' + P.q.id); } catch (z) { } }
+      if (P.q && (go || P.q.state === 'replaced')) viewQuote(); else if (P.view !== 'quote') render();
+    }, function () { P.q = null; });
+  }
+  function qBanner() {
+    var r = P.q; if (!r || r.state === 'replaced') return '';
+    if (r.state === 'accepted') return '<div class="note ok" id="qban">You approved Quote ' + esc(r.ref) + ' on ' + esc(when((r.accepted || {}).at)) + '. <button type="button" class="btn sm" data-qdo="viewq">See the signed quote</button></div>';
+    return '<div class="note" id="qban"><b>Rhys has sent you a quote.</b> Quote ' + esc(r.ref) + ', ' + esc(gbp((r.snapshot || {}).once)) + ' one off. <button type="button" class="btn pri sm" data-qdo="viewq">Read and accept it</button></div>';
+  }
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest('[data-qdo]'); if (!t || P.ro) return; var d = t.dataset.qdo;
+    if (d === 'viewq') viewQuote();
+    else if (d === 'back') { P.view = ''; document.body.classList.remove('pq'); render(); }
+    else if (d === 'accept') viewConfirm();
+    else if (d === 'clear') { var cv = $('#pq-sig'); if (cv) { cv.getContext('2d').clearRect(0, 0, cv.width, cv.height); SIG.drawn = false; sigOk(); } }
+    else if (d === 'print') { try { window.print(); } catch (z) { } }
+    else if (d === 'yes') {
+      var nm = ($('#pq-name').value || '').trim(), cv2 = $('#pq-sig'), er = $('#pq-err'); er.textContent = '';
+      if (nm.length < 2 || !$('#pq-ok').checked || !SIG.drawn) { er.textContent = 'Please type your full name, tick the box and draw your signature'; return; }
+      t.disabled = true; t.textContent = 'Saving';
+      var out = document.createElement('canvas'); out.width = cv2.width; out.height = cv2.height; var ox = out.getContext('2d'); ox.fillStyle = '#fff'; ox.fillRect(0, 0, out.width, out.height); ox.drawImage(cv2, 0, 0);
+      rpc('portal_quote_accept', { p_token: P.token, p_quote_id: P.q.id, p_name: nm, p_signature: out.toDataURL('image/png') }).then(function (r) {
+        if (!r) { bigMsg('This link is not working', 'It may be switched off. Please ask Rhys to send it again'); return; }
+        if (r.state === 'replaced') { P.q = { state: 'replaced', id: P.q.id }; viewQuote(); return; }
+        P.qid = P.q.id; return loadQuote(true);
+      }).catch(function (er2) { t.disabled = false; t.textContent = 'Yes, I approve this quote'; $('#pq-err').textContent = (er2 instanceof TypeError) ? 'I could not save this, there is no connection. Your name and signature are still on this screen. Try again in a moment' : 'I could not save this. Please try again, or ask Rhys'; });
+    }
+  });
+
   /* ---- start ---- */
   function start() {
     var h = location.hash.replace(/^#/, '');
@@ -370,11 +462,11 @@ input:focus,textarea:focus,select:focus,button:focus{outline:3px solid #7aa2f7;o
     }
     var m = /(?:^|&)t=([0-9a-f]{48})(?:&|$)/.exec(h);
     if (!m) { bigMsg('This link is not working', 'It may be incomplete or switched off. Please ask Rhys to send it again'); return; }
-    P.token = m[1]; bigMsg('Loading', 'One moment');
+    P.token = m[1]; var qm = /(?:^|&)q=([0-9a-f-]{36})(?:&|$)/.exec(h); P.qid = qm ? qm[1] : ''; bigMsg('Loading', 'One moment');
     rpc('portal_open', { p_token: P.token }).then(function (r) {
       if (!r) { bigMsg('This link is not working', 'It may be incomplete or switched off. Please ask Rhys to send it again'); return; }
       P.name = String(r.client_name || '').slice(0, 200); P.A = normalise(r.answers); P.cfg = P.A.discovery._cfg || null; P.opts = optsOf(P.cfg); P.sections = sectionsOf(P.cfg);
-      P.submittedAt = r.submitted_at ? Date.parse(r.submitted_at) : null; render();
+      P.submittedAt = r.submitted_at ? Date.parse(r.submitted_at) : null; render(); loadQuote(!!P.qid);
       fetch(SB + '/functions/v1/portal-videos', { method: 'POST', headers: { apikey: KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ token: P.token }) }).then(function (x) { return x.ok ? x.json() : { videos: [] }; }).then(function (j) { var v = j && Array.isArray(j.videos) ? j.videos : []; P.videos = v.slice(0, 20).filter(function (x) { return x && typeof x.url === 'string' && x.url.indexOf(SB + '/storage/') === 0; }); if (P.videos.length && !P.busyEdit) { var y = window.scrollY; render(); window.scrollTo(0, y); } }).catch(function () { });
     }).catch(function () { bigMsg('I could not load this page', 'Check your connection and try again', '<p><button type="button" class="btn pri" onclick="location.reload()">Try again</button></p>'); });
   }
