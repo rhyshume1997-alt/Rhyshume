@@ -173,7 +173,7 @@ function makeFetch(deadline, realFetch) {
 
 async function callSheet(payload) {
   const controller = new AbortController();
-  const timer = setTimeout(function () { controller.abort(); }, 10000);
+  const timer = setTimeout(function () { controller.abort(); }, 25000);
   try {
     const res = await fetch(process.env.UPGRADE_SHEET_URL, {
       method: 'POST',
@@ -186,6 +186,7 @@ async function callSheet(payload) {
     const data = await res.json();
     return data && typeof data === 'object' ? data : { ok: false, reason: 'sheet_bad_reply' };
   } catch (e) {
+    console.error('upgrade-live: sheet call threw: ' + (e && e.name) + ' ' + (e && e.message) + ' ' + (e && e.cause && (e.cause.code || e.cause.message)) + ' urlset=' + Boolean(process.env.UPGRADE_SHEET_URL) + ' urllen=' + String(process.env.UPGRADE_SHEET_URL || '').length);
     return { ok: false, reason: 'sheet_unreachable' };
   } finally {
     clearTimeout(timer);
