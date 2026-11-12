@@ -377,6 +377,7 @@ input:focus,textarea:focus,select:focus,button:focus{outline:3px solid #7aa2f7;o
     var r = P.q; P.view = 'quote'; document.body.classList.remove('pq');
     if (!r || r.state === 'none') { P.view = ''; render(); return; }
     if (r.state === 'replaced') { bigMsg('This quote has been replaced', 'Ask Rhys for the new one'); return; }
+    if (r.state === 'expired') { bigMsg('This link has expired', 'Ask Rhys for a new one'); return; }
     var s = r.snapshot || {}, nm = P.name;
     if (r.state === 'accepted') {
       var a = r.accepted || {}; document.body.classList.add('pq');
@@ -388,7 +389,7 @@ input:focus,textarea:focus,select:focus,button:focus{outline:3px solid #7aa2f7;o
       return;
     }
     app().innerHTML = shell('<main class="pqmain"><p class="noprint"><button type="button" class="btn" data-qdo="back">Back to my page</button></p>' + quoteDoc(s) +
-      '<div class="bar noprint"><div class="st">Quote ' + esc(r.ref) + ', ' + esc(gbp(s.once)) + ' one off' + (Number(s.monthly) > 0 ? ', ' + esc(gbp(s.monthly)) + ' a month' : '') + '</div><button type="button" class="btn pri" data-qdo="accept">Accept this quote</button></div></main>');
+      '<div class="bar noprint"><div class="st">Quote ' + esc(r.ref) + ', ' + esc(gbp(s.once)) + ' one off' + (Number(s.monthly) > 0 ? ', ' + esc(gbp(s.monthly)) + ' a month' : '') + (r.expires_at ? '. This link works until ' + esc(new Date(r.expires_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })) : '') + '</div><button type="button" class="btn pri" data-qdo="accept">Accept this quote</button></div></main>');
   }
   function viewConfirm() {
     var r = P.q, s = r.snapshot || {};
@@ -417,11 +418,12 @@ input:focus,textarea:focus,select:focus,button:focus{outline:3px solid #7aa2f7;o
     return rpc('portal_quote', { p_token: P.token, p_quote_id: P.qid || null }).then(function (r) {
       P.q = r && r.state && r.state !== 'none' ? r : null;
       if (P.q && P.q.id) { try { history.replaceState(null, '', location.pathname + '#t=' + P.token + '&q=' + P.q.id); } catch (z) { } }
-      if (P.q && (go || P.q.state === 'replaced')) viewQuote(); else if (P.view !== 'quote') render();
+      if (P.q && (go || P.q.state === 'replaced') && P.q.state !== 'none') viewQuote(); else if (P.view !== 'quote') render();
     }, function () { P.q = null; });
   }
   function qBanner() {
     var r = P.q; if (!r || r.state === 'replaced') return '';
+    if (r.state === 'expired') return '<div class="note bad" id="qban">Your quote link has expired. Ask Rhys for a new one.</div>';
     if (r.state === 'accepted') return '<div class="note ok" id="qban">You approved Quote ' + esc(r.ref) + ' on ' + esc(when((r.accepted || {}).at)) + '. <button type="button" class="btn sm" data-qdo="viewq">See the signed quote</button></div>';
     return '<div class="note" id="qban"><b>Rhys has sent you a quote.</b> Quote ' + esc(r.ref) + ', ' + esc(gbp((r.snapshot || {}).once)) + ' one off. <button type="button" class="btn pri sm" data-qdo="viewq">Read and accept it</button></div>';
   }
@@ -439,7 +441,7 @@ input:focus,textarea:focus,select:focus,button:focus{outline:3px solid #7aa2f7;o
       var out = document.createElement('canvas'); out.width = cv2.width; out.height = cv2.height; var ox = out.getContext('2d'); ox.fillStyle = '#fff'; ox.fillRect(0, 0, out.width, out.height); ox.drawImage(cv2, 0, 0);
       rpc('portal_quote_accept', { p_token: P.token, p_quote_id: P.q.id, p_name: nm, p_signature: out.toDataURL('image/png') }).then(function (r) {
         if (!r) { bigMsg('This link is not working', 'It may be switched off. Please ask Rhys to send it again'); return; }
-        if (r.state === 'replaced') { P.q = { state: 'replaced', id: P.q.id }; viewQuote(); return; }
+        if (r.state === 'replaced' || r.state === 'expired') { P.q = { state: r.state, id: P.q.id }; viewQuote(); return; }
         P.qid = P.q.id; return loadQuote(true);
       }).catch(function (er2) { t.disabled = false; t.textContent = 'Yes, I approve this quote'; $('#pq-err').textContent = (er2 instanceof TypeError) ? 'I could not save this, there is no connection. Your name and signature are still on this screen. Try again in a moment' : 'I could not save this. Please try again, or ask Rhys'; });
     }

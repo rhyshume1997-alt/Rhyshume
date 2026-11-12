@@ -3815,7 +3815,7 @@ function enquiryPrefill(l) {
 }
 </script>
 <script>/* ---------- Quote page: one A4 page, short, like a supplier quote ---------- */
-const qpCss = '.qp{font:13px/1.4 "IBM Plex Sans",Arial,sans-serif;color:#0b2a5b;max-width:760px;margin:0 auto;background:#f4f4f0;padding:18px;break-inside:avoid}.qp *{box-sizing:border-box}.qp .qh{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid #0b2a5b;padding-bottom:10px}.qp .qname{font:500 34px/1 "Newsreader",Georgia,serif;color:#0b2a5b;letter-spacing:-.01em}.qp .qsite{font:400 11px "IBM Plex Mono",monospace;color:#56688a;margin-top:6px}.qp .qbig{font:500 46px/1 "Newsreader",Georgia,serif;letter-spacing:.02em;color:#0b2a5b}.qp .qmeta{display:flex;justify-content:space-between;gap:20px;margin:14px 0}.qp .qmeta>div{flex:1}.qp .qmeta dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:3px 14px}.qp .qmeta dt{font:400 11px "IBM Plex Mono",monospace;color:#56688a;letter-spacing:.04em;text-transform:uppercase;padding-top:2px}.qp .qmeta dd{margin:0;font-weight:600}.qp .qto b{font:500 18px "Newsreader",Georgia,serif}.qp .qto{color:#33486c}.qp table{width:100%;border-collapse:collapse;margin-top:4px}.qp th{background:#0b2a5b;color:#fff;text-align:left;font:500 11px "IBM Plex Mono",monospace;letter-spacing:.06em;text-transform:uppercase;padding:6px 8px}.qp td{padding:7px 8px;border-bottom:1px solid #c3cad6}.qp .r{text-align:right;white-space:nowrap;font-family:"IBM Plex Mono",monospace;font-size:12.5px}.qp td:first-child{font-family:"IBM Plex Sans",Arial,sans-serif}.qp .qtot{margin:8px 0 0 auto;width:64%;font-size:13px}.qp .qtot div{display:flex;justify-content:space-between;gap:12px;padding:3px 8px;color:#33486c}.qp .qtot span:last-child{font-family:"IBM Plex Mono",monospace;font-size:12.5px;text-align:right}.qp .qtot .g{font-weight:600;font-size:15px;border-top:2px solid #0b2a5b;margin-top:2px;padding-top:6px;color:#0b2a5b}.qp .qmo{margin:12px 0 0;padding:7px 10px;border-left:3px solid #3a659f;background:#dce5f1;font-size:12.5px;color:#0b2a5b}.qp h3{font:400 11px "IBM Plex Mono",monospace;letter-spacing:.1em;text-transform:uppercase;margin:16px 0 5px;color:#3a659f}.qp .qpay{margin:0;color:#33486c}.qp .qacc{display:grid;grid-template-columns:1fr 1fr;gap:8px 18px;margin-top:6px}.qp .qbox{border:1px solid #c3cad6;background:#fff;min-height:30px;padding:3px 7px;font:400 10.5px "IBM Plex Mono",monospace;color:#56688a}.qp .qbox.sig{grid-row:span 2;min-height:68px}.qp .rsig{max-width:none;margin:10px 0 0}.qp .rsig .rsig-s{font-size:36px;color:#0b2a5b}.qp .rsig .rsig-line{border-bottom:1px solid #0b2a5b}.qp .rsig p{font-size:12px;color:#33486c}.qp ul.qn{margin:0;padding-left:16px;font-size:11.5px;color:#33486c}.qp .qf{margin-top:14px;padding-top:7px;border-top:2px solid #3a659f;font-size:11px;color:#33486c}.qp .qf1{font:500 12px "IBM Plex Mono",monospace;color:#0b2a5b}.qp .qf2{margin-top:2px}@media (max-width:600px){.qp{padding:12px}.qp .qh{align-items:center}.qp .qname{font-size:22px}.qp .qbig{font-size:32px}.qp .qmeta{flex-direction:column;gap:12px}.qp table{table-layout:fixed}.qp th:nth-child(2){width:30px}.qp th:nth-child(n+3){width:64px}.qp th,.cvcard .qp th{font-size:9px;padding:6px 3px;letter-spacing:0}.qp td,.cvcard .qp td{padding:7px 3px;font-size:12.5px}.qp .r{font-size:11px}.qp .qtot span:last-child{font-size:11.5px}.qp .qtot{width:100%}.qp .qacc{grid-template-columns:1fr}.qp .qbox.sig{grid-row:auto}}@media print{html,body,body.pd,body.pd .main,body.pd #app{background:#fff!important}.qp{background:#fff;padding:0}.qp .qbox{background:#fff}.qp th,.qp .qmo{-webkit-print-color-adjust:exact;print-color-adjust:exact}.qp th{background:#0b2a5b!important;color:#fff!important}.qp .qmo{background:#dce5f1!important}.qp .rsig-s{color:#0b2a5b!important}}';
+const qpCss = '.qp .qconf{font:500 10px "IBM Plex Mono",monospace;letter-spacing:.16em;text-transform:uppercase;color:#56688a;margin:0 0 8px}.qp{font:13px/1.4 "IBM Plex Sans",Arial,sans-serif;color:#0b2a5b;max-width:760px;margin:0 auto;background:#f4f4f0;padding:18px;break-inside:avoid}.qp *{box-sizing:border-box}.qp .qh{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid #0b2a5b;padding-bottom:10px}.qp .qname{font:500 34px/1 "Newsreader",Georgia,serif;color:#0b2a5b;letter-spacing:-.01em}.qp .qsite{font:400 11px "IBM Plex Mono",monospace;color:#56688a;margin-top:6px}.qp .qbig{font:500 46px/1 "Newsreader",Georgia,serif;letter-spacing:.02em;color:#0b2a5b}.qp .qmeta{display:flex;justify-content:space-between;gap:20px;margin:14px 0}.qp .qmeta>div{flex:1}.qp .qmeta dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:3px 14px}.qp .qmeta dt{font:400 11px "IBM Plex Mono",monospace;color:#56688a;letter-spacing:.04em;text-transform:uppercase;padding-top:2px}.qp .qmeta dd{margin:0;font-weight:600}.qp .qto b{font:500 18px "Newsreader",Georgia,serif}.qp .qto{color:#33486c}.qp table{width:100%;border-collapse:collapse;margin-top:4px}.qp th{background:#0b2a5b;color:#fff;text-align:left;font:500 11px "IBM Plex Mono",monospace;letter-spacing:.06em;text-transform:uppercase;padding:6px 8px}.qp td{padding:7px 8px;border-bottom:1px solid #c3cad6}.qp .r{text-align:right;white-space:nowrap;font-family:"IBM Plex Mono",monospace;font-size:12.5px}.qp td:first-child{font-family:"IBM Plex Sans",Arial,sans-serif}.qp .qtot{margin:8px 0 0 auto;width:64%;font-size:13px}.qp .qtot div{display:flex;justify-content:space-between;gap:12px;padding:3px 8px;color:#33486c}.qp .qtot span:last-child{font-family:"IBM Plex Mono",monospace;font-size:12.5px;text-align:right}.qp .qtot .g{font-weight:600;font-size:15px;border-top:2px solid #0b2a5b;margin-top:2px;padding-top:6px;color:#0b2a5b}.qp .qmo{margin:12px 0 0;padding:7px 10px;border-left:3px solid #3a659f;background:#dce5f1;font-size:12.5px;color:#0b2a5b}.qp h3{font:400 11px "IBM Plex Mono",monospace;letter-spacing:.1em;text-transform:uppercase;margin:16px 0 5px;color:#3a659f}.qp .qpay{margin:0;color:#33486c}.qp .qacc{display:grid;grid-template-columns:1fr 1fr;gap:8px 18px;margin-top:6px}.qp .qbox{border:1px solid #c3cad6;background:#fff;min-height:30px;padding:3px 7px;font:400 10.5px "IBM Plex Mono",monospace;color:#56688a}.qp .qbox.sig{grid-row:span 2;min-height:68px}.qp .rsig{max-width:none;margin:10px 0 0}.qp .rsig .rsig-s{font-size:36px;color:#0b2a5b}.qp .rsig .rsig-line{border-bottom:1px solid #0b2a5b}.qp .rsig p{font-size:12px;color:#33486c}.qp ul.qn{margin:0;padding-left:16px;font-size:11.5px;color:#33486c}.qp .qf{margin-top:14px;padding-top:7px;border-top:2px solid #3a659f;font-size:11px;color:#33486c}.qp .qf1{font:500 12px "IBM Plex Mono",monospace;color:#0b2a5b}.qp .qf2{margin-top:2px}@media (max-width:600px){.qp{padding:12px}.qp .qh{align-items:center}.qp .qname{font-size:22px}.qp .qbig{font-size:32px}.qp .qmeta{flex-direction:column;gap:12px}.qp table{table-layout:fixed}.qp th:nth-child(2){width:30px}.qp th:nth-child(n+3){width:64px}.qp th,.cvcard .qp th{font-size:9px;padding:6px 3px;letter-spacing:0}.qp td,.cvcard .qp td{padding:7px 3px;font-size:12.5px}.qp .r{font-size:11px}.qp .qtot span:last-child{font-size:11.5px}.qp .qtot{width:100%}.qp .qacc{grid-template-columns:1fr}.qp .qbox.sig{grid-row:auto}}@media print{html,body,body.pd,body.pd .main,body.pd #app{background:#fff!important}.qp{background:#fff;padding:0}.qp .qbox{background:#fff}.qp th,.qp .qmo{-webkit-print-color-adjust:exact;print-color-adjust:exact}.qp th{background:#0b2a5b!important;color:#fff!important}.qp .qmo{background:#dce5f1!important}.qp .rsig-s{color:#0b2a5b!important}}';
 function qpAddDays(iso, n) { const d = new Date((iso || isoToday()) + 'T12:00:00'); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10); }
 function qpData() {
   const q = qSnap(), c = qCalc(), date = q.date || isoToday(), once = q.lines.filter(l => l.freq === 'once' && l.tag !== 'not'), rec = q.lines.filter(l => l.freq !== 'once' && l.tag !== 'not');
@@ -3847,7 +3847,7 @@ function qpHtml(d, o) {
   const notes = ['Dates depend on you sending your content and answers on time.'].concat(fund() ? ['The start date depends on your grant being approved.'] : []).concat(['Monthly costs, domain and hosting are separate from the one off total.', (o && o.web ? 'This is not a contract until you accept it.' : 'This is not a contract until you accept it by signing below.')]);
   const mo = d.rec.length ? `<div class="qmo"><b>Monthly, kept apart:</b> ${d.rec.map(l => esc(l.name) + ', ' + money(num(l.price)) + ' ' + freqWord(l.freq)).join('; ')}</div>` : '';
   const vat = d.c.vatOn ? `<div><span>VAT ${esc(String(d.c.vatRate))}%</span><span>${money(d.c.vat)}</span></div>` : '<div><span>VAT</span><span>Not VAT registered, no VAT charged</span></div>';
-  return `<div class="qp"><div class="qh"><div><div class="qname">${esc(TPL.mark)}</div><div class="qsite">${esc(TPL.site)}</div></div><div class="qbig">QUOTE</div></div>
+  return `<div class="qp"><div class="qconf">Confidential</div><div class="qh"><div><div class="qname">${esc(TPL.mark)}</div><div class="qsite">${esc(TPL.site)}</div></div><div class="qbig">QUOTE</div></div>
 <div class="qmeta"><div class="qto"><b>${esc(cl.contact || seoName())}</b><br>${cl.contact ? esc(seoName()) + '<br>' : ''}${addr.map(esc).join('<br>')}</div><div><dl><dt>Quote ref</dt><dd>${esc(d.ref)}</dd><dt>Date of quote</dt><dd>${esc(fmtDate(d.date))}</dd><dt>Valid to</dt><dd>${esc(fmtDate(d.valid))}</dd><dt>Salesperson</dt><dd>Rhys Hume</dd></dl></div></div>
 <table><thead><tr><th>Description</th><th class="r">Qty</th><th class="r">Unit price</th><th class="r">Amount</th></tr></thead><tbody>${d.once.map(row).join('') || '<tr><td colspan="4">No lines yet</td></tr>'}</tbody></table>
 <div class="qtot"><div><span>One off total</span><span>${money(d.c.sub)}</span></div>${vat}<div class="g"><span>Total</span><span>${money(d.c.total)}</span></div></div>${mo}
@@ -3885,7 +3885,7 @@ const SEQKEY = 'client-workbook-qseq-v1';
 const seqGet = () => { try { const r = JSON.parse(localStorage.getItem(SEQKEY)); if (r && typeof r === 'object') return r; } catch (e) { } return {}; };
 function seqPeek(date) { const y = String(date || isoToday()).slice(0, 4), n = (seqGet()[y] || 0) + 1; return { y, n, ref: 'Q-' + y + '-' + String(n).padStart(4, '0') }; }
 function qpEnsureRef() { if ((S.quote2.no || '').trim()) return; const p = seqPeek(S.quote2.date); const o = seqGet(); o[p.y] = p.n; try { localStorage.setItem(SEQKEY, JSON.stringify(o)); } catch (e) { } S.quote2.no = p.ref; save(); }
-async function qpPdfBytes(d, link) {
+async function qpPdfBytes(d, link, pdfExp) {
   const { L, fontkit } = pdfLibs(), { PDFDocument, rgb, StandardFonts, PDFString } = L, doc = await PDFDocument.create(); doc.registerFontkit(fontkit);
   const q = d.q, cl = S.client, c = d.c, W0 = 595.28, H = 841.89, M = 42, W = W0 - 2 * M, col = (r, g, b) => rgb(r / 255, g / 255, b / 255);
   const NAVY = col(11, 42, 91), SOFT = col(51, 72, 108), GREY = col(86, 104, 138), LINE = col(195, 202, 214), BLUE = col(58, 101, 159), PALE = col(220, 229, 241), WHITE = col(255, 255, 255);
@@ -3898,6 +3898,7 @@ async function qpPdfBytes(d, link) {
   const wrap = (s, font, size, maxW) => { const words = String(s).split(/\s+/), out = []; let cur = ''; words.forEach(w => { const t = cur ? cur + ' ' + w : w; if (font.widthOfTextAtSize(t, size) <= maxW) cur = t; else { if (cur) out.push(cur); cur = w; } }); if (cur) out.push(cur); return out; };
   const upper = s => s.toUpperCase();
   // header
+  T('CONFIDENTIAL', M, 38, monoM, 8, GREY);
   T(TPL.mark, M, 70, serif, 32, NAVY); T(TPL.site, M, 86, mono, 8, GREY); T('QUOTE', M + W, 70, serif, 40, NAVY, { right: true }); HL(M, M + W, 98, 2, NAVY);
   // client and meta
   let y = 124; T(cl.contact || seoName(), M, y, serif, 15, NAVY); y += 16; if (cl.contact) { T(seoName(), M, y, sans, 10, SOFT); y += 13; }
@@ -3924,7 +3925,7 @@ async function qpPdfBytes(d, link) {
   fld('Date', 'Date', fmtDate(isoToday()), top); fld('OrderRef', 'Order ref', d.ref, top + 40); fld('PrintName', 'Print name', '', top + 80);
   const sx = M + fw + 20, sw = W - fw - 20, sh = 112; R(sx, top, sw, sh, WHITE, { borderColor: LINE, borderWidth: 1 }); T('SIGNATURE, SIGN HERE', sx + 8, top + 14, mono, 7, GREY);
   if (link) {
-    const lk = [], tl = 'Cannot fill this in? Accept online at:'; let cur = '';
+    const lk = [], tl = 'Cannot fill this in? Accept online at' + (pdfExp ? ' (link works until ' + pdfExp + ')' : '') + ':'; let cur = '';
     for (const ch of link) { if (sans.widthOfTextAtSize(cur + ch, 6.8) > sw - 4) { lk.push(cur); cur = ch; } else cur += ch; } lk.push(cur);
     T(tl, sx, top + sh + 11, sansB, 7, NAVY);
     lk.forEach((s2, i) => { const yt = top + sh + 21 + i * 8.5; T(s2, sx, yt, sans, 6.8, BLUE); const x2 = sx + sans.widthOfTextAtSize(s2, 6.8); page.node.addAnnot(doc.context.register(doc.context.obj({ Type: 'Annot', Subtype: 'Link', Rect: [sx, H - yt - 2, x2, H - yt + 7], Border: [0, 0, 0], A: { Type: 'Action', S: 'URI', URI: PDFString.of(link) } }))); });
@@ -3944,19 +3945,21 @@ async function qpPdfBytes(d, link) {
 }
 Object.assign(ACTS2, {
   qppdf: async () => {
-    S.ui.qpmsg = ''; S.ui.qpstop = false; if (!bankOk()) { S.ui.qpmsg = 'Add your bank details first'; S.ui.qpstop = true; render(); return; } try { qpEnsureRef(); const d = qpData(), link = typeof qaLink === 'function' ? qaLink() : '', bytes = await qpPdfBytes(d, link), a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' })); a.download = (seoName() + ' Quote ' + d.ref).replace(/[^\w -]/g, '').replace(/\s+/g, ' ').trim() + '.pdf'; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500); S.ui.qpmsg = 'Saved ' + a.download + (link ? (typeof qaStale === 'function' && qaStale() ? '. The accept link on it does not match this version yet, press Send for acceptance below first, then download again' : '. It has the client\'s accept link printed under the signature box') : '. It has no accept link, because I do not have the client\'s private link. Make one on Client link, paste it below, then download again'); } catch (e) { S.ui.qpmsg = 'I could not make the PDF: ' + (e && e.message || e); }
+    S.ui.qpmsg = ''; S.ui.qpstop = false; if (!bankOk()) { S.ui.qpmsg = 'Add your bank details first'; S.ui.qpstop = true; render(); return; } try { qpEnsureRef(); const d = qpData(), link = typeof qaLink === 'function' ? qaLink() : '', bytes = await qpPdfBytes(d, link, typeof qaDay === 'function' && QA.q[0] && QA.q[0].status === 'open' && QA.q[0].expires_at ? qaDay(QA.q[0].expires_at) : ''), a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' })); a.download = (seoName() + ' Quote ' + d.ref).replace(/[^\w -]/g, '').replace(/\s+/g, ' ').trim() + '.pdf'; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500); S.ui.qpmsg = 'Saved ' + a.download + (link ? (typeof qaStale === 'function' && qaStale() ? '. The accept link on it does not match this version yet, press Send for acceptance below first, then download again' : '. It has the client\'s accept link printed under the signature box') : '. It has no accept link, because I do not have the client\'s private link. Make one on Client link, paste it below, then download again'); } catch (e) { S.ui.qpmsg = 'I could not make the PDF: ' + (e && e.message || e); }
     render();
   }
 });
 </script>
 <script>/* ---------- Accept this quote, workbook side. The client signs on their own private link. No email is sent from here. ---------- */
-const QA = { id: '', loaded: false, busy: '', msg: '', err: '', q: [], a: [], at: 0 };
+const QA = { days: 5, id: '', loaded: false, busy: '', msg: '', err: '', q: [], a: [], at: 0 };
 const AC = () => S.accept || (S.accept = { key: '', id: '' });
 const qaH = s => { s = String(s); let a = 0, b = 5381; for (let i = 0; i < s.length; i++) { const c = s.charCodeAt(i); a = (a * 31 + c) | 0; b = ((b << 5) + b + c) | 0; } return s.length + ':' + a + ':' + b; };
 function qaSnap() {
   const d = qpData(), r2 = n => Math.round(num(n) * 100) / 100;
   return { v: 1, ref: d.ref, date: d.date, valid: d.valid, client: seoName(), contact: (S.client.contact || '').trim(), business: TPL.mark, site: TPL.site, once: r2(d.c.total), monthly: r2(d.c.month), deposit: r2(d.dep.amt), depPct: r2(d.dep.pct), html: qpHtml(d, { nobank: true, web: true }), css: qpCss };
 }
+const qaDays = () => { const n = Math.round(Number(QA.days)); return n >= 1 && n <= 60 ? n : 5; };
+const qaDay = t => { const d = new Date(t); return isNaN(d) ? '' : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }); };
 const qaBase = () => /^https?:/.test(location.origin) ? location.origin : 'https://rhyshume.co.uk';
 function qaLink() {
   qaReset(); const q = QA.q[0], sfx = q && q.status !== 'replaced' ? '&q=' + q.id : '';
@@ -3964,14 +3967,15 @@ function qaLink() {
   return /^[0-9a-f]{48}$/.test(tok) ? qaBase() + PORTAL_PATH + '#t=' + tok + sfx : '';
 }
 function qaStale() { const last = QA.q[0]; return !last || AC().key !== qaKey(qaSnap()); }
-document.addEventListener('input', e => { if (e.target && e.target.getAttribute && e.target.hasAttribute('data-qalink')) QA.pasted = e.target.value.trim(); });
+document.addEventListener('input', e => { const t = e.target; if (t && t.hasAttribute) { if (t.hasAttribute('data-qalink')) QA.pasted = t.value.trim(); if (t.hasAttribute('data-qadays')) QA.days = t.value; } });
+document.addEventListener('change', e => { if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-qadays') && (S.screen === 'qpage' || S.screen === 'portal')) render(); });
 const qaKey = s => qaH(JSON.stringify(s));
 function qaReset() { if (QA.id !== CL.id) { QA.id = CL.id; QA.loaded = false; QA.q = []; QA.a = []; QA.msg = ''; QA.err = ''; } }
 async function qaLoad() {
   qaReset(); if (!pOnline()) return; QA.busy = 'Loading'; QA.err = '';
   try {
     const w = encodeURIComponent(CL.id);
-    QA.q = await clRest('?workbook_id=eq.' + w + '&select=id,ref,version,status,created_at,replaced_at,total_once,total_monthly,deposit&order=created_at.desc', { table: 'client_quotes' }) || [];
+    QA.q = await clRest('?workbook_id=eq.' + w + '&select=id,ref,version,status,created_at,replaced_at,expires_at,total_once,total_monthly,deposit&order=created_at.desc', { table: 'client_quotes' }) || [];
     QA.a = await clRest('?workbook_id=eq.' + w + '&select=quote_id,typed_name,accepted_at,ref,version,total_once,total_monthly,deposit&order=accepted_at.desc', { table: 'quote_acceptances' }) || [];
     QA.loaded = true; QA.at = Date.now(); QA.noTables = false;
   } catch (e) { QA.noTables = /404|42P01|relation|schema cache/i.test(String(e.message)); QA.err = e instanceof TypeError ? 'No connection, try again' : (QA.noTables ? 'Acceptance is not switched on in the database yet' : 'Could not load. ' + String(e.message).slice(0, 120)); }
@@ -3992,16 +3996,22 @@ function vAccept() {
   let st, btn = 'Send for acceptance', dis = false;
   if (!last) st = 'Not sent for acceptance yet';
   else if (last.status === 'accepted') { st = 'Version ' + last.version + ' is accepted and locked'; if (changed) btn = 'Send a new version (version ' + (last.version + 1) + ')'; else { btn = 'Accepted, locked'; dis = true; } }
-  else { st = 'Version ' + last.version + ' is waiting for the client'; if (changed) btn = 'Send the changed quote (version ' + (last.version + 1) + ')'; else { btn = 'Already sent, nothing changed'; dis = true; } }
+  else { const exp = last.expires_at ? (new Date(last.expires_at) < new Date() ? ', but the link EXPIRED on ' + qaDay(last.expires_at) : ', the link works until ' + qaDay(last.expires_at)) : ''; st = 'Version ' + last.version + ' is waiting for the client' + exp; if (changed) btn = 'Send the changed quote (version ' + (last.version + 1) + ')'; else { btn = 'Already sent, nothing changed'; dis = true; } }
   const warn = changed && last ? note(last.status === 'accepted' ? 'You changed the quote after it was accepted. The signed version stays exactly as signed. Sending creates a new version the client has to accept again' : 'You changed the quote since you sent it. The client still sees the old one until you send the changed one. Once you do, their old accept page says it has been replaced', 'stop', 'Changed since sent:') : '';
   const hasL = !!qaLink(), pasteBox = '<p class="hint">Client private link, only used to print the safety net line on the PDF. I do not save it. It fills itself in when you make a new link here this session</p><input data-qalink placeholder="Paste the client link" autocomplete="off" value="' + esc(PT.token ? '' : (QA.pasted || '')) + '" style="width:100%">' + (hasL ? '<p class="hint">PDF will carry the accept link</p>' : '<p class="hint">No link yet, so the PDF will not have the safety net line</p>');
   const lnk = pasteBox + (PT.token && last ? '<p class="hint">Their link, with this exact version:</p><div class="mono" style="word-break:break-all;user-select:all">' + esc(location.origin + PORTAL_PATH + '#t=' + PT.token + '&q=' + last.id) + '</div>' : '<p class="hint">The client opens their own private link from the Client link screen. It always shows the newest quote. I do not keep that link, so make a new one there if you have lost it.</p>');
   return '<section class="sec nopd">' + head + '<p>' + esc(st) + '</p>' + warn
-    + '<p class="row"><button class="btn pri" data-act="qasend" ' + (dis || QA.busy ? 'disabled' : '') + '>' + esc(QA.busy || btn) + '</button><button class="btn" data-act="qarefresh">Refresh</button></p>'
+    + '<p class="row"><label>Link works for <input type="number" min="1" max="60" value="' + qaDays() + '" data-qadays style="width:64px"> days</label></p><p class="row"><button class="btn pri" data-act="qasend" ' + (dis || QA.busy ? 'disabled' : '') + '>' + esc(QA.busy || btn) + '</button>' + (last && last.status === 'open' ? '<button class="btn" data-act="qarenew" ' + (QA.busy ? 'disabled' : '') + '>Renew ' + qaDays() + ' days</button>' : '') + '<button class="btn" data-act="qarefresh">Refresh</button></p>'
     + (QA.msg ? note(esc(QA.msg), '', 'Done:') : '') + (QA.err ? note(esc(QA.err), 'stop', 'Problem:') : '') + lnk
     + '<p class="hint">The client types their name, ticks a box and draws their signature on their own private link. I save the name, the signature picture, the date and time, and the exact quote they saw. I do not email anyone, you send the link yourself. This is an electronic acceptance record. It is not legal advice, and I have not had it checked by a solicitor.</p></section>';
 }
 Object.assign(ACTS2, {
+  qarenew: async () => {
+    if (!pOnline() || QA.busy) return; QA.busy = 'Renewing'; QA.err = ''; QA.msg = ''; render();
+    try { const r = await clRest('', { rpc: 'quote_renew', body: { p_workbook_id: CL.id, p_days: qaDays() } }); QA.msg = 'The link now works until ' + qaDay(r && r.expires_at) + '. The quote did not change'; }
+    catch (e) { QA.err = e instanceof TypeError ? 'No connection, try again' : 'Could not renew. ' + String(e.message).slice(0, 140); }
+    QA.busy = ''; QA.loaded = false; await qaLoad(); render();
+  },
   qarefresh: () => { QA.loaded = false; QA.msg = ''; QA.err = ''; qaLoad(); },
   qasend: async () => {
     if (!pOnline() || QA.busy) return; qaReset();
@@ -4009,11 +4019,11 @@ Object.assign(ACTS2, {
     try {
       qpEnsureRef(); const snap = qaSnap();
       if (!(snap.once > 0)) throw new Error('The quote has no price yet');
-      const r = await clRest('', { rpc: 'quote_publish', body: { p_workbook_id: CL.id, p_snapshot: snap } });
+      const r = await clRest('', { rpc: 'quote_send', body: { p_workbook_id: CL.id, p_snapshot: snap, p_days: qaDays() } });
       if (!r || !r.id) throw new Error('unexpected reply');
       AC().key = qaKey(snap); AC().id = r.id; save();
-      QA.msg = 'Saved as version ' + r.version + '. The client can now accept it on their private link. No email was sent';
-    } catch (e) { QA.err = e instanceof TypeError ? 'No connection, try again' : (/42883|not find the function|404/i.test(String(e.message)) ? 'Acceptance is not switched on in the database yet' : 'Could not send. ' + String(e.message).slice(0, 140)); }
+      QA.msg = 'Saved as version ' + r.version + '. The client can accept it on their private link until ' + qaDay(r.expires_at) + '. No email was sent';
+    } catch (e) { QA.err = e instanceof TypeError ? 'No connection, try again' : (/42883|not find the function|PGRST202|404/i.test(String(e.message)) ? 'Acceptance is not switched on in the database yet' : 'Could not send. ' + String(e.message).slice(0, 140)); }
     QA.busy = ''; QA.loaded = false; await qaLoad(); render();
   }
 });
