@@ -1199,7 +1199,7 @@ document.addEventListener('click', e => {
 window.addEventListener('keydown', e => { if (e.key === 'Escape' && S.ui.park) { S.ui.park = false; render(); } });
 
 /* ---------- start ---------- */
-function init() { load(); ensurePackState(); if (typeof cloudInit === 'function') cloudInit(); render(); setInterval(tick, 1000); }
+function init() { load(); ensurePackState(); if (typeof cloudInit === 'function') cloudInit(); render(); if (typeof bzEnsure === 'function') bzEnsure(); setInterval(tick, 1000); }
 </script>
 <script>/* ---------- funding side views ---------- */
 function prepItems() {
@@ -3137,7 +3137,7 @@ async function clRest(path, o) {
   o = o || {};
   for (let tries = 0; tries < 2; tries++) {
     const tok = await clToken();
-    const r = await fetch(CLOUD.url + '/rest/v1/' + (o.rpc ? 'rpc/' + o.rpc : (o.table || CLOUD.table) + path), { method: o.method || (o.rpc ? 'POST' : 'GET'), headers: Object.assign({ apikey: CLOUD.key, Authorization: 'Bearer ' + tok, 'Content-Type': 'application/json' }, o.rpc ? {} : { Prefer: 'return=representation' }), body: o.body == null ? undefined : (typeof o.body === 'string' ? o.body : JSON.stringify(o.body)) });
+    const r = await fetch(CLOUD.url + '/rest/v1/' + (o.rpc ? 'rpc/' + o.rpc : (o.table || CLOUD.table) + path), { method: o.method || (o.rpc ? 'POST' : 'GET'), headers: Object.assign({ apikey: CLOUD.key, Authorization: 'Bearer ' + tok, 'Content-Type': 'application/json' }, o.rpc ? {} : { Prefer: o.prefer || 'return=representation' }), body: o.body == null ? undefined : (typeof o.body === 'string' ? o.body : JSON.stringify(o.body)) });
     if (r.status === 401 && tries === 0) { CL.session.expires_at = 0; continue; }
     if (!r.ok) { const t = await r.text(); throw new Error('http ' + r.status + ' ' + t.slice(0, 140)); }
     if (r.status === 204) return [];
@@ -3831,15 +3831,17 @@ const BANK = (() => { try { const r = JSON.parse(localStorage.getItem(BANKKEY));
 const bankOk = () => BANK.sort.trim() && BANK.acc.trim();
 function bankFoot(o) { if (o && o.nobank) return ''; return bankOk() ? '<div class="qf2"><b>Pay to: Rhys David Hume</b>. Sort code ' + esc(BANK.sort.trim()) + '. Account number ' + esc(BANK.acc.trim()) + '</div>' : '<div class="qf2 noprint" style="color:#9b2c2c;font-weight:700">Bank details to add</div>'; }
 function vBiz() {
-  return `<div class="nopd">${head('My business details', 'Change the quote look once here and every quote updates. Only I see this screen. Saved on this device only, never sent to a client link, never in a client view or a download', 'biz')}
+  bzEnsure();
+  return `<div class="nopd">${head('My business details', 'Change the quote look once here and every quote updates. Only I see this screen. Saved to my login online so every device has them, never sent to a client link, never in a client view or a download', 'biz')}
   <div class="grid2"><label class="f"><span class="fl">Account name</span><input value="Rhys David Hume" readonly aria-readonly="true"><span class="hint">Fixed, so it always matches the bank</span></label><span></span>
   <label class="f"><span class="fl">Wordmark, top left of every quote</span><input data-tpl="mark" autocomplete="off" value="${esc(TPL.mark)}"><span class="hint">Shows on every quote, proposal and client view</span></label>
   <label class="f"><span class="fl">Website, under the wordmark and in the footer</span><input data-tpl="site" autocomplete="off" value="${esc(TPL.site)}"><span class="hint">Same on every quote</span></label>
   <label class="f"><span class="fl">Extra footer line, optional</span><input data-tpl="foot" autocomplete="off" value="${esc(TPL.foot)}"><span class="hint">Printed under the bank details on every quote. Leave empty for none</span></label><span></span>
   <label class="f"><span class="fl">Sort code</span><input data-bank="sort" inputmode="numeric" autocomplete="off" value="${esc(BANK.sort)}"><span class="hint">Printed on the quote page footer</span></label>
-  <label class="f"><span class="fl">Account number</span><input data-bank="acc" inputmode="numeric" autocomplete="off" value="${esc(BANK.acc)}"><span class="hint">Printed on the quote page footer</span></label></div></div>`;
+  <label class="f"><span class="fl">Account number</span><input data-bank="acc" inputmode="numeric" autocomplete="off" value="${esc(BANK.acc)}"><span class="hint">Printed on the quote page footer</span></label></div>
+  <p class="hint" id="bz-note" role="status">${esc(bzText())}</p></div>`;
 }
-document.addEventListener('input', e => { const tk = e.target && e.target.getAttribute && e.target.getAttribute('data-tpl'); if (tk) { TPL[tk] = e.target.value; try { localStorage.setItem(TPLKEY, JSON.stringify(TPL)); } catch (x) { } return; } const k = e.target && e.target.getAttribute && e.target.getAttribute('data-bank'); if (!k) return; BANK[k] = e.target.value; try { localStorage.setItem(BANKKEY, JSON.stringify(BANK)); } catch (x) { } });
+document.addEventListener('input', e => { const tk = e.target && e.target.getAttribute && e.target.getAttribute('data-tpl'); if (tk) { TPL[tk] = e.target.value; try { localStorage.setItem(TPLKEY, JSON.stringify(TPL)); } catch (x) { } bzDirty(); return; } const k = e.target && e.target.getAttribute && e.target.getAttribute('data-bank'); if (!k) return; BANK[k] = e.target.value; try { localStorage.setItem(BANKKEY, JSON.stringify(BANK)); } catch (x) { }  bzDirty(); });
 function qpHtml(d, o) {
   d = d || qpData(); const q = d.q, cl = S.client, nb = x => x === '' || x == null;
   const row = l => `<tr><td>${esc(l.name)}</td><td class="r">${l.free ? '' : esc(l.qty)}</td><td class="r">${l.free ? 'No extra cost' : nb(l.price) ? 'to confirm' : money(num(l.price))}</td><td class="r">${l.free || nb(l.price) ? '' : money(l.total)}</td></tr>`;
@@ -3868,6 +3870,48 @@ function vQpage() {
   <article class="doc" data-kind="qpage"><style>${qpCss}</style>${qpHtml(d)}</article>`;
 }
 Object.assign(ACTS2, { qpprint: () => { S.ui.qpstop = false; if (!bankOk()) { S.ui.qpmsg = 'Add your bank details first'; S.ui.qpstop = true; render(); return; } S.ui.qpmsg = ''; qpEnsureRef(); render(); let st = document.getElementById('pgs'); if (!st) { st = document.createElement('style'); st.id = 'pgs'; document.head.appendChild(st); } st.textContent = '@page{size:A4;margin:12mm}'; document.body.classList.add('pd'); try { window.print(); } finally { setTimeout(() => document.body.classList.remove('pd'), 400); } } });
+
+/* MY BUSINESS DETAILS SAVED ONLINE: one owner-only row (table business_details, row level security by my email). Online copy is the master, the browser copy is a cache. Never part of the client workbook JSON, a client link, the accept page or the lead form. Offline or file mode: this device only */
+const BZDIRTY = 'client-workbook-bz-dirty-v1';
+const BZ = { st: 'idle', tried: false, timer: 0, busy: false, again: false };
+const bzOnline = () => typeof CL !== 'undefined' && CL.on && !CL.offline && !!CL.session;
+const bzVals = () => ({ mark: TPL.mark, site: TPL.site, foot: TPL.foot, sort: BANK.sort, acc: BANK.acc });
+const bzHasLocal = () => !!(BANK.sort.trim() || BANK.acc.trim() || TPL.foot.trim() || TPL.mark !== 'Rhys Hume' || TPL.site !== 'rhyshume.co.uk');
+function bzText() { if (!bzOnline()) return 'Saved on this device only (not signed in online)'; return ({ saving: 'Saving online', pending: 'Changes waiting, saving soon', saved: 'Saved online', error: 'Not saved online yet, kept on this device and will retry', idle: 'Checking online copy' })[BZ.st] || ''; }
+function bzShow() { const n = document.getElementById('bz-note'); if (n) n.textContent = bzText(); }
+function bzCache() { try { localStorage.setItem(TPLKEY, JSON.stringify(TPL)); localStorage.setItem(BANKKEY, JSON.stringify(BANK)); } catch (e) { } }
+function bzApply(d) {
+  const str = v => typeof v === 'string' ? v : '';
+  let ch = false; const set = (o, k, v) => { if (o[k] !== v) { o[k] = v; ch = true; } };
+  set(TPL, 'mark', str(d.mark).trim() ? str(d.mark) : 'Rhys Hume'); set(TPL, 'site', str(d.site).trim() ? str(d.site) : 'rhyshume.co.uk'); set(TPL, 'foot', str(d.foot)); set(BANK, 'sort', str(d.sort)); set(BANK, 'acc', str(d.acc));
+  bzCache(); return ch;
+}
+async function bzPush() {
+  if (!bzOnline()) { BZ.st = 'idle'; bzShow(); return; }
+  if (BZ.busy) { BZ.again = true; return; }
+  BZ.busy = true; BZ.st = 'saving'; bzShow();
+  try {
+    await clRest('?on_conflict=id', { table: 'business_details', method: 'POST', prefer: 'resolution=merge-duplicates,return=minimal', body: { id: 1, data: bzVals() } });
+    try { localStorage.removeItem(BZDIRTY); } catch (e) { }
+    BZ.st = 'saved';
+  } catch (e) { BZ.st = 'error'; clearTimeout(BZ.timer); BZ.timer = setTimeout(bzPush, 15000); }
+  BZ.busy = false; bzShow();
+  if (BZ.again) { BZ.again = false; bzPush(); }
+}
+function bzDirty() { try { localStorage.setItem(BZDIRTY, '1'); } catch (e) { } if (!bzOnline()) { bzShow(); return; } BZ.st = 'pending'; bzShow(); clearTimeout(BZ.timer); BZ.timer = setTimeout(bzPush, 900); }
+async function bzPull() {
+  if (!bzOnline()) return; BZ.tried = true;
+  try {
+    const rows = await clRest('?id=eq.1&select=data', { table: 'business_details' });
+    const dirty = (() => { try { return !!localStorage.getItem(BZDIRTY); } catch (e) { return false; } })();
+    if (rows && rows.length && rows[0].data && typeof rows[0].data === 'object') {
+      if (dirty) { await bzPush(); return; }
+      const ch = bzApply(rows[0].data); BZ.st = 'saved';
+      const a = document.activeElement; if (ch && !(a && a.matches && a.matches('input,textarea,select'))) render(); else bzShow();
+    } else if (bzHasLocal()) { await bzPush(); } else { BZ.st = 'saved'; bzShow(); }
+  } catch (e) { BZ.tried = false; BZ.st = 'error'; bzShow(); }
+}
+function bzEnsure() { if (!BZ.tried && bzOnline()) bzPull(); }
 </script>
 <script>/* ---------- Fillable PDF quote (pdf-lib, loaded only when used) ---------- */
 let PDFLIBS = null;
