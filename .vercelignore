@@ -1,3 +1,6 @@
 test
 docs
 preview/*/notes.md
+.claude
+.agents
+skills-lock.json
