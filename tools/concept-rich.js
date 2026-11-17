@@ -129,6 +129,10 @@ form.qf textarea{min-height:120px;resize:vertical}
 .contact .mail{display:block;margin-top:22px;font:400 17px/1.3 var(--mono);color:var(--mute);text-decoration:none}
 footer{background:var(--d);color:var(--lt);font:400 12.5px/1.5 var(--mono);padding:26px 0;letter-spacing:.03em}
 .callbar{display:none}
+.fromrhys{background:var(--paper2);border-top:1px solid var(--rule);padding:34px 0}
+.fromrhys .wrap{display:flex;flex-wrap:wrap;gap:14px 34px;align-items:baseline}
+.fromrhys p{font:600 19px/1.3 var(--disp);margin:0;color:var(--ink)}
+.fromrhys a{font:500 14px/1.3 var(--mono);color:var(--t);text-underline-offset:4px}
 .rise{animation:rise 1s var(--ease) both}.r1{animation-delay:.05s}.r2{animation-delay:.18s}.r3{animation-delay:.3s}.r4{animation-delay:.42s}
 @keyframes rise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
@@ -253,7 +257,15 @@ function changesSection(c, b, fonts, points) {
   return '<section class="chg" id="changes"><div class="wrap split"><div class="head reveal"><span class="eyebrow">Built from ' + esc(c.host || c.name) + '</span><h2>What changed</h2><dl class="read">' + read + '</dl></div><ol>' + items + '</ol></div></section>';
 }
 
-function renderRich(c, brandIn, points) {
+function fromRhys(o) {
+  if (!o || !o.cta) return '';
+  const link = function (href, label) { return /^(https:|mailto:)/.test(href || '') ? '<a href="' + esc(href) + '">' + esc(label) + '</a>' : ''; };
+  return '<section class="fromrhys" id="from-rhys"><div class="wrap"><p>Like it? Reply to my email or book 20 minutes.</p>' +
+    link(o.cta.mail, 'Reply by email') + link(o.cta.book, 'Book 20 minutes') + '</div></section>';
+}
+
+function renderRich(c, brandIn, points, opts) {
+  opts = opts || {};
   const b = Object.assign({ primary: '#1f3a5f', accent: '#c8562a', dark: '#0f1d30', soft: '#eef2f7', ink: '#111827', onPrimary: '#ffffff', onAccent: '#ffffff', text: '#1f3a5f' }, brandIn || {});
   ['primary', 'accent', 'dark', 'soft', 'ink', 'onPrimary', 'onAccent', 'text'].forEach(function (k) { b[k] = hexOk(b[k], '#1f3a5f'); });
 
@@ -310,6 +322,7 @@ function renderRich(c, brandIn, points) {
     (c.fileTypesLine ? '<p class="intro">' + esc(c.fileTypesLine) + '</p>' : '') + (c.replyLine ? '<p class="intro">' + esc(c.replyLine) + '</p>' : '') + '</div>' +
     '<div class="reveal d1" id="qf-root">' + fallbackForm + '</div></div></section>' +
     '<section class="contact" id="contact"><div class="wrap"><div class="reveal"><span class="eyebrow">' + esc(c.contactHeading) + '</span></div><div class="reveal d1">' + contactLinks + '</div></div></section></main>' +
+    fromRhys(opts) +
     '<footer><div class="wrap">' + esc(c.footer) + '</div></footer>' +
     (c.phone ? '<a class="callbar" href="tel:' + esc(c.phone.href) + '">' + esc(c.callBar) + '</a>' : '') +
     '<script type="application/json" id="qf-data">' + JSON.stringify(qf).replace(/</g, '\\u003c') + '</script>' +
