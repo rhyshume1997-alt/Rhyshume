@@ -342,3 +342,57 @@ th{font:700 .9rem/1.2 var(--head);letter-spacing:.08em;text-transform:uppercase;
 @keyframes unfold-r{from{transform:rotateY(180deg)}to{transform:none}}
 @media (max-width:760px){.fold{grid-template-columns:1fr 1fr;min-height:70svh}}
 @media (prefers-reduced-motion:reduce){.fold__p{animation:none}}
+
+/* ---- realism test: rendered plate used as a 9-slice ---- */
+.rplate{--bw:20px;position:relative;display:inline-flex;align-items:center;justify-content:center;gap:1rem;text-decoration:none;border:var(--bw) solid transparent;
+  border-image:url(render/plate.webp) 96 fill / var(--bw) stretch;padding:.15rem .7rem;
+  filter:drop-shadow(0 1px 0 rgba(0,0,0,.55)) drop-shadow(0 7px 9px rgba(0,0,0,.38));
+  transition:transform .35s var(--ease-settle),filter .35s var(--ease-settle)}
+.rplate>span{position:relative;z-index:1;font:700 1.05rem/1 var(--head);letter-spacing:.12em;text-transform:uppercase;color:#23282e;opacity:.92;text-shadow:0 1px 0 rgba(255,255,255,.28)}
+/* reflected light bands across the plate, and a second band that follows the pointer */
+.rplate::before,.rplate::after{content:"";position:absolute;inset:calc(var(--bw) * -1 + 2px);border-radius:5px;pointer-events:none}
+.rplate::before{mix-blend-mode:soft-light;background:linear-gradient(180deg,rgba(255,255,255,.5),transparent 45%,rgba(0,0,0,.35)),
+  linear-gradient(97deg,rgba(0,0,0,.4) 0%,rgba(255,255,255,.55) 16%,rgba(0,0,0,.15) 34%,rgba(255,255,255,.75) 47%,rgba(0,0,0,.3) 63%,rgba(255,255,255,.35) 82%,rgba(0,0,0,.35) 100%)}
+.rplate::after{mix-blend-mode:soft-light;opacity:0;transition:opacity .3s;
+  background:linear-gradient(100deg,transparent calc(var(--mx,50%) - 20%),rgba(255,255,255,.95) var(--mx,50%),transparent calc(var(--mx,50%) + 20%))}
+a.rplate:hover,a.rplate:focus-visible{transform:translateY(-3px);filter:drop-shadow(0 1px 0 rgba(0,0,0,.55)) drop-shadow(0 16px 16px rgba(0,0,0,.45))}
+a.rplate:hover::after,a.rplate:focus-visible::after{opacity:1}
+a.rplate:active{transform:translateY(1px);filter:drop-shadow(0 1px 0 rgba(0,0,0,.6)) drop-shadow(0 2px 3px rgba(0,0,0,.5))}
+.rplate--lg{--bw:34px;display:flex;justify-content:space-between;padding:.9rem 1.6rem;max-width:900px}
+.rplate--lg>span{font-size:clamp(1.5rem,3.2vw,2.3rem);letter-spacing:.03em}
+.rplate--lg>.sm{font-size:.9rem;letter-spacing:.14em}
+.plate-row{display:flex;flex-wrap:wrap;gap:.9rem;align-items:center}
+.swatch{padding:1.6rem;border-radius:3px}
+.cmp{display:grid;gap:1.4rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr))}
+.cmp figure{margin:0;background:#070d1f;border-radius:3px;overflow:hidden}
+.cmp img,.cmp video,.cmp .viewer{width:100%;aspect-ratio:16/10;display:block;object-fit:cover}
+.cmp figcaption{padding:.9rem 1.1rem 1.1rem;color:#c6cee0;font-size:.95rem}
+.cmp figcaption b{display:block;font:700 1.15rem/1.1 var(--head);letter-spacing:.05em;text-transform:uppercase;color:#fff;margin-bottom:.3rem}
+.cmp .wide{grid-column:1/-1}
+.viewer{position:relative;background:radial-gradient(90% 70% at 50% 60%,#16244c,#05091a 75%)}
+.viewer canvas{position:absolute;inset:0;width:100%;height:100%}
+@media (prefers-reduced-motion:reduce){.rplate{transition:none}}
+
+/* ---- exploration: prerendered film as the hero stage, live HTML over it ---- */
+.hero--film .hero__stage video{position:absolute;right:0;top:0;width:74%;height:100%;object-fit:cover;object-position:50% 55%;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 30%);mask-image:linear-gradient(90deg,transparent 0,#000 30%)}
+.hero--film{background:#06080d}
+.hero--film .callout{opacity:0}
+.hero--film.is-done .callout{opacity:1;pointer-events:auto}
+@media (max-width:899px){
+  .hero--film .hero__stage{height:auto;aspect-ratio:16/10}
+  .hero--film .hero__stage video{position:static;width:100%;height:100%;-webkit-mask-image:linear-gradient(180deg,#000 80%,transparent);mask-image:linear-gradient(180deg,#000 80%,transparent)}
+}
+.fps{font:600 .85rem/1.4 var(--head);letter-spacing:.08em;text-transform:uppercase;color:#9fb0d6;margin:.6rem 0 0}
+
+/* ---- realism test: interactive stage ---- */
+.stage3d{background:#05070c;border-radius:3px;overflow:hidden}
+.viewer--big{aspect-ratio:16/10;touch-action:none;cursor:grab}
+.viewer--big:active{cursor:grabbing}
+.stage3d__bar{display:flex;flex-wrap:wrap;gap:.5rem;padding:.8rem;align-items:center;background:#0b1226}
+.chip{font:600 .9rem/1 var(--head);letter-spacing:.1em;text-transform:uppercase;background:#18244a;color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:2px;padding:.7rem .9rem;cursor:pointer;display:inline-flex;align-items:center;gap:.6rem}
+.chip:hover,.chip[aria-pressed=true]{background:#fff;color:#000}
+.chip--range{cursor:default}.chip--range:hover{background:#18244a;color:#fff}
+.chip--range input{width:min(38vw,220px);accent-color:#8aa7e6}
+.chip-gap{flex:1}
+.stage3d .fps{padding:0 .9rem .8rem;margin:0}

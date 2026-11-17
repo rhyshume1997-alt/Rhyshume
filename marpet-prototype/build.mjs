@@ -28,7 +28,7 @@ function page({ file, title, desc, section, page, main }) {
 </head>
 <body data-page="${page}" data-section="${section}" data-nav-scope>
 <a class="skip" href="#main">Skip to content</a>
-<p class="proto-bar">Design prototype for review. Not the live Marpet site. <a href="storyboard.html">Storyboard, concepts and open items</a></p>
+<p class="proto-bar">Design prototype for review. Not the live Marpet site. <a href="storyboard.html">Storyboard, concepts and open items</a> · <a href="material-test.html">Realism test</a></p>
 <header class="site-header">
   <div class="wrap">
     <a class="brand" href="index.html" data-name="Home"><img src="assets/img/logo.jpg" alt="Marpet Fabrications 1997 Limited, home" width="293" height="107"></a>
@@ -386,7 +386,7 @@ page({ file: 'storyboard.html', title: 'Storyboard, concepts and review', desc: 
 <section class="page-head"><div class="wrap">
   <h1>Storyboard and concepts</h1>
   <p class="lead">Frames below are captured from the working prototype, not drawn.</p>
-  <div class="btn-row"><a class="btn btn--primary" href="index.html?intro=1" data-no-nav>Play the intro</a><a class="btn btn--ghost" href="concept-b.html">Open Concept B</a></div>
+  <div class="btn-row"><a class="btn btn--primary" href="index.html?intro=1" data-no-nav>Play the intro</a><a class="btn btn--ghost" href="concept-b.html">Open Concept B</a><a class="btn btn--ghost" href="material-test.html">Realism test</a></div>
 </div></section>
 <section class="section on-dark"><div class="wrap">
   <p class="eyebrow">Phase 3</p><div class="section-head"><h2>Conveyor hero storyboard</h2></div>
@@ -401,6 +401,86 @@ page({ file: 'storyboard.html', title: 'Storyboard, concepts and review', desc: 
   <p class="eyebrow">Phase 2</p><div class="section-head"><h2>Concept A against Concept B</h2></div>
   <div class="table-wrap"><table><thead><tr><th scope="col">Criterion</th><th scope="col">A: Conveyor assembly</th><th scope="col">B: Architectural fabrication</th></tr></thead><tbody>${rows.map((r) => `<tr><th scope="row">${r[0]}</th><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('')}</tbody></table></div>
   <p style="margin-top:1.5rem"><b>Recommendation:</b> Concept A for the homepage hero, with Concept B's CSS panel system used for every page transition and component. That is what this prototype does.</p>
+</div></section>
+</main>` });
+
+/* ---------------- Realism test (isolated; nothing else on the site uses these assets) ---------------- */
+const V = 'data-model="assets/render/conveyor.glb" data-hdri="assets/render/studio.exr"';
+const why = [
+  ['No occlusion', 'Every surface reflected the full studio, even inside joints and under the frame.', 'Ambient occlusion baked in Blender into the model (vertex colour). It dims reflections in crevices.'],
+  ['No grounding', 'One hard shadow map and a floor that could not reflect.', 'Soft key shadow, blurred contact shadows that follow moving parts, and a dark mirror floor on desktop.'],
+  ['Lost surface detail', 'Blender\'s procedural grain, scratches and smudges do not export to GLB.', 'A single 4096 px roughness texture mapped once across the whole side panel, with anisotropic highlights.'],
+  ['Wrong light levels', 'I had the HDRI five times too bright and the lamps sixteen times too bright.', 'HDRI at Blender\'s strength, plus a light card for each Blender lamp at the same position, size and output.'],
+  ['Heavy, unmerged model', '418 separate parts, 370,000 triangles, 2.7 MB.', '13 merged parts, 112,000 triangles, 1.4 MB with meshopt compression.'],
+];
+const still = [
+  ['Light between parts', 'Cycles bounces light between the frame, legs and floor. Three.js lights each surface from the studio alone.'],
+  ['Blurred reflections of nearby objects', 'The Cycles floor shows a soft reflection that fades with distance. The Three.js mirror is sharp and even.'],
+  ['Depth of field and fine grain', 'Cycles has lens blur and sub-pixel brushing. Three.js is sharp everywhere and its grain is a texture.'],
+];
+const refs = [
+  'Three-quarter, side-on, end-on and plan photographs of one complete conveyor, taken from the same distance',
+  'Close-ups of the drive end, tail end, a leg foot, a frame joint and a finished weld',
+  'The drive side: motor, gearbox and how they mount. No current photograph shows it clearly, so none is modelled',
+  'Underside and belt return, including any support rollers',
+  'Belt type per conveyor: flat PU belt or modular plastic belt, colour and pitch',
+  'Overall length, width and belt height, sheet thickness, leg section size, fastener sizes',
+  'A general arrangement drawing or CAD export (STEP) if one exists. This replaces most of the list above',
+  'The steel finish specified (for example 2B, or brushed to 240 grit) and a straight-on photograph of a clean panel in daylight',
+  'Which conveyor Marpet wants shown, and confirmation it may be shown',
+];
+page({ file: 'material-test.html', title: 'Realism test', desc: 'Interactive conveyor test against a Blender Cycles benchmark.', section: 'review', page: 'test', main: `
+<main id="main">
+<section class="page-head"><div class="wrap">
+  <p class="crumbs"><a href="storyboard.html">Review</a><span>/</span><span>Realism test</span></p>
+  <h1>Realism test</h1>
+  <p class="lead">One Blender master model, shown two ways: rendered offline as the benchmark, and running live in Three.js. The homepage, its layout and its copy are unchanged.</p>
+</div></section>
+<section class="section on-deep"><div class="wrap">
+  <p class="eyebrow">Interactive</p><div class="section-head"><h2>Turn it, zoom it, build it</h2></div>
+  <div class="stage3d">
+    <div class="viewer viewer--big" data-viewer data-interactive data-view="hero" ${V}><canvas aria-label="Interactive 3D conveyor. Drag to rotate, scroll or pinch to zoom."></canvas></div>
+    <div class="stage3d__bar">
+      <button type="button" class="chip" data-play>Play assembly</button>
+      <label class="chip chip--range">Assembly <input type="range" min="0" max="1000" value="1000" data-assembly aria-label="Assembly progress"></label>
+      <button type="button" class="chip" data-run aria-pressed="false">Run belt</button>
+      <span class="chip-gap"></span>
+      <button type="button" class="chip" data-goto="hero">Whole</button>
+      <button type="button" class="chip" data-goto="drive">Drive end</button>
+      <button type="button" class="chip" data-goto="weld">Leg weld</button>
+    </div>
+    <p class="fps" data-hud aria-live="off">Loading model</p>
+  </div>
+  <p style="margin-top:1rem">Drag to rotate. Scroll or pinch to zoom. The slider scrubs the assembly in either direction.</p>
+</div></section>
+<section class="section on-dark"><div class="wrap">
+  <p class="eyebrow">Side by side</p><div class="section-head"><h2>Blender Cycles against Three.js, same camera</h2></div>
+  <p>Each pair uses the same model, camera position, aim, lens, HDRI and lamp positions. Left is rendered offline. Right is drawn live by your browser.</p>
+  ${[['hero', 'Whole conveyor', 'reflections and overall light'], ['drive', 'Drive end', 'surface texture, bends, fasteners and take-up'], ['weld', 'Leg joint', 'welds, gussets and shadow under the frame']].map(([v, t, d]) => `
+  <h3 style="margin-top:2.2rem">${t}: ${d}</h3>
+  <div class="cmp">
+    <figure><img src="assets/render/${v}.jpg" alt="Blender Cycles render, ${t.toLowerCase()}" width="1600" height="1000" loading="lazy"><figcaption><b>Blender Cycles (benchmark)</b>Path traced offline.</figcaption></figure>
+    <figure><div class="viewer" data-viewer data-view="${v}" ${V}><canvas aria-label="Three.js render, ${t.toLowerCase()}"></canvas></div><figcaption><b>Three.js (live)</b>Real time in your browser.</figcaption></figure>
+  </div>`).join('')}
+</div></section>
+<section class="section on-white"><div class="wrap">
+  <p class="eyebrow">Diagnosis</p><div class="section-head"><h2>Why the first Three.js version looked flat</h2></div>
+  <div class="table-wrap"><table><thead><tr><th scope="col">Cause</th><th scope="col">What was wrong</th><th scope="col">What changed</th></tr></thead><tbody>${why.map((r) => `<tr><th scope="row">${r[0]}</th><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('')}</tbody></table></div>
+  <h3 style="margin-top:2rem">What real time still cannot match</h3>
+  <div class="table-wrap"><table><tbody>${still.map((r) => `<tr><th scope="row">${r[0]}</th><td>${r[1]}</td></tr>`).join('')}</tbody></table></div>
+</div></section>
+<section class="section on-steel"><div class="wrap">
+  <p class="eyebrow">Navigation plate</p><div class="section-head"><h2>Plate test</h2></div>
+  <p>The new plate is a Cycles render of a 4 mm brushed plate with four socket screws, sliced so one 18 KB image fits any size. Lettering is dark, like laser marking. Hover or tab to it.</p>
+  <h3>Before</h3>
+  <div class="swatch on-deep"><div class="plate-row">${['Services', 'Our work', 'About'].map((n) => `<span class="plate" style="padding:.8rem 1.4rem;font:700 1.05rem/1 var(--head);letter-spacing:.12em;text-transform:uppercase">${n}</span>`).join('')}</div></div>
+  <h3 style="margin-top:2rem">After</h3>
+  <div class="swatch on-deep"><div class="plate-row">${[['Services', 'services.html'], ['Our work', 'work.html'], ['About', 'about.html'], ['Team', 'team.html'], ['Contact', 'contact.html']].map(([n, h]) => `<a class="rplate" href="${h}"><span>${n}</span></a>`).join('')}</div></div>
+  <div class="swatch" style="padding-inline:0"><a class="rplate rplate--lg" href="service-conveyor-systems.html" data-plate data-name="Conveyor systems"><span class="sm">01</span><span>Conveyor systems</span><span class="sm">View</span></a></div>
+</div></section>
+<section class="section on-white"><div class="wrap">
+  <p class="eyebrow">Reference</p><div class="section-head"><h2>Material needed from Marpet</h2></div>
+  <ul class="ticks" style="grid-template-columns:1fr">${refs.map((r) => `<li>${r}</li>`).join('')}</ul>
 </div></section>
 </main>` });
 

@@ -271,9 +271,43 @@
     });
   }
 
+  // Exploration: the hero as a prerendered film. Same rules as the live hero: skippable, once per browser,
+  // still frame for reduced motion, and the header and quote button never wait for it.
+  function initFilm() {
+    const v = $('[data-film]');
+    if (!v) return;
+    const section = v.closest('.hero'), skip = $('[data-hero-skip]', section), replay = $('[data-hero-replay]', section), out = $('[data-film-stats]');
+    const q = new URLSearchParams(location.search);
+    const done = () => { section.classList.add('is-ready', 'is-done'); skip.hidden = true; replay.hidden = reduce.matches; try { localStorage.setItem('mp-film', '1'); } catch (e) {} };
+    const end = () => { v.pause(); if (v.duration) v.currentTime = v.duration; done(); };
+    let seen = false; try { seen = localStorage.getItem('mp-film') === '1'; } catch (e) {}
+    const report = () => {
+      if (!out || !v.getVideoPlaybackQuality) return;
+      const s = v.getVideoPlaybackQuality();
+      out.textContent = `Played ${s.totalVideoFrames} frames, dropped ${s.droppedVideoFrames}. Video ${v.videoWidth}x${v.videoHeight}.`;
+    };
+    on(v, 'timeupdate', () => { if (v.duration && v.currentTime > v.duration * 0.82) section.classList.add('is-ready'); });
+    on(v, 'ended', () => { done(); report(); });
+    on(skip, 'click', end);
+    on(replay, 'click', () => { section.classList.remove('is-ready', 'is-done'); replay.hidden = true; skip.hidden = false; v.currentTime = 0; v.play(); });
+    on(window, 'keydown', (e) => { if (e.key === 'Escape' && !v.paused) end(); });
+    if (reduce.matches || (seen && !q.has('intro'))) { v.removeAttribute('autoplay'); on(v, 'loadedmetadata', end); if (v.readyState > 0) end(); return; }
+    skip.hidden = false;
+    v.play().catch(done);   // autoplay refused: show the poster and the page
+  }
+
+  function initTest() {
+    const v = $('[data-viewer]');
+    if (v) import('./viewer.js').then((m) => $$('[data-viewer]').forEach((el) => m.initViewer(el))).catch(() => {});
+    $$('a.rplate').forEach((el) => on(el, 'pointermove', (e) => {
+      const r = el.getBoundingClientRect();
+      el.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
+    }));
+  }
+
   function init() {
     document.documentElement.classList.add('js');
-    initHero(); initFilter(); initReveal(); initForm();
+    initHero(); initFilter(); initReveal(); initForm(); initTest(); initFilm();
   }
   init();
 })();

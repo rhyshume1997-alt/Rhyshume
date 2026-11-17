@@ -28,3 +28,27 @@ Open `http://localhost:4173/`. Add `?intro=1` to replay the opening, `?static` t
 - The hero conveyor is an illustrative model, not a Marpet machine.
 - The enquiry form sends nothing.
 - Libraries: three.js 0.187 (MIT) and GSAP 3.15 (Webflow standard licence, free for commercial use), vendored unminified. Fonts: Barlow and Barlow Condensed (SIL OFL).
+
+## Realism test (isolated)
+
+`site/material-test.html` compares a Blender Cycles benchmark with the same model running live in Three.js, from identical camera angles, and tests one rendered navigation plate. Findings are in `docs/realism-assessment.md`; side-by-side stills are in `review/compare-*.jpg`.
+
+Rebuilding the 3D assets needs Blender's Python module and glTF-Transform:
+
+```bash
+pip install bpy
+```
+
+```bash
+python blender/conveyor.py hero.png --view hero --samples 160 --width 1600
+```
+
+```bash
+python blender/conveyor.py check.png --samples 4 --width 160 --bake --glb conveyor-raw.glb
+```
+
+```bash
+npx @gltf-transform/cli optimize conveyor-raw.glb site/assets/render/conveyor.glb --compress meshopt --join false --flatten false --instance false --simplify false --palette false --prune false
+```
+
+Views are `hero`, `drive`, `weld`, `foot` and `takeup`. The HDRI is Blender's bundled `studio.exr`. `blender/plate.py` renders the navigation plate.

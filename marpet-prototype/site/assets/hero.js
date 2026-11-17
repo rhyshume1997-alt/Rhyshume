@@ -54,7 +54,7 @@ function beltTexture() {
 }
 
 // A plain photo studio for the steel to reflect: grey cyclorama, navy floor, three softboxes.
-function studio() {
+export function studio() {
   const s = new THREE.Scene();
   const geo = new THREE.SphereGeometry(20, 32, 16);
   const col = [];
