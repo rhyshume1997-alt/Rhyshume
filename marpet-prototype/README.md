@@ -1,6 +1,6 @@
 # Marpet Fabrications redesign prototype
 
-Design exploration for review. Not deployed, not linked from the live site, excluded from Vercel by `.vercelignore`. Every page carries `noindex`.
+Design exploration for review. Not linked from the live site, listed in `.vercelignore`, and every page carries `noindex`. Vercel previews are switched off for the working branch in `vercel.json`.
 
 ## Run it
 
@@ -9,10 +9,18 @@ node build.mjs
 ```
 
 ```bash
-cd site && python3 -m http.server 4173
+npm install
 ```
 
-Open `http://localhost:4173/`. Add `?intro=1` to replay the opening, `?static` to see the no-WebGL fallback.
+```bash
+npm run bundle
+```
+
+```bash
+node serve.mjs
+```
+
+Open `http://localhost:4173/`. The server also prints an address for a phone on the same Wi-Fi; `phone-test.html` measures the interactive conveyor on that device. `npm install` and `npm run bundle` are only needed after editing `site/assets/viewer.js`; the bundled file is committed. Add `?intro=1` to replay the opening, `?static` to see the no-WebGL fallback.
 
 ## What is here
 
@@ -48,7 +56,7 @@ python blender/conveyor.py check.png --samples 4 --width 160 --bake --glb convey
 ```
 
 ```bash
-npx @gltf-transform/cli optimize conveyor-raw.glb site/assets/render/conveyor.glb --compress meshopt --join false --flatten false --instance false --simplify false --palette false --prune false
+npx @gltf-transform/cli optimize conveyor-raw.glb site/assets/render/conveyor.glb --compress meshopt --meshopt-level high --join false --flatten false --instance false --simplify false --palette false --prune false
 ```
 
 Views are `hero`, `drive`, `weld`, `foot` and `takeup`. The HDRI is Blender's bundled `studio.exr`. `blender/plate.py` renders the navigation plate.

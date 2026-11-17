@@ -18,7 +18,7 @@ const BANNED = /\b(whole|lands|quiet|quietly|proper)\b/i;
 function htmlFiles(dir, out) {
   fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true }).forEach(function (e) {
     const rel = path.join(dir, e.name);
-    if (e.isDirectory()) { if (!/^(\.git|node_modules|test|docs|api|fonts|images)$/.test(e.name)) htmlFiles(rel, out); }
+    if (e.isDirectory()) { if (!/^(\.git|node_modules|test|docs|api|fonts|images|marpet-prototype)$/.test(e.name)) htmlFiles(rel, out); }
     else if (e.name.endsWith('.html')) out.push(rel);
   });
   return out;

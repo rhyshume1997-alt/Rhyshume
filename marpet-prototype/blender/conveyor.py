@@ -285,14 +285,18 @@ if '--bake' in argv:   # ambient occlusion into vertex colours: crevices, under 
     sc.render.engine = 'CYCLES'; sc.cycles.samples = 160; sc.render.bake.target = 'VERTEX_COLORS'
     for name, (o,) in GROUPS.items():
         bpy.ops.object.select_all(action='DESELECT'); o.select_set(True); bpy.context.view_layer.objects.active = o
+        # Each group is baked alone. Occlusion from a neighbouring part would stay behind as a dark
+        # patch while that part is still travelling in during the assembly sequence.
+        for other, (oo,) in GROUPS.items(): oo.hide_render = other != name
         ca = o.data.color_attributes.new('AO', 'BYTE_COLOR', 'CORNER'); o.data.color_attributes.active_color = ca; o.data.color_attributes.render_color_index = 0
         bpy.ops.object.bake(type='AO')
         # keep the occlusion gentle: fully enclosed parts (studs, shafts) must not go black
         n = len(ca.data); buf = [0.0] * (n * 4); ca.data.foreach_get('color', buf)
         for i in range(0, n * 4, 4):
-            v = 0.42 + 0.58 * buf[i]; buf[i] = buf[i + 1] = buf[i + 2] = v
+            v = 0.5 + 0.5 * buf[i]; buf[i] = buf[i + 1] = buf[i + 2] = v
         ca.data.foreach_set('color', buf)
         print('baked', name, len(o.data.polygons))
+    for (oo,) in GROUPS.values(): oo.hide_render = False
 
 if GLB:
     kw = dict(filepath=GLB, export_format='GLB', export_yup=True, export_materials='EXPORT', export_extras=True)

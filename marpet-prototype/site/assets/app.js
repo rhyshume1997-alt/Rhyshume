@@ -297,8 +297,35 @@
   }
 
   function initTest() {
-    const v = $('[data-viewer]');
-    if (v) import('./viewer.js').then((m) => $$('[data-viewer]').forEach((el) => m.initViewer(el))).catch(() => {});
+    const viewers = $$('[data-viewer]');
+    if (viewers.length) {
+      // the 3D bundle and model load only when a viewer is close to the screen
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return;
+          io.unobserve(e.target);
+          import('./viewer.min.js').then((m) => e.target.isConnected && m.initViewer(e.target)).catch((err) => { e.target.dataset.error = String(err); });
+        });
+      }, { rootMargin: '300px' });
+      viewers.forEach((v) => io.observe(v));
+      cleanup.push(() => io.disconnect());
+    }
+    const bench = $('[data-bench]');
+    if (bench) {
+      const out = $('[data-bench-out]'), status = $('[data-bench-status]'), v = $('[data-interactive]');
+      on(bench, 'click', async () => {
+        if (!v.viewer || !v.classList.contains('is-loaded')) { status.textContent = 'Still loading the model. Try again in a moment.'; return; }
+        bench.disabled = true;
+        const r = await v.viewer.benchmark((s) => { status.textContent = 'Running: ' + s; });
+        out.value = JSON.stringify(r, null, 1);
+        status.textContent = `Done. ${r.rotate.fps} frames a second rotating, ${r.assembly.fps} assembling.`;
+        bench.disabled = false;
+      });
+      on($('[data-bench-copy]'), 'click', async () => {
+        out.select();
+        try { await navigator.clipboard.writeText(out.value); status.textContent = 'Copied.'; } catch (e) { status.textContent = 'Select the text and copy it by hand.'; }
+      });
+    }
     $$('a.rplate').forEach((el) => on(el, 'pointermove', (e) => {
       const r = el.getBoundingClientRect();
       el.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');

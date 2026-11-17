@@ -39,15 +39,15 @@ const ease = (t) => 1 - Math.pow(1 - Math.min(1, Math.max(0, t)), 3);   // decel
 
 // One texture for the whole side panel (2.2 m x 0.21 m), not a tile: grain, a few off-axis
 // scratches and soft wipe marks. Green channel is roughness, as Three.js expects.
-function panelTexture() {
-  const W = 4096, H = 512, c = document.createElement('canvas'); c.width = W; c.height = H;
+function panelTexture(lite) {
+  const W = lite ? 2048 : 4096, H = lite ? 256 : 512, c = document.createElement('canvas'); c.width = W; c.height = H;
   const g = c.getContext('2d'); g.fillStyle = 'rgb(196,196,196)'; g.fillRect(0, 0, W, H);
   for (let i = 0; i < 9; i++) {   // wipe marks
     const x = Math.random() * W, y = Math.random() * H, r = 120 + Math.random() * 260;
     const gr = g.createRadialGradient(x, y, 0, x, y, r); gr.addColorStop(0, 'rgba(235,235,235,0.22)'); gr.addColorStop(1, 'rgba(235,235,235,0)');
     g.fillStyle = gr; g.fillRect(x - r, y - r, r * 2, r * 2);
   }
-  for (let i = 0; i < 60000; i++) {   // grain along the length
+  for (let i = 0; i < (lite ? 16000 : 60000); i++) {   // grain along the length
     const v = Math.random() < 0.5 ? 255 : 120;
     g.strokeStyle = `rgba(${v},${v},${v},${0.04 + Math.random() * 0.14})`;
     const x = Math.random() * W, y = Math.random() * H;
@@ -62,6 +62,15 @@ function panelTexture() {
   t.repeat.set(1 / LEN, 1 / 0.21); t.offset.set(0, -0.74 / 0.21);   // panel UVs are in metres: u = x, v = z
   return t;
 }
+function tubeTexture() {   // legs: grain runs up the tube
+  const c = document.createElement('canvas'); c.width = 256; c.height = 1024; const g = c.getContext('2d');
+  g.fillStyle = 'rgb(205,205,205)'; g.fillRect(0, 0, 256, 1024);
+  for (let i = 0; i < 5000; i++) {
+    const v = Math.random() < 0.5 ? 255 : 130; g.strokeStyle = `rgba(${v},${v},${v},${0.04 + Math.random() * 0.12})`;
+    const x = Math.random() * 256, y = Math.random() * 1024; g.beginPath(); g.moveTo(x, y); g.lineTo(x, y + 60 + Math.random() * 400); g.stroke();
+  }
+  const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = 8; return t;
+}
 function beltTexture() {
   const c = document.createElement('canvas'); c.width = 256; c.height = 256; const g = c.getContext('2d');
   g.fillStyle = '#2d6fd0'; g.fillRect(0, 0, 256, 256);
@@ -71,8 +80,8 @@ function beltTexture() {
 }
 
 let assets;
-function load(model, hdri) {
-  assets ??= Promise.all([new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).loadAsync(model), new EXRLoader().loadAsync(hdri)]);
+function load(model, hdri, onProgress) {
+  assets ??= Promise.all([new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).loadAsync(model, onProgress), new EXRLoader().loadAsync(hdri)]);
   return assets;
 }
 
@@ -85,7 +94,7 @@ export function initViewer(root) {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
   const dprCap = tier === 'mobile' ? 1.5 : 2;
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, dprCap));
-  renderer.toneMapping = THREE.AgXToneMapping; renderer.toneMappingExposure = 1.25;
+  renderer.toneMapping = THREE.AgXToneMapping; renderer.toneMappingExposure = 1.4;
   renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFShadowMap; renderer.shadowMap.autoUpdate = false;
   const scene = new THREE.Scene();
   scene.background = new THREE.Color().setRGB(0.004, 0.006, 0.014);
@@ -94,27 +103,40 @@ export function initViewer(root) {
   const cam = new THREE.PerspectiveCamera(fov(lens), 1.6, 0.02, 80);
   cam.position.copy(pos); cam.lookAt(aim);
 
-  // key lamp with a soft shadow map: shapes the model. Contact shadows below do the grounding.
-  const key = new THREE.DirectionalLight(0xffffff, 0.35);
-  key.position.copy(B(...LIGHTS[0][0])); key.target.position.copy(B(...LIGHTS[0][1])); key.castShadow = true;
-  const sm = tier === 'mobile' ? 2048 : 4096; key.shadow.mapSize.set(sm, sm);
-  Object.assign(key.shadow.camera, { left: -1.8, right: 1.8, top: 1.6, bottom: -1.6, near: 0.5, far: 12 });
-  key.shadow.bias = -0.0004; key.shadow.normalBias = 0.004; key.shadow.radius = 5; key.shadow.blurSamples = 16;
-  scene.add(key, key.target);
+  // Two lamps, kept very dim: they exist to cast shadows. The steel is lit by the environment,
+  // as it is in Cycles. Bright lamps were what turned the legs flat white.
+  const sm = tier === 'mobile' ? 1024 : 2048;
+  const lamp = (from, to, k, radius) => {
+    const d = new THREE.DirectionalLight(0xffffff, k); d.position.copy(from); d.target.position.copy(to); d.castShadow = true;
+    d.shadow.mapSize.set(sm, sm); Object.assign(d.shadow.camera, { left: -1.9, right: 1.9, top: 1.7, bottom: -1.7, near: 0.5, far: 12 });
+    d.shadow.bias = -0.0006; d.shadow.normalBias = 0.01; d.shadow.radius = radius; d.shadow.blurSamples = 16;
+    scene.add(d, d.target); return d;
+  };
+  lamp(B(...LIGHTS[0][0]), B(...LIGHTS[0][1]), 0.12, 5);                 // key: direction of the long shadow
+  lamp(B(LEN / 2, -0.35, 4.2), B(LEN / 2, -0.3, 0), 0.05, 10);          // overhead: the shadow under the machine
 
-  // floor: dark mirror at low strength (desktop), so the legs and feet reflect as they do in Cycles
+  // Floor, bottom to top: a low-resolution mirror (soft because it is small), a painted pool of light that
+  // hides the mirror with distance, a shadow-only layer, then the contact shadows.
   let mirror = null;
   if (tier !== 'mobile') {
-    mirror = new Reflector(new THREE.PlaneGeometry(40, 40), { textureWidth: 1024, textureHeight: 640, color: new THREE.Color().setRGB(0.085, 0.09, 0.105), clipBias: 0.001 });
-    mirror.rotation.x = -Math.PI / 2; mirror.position.y = -0.001; scene.add(mirror);
+    mirror = new Reflector(new THREE.PlaneGeometry(14, 14), { textureWidth: 400, textureHeight: 250, color: new THREE.Color().setRGB(0.5, 0.52, 0.56), clipBias: 0.001 });
+    mirror.rotation.x = -Math.PI / 2; mirror.position.set(LEN / 2, -0.002, 0); scene.add(mirror);
   }
-  // a matt floor over the mirror, lit by one overhead spot: the pool of light under the machine
-  const floor = new THREE.Mesh(new THREE.PlaneGeometry(40, 40), new THREE.MeshStandardMaterial({ color: new THREE.Color().setRGB(0.07, 0.082, 0.12), roughness: 0.7, metalness: 0, envMapIntensity: 0, transparent: tier !== 'mobile', opacity: tier !== 'mobile' ? 0.8 : 1, depthWrite: false }));
-  const pool = new THREE.SpotLight(0xffffff, 60, 12, 0.5, 1, 2); pool.castShadow = true; pool.shadow.mapSize.set(sm / 2, sm / 2); pool.shadow.radius = 9; pool.shadow.blurSamples = 20; pool.shadow.bias = -0.0008; pool.shadow.normalBias = 0.012; pool.position.copy(B(LEN / 2, -0.5, 3.4)); pool.target.position.copy(B(LEN / 2, -0.3, 0)); scene.add(pool, pool.target);
-  floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
+  const poolTex = (() => {
+    const c = document.createElement('canvas'); c.width = c.height = 512; const g = c.getContext('2d');
+    const far = tier === 'mobile' ? 1 : 1, near = tier === 'mobile' ? 1 : 0.86;   // alpha: the mirror shows only near the machine
+    const gr = g.createRadialGradient(256, 256, 0, 256, 256, 256);
+    gr.addColorStop(0, `rgba(168,174,186,${near})`); gr.addColorStop(0.07, `rgba(128,134,148,${near})`); gr.addColorStop(0.17, `rgba(52,57,70,${(near + far) / 2})`); gr.addColorStop(0.3, `rgba(14,17,26,${far})`); gr.addColorStop(0.5, `rgba(6,8,14,${far})`); gr.addColorStop(1, `rgba(6,8,14,${far})`);
+    g.fillStyle = gr; g.fillRect(0, 0, 512, 512);
+    const x = new THREE.CanvasTexture(c); x.colorSpace = THREE.SRGBColorSpace; return x;
+  })();
+  const pool = new THREE.Mesh(new THREE.PlaneGeometry(40, 40), new THREE.MeshBasicMaterial({ map: poolTex, transparent: tier !== 'mobile', depthWrite: false, toneMapped: false }));
+  pool.rotation.x = -Math.PI / 2; pool.position.set(LEN / 2, -0.001, -0.3); pool.scale.set(1.25, 0.85, 1); scene.add(pool);
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(14, 14), new THREE.ShadowMaterial({ opacity: 0.5 }));
+  floor.rotation.x = -Math.PI / 2; floor.position.set(LEN / 2, 0, 0); floor.receiveShadow = true; scene.add(floor);
 
   // contact shadows: depth of the model seen from under the floor, blurred. Follows moving parts.
-  const CS = { size: 4.2, depth: 0.35, res: tier === 'mobile' ? 256 : 512, blur: 2.6, darkness: 1.6 };
+  const CS = { size: 4.2, depth: 0.3, res: tier === 'mobile' ? 256 : 512, blur: 1.6, darkness: 1.6 };
   const csGroup = new THREE.Group(); csGroup.position.set(LEN / 2, 0.002, 0); scene.add(csGroup);
   const rtA = new THREE.WebGLRenderTarget(CS.res, CS.res), rtB = new THREE.WebGLRenderTarget(CS.res, CS.res);
   rtA.texture.generateMipmaps = rtB.texture.generateMipmaps = false;
@@ -136,14 +158,14 @@ export function initViewer(root) {
     blurPlane.visible = false;
   }
   function contactShadows() {
-    const bg = scene.background; scene.background = null; csPlane.visible = false; floor.visible = false; if (mirror) mirror.visible = false;
+    const bg = scene.background; scene.background = null; csPlane.visible = false; floor.visible = false; pool.visible = false; if (mirror) mirror.visible = false;
     scene.overrideMaterial = depthMat;
     const ca = renderer.getClearAlpha(); renderer.setClearAlpha(0);
     renderer.setRenderTarget(rtA); renderer.render(scene, csCam);
     scene.overrideMaterial = null;
     blurPass(CS.blur); blurPass(CS.blur * 0.4);
     renderer.setRenderTarget(null); renderer.setClearAlpha(ca);
-    scene.background = bg; csPlane.visible = true; floor.visible = true; if (mirror) mirror.visible = true;
+    scene.background = bg; csPlane.visible = true; floor.visible = true; pool.visible = true; if (mirror) mirror.visible = true;
   }
 
   const parts = {}; let drums = [], beltTex = null, model = null;
@@ -163,7 +185,10 @@ export function initViewer(root) {
   }
   function play() { playing = performance.now(); setAssembly(0); }
 
-  load(root.dataset.model, root.dataset.hdri).then(([gltf, exr]) => {
+  const t0 = performance.now(); let tAssets = 0;
+  const url = root.dataset.model;
+  load(url, root.dataset.hdri, (e) => { if (hud && e.total) hud.textContent = `Loading model ${Math.min(99, Math.round(e.loaded / e.total * 100))}%`; }).then(([gltf, exr]) => {
+    tAssets = performance.now() - t0;
     // image-based light: the HDRI plus a card for every Blender area lamp
     exr.mapping = THREE.EquirectangularReflectionMapping;
     const env = new THREE.Scene(); env.background = exr; env.backgroundRotation.y = Math.PI;
@@ -172,6 +197,9 @@ export function initViewer(root) {
       const m = new THREE.Mesh(new THREE.PlaneGeometry(sx, sy), new THREE.MeshBasicMaterial({ color: new THREE.Color().setRGB(col[0] * L, col[1] * L, col[2] * L), side: THREE.DoubleSide }));
       m.position.copy(B(...loc)).sub(CENTRE); m.lookAt(B(...tgt).sub(CENTRE)); env.add(m);
     }
+    const ground = (r, v, y) => { const m = new THREE.Mesh(new THREE.CircleGeometry(r, 48), new THREE.MeshBasicMaterial({ color: new THREE.Color().setRGB(v, v * 1.04, v * 1.12) })); m.rotation.x = -Math.PI / 2; m.position.y = y; env.add(m); };
+    ground(60, 0.045 / HDRI_STRENGTH, -CENTRE.y);            // the dark floor, as the machine sees it
+    ground(3.4, 0.42 / HDRI_STRENGTH, -CENTRE.y + 0.01);     // the pool of light under it
     const pm = new THREE.PMREMGenerator(renderer);
     scene.environment = pm.fromScene(env, 0, 0.1, 100).texture; scene.environmentIntensity = HDRI_STRENGTH;
     pm.dispose();
@@ -179,8 +207,8 @@ export function initViewer(root) {
     // materials: the baked ambient occlusion arrives as vertex colour and multiplies the reflection
     const steel = (o) => new THREE.MeshPhysicalMaterial({ color: new THREE.Color().setRGB(0.60, 0.60, 0.61), metalness: 1, vertexColors: true, side: THREE.DoubleSide, ...o });
     const mats = {
-      'Brushed sheet': steel({ roughness: 0.42, roughnessMap: panelTexture(), anisotropy: 0.55 }),
-      'Brushed tube': steel({ roughness: 0.44, anisotropy: 0.55, anisotropyRotation: Math.PI / 2 }),
+      'Brushed sheet': steel({ roughness: 0.42, roughnessMap: panelTexture(tier === 'mobile'), anisotropy: 0.55 }),
+      'Brushed tube': steel({ roughness: 0.4, roughnessMap: tubeTexture(), anisotropy: 0.5, anisotropyRotation: Math.PI / 2 }),
       Plate: steel({ roughness: 0.36 }),
     };
     beltTex = beltTexture();
@@ -202,7 +230,9 @@ export function initViewer(root) {
     renderer.render(scene, cam);
     root.dataset.triangles = renderer.info.render.triangles; root.dataset.calls = renderer.info.render.calls; root.dataset.tier = tier;
     root.dataset.pixels = canvas.width + 'x' + canvas.height;
+    root.dataset.assetsMs = Math.round(tAssets); root.dataset.readyMs = Math.round(performance.now() - t0); root.dataset.model = url;
     root.classList.add('is-loaded'); dirty = true;
+    if (hud) hud.textContent = `Model ready in ${(root.dataset.readyMs / 1000).toFixed(1)} s · ${tier} tier`;
   }).catch((e) => { root.dataset.error = String(e && e.stack || e); });
 
   // interaction
@@ -229,7 +259,31 @@ export function initViewer(root) {
   range?.addEventListener('input', () => { playing = 0; setAssembly(range.value / 1000); });
   ui('[data-run]')?.addEventListener('click', (e) => { running = !running; e.currentTarget.setAttribute('aria-pressed', String(running)); dirty = true; });
   root.parentElement.querySelectorAll('[data-goto]').forEach((b) => b.addEventListener('click', () => flyTo(b.dataset.goto)));
-  root.viewer = { play, setAssembly, run: (v) => { running = v; dirty = true; }, spin: (v) => { if (controls) { controls.autoRotate = v; controls.autoRotateSpeed = 6; } } };
+  // Runs on the visitor's own device: real frame times from requestAnimationFrame.
+  async function benchmark(report) {
+    const phase = (ms, start) => new Promise((done) => {
+      start(); const f = []; let last = performance.now(); const end = last + ms;
+      const tick = (now) => { f.push(now - last); last = now; dirty = true; if (now < end) requestAnimationFrame(tick); else done(f.slice(2)); };
+      requestAnimationFrame(tick);
+    });
+    const sum = (f) => { const s = [...f].sort((a, b) => a - b), avg = f.reduce((a, b) => a + b, 0) / f.length; return { fps: +(1000 / avg).toFixed(1), worst5pcMs: +s[Math.floor(s.length * 0.95)].toFixed(1), frames: f.length }; };
+    report('Rotating with belt running (6 s)');
+    const a = sum(await phase(6000, () => { setAssembly(1); running = true; if (controls) { controls.autoRotate = true; controls.autoRotateSpeed = 6; } }));
+    if (controls) controls.autoRotate = false; running = false;
+    report('Assembly sequence (5 s)');
+    const b = sum(await phase(5300, () => play()));
+    const gl = renderer.getContext(), ext = gl.getExtension('WEBGL_debug_renderer_info');
+    const res = performance.getEntriesByType('resource').filter((r) => /assets\//.test(r.name));
+    const kb = (f) => Math.round(res.filter(f).reduce((n, r) => n + (r.transferSize || r.encodedBodySize || 0), 0) / 1024);
+    return {
+      rotate: a, assembly: b, tier, canvas: canvas.width + 'x' + canvas.height, devicePixelRatio: window.devicePixelRatio,
+      triangles: renderer.info.render.triangles, drawCalls: renderer.info.render.calls,
+      gpu: ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : 'not reported',
+      modelAndHdriMs: Math.round(tAssets), readyMs: +root.dataset.readyMs, transferKB: { all: kb(() => true), model: kb((r) => /\.glb/.test(r.name)), script: kb((r) => /\.js/.test(r.name)) },
+      screen: screen.width + 'x' + screen.height, userAgent: navigator.userAgent,
+    };
+  }
+  root.viewer = { benchmark, play, setAssembly, run: (v) => { running = v; dirty = true; }, spin: (v) => { if (controls) { controls.autoRotate = v; controls.autoRotateSpeed = 6; } } };
 
   const size = () => { const w = root.clientWidth, h = root.clientHeight; if (!w) return; renderer.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix(); dirty = true; };
   new ResizeObserver(size).observe(root); size();

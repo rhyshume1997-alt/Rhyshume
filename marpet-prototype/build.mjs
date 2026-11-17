@@ -407,11 +407,12 @@ page({ file: 'storyboard.html', title: 'Storyboard, concepts and review', desc: 
 /* ---------------- Realism test (isolated; nothing else on the site uses these assets) ---------------- */
 const V = 'data-model="assets/render/conveyor.glb" data-hdri="assets/render/studio.exr"';
 const why = [
-  ['No occlusion', 'Every surface reflected the full studio, even inside joints and under the frame.', 'Ambient occlusion baked in Blender into the model (vertex colour). It dims reflections in crevices.'],
-  ['No grounding', 'One hard shadow map and a floor that could not reflect.', 'Soft key shadow, blurred contact shadows that follow moving parts, and a dark mirror floor on desktop.'],
+  ['No occlusion', 'Every surface reflected the full studio, even inside joints and under the frame.', 'Ambient occlusion baked in Blender into the model, one part at a time so nothing ghosts during assembly.'],
+  ['No grounding', 'One hard shadow map and a floor that could not reflect.', 'Two soft shadow maps, contact shadows that follow moving parts, a pool of light, and a soft reflection near the machine on desktop.'],
+  ['Legs lit like plastic', 'Bright lamps and a bright studio floor in the reflections turned the legs flat white.', 'Lamps cut to shadow-casting only. The reflected environment now includes the dark floor.'],
   ['Lost surface detail', 'Blender\'s procedural grain, scratches and smudges do not export to GLB.', 'A single 4096 px roughness texture mapped once across the whole side panel, with anisotropic highlights.'],
   ['Wrong light levels', 'I had the HDRI five times too bright and the lamps sixteen times too bright.', 'HDRI at Blender\'s strength, plus a light card for each Blender lamp at the same position, size and output.'],
-  ['Heavy, unmerged model', '418 separate parts, 370,000 triangles, 2.7 MB.', '13 merged parts, 112,000 triangles, 1.4 MB with meshopt compression.'],
+  ['Heavy, unmerged model', '418 separate parts, 370,000 triangles, 2.7 MB.', '13 merged parts, 112,000 triangles, 1.26 MB (0.65 MB compressed). A simplified phone version was tried and rejected: it faceted the side panel.'],
 ];
 const still = [
   ['Light between parts', 'Cycles bounces light between the frame, legs and floor. Three.js lights each surface from the studio alone.'],
@@ -451,7 +452,8 @@ page({ file: 'material-test.html', title: 'Realism test', desc: 'Interactive con
     </div>
     <p class="fps" data-hud aria-live="off">Loading model</p>
   </div>
-  <p style="margin-top:1rem">Drag to rotate. Scroll or pinch to zoom. The slider scrubs the assembly in either direction.</p>
+  <p style="margin-top:1rem"><a class="text-link" href="phone-test.html" data-no-nav>Open the phone test page</a></p>
+  <p>Drag to rotate. Scroll or pinch to zoom. The slider scrubs the assembly in either direction.</p>
 </div></section>
 <section class="section on-dark"><div class="wrap">
   <p class="eyebrow">Side by side</p><div class="section-head"><h2>Blender Cycles against Three.js, same camera</h2></div>
@@ -481,6 +483,30 @@ page({ file: 'material-test.html', title: 'Realism test', desc: 'Interactive con
 <section class="section on-white"><div class="wrap">
   <p class="eyebrow">Reference</p><div class="section-head"><h2>Material needed from Marpet</h2></div>
   <ul class="ticks" style="grid-template-columns:1fr">${refs.map((r) => `<li>${r}</li>`).join('')}</ul>
+</div></section>
+</main>` });
+
+/* ---------------- Phone test (isolated) ---------------- */
+page({ file: 'phone-test.html', title: 'Phone test', desc: 'Measure the interactive conveyor on this device.', section: 'review', page: 'phone', main: `
+<main id="main">
+<section class="section on-deep" style="padding-top:1.5rem"><div class="wrap">
+  <h1 style="font-size:clamp(2rem,6vw,3.2rem);color:#fff">Phone test</h1>
+  <p>Wait for the model, try rotating and pinching, then press the button. It takes about 12 seconds and measures this device, not a simulation.</p>
+  <div class="stage3d">
+    <div class="viewer viewer--big" data-viewer data-interactive data-view="hero" ${V}><canvas aria-label="Interactive 3D conveyor. Drag to rotate, pinch to zoom."></canvas></div>
+    <div class="stage3d__bar">
+      <button type="button" class="chip" data-bench>Run phone test</button>
+      <button type="button" class="chip" data-play>Play assembly</button>
+      <button type="button" class="chip" data-run aria-pressed="false">Run belt</button>
+      <label class="chip chip--range">Assembly <input type="range" min="0" max="1000" value="1000" data-assembly aria-label="Assembly progress"></label>
+    </div>
+    <p class="fps" data-hud aria-live="off">Loading model</p>
+  </div>
+  <h2 style="margin-top:2rem;font-size:1.6rem;color:#fff">Results</h2>
+  <p data-bench-status role="status">Not run yet.</p>
+  <textarea data-bench-out readonly rows="14" aria-label="Test results" style="width:100%;font:13px/1.4 ui-monospace,monospace;background:#0b1226;color:#dbe2f2;border:1px solid rgba(255,255,255,.25);padding:.8rem;border-radius:3px"></textarea>
+  <div class="btn-row"><button type="button" class="btn btn--primary" data-bench-copy>Copy results</button></div>
+  <p style="margin-top:1rem">Paste the results back to me. Add <code>?tier=desktop</code> to the address to try the full-quality version on this device.</p>
 </div></section>
 </main>` });
 

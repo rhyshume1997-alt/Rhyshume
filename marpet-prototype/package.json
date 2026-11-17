@@ -1,0 +1,13 @@
+{
+  "name": "marpet-prototype",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs && npm run bundle",
+    "bundle": "esbuild site/assets/viewer.js --bundle --minify --format=esm --target=es2020 --alias:three=./site/assets/vendor/three.module.js --outfile=site/assets/viewer.min.js",
+    "serve": "node serve.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  }
+}

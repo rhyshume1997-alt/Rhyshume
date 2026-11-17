@@ -1,14 +1,94 @@
 # Conveyor realism: Blender benchmark and interactive Three.js test
 
-Isolated test. The homepage, its layout and its copy are unchanged. Nothing is deployed or merged.
+Isolated test. The production homepage, its layout and its copy are unchanged. Nothing is merged.
 
-Open `site/material-test.html` (see the README for how to serve it). Side-by-side stills are also saved in `review/compare-hero.jpg`, `compare-drive.jpg` and `compare-weld.jpg`.
+- Test page: `site/material-test.html`
+- Phone test page: `site/phone-test.html`
+- Side-by-side stills: `review/compare-hero.jpg`, `compare-drive.jpg`, `compare-weld.jpg`
 
-## Where this stands
+## Where this stands (round 2)
 
-- **Blender Cycles is the visual benchmark.** One master model, `blender/conveyor.py`, produces both the benchmark renders and the browser model.
-- **The Three.js version is much closer than it was, and still short of Blender.** The brushed side panel, fasteners, take-up and end plate now hold up at the same camera angle. The floor, the light under the machine and the leg highlights do not.
-- **Frame rate on a real phone is not measured.** This environment has no GPU. CPU cost and download sizes are measured; the rest needs a phone in hand.
+- **Blender Cycles is the benchmark.** One master model, `blender/conveyor.py`, produces the benchmark renders and the browser model.
+- **The four defects from round 1 are addressed.** Details below.
+- **Real-phone results: none yet.** This environment has no GPU. The phone test page measures the device it runs on; it needs to be opened on a phone.
+
+## The four defects
+
+| Defect | Cause | Fix | Result |
+|---|---|---|---|
+| Overbright legs | Bright direct lamps, and the reflected studio had a bright floor | Lamps cut to shadow-casting strength. The reflected environment now contains the dark floor and its pool of light. Legs have their own vertical grain texture | Legs read as grey steel. Slightly darker than Cycles |
+| Assembly ghosting | Occlusion was baked for the finished machine | Occlusion baked one part at a time in Blender | No dark patches where parts have not arrived |
+| Floor reflection and contact shadows | Sharp full-strength mirror, flat floor light, weak shadows | Low-resolution mirror (soft), hidden by a painted pool of light as distance grows. Two soft shadow maps (long shadow and under-machine shadow) plus contact shadows at the feet | Soft reflection near the machine, clear shadow under it. Not the graded falloff of Cycles |
+| Mobile loading | Unminified library, uncompressed server, eager loading | One minified bundle, brotli compression, 3D loads only when a viewer nears the screen, lighter textures and shadow maps on phones | Download 4,320 KB to 1,089 KB. Time to interactive 9.8 s to 2.6 s on the phone profile |
+
+Tried and rejected: a simplified phone model (0.81 MB). It saved about 180 KB compressed but visibly faceted the side panel.
+
+## What still falls short of Cycles
+
+- Light bouncing between parts.
+- The floor: graded reflection and light falloff.
+- Depth of field and sub-pixel grain.
+- Weld bead edges show slight stair-stepping close up.
+- Plates sitting on the frame no longer darken the frame beneath them (the cost of removing the ghosting).
+
+## Loading measurements
+
+Measured against `serve.mjs` (brotli), in headless Chromium.
+
+| Run | Network | Download | Time to interactive |
+|---|---|---|---|
+| Desktop 1440x900 | unthrottled | 1,089 KB | 1.8 s |
+| Phone profile (Pixel 7), CPU slowed 4x | Fast 4G (9 Mbps) | 1,089 KB | 2.6 s |
+| Phone profile (Pixel 7), CPU slowed 4x | Slow 4G (1.6 Mbps) | 1,089 KB | 7.6 s |
+| Round 1, phone profile, CPU slowed 4x | local, unthrottled | 4,320 KB | 9.8 s |
+
+Download breakdown: model and HDRI 771 KB, script 199 KB, page, styles and fonts 120 KB.
+
+Of the 2.6 s, about 1.0 s is fetching the model and about 0.9 s is building the scene (environment, textures, shadows).
+
+## Frame rate
+
+Not measurable here. The GPU in this environment is emulated in software, so the figures it produces (6 frames a second rotating) describe the emulator, not a phone. The phone test page was run end to end here to confirm it works and reports correctly.
+
+What is known:
+
+- Model: 112,000 triangles, 13 meshes.
+- Phones draw the scene up to three times a frame while parts are moving (view plus two shadow maps), about 350,000 triangles. Shadows are not redrawn when nothing moves.
+- Phones get no mirror floor, a pixel ratio cap of 1.5 and 1024 px shadow maps.
+
+## Testing on a real phone
+
+1. On a computer on the same Wi-Fi as the phone, in `marpet-prototype`:
+
+```bash
+node serve.mjs
+```
+
+2. It prints an address such as `http://192.168.1.20:4173/phone-test.html`. Open that on the phone.
+3. Wait for "Model ready", rotate and pinch, then press **Run phone test**. It takes about 12 seconds.
+4. Press **Copy results** and send them back.
+
+The results include frames per second while rotating and while assembling, the slowest 5% of frames, the GPU, screen size, load time and download size.
+
+No install is needed to serve the page; Node 18 or later is enough.
+
+## Preview deployments
+
+Pushing this branch did trigger automatic Vercel preview builds: one for each of the first two pushes (commits `083849e` and `56c937e`). Both are previews, not production. The Vercel project has login protection on every deployment except the custom domain, so they are not public.
+
+`marpet-prototype` is listed in `.vercelignore`. I have not opened those previews to confirm the folder is absent, because doing so from here means creating a share link on the deployment.
+
+From this commit on, `vercel.json` switches off deployments for this branch only, so further pushes build nothing.
+
+## References studied
+
+| Reference | Finding |
+|---|---|
+| `nesdesignco/FormDrive` (MIT; models CC BY 4.0) | Three.js with React Three Fiber. No HDRI, no post-processing. ACES tone mapping, five lamps, cloned GLB materials with raised environment intensity, a clearcoat floor, shadow maps. Pixel ratio capped at 1.8. Orbit limits and damped camera presets |
+| `ASTRICKK/PorscheLab` (README only; all rights reserved) | Poly Haven HDRIs at 2K or 4K with ground projection, accumulated soft shadows, light bloom and vignette, GSAP camera tours |
+| Blank Studio, Polestar 3 | A short case study without figures. Method named: retopology, texture baking, web-ready PBR materials, Three.js and Next.js |
+
+All three point the same way: optimise and bake in the 3D tool, keep the browser scene simple. No code or assets were copied.
 
 ## The master model
 
@@ -25,103 +105,7 @@ Reconstructed from four Marpet photographs. Every dimension is an estimate.
 
 Not modelled because no photograph shows it clearly: motor and gearbox, belt return rollers, the underside, control gear, guarding.
 
-Materials (starting values, to be calibrated against a clean daylight photograph):
-
-| Material | Settings |
-|---|---|
-| Brushed sheet | Metallic 1.0, roughness 0.25 to 0.41 along the grain, anisotropy 0.55, off-axis scratches, soft wipe marks, 4% tone variation, 0.3 to 0.45 mm oil-canning in the sheet |
-| Brushed tube | As sheet, grain running up the leg, roughness about 0.34 |
-| Laser-cut plate | Roughness about 0.36, lower anisotropy |
-| Polished turned parts | Roughness 0.16 |
-| Fasteners | Roughness 0.27 |
-| Welds | Roughness 0.46, slight straw heat tint, rippled bead |
-| Bearing housings | Orange thermoplastic, roughness 0.33 |
-| Belt | Blue PU, roughness 0.42, 7 mm sag on the return run |
-
-Lighting: Blender's bundled `studio.exr` HDRI at strength 0.2 for ambient and reflections, plus nine area lamps (key softbox, overhead, five tall strips, rim, low fill). No bloom.
-
-## Why the first Three.js version looked flat
-
-1. **No occlusion.** Every surface reflected the whole studio, including inside joints and under the frame.
-2. **No grounding.** One hard shadow map, and a floor that could not reflect the machine.
-3. **Surface detail was lost.** Blender's procedural grain, scratches and smudges do not export to GLB.
-4. **Light levels were wrong.** My first setup had the HDRI five times too bright and the lamps sixteen times too bright.
-5. **The model was unoptimised.** 418 separate parts and 370,000 triangles.
-
-## What the pipeline does now
-
-| Step | Detail |
-|---|---|
-| Export | Parts joined into 13 meshes by assembly group, so they can still move separately |
-| Baked detail | Ambient occlusion baked in Cycles into vertex colour; it dims reflections in crevices |
-| Compression | glTF-Transform with meshopt: 5.2 MB to 1.4 MB |
-| Environment | Same HDRI at the same strength, plus a light card for each Blender lamp at the same position, size and output |
-| Materials | `MeshPhysicalMaterial`, metalness 1, the Blender roughness values, anisotropy, one 4096 px roughness texture mapped once across the whole side panel |
-| Shadows | Soft key shadow, an overhead spot that puts the pool of light and the shadow under the machine, blurred contact shadows that follow moving parts |
-| Floor | Dark mirror at low strength on desktop; off on phones |
-| Tone mapping | AgX, as in Blender |
-| Interaction | Drag to rotate, scroll or pinch to zoom, three camera presets, assembly play and scrub, running belt and drums |
-| Rendering | Draws only when something changes; stops when off screen |
-
-## What real time still does not match
-
-- **Light bouncing between parts.** Cycles lights the legs from the floor and the frame from the belt. Three.js lights each surface from the studio only.
-- **The floor.** Cycles gives a soft reflection that fades with distance and a graded pool of light. Three.js gives a sharp mirror and a flatter pool.
-- **Legs.** They read as flat white in Three.js. They need their own roughness texture and gentler direct light.
-- **Depth of field and sub-pixel grain.** Cycles has both. Three.js is sharp everywhere.
-- **Assembly ghosts.** The baked occlusion is for the finished machine, so darker patches show where a part has not yet arrived. Fixable by baking per part.
-- **Weld bead edges** show slight stair-stepping close up.
-
-Options not yet tried, in order of likely value: screen-space ambient occlusion, a blurred floor reflection, per-part occlusion bakes, baked normal maps for welds, a higher resolution studio HDRI.
-
-## Sizes
-
-| Asset | On disk | Compressed transfer |
-|---|---|---|
-| Conveyor model (`conveyor.glb`) | 1.40 MB | 0.81 MB |
-| Studio HDRI | 98 KB | 96 KB |
-| Three.js as vendored (unminified) | 2.13 MB | 422 KB |
-| Three.js once bundled and minified (estimate) | about 700 KB | about 180 KB |
-| Loaders, controls, reflector, decoder | | 99 KB |
-| Viewer code | 17 KB | 6 KB |
-| Benchmark stills (three JPEGs) | 213 KB | |
-| Rendered navigation plate | 18 KB | |
-
-Model: 56,000 faces, 112,000 triangles, 13 meshes, about 40 draw calls for the model.
-
-## Performance measured here
-
-Software rendering only (no GPU in this environment), with Blender rendering on the same four cores at the time.
-
-| Run | Time to interactive | CPU per frame, rotating with belt running | CPU per frame, assembling | Horizontal overflow |
-|---|---|---|---|---|
-| Desktop 1440x900 | 6.8 s | 2.8 ms | 4.0 ms | none |
-| Phone profile (Pixel 7), CPU slowed 4x | 9.8 s | 8.4 ms | 14.2 ms | none |
-
-Reading this:
-
-- CPU cost per frame stays under the 16.7 ms needed for 60 frames a second, even slowed four times.
-- Frame rate itself was 0 to 1 here because the GPU is emulated. It says nothing about real devices.
-- On phones the mirror floor is off, pixel ratio is capped at 1.5 and shadow maps are halved.
-- During assembly the scene is drawn three times a frame (view plus two shadow maps), about 350,000 triangles. That is the number to watch on older phones.
-- Reduced motion: the model loads assembled and nothing plays by itself. The slider and buttons work from the keyboard.
-
-## References studied
-
-| Reference | Finding |
-|---|---|
-| `nesdesignco/FormDrive` (MIT; models CC BY 4.0) | Three.js 0.180 with React Three Fiber. No HDRI and no post-processing. ACES tone mapping, a stack of five lamps, cloned GLB materials with raised environment intensity, clearcoat paint, a glossy clearcoat floor, shadow maps only. Pixel ratio capped at 1.8. Orbit limits and damped camera presets |
-| `ASTRICKK/PorscheLab` (README only; all rights reserved, ideas only) | Three.js r176 with React Three Fiber. Poly Haven HDRIs at 2K or 4K with ground projection, accumulated soft shadows, light bloom and vignette, GSAP camera tours |
-| blankstudio.it Polestar research | Not reviewed. The host is outside this session's network allowlist |
-
-Taken from them: orbit limits with damping, camera presets, a reflective floor, a pixel ratio cap, clone-and-patch materials after load. Not copied: any code or assets.
-
-## Recommendation
-
-1. Keep Blender as the master asset and the quality benchmark.
-2. Use the interactive Three.js conveyor where the visitor handles the machine: rotate, zoom, assemble, run.
-3. Do not yet replace the homepage opening with it. Decide that after a real-phone test and one more pass on the floor and legs.
-4. If the opening must match Blender exactly, a short Cycles-rendered sequence for the opening, handing over to the live model once it settles, remains available. A draft render path exists (`conveyor.py --anim`). It was not completed in this round.
+Materials (starting values, to be calibrated against a clean daylight photograph): brushed sheet at metallic 1.0, roughness 0.25 to 0.41 along the grain, anisotropy 0.55, with off-axis scratches, soft wipe marks and slight oil-canning; tube about 0.34 to 0.40; plate 0.36; polished turned parts 0.16; fasteners 0.27; welds 0.46 with a slight heat tint.
 
 ## Reference material needed from Marpet
 
@@ -137,4 +121,4 @@ Taken from them: orbit limits with damping, camera presets, a reflective floor, 
 
 ## Navigation plate
 
-The plate on the test page is a Cycles render of a 4 mm brushed plate with four socket screws, used as a nine-slice image so one 18 KB file fits any size. Lettering is dark, like laser marking. A band of reflected light follows the pointer. It is on the test page only and has not been applied to the site.
+A Cycles render of a 4 mm brushed plate with four socket screws, used as a nine-slice image so one 18 KB file fits any size. On the test page only; not applied to the site.

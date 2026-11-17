@@ -90,5 +90,10 @@
       "source": "/c/:id",
       "destination": "/api/c?id=:id"
     }
-  ]
+  ],
+  "git": {
+    "deploymentEnabled": {
+      "claude/beautiful-hawking-dh0pog": false
+    }
+  }
 }

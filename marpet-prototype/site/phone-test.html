@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Phone test | Marpet Fabrications (prototype)</title>
+<meta name="description" content="Measure the interactive conveyor on this device.">
+<link rel="icon" href="data:,">
+<link rel="preload" href="assets/fonts/barlow-condensed-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/styles.css">
+<script type="importmap">{"imports":{"three":"./assets/vendor/three.module.js"}}</script>
+</head>
+<body data-page="phone" data-section="review" data-nav-scope>
+<a class="skip" href="#main">Skip to content</a>
+<p class="proto-bar">Design prototype for review. Not the live Marpet site. <a href="storyboard.html">Storyboard, concepts and open items</a> · <a href="material-test.html">Realism test</a></p>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html" data-name="Home"><img src="assets/img/logo.jpg" alt="Marpet Fabrications 1997 Limited, home" width="293" height="107"></a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
+    <nav class="nav" id="nav" aria-label="Main">
+      <ul><li><a href="services.html" data-section="services">Services</a></li><li><a href="work.html" data-section="work">Our Work</a></li><li><a href="about.html" data-section="about">About</a></li><li><a href="team.html" data-section="team">Team</a></li><li><a href="contact.html" data-section="contact" data-transition="shutter">Contact</a></li></ul>
+    </nav>
+    <a class="header-tel" href="tel:+441416411778">0141 641 1778</a>
+    <a class="btn btn--primary header-cta" href="contact.html#enquiry" data-transition="shutter" data-name="Request a quote">Request a quote</a>
+  </div>
+</header>
+
+<main id="main">
+<section class="section on-deep" style="padding-top:1.5rem"><div class="wrap">
+  <h1 style="font-size:clamp(2rem,6vw,3.2rem);color:#fff">Phone test</h1>
+  <p>Wait for the model, try rotating and pinching, then press the button. It takes about 12 seconds and measures this device, not a simulation.</p>
+  <div class="stage3d">
+    <div class="viewer viewer--big" data-viewer data-interactive data-view="hero" data-model="assets/render/conveyor.glb" data-hdri="assets/render/studio.exr"><canvas aria-label="Interactive 3D conveyor. Drag to rotate, pinch to zoom."></canvas></div>
+    <div class="stage3d__bar">
+      <button type="button" class="chip" data-bench>Run phone test</button>
+      <button type="button" class="chip" data-play>Play assembly</button>
+      <button type="button" class="chip" data-run aria-pressed="false">Run belt</button>
+      <label class="chip chip--range">Assembly <input type="range" min="0" max="1000" value="1000" data-assembly aria-label="Assembly progress"></label>
+    </div>
+    <p class="fps" data-hud aria-live="off">Loading model</p>
+  </div>
+  <h2 style="margin-top:2rem;font-size:1.6rem;color:#fff">Results</h2>
+  <p data-bench-status role="status">Not run yet.</p>
+  <textarea data-bench-out readonly rows="14" aria-label="Test results" style="width:100%;font:13px/1.4 ui-monospace,monospace;background:#0b1226;color:#dbe2f2;border:1px solid rgba(255,255,255,.25);padding:.8rem;border-radius:3px"></textarea>
+  <div class="btn-row"><button type="button" class="btn btn--primary" data-bench-copy>Copy results</button></div>
+  <p style="margin-top:1rem">Paste the results back to me. Add <code>?tier=desktop</code> to the address to try the full-quality version on this device.</p>
+</div></section>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div><h2>Marpet Fabrications</h2><p>Sheet metal fabricators. Stainless steel, mild steel and aluminium.</p><p>Unit 4 Clyde Workshops, Fullarton Road, Glasgow, G32 8YL</p></div>
+      <div><h2>Services</h2><ul><li><a href="service-conveyor-systems.html">Conveyor systems</a></li><li><a href="service-production-lines.html">Production lines</a></li><li><a href="service-pipework.html">Industrial pipework</a></li><li><a href="service-access-platforms.html">Access platforms</a></li><li><a href="service-catering.html">Catering fabrication</a></li><li><a href="service-dentistry.html">Dentistry equipment</a></li><li><a href="service-general-fabrication.html">General fabrication</a></li></ul></div>
+      <div><h2>Company</h2><ul><li><a href="work.html">Our work</a></li><li><a href="about.html">About Marpet</a></li><li><a href="team.html">Meet the team</a></li><li><a href="contact.html" data-transition="shutter">Contact</a></li></ul></div>
+      <div><h2>Contact</h2><ul><li><a href="tel:+441416411778">0141 641 1778</a></li><li><a href="mailto:info@marpet.co.uk">info@marpet.co.uk</a></li><li>LinkedIn <span class="confirm">URL to confirm</span></li><li>Family: <a href="https://jnrengineering.co.uk/" target="_blank" rel="noopener">JNR Engineering<span class="visually-hidden"> (opens in a new tab)</span></a></li></ul></div>
+    </div>
+    <p class="legal"><span>Registered in Scotland 172812. VAT number 680561724. <span class="confirm">Confirm before launch</span></span><span>Prototype. Photographs from marpet.co.uk.</span></p>
+  </div>
+</footer>
+<script src="assets/vendor/gsap.min.js" defer></script>
+<script src="assets/app.js" defer></script>
+</body>
+</html>
