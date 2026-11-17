@@ -91,3 +91,12 @@ test('evidence section shows proof and the comparison, and is absent with no pro
   const none = rich.renderRich(base, null, null, { cta: { mail: 'mailto:rhys@rhyshume.co.uk' }, evidence: { host: 'x', problems: [] } });
   assert.ok(!none.includes('you may not know about'));
 });
+
+test('a name that is a short list of services but unrelated to the web address is replaced from the text', () => {
+  const preview = require('../tools/preview');
+  const html = '<html><head><title>Steel Fabrication, Steel Erection Specialists</title></head><body><p>Welcome to Simmers Contracts Ltd, based in Keith.</p></body></html>';
+  const facts = preview.extractFacts([{ url: 'https://simmerscontracts.co.uk/', html: html }], '', []);
+  assert.strictEqual(facts.name, 'Simmers Contracts Ltd');
+  const brand = preview.extractFacts([{ url: 'https://mdk-fab.com/', html: '<html><head><title>MDK Fab | Steel</title></head><body>x</body></html>' }], '', []);
+  assert.strictEqual(brand.name, 'MDK Fab');
+});

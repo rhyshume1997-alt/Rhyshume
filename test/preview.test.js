@@ -503,3 +503,14 @@ test('Action safety: manual only, one run at a time, 20 a day, up to 3 prospects
   assert.match(yml, /ANTHROPIC_API_KEY: \$\{\{ secrets\.ANTHROPIC_API_KEY \}\}/);
   assert.strictEqual((yml.match(/secrets\.ANTHROPIC_API_KEY/g) || []).length, 1);
 });
+
+test('a reply that is not valid JSON gets one retry instead of failing the build', async function () {
+  const r = await generate(['{"headline": "Broken, "intro": oops', GOOD]);
+  assert.strictEqual(r.net.calls.api.length, 2, 'it should retry exactly once');
+  assert.match(r.net.calls.api[1].messages[2].content, /not valid JSON/);
+  assert.ok(r.html.length > 1000);
+});
+
+test('two invalid JSON replies in a row still fail, with the parse error', async function () {
+  await assert.rejects(generate(['not json at all {', '{"also": broken']), /JSON|json/);
+});
