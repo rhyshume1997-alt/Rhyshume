@@ -1,0 +1,11 @@
+{
+  "name": "mascot-designer",
+  "private": true,
+  "description": "Mascot Designer's runtime: cleans and sizes the pictures (sharp) and films the demo with your own Chrome (playwright-core).",
+  "type": "module",
+  "engines": { "node": ">=18.17" },
+  "dependencies": {
+    "playwright-core": "^1.55.0",
+    "sharp": "^0.34.0"
+  }
+}

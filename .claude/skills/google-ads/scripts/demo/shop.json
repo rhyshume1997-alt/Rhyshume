@@ -1,0 +1,999 @@
+{
+ "format": "google-ads-export",
+ "v": 1,
+ "demo": true,
+ "made": null,
+ "days": 30,
+ "brief": {
+  "business": "Example candle shop (demo)",
+  "goal": "sales",
+  "target_cost": 18,
+  "target_roas": 3,
+  "monthly_budget": 3000,
+  "where": [
+   "United States"
+  ],
+  "reach": "there",
+  "languages": [
+   "English"
+  ],
+  "brand": [
+   "Ember & Oak"
+  ],
+  "approver": "Maya"
+ },
+ "account": {
+  "id": "2345678901",
+  "name": "Example candle shop (demo)",
+  "currency": "USD",
+  "timeZone": "America/New_York"
+ },
+ "data": {
+  "customer": [
+   {
+    "customer": {
+     "id": "2345678901",
+     "descriptiveName": "Example candle shop (demo)",
+     "currencyCode": "USD",
+     "timeZone": "America/New_York",
+     "autoTaggingEnabled": true
+    }
+   }
+  ],
+  "campaigns": [
+   {
+    "campaign": {
+     "id": "21",
+     "name": "Soy candles · Search",
+     "status": "ENABLED",
+     "advertisingChannelType": "SEARCH",
+     "biddingStrategyType": "TARGET_ROAS",
+     "targetRoas": {
+      "targetRoas": 4
+     },
+     "networkSettings": {
+      "targetGoogleSearch": true,
+      "targetSearchNetwork": true,
+      "targetContentNetwork": false,
+      "targetPartnerSearchNetwork": false
+     },
+     "geoTargetTypeSetting": {
+      "positiveGeoTargetType": "PRESENCE",
+      "negativeGeoTargetType": "PRESENCE"
+     },
+     "campaignBudget": "customers/2345678901/campaignBudgets/211"
+    },
+    "campaignBudget": {
+     "amountMicros": "60000000",
+     "explicitlyShared": false
+    }
+   },
+   {
+    "campaign": {
+     "id": "22",
+     "name": "Performance Max · all products",
+     "status": "ENABLED",
+     "advertisingChannelType": "PERFORMANCE_MAX",
+     "biddingStrategyType": "MAXIMIZE_CONVERSION_VALUE",
+     "networkSettings": {
+      "targetGoogleSearch": true,
+      "targetSearchNetwork": false,
+      "targetContentNetwork": false,
+      "targetPartnerSearchNetwork": false
+     },
+     "geoTargetTypeSetting": {
+      "positiveGeoTargetType": "PRESENCE_OR_INTEREST",
+      "negativeGeoTargetType": "PRESENCE"
+     },
+     "campaignBudget": "customers/2345678901/campaignBudgets/221"
+    },
+    "campaignBudget": {
+     "amountMicros": "40000000",
+     "explicitlyShared": false
+    }
+   }
+  ],
+  "campaignAiMax": [
+   {
+    "campaign": {
+     "id": "21",
+     "aiMaxSetting": {
+      "enableAiMax": false
+     }
+    }
+   },
+   {
+    "campaign": {
+     "id": "22",
+     "aiMaxSetting": {
+      "enableAiMax": false
+     }
+    }
+   }
+  ],
+  "campaignBroad": [
+   {
+    "campaign": {
+     "id": "21",
+     "keywordMatchType": "UNSPECIFIED"
+    }
+   },
+   {
+    "campaign": {
+     "id": "22",
+     "keywordMatchType": "UNSPECIFIED"
+    }
+   }
+  ],
+  "campaignAssetAutomation": [
+   {
+    "campaign": {
+     "id": "21",
+     "assetAutomationSettings": [
+      {
+       "assetAutomationType": "TEXT_ASSET_AUTOMATION",
+       "assetAutomationStatus": "OPTED_OUT"
+      },
+      {
+       "assetAutomationType": "FINAL_URL_EXPANSION_TEXT_ASSET_AUTOMATION",
+       "assetAutomationStatus": "OPTED_OUT"
+      }
+     ]
+    }
+   },
+   {
+    "campaign": {
+     "id": "22",
+     "assetAutomationSettings": [
+      {
+       "assetAutomationType": "TEXT_ASSET_AUTOMATION",
+       "assetAutomationStatus": "OPTED_IN"
+      },
+      {
+       "assetAutomationType": "FINAL_URL_EXPANSION_TEXT_ASSET_AUTOMATION",
+       "assetAutomationStatus": "OPTED_IN"
+      }
+     ]
+    }
+   }
+  ],
+  "campaignStats": [
+   {
+    "campaign": {
+     "id": "21"
+    },
+    "metrics": {
+     "costMicros": "1764000000",
+     "clicks": "1260",
+     "impressions": "17640",
+     "conversions": 98,
+     "conversionsValue": 5096,
+     "searchImpressionShare": 0.5,
+     "searchBudgetLostImpressionShare": 0.27,
+     "searchRankLostImpressionShare": 0.2
+    }
+   },
+   {
+    "campaign": {
+     "id": "22"
+    },
+    "metrics": {
+     "costMicros": "1105000000",
+     "clicks": "2400",
+     "impressions": "33600",
+     "conversions": 67,
+     "conversionsValue": 3506,
+     "searchImpressionShare": 0.5,
+     "searchBudgetLostImpressionShare": 0.02,
+     "searchRankLostImpressionShare": 0.3
+    }
+   }
+  ],
+  "campaignStatsPrev": [
+   {
+    "campaign": {
+     "id": "21"
+    },
+    "metrics": {
+     "costMicros": "1702000000",
+     "clicks": "1190",
+     "impressions": "16660",
+     "conversions": 101,
+     "conversionsValue": 5300
+    }
+   },
+   {
+    "campaign": {
+     "id": "22"
+    },
+    "metrics": {
+     "costMicros": "990000000",
+     "clicks": "2100",
+     "impressions": "29400",
+     "conversions": 58,
+     "conversionsValue": 3010
+    }
+   }
+  ],
+  "networks": [
+   {
+    "campaign": {
+     "id": "21"
+    },
+    "segments": {
+     "adNetworkType": "SEARCH"
+    },
+    "metrics": {
+     "costMicros": "1420000000",
+     "clicks": "950",
+     "impressions": "13300",
+     "conversions": 77,
+     "conversionsValue": 4004
+    }
+   },
+   {
+    "campaign": {
+     "id": "21"
+    },
+    "segments": {
+     "adNetworkType": "SEARCH_PARTNERS"
+    },
+    "metrics": {
+     "costMicros": "344000000",
+     "clicks": "310",
+     "impressions": "4340",
+     "conversions": 21,
+     "conversionsValue": 1092
+    }
+   },
+   {
+    "campaign": {
+     "id": "22"
+    },
+    "segments": {
+     "adNetworkType": "SEARCH"
+    },
+    "metrics": {
+     "costMicros": "1105000000",
+     "clicks": "2400",
+     "impressions": "33600",
+     "conversions": 67,
+     "conversionsValue": 3506
+    }
+   }
+  ],
+  "geoTypes": [
+   {
+    "campaign": {
+     "id": "21"
+    },
+    "geographicView": {
+     "locationType": "LOCATION_OF_PRESENCE",
+     "countryCriterionId": "2840"
+    },
+    "metrics": {
+     "costMicros": "1764000000",
+     "clicks": "1260",
+     "impressions": "17640",
+     "conversions": 98,
+     "conversionsValue": 5096
+    }
+   },
+   {
+    "campaign": {
+     "id": "22"
+    },
+    "geographicView": {
+     "locationType": "LOCATION_OF_PRESENCE",
+     "countryCriterionId": "2840"
+    },
+    "metrics": {
+     "costMicros": "1010000000",
+     "clicks": "2200",
+     "impressions": "30800",
+     "conversions": 64,
+     "conversionsValue": 3350
+    }
+   },
+   {
+    "campaign": {
+     "id": "22"
+    },
+    "geographicView": {
+     "locationType": "AREA_OF_INTEREST",
+     "countryCriterionId": "2840"
+    },
+    "metrics": {
+     "costMicros": "95000000",
+     "clicks": "200",
+     "impressions": "2800",
+     "conversions": 3,
+     "conversionsValue": 156
+    }
+   }
+  ],
+  "hours": [],
+  "conversionsByCampaign": [],
+  "campaignCriteria": [
+   {
+    "campaign": {
+     "id": "21"
+    },
+    "campaignCriterion": {
+     "type": "LOCATION",
+     "negative": false,
+     "status": "ENABLED",
+     "location": {
+      "geoTargetConstant": "geoTargetConstants/2840"
+     }
+    }
+   },
+   {
+    "campaign": {
+     "id": "21"
+    },
+    "campaignCriterion": {
+     "type": "LANGUAGE",
+     "negative": false,
+     "status": "ENABLED",
+     "language": {
+      "languageConstant": "languageConstants/1000"
+     }
+    }
+   },
+   {
+    "campaign": {
+     "id": "22"
+    },
+    "campaignCriterion": {
+     "type": "LOCATION",
+     "negative": false,
+     "status": "ENABLED",
+     "location": {
+      "geoTargetConstant": "geoTargetConstants/2840"
+     }
+    }
+   },
+   {
+    "campaign": {
+     "id": "22"
+    },
+    "campaignCriterion": {
+     "type": "LANGUAGE",
+     "negative": false,
+     "status": "ENABLED",
+     "language": {
+      "languageConstant": "languageConstants/1000"
+     }
+    }
+   }
+  ],
+  "brandExclusions": [],
+  "conversionActions": [
+   {
+    "conversionAction": {
+     "id": "201",
+     "name": "Purchase",
+     "status": "ENABLED",
+     "type": "WEBPAGE",
+     "category": "PURCHASE",
+     "primaryForGoal": true,
+     "countingType": "ONE_PER_CLICK",
+     "includeInConversionsMetric": true,
+     "clickThroughLookbackWindowDays": "30",
+     "attributionModelSettings": {
+      "attributionModel": "GOOGLE_SEARCH_ATTRIBUTION_DATA_DRIVEN"
+     }
+    }
+   },
+   {
+    "conversionAction": {
+     "id": "202",
+     "name": "Purchase (GA4)",
+     "status": "ENABLED",
+     "type": "GOOGLE_ANALYTICS_4_PURCHASE",
+     "category": "PURCHASE",
+     "primaryForGoal": true,
+     "countingType": "MANY_PER_CLICK",
+     "includeInConversionsMetric": true,
+     "clickThroughLookbackWindowDays": "30",
+     "attributionModelSettings": {
+      "attributionModel": "GOOGLE_SEARCH_ATTRIBUTION_DATA_DRIVEN"
+     }
+    }
+   }
+  ],
+  "conversionStats": [
+   {
+    "segments": {
+     "conversionAction": "customers/2345678901/conversionActions/201",
+     "conversionActionName": "Purchase"
+    },
+    "metrics": {
+     "conversions": 131,
+     "allConversions": 131,
+     "conversionsValue": 6812
+    }
+   },
+   {
+    "segments": {
+     "conversionAction": "customers/2345678901/conversionActions/202",
+     "conversionActionName": "Purchase (GA4)"
+    },
+    "metrics": {
+     "conversions": 34,
+     "allConversions": 34,
+     "conversionsValue": 1790
+    }
+   }
+  ],
+  "adGroups": [
+   {
+    "campaign": {
+     "id": "21"
+    },
+    "adGroup": {
+     "id": "701",
+     "name": "Soy candles",
+     "status": "ENABLED",
+     "type": "SEARCH_STANDARD"
+    }
+   }
+  ],
+  "keywords": [
+   {
+    "campaign": {
+     "id": "21"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "adGroupCriterion": {
+     "criterionId": "5001",
+     "keyword": {
+      "text": "soy candles",
+      "matchType": "PHRASE"
+     },
+     "status": "ENABLED",
+     "qualityInfo": {
+      "qualityScore": 8,
+      "creativeQualityScore": "AVERAGE",
+      "postClickQualityScore": "AVERAGE",
+      "searchPredictedCtr": "AVERAGE"
+     }
+    },
+    "metrics": {
+     "costMicros": "720000000",
+     "clicks": "520",
+     "impressions": "7280",
+     "conversions": 44,
+     "conversionsValue": 2288
+    }
+   },
+   {
+    "campaign": {
+     "id": "21"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "adGroupCriterion": {
+     "criterionId": "5002",
+     "keyword": {
+      "text": "scented soy candles",
+      "matchType": "EXACT"
+     },
+     "status": "ENABLED",
+     "qualityInfo": {
+      "qualityScore": 9,
+      "creativeQualityScore": "AVERAGE",
+      "postClickQualityScore": "AVERAGE",
+      "searchPredictedCtr": "AVERAGE"
+     }
+    },
+    "metrics": {
+     "costMicros": "510000000",
+     "clicks": "350",
+     "impressions": "4900",
+     "conversions": 36,
+     "conversionsValue": 1872
+    }
+   },
+   {
+    "campaign": {
+     "id": "21"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "adGroupCriterion": {
+     "criterionId": "5003",
+     "keyword": {
+      "text": "candles",
+      "matchType": "BROAD"
+     },
+     "status": "ENABLED",
+     "qualityInfo": {
+      "qualityScore": 5,
+      "creativeQualityScore": "AVERAGE",
+      "postClickQualityScore": "AVERAGE",
+      "searchPredictedCtr": "AVERAGE"
+     }
+    },
+    "metrics": {
+     "costMicros": "392000000",
+     "clicks": "300",
+     "impressions": "4200",
+     "conversions": 14,
+     "conversionsValue": 728
+    }
+   },
+   {
+    "campaign": {
+     "id": "21"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "adGroupCriterion": {
+     "criterionId": "5004",
+     "keyword": {
+      "text": "wood wick candles",
+      "matchType": "PHRASE"
+     },
+     "status": "ENABLED",
+     "qualityInfo": {
+      "qualityScore": 7,
+      "creativeQualityScore": "AVERAGE",
+      "postClickQualityScore": "AVERAGE",
+      "searchPredictedCtr": "AVERAGE"
+     }
+    },
+    "metrics": {
+     "costMicros": "142000000",
+     "clicks": "90",
+     "impressions": "1260",
+     "conversions": 4,
+     "conversionsValue": 208
+    }
+   }
+  ],
+  "adGroupNegatives": [],
+  "sharedSets": [],
+  "campaignSharedSets": [],
+  "sharedNegatives": [],
+  "ads": [
+   {
+    "campaign": {
+     "id": "21"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "adGroupAd": {
+     "ad": {
+      "id": "9001",
+      "type": "RESPONSIVE_SEARCH_AD",
+      "finalUrls": [
+       "https://www.example.com/soy-candles"
+      ],
+      "responsiveSearchAd": {
+       "headlines": [
+        {
+         "text": "Soy Candles, Hand-Poured"
+        },
+        {
+         "text": "Scented Soy Candles"
+        },
+        {
+         "text": "Free Shipping Over $40"
+        },
+        {
+         "text": "Burns 50+ Hours"
+        },
+        {
+         "text": "Shop Soy Candles"
+        },
+        {
+         "text": "4.8 Stars, 2,100+ Reviews"
+        },
+        {
+         "text": "Ember & Oak Candles"
+        },
+        {
+         "text": "Small-Batch in Vermont"
+        }
+       ],
+       "descriptions": [
+        {
+         "text": "Hand-poured soy candles that burn 50+ hours. Free shipping over $40. Shop the fall scents."
+        },
+        {
+         "text": "Rated 4.8 by 2,100+ customers. 30-day returns, no questions. Order today."
+        },
+        {
+         "text": "Small-batch scented candles from Vermont. Cotton wicks, clean soy wax."
+        }
+       ],
+       "path1": "soy-candles"
+      }
+     },
+     "status": "ENABLED",
+     "adStrength": "AVERAGE",
+     "policySummary": {
+      "approvalStatus": "APPROVED"
+     }
+    },
+    "metrics": {
+     "costMicros": "1764000000",
+     "clicks": "1260",
+     "impressions": "17640",
+     "conversions": 98,
+     "conversionsValue": 0
+    }
+   }
+  ],
+  "adsAll": [
+   {
+    "campaign": {
+     "id": "21"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "adGroupAd": {
+     "ad": {
+      "id": "9001",
+      "type": "RESPONSIVE_SEARCH_AD",
+      "finalUrls": [
+       "https://www.example.com/soy-candles"
+      ],
+      "responsiveSearchAd": {
+       "headlines": [
+        {
+         "text": "Soy Candles, Hand-Poured"
+        },
+        {
+         "text": "Scented Soy Candles"
+        },
+        {
+         "text": "Free Shipping Over $40"
+        },
+        {
+         "text": "Burns 50+ Hours"
+        },
+        {
+         "text": "Shop Soy Candles"
+        },
+        {
+         "text": "4.8 Stars, 2,100+ Reviews"
+        },
+        {
+         "text": "Ember & Oak Candles"
+        },
+        {
+         "text": "Small-Batch in Vermont"
+        }
+       ],
+       "descriptions": [
+        {
+         "text": "Hand-poured soy candles that burn 50+ hours. Free shipping over $40. Shop the fall scents."
+        },
+        {
+         "text": "Rated 4.8 by 2,100+ customers. 30-day returns, no questions. Order today."
+        },
+        {
+         "text": "Small-batch scented candles from Vermont. Cotton wicks, clean soy wax."
+        }
+       ],
+       "path1": "soy-candles"
+      }
+     },
+     "status": "ENABLED",
+     "adStrength": "AVERAGE",
+     "policySummary": {
+      "approvalStatus": "APPROVED"
+     }
+    }
+   }
+  ],
+  "searchTerms": [
+   {
+    "campaign": {
+     "id": "21"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "searchTermView": {
+     "searchTerm": "soy candles",
+     "status": "ADDED"
+    },
+    "metrics": {
+     "costMicros": "520000000",
+     "clicks": "380",
+     "impressions": "5320",
+     "conversions": 34,
+     "conversionsValue": 1768
+    }
+   },
+   {
+    "campaign": {
+     "id": "21"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "searchTermView": {
+     "searchTerm": "scented soy candles",
+     "status": "ADDED"
+    },
+    "metrics": {
+     "costMicros": "410000000",
+     "clicks": "280",
+     "impressions": "3920",
+     "conversions": 30,
+     "conversionsValue": 1560
+    }
+   },
+   {
+    "campaign": {
+     "id": "21"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "searchTermView": {
+     "searchTerm": "best soy candles for gifts",
+     "status": "NONE"
+    },
+    "metrics": {
+     "costMicros": "150000000",
+     "clicks": "96",
+     "impressions": "1344",
+     "conversions": 11,
+     "conversionsValue": 594
+    }
+   },
+   {
+    "campaign": {
+     "id": "21"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "searchTermView": {
+     "searchTerm": "candle making kit",
+     "status": "NONE"
+    },
+    "metrics": {
+     "costMicros": "96000000",
+     "clicks": "80",
+     "impressions": "1120",
+     "conversions": 0,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "21"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "searchTermView": {
+     "searchTerm": "candle making supplies wholesale",
+     "status": "NONE"
+    },
+    "metrics": {
+     "costMicros": "58000000",
+     "clicks": "44",
+     "impressions": "616",
+     "conversions": 0,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "21"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "searchTermView": {
+     "searchTerm": "how to make soy candles",
+     "status": "NONE"
+    },
+    "metrics": {
+     "costMicros": "44000000",
+     "clicks": "41",
+     "impressions": "574",
+     "conversions": 0,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "21"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "searchTermView": {
+     "searchTerm": "yankee candle sale",
+     "status": "NONE"
+    },
+    "metrics": {
+     "costMicros": "71000000",
+     "clicks": "60",
+     "impressions": "840",
+     "conversions": 0,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "21"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "searchTermView": {
+     "searchTerm": "candle wax bulk",
+     "status": "NONE"
+    },
+    "metrics": {
+     "costMicros": "39000000",
+     "clicks": "31",
+     "impressions": "434",
+     "conversions": 0,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "21"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "searchTermView": {
+     "searchTerm": "wood wick candles",
+     "status": "ADDED"
+    },
+    "metrics": {
+     "costMicros": "120000000",
+     "clicks": "78",
+     "impressions": "1092",
+     "conversions": 4,
+     "conversionsValue": 208
+    }
+   }
+  ],
+  "matchSources": [],
+  "customerAssets": [
+   {
+    "customerAsset": {
+     "fieldType": "SITELINK",
+     "status": "ENABLED"
+    }
+   },
+   {
+    "customerAsset": {
+     "fieldType": "SITELINK",
+     "status": "ENABLED"
+    }
+   },
+   {
+    "customerAsset": {
+     "fieldType": "SITELINK",
+     "status": "ENABLED"
+    }
+   },
+   {
+    "customerAsset": {
+     "fieldType": "SITELINK",
+     "status": "ENABLED"
+    }
+   },
+   {
+    "customerAsset": {
+     "fieldType": "SITELINK",
+     "status": "ENABLED"
+    }
+   },
+   {
+    "customerAsset": {
+     "fieldType": "SITELINK",
+     "status": "ENABLED"
+    }
+   },
+   {
+    "customerAsset": {
+     "fieldType": "CALLOUT",
+     "status": "ENABLED"
+    }
+   },
+   {
+    "customerAsset": {
+     "fieldType": "CALLOUT",
+     "status": "ENABLED"
+    }
+   },
+   {
+    "customerAsset": {
+     "fieldType": "CALLOUT",
+     "status": "ENABLED"
+    }
+   },
+   {
+    "customerAsset": {
+     "fieldType": "CALLOUT",
+     "status": "ENABLED"
+    }
+   },
+   {
+    "customerAsset": {
+     "fieldType": "CALLOUT",
+     "status": "ENABLED"
+    }
+   },
+   {
+    "customerAsset": {
+     "fieldType": "CALLOUT",
+     "status": "ENABLED"
+    }
+   },
+   {
+    "customerAsset": {
+     "fieldType": "STRUCTURED_SNIPPET",
+     "status": "ENABLED"
+    }
+   },
+   {
+    "customerAsset": {
+     "fieldType": "STRUCTURED_SNIPPET",
+     "status": "ENABLED"
+    }
+   },
+   {
+    "customerAsset": {
+     "fieldType": "AD_IMAGE",
+     "status": "ENABLED"
+    }
+   },
+   {
+    "customerAsset": {
+     "fieldType": "AD_IMAGE",
+     "status": "ENABLED"
+    }
+   },
+   {
+    "customerAsset": {
+     "fieldType": "AD_IMAGE",
+     "status": "ENABLED"
+    }
+   },
+   {
+    "customerAsset": {
+     "fieldType": "AD_IMAGE",
+     "status": "ENABLED"
+    }
+   }
+  ],
+  "campaignAssets": [],
+  "adGroupAssets": [],
+  "autoApply": [],
+  "assetGroups": []
+ },
+ "names": {
+  "geo": {
+   "geoTargetConstants/2840": "United States"
+  },
+  "languages": {
+   "languageConstants/1000": "English"
+  }
+ },
+ "errors": [],
+ "truncated": []
+}

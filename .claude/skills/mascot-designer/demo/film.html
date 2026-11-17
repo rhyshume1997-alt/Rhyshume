@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Mascot film</title>
+<meta name="viewport" content="width=1920">
+<link rel="icon" href="data:,">
+<style>
+@font-face { font-family: "Bubble"; src: url("../assets/fonts/TitanOne.woff2") format("woff2"); font-display: block; }
+@font-face { font-family: "Round"; src: url("../assets/fonts/Fredoka.woff2") format("woff2"); font-weight: 300 700; font-display: block; }
+@font-face { font-family: "Nunito"; src: url("../assets/fonts/Nunito.woff2") format("woff2"); font-weight: 400 1000; font-display: block; }
+:root {
+  --hue: 10; --body: #e4725a; --accent: #c4452e; --ink: #2a1712; --tint: #fff1ec; --tint2: #ffd9cc; --deep: #5b2418;
+  --ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Inter, system-ui, sans-serif;
+  --round: ui-rounded, "SF Pro Rounded", "Nunito", "Round", system-ui, sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--tint); }
+body { font-family: var(--ui); color: var(--ink); -webkit-font-smoothing: antialiased; }
+.scene { position: absolute; inset: 0; opacity: 0; }
+.bubble {
+  font-family: "Bubble", var(--round); letter-spacing: 0.01em; color: #fff; line-height: 0.95;
+  -webkit-text-stroke: 0.06em var(--deep); paint-order: stroke fill;
+  text-shadow: 0 0.06em 0 var(--deep), 0 0.1em 0 var(--deep), 0 0.16em 0.12em rgba(0,0,0,.18);
+}
+.bubble .hi { color: var(--tint2); }
+
+/* ---------- intro / outro backdrop ---------- */
+.sky { position: absolute; inset: 0; background:
+  radial-gradient(60% 70% at 50% 62%, #fff 0%, var(--tint) 55%, var(--tint2) 100%); }
+.dots { position: absolute; inset: 0; background-image: radial-gradient(color-mix(in srgb, var(--body) 22%, transparent) 2.2px, transparent 2.6px); background-size: 34px 34px; mask-image: radial-gradient(70% 60% at 50% 50%, transparent 40%, #000 100%); }
+
+#intro .name { position: absolute; left: 0; right: 0; top: 120px; text-align: center; font-size: 150px; }
+#intro .line { position: absolute; left: 0; right: 0; top: 330px; text-align: center; font: 600 40px/1.25 var(--round); color: var(--deep); }
+#intro mascot-view { position: absolute; left: 50%; top: 390px; width: 640px; margin-left: -320px; }
+
+/* ---------- iPhone ---------- */
+#phone .moves { position: absolute; left: 1060px; top: 150px; width: 700px; }
+#phone .moves h3 { font: 700 26px/1 var(--round); letter-spacing: .02em; color: color-mix(in srgb, var(--ink) 55%, transparent); text-transform: uppercase; margin: 0 0 22px 8px; }
+.move { display: flex; align-items: center; gap: 22px; height: 92px; padding: 0 26px 0 12px; border-radius: 46px; margin-bottom: 8px; transition: none; }
+.move img { width: 76px; height: 76px; object-fit: contain; transform: scale(1.3) translateY(-5%); }
+.move b { font: 700 40px/1 var(--round); color: var(--ink); min-width: 220px; }
+.move span { font: 500 26px/1.1 var(--ui); color: color-mix(in srgb, var(--ink) 55%, transparent); }
+.move.on { background: #fff; box-shadow: 0 14px 40px -12px color-mix(in srgb, var(--deep) 45%, transparent), 0 0 0 3px var(--body) inset; }
+.move.on b { color: var(--accent); }
+.move.on span { color: var(--ink); }
+
+.iphone { position: absolute; left: 470px; top: 60px; width: 444px; height: 960px; border-radius: 76px; padding: 14px;
+  background: linear-gradient(145deg, #4a4a4f, #1d1d20 40%, #3a3a3e 70%, #18181a);
+  box-shadow: 0 0 0 2px #0c0c0d, 0 60px 120px -30px rgba(40,20,10,.45), 0 30px 60px -30px rgba(40,20,10,.35), inset 0 0 0 1.5px rgba(255,255,255,.18); }
+.iphone::before { content: ""; position: absolute; right: -4px; top: 250px; width: 5px; height: 100px; border-radius: 3px; background: #2a2a2d; }
+.iphone::after { content: ""; position: absolute; left: -4px; top: 200px; width: 5px; height: 64px; border-radius: 3px; background: #2a2a2d; box-shadow: 0 90px 0 #2a2a2d; }
+.screen { position: relative; width: 100%; height: 100%; border-radius: 62px; overflow: hidden; background: #fff; isolation: isolate; }
+.island { position: absolute; top: 14px; left: 50%; width: 124px; height: 36px; margin-left: -62px; background: #000; border-radius: 20px; z-index: 300; }
+.status { position: absolute; top: 0; left: 0; right: 0; height: 58px; display: flex; justify-content: space-between; align-items: center; padding: 6px 38px 0 46px; font: 600 17px/1 var(--ui); color: #000; z-index: 290; }
+.status .icons { display: flex; gap: 6px; align-items: center; }
+.home { position: absolute; bottom: 9px; left: 50%; width: 140px; height: 5px; margin-left: -70px; background: #000; border-radius: 3px; z-index: 300; opacity: .85; }
+.app { position: absolute; inset: 0; opacity: 0; background: #fff; }
+.app .title { position: absolute; left: 22px; top: 106px; font: 800 34px/1 var(--ui); letter-spacing: -0.02em; }
+.glassbtn { position: absolute; width: 46px; height: 46px; border-radius: 50%; background: rgba(255,255,255,.72); backdrop-filter: blur(12px);
+  box-shadow: 0 0 0 .5px rgba(0,0,0,.08), 0 6px 18px -6px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.9); display: grid; place-items: center; font: 400 30px/1 var(--ui); color: var(--accent); }
+.cta { position: absolute; left: 22px; right: 22px; bottom: 44px; height: 58px; border-radius: 29px; background: var(--accent); color: #fff; display: grid; place-items: center; font: 650 19px/1 var(--ui); box-shadow: 0 10px 24px -10px var(--accent); }
+.tab { position: absolute; left: 22px; right: 22px; bottom: 30px; height: 64px; border-radius: 32px; background: rgba(250,250,252,.8); backdrop-filter: blur(14px); box-shadow: 0 0 0 .5px rgba(0,0,0,.08), 0 10px 30px -12px rgba(0,0,0,.25); display: flex; justify-content: space-around; align-items: center; }
+.tab i { width: 26px; height: 26px; border-radius: 8px; background: color-mix(in srgb, var(--ink) 22%, transparent); }
+.tab i.on { background: var(--accent); }
+.h1 { font: 800 30px/1.08 var(--ui); letter-spacing: -0.02em; text-align: center; }
+.p { font: 450 17px/1.38 var(--ui); color: rgba(0,0,0,.58); text-align: center; }
+.tap { position: absolute; width: 44px; height: 44px; margin: -22px 0 0 -22px; border-radius: 50%; background: rgba(0,0,0,.18); box-shadow: 0 0 0 2px rgba(255,255,255,.9); z-index: 310; opacity: 0; pointer-events: none; }
+.card { position: absolute; left: 18px; right: 18px; background: #fff; border-radius: 26px; box-shadow: 0 0 0 .5px rgba(0,0,0,.06), 0 10px 30px -14px rgba(0,0,0,.22); }
+.row { display: flex; align-items: center; gap: 14px; height: 70px; padding: 0 18px; border-bottom: .5px solid rgba(0,0,0,.08); font: 600 17px/1.2 var(--ui); }
+.row:last-child { border: 0; }
+.row .ic { width: 38px; height: 38px; border-radius: 12px; background: var(--tint2); flex: none; }
+.row .amt { margin-left: auto; font-variant-numeric: tabular-nums; color: rgba(0,0,0,.5); font-weight: 500; }
+.bar { height: 8px; border-radius: 4px; background: rgba(0,0,0,.07); overflow: hidden; }
+.bar > i { display: block; height: 100%; width: 40%; border-radius: 4px; background: var(--accent); }
+.toast { position: absolute; left: 50%; bottom: 112px; transform: translateX(-50%); padding: 12px 20px 12px 16px; border-radius: 26px; background: rgba(28,28,30,.92); color: #fff; font: 650 16px/1 var(--ui); display: flex; gap: 10px; align-items: center; white-space: nowrap; z-index: 30; }
+.toast .dot { width: 22px; height: 22px; border-radius: 50%; background: #34c759; display: grid; place-items: center; font-size: 13px; }
+.banner { position: absolute; left: 14px; right: 14px; top: 152px; padding: 14px 16px; border-radius: 22px; background: #fff; box-shadow: 0 10px 30px -10px rgba(0,0,0,.3), 0 0 0 .5px rgba(0,0,0,.08); display: flex; gap: 12px; align-items: center; z-index: 30; font: 600 15px/1.25 var(--ui); }
+.banner .x { width: 34px; height: 34px; border-radius: 10px; background: #ff3b30; color: #fff; display: grid; place-items: center; font-weight: 800; flex: none; }
+.tip { position: absolute; padding: 14px 16px; border-radius: 20px; background: var(--ink); color: #fff; font: 600 16px/1.3 var(--ui); width: 222px; hyphens: manual; }
+.tip::after { content: ""; position: absolute; right: -9px; bottom: 22px; border: 10px solid transparent; border-left-color: var(--ink); border-right: 0; }
+.sheet { position: absolute; left: 0; right: 0; bottom: 0; height: 600px; background: #fff; border-radius: 40px 40px 0 0; box-shadow: 0 -10px 40px -10px rgba(0,0,0,.25); }
+.stars { display: flex; gap: 8px; justify-content: center; font-size: 34px; color: #ffcc00; }
+.dim { position: absolute; inset: 0; background: rgba(0,0,0,.28); }
+
+/* ---------- Mac ---------- */
+#mac .wall { position: absolute; inset: 0; background:
+  radial-gradient(70% 90% at 15% 10%, var(--tint2), transparent 60%),
+  radial-gradient(80% 80% at 90% 100%, color-mix(in srgb, var(--body) 55%, #fff), transparent 60%),
+  linear-gradient(160deg, var(--tint), color-mix(in srgb, var(--body) 30%, #fff)); }
+.menubar { position: absolute; top: 0; left: 0; right: 0; height: 34px; background: rgba(255,255,255,.35); backdrop-filter: blur(20px); display: flex; align-items: center; gap: 26px; padding: 0 20px; font: 600 15px/1 var(--ui); color: rgba(0,0,0,.85); }
+.menubar .r { margin-left: auto; display: flex; gap: 18px; align-items: center; font-weight: 500; }
+.menubar .mini { width: 26px; height: 26px; object-fit: contain; transform: scale(1.5) translateY(4%); }
+.win { position: absolute; left: 230px; top: 110px; width: 1460px; height: 860px; border-radius: 26px; background: #fbfbfd; overflow: hidden;
+  box-shadow: 0 0 0 .5px rgba(0,0,0,.18), 0 50px 120px -30px rgba(40,20,10,.5), 0 20px 40px -20px rgba(40,20,10,.3); }
+.side { position: absolute; left: 10px; top: 10px; bottom: 10px; width: 280px; border-radius: 18px; background: color-mix(in srgb, var(--tint) 70%, rgba(240,240,245,1)); box-shadow: inset 0 0 0 .5px rgba(0,0,0,.06); padding: 64px 14px 14px; }
+.lights { position: absolute; left: 22px; top: 22px; display: flex; gap: 9px; }
+.lights i { width: 14px; height: 14px; border-radius: 50%; background: #ff5f57; } .lights i:nth-child(2) { background: #febc2e; } .lights i:nth-child(3) { background: #28c840; }
+.side .it { height: 40px; border-radius: 10px; display: flex; align-items: center; gap: 12px; padding: 0 12px; font: 550 16px/1 var(--ui); color: rgba(0,0,0,.78); }
+.side .it i { width: 20px; height: 20px; border-radius: 6px; background: color-mix(in srgb, var(--ink) 25%, transparent); }
+.side .it.on { background: color-mix(in srgb, var(--body) 22%, #fff); color: var(--ink); }
+.side .it.on i { background: var(--accent); }
+.main { position: absolute; left: 310px; right: 0; top: 0; bottom: 0; padding: 46px 48px; }
+.main h2 { font: 800 36px/1 var(--ui); letter-spacing: -0.02em; }
+.main .sub { margin-top: 10px; font: 500 17px/1 var(--ui); color: rgba(0,0,0,.5); }
+.grid { margin-top: 36px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; width: 600px; }
+.tile { height: 170px; border-radius: 22px; background: #fff; box-shadow: 0 0 0 .5px rgba(0,0,0,.06), 0 10px 30px -18px rgba(0,0,0,.3); padding: 22px; }
+.tile b { display: block; font: 700 18px/1.2 var(--ui); } .tile span { display: block; margin-top: 8px; font: 500 15px/1.3 var(--ui); color: rgba(0,0,0,.5); }
+.tile .bar { margin-top: 54px; }
+.buddy { position: absolute; right: 48px; top: 150px; width: 440px; height: 600px; border-radius: 30px; background: linear-gradient(170deg, #fff, var(--tint)); box-shadow: 0 0 0 .5px rgba(0,0,0,.06), 0 20px 50px -24px rgba(0,0,0,.35); }
+.buddy mascot-view { position: absolute; left: 50%; top: 40px; width: 400px; margin-left: -200px; }
+.pill { position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%); padding: 12px 20px; border-radius: 22px; background: #fff; box-shadow: 0 0 0 .5px rgba(0,0,0,.08), 0 8px 20px -10px rgba(0,0,0,.3); font: 650 17px/1 var(--ui); white-space: nowrap; display: flex; gap: 10px; align-items: center; }
+.spin { width: 18px; height: 18px; border-radius: 50%; border: 2.5px solid color-mix(in srgb, var(--accent) 25%, transparent); border-top-color: var(--accent); }
+.cursor { position: absolute; width: 30px; height: 30px; z-index: 80; filter: drop-shadow(0 2px 3px rgba(0,0,0,.35)); }
+
+/* ---------- outro ---------- */
+#outro .name { position: absolute; left: 0; right: 0; top: 54px; text-align: center; font-size: 104px; }
+#outro .sub { position: absolute; left: 0; right: 0; top: 196px; text-align: center; font: 600 32px/1 var(--round); color: var(--deep); }
+#outro .wall9 { position: absolute; left: 130px; right: 130px; top: 270px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 22px 26px; }
+.t9 { position: relative; height: 360px; border-radius: 36px; background: rgba(255,255,255,.72); box-shadow: 0 0 0 1px color-mix(in srgb, var(--body) 18%, transparent), 0 20px 40px -26px color-mix(in srgb, var(--deep) 60%, transparent); overflow: visible; }
+.t9 mascot-view { position: absolute; left: 50%; top: -10px; width: 300px; margin-left: -150px; }
+.t9 b { position: absolute; left: 0; right: 0; bottom: 26px; text-align: center; font: 700 30px/1 var(--round); color: var(--ink); }
+.t9 span { position: absolute; left: 0; right: 0; bottom: 4px; text-align: center; font: 500 17px/1 var(--ui); color: color-mix(in srgb, var(--ink) 50%, transparent); }
+#outro .wall9.small .t9 { height: 300px; }
+</style>
+</head>
+<body>
+<!-- INTRO -->
+<section class="scene" id="intro">
+  <div class="sky"></div><div class="dots"></div>
+  <div class="name bubble" data-text="hiName">Hi, I'm Pip</div>
+  <div class="line" data-text="role"></div>
+  <mascot-view data-m="intro" shadow="on"></mascot-view>
+</section>
+
+<!-- IPHONE -->
+<section class="scene" id="phone">
+  <div class="sky"></div><div class="dots"></div>
+  <div class="iphone"><div class="screen">
+    <div class="island"></div>
+    <div class="status"><span>9:41</span><span class="icons">
+      <svg width="19" height="12" viewBox="0 0 19 12"><rect x="0" y="8" width="3.2" height="4" rx="1"/><rect x="5" y="5.5" width="3.2" height="6.5" rx="1"/><rect x="10" y="3" width="3.2" height="9" rx="1"/><rect x="15" y="0" width="3.2" height="12" rx="1"/></svg>
+      <svg width="17" height="12" viewBox="0 0 17 12"><path d="M8.5 2.2c2.4 0 4.6.9 6.2 2.5l1.2-1.2A10.5 10.5 0 0 0 8.5.5 10.5 10.5 0 0 0 1.1 3.5l1.2 1.2A8.8 8.8 0 0 1 8.5 2.2Zm0 3.4c1.5 0 2.9.6 4 1.6l1.2-1.2a7.3 7.3 0 0 0-10.4 0l1.2 1.2c1.1-1 2.5-1.6 4-1.6Zm0 3.4c.6 0 1.2.2 1.7.7L8.5 11.4 6.8 9.7c.5-.5 1.1-.7 1.7-.7Z"/></svg>
+      <svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.8" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="20" height="9" rx="2.5"/><rect x="24.5" y="4.3" width="1.6" height="4.4" rx=".8" opacity=".45"/></svg>
+    </span></div>
+
+    <!-- A: onboarding -->
+    <div class="app" id="a-onb" style="background:linear-gradient(180deg,var(--tint) 0%,#fff 70%)">
+      <mascot-view data-m="onb" style="position:absolute;left:50%;top:150px;width:380px;margin-left:-190px"></mascot-view>
+      <div class="h1" style="position:absolute;left:30px;right:30px;top:548px" data-text="hiName"></div>
+      <div class="p" style="position:absolute;left:40px;right:40px;top:600px" data-text="hello"></div>
+      <div class="cta" style="bottom:56px" data-text="ctaStart"></div>
+    </div>
+
+    <!-- B: empty -->
+    <div class="app" id="a-empty">
+      <div class="title" data-text="app"></div>
+      <div class="glassbtn" style="right:20px;top:96px">+</div>
+      <mascot-view data-m="empty" style="position:absolute;left:50%;top:228px;width:330px;margin-left:-165px"></mascot-view>
+      <div class="h1" style="position:absolute;left:30px;right:30px;top:576px;font-size:24px" data-text="emptyTitle"></div>
+      <div class="p" style="position:absolute;left:44px;right:44px;top:614px" data-text="empty"></div>
+      <div class="tab"><i class="on"></i><i></i><i></i><i></i></div>
+    </div>
+
+    <!-- C: think -->
+    <div class="app" id="a-think">
+      <div class="title" data-text="app"></div>
+      <div class="glassbtn" style="right:20px;top:96px">+</div>
+      <div class="card" style="top:168px;height:350px;background:linear-gradient(180deg,#fff, var(--tint))">
+        <mascot-view data-m="think" style="position:absolute;left:50%;top:-6px;width:290px;margin-left:-145px"></mascot-view>
+        <div class="p" style="position:absolute;left:20px;right:20px;bottom:24px;color:var(--ink);font-weight:600" data-text="think"></div>
+      </div>
+      <div class="card" style="top:536px"><div class="row"><i class="ic"></i><span class="shim" data-text="item1"></span><span class="amt">…</span></div><div class="row"><i class="ic" style="opacity:.6"></i><span style="color:rgba(0,0,0,.35)">Loading</span></div></div>
+      <div class="tab"><i class="on"></i><i></i><i></i><i></i></div>
+    </div>
+
+    <!-- D: celebrate -->
+    <div class="app" id="a-yay">
+      <div class="title" data-text="app"></div>
+      <div class="glassbtn" style="right:20px;top:96px">+</div>
+      <div class="card" style="top:168px;height:350px;background:linear-gradient(180deg,#fff, var(--tint2))">
+        <mascot-view data-m="yay" style="position:absolute;left:50%;top:-6px;width:290px;margin-left:-145px"></mascot-view>
+        <div class="p" style="position:absolute;left:20px;right:20px;bottom:24px;color:var(--ink);font-weight:700;font-size:19px" data-text="success"></div>
+      </div>
+      <div class="card" style="top:536px"><div class="row"><i class="ic"></i><span data-text="item1"></span><span class="amt" style="color:#34a853">✓</span></div><div class="row"><i class="ic"></i><span data-text="item2"></span><span class="amt" data-text="meta2"></span></div></div>
+      <div class="toast" id="toast"><span class="dot">✓</span><span data-text="toast"></span></div>
+      <div class="tab"><i class="on"></i><i></i><i></i><i></i></div>
+    </div>
+
+    <!-- E: oops -->
+    <div class="app" id="a-oops">
+      <div class="title" data-text="app"></div>
+      <div class="banner" id="banner"><span class="x">!</span><span><b data-text="bannerTitle"></b><br><span style="font-weight:450;color:rgba(0,0,0,.55)" data-text="bannerBody"></span></span></div>
+      <mascot-view data-m="oops" style="position:absolute;left:50%;top:210px;width:340px;margin-left:-170px"></mascot-view>
+      <div class="h1" style="position:absolute;left:30px;right:30px;top:566px;font-size:24px" data-text="oopsTitle"></div>
+      <div class="p" style="position:absolute;left:44px;right:44px;top:604px" data-text="oops"></div>
+      <div class="cta" style="left:110px;right:110px;bottom:120px;height:50px" data-text="ctaRetry"></div>
+      <div class="tab" style="opacity:.6"><i class="on"></i><i></i><i></i><i></i></div>
+    </div>
+
+    <!-- F: point -->
+    <div class="app" id="a-tip">
+      <div class="title" data-text="app"></div>
+      <div class="card" style="top:168px"><div class="row"><i class="ic"></i><span data-text="item1"></span><span class="amt" style="color:#34a853">✓</span></div><div class="row"><i class="ic"></i><span data-text="item2"></span><span class="amt" data-text="meta2"></span></div><div class="row"><i class="ic"></i><span data-text="item3"></span><span class="amt" data-text="meta3"></span></div></div>
+      <mascot-view data-m="tip" style="position:absolute;left:-10px;top:520px;width:250px"></mascot-view>
+      <div class="tip" style="left:196px;top:560px" data-text="tip"></div>
+      <div class="glassbtn" id="plus" style="right:30px;bottom:118px;width:62px;height:62px;background:var(--accent);color:#fff;font-size:38px">+</div>
+      <div class="tab"><i class="on"></i><i></i><i></i><i></i></div>
+    </div>
+
+    <!-- G: love -->
+    <div class="app" id="a-love">
+      <div class="title" data-text="app"></div>
+      <div class="card" style="top:168px"><div class="row"><i class="ic"></i><span data-text="item1"></span><span class="amt" style="color:#34a853">✓</span></div><div class="row"><i class="ic"></i><span data-text="item2"></span><span class="amt" data-text="meta2"></span></div></div>
+      <div class="dim" id="dim"></div>
+      <div class="sheet" id="sheet">
+        <div style="width:40px;height:5px;border-radius:3px;background:rgba(0,0,0,.15);margin:10px auto 0"></div>
+        <mascot-view data-m="love" style="position:absolute;left:50%;top:6px;width:300px;margin-left:-150px"></mascot-view>
+        <div class="h1" style="position:absolute;left:30px;right:30px;top:316px;font-size:26px" data-text="loveTitle"></div>
+        <div class="p" style="position:absolute;left:40px;right:40px;top:356px" data-text="love"></div>
+        <div class="stars" style="position:absolute;left:0;right:0;top:420px">★★★★★</div>
+        <div class="cta" style="bottom:40px" data-text="ctaLove"></div>
+      </div>
+    </div>
+
+    <div class="tap" id="tap"></div>
+    <div class="home"></div>
+  </div></div>
+
+  <div class="moves">
+    <h3>The moves</h3>
+    <div class="move" data-move="hello"><img data-pose="wave"><b>Hello</b><span>Onboarding</span></div>
+    <div class="move" data-move="sleep"><img data-pose="sleep"><b>Sleeping</b><span>Empty states</span></div>
+    <div class="move" data-move="think"><img data-pose="think"><b>Thinking</b><span>Loading</span></div>
+    <div class="move" data-move="celebrate"><img data-pose="celebrate"><b>Celebrate</b><span>Success</span></div>
+    <div class="move" data-move="oops"><img data-pose="oops"><b>Oops</b><span>Errors</span></div>
+    <div class="move" data-move="point"><img data-pose="point"><b>Pointing</b><span>Tips</span></div>
+    <div class="move" data-move="love"><img data-pose="love"><b>Love</b><span>Thank you</span></div>
+  </div>
+</section>
+
+<!-- MAC -->
+<section class="scene" id="mac">
+  <div class="wall"></div>
+  <div class="menubar"><b></b><span data-text="app"></span><span style="font-weight:500">File</span><span style="font-weight:500">Edit</span><span style="font-weight:500">View</span><span style="font-weight:500">Window</span>
+    <span class="r"><img class="mini" data-pose="idle"><span>Sat 1 Nov</span><span>9:41</span></span></div>
+  <div class="win">
+    <div class="side"><div class="lights"><i></i><i></i><i></i></div>
+      <div class="it on"><i></i><span data-text="app"></span></div><div class="it"><i></i><span data-text="side1"></span></div><div class="it"><i></i><span data-text="side2"></span></div><div class="it"><i></i><span data-text="side3"></span></div></div>
+    <div class="main">
+      <h2 data-text="macTitle"></h2>
+      <div class="sub" data-text="macSub"></div>
+      <div class="grid">
+        <div class="tile"><b data-text="item1"></b><span data-text="meta1"></span><div class="bar"><i style="width:100%"></i></div></div>
+        <div class="tile"><b data-text="item2"></b><span data-text="meta2"></span><div class="bar"><i style="width:40%"></i></div></div>
+        <div class="tile"><b data-text="item3"></b><span data-text="meta3"></span><div class="bar"><i style="width:8%"></i></div></div>
+        <div class="tile"><b data-text="tileTitle"></b><span data-text="tileMeta"></span><div class="bar"><i style="width:85%"></i></div></div>
+      </div>
+      <div class="buddy"><mascot-view data-m="mac"></mascot-view>
+        <div class="pill" id="pill"><span class="spin" id="spin"></span><span id="pilltxt"></span></div></div>
+    </div>
+  </div>
+  <svg class="cursor" id="cursor" viewBox="0 0 24 24"><path d="M5 2.5v17.2l4.3-4.1 2.8 6.4 2.7-1.2-2.8-6.3h6z" fill="#000" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></svg>
+</section>
+
+<!-- OUTRO -->
+<section class="scene" id="outro">
+  <div class="sky"></div><div class="dots"></div>
+  <div class="name bubble" data-text="name"></div>
+  <div class="sub">Every move, ready for your app.</div>
+  <div class="wall9" id="wall9"></div>
+</section>
+
+<script type="module">
+
+const Q = new URLSearchParams(location.search);
+const F = window.FILM || {};
+const M = F.mascot || {};
+const src = F.src || Q.get("src") || "../demo/sample";
+window.MASCOT_MOTION = window.MASCOT_MOTION || await (await fetch("../runtime/motion.json")).json();
+const { MascotView } = await import("../runtime/mascot.js");
+
+// --------------------------------------------------------------- theme from the body colour
+function hsl(h, s, l) { return `hsl(${h} ${Math.round(s * 100)}% ${Math.round(l * 100)}%)`; }
+function lum(hexs) { const c = hexs.match(/\w\w/g).map((x) => parseInt(x, 16) / 255).map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4)); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; }
+function hslHex(h, s, l) { const a = s * Math.min(l, 1 - l), f = (n) => { const k = (n + h / 30) % 12; return Math.round(255 * (l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1)))).toString(16).padStart(2, "0"); }; return `#${f(0)}${f(8)}${f(4)}`; }
+const body = M.body || { hex: "#e4725a", h: 10, s: 0.72, l: 0.62 };
+const H = body.h, S = Math.max(0.35, Math.min(0.85, body.s)), grey = body.s < 0.14;
+// accent: the body hue, dark enough for white text (4.5:1)
+// accent: the app's brand colour when there is one, else the body hue; dark enough for white text (4.5:1)
+const hexHsl = (x) => { const [r, g, b2] = x.match(/\w\w/g).map((v) => parseInt(v, 16) / 255); const mx = Math.max(r, g, b2), mn = Math.min(r, g, b2), l = (mx + mn) / 2; if (mx === mn) return [0, 0, l]; const d = mx - mn, s = l > 0.5 ? d / (2 - mx - mn) : d / (mx + mn); const h = mx === r ? (g - b2) / d + (g < b2 ? 6 : 0) : mx === g ? (b2 - r) / d + 2 : (r - g) / d + 4; return [h * 60, s, l]; };
+const brand = /^#?[0-9a-f]{6}$/i.test(M.brand || "") ? hexHsl(M.brand.replace("#", "")) : null;
+const AH = brand ? brand[0] : H, AS = brand ? brand[1] : grey ? 0.1 : S;
+let L = Math.min(brand ? brand[2] : body.l, 0.55), accent = hslHex(AH, AS, L);
+while ((1.05 / (lum(accent) + 0.05)) < 4.5 && L > 0.15) { L -= 0.02; accent = hslHex(AH, AS, L); }
+const root = document.documentElement.style;
+root.setProperty("--body", body.hex);
+root.setProperty("--accent", F.accent || accent);
+root.setProperty("--ink", hsl(H, grey ? 0.1 : 0.35, 0.13));
+root.setProperty("--deep", hsl(H, grey ? 0.15 : 0.55, 0.27));
+root.setProperty("--tint", hsl(H, grey ? 0.1 : 0.85, 0.96));
+root.setProperty("--tint2", hsl(H, grey ? 0.12 : 0.8, 0.88));
+
+// --------------------------------------------------------------- words
+const name = M.name || "Pip";
+const L0 = M.lines || {};
+const T = {
+  name, app: M.app || name,
+  hiName: `Hi, I'm ${name}.`,
+  role: M.role || "",
+  hello: L0.hello || "I'll be here to help you along.",
+  empty: L0.empty || "Add your first one and I'll keep an eye on it.",
+  think: L0.think || "Working on it…",
+  success: L0.success || "Done! That's a win.",
+  toast: L0.toast || "Saved",
+  oops: L0.oops || "Something went wrong. Let's try that again.",
+  tip: L0.tip || "Tap here to add a new one.",
+  loveTitle: L0.loveTitle || "Thank you!",
+  love: L0.love || "Enjoying the app? A rating helps a lot.",
+  item1: (L0.items || [])[0] || "First one", item2: (L0.items || [])[1] || "Second one", item3: (L0.items || [])[2] || "Third one",
+  macTitle: L0.macTitle || "Good morning", macSub: L0.macSub || "Here's where things stand.",
+  sync: L0.sync || "Syncing…", synced: L0.synced || "All up to date",
+  emptyTitle: L0.emptyTitle || "Nothing here yet",
+  oopsTitle: L0.oopsTitle || "Oops.",
+  bannerTitle: L0.bannerTitle || "No connection", bannerBody: L0.bannerBody || "We'll try again in a moment.",
+  ctaStart: L0.ctaStart || "Get started", ctaRetry: L0.ctaRetry || "Try again", ctaLove: L0.ctaLove || "Rate us",
+  meta1: (L0.itemMeta || [])[0] || "Updated today", meta2: (L0.itemMeta || [])[1] || "2 of 5", meta3: (L0.itemMeta || [])[2] || "0 of 3",
+  side1: (L0.sidebar || [])[0] || "Activity", side2: (L0.sidebar || [])[1] || "Goals", side3: (L0.sidebar || [])[2] || "Settings",
+  tileTitle: (L0.tile || [])[0] || "Streak", tileMeta: (L0.tile || [])[1] || "6 days",
+};
+for (const el of document.querySelectorAll("[data-text]")) el.textContent = T[el.dataset.text] ?? "";
+const ext = M.ext || "webp";
+for (const im of document.querySelectorAll("img[data-pose]")) im.src = `${src}/${im.dataset.pose}.${ext}`;
+
+// the move wall at the end
+const W9 = [["hello", "Hello", "Onboarding"], ["think", "Thinking", "Loading"], ["celebrate", "Celebrate", "Success"], ["oops", "Oops", "Errors"], ["sleep", "Sleeping", "Empty states"],
+            ["point", "Pointing", "Tips"], ["love", "Love", "Thank you"], ["idle", "Idle", "Always"], ["appear", "Appear", "Arrivals"], ["poke", "Tap", "Squish"]];
+document.getElementById("wall9").innerHTML = W9.map(([s, b, u]) => `<div class="t9"><mascot-view data-m="w-${s}"></mascot-view><b>${b}</b><span>${u}</span></div>`).join("");
+
+// --------------------------------------------------------------- the mascots
+MascotView.clock = () => window.__t;
+window.__t = 0;
+const views = {};
+for (const el of document.querySelectorAll("mascot-view")) { el.setAttribute("src", src); el.setAttribute("poke", "off"); views[el.dataset.m] = el; }
+
+// --------------------------------------------------------------- timeline
+const P0 = 2.6;                         // phone section starts
+const SCR = [["a-onb", 0, 2.7], ["a-empty", 2.7, 5.2], ["a-think", 5.2, 7.3], ["a-yay", 7.3, 9.6], ["a-oops", 9.6, 11.8], ["a-tip", 11.8, 14.0], ["a-love", 14.0, 16.6]];
+const M0 = P0 + 16.6 + 0.2;             // mac
+const O0 = M0 + 7.4;                    // outro
+const END = O0 + 5.2;
+window.__duration = END;
+const MOVE_AT = [["hello", 0], ["sleep", 2.7], ["think", 5.2], ["celebrate", 7.3], ["oops", 9.6], ["point", 11.8], ["love", 14.0]];
+
+// mascot events: [time, view, state, opts]
+const EV = [
+  [0.15, "intro", "appear"], [1.05, "intro", "hello"],
+  [P0 + 0.0, "onb", "appear"], [P0 + 0.7, "onb", "hello"],
+  [P0 + 2.7, "empty", "sleep"],
+  [P0 + 5.2, "think", "think"],
+  [P0 + 7.3, "yay", "celebrate"],
+  [P0 + 9.75, "oops", "oops"],
+  [P0 + 11.9, "tip", "point"],
+  [P0 + 14.4, "love", "love"], ["poke", P0 + 15.7, "love"],
+  [M0 + 0.3, "mac", "think"], [M0 + 3.3, "mac", "celebrate"], ["poke", M0 + 6.3, "mac"],
+  ...W9.map(([s], i) => s === "poke" ? [O0 + 0.2 + i * 0.07, `w-${s}`, "idle"] : [O0 + 0.2 + i * 0.07, `w-${s}`, s]),
+  ...[0, 1.4, 2.8, 4.2].map((d) => ["poke", O0 + 0.9 + d, "w-poke"]),
+  [O0 + 2.6, "w-hello", "hello"], [O0 + 2.8, "w-celebrate", "celebrate"], [O0 + 3.0, "w-appear", "appear"],
+].map((e) => (e[0] === "poke" ? { t: e[1], v: e[2], poke: true } : { t: e[0], v: e[1], s: e[2], o: e[3] || {} })).sort((a, b) => a.t - b.t);
+let fired = 0;
+
+const ease = (t) => 1 - (1 - t) ** 3, clamp = (t) => Math.max(0, Math.min(1, t));
+const win = (t, a, b, fade = 0.35) => clamp(Math.min((t - a) / fade, (b - t) / fade)); // 0..1 inside [a,b] with fades
+const $ = (id) => document.getElementById(id);
+
+function seek(t) {
+  window.__t = t;
+  while (fired < EV.length && EV[fired].t <= t + 1e-6) {
+    const e = EV[fired++], v = views[e.v];
+    const at = e.t;
+    const old = MascotView.clock; MascotView.clock = () => at;
+    if (e.poke) v.poke(); else v.play(e.s, e.o);
+    MascotView.clock = old;
+  }
+  // scenes
+  $("intro").style.opacity = win(t, -1, P0, 0.4);
+  const ph = win(t, P0 - 0.4, M0, 0.4);
+  $("phone").style.opacity = ph;
+  $("mac").style.opacity = win(t, M0 - 0.4, O0, 0.4);
+  $("outro").style.opacity = win(t, O0 - 0.4, END + 1, 0.4);
+  // intro type
+  const it = clamp((t - 0.35) / 0.5);
+  document.querySelector("#intro .name").style.transform = `translateY(${(1 - ease(it)) * 40}px) scale(${0.9 + 0.1 * ease(it)})`;
+  document.querySelector("#intro .name").style.opacity = it;
+  document.querySelector("#intro .line").style.opacity = clamp((t - 0.8) / 0.4);
+  // phone: iOS push between screens
+  const pt = t - P0;
+  for (const [id, a, b] of SCR) {
+    const el = $(id);
+    const inK = clamp((pt - a) / 0.38), outK = clamp((pt - b) / 0.38);
+    const vis = pt >= a - 0.01 && pt < b + 0.38;
+    el.style.opacity = vis ? 1 : 0;
+    const x = a === 0 ? 0 : (1 - ease(inK)) * 100;
+    const xo = -ease(outK) * 30;
+    el.style.transform = `translateX(${x + xo}%)`;
+    el.style.zIndex = vis ? Math.round(a * 10) : 0;
+    el.style.filter = outK > 0 ? `brightness(${1 - 0.15 * outK})` : "";
+  }
+  // move list
+  let active = null; for (const [m, a] of MOVE_AT) if (pt >= a) active = m;
+  for (const el of document.querySelectorAll(".move")) el.classList.toggle("on", el.dataset.move === active);
+  // taps
+  const taps = [[2.35, 222, 880], [4.85, 395, 118], [15.7, 222, 470]];
+  let tp = null; for (const [a, x, y] of taps) if (pt >= a && pt < a + 0.35) tp = [pt - a, x, y];
+  const tap = $("tap");
+  if (tp) { const k = tp[0] / 0.35; tap.style.left = tp[1] + "px"; tap.style.top = tp[2] + "px"; tap.style.opacity = Math.sin(Math.PI * k); tap.style.transform = `scale(${0.7 + 0.5 * k})`; } else tap.style.opacity = 0;
+  // toast + banner + sheet
+  const toastK = ease(clamp((pt - 7.55) / 0.35)) * (1 - ease(clamp((pt - 9.2) / 0.3)));
+  $("toast").style.transform = `translate(-50%, ${(1 - toastK) * 60}px)`;
+  $("toast").style.opacity = toastK;
+  const banK = ease(clamp((pt - 9.75) / 0.4));
+  $("banner").style.transform = `translateY(${(1 - banK) * -30}px)`;
+  $("banner").style.opacity = banK;
+  const shK = ease(clamp((pt - 14.15) / 0.45));
+  $("sheet").style.transform = `translateY(${(1 - shK) * 620}px)`;
+  $("dim").style.opacity = shK;
+  // mac
+  const mt = t - M0;
+  const done = mt >= 3.3;
+  $("pilltxt").textContent = done ? T.synced : T.sync;
+  $("spin").style.display = done ? "none" : "";
+  $("spin").style.transform = `rotate(${mt * 360 * 1.2}deg)`;
+  // cursor path: comes in, rests, goes to the mascot, clicks
+  const cur = $("cursor");
+  const path = [[0, 1300, 1000], [1.0, 1000, 760], [4.6, 1000, 760], [6.1, 1470, 640], [7.5, 1470, 640]];
+  let cx = path[0][1], cy = path[0][2];
+  for (let i = 1; i < path.length; i++) { const [a, x0, y0] = path[i - 1], [b, x1, y1] = path[i]; if (mt >= a && mt <= b) { const k = ease((mt - a) / (b - a)); cx = x0 + (x1 - x0) * k; cy = y0 + (y1 - y0) * k; } else if (mt > b) { cx = x1; cy = y1; } }
+  cur.style.left = cx + "px"; cur.style.top = cy + "px";
+  cur.style.transform = mt > 6.25 && mt < 6.45 ? "scale(.85)" : "";
+  // outro tiles pop in
+  const ot = t - O0;
+  document.querySelectorAll(".t9").forEach((el, i) => { const k = clamp((ot - i * 0.07) / 0.45); el.style.opacity = k; el.style.transform = `translateY(${(1 - ease(k)) * 40}px)`; });
+  const on = clamp(ot / 0.5);
+  document.querySelector("#outro .name").style.transform = `scale(${0.85 + 0.15 * ease(on)})`;
+  MascotView.renderAll();
+}
+window.__seek = seek;
+
+// wait for every mascot picture
+await document.fonts.ready;
+await Promise.all([...document.querySelectorAll("mascot-view")].map((el) => el.ready ? 0 : new Promise((r) => el.addEventListener("ready", r, { once: true }))));
+await Promise.all([...document.images].map((i) => (i.complete ? 0 : new Promise((r) => { i.onload = i.onerror = r; }))));
+seek(0);
+window.__ready = true;
+
+// live preview (not when the renderer drives it)
+if (!Q.has("render")) {
+  const t0 = performance.now();
+  const tick = () => { const t = ((performance.now() - t0) / 1000) % END; if (t < window.__t) { fired = 0; for (const v of Object.values(views)) v.engine = new v.engine.constructor(); } seek(t); requestAnimationFrame(tick); };
+  requestAnimationFrame(tick);
+}
+</script>
+</body>
+</html>

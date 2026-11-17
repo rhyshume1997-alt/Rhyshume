@@ -1,0 +1,1151 @@
+[
+  {
+    "id": "penny",
+    "name": "Penny",
+    "style": "clay",
+    "styleName": "Soft clay",
+    "role": "A piggy bank with a sprout on top: money that grows.",
+    "represents": [
+      "savings",
+      "budgeting",
+      "money",
+      "finance",
+      "banking",
+      "investing",
+      "goals",
+      "payments",
+      "bills",
+      "splitting",
+      "expenses",
+      "wallet",
+      "debt",
+      "loans",
+      "shared money"
+    ],
+    "personality": "kind, encouraging, quietly proud of you",
+    "body": {
+      "hex": "#e4725a",
+      "h": 10.3,
+      "s": 0.722,
+      "l": 0.624
+    },
+    "palette": [
+      {
+        "hex": "#f27960",
+        "share": 0.395
+      },
+      {
+        "hex": "#ce4f3a",
+        "share": 0.328
+      },
+      {
+        "hex": "#f9ac8f",
+        "share": 0.177
+      },
+      {
+        "hex": "#88983b",
+        "share": 0.067
+      },
+      {
+        "hex": "#311d16",
+        "share": 0.032
+      }
+    ],
+    "anchors": {
+      "cx": 0.5006,
+      "top": 0.3018,
+      "left": 0.2549,
+      "right": 0.75
+    },
+    "ground": 0.94,
+    "shadow": {
+      "w": 0.379
+    },
+    "tol": 22
+  },
+  {
+    "id": "nimbus",
+    "name": "Nimbus",
+    "style": "clay",
+    "styleName": "Soft clay",
+    "role": "A puffy little cloud that keeps your things safe up there.",
+    "represents": [
+      "weather",
+      "cloud",
+      "storage",
+      "sync",
+      "backup",
+      "files",
+      "sky",
+      "photos",
+      "drive",
+      "upload"
+    ],
+    "personality": "light, easygoing, dependable",
+    "body": {
+      "hex": "#95b7d7",
+      "h": 209.2,
+      "s": 0.451,
+      "l": 0.714
+    },
+    "palette": [
+      {
+        "hex": "#ebe8e7",
+        "share": 0.623
+      },
+      {
+        "hex": "#b0c5dd",
+        "share": 0.211
+      },
+      {
+        "hex": "#6f9fca",
+        "share": 0.152
+      }
+    ],
+    "anchors": {
+      "cx": 0.5004,
+      "top": 0.3018,
+      "left": 0.0967,
+      "right": 0.8877
+    },
+    "ground": 0.94,
+    "shadow": {
+      "w": 0.5385
+    },
+    "tol": 22
+  },
+  {
+    "id": "mochi",
+    "name": "Mochi",
+    "style": "plush",
+    "styleName": "Plush",
+    "role": "A soft round mochi that helps you slow down.",
+    "represents": [
+      "meditation",
+      "calm",
+      "mental health",
+      "breathing",
+      "mindfulness",
+      "self-care",
+      "therapy",
+      "wellness",
+      "anxiety",
+      "journal"
+    ],
+    "personality": "calm, gentle, unhurried",
+    "body": {
+      "hex": "#b8ceb9",
+      "h": 122.7,
+      "s": 0.179,
+      "l": 0.765
+    },
+    "palette": [
+      {
+        "hex": "#c6d7c7",
+        "share": 0.466
+      },
+      {
+        "hex": "#a9bfa9",
+        "share": 0.376
+      },
+      {
+        "hex": "#8ea289",
+        "share": 0.141
+      }
+    ],
+    "anchors": {
+      "cx": 0.5002,
+      "top": 0.3008,
+      "left": 0.1982,
+      "right": 0.835
+    },
+    "ground": 0.94,
+    "shadow": {
+      "w": 0.4966
+    },
+    "tol": 32
+  },
+  {
+    "id": "volt",
+    "name": "Volt",
+    "style": "clay",
+    "styleName": "Soft clay",
+    "role": "A chubby little battery, always charged for your next move.",
+    "represents": [
+      "energy",
+      "fitness",
+      "workouts",
+      "battery",
+      "health tracking",
+      "steps",
+      "productivity",
+      "running",
+      "gym",
+      "charging",
+      "electric"
+    ],
+    "personality": "upbeat, sporty, a bit hyper",
+    "body": {
+      "hex": "#d5d83e",
+      "h": 61.1,
+      "s": 0.666,
+      "l": 0.546
+    },
+    "palette": [
+      {
+        "hex": "#e4e643",
+        "share": 0.521
+      },
+      {
+        "hex": "#b0b324",
+        "share": 0.219
+      },
+      {
+        "hex": "#3a3731",
+        "share": 0.109
+      },
+      {
+        "hex": "#e6dda5",
+        "share": 0.085
+      },
+      {
+        "hex": "#7b6f6d",
+        "share": 0.065
+      }
+    ],
+    "anchors": {
+      "cx": 0.501,
+      "top": 0.3018,
+      "left": 0.3359,
+      "right": 0.6563
+    },
+    "ground": 0.94,
+    "shadow": {
+      "w": 0.2498
+    },
+    "tol": 34
+  },
+  {
+    "id": "scout",
+    "name": "Scout",
+    "style": "vinyl",
+    "styleName": "Designer toy",
+    "role": "A little fox explorer who always knows the way.",
+    "represents": [
+      "travel",
+      "maps",
+      "exploring",
+      "trips",
+      "outdoors",
+      "navigation",
+      "hiking",
+      "flights",
+      "hotels",
+      "adventure",
+      "guide"
+    ],
+    "personality": "curious, brave, cheerful",
+    "body": {
+      "hex": "#ce804d",
+      "h": 23.7,
+      "s": 0.57,
+      "l": 0.555
+    },
+    "palette": [
+      {
+        "hex": "#e96f1e",
+        "share": 0.325
+      },
+      {
+        "hex": "#e9cdb4",
+        "share": 0.261
+      },
+      {
+        "hex": "#d89b69",
+        "share": 0.152
+      },
+      {
+        "hex": "#954119",
+        "share": 0.138
+      },
+      {
+        "hex": "#342011",
+        "share": 0.124
+      }
+    ],
+    "anchors": {
+      "cx": 0.5002,
+      "top": 0.3018,
+      "left": 0.2764,
+      "right": 0.7402
+    },
+    "ground": 0.94,
+    "shadow": {
+      "w": 0.3618
+    },
+    "tol": 22
+  },
+  {
+    "id": "pebble",
+    "name": "Pebble",
+    "style": "clay",
+    "styleName": "Soft clay",
+    "role": "A smooth river stone with a moss cap: steady and grounded.",
+    "represents": [
+      "journaling",
+      "notes",
+      "focus",
+      "reflection",
+      "grounding",
+      "diary",
+      "minimal",
+      "writing",
+      "stoicism",
+      "quiet"
+    ],
+    "personality": "steady, thoughtful, wise in a quiet way",
+    "body": {
+      "hex": "#a58e78",
+      "h": 28.7,
+      "s": 0.201,
+      "l": 0.561
+    },
+    "palette": [
+      {
+        "hex": "#9e856f",
+        "share": 0.263
+      },
+      {
+        "hex": "#d1baa3",
+        "share": 0.261
+      },
+      {
+        "hex": "#282807",
+        "share": 0.219
+      },
+      {
+        "hex": "#655931",
+        "share": 0.215
+      },
+      {
+        "hex": "#8e9035",
+        "share": 0.041
+      }
+    ],
+    "anchors": {
+      "cx": 0.5005,
+      "top": 0.3018,
+      "left": 0.2549,
+      "right": 0.749
+    },
+    "ground": 0.94,
+    "shadow": {
+      "w": 0.3854
+    },
+    "tol": 22
+  },
+  {
+    "id": "hoot",
+    "name": "Hoot",
+    "style": "plush",
+    "styleName": "Plush",
+    "role": "A wise little owl who makes learning feel easy.",
+    "represents": [
+      "learning",
+      "education",
+      "reading",
+      "languages",
+      "study",
+      "books",
+      "school",
+      "quiz",
+      "homework",
+      "flashcards",
+      "kids"
+    ],
+    "personality": "wise, patient, a little nerdy",
+    "body": {
+      "hex": "#decfbd",
+      "h": 32.2,
+      "s": 0.333,
+      "l": 0.805
+    },
+    "palette": [
+      {
+        "hex": "#e2d7cd",
+        "share": 0.495
+      },
+      {
+        "hex": "#96a3d0",
+        "share": 0.295
+      },
+      {
+        "hex": "#636e99",
+        "share": 0.115
+      },
+      {
+        "hex": "#bf955a",
+        "share": 0.048
+      },
+      {
+        "hex": "#2a2220",
+        "share": 0.047
+      }
+    ],
+    "anchors": {
+      "cx": 0.5002,
+      "top": 0.3018,
+      "left": 0.2627,
+      "right": 0.7344
+    },
+    "ground": 0.94,
+    "shadow": {
+      "w": 0.3679
+    },
+    "tol": 32
+  },
+  {
+    "id": "byte",
+    "name": "Byte",
+    "style": "vinyl",
+    "styleName": "Designer toy",
+    "role": "A small robot helper with a glowing antenna: your AI sidekick.",
+    "represents": [
+      "ai",
+      "assistant",
+      "developer tools",
+      "automation",
+      "code",
+      "tech",
+      "chatbot",
+      "agent",
+      "copilot",
+      "coding",
+      "bot",
+      "productivity"
+    ],
+    "personality": "helpful, clever, eager",
+    "body": {
+      "hex": "#d9bca6",
+      "h": 26.1,
+      "s": 0.405,
+      "l": 0.751
+    },
+    "palette": [
+      {
+        "hex": "#ebe0d5",
+        "share": 0.402
+      },
+      {
+        "hex": "#2c2422",
+        "share": 0.254
+      },
+      {
+        "hex": "#c1ab9c",
+        "share": 0.198
+      },
+      {
+        "hex": "#d96a1e",
+        "share": 0.101
+      },
+      {
+        "hex": "#fbdf87",
+        "share": 0.044
+      }
+    ],
+    "anchors": {
+      "cx": 0.4953,
+      "top": 0.3018,
+      "left": 0.3174,
+      "right": 0.6787
+    },
+    "ground": 0.94,
+    "shadow": {
+      "w": 0.2818
+    },
+    "tol": 22
+  },
+  {
+    "id": "sprout",
+    "name": "Sprout",
+    "style": "clay",
+    "styleName": "Soft clay",
+    "role": "A seedling in a little pot that grows with every good day.",
+    "represents": [
+      "habits",
+      "growth",
+      "plants",
+      "gardening",
+      "wellness",
+      "progress",
+      "self-improvement",
+      "garden",
+      "tracker",
+      "eco"
+    ],
+    "personality": "hopeful, patient, proud of small wins",
+    "body": {
+      "hex": "#c26439",
+      "h": 18.5,
+      "s": 0.544,
+      "l": 0.493
+    },
+    "palette": [
+      {
+        "hex": "#ea814c",
+        "share": 0.271
+      },
+      {
+        "hex": "#a84927",
+        "share": 0.251
+      },
+      {
+        "hex": "#97b633",
+        "share": 0.194
+      },
+      {
+        "hex": "#545311",
+        "share": 0.193
+      },
+      {
+        "hex": "#dfdb87",
+        "share": 0.091
+      }
+    ],
+    "anchors": {
+      "cx": 0.5004,
+      "top": 0.3008,
+      "left": 0.2715,
+      "right": 0.7422
+    },
+    "ground": 0.94,
+    "shadow": {
+      "w": 0.3671
+    },
+    "tol": 22
+  },
+  {
+    "id": "fuzz",
+    "name": "Fuzz",
+    "style": "fuzzy",
+    "styleName": "Fuzzy",
+    "role": "A fluffy monster with big headphones who lives for the beat.",
+    "represents": [
+      "music",
+      "podcasts",
+      "audio",
+      "playlists",
+      "radio",
+      "sound",
+      "parties",
+      "games",
+      "streaming",
+      "creators",
+      "fun"
+    ],
+    "personality": "playful, groovy, loud in a lovable way",
+    "body": {
+      "hex": "#8b26d2",
+      "h": 275.3,
+      "s": 0.691,
+      "l": 0.487
+    },
+    "palette": [
+      {
+        "hex": "#7916c6",
+        "share": 0.402
+      },
+      {
+        "hex": "#a93aee",
+        "share": 0.389
+      },
+      {
+        "hex": "#490f80",
+        "share": 0.13
+      },
+      {
+        "hex": "#e5c6dd",
+        "share": 0.052
+      },
+      {
+        "hex": "#8e83af",
+        "share": 0.028
+      }
+    ],
+    "anchors": {
+      "cx": 0.5004,
+      "top": 0.3018,
+      "left": 0.2393,
+      "right": 0.7461
+    },
+    "ground": 0.94,
+    "shadow": {
+      "w": 0.3953
+    },
+    "tol": 45
+  },
+  {
+    "id": "shelly",
+    "name": "Shelly",
+    "style": "vinyl",
+    "styleName": "Designer toy",
+    "role": "A turtle with a shield for a shell: your things, kept safe.",
+    "represents": [
+      "security",
+      "privacy",
+      "passwords",
+      "vpn",
+      "protection",
+      "safety",
+      "insurance",
+      "authentication",
+      "backup",
+      "family safety",
+      "identity"
+    ],
+    "personality": "calm, protective, trustworthy",
+    "body": {
+      "hex": "#7caf8f",
+      "h": 141.6,
+      "s": 0.241,
+      "l": 0.587
+    },
+    "palette": [
+      {
+        "hex": "#a3ccad",
+        "share": 0.261
+      },
+      {
+        "hex": "#4c7e67",
+        "share": 0.238
+      },
+      {
+        "hex": "#77a88d",
+        "share": 0.225
+      },
+      {
+        "hex": "#0f3936",
+        "share": 0.15
+      },
+      {
+        "hex": "#e4d8bc",
+        "share": 0.126
+      }
+    ],
+    "anchors": {
+      "cx": 0.5003,
+      "top": 0.3008,
+      "left": 0.293,
+      "right": 0.7207
+    },
+    "ground": 0.94,
+    "shadow": {
+      "w": 0.3336
+    },
+    "tol": 22
+  },
+  {
+    "id": "toasty",
+    "name": "Toasty",
+    "style": "plush",
+    "styleName": "Plush",
+    "role": "A warm slice of toast with a pat of butter: comfort food, friend.",
+    "represents": [
+      "food",
+      "recipes",
+      "cooking",
+      "breakfast",
+      "groceries",
+      "restaurants",
+      "delivery",
+      "meal planning",
+      "kitchen",
+      "bakery",
+      "coffee"
+    ],
+    "personality": "warm, cosy, comforting",
+    "body": {
+      "hex": "#df9640",
+      "h": 32.5,
+      "s": 0.713,
+      "l": 0.563
+    },
+    "palette": [
+      {
+        "hex": "#f4b957",
+        "share": 0.35
+      },
+      {
+        "hex": "#e69231",
+        "share": 0.233
+      },
+      {
+        "hex": "#ae521e",
+        "share": 0.189
+      },
+      {
+        "hex": "#fbdb94",
+        "share": 0.128
+      },
+      {
+        "hex": "#712b0b",
+        "share": 0.1
+      }
+    ],
+    "anchors": {
+      "cx": 0.5004,
+      "top": 0.3008,
+      "left": 0.2305,
+      "right": 0.7988
+    },
+    "ground": 0.94,
+    "shadow": {
+      "w": 0.4433
+    },
+    "tol": 32
+  },
+  {
+    "id": "drop",
+    "name": "Drop",
+    "style": "clay",
+    "styleName": "Soft clay",
+    "role": "A little water droplet that keeps you fresh.",
+    "represents": [
+      "hydration",
+      "water",
+      "health",
+      "cleaning",
+      "wellbeing",
+      "ocean",
+      "drink",
+      "skincare",
+      "weather"
+    ],
+    "personality": "fresh, bubbly, encouraging",
+    "body": {
+      "hex": "#69c6ee",
+      "h": 197.8,
+      "s": 0.793,
+      "l": 0.672
+    },
+    "palette": [
+      {
+        "hex": "#6ecdf3",
+        "share": 0.395
+      },
+      {
+        "hex": "#38aae0",
+        "share": 0.313
+      },
+      {
+        "hex": "#9fe1f9",
+        "share": 0.243
+      },
+      {
+        "hex": "#e0d7e5",
+        "share": 0.032
+      },
+      {
+        "hex": "#182127",
+        "share": 0.017
+      }
+    ],
+    "anchors": {
+      "cx": 0.5007,
+      "top": 0.3018,
+      "left": 0.2471,
+      "right": 0.7539
+    },
+    "ground": 0.94,
+    "shadow": {
+      "w": 0.3953
+    },
+    "tol": 34
+  },
+  {
+    "id": "ember",
+    "name": "Ember",
+    "style": "clay",
+    "styleName": "Soft clay",
+    "role": "A little flame that grows with your streak.",
+    "represents": [
+      "streaks",
+      "motivation",
+      "goals",
+      "challenges",
+      "fitness",
+      "consistency",
+      "fire",
+      "workouts",
+      "habits",
+      "productivity",
+      "gamification"
+    ],
+    "personality": "fiery, motivating, cheerful",
+    "body": {
+      "hex": "#f9912e",
+      "h": 29.2,
+      "s": 0.947,
+      "l": 0.578
+    },
+    "palette": [
+      {
+        "hex": "#f66618",
+        "share": 0.45
+      },
+      {
+        "hex": "#fbb43b",
+        "share": 0.422
+      },
+      {
+        "hex": "#fbd489",
+        "share": 0.103
+      },
+      {
+        "hex": "#2c150b",
+        "share": 0.02
+      }
+    ],
+    "anchors": {
+      "cx": 0.5003,
+      "top": 0.3018,
+      "left": 0.3066,
+      "right": 0.7109
+    },
+    "ground": 0.94,
+    "shadow": {
+      "w": 0.3154
+    },
+    "tol": 34
+  },
+  {
+    "id": "inky",
+    "name": "Inky",
+    "style": "plush",
+    "styleName": "Plush",
+    "role": "A soft octopus who juggles all your ideas.",
+    "represents": [
+      "writing",
+      "notes",
+      "creativity",
+      "multitasking",
+      "documents",
+      "design",
+      "art",
+      "docs",
+      "whiteboard",
+      "brainstorm",
+      "team"
+    ],
+    "personality": "creative, busy, warm-hearted",
+    "body": {
+      "hex": "#b08dc1",
+      "h": 279.8,
+      "s": 0.296,
+      "l": 0.656
+    },
+    "palette": [
+      {
+        "hex": "#b08bbd",
+        "share": 0.413
+      },
+      {
+        "hex": "#d3b2d8",
+        "share": 0.34
+      },
+      {
+        "hex": "#8d6699",
+        "share": 0.215
+      },
+      {
+        "hex": "#231b21",
+        "share": 0.025
+      }
+    ],
+    "anchors": {
+      "cx": 0.5003,
+      "top": 0.3018,
+      "left": 0.2227,
+      "right": 0.7783
+    },
+    "ground": 0.94,
+    "shadow": {
+      "w": 0.4334
+    },
+    "tol": 32
+  },
+  {
+    "id": "luna",
+    "name": "Luna",
+    "style": "fuzzy",
+    "styleName": "Fuzzy",
+    "role": "A sleepy night cat with a crescent moon tuft.",
+    "represents": [
+      "sleep",
+      "night",
+      "dreams",
+      "alarm",
+      "relaxation",
+      "bedtime",
+      "stars",
+      "meditation",
+      "stories",
+      "night mode",
+      "sleep tracker"
+    ],
+    "personality": "dreamy, soft, soothing",
+    "body": {
+      "hex": "#232446",
+      "h": 238.4,
+      "s": 0.326,
+      "l": 0.206
+    },
+    "palette": [
+      {
+        "hex": "#16162e",
+        "share": 0.622
+      },
+      {
+        "hex": "#333053",
+        "share": 0.281
+      },
+      {
+        "hex": "#655b7f",
+        "share": 0.064
+      },
+      {
+        "hex": "#b48f8b",
+        "share": 0.02
+      }
+    ],
+    "anchors": {
+      "cx": 0.5004,
+      "top": 0.3018,
+      "left": 0.2432,
+      "right": 0.9316
+    },
+    "ground": 0.94,
+    "shadow": {
+      "w": 0.494
+    },
+    "tol": 45
+  },
+  {
+    "id": "chatty",
+    "name": "Chatty",
+    "style": "line",
+    "styleName": "Flat line",
+    "role": "A talkative speech bubble who loves to say hi.",
+    "represents": [
+      "social",
+      "messaging",
+      "chat",
+      "community",
+      "support",
+      "comments",
+      "friends",
+      "groups",
+      "messages",
+      "dating",
+      "forum",
+      "feedback"
+    ],
+    "personality": "chatty, friendly, a bit cheeky",
+    "body": {
+      "hex": "#f52b1f",
+      "h": 3.4,
+      "s": 0.915,
+      "l": 0.541
+    },
+    "palette": [
+      {
+        "hex": "#f62b1f",
+        "share": 0.735
+      },
+      {
+        "hex": "#030202",
+        "share": 0.255
+      }
+    ],
+    "anchors": {
+      "cx": 0.5003,
+      "top": 0.3018,
+      "left": 0.2207,
+      "right": 0.7783
+    },
+    "ground": 0.94,
+    "shadow": {
+      "w": 0.3957
+    },
+    "tol": 22
+  },
+  {
+    "id": "biscuit",
+    "name": "Biscuit",
+    "style": "line",
+    "styleName": "Flat line",
+    "role": "A happy pup who's always ready for a walk.",
+    "represents": [
+      "pets",
+      "dogs",
+      "walks",
+      "animals",
+      "vets",
+      "pet care",
+      "companions",
+      "dog walking",
+      "pet sitting",
+      "adoption"
+    ],
+    "personality": "loyal, excitable, sweet",
+    "body": {
+      "hex": "#f99928",
+      "h": 32.4,
+      "s": 0.942,
+      "l": 0.566
+    },
+    "palette": [
+      {
+        "hex": "#fb9a29",
+        "share": 0.73
+      },
+      {
+        "hex": "#060203",
+        "share": 0.25
+      }
+    ],
+    "anchors": {
+      "cx": 0.4999,
+      "top": 0.3008,
+      "left": 0.2314,
+      "right": 0.7373
+    },
+    "ground": 0.94,
+    "shadow": {
+      "w": 0.3892
+    },
+    "tol": 22
+  },
+  {
+    "id": "tick",
+    "name": "Tick",
+    "style": "sticker",
+    "styleName": "Retro sticker",
+    "role": "An old-school alarm clock who keeps you on time.",
+    "represents": [
+      "calendar",
+      "time",
+      "timer",
+      "pomodoro",
+      "schedule",
+      "reminders",
+      "planning",
+      "tasks",
+      "to-do",
+      "productivity",
+      "deadlines",
+      "focus timer"
+    ],
+    "personality": "punctual, cheeky, energetic",
+    "body": {
+      "hex": "#faf5e9",
+      "h": 45.3,
+      "s": 0.614,
+      "l": 0.946
+    },
+    "palette": [
+      {
+        "hex": "#f7f4ea",
+        "share": 0.5
+      },
+      {
+        "hex": "#0b0c0e",
+        "share": 0.239
+      },
+      {
+        "hex": "#063ecd",
+        "share": 0.182
+      },
+      {
+        "hex": "#99a5c0",
+        "share": 0.04
+      },
+      {
+        "hex": "#2f3a5a",
+        "share": 0.038
+      }
+    ],
+    "anchors": {
+      "cx": 0.5001,
+      "top": 0.3008,
+      "left": 0.2637,
+      "right": 0.7471
+    },
+    "ground": 0.94,
+    "shadow": {
+      "w": 0.3561
+    },
+    "tol": 22
+  },
+  {
+    "id": "bagsy",
+    "name": "Bagsy",
+    "style": "sticker",
+    "styleName": "Retro sticker",
+    "role": "A cheerful shopping bag who's always found a deal.",
+    "represents": [
+      "shopping",
+      "e-commerce",
+      "store",
+      "deals",
+      "orders",
+      "retail",
+      "marketplace",
+      "checkout",
+      "receipts",
+      "coupons",
+      "fashion",
+      "cart"
+    ],
+    "personality": "upbeat, generous, a bit sassy",
+    "body": {
+      "hex": "#f8f2e7",
+      "h": 39.2,
+      "s": 0.567,
+      "l": 0.94
+    },
+    "palette": [
+      {
+        "hex": "#f8f1e7",
+        "share": 0.665
+      },
+      {
+        "hex": "#0a0808",
+        "share": 0.174
+      },
+      {
+        "hex": "#f65b94",
+        "share": 0.074
+      },
+      {
+        "hex": "#e8aabc",
+        "share": 0.059
+      },
+      {
+        "hex": "#685155",
+        "share": 0.028
+      }
+    ],
+    "anchors": {
+      "cx": 0.5001,
+      "top": 0.3018,
+      "left": 0.2393,
+      "right": 0.7402
+    },
+    "ground": 0.94,
+    "shadow": {
+      "w": 0.366
+    },
+    "tol": 22
+  }
+]

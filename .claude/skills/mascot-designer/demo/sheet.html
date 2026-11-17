@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Character sheet</title>
+<style>
+@font-face { font-family: "Bubble"; src: url("../assets/fonts/TitanOne.woff2") format("woff2"); font-display: block; }
+@font-face { font-family: "Round"; src: url("../assets/fonts/Fredoka.woff2") format("woff2"); font-weight: 300 700; font-display: block; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --tint: #fff1ec; --tint2: #ffd9cc; --deep: #5b2418; --ink: #2a1712; --body: #e4725a; }
+html, body { width: 2400px; height: 1600px; overflow: hidden; }
+body { background: radial-gradient(70% 90% at 72% 40%, #fff 0%, var(--tint) 50%, var(--tint2) 100%); font-family: "Round", ui-rounded, system-ui, sans-serif; color: var(--ink); position: relative; }
+.dots { position: absolute; inset: 0; background-image: radial-gradient(color-mix(in srgb, var(--body) 22%, transparent) 3px, transparent 3.5px); background-size: 44px 44px; mask-image: radial-gradient(60% 60% at 72% 40%, transparent 30%, #000 100%); }
+.kicker { position: absolute; left: 120px; top: 110px; font: 600 30px/1 "Round"; letter-spacing: .14em; text-transform: uppercase; color: color-mix(in srgb, var(--ink) 55%, transparent); }
+.name { position: absolute; left: 110px; top: 160px; font: 240px/0.95 "Bubble"; color: #fff; -webkit-text-stroke: 0.055em var(--deep); paint-order: stroke fill;
+  text-shadow: 0 0.05em 0 var(--deep), 0 0.09em 0 var(--deep), 0 0.15em 0.1em rgba(0,0,0,.16); max-width: 1300px; }
+.col { position: absolute; left: 120px; top: 470px; width: 1050px; display: flex; flex-direction: column; gap: 36px; }
+.role { font: 500 46px/1.25 "Round"; color: var(--deep); text-wrap: pretty; }
+.facts { display: grid; grid-template-columns: 240px 1fr; row-gap: 18px; font: 500 32px/1.3 "Round"; }
+.facts dd { text-wrap: pretty; }
+.facts dt { color: color-mix(in srgb, var(--ink) 50%, transparent); font-weight: 600; }
+.pal { display: flex; gap: 26px; }
+.pal div { text-align: center; font: 600 22px/1 "Round"; color: color-mix(in srgb, var(--ink) 60%, transparent); }
+.pal i { display: block; width: 104px; height: 104px; border-radius: 50%; margin-bottom: 14px; box-shadow: inset 0 -8px 0 rgba(0,0,0,.08), 0 10px 20px -12px rgba(0,0,0,.4); }
+.hero { position: absolute; right: 60px; top: -10px; width: 1100px; height: 1100px; }
+.hero img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 30px 30px rgba(60,20,10,.18)); }
+.band { position: absolute; left: 60px; right: 60px; bottom: 50px; height: 420px; border-radius: 60px; background: rgba(255,255,255,.66); box-shadow: 0 0 0 2px color-mix(in srgb, var(--body) 20%, transparent), 0 30px 60px -40px rgba(60,20,10,.5); display: grid; grid-template-columns: repeat(9, 1fr); padding: 0 20px; }
+.p { position: relative; }
+.p img { position: absolute; left: 50%; top: -30px; width: 300px; margin-left: -150px; }
+.p b { position: absolute; left: 0; right: 0; bottom: 64px; text-align: center; font: 700 32px/1 "Round"; }
+.p span { position: absolute; left: 0; right: 0; bottom: 30px; text-align: center; font: 500 21px/1 "Round"; color: color-mix(in srgb, var(--ink) 50%, transparent); }
+.bandlabel { position: absolute; left: 120px; bottom: 486px; font: 600 26px/1 "Round"; letter-spacing: .14em; text-transform: uppercase; color: color-mix(in srgb, var(--ink) 55%, transparent); }
+</style></head>
+<body>
+<div class="dots"></div>
+<div class="kicker" id="kicker">Mascot</div>
+<div class="name" id="name"></div>
+<div class="col"><div class="role" id="role"></div>
+<dl class="facts" id="facts"></dl>
+<div class="pal" id="pal"></div></div>
+<div class="hero"><img id="hero"></div>
+<div class="bandlabel">The moves</div>
+<div class="band" id="band"></div>
+<script>
+const S = window.SHEET;
+const r = document.documentElement.style;
+for (const [k, v] of Object.entries(S.theme)) r.setProperty(`--${k}`, v);
+document.getElementById("kicker").textContent = S.kicker;
+document.getElementById("name").textContent = S.name;
+document.getElementById("role").textContent = S.role || "";
+document.getElementById("facts").innerHTML = S.facts.map(([k, v]) => `<dt>${k}</dt><dd>${String(v).charAt(0).toUpperCase() + String(v).slice(1)}</dd>`).join("");
+document.getElementById("pal").innerHTML = S.palette.map((c) => `<div><i style="background:${c}"></i>${c.toUpperCase()}</div>`).join("");
+document.getElementById("hero").src = S.poses.idle;
+const moves = [["wave", "Hello"], ["think", "Thinking"], ["celebrate", "Celebrate"], ["oops", "Oops"], ["sleep", "Sleeping"], ["point", "Pointing"], ["love", "Love"], ["idle", "Idle"], ["blink", "Blink"]];
+const uses = { wave: "Onboarding", think: "Loading", celebrate: "Success", oops: "Errors", sleep: "Empty states", point: "Tips", love: "Thank you", idle: "Always", blink: "Every few seconds" };
+document.getElementById("band").innerHTML = moves.map(([p, l]) => `<div class="p"><img src="${S.poses[p]}"><b>${l}</b><span>${uses[p]}</span></div>`).join("");
+// the left column must end above the band (top 1130)
+const col = document.querySelector(".col"); let rs = 46, fsz = 32;
+while (col.getBoundingClientRect().bottom > 1045 && rs > 28) { rs -= 2; fsz -= 1.5; document.getElementById("role").style.fontSize = rs + "px"; document.getElementById("facts").style.fontSize = fsz + "px"; }
+// shrink the name until it fits on one line
+const n = document.getElementById("name"); let fs = 240;
+while (n.scrollWidth > 1300 && fs > 120) { fs -= 8; n.style.fontSize = fs + "px"; }
+</script>
+</body></html>

@@ -1,0 +1,16 @@
+{
+  "keywords": ["the ad group's main keyword", "a second keyword"],
+  "ads": [
+    {
+      "group": "Ad group name",
+      "finalUrl": "https://www.example.com/the-page-about-this",
+      "path1": "word",
+      "path2": "word",
+      "headlines": [
+        "Up to 30 characters each",
+        { "text": "A pinned one looks like this", "pinned": "HEADLINE_1" }
+      ],
+      "descriptions": ["Up to 90 characters each. Four of them."]
+    }
+  ]
+}

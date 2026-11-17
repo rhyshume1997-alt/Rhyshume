@@ -1,0 +1,1789 @@
+{
+ "format": "google-ads-export",
+ "v": 1,
+ "demo": true,
+ "made": null,
+ "days": 30,
+ "brief": {
+  "business": "Example plumber (demo)",
+  "goal": "leads",
+  "target_cost": 60,
+  "monthly_budget": 2400,
+  "where": [
+   "Austin"
+  ],
+  "reach": "there",
+  "languages": [
+   "English"
+  ],
+  "brand": [
+   "Lone Star Plumbing"
+  ],
+  "approver": "Sam"
+ },
+ "account": {
+  "id": "1234567890",
+  "name": "Example plumber (demo)",
+  "currency": "USD",
+  "timeZone": "America/Chicago"
+ },
+ "data": {
+  "customer": [
+   {
+    "customer": {
+     "id": "1234567890",
+     "descriptiveName": "Example plumber (demo)",
+     "currencyCode": "USD",
+     "timeZone": "America/Chicago",
+     "autoTaggingEnabled": true
+    }
+   }
+  ],
+  "campaigns": [
+   {
+    "campaign": {
+     "id": "11",
+     "name": "Emergency plumber",
+     "status": "ENABLED",
+     "advertisingChannelType": "SEARCH",
+     "biddingStrategyType": "MAXIMIZE_CONVERSIONS",
+     "networkSettings": {
+      "targetGoogleSearch": true,
+      "targetSearchNetwork": true,
+      "targetContentNetwork": true,
+      "targetPartnerSearchNetwork": false
+     },
+     "geoTargetTypeSetting": {
+      "positiveGeoTargetType": "PRESENCE_OR_INTEREST",
+      "negativeGeoTargetType": "PRESENCE"
+     },
+     "campaignBudget": "customers/1234567890/campaignBudgets/111"
+    },
+    "campaignBudget": {
+     "amountMicros": "45000000",
+     "explicitlyShared": false
+    }
+   },
+   {
+    "campaign": {
+     "id": "12",
+     "name": "Water heaters",
+     "status": "ENABLED",
+     "advertisingChannelType": "SEARCH",
+     "biddingStrategyType": "TARGET_CPA",
+     "targetCpa": {
+      "targetCpaMicros": "35000000"
+     },
+     "networkSettings": {
+      "targetGoogleSearch": true,
+      "targetSearchNetwork": false,
+      "targetContentNetwork": false,
+      "targetPartnerSearchNetwork": false
+     },
+     "geoTargetTypeSetting": {
+      "positiveGeoTargetType": "PRESENCE",
+      "negativeGeoTargetType": "PRESENCE"
+     },
+     "campaignBudget": "customers/1234567890/campaignBudgets/121"
+    },
+    "campaignBudget": {
+     "amountMicros": "30000000",
+     "explicitlyShared": false
+    }
+   },
+   {
+    "campaign": {
+     "id": "13",
+     "name": "Brand",
+     "status": "ENABLED",
+     "advertisingChannelType": "SEARCH",
+     "biddingStrategyType": "TARGET_IMPRESSION_SHARE",
+     "networkSettings": {
+      "targetGoogleSearch": true,
+      "targetSearchNetwork": false,
+      "targetContentNetwork": false,
+      "targetPartnerSearchNetwork": false
+     },
+     "geoTargetTypeSetting": {
+      "positiveGeoTargetType": "PRESENCE",
+      "negativeGeoTargetType": "PRESENCE"
+     },
+     "campaignBudget": "customers/1234567890/campaignBudgets/131"
+    },
+    "campaignBudget": {
+     "amountMicros": "5000000",
+     "explicitlyShared": false
+    }
+   }
+  ],
+  "campaignAiMax": [
+   {
+    "campaign": {
+     "id": "11",
+     "aiMaxSetting": {
+      "enableAiMax": true
+     }
+    }
+   },
+   {
+    "campaign": {
+     "id": "12",
+     "aiMaxSetting": {
+      "enableAiMax": false
+     }
+    }
+   },
+   {
+    "campaign": {
+     "id": "13",
+     "aiMaxSetting": {
+      "enableAiMax": false
+     }
+    }
+   }
+  ],
+  "campaignBroad": [
+   {
+    "campaign": {
+     "id": "11",
+     "keywordMatchType": "UNSPECIFIED"
+    }
+   },
+   {
+    "campaign": {
+     "id": "12",
+     "keywordMatchType": "UNSPECIFIED"
+    }
+   },
+   {
+    "campaign": {
+     "id": "13",
+     "keywordMatchType": "UNSPECIFIED"
+    }
+   }
+  ],
+  "campaignAssetAutomation": [
+   {
+    "campaign": {
+     "id": "11",
+     "assetAutomationSettings": [
+      {
+       "assetAutomationType": "TEXT_ASSET_AUTOMATION",
+       "assetAutomationStatus": "OPTED_IN"
+      },
+      {
+       "assetAutomationType": "FINAL_URL_EXPANSION_TEXT_ASSET_AUTOMATION",
+       "assetAutomationStatus": "OPTED_IN"
+      }
+     ]
+    }
+   },
+   {
+    "campaign": {
+     "id": "12",
+     "assetAutomationSettings": [
+      {
+       "assetAutomationType": "TEXT_ASSET_AUTOMATION",
+       "assetAutomationStatus": "OPTED_OUT"
+      },
+      {
+       "assetAutomationType": "FINAL_URL_EXPANSION_TEXT_ASSET_AUTOMATION",
+       "assetAutomationStatus": "OPTED_OUT"
+      }
+     ]
+    }
+   },
+   {
+    "campaign": {
+     "id": "13",
+     "assetAutomationSettings": [
+      {
+       "assetAutomationType": "TEXT_ASSET_AUTOMATION",
+       "assetAutomationStatus": "OPTED_OUT"
+      },
+      {
+       "assetAutomationType": "FINAL_URL_EXPANSION_TEXT_ASSET_AUTOMATION",
+       "assetAutomationStatus": "OPTED_OUT"
+      }
+     ]
+    }
+   }
+  ],
+  "campaignStats": [
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "metrics": {
+     "costMicros": "1312000000",
+     "clicks": "240",
+     "impressions": "3360",
+     "conversions": 19,
+     "conversionsValue": 0,
+     "searchImpressionShare": 0.5,
+     "searchBudgetLostImpressionShare": 0.04,
+     "searchRankLostImpressionShare": 0.33
+    }
+   },
+   {
+    "campaign": {
+     "id": "12"
+    },
+    "metrics": {
+     "costMicros": "828000000",
+     "clicks": "131",
+     "impressions": "1834",
+     "conversions": 12,
+     "conversionsValue": 0,
+     "searchImpressionShare": 0.5,
+     "searchBudgetLostImpressionShare": 0.03,
+     "searchRankLostImpressionShare": 0.41
+    }
+   },
+   {
+    "campaign": {
+     "id": "13"
+    },
+    "metrics": {
+     "costMicros": "96000000",
+     "clicks": "44",
+     "impressions": "616",
+     "conversions": 6,
+     "conversionsValue": 0,
+     "searchImpressionShare": 0.5,
+     "searchBudgetLostImpressionShare": 0,
+     "searchRankLostImpressionShare": 0.05
+    }
+   }
+  ],
+  "campaignStatsPrev": [
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "metrics": {
+     "costMicros": "1240000000",
+     "clicks": "228",
+     "impressions": "3192",
+     "conversions": 20,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "12"
+    },
+    "metrics": {
+     "costMicros": "770000000",
+     "clicks": "126",
+     "impressions": "1764",
+     "conversions": 13,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "13"
+    },
+    "metrics": {
+     "costMicros": "95000000",
+     "clicks": "41",
+     "impressions": "574",
+     "conversions": 6,
+     "conversionsValue": 0
+    }
+   }
+  ],
+  "networks": [
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "segments": {
+     "adNetworkType": "SEARCH"
+    },
+    "metrics": {
+     "costMicros": "1012000000",
+     "clicks": "171",
+     "impressions": "2394",
+     "conversions": 18,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "segments": {
+     "adNetworkType": "SEARCH_PARTNERS"
+    },
+    "metrics": {
+     "costMicros": "212000000",
+     "clicks": "52",
+     "impressions": "728",
+     "conversions": 1,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "segments": {
+     "adNetworkType": "CONTENT"
+    },
+    "metrics": {
+     "costMicros": "88000000",
+     "clicks": "17",
+     "impressions": "238",
+     "conversions": 0,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "12"
+    },
+    "segments": {
+     "adNetworkType": "SEARCH"
+    },
+    "metrics": {
+     "costMicros": "828000000",
+     "clicks": "131",
+     "impressions": "1834",
+     "conversions": 12,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "13"
+    },
+    "segments": {
+     "adNetworkType": "SEARCH"
+    },
+    "metrics": {
+     "costMicros": "96000000",
+     "clicks": "44",
+     "impressions": "616",
+     "conversions": 6,
+     "conversionsValue": 0
+    }
+   }
+  ],
+  "geoTypes": [
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "geographicView": {
+     "locationType": "LOCATION_OF_PRESENCE",
+     "countryCriterionId": "2840"
+    },
+    "metrics": {
+     "costMicros": "1164000000",
+     "clicks": "211",
+     "impressions": "2954",
+     "conversions": 19,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "geographicView": {
+     "locationType": "AREA_OF_INTEREST",
+     "countryCriterionId": "2840"
+    },
+    "metrics": {
+     "costMicros": "148000000",
+     "clicks": "29",
+     "impressions": "406",
+     "conversions": 0,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "12"
+    },
+    "geographicView": {
+     "locationType": "LOCATION_OF_PRESENCE",
+     "countryCriterionId": "2840"
+    },
+    "metrics": {
+     "costMicros": "828000000",
+     "clicks": "131",
+     "impressions": "1834",
+     "conversions": 12,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "13"
+    },
+    "geographicView": {
+     "locationType": "LOCATION_OF_PRESENCE",
+     "countryCriterionId": "2840"
+    },
+    "metrics": {
+     "costMicros": "96000000",
+     "clicks": "44",
+     "impressions": "616",
+     "conversions": 6,
+     "conversionsValue": 0
+    }
+   }
+  ],
+  "hours": [],
+  "conversionsByCampaign": [],
+  "campaignCriteria": [
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "campaignCriterion": {
+     "type": "LOCATION",
+     "negative": false,
+     "status": "ENABLED",
+     "location": {
+      "geoTargetConstant": "geoTargetConstants/1026201"
+     }
+    }
+   },
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "campaignCriterion": {
+     "type": "LANGUAGE",
+     "negative": false,
+     "status": "ENABLED",
+     "language": {
+      "languageConstant": "languageConstants/1000"
+     }
+    }
+   },
+   {
+    "campaign": {
+     "id": "12"
+    },
+    "campaignCriterion": {
+     "type": "LOCATION",
+     "negative": false,
+     "status": "ENABLED",
+     "location": {
+      "geoTargetConstant": "geoTargetConstants/1026201"
+     }
+    }
+   },
+   {
+    "campaign": {
+     "id": "12"
+    },
+    "campaignCriterion": {
+     "type": "LANGUAGE",
+     "negative": false,
+     "status": "ENABLED",
+     "language": {
+      "languageConstant": "languageConstants/1000"
+     }
+    }
+   },
+   {
+    "campaign": {
+     "id": "12"
+    },
+    "campaignCriterion": {
+     "type": "KEYWORD",
+     "negative": true,
+     "status": "ENABLED",
+     "keyword": {
+      "text": "jobs",
+      "matchType": "PHRASE"
+     }
+    }
+   },
+   {
+    "campaign": {
+     "id": "12"
+    },
+    "campaignCriterion": {
+     "type": "KEYWORD",
+     "negative": true,
+     "status": "ENABLED",
+     "keyword": {
+      "text": "diy",
+      "matchType": "PHRASE"
+     }
+    }
+   },
+   {
+    "campaign": {
+     "id": "13"
+    },
+    "campaignCriterion": {
+     "type": "LOCATION",
+     "negative": false,
+     "status": "ENABLED",
+     "location": {
+      "geoTargetConstant": "geoTargetConstants/1026201"
+     }
+    }
+   },
+   {
+    "campaign": {
+     "id": "13"
+    },
+    "campaignCriterion": {
+     "type": "LANGUAGE",
+     "negative": false,
+     "status": "ENABLED",
+     "language": {
+      "languageConstant": "languageConstants/1000"
+     }
+    }
+   }
+  ],
+  "brandExclusions": [],
+  "conversionActions": [
+   {
+    "conversionAction": {
+     "id": "101",
+     "name": "Quote form sent",
+     "status": "ENABLED",
+     "type": "WEBPAGE",
+     "category": "SUBMIT_LEAD_FORM",
+     "primaryForGoal": true,
+     "countingType": "MANY_PER_CLICK",
+     "includeInConversionsMetric": true,
+     "clickThroughLookbackWindowDays": "30",
+     "attributionModelSettings": {
+      "attributionModel": "GOOGLE_SEARCH_ATTRIBUTION_DATA_DRIVEN"
+     }
+    }
+   },
+   {
+    "conversionAction": {
+     "id": "102",
+     "name": "Calls from ads",
+     "status": "ENABLED",
+     "type": "AD_CALL",
+     "category": "PHONE_CALL_LEAD",
+     "primaryForGoal": true,
+     "countingType": "ONE_PER_CLICK",
+     "includeInConversionsMetric": true,
+     "clickThroughLookbackWindowDays": "30",
+     "attributionModelSettings": {
+      "attributionModel": "GOOGLE_SEARCH_ATTRIBUTION_DATA_DRIVEN"
+     }
+    }
+   }
+  ],
+  "conversionStats": [
+   {
+    "segments": {
+     "conversionAction": "customers/1234567890/conversionActions/101",
+     "conversionActionName": "Quote form sent"
+    },
+    "metrics": {
+     "conversions": 22,
+     "allConversions": 22,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "segments": {
+     "conversionAction": "customers/1234567890/conversionActions/102",
+     "conversionActionName": "Calls from ads"
+    },
+    "metrics": {
+     "conversions": 15,
+     "allConversions": 15,
+     "conversionsValue": 0
+    }
+   }
+  ],
+  "adGroups": [
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "adGroup": {
+     "id": "701",
+     "name": "Emergency",
+     "status": "ENABLED",
+     "type": "SEARCH_STANDARD"
+    }
+   },
+   {
+    "campaign": {
+     "id": "12"
+    },
+    "adGroup": {
+     "id": "702",
+     "name": "Water heater repair",
+     "status": "ENABLED",
+     "type": "SEARCH_STANDARD"
+    }
+   },
+   {
+    "campaign": {
+     "id": "13"
+    },
+    "adGroup": {
+     "id": "703",
+     "name": "Lone Star Plumbing",
+     "status": "ENABLED",
+     "type": "SEARCH_STANDARD"
+    }
+   }
+  ],
+  "keywords": [
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "adGroupCriterion": {
+     "criterionId": "5001",
+     "keyword": {
+      "text": "emergency plumber austin",
+      "matchType": "EXACT"
+     },
+     "status": "ENABLED",
+     "qualityInfo": {
+      "qualityScore": 8,
+      "creativeQualityScore": "AVERAGE",
+      "postClickQualityScore": "AVERAGE",
+      "searchPredictedCtr": "AVERAGE"
+     }
+    },
+    "metrics": {
+     "costMicros": "380000000",
+     "clicks": "58",
+     "impressions": "812",
+     "conversions": 9,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "adGroupCriterion": {
+     "criterionId": "5002",
+     "keyword": {
+      "text": "24 hour plumber",
+      "matchType": "PHRASE"
+     },
+     "status": "ENABLED",
+     "qualityInfo": {
+      "qualityScore": 7,
+      "creativeQualityScore": "AVERAGE",
+      "postClickQualityScore": "AVERAGE",
+      "searchPredictedCtr": "AVERAGE"
+     }
+    },
+    "metrics": {
+     "costMicros": "290000000",
+     "clicks": "49",
+     "impressions": "686",
+     "conversions": 6,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "adGroupCriterion": {
+     "criterionId": "5003",
+     "keyword": {
+      "text": "plumber near me",
+      "matchType": "PHRASE"
+     },
+     "status": "ENABLED",
+     "qualityInfo": {
+      "qualityScore": 6,
+      "creativeQualityScore": "AVERAGE",
+      "postClickQualityScore": "AVERAGE",
+      "searchPredictedCtr": "AVERAGE"
+     }
+    },
+    "metrics": {
+     "costMicros": "310000000",
+     "clicks": "61",
+     "impressions": "854",
+     "conversions": 4,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "adGroupCriterion": {
+     "criterionId": "5004",
+     "keyword": {
+      "text": "plumbing",
+      "matchType": "BROAD"
+     },
+     "status": "ENABLED",
+     "qualityInfo": {
+      "qualityScore": 3,
+      "creativeQualityScore": "BELOW_AVERAGE",
+      "postClickQualityScore": "AVERAGE",
+      "searchPredictedCtr": "BELOW_AVERAGE"
+     }
+    },
+    "metrics": {
+     "costMicros": "204000000",
+     "clicks": "47",
+     "impressions": "658",
+     "conversions": 0,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "adGroupCriterion": {
+     "criterionId": "5005",
+     "keyword": {
+      "text": "burst pipe repair",
+      "matchType": "PHRASE"
+     },
+     "status": "ENABLED",
+     "qualityInfo": {
+      "qualityScore": 5,
+      "creativeQualityScore": "AVERAGE",
+      "postClickQualityScore": "AVERAGE",
+      "searchPredictedCtr": "AVERAGE"
+     }
+    },
+    "metrics": {
+     "costMicros": "128000000",
+     "clicks": "25",
+     "impressions": "350",
+     "conversions": 0,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "12"
+    },
+    "adGroup": {
+     "id": "702"
+    },
+    "adGroupCriterion": {
+     "criterionId": "5006",
+     "keyword": {
+      "text": "water heater repair",
+      "matchType": "PHRASE"
+     },
+     "status": "ENABLED",
+     "qualityInfo": {
+      "qualityScore": 8,
+      "creativeQualityScore": "AVERAGE",
+      "postClickQualityScore": "AVERAGE",
+      "searchPredictedCtr": "AVERAGE"
+     }
+    },
+    "metrics": {
+     "costMicros": "420000000",
+     "clicks": "66",
+     "impressions": "924",
+     "conversions": 7,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "12"
+    },
+    "adGroup": {
+     "id": "702"
+    },
+    "adGroupCriterion": {
+     "criterionId": "5007",
+     "keyword": {
+      "text": "water heater replacement",
+      "matchType": "EXACT"
+     },
+     "status": "ENABLED",
+     "qualityInfo": {
+      "qualityScore": 7,
+      "creativeQualityScore": "AVERAGE",
+      "postClickQualityScore": "AVERAGE",
+      "searchPredictedCtr": "AVERAGE"
+     }
+    },
+    "metrics": {
+     "costMicros": "300000000",
+     "clicks": "44",
+     "impressions": "616",
+     "conversions": 5,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "12"
+    },
+    "adGroup": {
+     "id": "702"
+    },
+    "adGroupCriterion": {
+     "criterionId": "5008",
+     "keyword": {
+      "text": "tankless water heater",
+      "matchType": "PHRASE"
+     },
+     "status": "ENABLED",
+     "qualityInfo": {
+      "qualityScore": 3,
+      "creativeQualityScore": "AVERAGE",
+      "postClickQualityScore": "BELOW_AVERAGE",
+      "searchPredictedCtr": "AVERAGE"
+     }
+    },
+    "metrics": {
+     "costMicros": "108000000",
+     "clicks": "21",
+     "impressions": "294",
+     "conversions": 0,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "13"
+    },
+    "adGroup": {
+     "id": "703"
+    },
+    "adGroupCriterion": {
+     "criterionId": "5009",
+     "keyword": {
+      "text": "lone star plumbing",
+      "matchType": "EXACT"
+     },
+     "status": "ENABLED",
+     "qualityInfo": {
+      "qualityScore": 10,
+      "creativeQualityScore": "AVERAGE",
+      "postClickQualityScore": "AVERAGE",
+      "searchPredictedCtr": "AVERAGE"
+     }
+    },
+    "metrics": {
+     "costMicros": "96000000",
+     "clicks": "44",
+     "impressions": "616",
+     "conversions": 6,
+     "conversionsValue": 0
+    }
+   }
+  ],
+  "adGroupNegatives": [],
+  "sharedSets": [],
+  "campaignSharedSets": [],
+  "sharedNegatives": [],
+  "ads": [
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "adGroupAd": {
+     "ad": {
+      "id": "9001",
+      "type": "RESPONSIVE_SEARCH_AD",
+      "finalUrls": [
+       "https://www.example.com/"
+      ],
+      "responsiveSearchAd": {
+       "headlines": [
+        {
+         "text": "Plumber in Austin",
+         "pinnedField": "HEADLINE_1"
+        },
+        {
+         "text": "Austin Plumber"
+        },
+        {
+         "text": "Best Plumbers!!"
+        },
+        {
+         "text": "Call Us Today"
+        },
+        {
+         "text": "Plumbing Services"
+        }
+       ],
+       "descriptions": [
+        {
+         "text": "We are a plumbing company in Austin. Call us."
+        },
+        {
+         "text": "Plumbing services for your home."
+        }
+       ]
+      }
+     },
+     "status": "ENABLED",
+     "adStrength": "POOR",
+     "policySummary": {
+      "approvalStatus": "APPROVED"
+     }
+    },
+    "metrics": {
+     "costMicros": "1312000000",
+     "clicks": "240",
+     "impressions": "3360",
+     "conversions": 19,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "12"
+    },
+    "adGroup": {
+     "id": "702"
+    },
+    "adGroupAd": {
+     "ad": {
+      "id": "9002",
+      "type": "RESPONSIVE_SEARCH_AD",
+      "finalUrls": [
+       "https://www.example.com/water-heaters"
+      ],
+      "responsiveSearchAd": {
+       "headlines": [
+        {
+         "text": "Water Heater Repair Austin"
+        },
+        {
+         "text": "Water Heater Repair Today"
+        },
+        {
+         "text": "Licensed & Insured Plumbers"
+        },
+        {
+         "text": "4.9 Stars From 600+ Reviews"
+        },
+        {
+         "text": "Free Quote in 10 Minutes"
+        },
+        {
+         "text": "Same-Day Water Heater Service"
+        },
+        {
+         "text": "Tank & Tankless Experts"
+        },
+        {
+         "text": "Book Your Repair Online"
+        },
+        {
+         "text": "Upfront Price Before We Start"
+        },
+        {
+         "text": "Serving Austin Since 2009"
+        }
+       ],
+       "descriptions": [
+        {
+         "text": "No hot water? A licensed plumber at your door today. Get a free quote in 10 minutes."
+        },
+        {
+         "text": "Repair or replace any tank or tankless heater. Upfront price, 2-year labor warranty."
+        },
+        {
+         "text": "Rated 4.9 by 600+ Austin homeowners. Book online or call, we answer 24/7."
+        },
+        {
+         "text": "Same-day water heater repair across Austin. Call now for a free, fixed quote."
+        }
+       ],
+       "path1": "water-heaters",
+       "path2": "austin"
+      }
+     },
+     "status": "ENABLED",
+     "adStrength": "GOOD",
+     "policySummary": {
+      "approvalStatus": "APPROVED"
+     }
+    },
+    "metrics": {
+     "costMicros": "828000000",
+     "clicks": "131",
+     "impressions": "1834",
+     "conversions": 12,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "13"
+    },
+    "adGroup": {
+     "id": "703"
+    },
+    "adGroupAd": {
+     "ad": {
+      "id": "9003",
+      "type": "RESPONSIVE_SEARCH_AD",
+      "finalUrls": [
+       "https://www.example.com/"
+      ],
+      "responsiveSearchAd": {
+       "headlines": [
+        {
+         "text": "Lone Star Plumbing Austin"
+        },
+        {
+         "text": "Lone Star Plumbing: Official"
+        },
+        {
+         "text": "Licensed Plumbers Since 2009"
+        },
+        {
+         "text": "4.9 Stars From 600+ Reviews"
+        },
+        {
+         "text": "Book Online in 2 Minutes"
+        },
+        {
+         "text": "Free Quote, Upfront Price"
+        },
+        {
+         "text": "24/7 Emergency Service"
+        },
+        {
+         "text": "Call Now, We Answer 24/7"
+        },
+        {
+         "text": "Water Heaters, Drains, Leaks"
+        },
+        {
+         "text": "2-Year Labor Warranty"
+        }
+       ],
+       "descriptions": [
+        {
+         "text": "The official site of Lone Star Plumbing. Book a licensed plumber online in 2 minutes."
+        },
+        {
+         "text": "Emergency repairs 24/7, water heaters, drains and leaks. Free quote, upfront price."
+        },
+        {
+         "text": "Rated 4.9 by 600+ Austin homeowners. Every job comes with a 2-year labor warranty."
+        },
+        {
+         "text": "Call now or book online. A real person answers day and night."
+        }
+       ],
+       "path1": "austin"
+      }
+     },
+     "status": "ENABLED",
+     "adStrength": "GOOD",
+     "policySummary": {
+      "approvalStatus": "APPROVED"
+     }
+    },
+    "metrics": {
+     "costMicros": "96000000",
+     "clicks": "44",
+     "impressions": "616",
+     "conversions": 6,
+     "conversionsValue": 0
+    }
+   }
+  ],
+  "adsAll": [
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "adGroupAd": {
+     "ad": {
+      "id": "9001",
+      "type": "RESPONSIVE_SEARCH_AD",
+      "finalUrls": [
+       "https://www.example.com/"
+      ],
+      "responsiveSearchAd": {
+       "headlines": [
+        {
+         "text": "Plumber in Austin",
+         "pinnedField": "HEADLINE_1"
+        },
+        {
+         "text": "Austin Plumber"
+        },
+        {
+         "text": "Best Plumbers!!"
+        },
+        {
+         "text": "Call Us Today"
+        },
+        {
+         "text": "Plumbing Services"
+        }
+       ],
+       "descriptions": [
+        {
+         "text": "We are a plumbing company in Austin. Call us."
+        },
+        {
+         "text": "Plumbing services for your home."
+        }
+       ]
+      }
+     },
+     "status": "ENABLED",
+     "adStrength": "POOR",
+     "policySummary": {
+      "approvalStatus": "APPROVED"
+     }
+    }
+   },
+   {
+    "campaign": {
+     "id": "12"
+    },
+    "adGroup": {
+     "id": "702"
+    },
+    "adGroupAd": {
+     "ad": {
+      "id": "9002",
+      "type": "RESPONSIVE_SEARCH_AD",
+      "finalUrls": [
+       "https://www.example.com/water-heaters"
+      ],
+      "responsiveSearchAd": {
+       "headlines": [
+        {
+         "text": "Water Heater Repair Austin"
+        },
+        {
+         "text": "Water Heater Repair Today"
+        },
+        {
+         "text": "Licensed & Insured Plumbers"
+        },
+        {
+         "text": "4.9 Stars From 600+ Reviews"
+        },
+        {
+         "text": "Free Quote in 10 Minutes"
+        },
+        {
+         "text": "Same-Day Water Heater Service"
+        },
+        {
+         "text": "Tank & Tankless Experts"
+        },
+        {
+         "text": "Book Your Repair Online"
+        },
+        {
+         "text": "Upfront Price Before We Start"
+        },
+        {
+         "text": "Serving Austin Since 2009"
+        }
+       ],
+       "descriptions": [
+        {
+         "text": "No hot water? A licensed plumber at your door today. Get a free quote in 10 minutes."
+        },
+        {
+         "text": "Repair or replace any tank or tankless heater. Upfront price, 2-year labor warranty."
+        },
+        {
+         "text": "Rated 4.9 by 600+ Austin homeowners. Book online or call, we answer 24/7."
+        },
+        {
+         "text": "Same-day water heater repair across Austin. Call now for a free, fixed quote."
+        }
+       ],
+       "path1": "water-heaters",
+       "path2": "austin"
+      }
+     },
+     "status": "ENABLED",
+     "adStrength": "GOOD",
+     "policySummary": {
+      "approvalStatus": "APPROVED"
+     }
+    }
+   },
+   {
+    "campaign": {
+     "id": "13"
+    },
+    "adGroup": {
+     "id": "703"
+    },
+    "adGroupAd": {
+     "ad": {
+      "id": "9003",
+      "type": "RESPONSIVE_SEARCH_AD",
+      "finalUrls": [
+       "https://www.example.com/"
+      ],
+      "responsiveSearchAd": {
+       "headlines": [
+        {
+         "text": "Lone Star Plumbing Austin"
+        },
+        {
+         "text": "Lone Star Plumbing: Official"
+        },
+        {
+         "text": "Licensed Plumbers Since 2009"
+        },
+        {
+         "text": "4.9 Stars From 600+ Reviews"
+        },
+        {
+         "text": "Book Online in 2 Minutes"
+        },
+        {
+         "text": "Free Quote, Upfront Price"
+        },
+        {
+         "text": "24/7 Emergency Service"
+        },
+        {
+         "text": "Call Now, We Answer 24/7"
+        },
+        {
+         "text": "Water Heaters, Drains, Leaks"
+        },
+        {
+         "text": "2-Year Labor Warranty"
+        }
+       ],
+       "descriptions": [
+        {
+         "text": "The official site of Lone Star Plumbing. Book a licensed plumber online in 2 minutes."
+        },
+        {
+         "text": "Emergency repairs 24/7, water heaters, drains and leaks. Free quote, upfront price."
+        },
+        {
+         "text": "Rated 4.9 by 600+ Austin homeowners. Every job comes with a 2-year labor warranty."
+        },
+        {
+         "text": "Call now or book online. A real person answers day and night."
+        }
+       ],
+       "path1": "austin"
+      }
+     },
+     "status": "ENABLED",
+     "adStrength": "GOOD",
+     "policySummary": {
+      "approvalStatus": "APPROVED"
+     }
+    }
+   }
+  ],
+  "searchTerms": [
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "searchTermView": {
+     "searchTerm": "emergency plumber austin",
+     "status": "ADDED"
+    },
+    "metrics": {
+     "costMicros": "290000000",
+     "clicks": "44",
+     "impressions": "616",
+     "conversions": 8,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "searchTermView": {
+     "searchTerm": "24 hour plumber near me",
+     "status": "NONE"
+    },
+    "metrics": {
+     "costMicros": "185000000",
+     "clicks": "32",
+     "impressions": "448",
+     "conversions": 5,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "searchTermView": {
+     "searchTerm": "plumber near me",
+     "status": "ADDED"
+    },
+    "metrics": {
+     "costMicros": "160000000",
+     "clicks": "32",
+     "impressions": "448",
+     "conversions": 4,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "searchTermView": {
+     "searchTerm": "plumber jobs austin",
+     "status": "NONE"
+    },
+    "metrics": {
+     "costMicros": "48000000",
+     "clicks": "11",
+     "impressions": "154",
+     "conversions": 0,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "searchTermView": {
+     "searchTerm": "plumbing apprenticeship salary",
+     "status": "NONE"
+    },
+    "metrics": {
+     "costMicros": "26000000",
+     "clicks": "6",
+     "impressions": "84",
+     "conversions": 0,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "searchTermView": {
+     "searchTerm": "plumber salary texas",
+     "status": "NONE"
+    },
+    "metrics": {
+     "costMicros": "19000000",
+     "clicks": "5",
+     "impressions": "70",
+     "conversions": 0,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "searchTermView": {
+     "searchTerm": "how to fix a leaking pipe diy",
+     "status": "NONE"
+    },
+    "metrics": {
+     "costMicros": "31000000",
+     "clicks": "8",
+     "impressions": "112",
+     "conversions": 0,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "searchTermView": {
+     "searchTerm": "diy unclog drain",
+     "status": "NONE"
+    },
+    "metrics": {
+     "costMicros": "22000000",
+     "clicks": "6",
+     "impressions": "84",
+     "conversions": 0,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "searchTermView": {
+     "searchTerm": "plumbing supply store",
+     "status": "NONE"
+    },
+    "metrics": {
+     "costMicros": "112000000",
+     "clicks": "26",
+     "impressions": "364",
+     "conversions": 0,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "searchTermView": {
+     "searchTerm": "plumbing supply near me",
+     "status": "NONE"
+    },
+    "metrics": {
+     "costMicros": "74000000",
+     "clicks": "17",
+     "impressions": "238",
+     "conversions": 0,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "searchTermView": {
+     "searchTerm": "roto rooter austin",
+     "status": "NONE"
+    },
+    "metrics": {
+     "costMicros": "72000000",
+     "clicks": "11",
+     "impressions": "154",
+     "conversions": 0,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "adGroup": {
+     "id": "701"
+    },
+    "searchTermView": {
+     "searchTerm": "burst pipe repair cost",
+     "status": "NONE"
+    },
+    "metrics": {
+     "costMicros": "61000000",
+     "clicks": "9",
+     "impressions": "126",
+     "conversions": 0,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "12"
+    },
+    "adGroup": {
+     "id": "702"
+    },
+    "searchTermView": {
+     "searchTerm": "water heater repair austin",
+     "status": "ADDED"
+    },
+    "metrics": {
+     "costMicros": "350000000",
+     "clicks": "55",
+     "impressions": "770",
+     "conversions": 7,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "12"
+    },
+    "adGroup": {
+     "id": "702"
+    },
+    "searchTermView": {
+     "searchTerm": "water heater replacement cost",
+     "status": "NONE"
+    },
+    "metrics": {
+     "costMicros": "260000000",
+     "clicks": "38",
+     "impressions": "532",
+     "conversions": 5,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "12"
+    },
+    "adGroup": {
+     "id": "702"
+    },
+    "searchTermView": {
+     "searchTerm": "tankless water heater reviews",
+     "status": "NONE"
+    },
+    "metrics": {
+     "costMicros": "64000000",
+     "clicks": "13",
+     "impressions": "182",
+     "conversions": 0,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "12"
+    },
+    "adGroup": {
+     "id": "702"
+    },
+    "searchTermView": {
+     "searchTerm": "home depot water heater",
+     "status": "NONE"
+    },
+    "metrics": {
+     "costMicros": "44000000",
+     "clicks": "9",
+     "impressions": "126",
+     "conversions": 0,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "12"
+    },
+    "adGroup": {
+     "id": "702"
+    },
+    "searchTermView": {
+     "searchTerm": "water heater rebate texas",
+     "status": "NONE"
+    },
+    "metrics": {
+     "costMicros": "38000000",
+     "clicks": "8",
+     "impressions": "112",
+     "conversions": 0,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "13"
+    },
+    "adGroup": {
+     "id": "703"
+    },
+    "searchTermView": {
+     "searchTerm": "lone star plumbing",
+     "status": "ADDED"
+    },
+    "metrics": {
+     "costMicros": "80000000",
+     "clicks": "37",
+     "impressions": "518",
+     "conversions": 5,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "13"
+    },
+    "adGroup": {
+     "id": "703"
+    },
+    "searchTermView": {
+     "searchTerm": "lone star plumbing austin",
+     "status": "ADDED"
+    },
+    "metrics": {
+     "costMicros": "16000000",
+     "clicks": "7",
+     "impressions": "98",
+     "conversions": 1,
+     "conversionsValue": 0
+    }
+   }
+  ],
+  "matchSources": [
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "segments": {
+     "searchTermMatchSource": "ADVERTISER_PROVIDED_KEYWORD"
+    },
+    "metrics": {
+     "costMicros": "930000000",
+     "clicks": "168",
+     "impressions": "2352",
+     "conversions": 17,
+     "conversionsValue": 0
+    }
+   },
+   {
+    "campaign": {
+     "id": "11"
+    },
+    "segments": {
+     "searchTermMatchSource": "AI_MAX_KEYWORDLESS"
+    },
+    "metrics": {
+     "costMicros": "294000000",
+     "clicks": "55",
+     "impressions": "770",
+     "conversions": 2,
+     "conversionsValue": 0
+    }
+   }
+  ],
+  "customerAssets": [
+   {
+    "customerAsset": {
+     "fieldType": "SITELINK",
+     "status": "ENABLED"
+    }
+   },
+   {
+    "customerAsset": {
+     "fieldType": "SITELINK",
+     "status": "ENABLED"
+    }
+   },
+   {
+    "customerAsset": {
+     "fieldType": "CALLOUT",
+     "status": "ENABLED"
+    }
+   },
+   {
+    "customerAsset": {
+     "fieldType": "CALLOUT",
+     "status": "ENABLED"
+    }
+   },
+   {
+    "customerAsset": {
+     "fieldType": "CALLOUT",
+     "status": "ENABLED"
+    }
+   },
+   {
+    "customerAsset": {
+     "fieldType": "CALLOUT",
+     "status": "ENABLED"
+    }
+   },
+   {
+    "customerAsset": {
+     "fieldType": "CALL",
+     "status": "ENABLED"
+    }
+   }
+  ],
+  "campaignAssets": [],
+  "adGroupAssets": [],
+  "autoApply": [
+   {
+    "recommendationSubscription": {
+     "type": "KEYWORD",
+     "status": "ENABLED"
+    }
+   },
+   {
+    "recommendationSubscription": {
+     "type": "USE_BROAD_MATCH_KEYWORD",
+     "status": "ENABLED"
+    }
+   }
+  ],
+  "assetGroups": []
+ },
+ "names": {
+  "geo": {
+   "geoTargetConstants/1026201": "Austin,Texas,United States"
+  },
+  "languages": {
+   "languageConstants/1000": "English"
+  }
+ },
+ "errors": [],
+ "truncated": []
+}
