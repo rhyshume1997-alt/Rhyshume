@@ -140,9 +140,11 @@ footer{background:var(--d);color:var(--lt);font:400 12.5px/1.5 var(--mono);paddi
 .evd li .wy{margin:0;color:var(--mute)}
 .evd .cmp{margin:40px 0 0;max-width:640px}
 .evd .cmp h3{font:600 19px/1.3 var(--disp);margin:0 0 12px}
-.evd table{width:100%;border-collapse:collapse;font:400 14px/1.4 var(--body)}
+.evd table{width:100%;table-layout:fixed;border-collapse:collapse;font:400 14px/1.4 var(--body)}
 .evd th{font:500 11.5px/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase;text-align:left;padding:8px 10px 8px 0;border-bottom:1px solid var(--rule);color:var(--t)}
 .evd td{padding:9px 10px 9px 0;border-bottom:1px solid var(--rule);color:var(--ink)}
+.evd th,.evd td{overflow-wrap:anywhere}
+.evd th:first-child{width:44%}
 .evd td.no{font-weight:600;color:var(--a)}
 .evd .note{margin:26px 0 0;font:400 13px/1.5 var(--mono);color:var(--mute);max-width:52em}
 @media(max-width:900px){.evd li{grid-template-columns:34px 1fr}.evd li>div:last-child{grid-column:1 / -1}}
