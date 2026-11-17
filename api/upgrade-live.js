@@ -197,7 +197,7 @@ async function callSheet(payload) {
 // The richer page: the firm's own colours, animation, three.js hero, React quote form. If anything about it fails,
 // the plain concept page (made stand-alone) is shown instead, so a visitor always sees something.
 function richHtml(result) {
-  try { return rich.renderRich(result.content, result.brand); }
+  try { return rich.renderRich(result.content, result.brand, result.points); }
   catch (e) { console.error('upgrade-live: rich page failed, using the plain concept: ' + (e && e.message)); return standAlone(result.html); }
 }
 
