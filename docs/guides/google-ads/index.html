@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Google Ads Skill Guide</title>
+<meta name="robots" content="noindex">
+<style>
+  /* An operator's manual: plain reading column, the check output set as the centrepiece, verdicts carried by colour and word. */
+  :root {
+    --paper: #f6f5f1;
+    --card: #ffffff;
+    --ink: #1c2530;
+    --soft: #5b6673;
+    --line: #dad7cd;
+    --accent: #1a56c4;
+    --bad: #b3261e;
+    --warn: #8a5a00;
+    --good: #18703c;
+    --term: #10161d;
+    --term-ink: #dfe6ee;
+    --display: Charter, "Bitstream Charter", "Iowan Old Style", Georgia, serif;
+    --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --paper: #12171d; --card: #1a212a; --ink: #e6ebf1; --soft: #9aa6b4; --line: #2c3743;
+      --accent: #7fb0ff; --bad: #ff8a80; --warn: #f0be5a; --good: #6fd699; --term: #0b0f14; --term-ink: #dfe6ee;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --paper: #12171d; --card: #1a212a; --ink: #e6ebf1; --soft: #9aa6b4; --line: #2c3743;
+    --accent: #7fb0ff; --bad: #ff8a80; --warn: #f0be5a; --good: #6fd699; --term: #0b0f14; --term-ink: #dfe6ee;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--paper); }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.6 var(--body); }
+  main { max-width: 940px; margin: 0 auto; padding: 44px 20px 80px; display: grid; gap: 48px; }
+  section { display: grid; gap: 16px; }
+  .prose { max-width: 66ch; display: grid; gap: 12px; }
+  h1 { font: 700 clamp(32px, 6vw, 48px)/1.1 var(--display); margin: 0; text-wrap: balance; }
+  h2 { font: 700 25px/1.2 var(--display); margin: 0; text-wrap: balance; }
+  h3 { font: 600 16px/1.3 var(--body); margin: 0; }
+  p, ul, ol { margin: 0; }
+  ul, ol { padding-left: 1.2em; display: grid; gap: 8px; }
+  .lede { font-size: 20px; line-height: 1.5; }
+  .note { color: var(--soft); font-size: 15px; }
+  code { font: 0.88em var(--mono); background: color-mix(in srgb, var(--ink) 9%, transparent); padding: 1px 6px; border-radius: 5px; }
+  a { color: var(--accent); }
+
+  .flow { list-style: none; padding: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+  .flow li { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: grid; gap: 6px; align-content: start; }
+  .flow b { font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+  .flow span { font-size: 15px; }
+
+  .steps { counter-reset: s; list-style: none; padding: 0; gap: 0; border: 1px solid var(--line); border-radius: 10px; background: var(--card); }
+  .steps li { counter-increment: s; display: grid; grid-template-columns: 34px 1fr; gap: 4px 10px; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+  .steps li:last-child { border-bottom: 0; }
+  .steps li::before { content: counter(s); font: 700 18px var(--display); color: var(--accent); grid-row: span 2; }
+  .steps b { font-weight: 600; }
+  .steps span { color: var(--soft); font-size: 15px; grid-column: 2; }
+
+  .check { background: var(--term); color: var(--term-ink); border-radius: 12px; overflow: hidden; }
+  .check header { padding: 10px 16px; font: 12px var(--mono); letter-spacing: 0.04em; color: #9aa6b4; border-bottom: 1px solid #263140; }
+  .check pre { margin: 0; padding: 16px; overflow-x: auto; font: 12.5px/1.65 var(--mono); }
+  .check b { color: #ffffff; }
+  .v { display: inline-block; min-width: 46px; font-weight: 700; }
+  .check .bad { color: #ff8a80; } .check .warn { color: #f0be5a; } .check .good { color: #6fd699; }
+
+  .legend { list-style: none; padding: 0; display: grid; gap: 8px 20px; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); font-size: 15px; }
+  .legend .v { font: 700 13px var(--mono); min-width: 58px; }
+  .legend .bad { color: var(--bad); } .legend .warn { color: var(--warn); } .legend .good { color: var(--good); }
+
+  .scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--card); }
+  table { border-collapse: collapse; width: 100%; min-width: 520px; font-size: 15px; }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--soft); }
+  tr:last-child td { border-bottom: 0; }
+  td:first-child { font-weight: 600; }
+
+  .rules { counter-reset: r; list-style: none; padding: 0; display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); }
+  .rules li { border-left: 3px solid var(--accent); padding: 2px 0 2px 14px; font-size: 15px; }
+  .rules b { display: block; font-size: 16px; }
+  footer { color: var(--soft); font-size: 14px; border-top: 1px solid var(--line); padding-top: 18px; }
+</style>
+</head>
+<body>
+<main>
+  <section>
+    <div class="prose">
+      <h1>The Google Ads skill, in plain words</h1>
+      <p class="lede">A skill for Claude Code that checks a Google Ads account against what the business actually wants, shows where money went for nothing, scores every ad, and writes the fixes for you to run.</p>
+      <p>It never logs in to Google Ads. It holds no password, token or key, and nothing in the account changes until you press Run yourself.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>How it reaches the account without a login</h2>
+    <ul class="flow">
+      <li><b>In</b><span>Claude writes a read-only script. You paste it once into Google Ads (Tools, Bulk actions, Scripts). It saves one file to your Google Drive, and you put that file in <code>gads/exports/</code>.</span></li>
+      <li><b>Check</b><span>The skill reads the file on your side and prints the check: settings, searches, keywords and ads, each with its number.</span></li>
+      <li><b>Out</b><span>For the options you choose, Claude writes a second script. You paste it, press Preview to see what would change, then Run.</span></li>
+    </ul>
+    <p class="note">Some fixes have no script. For those you get the click path to follow in Google Ads, one step per line.</p>
+  </section>
+
+  <section>
+    <div class="prose">
+      <h2>First time: six questions</h2>
+      <p>Open Claude Code in a folder for the business and say "check my Google Ads". After showing an example, it asks these once and saves the answers in <code>gads/brief.json</code>.</p>
+    </div>
+    <ol class="steps">
+      <li><b>What is the business, and what should the ads bring?</b><span>Leads, sales on a website, calls, or visits to a place.</span></li>
+      <li><b>What can one of those cost at most?</b><span>If you don't know, it works it out with you: a £600 customer and 1 enquiry in 10 converting means £60 an enquiry at most.</span></li>
+      <li><b>How much a month for ads?</b><span>The budget the check holds the account to.</span></li>
+      <li><b>Where are the customers?</b><span>And whether people searching from somewhere else count. A plumber: no. A hotel: yes.</span></li>
+      <li><b>What language do they search in?</b><span>Checked against each campaign's language setting.</span></li>
+      <li><b>Your brand name, and phone hours</b><span>So the brand is never blocked by mistake, and the ad schedule is checked if calls matter.</span></li>
+    </ol>
+  </section>
+
+  <section>
+    <div class="prose">
+      <h2>What a check looks like</h2>
+      <p>This is the skill's built-in example, a plumber who wants leads. The account and every number in it are made up.</p>
+    </div>
+    <div class="check">
+      <header>EXAMPLE ACCOUNT · MADE-UP NUMBERS</header>
+      <pre tabindex="0" aria-label="Example Google Ads check output">Google Ads check (example account, made-up numbers) · Example plumber (demo) · last 30 days · nothing changed
+
+$2,236 spent · 37 leads · $60.43 each
+The 30 days before: $2,105 · 39 leads · $53.97 each (now 12% dearer)
+You want: leads at $60.00 or less · from people in Austin · $2,400 a month
+Settings: 6 wrong · 3 to check · 14 as you asked
+
+<b>The account:</b>
+  <span class="v bad">WRONG</span>  How conversions are counted: "Quote form sent" counts every time: one person who gets in touch three times counts as 3 leads. For leads, Google's own advice is "One".
+  <span class="v bad">WRONG</span>  Auto-apply recommendations: on for 2 kinds of change: Google may add new keywords and switch your keywords to broad match without asking you.
+  <span class="v warn">CHECK</span>  Extras under your ads: 2 sitelinks (Google suggests 4 or more), no structured snippets, no images. They make the ad bigger at no extra cost per click.
+         Fix: Assets → + → add them at account level so every campaign gets them.
+  <span class="v good">OK</span>     Budgets: $80 a day in total, at most $2,432 a month (you said $2,400). One day can reach $160: Google may spend up to twice the daily budget.
+
+<b>"Emergency plumber" · Search · $45 a day · $1,312 spent, 19 leads at $69.05</b>
+  <span class="v bad">WRONG</span>  Search partners: on · $212 went to other sites' search boxes, 1 lead ($212.00 each; $56.22 on Google itself)
+  <span class="v bad">WRONG</span>  Display Network: on in a Search campaign · $88 went to banners on websites and apps, 0 leads
+  <span class="v bad">WRONG</span>  Location option: "Presence or interest": your ads also reach people who are outside Austin, only searching about it · $148 went to them, 0 leads
+  <span class="v bad">WRONG</span>  AI Max: on: Google shows your ads on searches beyond your keywords, and may rewrite your ad text and pick other pages of your site · $294 went to searches it picked itself, 2 leads at $147.00 each (your keywords: $54.71 each)
+  <span class="v warn">CHECK</span>  Negative keywords: none at all: nothing stops this campaign showing on searches you'd never want.
+  <span class="v good">OK</span>     Locations: Austin,Texas,United States · Bidding: Maximize conversions
+
+<b>"Water heaters" · Search · $30 a day · $828 spent, 12 leads at $69.00</b>
+  <span class="v warn">CHECK</span>  Bidding: the target is $35.00 per lead; it has really cost $69.00. A target that far under holds your ads back (you miss 41% of searches on rank).
+         Fix: Set the target near what it costs now ($62.10), then step down 10 to 15% at a time, two weeks apart.
+  <span class="v good">OK</span>     Search partners: off · Display Network: off · Location option: Presence: people in the place · Locations: Austin,Texas,United States · AI Max: off
+
+<b>"Brand" · Search · $5 a day · $96 spent, 6 leads at $16.00</b>
+  <span class="v good">OK</span>     every setting checked is as you asked (search partners, display network, location option, locations, ai max, bidding)
+
+<b>Searches people really typed (WASTE: enough spent to block. LOOK: the biggest with nothing back; on topic or not is a judgement):</b>
+  "Emergency plumber": $465 of $1,100 (42%) went to searches with 0 leads
+  <span class="v bad">WASTE</span>  "supply" · $186 · 0 leads · in 2 searches, 3.1× your target ("plumbing supply store")
+  <span class="v bad">WASTE</span>  "diy" · $53 · 0 leads · rarely a buyer ("how to fix a leaking pipe diy")
+  <span class="v bad">WASTE</span>  "jobs" · $48 · 0 leads · rarely a buyer ("plumber jobs austin")
+  <span class="v bad">WASTE</span>  "salary" · $45 · 0 leads · rarely a buyer ("plumbing apprenticeship salary")
+  <span class="v warn">LOOK</span>   "roto rooter austin" · $72 · 0 leads
+  <span class="v warn">LOOK</span>   "burst pipe repair cost" · $61 · 0 leads
+  <span class="v good">ADD</span>    "24 hour plumber near me" · 5 leads at $37.00, and it isn't a keyword yet
+  "Water heaters": $146 of $756 (19%) went to searches with 0 leads
+  <span class="v warn">LOOK</span>   "tankless water heater reviews" · $64 · 0 leads
+  <span class="v warn">LOOK</span>   "home depot water heater" · $44 · 0 leads
+  <span class="v warn">LOOK</span>   "water heater rebate texas" · $38 · 0 leads
+  <span class="v good">ADD</span>    "water heater replacement cost" · 5 leads at $52.00, and it isn't a keyword yet
+
+<b>Keywords:</b>
+  <span class="v bad">OFF</span>    plumbing (broad) · $204 · 0 leads · 3.4× your target
+  <span class="v warn">LOW</span>    "tankless water heater" · Quality Score 3/10 · $108 · landing page below average
+
+<b>Your ads (each scored out of 20; 14 passes):</b>
+  <span class="v bad">6/20</span>   "Emergency" · poor · $1,312 spent through it
+         ✗ Enough headlines: 5 of 15: Google mixes them to find what works, so this gives it almost nothing to test
+         ✗ Enough descriptions: 2 of 4
+         ✗ A reason to pick you: nothing a competitor couldn't also say: no years, reviews, rating, guarantee or licence
+         ✗ An offer or a price: no price, offer, free quote or delivery promise anywhere
+         ✗ Google would refuse "Best Plumbers!!": an exclamation mark in a headline (Google refuses it)
+         ✗ Google would refuse "Best Plumbers!!": repeated punctuation
+  <span class="v good">PASS</span>   "Lone Star Plumbing" 18/20 · "Water heater repair" 19/20
+
+<b>Options (say which ones, or none):</b>
+  3. Block 4 searches that never paid in "Emergency plumber" ($332 in 30 days, 0 leads)
+     If I'm wrong: A blocked word also blocks every future search containing it. Read the list first and say which to leave out; a negative comes off in one click.
+  5. Search partners off in "Emergency plumber" ($212 went there in 30 days)
+     If I'm wrong: Some partner sites do bring cheap results. It switches back on in one click, and this check will show what you missed.
+  9. Rewrite the ad in "Emergency" (6/20, $1,312 spent through it)
+     If I'm wrong: The new ad runs next to the old one; the numbers decide which stays.
+     How: I write the new lines and score them before you see them; you paste them in: Ads → + → Responsive search ad.
+  ...
+  Options 3, 4, 5, 6, 7 and 8 go in one change script: you paste it, press Preview, then Run.
+Nothing changes in your account until you press Run in Google Ads.</pre>
+    </div>
+    <ul class="legend" aria-label="What each label means">
+      <li><span class="v bad">WRONG</span> A setting that goes against what you said you want</li>
+      <li><span class="v bad">WASTE</span> A search word with enough spent on it, and nothing back, to block</li>
+      <li><span class="v bad">OFF</span> A keyword worth pausing</li>
+      <li><span class="v warn">CHECK</span> Worth a look. It may be fine for you</li>
+      <li><span class="v warn">LOOK</span> A big search with nothing back. Whether it is on topic is your call</li>
+      <li><span class="v warn">LOW</span> A keyword Google rates poorly</li>
+      <li><span class="v good">OK</span> As you asked</li>
+      <li><span class="v good">ADD</span> A search that brings results and is not a keyword yet</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>The routine once it is set up</h2>
+    <ol class="steps">
+      <li><b>Say "check my Google Ads"</b><span>It reads the newest export. If the file is over a week old it asks for a fresh one.</span></li>
+      <li><b>Read the check and pick options</b><span>Say which numbers you want, or none. Leaving everything alone can be the right answer.</span></li>
+      <li><b>Paste the change script, Preview, then Run</b><span>Preview changes nothing. The script skips anything that was renamed or changed since the check.</span></li>
+      <li><b>Export again in a few days</b><span>The next check says what was fixed and what is new. The first days after a change look odd while Google adjusts.</span></li>
+    </ol>
+    <p class="note">The export script can run itself weekly from Google Ads, so a fresh file is always waiting in Drive.</p>
+  </section>
+
+  <section>
+    <h2>Other things you can ask</h2>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>You say</th><th>You get</th></tr></thead>
+        <tbody>
+          <tr><td>"Rate my ads" or "why is this ad weak"</td><td>Each responsive search ad scored out of 20 with the reasons. 14 passes.</td></tr>
+          <tr><td>"Write me a better ad"</td><td>New headlines and descriptions that have to pass the same score before you see them. It never invents a claim: unknown facts are left as [brackets] for you to fill.</td></tr>
+          <tr><td>"New campaign for ..."</td><td>A settings sheet for the campaign, the structure, and ads. After you publish, it checks that what is live matches the plan.</td></tr>
+          <tr><td>"What am I paying for" or "negative keywords"</td><td>The searches people really typed, sorted by what they cost and brought.</td></tr>
+          <tr><td>"Should I use AI Max, search partners, broad match, Performance Max"</td><td>An answer for your goal, with your numbers if there is an export.</td></tr>
+          <tr><td>"Is my tracking right"</td><td>How conversions are counted, checked first, because every other number depends on it.</td></tr>
+          <tr><td>"I can't run scripts"</td><td>Two other ways in: a Search terms report plus screenshots, or Google's own connector.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>The rules it holds itself to</h2>
+    <ul class="rules">
+      <li><b>Nothing changes unless you run it</b>It proposes. You are the only one who can change the account.</li>
+      <li><b>Only what you picked</b>A yes to one option is not a yes to another.</li>
+      <li><b>No invented numbers</b>Every figure comes from your export. No benchmarks, no promised results.</li>
+      <li><b>Enough data before a verdict</b>A word is only called waste after three times your target was spent on it with nothing back. It says "too early" when it is.</li>
+      <li><b>Meaning is checked by reading</b>Before a word is blocked it is read against what you sell, so a real customer is not shut out.</li>
+      <li><b>Your claims are yours</b>Years, reviews, prices and guarantees only go in an ad if you said they are true.</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="prose">
+      <h2>What it covers</h2>
+      <ul>
+        <li><b>Search campaigns, in full:</b> networks, locations, languages, AI Max, bidding, budgets, auto-apply, conversion setup, search terms, keywords and every responsive search ad.</li>
+        <li><b>Performance Max, in part:</b> location, bidding, final URL expansion, brand exclusions and asset strength.</li>
+        <li><b>Display, Video, Demand Gen, Shopping and App:</b> location and bidding only.</li>
+      </ul>
+      <p>It cannot see your landing page, call recordings, lead quality, or anything after the click that is not a conversion in Google Ads. Your own sales records stay the truth for money.</p>
+      <p class="note">Needs Claude Code and Node.js 18 or newer. Each business keeps its own <code>gads/</code> folder, so open Claude Code in the same folder each time.</p>
+    </div>
+  </section>
+
+  <footer>Google Ads skill 1.0 is made by Tobia Donadon (tobiadonadon.com). It is not made by, or affiliated with, Google. This page is a guide to using it, written from the skill's own instructions.</footer>
+</main>
+</body>
+</html>

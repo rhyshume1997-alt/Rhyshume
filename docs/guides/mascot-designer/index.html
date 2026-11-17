@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mascot Designer Guide</title>
+<meta name="robots" content="noindex">
+<style>
+  /* A friendly handbook: one reading column on the lavender of the mascot sheet, with rounded display type. Light by choice. */
+  :root {
+    color-scheme: light;
+    --paper: #f3f0f7;
+    --card: #ffffff;
+    --ink: #2a2140;
+    --soft: #6a5f85;
+    --line: #dcd5ea;
+    --coral: #f0624d;
+    --leaf: #2f9e62;
+    --display: "Fredoka", "Trebuchet MS", "Segoe UI", sans-serif;
+    --body: "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  @font-face { font-family: "Fredoka"; src: url("fonts/Fredoka.woff2") format("woff2"); font-weight: 300 700; font-display: swap; }
+  @font-face { font-family: "Nunito"; src: url("fonts/Nunito.woff2") format("woff2"); font-weight: 200 1000; font-display: swap; }
+  * { box-sizing: border-box; }
+  html { background: var(--paper); }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.6 var(--body); }
+  main { max-width: 920px; margin: 0 auto; padding: 44px 20px 80px; display: grid; gap: 52px; }
+  section { display: grid; gap: 16px; }
+  .prose { max-width: 64ch; display: grid; gap: 12px; }
+  h1 { font: 600 clamp(34px, 7vw, 54px)/1.05 var(--display); margin: 0; text-wrap: balance; }
+  h1 span { color: var(--coral); }
+  h2 { font: 600 26px/1.2 var(--display); margin: 0; text-wrap: balance; }
+  p, ul, ol { margin: 0; }
+  ul, ol { padding-left: 1.2em; display: grid; gap: 8px; }
+  .lede { font-size: 20px; line-height: 1.5; }
+  .note { color: var(--soft); font-size: 15px; }
+  a { color: var(--coral); }
+  a:focus-visible { outline: 2px solid var(--coral); outline-offset: 3px; }
+  code { font: 0.88em var(--mono); background: #e9e3f3; padding: 1px 6px; border-radius: 6px; }
+  pre { margin: 0; padding: 16px 18px; background: var(--ink); color: #f3f0f7; border-radius: 14px; overflow-x: auto; font: 13.5px/1.6 var(--mono); }
+  pre code { background: none; padding: 0; font-size: inherit; }
+
+  .say { display: flex; flex-wrap: wrap; gap: 10px; padding: 0; list-style: none; }
+  .say li { background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 8px 16px; font: 500 15px var(--display); }
+  .say li::before { content: "“"; color: var(--coral); }
+  .say li::after { content: "”"; color: var(--coral); }
+
+  .steps { counter-reset: s; list-style: none; padding: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+  .steps li { counter-increment: s; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 16px 18px; display: grid; gap: 6px; align-content: start; }
+  .steps li::before { content: counter(s); font: 600 22px var(--display); color: var(--coral); }
+  .steps b { font: 600 17px var(--display); }
+  .steps span { color: var(--soft); font-size: 15px; }
+
+  .two { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .way { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px 20px; display: grid; gap: 8px; align-content: start; }
+  .way h3 { font: 600 19px var(--display); margin: 0; }
+  .way.here { border-color: var(--leaf); box-shadow: inset 0 0 0 1px var(--leaf); }
+  .tag { justify-self: start; font: 600 12px var(--display); letter-spacing: 0.04em; text-transform: uppercase; color: #fff; background: var(--leaf); border-radius: 999px; padding: 3px 10px; }
+
+  figure { margin: 0; display: grid; gap: 8px; }
+  figure img { width: 100%; height: auto; display: block; border-radius: 16px; border: 1px solid var(--line); }
+  figcaption { font-size: 14px; color: var(--soft); }
+
+  .scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 16px; background: var(--card); }
+  table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 15px; }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font: 600 13px var(--display); letter-spacing: 0.04em; text-transform: uppercase; color: var(--soft); }
+  tr:last-child td { border-bottom: 0; }
+  td:first-child { font: 600 15px var(--mono); color: var(--coral); white-space: nowrap; }
+
+  .kit { list-style: none; padding: 0; display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+  .kit li { border-left: 3px solid var(--coral); padding: 2px 0 2px 14px; }
+  .kit b { display: block; font-family: var(--display); font-weight: 600; }
+  .kit span { color: var(--soft); font-size: 15px; }
+  footer { color: var(--soft); font-size: 14px; border-top: 1px solid var(--line); padding-top: 18px; }
+</style>
+</head>
+<body>
+<main>
+  <section>
+    <div class="prose">
+      <h1>Mascot Designer, <span>in plain words</span></h1>
+      <p class="lede">A skill for Claude Code that gives your app or website a character: a little creature that stands for what the product does, drawn in nine poses, with the animation and code to drop it straight in.</p>
+      <p>You ask for it in a sentence. Claude asks up to four quick questions, shows you ideas, and about ten minutes later hands over a finished kit.</p>
+    </div>
+    <ul class="say" aria-label="Things you can say to start">
+      <li>make a mascot for my app</li>
+      <li>I want a character for my website</li>
+      <li>give my app a Duolingo-style mascot</li>
+      <li>put the mascot in my app</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>How a run goes</h2>
+    <ol class="steps">
+      <li><b>Open Claude Code in your project</b><span>It reads the app's name, what it does and its brand colour first, so it doesn't ask what it can find.</span></li>
+      <li><b>Answer one round of questions</b><span>What should the mascot stand for, its personality, its colour, and where it will live.</span></li>
+      <li><b>Pick one of three ideas</b><span>Three different characters for the same meaning, shown side by side. You can ask for another round.</span></li>
+      <li><b>Wait for the poses</b><span>Every pose of your pick is drawn, cleaned up and lined up. Three to eight minutes.</span></li>
+      <li><b>Watch the film</b><span>You see the mascot living in an iPhone app and a Mac app before anything else.</span></li>
+      <li><b>Say where it goes</b><span>Claude copies the files into your app and places each move where it belongs.</span></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Two ways to get one</h2>
+    <div class="two">
+      <div class="way">
+        <h3>One of a kind</h3>
+        <p>Drawn from scratch for your product. It uses your own OpenAI account: an API key, or ChatGPT signed in through the Codex app. A mascot is about 12 images (3 ideas, 9 poses), charged to that account.</p>
+        <p class="note">To switch it on, run <code>codex login</code>, or put <code>OPENAI_API_KEY=sk-...</code> in <code>~/.mascot-designer/.env</code>.</p>
+      </div>
+      <div class="way here">
+        <span class="tag">What this workspace has now</span>
+        <h3>From the ready-made twenty</h3>
+        <p>No account needed. Claude matches your product to one of 20 finished mascots, renames it, recolours it to your brand and rewrites what it stands for.</p>
+        <p class="note">Other people using the skill can pick the same character. Only a one-of-a-kind mascot is yours alone.</p>
+      </div>
+    </div>
+    <figure>
+      <img src="library.webp" width="1800" height="1640" alt="Twenty ready-made mascots in a grid, including a piggy bank with a sprout, a cloud, a fox explorer, an owl, a robot, a flame and a shopping bag.">
+      <figcaption>The 20 ready-made mascots, in six looks: soft clay, plush, fuzzy, designer toy, flat line and retro sticker.</figcaption>
+    </figure>
+  </section>
+
+  <section>
+    <h2>What lands in your folder</h2>
+    <ul class="kit">
+      <li><b>A 32-second film</b><span>The mascot doing every move inside a realistic iPhone app and Mac app.</span></li>
+      <li><b>A character sheet</b><span>Name, what it stands for, palette and all nine poses on one poster.</span></li>
+      <li><b>For iPhone and Mac</b><span>An Xcode asset catalog and a SwiftUI view (iOS 17+, macOS 14+).</span></li>
+      <li><b>For the web</b><span>A <code>&lt;mascot-view&gt;</code> element with the same moves, frame for frame.</span></li>
+      <li><b>Every pose as a PNG</b><span>1024 px, transparent background.</span></li>
+      <li><b>A how-to file</b><span>The exact lines to paste for your platform.</span></li>
+    </ul>
+    <p class="note">On your own computer the folder is <code>~/Desktop/Mascots/&lt;Name&gt;/</code>. In a cloud session, ask Claude to save the kit into your repository so it isn't lost when the session ends.</p>
+  </section>
+
+  <section>
+    <div class="prose">
+      <h2>The moves, and where each belongs</h2>
+      <p>Every mascot gets the same set of moves. Tapping the mascot always gives a little squish.</p>
+    </div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Move</th><th>What it does</th><th>Use it for</th></tr></thead>
+        <tbody>
+          <tr><td>idle</td><td>Breathes, sways, blinks</td><td>Wherever it rests</td></tr>
+          <tr><td>appear</td><td>Pops in with sparkles</td><td>First launch, a panel opening</td></tr>
+          <tr><td>hello</td><td>Waves with its whole body</td><td>Onboarding, welcome back</td></tr>
+          <tr><td>think</td><td>Hand on chin, thought bubble</td><td>Waits longer than a second: loading, syncing</td></tr>
+          <tr><td>celebrate</td><td>Jumps, arms up, confetti</td><td>Real wins: saved, goal reached, purchase done</td></tr>
+          <tr><td>oops</td><td>Flinches, then looks worried</td><td>Errors that come with a way out</td></tr>
+          <tr><td>sleep</td><td>Sits, slow breaths, Zzz</td><td>Empty states, offline</td></tr>
+          <tr><td>point</td><td>Leans in and points</td><td>One tip at a time: a new feature, the next step</td></tr>
+          <tr><td>love</td><td>Hugs a beating heart</td><td>Thank you, rate us, upgrade done</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul class="prose">
+      <li>One mascot moment per screen. It is a character, not wallpaper.</li>
+      <li>Keep <code>celebrate</code> for real wins. If everything celebrates, nothing does.</li>
+      <li>An <code>oops</code> always comes with the fix, such as a Try again button.</li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="prose">
+      <h2>On a website</h2>
+      <p>Copy <code>mascot.js</code> and the mascot's folder into your site's public files, then:</p>
+    </div>
+<pre><code>&lt;script type="module" src="/mascot.js"&gt;&lt;/script&gt;
+&lt;mascot-view src="/penny" state="hello"&gt;&lt;/mascot-view&gt;
+
+&lt;script type="module"&gt;
+  const m = document.querySelector("mascot-view");
+  m.play("think");
+  try { await save(); m.play("celebrate"); } catch { m.play("oops"); }
+&lt;/script&gt;</code></pre>
+    <p class="note">In an iPhone or Mac app it is one line of SwiftUI: <code>PennyView(move: .celebrate)</code>.</p>
+  </section>
+
+  <section>
+    <div class="prose">
+      <h2>Changing it later</h2>
+      <ul>
+        <li><b>A colour:</b> "make the mascot our brand blue". Claude previews it first.</li>
+        <li><b>One pose:</b> "redo the thinking pose, keep it standing".</li>
+        <li><b>The name or its lines:</b> "rename it Pip" or "change what it says on the empty screen".</li>
+      </ul>
+      <p class="note">Needs Claude Code and Node.js 18 or newer. Films and sheets are rendered with Chrome, Edge or Chromium.</p>
+    </div>
+  </section>
+
+  <footer>Mascot Designer 1.0 is made by Tobia Donadon (tobiadonadon.com). This page is a guide to using it, written from the skill's own instructions.</footer>
+</main>
+</body>
+</html>
