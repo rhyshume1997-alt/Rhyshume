@@ -280,7 +280,7 @@ function renderRich(c, brandIn, points, opts) {
   const brand = '<a class="brand" href="#top" aria-label="' + esc(c.name) + '">' + (logo ? '<img src="' + logo + '" alt="' + esc(c.name) + '" referrerpolicy="no-referrer">' : esc(c.name)) + '</a>';
   const hero = c.heroPhoto && url(c.heroPhoto.src)
     ? '<div class="shot rise r3"><img src="' + url(c.heroPhoto.src) + '" alt="' + esc(c.heroPhoto.alt) + '" referrerpolicy="no-referrer"></div>'
-    : '<div class="shot empty rise r3">' + esc(c.placeholder) + '</div>';
+    : '';
   const proofItems = (c.proof || []).map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('');
   const proof = proofItems ? '<div class="proof" aria-label="' + esc(c.name) + '"><div class="wrap"><ul>' + proofItems + '</ul></div></div>' : '';
   const services = (c.services || []).map(function (s, i) {
