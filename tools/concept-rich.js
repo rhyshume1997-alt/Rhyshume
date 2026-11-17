@@ -35,11 +35,18 @@ header.nav{position:sticky;top:0;z-index:30;background:var(--paper);border-botto
 .nav nav a{text-decoration:none;font-size:15px;font-weight:500;color:var(--ink);position:relative;padding:6px 0}
 .nav nav a:after,.tlink:after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--a);transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
 .nav nav a:hover:after,.tlink:hover:after{transform:scaleX(1)}
+.nav nav a{opacity:.82;transition:transform .4s var(--ease),opacity .4s var(--ease)}
+.nav nav a:hover,.nav nav a:focus-visible{transform:translateY(-3px);opacity:1}
 .btn{position:relative;overflow:hidden;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;cursor:pointer;font:600 15px/1 var(--body);letter-spacing:.01em;padding:17px 26px;border-radius:3px;text-decoration:none}
-.btn.pri{background:var(--a);color:var(--oa);transition:color .35s}
+.btn.pri{background:var(--a);color:var(--oa)}
 .btn.pri:before{content:"";position:absolute;inset:0;background:var(--d);transform:translateY(101%);transition:transform .5s var(--ease);z-index:-1}
 .btn.pri:hover:before,.btn.pri:focus-visible:before{transform:none}
-.btn.pri:hover,.btn.pri:focus-visible{color:#fcfbf8}
+.fl{display:inline-grid;perspective:600px}
+.fl i{--dp:.575em;font-style:normal;display:inline-grid;transform-style:preserve-3d;transform:translateZ(calc(var(--dp) * -1));transition:transform .55s var(--ease)}
+.fl b{grid-area:1/1;font-weight:inherit;display:inline-flex;align-items:center;justify-content:center;height:1.15em;line-height:1.15em;backface-visibility:hidden;transform:translateZ(var(--dp))}
+.fl b+b{transform:rotateX(-90deg) translateZ(var(--dp))}
+.btn.pri .fl b+b{color:#fcfbf8}
+.btn:hover .fl i,.btn:focus-visible .fl i{transform:translateZ(calc(var(--dp) * -1)) rotateX(90deg)}
 .btn.sm{padding:13px 20px;font-size:14px}
 .tlink{position:relative;font:500 15px/1 var(--mono);text-decoration:none;color:var(--ink);padding:8px 0}
 .phone{font:500 14px/1 var(--mono);text-decoration:none;color:var(--ink)}
@@ -49,6 +56,12 @@ header.nav{position:sticky;top:0;z-index:30;background:var(--paper);border-botto
 .burger span:before{top:-7px}.burger span:after{top:7px}
 .menu-open .burger span{opacity:0}.menu-open .burger span:before,.menu-open .burger span:after{opacity:1}.menu-open .burger span:before{top:0;transform:rotate(45deg)}.menu-open .burger span:after{top:0;transform:rotate(-45deg)}
 .hero{position:relative;overflow:hidden;border-bottom:1px solid var(--rule)}
+.floor{position:absolute;inset:0;pointer-events:none;overflow:hidden;color:color-mix(in srgb,var(--d) 26%,var(--paper))}
+.floor .fg{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.45;-webkit-mask-image:radial-gradient(ellipse 80% 90% at 72% 70%,#000 20%,transparent 100%);mask-image:radial-gradient(ellipse 80% 90% at 72% 70%,#000 20%,transparent 100%)}
+.floor .spot{position:absolute;top:0;left:0;width:340px;height:340px;opacity:0;transition:opacity .4s var(--ease);will-change:transform;-webkit-mask-image:radial-gradient(closest-side,#000,transparent);mask-image:radial-gradient(closest-side,#000,transparent)}
+.floor.on .spot{opacity:.85}
+.floor .lit{position:absolute;top:0;left:0;color:var(--a);will-change:transform}
+.floor .fl2{display:block;width:100%;height:100%}
 #fx{position:absolute;inset:0;width:100%;height:100%;opacity:.9;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 40%);mask-image:linear-gradient(90deg,transparent 0,#000 40%)}
 .hero .wrap{position:relative;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(28px,5vw,80px);align-items:end;padding:clamp(48px,8vw,112px) 0 clamp(48px,7vw,96px)}
 .eyebrow{display:flex;align-items:center;gap:12px;font:500 12.5px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t)}
@@ -93,10 +106,22 @@ h2{font:800 clamp(30px,4vw,56px)/1 var(--disp);letter-spacing:-.03em;margin:18px
 .quote .split{align-items:start}.quote .split .head{top:104px}
 form.qf{background:var(--paper);color:var(--ink);padding:clamp(22px,3vw,40px);display:grid;gap:18px;border-radius:3px}
 form.qf label{display:grid;gap:8px;font:500 12px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
-form.qf input,form.qf textarea{font:400 16px/1.4 var(--body);letter-spacing:0;text-transform:none;color:var(--ink);padding:14px 14px;border-radius:3px;border:1px solid var(--rule);background:#fff0;transition:border-color .2s,box-shadow .2s}
+form.qf input,form.qf textarea{font:400 16px/1.4 var(--body);letter-spacing:0;text-transform:none;color:var(--ink);padding:14px 14px;border-radius:3px;border:1px solid var(--rule);background:#fff0}
 form.qf input:focus,form.qf textarea:focus{outline:0;border-color:var(--t);box-shadow:0 0 0 3px color-mix(in srgb,var(--a) 30%,transparent)}
 form.qf textarea{min-height:120px;resize:vertical}
 .fine{font:400 12.5px/1.5 var(--mono);color:var(--mute)}.ok{border-left:2px solid var(--t);padding:6px 0 6px 12px;font-weight:500;color:var(--ink)}
+.chg{background:var(--paper2);border-bottom:1px solid var(--rule);padding:clamp(44px,6vw,92px) 0 clamp(36px,5vw,70px)}
+.chg .read{margin:30px 0 0;padding:0;font:400 12.5px/1.45 var(--mono)}
+.chg .read div{display:grid;grid-template-columns:78px minmax(0,1fr);gap:12px;padding:10px 0;border-top:1px solid var(--rule)}
+.chg .read dt{color:var(--mute);text-transform:uppercase;letter-spacing:.08em}
+.chg .read dd{margin:0;color:var(--ink)}
+.sw{display:inline-block;width:14px;height:14px;margin-right:6px;vertical-align:-2px;border:1px solid var(--rule)}
+.sw+.hx{margin-right:14px}
+.chg ol{list-style:none;margin:0;padding:0;border-bottom:1px solid var(--rule)}
+.chg li{display:grid;grid-template-columns:56px minmax(0,1fr);gap:24px;padding:28px 0;border-top:1px solid var(--rule)}
+.chg li .n{font:400 13px/1.6 var(--mono);color:var(--mute)}
+.chg li p{margin:0;font:600 clamp(18px,1.9vw,24px)/1.3 var(--disp);letter-spacing:-.015em}
+.chg li p.why{margin-top:8px;font:400 15px/1.55 var(--body);letter-spacing:0;color:var(--mute)}
 .contact .wrap{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:clamp(28px,6vw,96px);align-items:end}
 .contact .big{font:800 clamp(34px,6.5vw,92px)/1 var(--disp);letter-spacing:-.035em;text-decoration:none;color:var(--ink);display:inline-block;position:relative}
 .contact .big:after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:3px;background:var(--a);transform:scaleX(0);transform-origin:left;transition:transform .6s var(--ease)}
@@ -109,11 +134,11 @@ footer{background:var(--d);color:var(--lt);font:400 12.5px/1.5 var(--mono);paddi
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
 .reveal.in{opacity:1;transform:none}
 .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}
-@media (prefers-reduced-motion:reduce){.rise{animation:none}.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}.row:hover h3{transform:none}}
+@media (prefers-reduced-motion:reduce){.rise{animation:none}.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}.row:hover h3{transform:none}.fl i{transition:none}.btn:hover .fl i,.btn:focus-visible .fl i{transform:translateZ(calc(var(--dp) * -1))}.nav nav a{transition:none}.nav nav a:hover{transform:none}.floor .spot{transition:none}}
 @media (max-width:900px){
  .burger{display:block}.nav nav{position:absolute;left:0;right:0;top:72px;background:var(--paper);flex-direction:column;align-items:flex-start;gap:0;padding:6px var(--gut) 20px;border-bottom:1px solid var(--rule);display:none}
  .menu-open .nav nav{display:flex}.nav nav a{padding:15px 0;width:100%;font-size:19px;border-bottom:1px solid var(--rule)}.nav nav a:after{display:none}
- .nav .phone,.nav .btn{display:none}
+ .nav .phone,.nav .btn{display:none}.nav nav a{opacity:1}.nav nav a:hover,.nav nav a:focus-visible{transform:none}.chg li{grid-template-columns:40px 1fr;gap:6px 14px;padding:22px 0}.floor{display:none}
  .hero .wrap{grid-template-columns:1fr;align-items:start}.shot{aspect-ratio:16/10}#fx{-webkit-mask-image:none;mask-image:none;opacity:.55}
  .split,.contact .wrap{grid-template-columns:1fr}.split .head{position:static}
  .row{grid-template-columns:40px 1fr;gap:6px 14px;padding:24px 0}.row .t2{grid-column:2}
@@ -137,7 +162,18 @@ const FX = `
   var b=document.querySelector('.burger');
   if(b){b.addEventListener('click',function(){var o=document.body.classList.toggle('menu-open');b.setAttribute('aria-expanded',o?'true':'false');});
     [].forEach.call(document.querySelectorAll('.nav nav a'),function(a){a.addEventListener('click',function(){document.body.classList.remove('menu-open');});});}
-  // three.js hero: a slow wireframe contour surface in the firm's own colour, behind the headline
+  // floor grid: a copy in the firm's accent colour shows through a round window that follows the mouse (transform only)
+var fl=document.querySelector('.floor');
+if(fl&&!reduce&&window.matchMedia&&window.matchMedia('(hover:hover) and (pointer:fine)').matches){
+var hr=fl.parentNode,sp=fl.querySelector('.spot'),lit=fl.querySelector('.lit'),S=340,raf=0;
+var fit=function(){lit.style.width=hr.clientWidth+'px';lit.style.height=hr.clientHeight+'px';};
+fit();window.addEventListener('resize',fit);
+hr.addEventListener('pointermove',function(e){if(e.pointerType!=='mouse')return;cancelAnimationFrame(raf);
+raf=requestAnimationFrame(function(){var r=hr.getBoundingClientRect(),x=e.clientX-r.left-S/2,y=e.clientY-r.top-S/2;
+sp.style.transform='translate3d('+x+'px,'+y+'px,0)';lit.style.transform='translate3d('+(-x)+'px,'+(-y)+'px,0)';fl.classList.add('on');});});
+hr.addEventListener('pointerleave',function(){cancelAnimationFrame(raf);fl.classList.remove('on');});
+}
+// three.js hero: a slow wireframe contour surface in the firm's own colour, behind the headline
   function hero3d(){
     var cv=document.getElementById('fx'); if(!cv||!window.THREE||reduce) return;
     var T=window.THREE, st=getComputedStyle(document.documentElement);
@@ -170,7 +206,7 @@ const FX = `
       function field(k,label,type){return h('label',{key:k},label,type==='area'?h('textarea',{value:v[k],onChange:on(k),required:k==='need'}):h('input',{type:type||'text',value:v[k],onChange:on(k),required:k==='name'||k==='email'}));}
       return h('form',{className:'qf',onSubmit:function(e){e.preventDefault();setSent(true);}},
         field('name',d.name),field('email',d.email,'email'),field('phone',d.phone,'tel'),field('need',d.need,'area'),
-        h('button',{className:'btn pri',type:'submit',disabled:sent},d.send),
+        h('button',{className:'btn pri',type:'submit',disabled:sent},h('span',{className:'fl'},h('i',null,h('b',null,d.send),h('b',{'aria-hidden':'true'},d.send)))),
         sent?h('div',{className:'ok',role:'status'},d.status):h('div',{className:'fine'},d.note));
     }
     var node=ReactDOM.createRoot?ReactDOM.createRoot(root):null; if(!node) return;
@@ -184,7 +220,40 @@ const FX = `
 })();
 `;
 
-function renderRich(c, brandIn) {
+function flip(label) {
+  return '<span class="fl"><i><b>' + esc(label) + '</b><b aria-hidden="true">' + esc(label) + '</b></i></span>';
+}
+
+// The floor grid behind the hero: the same diamond pattern twice, grey and in the firm's accent colour.
+function floorSvg(id, cls) {
+  return '<svg class="' + cls + '" width="100%" height="100%" aria-hidden="true"><defs><pattern id="' + id + '" width="84" height="48" patternUnits="userSpaceOnUse"><path d="M0 24L42 0L84 24M0 24L42 48L84 24" fill="none" stroke="currentColor" stroke-width=".8"/></pattern></defs><rect width="100%" height="100%" fill="url(#' + id + ')"/></svg>';
+}
+
+// What was read from their site and what changed. Every value comes from the content the engine already checked,
+// the colours and fonts found by tools/brand.js, and the change list the engine wrote (points). Nothing is made up.
+function changesSection(c, b, fonts, points) {
+  const list = (Array.isArray(points) ? points : []).map(function (p) { return String(p || ''); }).filter(Boolean).slice(0, 5);
+  if (!list.length) return '';
+  const sw = function (hex) { return '<span class="sw" style="background:' + hex + '"></span><span class="hx">' + esc(hex) + '</span>'; };
+  const own = fonts.display || fonts.body;
+  const nPhotos = (c.heroPhoto ? 1 : 0) + (c.photos || []).length;
+  const read = [
+    ['Colours', b.found ? sw(b.primary) + sw(b.accent) : 'None found on the site, house colours used'],
+    ['Fonts', own ? esc(fonts.display || own) + (fonts.body && fonts.body !== fonts.display ? ', ' + esc(fonts.body) : '') : 'None of their own found, house fonts used'],
+    ['Logo', c.logo ? 'Found and used' : 'None found, the name is shown as text'],
+    ['Photos', nPhotos ? nPhotos + ' from their site' : 'None found, a marked space is shown'],
+    ['Phone', c.phone ? esc(c.phone.display) : 'None found'],
+    ['Email', c.email ? esc(c.email) : 'None found'],
+    ['Services', (c.services || []).length + ' taken from their pages']
+  ].map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + r[1] + '</dd></div>'; }).join('');
+  const items = list.map(function (p, i) {
+    const cut = p.split(' Why: ');
+    return '<li class="reveal"><span class="n">' + String(i + 1).padStart(2, '0') + '</span><div><p>' + esc(cut[0]) + '</p>' + (cut[1] ? '<p class="why">' + esc(cut[1].charAt(0).toUpperCase() + cut[1].slice(1)) + '</p>' : '') + '</div></li>';
+  }).join('');
+  return '<section class="chg" id="changes"><div class="wrap split"><div class="head reveal"><span class="eyebrow">Built from ' + esc(c.host || c.name) + '</span><h2>What changed</h2><dl class="read">' + read + '</dl></div><ol>' + items + '</ol></div></section>';
+}
+
+function renderRich(c, brandIn, points) {
   const b = Object.assign({ primary: '#1f3a5f', accent: '#c8562a', dark: '#0f1d30', soft: '#eef2f7', ink: '#111827', onPrimary: '#ffffff', onAccent: '#ffffff', text: '#1f3a5f' }, brandIn || {});
   ['primary', 'accent', 'dark', 'soft', 'ink', 'onPrimary', 'onAccent', 'text'].forEach(function (k) { b[k] = hexOk(b[k], '#1f3a5f'); });
 
@@ -214,7 +283,7 @@ function renderRich(c, brandIn) {
   const fallbackForm = '<form class="qf" onsubmit="event.preventDefault();this.querySelector(\'.fine\').textContent=\'' + esc(c.demoStatus).replace(/'/g, '') + '\'">' +
     '<label>' + esc(L.name) + '<input required></label><label>' + esc(L.email) + '<input type="email" required></label>' +
     '<label>' + esc(L.phone) + '<input type="tel"></label><label>' + esc(L.need) + '<textarea required></textarea></label>' +
-    '<button class="btn pri" type="submit">' + esc(c.send) + '</button><div class="fine">' + esc(c.demoNote) + '</div></form>';
+    '<button class="btn pri" type="submit">' + flip(c.send) + '</button><div class="fine">' + esc(c.demoNote) + '</div></form>';
   const about = c.about ? '<section class="about" id="about"><div class="wrap split"><div class="head reveal"><span class="eyebrow">' + esc(c.aboutHeading) + '</span><h2>' + esc(c.name) + '</h2></div><p class="lead reveal d1">' + esc(c.about) + '</p></div></section>' : '';
   const contactLinks = (c.phone ? '<a class="big" href="tel:' + esc(c.phone.href) + '">' + esc(c.phone.display) + '</a>' : '') +
     (c.email ? '<a class="mail" href="mailto:' + esc(c.email) + '">' + esc(c.email) + '</a>' : '');
@@ -227,13 +296,13 @@ function renderRich(c, brandIn) {
     '<header class="nav"><div class="wrap">' + brand +
     '<nav aria-label="Main"><a href="#services">' + esc(c.servicesHeading) + '</a>' + (c.about ? '<a href="#about">' + esc(c.aboutHeading) + '</a>' : '') +
     '<a href="#quote">' + esc(c.quoteHeading) + '</a><a href="#contact">' + esc(c.contactHeading) + '</a></nav>' + phone +
-    '<a class="btn pri sm" href="#quote">' + esc(c.quoteButton) + '</a>' +
+    '<a class="btn pri sm" href="#quote">' + flip(c.quoteButton) + '</a>' +
     '<button class="burger" aria-label="Menu" aria-expanded="false"><span></span></button></div></header>' +
-    '<main><section class="hero" style="padding:0"><canvas id="fx" aria-hidden="true"></canvas><div class="wrap">' +
+    '<main><section class="hero" style="padding:0"><div class="floor" aria-hidden="true">' + floorSvg('fc', 'fg') + '<div class="spot"><div class="lit">' + floorSvg('fcl', 'fl2') + '</div></div></div><canvas id="fx" aria-hidden="true"></canvas><div class="wrap">' +
     '<div><span class="eyebrow rise r1">' + esc(c.name) + '</span><h1 class="rise r2' + (String(c.headline || '').length > 58 ? ' long' : '') + '">' + esc(c.headline) + '</h1>' +
     '<p class="intro rise r3">' + esc(c.intro) + '</p>' + (c.area ? '<p class="area rise r3">' + esc(c.area) + '</p>' : '') +
-    '<div class="ctas rise r4"><a class="btn pri" href="#quote">' + esc(c.quoteButton) + '</a>' + (c.phone ? '<a class="tlink" href="tel:' + esc(c.phone.href) + '">' + esc(c.phone.display) + '</a>' : '') + '</div></div>' +
-    hero + '</div></section>' + proof +
+    '<div class="ctas rise r4"><a class="btn pri" href="#quote">' + flip(c.quoteButton) + '</a>' + (c.phone ? '<a class="tlink" href="tel:' + esc(c.phone.href) + '">' + esc(c.phone.display) + '</a>' : '') + '</div></div>' +
+    hero + '</div></section>' + proof + changesSection(c, b, fonts, points) +
     '<section id="services"><div class="wrap"><div class="split"><div class="head reveal"><span class="eyebrow">' + esc(c.name) + '</span><h2>' + esc(c.servicesHeading) + '</h2></div>' +
     '<div class="rows">' + services + '</div></div>' + (photos ? '<div class="photos">' + photos + '</div>' : '') + '</div></section>' +
     about +
