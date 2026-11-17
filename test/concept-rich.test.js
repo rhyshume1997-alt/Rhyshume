@@ -43,7 +43,7 @@ test('rich page: still a complete page with no phone, no photo and no about text
   const html = renderRich(content({ phone: null, email: null, heroPhoto: null, about: '', callBar: '' }), null);
   assert.ok(html.startsWith('<!DOCTYPE html>'));
   assert.ok(!html.includes('class="callbar"'));
-  assert.ok(html.includes('Placeholder'));
+  assert.ok(!html.includes('Placeholder'));
 });
 
 test('rich page: shows what was read and what changed only when the engine gives a change list', function () {
