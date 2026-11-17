@@ -113,7 +113,8 @@ test('only their own photos are used, and the others are reported', async functi
 
 test('it reads the home page and up to 3 linked pages, from their own site only', async function () {
   const r = await generate(GOOD);
-  assert.deepStrictEqual(r.net.calls.pages, [SITE + '/', SITE + '/services', SITE + '/about-us', SITE + '/contact']);
+  assert.deepStrictEqual(r.net.calls.pages.filter(function (u) { return !/sitemap\.xml$/.test(u); }), [SITE + '/', SITE + '/services', SITE + '/about-us', SITE + '/contact']);
+  assert.ok(r.net.calls.pages.every(function (u) { return u.indexOf(SITE) === 0; }), 'a request left their site');
 });
 
 test('the demo quote form posts nowhere', async function () {

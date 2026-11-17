@@ -67,3 +67,27 @@ test('prototype notice and the how this helps section appear with a cta and cove
   const plain = rich.renderRich(base, null, null);
   assert.ok(!plain.includes('How this helps your business'));
 });
+
+test('evidence checks find real problems, quote proof, and a clean page passes', () => {
+  const ev = require('../tools/evidence');
+  const bad = '<html><head><title>Steel</title></head><body><p>Call 0845 123 4567 Fax 01382 111 222 © 2019</p><img src="a.jpg"><img src="b.jpg"><img src="c.jpg"></body></html>';
+  const found = ev.checkSite([{ url: 'http://x.co.uk/', html: bad }], { sitemap: false }, new Date('2026-11-17'));
+  const ids = ev.topProblems(found, 20).map(p => p.id);
+  ['viewport', 'description', 'h1', 'schema', 'form', 'https', 'sitemap', 'year', 'fax', 'nongeo', 'alt', 'title'].forEach(id => assert.ok(ids.includes(id), id));
+  assert.ok(found.find(c => c.id === 'year').proof.includes('2019'));
+  const good = '<html><head><title>Calder Engineering, steel fabrication in Thurso</title><meta name="viewport" content="width=device-width"><meta name="description" content="x"><meta property="og:title" content="x"><script type="application/ld+json">{}</script></head><body><h1>Calder</h1><a href="tel:+441847123456">01847 123456</a><form><textarea></textarea></form></body></html>';
+  const ok = ev.checkSite([{ url: 'https://y.co.uk/', html: good }], { sitemap: true }, new Date('2026-11-17'));
+  assert.deepStrictEqual(ev.topProblems(ok, 20).map(p => p.id), []);
+  const cmp = ev.compare(found, ok);
+  assert.ok(cmp.length > 3 && cmp.every(r => r.comp === true));
+});
+
+test('evidence section shows proof and the comparison, and is absent with no problems', () => {
+  const evidence = { host: 'x.co.uk', checkedOn: '2026-11-17', problems: [{ issue: 'No form', proof: 'None found.', why: 'Buyers leave.' }], compHost: 'y.co.uk', compare: [{ label: 'Tap to call', theirs: false, comp: true }] };
+  const html = rich.renderRich(base, null, null, { cta: { mail: 'mailto:rhys@rhyshume.co.uk' }, evidence });
+  assert.ok(html.includes('Problems on your current site you may not know about'));
+  assert.ok(html.includes('None found.') && html.includes('The same checks on y.co.uk'));
+  assert.ok(!html.includes('—'));
+  const none = rich.renderRich(base, null, null, { cta: { mail: 'mailto:rhys@rhyshume.co.uk' }, evidence: { host: 'x', problems: [] } });
+  assert.ok(!none.includes('you may not know about'));
+});
