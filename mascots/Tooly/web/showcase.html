@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tooly</title>
+<meta name="robots" content="noindex">
+<style>
+  /* Tooly's own palette: Tolra navy and cobalt, hi-vis orange. A product page for one character, light by choice. */
+  :root {
+    color-scheme: light;
+    --paper: #eef2fc;
+    --card: #ffffff;
+    --ink: #14213f;
+    --soft: #55627f;
+    --line: #d3dcf2;
+    --navy: #1e3472;
+    --cobalt: #2855c5;
+    --orange: #fb7603;
+    --display: ui-rounded, "SF Pro Rounded", "Trebuchet MS", system-ui, sans-serif;
+    --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--paper); }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.6 var(--body); }
+  main { max-width: 960px; margin: 0 auto; padding: 36px 20px 72px; display: grid; gap: 44px; }
+  section, .hero > * { display: grid; gap: 16px; min-width: 0; }
+  main > *, section > * { min-width: 0; }
+  h1 { font: 800 clamp(40px, 9vw, 72px)/1 var(--display); margin: 0; color: var(--navy); }
+  h2 { font: 800 24px/1.2 var(--display); margin: 0; color: var(--navy); }
+  p { margin: 0; max-width: 62ch; }
+  .lede { font-size: 20px; line-height: 1.45; }
+  .note { color: var(--soft); font-size: 15px; }
+  code { font: 0.88em var(--mono); background: #e2e9fa; padding: 1px 6px; border-radius: 6px; }
+  a { color: var(--cobalt); }
+
+  .hero { display: grid; gap: 24px; grid-template-columns: 1.1fr 1fr; align-items: center; }
+  @media (max-width: 720px) { .hero { grid-template-columns: 1fr; } }
+  .stage { overflow: hidden; background: radial-gradient(circle at 50% 70%, #fff, #dfe7fb); border: 1px solid var(--line); border-radius: 24px; padding: 18px 12px 14px; display: grid; justify-items: center; gap: 12px; }
+  mascot-view { width: min(300px, 70vw); display: block; }
+  .moves { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .moves button {
+    font: 700 14px var(--display); border: 0; border-radius: 999px; padding: 9px 15px; cursor: pointer;
+    background: var(--card); color: var(--ink); box-shadow: 0 0 0 1.5px #2855c540, 0 5px 14px -10px #0006;
+  }
+  .moves button[aria-pressed="true"] { background: var(--cobalt); color: #fff; }
+  button:focus-visible, a:focus-visible, video:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+
+  .wide { width: 100%; height: auto; display: block; border-radius: 18px; border: 1px solid var(--line); background: var(--card); }
+  video { width: 100%; height: auto; display: block; border-radius: 18px; border: 1px solid var(--line); background: #dfe7fb; }
+
+  .table { overflow-x: auto; border: 1px solid var(--line); border-radius: 16px; background: var(--card); }
+  table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 15px; }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font: 700 12px var(--display); letter-spacing: 0.06em; text-transform: uppercase; color: var(--soft); }
+  tr:last-child td { border-bottom: 0; }
+  td:first-child { font: 700 15px var(--mono); color: var(--cobalt); white-space: nowrap; }
+  pre { margin: 0; padding: 16px 18px; background: var(--navy); color: #eef2fc; border-radius: 14px; overflow-x: auto; font: 13.5px/1.6 var(--mono); }
+</style>
+</head>
+<body>
+<main>
+  <section class="hero">
+    <div style="display:grid;gap:14px">
+      <h1>Tooly</h1>
+      <p class="lede">A spanner you can talk to. Tooly is the face of Tolra's AI helper: ask in plain words, and the job gets sorted.</p>
+      <p class="note">Press a move to see it. Tap Tooly for a squish.</p>
+    </div>
+    <div class="stage">
+      <mascot-view id="m" src="./tooly" state="appear" aria-label="Tooly, a blue spanner mascot"></mascot-view>
+      <div class="moves" id="moves" role="group" aria-label="Moves">
+        <button type="button" data-move="idle">idle</button>
+        <button type="button" data-move="appear">appear</button>
+        <button type="button" data-move="hello">hello</button>
+        <button type="button" data-move="think">think</button>
+        <button type="button" data-move="celebrate">celebrate</button>
+        <button type="button" data-move="oops">oops</button>
+        <button type="button" data-move="sleep">sleep</button>
+        <button type="button" data-move="point">point</button>
+        <button type="button" data-move="love">love</button>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Tooly inside an app</h2>
+    <video controls playsinline preload="metadata" aria-label="32 second film of Tooly in an iPhone app and a Mac app"><source src="../Tooly.mp4" type="video/mp4"></video>
+    <p class="note">32 seconds: an iPhone app, a Mac app, then every move. The words are written for Tolra's helper.</p>
+  </section>
+
+  <section>
+    <h2>Character sheet</h2>
+    <img class="wide" src="../Tooly character sheet.png" width="2400" height="1600" alt="Tooly character sheet: name, what it stands for, palette and all nine poses.">
+  </section>
+
+  <section>
+    <h2>Where each move goes in the helper</h2>
+    <div class="table">
+      <table>
+        <thead><tr><th>Move</th><th>When the helper</th></tr></thead>
+        <tbody>
+          <tr><td>hello</td><td>opens for the first time, or someone returns to it</td></tr>
+          <tr><td>think</td><td>is working on an answer or an action</td></tr>
+          <tr><td>celebrate</td><td>finishes something real, such as a quote drafted or a job despatched</td></tr>
+          <tr><td>oops</td><td>fails or hits the spend cap, with Try again beside it</td></tr>
+          <tr><td>sleep</td><td>is switched off for the company, or has nothing to show yet</td></tr>
+          <tr><td>point</td><td>suggests something to ask, one tip at a time</td></tr>
+          <tr><td>love</td><td>asks whether the answer helped</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Using the web version</h2>
+<pre><code>&lt;script type="module" src="/mascot.js"&gt;&lt;/script&gt;
+&lt;mascot-view src="/tooly" state="idle" style="width:200px"&gt;&lt;/mascot-view&gt;
+
+&lt;script type="module"&gt;
+  const m = document.querySelector("mascot-view");
+  m.play("think");
+  try { await ask(); m.play("celebrate"); } catch { m.play("oops"); }
+&lt;/script&gt;</code></pre>
+    <p class="note">For iPhone and Mac there is an Xcode asset catalog and a SwiftUI view: <code>ToolyView(move: .celebrate)</code>. Both are in the kit on the <code>claude/rive-night-city-hovercar-ti6uzb</code> branch under <code>mascots/Tooly</code>.</p>
+  </section>
+</main>
+<script type="module">
+  import "./mascot.js";
+  const m = document.getElementById("m");
+  const buttons = [...document.querySelectorAll("#moves button")];
+  for (const b of buttons) {
+    b.addEventListener("click", () => {
+      m.play(b.dataset.move);
+      buttons.forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    });
+  }
+</script>
+</body>
+</html>
