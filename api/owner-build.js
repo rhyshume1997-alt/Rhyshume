@@ -1,7 +1,7 @@
 'use strict';
 
 /*
-  POST /api/owner-build   (JSON: { key, website })
+  POST /api/owner-build   (JSON: { key, website, competitor? })
   Rhys only. Builds one concept for one prospect website with the same engine as the public /upgrade button,
   but with no Turnstile and no Sheet limits, saves it under a private random link, and returns that link.
 
@@ -56,21 +56,24 @@ module.exports = async function handler(req, res) {
   const site = upgrade.cleanWebsite(body.website);
   if (!site) return json(res, 400, { ok: false, error: 'bad_website' });
 
+  const comp = body.competitor ? upgrade.cleanWebsite(body.competitor) : null;
+  if (body.competitor && !comp) return json(res, 400, { ok: false, error: 'bad_competitor' });
+  const competitorUrl = comp ? comp.url : undefined;
   const deadline = Date.now() + BUDGET_MS;
   const slug = 'own-' + crypto.randomBytes(5).toString('hex');
   const outRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'owner-'));
   try {
     const result = await preview.run({
-      url: site.url, slug: slug, apiKey: process.env.ANTHROPIC_API_KEY, model: process.env.ANTHROPIC_MODEL || undefined,
+      url: site.url, competitor: competitorUrl, slug: slug, apiKey: process.env.ANTHROPIC_API_KEY, model: process.env.ANTHROPIC_MODEL || undefined,
       fetchImpl: live.makeFetch(deadline), outRoot: outRoot, measure: false
     });
     const cta = { mail: 'mailto:' + REPLY_EMAIL + '?subject=' + encodeURIComponent('Re: the concept for ' + site.domain), book: process.env.OWNER_BOOK_URL || '' };
-    const html = rich.renderRich(result.content, result.brand, result.points, { cta: cta });
+    const html = rich.renderRich(result.content, result.brand, result.points, { cta: cta, evidence: result.evidence });
     const id = crypto.randomBytes(12).toString('hex');
     await blob.put(id, html);
     console.log('owner-build: saved a concept for ' + site.domain);
     return json(res, 200, {
-      ok: true, host: site.host, link: BASE + '/c/' + id,
+      ok: true, host: site.host, link: BASE + '/c/' + id, problems: result.evidence ? result.evidence.problems.length : 0, compared: !!(result.evidence && result.evidence.compare),
       warnings: (result.warnings || []).filter(function (w) { return !/screenshot|competitor/i.test(w); })
     });
   } catch (e) {
