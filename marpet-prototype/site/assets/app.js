@@ -1,6 +1,7 @@
 // Marpet prototype: progressive enhancement only. Every page is a real HTML file,
 // so links, direct URLs and back/forward work with this script switched off.
 (() => {
+  const clamp01 = (x) => Math.min(1, Math.max(0, x));
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -198,131 +199,116 @@
   }
   const on = (el, ev, fn, o) => { el.addEventListener(ev, fn, o); cleanup.push(() => el.removeEventListener(ev, fn, o)); };
 
-  // Homepage hero. On wide screens the opening is a rendered film (close on a weld, across the steel,
-  // pull back) that ends on the exact view the live 3D scene starts from, then fades to it.
-  // Phones, and any case where the film cannot play, use the live scene's own opening instead.
-  // The header and quote button never wait for any of it.
+  // Homepage opening, built from Marpet photographs: close on the brushed side panel of a Marpet conveyor,
+  // a light travels across it, the camera drifts along the steel, then dissolves and pulls back into the
+  // production hall where the headline arrives. Scroll then carries the camera on through three scenes.
+  // The header, menu and quote button never wait for any of it.
   function initHero() {
-    const root = $('[data-hero]');
-    if (!root) return;
-    const section = root.closest('.hero');
-    const skip = $('[data-hero-skip]', section), replay = $('[data-hero-replay]', section), film = $('[data-film]', section);
-    const q = new URLSearchParams(location.search);
+    const section = $('[data-open]');
+    if (!section) return;
+    const skip = $('[data-hero-skip]', section), replay = $('[data-hero-replay]', section);
+    const MP = window.MP, q = new URLSearchParams(location.search);
     const ready = () => section.classList.add('is-ready');
-    const fallback = () => { section.classList.add('is-static'); ready(); };
-    let webgl = false;
-    try { webgl = !!document.createElement('canvas').getContext('webgl2'); } catch (e) {}
-    if (!webgl || q.has('static')) { fallback(); return; }
+    if (!MP || reduce.matches || q.has('static')) { section.classList.add('is-static', 'is-done'); ready(); return; }
+    section.classList.add('is-scrolly');   // pinned layout from the first frame, so no copy shows through the opening
     let seen = false;
     try { seen = localStorage.getItem('mp-intro') === '1'; } catch (e) {}
-    const wantIntro = !reduce.matches && (!seen || q.has('intro')) && !q.has('assembled');
-    const filmOK = film && innerWidth >= 900 && !q.has('nofilm');
-    const filmSrc = () => (film.canPlayType('video/webm; codecs="vp9"') ? film.dataset.src.replace('.mp4', '.webm') : film.dataset.src);
-    let useFilm = wantIntro && filmOK, viewerReady = false, filmStarted = false, filmDone = !useFilm, finished = false;
-    const giveUp = setTimeout(ready, 6000);   // slow connection: show the copy; the scene joins when it arrives
-    cleanup.push(() => clearTimeout(giveUp));
-
-    const handOver = () => {   // film finished and the live scene is ready: fade one into the other
-      if (finished || !viewerReady || !filmDone) return;
-      finished = true; root.viewer.finish(); if (film) film.classList.add('is-out');
-    };
-    const liveIntro = () => { skip.hidden = false; root.viewer.play(); };
-    const endIntro = () => {
-      if (useFilm && filmStarted && !filmDone) { film.pause(); filmDone = true; ready(); handOver(); }
-      else if (root.viewer && root.viewer.playing) root.viewer.finish();
-    };
-    const filmFailed = () => { if (filmStarted || !useFilm) return; useFilm = false; filmDone = true; if (viewerReady && !finished) liveIntro(); };
-    const playFilm = () => {
-      filmStarted = true; filmDone = false; finished = false;
-      section.classList.add('is-film'); film.classList.remove('is-out'); skip.hidden = false;
-      film.currentTime = 0;
-      film.play().catch(() => { filmStarted = false; filmFailed(); });
-    };
-
-    on(root, 'viewer:reveal', ready);
-    on(root, 'viewer:done', () => {
-      section.classList.add('is-done'); skip.hidden = true; replay.hidden = reduce.matches;
-      if (!reduce.matches) root.viewer.run(true);
+    const wantIntro = (!seen || q.has('intro')) && !q.has('assembled');
+    let tl = null, scene = null;
+    const done = () => {
+      section.classList.add('is-done'); ready(); skip.hidden = true; replay.hidden = false;
       try { localStorage.setItem('mp-intro', '1'); } catch (e) {}
-    });
-    on(root, 'viewer:ready', () => {
-      viewerReady = true; clearTimeout(giveUp); section.classList.add('is-live'); initScene(section, root);
-      if (!wantIntro) { root.viewer.finish(); return; }
-      if (useFilm) handOver(); else liveIntro();
-    });
+      if (!scene) scene = initScene(section);
+    };
+    const end = () => { if (tl && tl.isActive()) tl.progress(1); };
     if (wantIntro) {
-      on(skip, 'click', endIntro);
-      on(window, 'keydown', (e) => { if (e.key === 'Escape') endIntro(); });
-      on(window, 'wheel', endIntro, { passive: true });
-      on(window, 'touchmove', endIntro, { passive: true });
-    }
-    if (film && filmOK) {
-      on(film, 'timeupdate', () => { if (film.duration && film.currentTime > film.duration * 0.6) ready(); });
-      on(film, 'ended', () => { filmDone = true; ready(); handOver(); });
-      on(film, 'error', filmFailed);
-    }
-    if (useFilm) {
-      const slow = setTimeout(filmFailed, 3500);   // film not ready in time: use the live opening
-      cleanup.push(() => clearTimeout(slow));
-      on(film, 'canplaythrough', () => { clearTimeout(slow); if (!filmStarted && useFilm) playFilm(); });
-      film.src = filmSrc(); film.load();
+      tl = MP.opening(section).eventCallback('onComplete', done);
+      skip.hidden = false;
+      const start = () => { if (section.isConnected) tl.play(0); };
+      const first = $('[data-shot=macro] img', section);
+      // start when the first close-up has arrived, or after a second and a half whatever happens
+      const go = setTimeout(start, 1500); cleanup.push(() => clearTimeout(go));
+      if (first.complete) { clearTimeout(go); start(); } else on(first, 'load', () => { clearTimeout(go); start(); });
+      on(skip, 'click', end);
+      on(window, 'keydown', (e) => { if (e.key === 'Escape') end(); });
+      on(window, 'wheel', end, { passive: true });
+      on(window, 'touchmove', end, { passive: true });
+      cleanup.push(() => tl.kill());
+    } else {
+      MP.opening(section).progress(1).kill();
+      done();
     }
     on(replay, 'click', () => {
-      section.classList.remove('is-ready', 'is-done'); replay.hidden = true; root.viewer.run(false); scrollTo(0, 0);
-      if (filmOK) { useFilm = true; if (!film.getAttribute('src')) film.src = filmSrc(); playFilm(); } else liveIntro();
+      scrollTo(0, 0); section.classList.remove('is-ready', 'is-done'); replay.hidden = true; skip.hidden = false;
+      if (scene) { scene.kill(); scene = null; }
+      tl = MP.opening(section).eventCallback('onComplete', done); tl.play(0);
     });
-    import('./viewer.min.js').then((m) => root.isConnected && m.initViewer(root)).catch(fallback);
   }
 
-  // ---- Homepage scene: one pinned 3D stage. Scroll moves the camera and swaps the chapters of copy. ----
-  const clamp01 = (x) => Math.min(1, Math.max(0, x));
-  function initScene(section, root) {
-    if (reduce.matches) return;
+  // ---- Homepage scenes: the stage stays pinned while scroll moves the camera through four photographs.
+  // A steel sheet crosses the frame between them; each chapter of copy arrives with its scene. ----
+  function initScene(section) {
     section.classList.add('is-scrolly');
+    const MP = window.MP, tl = MP.scene(section);
     const chapters = $$('[data-ch]', section).map((el) => ({ el, from: +el.dataset.from, to: +el.dataset.to }));
     const rail = $$('.scene__rail i', section), stage = $('.hero__stage', section);
-    let ticking = false, lastOn = -1;
+    let ticking = false, lastOn = -1, alive = true;
     const update = () => {
       ticking = false;
+      if (!alive) return;
       const r = section.getBoundingClientRect(), span = r.height - innerHeight;
       const p = span > 0 ? clamp01(-r.top / span) : 0;
-      if (root.viewer) root.viewer.setScroll(Math.min(1, p / 0.9));   // camera reaches its last position at 90% and holds
-      let on = -1;
-      chapters.forEach((c, i) => { const live = p >= c.from && p < c.to; c.el.classList.toggle('is-on', live); c.el.inert = !live; if (live) on = i; });
-      if (on !== lastOn) { lastOn = on; rail.forEach((d, i) => d.classList.toggle('is-on', i === on)); }
-      stage.style.opacity = String(1 - clamp01((p - 0.93) / 0.07) * 0.85);
+      MP.gsap.to(tl, { progress: Math.min(1, p / 0.94), duration: 0.7, ease: 'power2.out', overwrite: true });   // a little weight, like a camera on a slider
+      let on_ = -1;
+      chapters.forEach((c, i) => { const live = p >= c.from && p < c.to; c.el.classList.toggle('is-on', live); c.el.inert = !live; if (live) on_ = i; });
+      if (on_ !== lastOn) { lastOn = on_; rail.forEach((d, i) => d.classList.toggle('is-on', i === on_)); }
+      stage.style.opacity = String(1 - clamp01((p - 0.95) / 0.05) * 0.8);
       section.classList.toggle('is-scrolled', p > 0.02);
     };
     const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
     on(window, 'scroll', onScroll, { passive: true }); on(window, 'resize', onScroll);
     update();
+    return { kill: () => { alive = false; MP.gsap.killTweensOf(tl); tl.kill(); } };
   }
 
-  // ---- Services: the selected plate brings its photographs into the viewing frame with a directional wipe ----
+  // ---- Services: two brushed steel shutters close over the viewing frame, the photographs change behind
+  // them, and they part again on the new service. ----
   function initSvc() {
     const box = $('[data-svc]');
     if (!box) return;
     const items = $$('[data-svc-item]', box), slides = $$('[data-svc-slide]', box);
+    const A_ = $('.shutter__a', box), B_ = $('.shutter__b', box);
     let current = 0, running = false, queued = null;
     items[0].classList.add('is-current');
-    const FACTOR = { svc__bg: 0.12, svc__fg: 0.5, svc__cap: 0.3 };   // how far each layer travels, as a share of the frame height
+    const E_IN = 'cubic-bezier(.7,0,.84,0)', E_OUT = 'cubic-bezier(.16,1,.3,1)';
     const show = async (i) => {
       if (i === current) return;
       if (running) { queued = i; return; }
       running = true;
-      const dir = i > current ? 1 : -1, A = slides[current], Bn = slides[i], H = A.offsetHeight;
+      const dir = i > current ? 1 : -1, A = slides[current], Bn = slides[i];
       items.forEach((el, k) => el.classList.toggle('is-current', k === i));
-      Bn.classList.add('is-on'); A.style.zIndex = '2'; Bn.style.zIndex = '1';
-      if (reduce.matches) { A.classList.remove('is-on'); A.style.zIndex = Bn.style.zIndex = ''; current = i; running = false; return; }
-      const wipe = dir > 0 ? ['inset(0 0 0 0)', 'inset(0 0 100% 0)'] : ['inset(0 0 0 0)', 'inset(100% 0 0 0)'];
-      const jobs = [A.animate({ clipPath: wipe }, { duration: 720, easing: 'cubic-bezier(.65,0,.35,1)', fill: 'forwards' }).finished];
-      for (const layer of A.children) layer.animate({ transform: ['none', `translateY(${-dir * 0.14 * H}px)`] }, { duration: 720, easing: 'cubic-bezier(.65,0,.35,1)' });
+      if (reduce.matches || !A_) { A.classList.remove('is-on'); Bn.classList.add('is-on'); current = i; running = false; return; }
+      // close: the sheets travel in from top and bottom (reversed when moving back up the list) and meet
+      const fromA = '-101%', fromB = '101%';   // top sheet from above, bottom sheet from below
+      for (const layer of A.children) layer.animate({ transform: ['none', 'scale(1.06)'] }, { duration: 420, easing: E_IN, fill: 'forwards' });
+      await Promise.all([
+        A_.animate({ transform: [`translateY(${fromA})`, 'translateY(0)'] }, { duration: 420, easing: E_IN, fill: 'forwards' }).finished,
+        B_.animate({ transform: [`translateY(${fromB})`, 'translateY(0)'] }, { duration: 420, easing: E_IN, fill: 'forwards' }).finished,
+      ]).catch(() => {});
+      A.classList.remove('is-on'); A.getAnimations({ subtree: true }).forEach((a) => a.cancel());
+      Bn.classList.add('is-on');
+      // open on the new photographs, which settle from a slight push-in; the caption rises after
+      const jobs = [
+        A_.animate({ transform: ['translateY(0)', `translateY(${fromA})`] }, { duration: 620, easing: E_OUT, fill: 'forwards' }).finished,
+        B_.animate({ transform: ['translateY(0)', `translateY(${fromB})`] }, { duration: 620, easing: E_OUT, fill: 'forwards' }).finished,
+      ];
       for (const layer of Bn.children) {
-        const f = FACTOR[layer.className] || 0.2;
-        jobs.push(layer.animate({ transform: [`translateY(${dir * f * H}px)`, 'none'] }, { duration: 760, delay: 140, easing: 'cubic-bezier(.22,.8,.3,1)', fill: 'backwards' }).finished);
+        const cap = layer.classList.contains('svc__cap');
+        jobs.push(layer.animate(cap ? { transform: ['translateY(36px)', 'none'], opacity: [0, 1] } : { transform: [layer.classList.contains('svc__bg') ? 'scale(1.16)' : 'scale(1.1) translateY(4%)', 'none'] },
+          { duration: cap ? 640 : 1100, delay: cap ? 220 : 0, easing: E_OUT, fill: 'backwards' }).finished);
       }
       await Promise.all(jobs).catch(() => {});
-      A.classList.remove('is-on'); A.getAnimations().forEach((a) => a.cancel()); A.style.zIndex = Bn.style.zIndex = '';
+      [A_, B_].forEach((s) => { s.getAnimations().forEach((a) => a.cancel()); });
       current = i; running = false;
       if (queued !== null && queued !== current) { const q = queued; queued = null; show(q); } else queued = null;
     };
@@ -458,8 +444,8 @@
 
   function init() {
     document.documentElement.classList.add('js');
-    initHero(); initSvc(); initFilter(); initReveal(); initForm(); initTest();
     if (window.MP) window.MP.init($('main'));
+    initHero(); initSvc(); initFilter(); initReveal(); initForm(); initTest();
   }
   init();
 })();

@@ -55,22 +55,21 @@ async function main() {
     // ---- desktop behaviour, motion on ----
     const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
     const p = await ctx.newPage();
-    await p.route('**/viewer.min.js', async (r) => { await new Promise((s) => setTimeout(s, 3000)); r.continue(); });   // hold the 3D scene back so the film is what is on screen
     await p.goto(U + 'index.html?intro=1');
     ok(await p.isVisible('.header-cta'), 'quote button is usable before the opening finishes');
     ok(await p.isVisible('.nav a[data-section=services]'), 'navigation is usable before the opening finishes');
     await p.waitForSelector('[data-hero-skip]:not([hidden])', { timeout: 90000 });
     ok(true, 'skip button shows during the opening');
-    ok(await p.evaluate(() => document.querySelector('.hero').classList.contains('is-film') && !!document.querySelector('[data-film]').getAttribute('src')), 'the opening film plays on a wide screen');
+    ok(await p.evaluate(() => document.querySelector('.hero').classList.contains('is-opening') && getComputedStyle(document.querySelector('[data-shot=macro]')).visibility === 'visible'), 'the opening starts close on Marpet steel');
+    ok(await p.evaluate(() => !document.querySelector('script[src*="viewer"]') && !performance.getEntriesByType('resource').some((r) => /viewer\.min\.js|conveyor\.glb/.test(r.name))), 'the homepage loads no 3D code or model');
     await p.click('[data-hero-skip]');
-    await p.waitForFunction(() => document.querySelector('.hero').classList.contains('is-done'), null, { timeout: 90000 });
-    await p.unroute('**/viewer.min.js');
-    ok(await p.evaluate(() => document.querySelector('[data-film]').classList.contains('is-out') && document.querySelector('[data-film]').paused), 'skipping stops the film and hands over to the live scene');
+    await p.waitForFunction(() => document.querySelector('.hero').classList.contains('is-done'), null, { timeout: 20000 });
+    ok(await p.evaluate(() => getComputedStyle(document.querySelector('[data-shot=hall]')).opacity === '1'), 'skipping lands on the production hall');
     ok(await p.isVisible('.hero h1'), 'hero copy is shown after skipping');
     await p.reload(); await p.goto(U + 'index.html');
     await p.waitForFunction(() => document.querySelector('.hero').classList.contains('is-done'), null, { timeout: 90000 });
     ok(await p.isHidden('[data-hero-skip]'), 'opening does not replay for a returning visitor');
-    ok(await p.locator('.callout a').first().isVisible(), 'service labels on the model are links');
+    ok(await p.evaluate(() => document.querySelector('[data-shot=hall] .shot__img img').complete && document.querySelector('[data-shot=hall] .shot__img img').naturalWidth > 0), 'the hall photograph has loaded');
 
     // ---- pinned homepage scene ----
     ok(await p.evaluate(() => document.querySelector('.scene').classList.contains('is-scrolly')), 'homepage scene is pinned when motion is allowed');
@@ -81,6 +80,7 @@ async function main() {
     ok(Math.abs(await p.evaluate(() => document.querySelector('.scene__pin').getBoundingClientRect().top) - 72) < 2, 'the stage stays pinned under the header');
     await toScene(0.6);
     ok(await chapterIs(2), 'then the second chapter');
+    ok(await p.waitForFunction(() => getComputedStyle(document.querySelector('[data-shot=ch2]')).visibility === 'visible', null, { timeout: 10000 }).then(() => true, () => false), 'each chapter brings its own photograph');
     ok(await p.evaluate(() => document.querySelector('[data-ch]').inert), 'chapters that are off screen cannot be tabbed into');
     ok(await p.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth) <= 0, 'pinned scene causes no sideways scroll');
     await toScene(0);
@@ -155,7 +155,9 @@ async function main() {
     await k.goto(U + 'index.html?intro=1');
     await k.waitForFunction(() => document.querySelector('.hero').classList.contains('is-done'), null, { timeout: 90000 });
     ok(await k.isHidden('[data-hero-skip]') && await k.isHidden('[data-hero-replay]'), 'reduced motion: no opening animation');
-    ok(await k.evaluate(() => !document.querySelector('[data-film]').getAttribute('src') && !document.querySelector('.sheets')), 'reduced motion: no film is downloaded and no sheets move');
+    ok(await k.evaluate(() => !document.querySelector('.sheets') && getComputedStyle(document.querySelector('[data-shot=hall]')).visibility === 'visible' && !document.querySelector('.has-motion')), 'reduced motion: a still photograph, no moving sheets or panels');
+    await k.goto(U + 'work.html');
+    ok(await k.evaluate(() => getComputedStyle(document.querySelector('.wk__panel')).display === 'none'), 'reduced motion: project photographs are never covered');
     const n = await (await browser.newContext({ viewport: { width: 390, height: 844 }, javaScriptEnabled: false })).newPage();
     await n.goto(U + 'index.html');
     ok(await n.isVisible('.hero h1') && await n.locator('.nav a').count() === 5, 'without scripts: copy and menu are there');

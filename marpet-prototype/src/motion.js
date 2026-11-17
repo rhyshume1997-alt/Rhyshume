@@ -61,6 +61,18 @@ function photos(root) {
   });
 }
 
+// Page headers: full-bleed graded photograph. The camera settles from a slight push-in when the page
+// opens, and the picture then moves more slowly than the page as it scrolls away.
+function heads(root) {
+  root.querySelectorAll('.ph-scene').forEach((sc) => {
+    const img = sc.querySelector('.ph-scene__img');
+    gsap.fromTo(img, { scale: 1.16 }, { scale: 1.02, duration: 2.6, ease: 'power3.out' });
+    gsap.to(img, { yPercent: 16, ease: 'none', scrollTrigger: { trigger: sc.parentElement, start: 'top top', end: 'bottom top', scrub: true } });
+    const light = sc.querySelector('.fx__light');
+    if (light) gsap.fromTo(light, { xPercent: -110 }, { xPercent: 110, duration: 3.2, ease: 'sine.inOut', delay: 0.2 });
+  });
+}
+
 // Our Work: each project is a scene. A soft enlarged copy of the photograph fills the background and
 // drifts slowly; the sharp photograph and the title move at their own rates in front of it.
 function work(root) {
@@ -69,7 +81,13 @@ function work(root) {
     gsap.fromTo(el.querySelector('.wk__bg img'), { yPercent: -12 }, { yPercent: 12, ease: 'none', scrollTrigger: st });
     gsap.fromTo(el.querySelector('.wk__frame img'), { yPercent: -6, scale: 1.2 }, { yPercent: 6, scale: 1.05, ease: 'none', scrollTrigger: st });
     gsap.fromTo(el.querySelector('.wk__cap'), { y: 70 }, { y: -70, ease: 'none', scrollTrigger: st });
-    gsap.fromTo(el.querySelector('.wk__frame'), { clipPath: 'inset(22% 16% 22% 16%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.3, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 78%', once: true } });
+    const pa = el.querySelector('.wk__panel--a'), pb = el.querySelector('.wk__panel--b');
+    if (pa) {   // two brushed steel panels cover the photograph and slide apart as the scene arrives
+      const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top 72%', once: true } });
+      tl.fromTo(pa, { xPercent: 0 }, { xPercent: -102, duration: 1.15, ease: 'power3.inOut' }, 0)
+        .fromTo(pb, { xPercent: 0 }, { xPercent: 102, duration: 1.15, ease: 'power3.inOut' }, 0.08)
+        .fromTo(el.querySelector('.wk__cap'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.8, ease: 'power2.out' }, 0.5);
+    }
   });
   if (matchMedia('(hover: hover) and (pointer: fine)').matches) root.querySelectorAll('.wk a').forEach((a) => {
     const frame = a.querySelector('.wk__frame'), bg = a.querySelector('.wk__bg');
@@ -80,11 +98,60 @@ function work(root) {
   });
 }
 
+// ---- Homepage opening, from Marpet photographs (about 6.4 seconds) ----
+export function opening(section) {
+  const q = (s) => section.querySelector(s);
+  const macro = q('[data-shot=macro]'), frame = q('[data-shot=frame]'), hall = q('[data-shot=hall]'), light = q('.fx__light');
+  const mi = macro.querySelector('img'), fi = frame.querySelector('img'), hi = hall.querySelector('.shot__img img'), hb = hall.querySelector('.shot__bg img');
+  gsap.set([macro], { autoAlpha: 1 }); gsap.set([frame, hall], { autoAlpha: 0 });
+  section.classList.add('is-opening');
+  const tl = gsap.timeline({ paused: true, defaults: { ease: 'none' }, onComplete: () => section.classList.remove('is-opening') });
+  // 1. close on the brushed side panel, out of focus, pulling into focus while a light travels along it
+  tl.fromTo(mi, { scale: 1.55, xPercent: 9, yPercent: 2, filter: 'blur(9px) brightness(0.45) contrast(1.25)' }, { scale: 1.3, xPercent: -11, yPercent: -1, duration: 3.1, ease: 'sine.inOut' }, 0)
+    .to(mi, { filter: 'blur(0px) brightness(1.18) contrast(1.25)', duration: 1.3, ease: 'power2.out' }, 0.1)
+    .fromTo(light, { xPercent: -120, autoAlpha: 0 }, { xPercent: 125, autoAlpha: 1, duration: 2.9, ease: 'sine.inOut' }, 0.25)
+  // 2. dissolve to the side frame with the Marpet logo plate, still close, drifting back
+    .to(frame, { autoAlpha: 1, duration: 0.8, ease: 'power1.inOut' }, 2.55)
+    .fromTo(fi, { scale: 1.5, xPercent: 7, filter: 'blur(4px) contrast(1.2) brightness(1.1)' }, { scale: 1.1, xPercent: 0, filter: 'blur(0px) contrast(1.2) brightness(1.1)', duration: 2.2, ease: 'power2.inOut' }, 2.55)
+  // 3. pull back into the production hall; the headline arrives as the camera settles
+    .to(hall, { autoAlpha: 1, duration: 1.0, ease: 'power1.inOut' }, 4.05)
+    .fromTo(hi, { scale: 1.75 }, { scale: 1.06, duration: 2.5, ease: 'power3.out' }, 4.05)
+    .fromTo(hb, { scale: 2.0 }, { scale: 1.25, duration: 2.5, ease: 'power3.out' }, 4.05)
+    .to(light, { autoAlpha: 0.4, duration: 1.2 }, 4.3)
+    .call(() => section.classList.add('is-ready'), null, 4.75)
+    .to({}, { duration: 0.2 }, 6.35);
+  return tl;
+}
+
+// ---- Homepage scenes, scrubbed by scroll: hall, then one scene per service. A brushed steel sheet
+// crosses the frame between scenes (left, up, right), and the photograph changes behind it. ----
+export function scene(section) {
+  const shots = ['hall', 'ch1', 'ch2', 'ch3'].map((k) => section.querySelector(`[data-shot=${k}]`));
+  const sheet = section.querySelector('.wipe__sheet');
+  const seg = [[0, 0.2], [0.2, 0.48], [0.48, 0.76], [0.76, 1]];
+  const tl = gsap.timeline({ paused: true, defaults: { ease: 'none' } });
+  gsap.set(sheet, { xPercent: 115, yPercent: 0 });
+  shots.forEach((s, i) => {
+    const [a, z] = seg[i], d = z - a + 0.04;
+    const img = s.querySelector('.shot__img img'), bg = s.querySelector('.shot__bg img'), fg = s.querySelector('.shot__fg img');
+    if (i) {
+      const from = [null, { xPercent: 115, yPercent: 0 }, { xPercent: 0, yPercent: 115 }, { xPercent: -115, yPercent: 0 }][i];
+      const to = [null, { xPercent: -115, yPercent: 0 }, { xPercent: 0, yPercent: -115 }, { xPercent: 115, yPercent: 0 }][i];
+      tl.fromTo(sheet, from, { ...to, duration: 0.075, ease: 'power1.inOut', immediateRender: false }, a - 0.04)
+        .fromTo(s, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.001, immediateRender: false }, a - 0.004);
+    }
+    tl.fromTo(img, { scale: i ? 1.24 : 1.06, xPercent: i % 2 ? 2.5 : -2.5 }, { scale: i ? 1.03 : 1.18, xPercent: i % 2 ? -2.5 : 2.5, duration: d, immediateRender: !i ? false : true }, a);
+    if (bg) tl.fromTo(bg, { scale: 1.32, yPercent: -3 }, { scale: 1.2, yPercent: 3, duration: d }, a);
+    if (fg) tl.fromTo(fg, { yPercent: 34, scale: 1.7 }, { yPercent: -44, scale: 1.85, duration: d }, a);
+  });
+  return tl;
+}
+
 export function init(root = document) {
   kill();
   if (reduce.matches) return;
   document.documentElement.classList.add('has-motion');
-  ctx = gsap.context(() => { headings(root); sheets(root); photos(root); work(root); });
+  ctx = gsap.context(() => { headings(root); sheets(root); photos(root); work(root); heads(root); });
   ScrollTrigger.refresh();
 }
 export function kill() {
@@ -94,4 +161,4 @@ export function kill() {
 // For frame-by-frame capture: stop GSAP's own clock and step it by hand.
 export function manualClock() { gsap.ticker.remove(gsap.updateRoot); let t = gsap.ticker.time; return (dt) => { t += dt; gsap.updateRoot(t); ScrollTrigger.update(); }; }
 
-window.MP = { init, kill, manualClock, gsap, ScrollTrigger };
+window.MP = { init, kill, manualClock, opening, scene, gsap, ScrollTrigger };

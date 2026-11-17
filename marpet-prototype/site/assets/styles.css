@@ -616,3 +616,131 @@ a.rplate:active{transform:translateY(1px);filter:drop-shadow(0 1px 0 rgba(0,0,0,
 
 .scene:not(.is-scrolly){overflow:hidden}
 .scene.is-film:not(.is-scrolly) .hero__ctrl{display:flex}
+
+/* =====================================================================
+   Moving industrial photography. Everything below uses genuine Marpet
+   photographs (graded by tools/cine.py) and CSS/GSAP layers. No 3D.
+   ===================================================================== */
+
+/* ---- shared atmosphere layers: light sweep, haze, grain, vignette ---- */
+.fx{position:absolute;inset:0;pointer-events:none;z-index:3;overflow:hidden}
+.fx i{position:absolute;inset:0;display:block}
+.fx__light{background:linear-gradient(104deg,transparent 34%,rgba(255,186,112,.06) 42%,rgba(255,200,140,.26) 50%,rgba(255,186,112,.06) 58%,transparent 66%);mix-blend-mode:screen;opacity:.35}
+.fx__haze{inset:-18%;background:radial-gradient(42% 30% at 72% 18%,rgba(205,220,240,.16),transparent 70%),radial-gradient(30% 22% at 22% 30%,rgba(255,196,130,.08),transparent 70%);animation:haze 22s ease-in-out infinite alternate}
+.fx__grain{inset:-60%;background:url(img/cine/grain.png);opacity:.11;mix-blend-mode:overlay;animation:grain 1s steps(5) infinite}
+.fx__vig{background:linear-gradient(180deg,rgba(3,4,7,.62) 0%,rgba(3,4,7,0) 34%),radial-gradient(120% 95% at 62% 58%,transparent 42%,rgba(2,3,6,.82) 100%),linear-gradient(90deg,rgba(3,5,9,.8) 0%,rgba(3,5,9,.42) 34%,rgba(3,5,9,0) 62%)}
+@keyframes haze{from{transform:translate3d(-3%,1%,0) scale(1)}to{transform:translate3d(3%,-2%,0) scale(1.06)}}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-7%,4%)}40%{transform:translate(5%,-6%)}60%{transform:translate(-4%,-3%)}80%{transform:translate(6%,5%)}100%{transform:translate(0,0)}}
+
+/* ---- homepage stage: stacked photographic shots ---- */
+.cine .hero__stage{background:#050608;overflow:hidden}
+.shot{position:absolute;inset:0;overflow:hidden}
+.shot img{display:block;width:100%;height:100%;object-fit:cover;max-width:none;will-change:transform}
+.shot--macro,.shot--frame,.shot--ch{opacity:0;visibility:hidden}
+.shot--macro img{object-position:40% 50%;transform-origin:45% 50%}
+.shot--frame img{transform-origin:24% 26%}
+.shot--hall .shot__img img{transform-origin:31% 52%}
+.shot__bg,.shot__img,.shot__fg{position:absolute;inset:0}
+.shot__bg{inset:-6%}
+.shot--ch .shot__img img{object-position:62% 50%}
+.shot__fg{inset:auto -10% -30% -10%;height:70%;opacity:.9;-webkit-mask-image:linear-gradient(0deg,#000 20%,transparent 85%);mask-image:linear-gradient(0deg,#000 20%,transparent 85%)}
+.shot__fg img{filter:blur(6px) brightness(.55)}
+.cine .hero__note{color:rgba(220,226,238,.55)}
+.cine .callout{display:none}
+/* steel sheet that crosses the frame between scenes */
+.wipe{position:absolute;inset:0;z-index:4;pointer-events:none;overflow:hidden}
+.wipe__sheet{position:absolute;inset:-3% -2%;transform:translateX(115%);
+  background:linear-gradient(102deg,rgba(255,255,255,0) 28%,rgba(255,226,190,.32) 47%,rgba(255,255,255,0) 63%),linear-gradient(180deg,rgba(0,0,0,0) 60%,rgba(0,0,0,.35)),url(img/cine/steel.webp) center/cover #747a82;
+  filter:brightness(.78) contrast(1.18);box-shadow:0 0 90px 40px rgba(0,0,0,.7),inset 0 0 0 2px rgba(255,255,255,.18)}
+/* the copy sits on the dark side of each shot */
+.cine .scene__ch{text-shadow:0 2px 24px rgba(0,0,0,.55)}
+.cine .hero__copy h1{font-size:clamp(3.4rem,9.4vw,9rem);line-height:.86;letter-spacing:-.005em}
+.cine .ln--hi>span{color:#e9c08a}
+.cine .eyebrow{color:#e9c08a}
+.cine .eyebrow::before{background:#e9c08a}
+.cine .scene__fact h2{font-size:clamp(2.6rem,6.4vw,6rem);line-height:.9}
+/* before the motion script runs, and with reduced motion: the hall photograph, still */
+.cine.is-static .shot--hall .shot__img img{transform:scale(1.04)}
+@media (max-width:899px){
+  .shot--macro img{object-position:30% 50%}
+  .cine .hero__copy h1{font-size:clamp(3rem,15vw,5rem)}
+  .fx__vig{background:linear-gradient(180deg,rgba(3,4,7,.5) 0%,rgba(3,4,7,0) 30%),radial-gradient(120% 95% at 55% 50%,transparent 45%,rgba(2,3,6,.8) 100%),linear-gradient(0deg,rgba(3,5,9,.85) 0%,rgba(3,5,9,0) 45%)}
+}
+
+/* ---- page headers: full-bleed graded photograph with the same atmosphere ---- */
+.page-head--cine{background:#05070b;min-height:min(74svh,700px);display:flex;align-items:flex-end;padding:clamp(7rem,16vh,10rem) 0 clamp(2.5rem,6vw,4.5rem)}
+.page-head--cine>.wrap{position:relative;z-index:4;width:var(--wrap)}
+.ph-scene{position:absolute;inset:0;overflow:hidden;z-index:0}
+.ph-scene__img{position:absolute;inset:-4% 0 -14%;will-change:transform}
+.ph-scene__img img{width:100%;height:100%;object-fit:cover;display:block;max-width:none}
+.ph-scene .fx__vig{background:linear-gradient(180deg,rgba(3,4,7,.55) 0%,rgba(3,4,7,0) 30%),linear-gradient(0deg,rgba(4,6,10,.92) 0%,rgba(4,6,10,.2) 55%,rgba(4,6,10,0) 75%),linear-gradient(90deg,rgba(3,5,9,.7) 0%,rgba(3,5,9,0) 60%)}
+.page-head--cine h1{font-size:clamp(3.2rem,8.6vw,8rem);line-height:.88;text-shadow:0 2px 30px rgba(0,0,0,.5)}
+.page-head--cine .lead{max-width:44ch;color:#d9dfea}
+.page-head--cine .crumbs a,.page-head--cine .crumbs span{color:#b9c3d6}
+.page-head--layered{min-height:0;align-items:center;padding-top:clamp(6.5rem,14vh,9rem)}
+.page-head--layered .ph-scene__img img{transform:scale(1.15)}
+.page-head--layered h1{font-size:clamp(2.6rem,6vw,5.4rem)}
+.page-head--layered .page-head__media{box-shadow:0 50px 90px rgba(0,0,0,.6)}
+
+/* ---- Services: steel shutters over the viewing frame ---- */
+.svc__stage .shutter{position:absolute;inset:0;z-index:6;pointer-events:none;overflow:hidden}
+.shutter i{position:absolute;left:0;right:0;height:50.6%;display:block;
+  background:linear-gradient(100deg,rgba(255,255,255,0) 30%,rgba(255,226,190,.28) 48%,rgba(255,255,255,0) 64%),url(img/cine/steel.webp) center/cover #747a82;filter:brightness(.8) contrast(1.15)}
+.shutter__a{top:0;transform:translateY(-101%);box-shadow:inset 0 -3px 0 rgba(0,0,0,.45),inset 0 -5px 0 rgba(255,255,255,.18),0 20px 40px rgba(0,0,0,.5)}
+.shutter__b{bottom:0;transform:translateY(101%);box-shadow:inset 0 3px 0 rgba(255,255,255,.3),0 -20px 40px rgba(0,0,0,.5)}
+.svc__stage .fx{z-index:3}
+.svc__stage .fx__vig{background:radial-gradient(120% 95% at 60% 45%,transparent 45%,rgba(2,3,6,.7) 100%),linear-gradient(0deg,rgba(3,5,9,.85) 0%,rgba(3,5,9,0) 55%)}
+.svc__cap{z-index:4}
+
+/* ---- Our Work: steel panels part to reveal each photograph ---- */
+.wk__panel{display:none;position:absolute;top:0;bottom:0;width:50.6%;z-index:2;
+  background:linear-gradient(100deg,rgba(255,255,255,0) 30%,rgba(255,226,190,.22) 50%,rgba(255,255,255,0) 66%),url(img/cine/steel.webp) center/cover #747a82;filter:brightness(.72) contrast(1.2)}
+.has-motion .wk__panel{display:block}
+.wk__panel--a{left:0;box-shadow:inset -3px 0 0 rgba(0,0,0,.45),inset -5px 0 0 rgba(255,255,255,.16)}
+.wk__panel--b{right:0;box-shadow:inset 3px 0 0 rgba(255,255,255,.28)}
+.wk__frame::after{z-index:3}
+.wk{background:#040508}
+.wk__bg::after{background:radial-gradient(120% 90% at 50% 50%,rgba(3,5,10,.15) 30%,rgba(3,5,10,.85) 100%)}
+.wk__no{color:rgba(233,192,138,.28)}
+.wk__svc{color:#e9c08a}
+.wk-sec,.on-deep.wk-sec{background:#040508}
+
+/* ---- steel sheets that reveal sections: the darker brushed sheet, lit from one side ---- */
+.sheet{background:linear-gradient(100deg,rgba(255,255,255,0) 30%,rgba(255,226,190,.3) 47%,rgba(255,255,255,0) 60%),linear-gradient(180deg,rgba(20,26,36,0) 55%,rgba(20,26,36,.35)),url(img/cine/steel.webp) center/cover #747a82;filter:brightness(.86) contrast(1.12)}
+
+/* ---- the rest of the photography: one grade, so snapshots read as a set ---- */
+.gallery img,.grid img,.svc__fg img,.beamed img,.frame__img img:not([src*="/cine/"]),.customers img{filter:saturate(.7) contrast(1.1) brightness(.9) sepia(.12)}
+
+@media (prefers-reduced-motion:reduce){
+  .fx__haze,.fx__grain{animation:none}
+  .shot--hall{opacity:1!important;visibility:visible!important}
+}
+.cine .hero__copy>h1{max-width:none}
+.cine .hero__copy::before{display:none}
+.cine .hero__copy h1{font-size:clamp(3rem,7.2vw,7rem)}
+.cine .shot__img img{filter:contrast(1.14) brightness(1.06)}
+@media (max-width:899px){.cine .hero__copy h1{font-size:clamp(2.8rem,13vw,4.6rem)}}
+
+/* ---- one dark, photographic palette for the whole site: charcoal and dark brushed steel, tungsten accents ---- */
+.on-white{background:#0b0d11;color:#e6eaf2}
+.on-steel{background:linear-gradient(rgba(9,11,15,.9),rgba(9,11,15,.93)),url(img/cine/steel.webp) center/cover #0e1116;color:#e6eaf2}
+.on-white p,.on-steel p,.on-white li,.on-steel li{color:#c3cad8}
+.on-white .eyebrow,.on-steel .eyebrow,.on-dark .eyebrow,.on-deep .eyebrow,.page-head .eyebrow{color:#e9c08a}
+.on-white .eyebrow::before,.on-steel .eyebrow::before,.on-dark .eyebrow::before,.on-deep .eyebrow::before{background:#e9c08a}
+.on-white a:not(.btn):not(.plate):not([data-plate]),.on-steel a:not(.btn):not(.plate):not([data-plate]){color:#f1f3f8}
+.on-dark{background:#0d1015}.on-deep{background:#07090c}
+.facts{background:rgba(255,255,255,.08)}.facts div{background:#07090c}
+/* first paint already matches the opening, before any script runs */
+@media (prefers-reduced-motion:no-preference){
+  .js .cine:not(.is-static):not(.is-scrolly) .scene__fact{display:none}
+  .js .cine:not(.is-static):not(.is-done) .shot--macro{opacity:1;visibility:visible}
+  .js .cine:not(.is-static):not(.is-done) .shot--hall{opacity:0}
+}
+/* if the scripts never arrive, the copy still appears */
+@keyframes copy-fallback{to{opacity:1;transform:none}}
+.js .hero:not(.is-ready) .hero__copy>*{animation:copy-fallback .6s 5s forwards}
+.js .hero:not(.is-ready) .hero__copy .ln>span{animation:copy-fallback .6s 5s forwards}
+.ticks li{background:rgba(255,255,255,.05);color:#e6eaf2;border-left-color:#e9c08a;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.on-white .ticks li,.on-steel .ticks li{color:#e6eaf2}
+table{color:var(--ink)}
+table th,table td{color:var(--ink)}

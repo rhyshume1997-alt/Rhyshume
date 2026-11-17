@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "node build.mjs && npm run bundle",
-    "bundle": "esbuild src/viewer.js --bundle --minify --format=esm --target=es2020 --alias:three=./vendor/three.module.js --outfile=site/assets/viewer.min.js && esbuild src/motion.js --bundle --minify --format=iife --target=es2020 --outfile=site/assets/motion.min.js",
+    "bundle:viewer": "esbuild src/viewer.js --bundle --minify --format=esm --target=es2020 --outfile=site/assets/viewer.min.js", "bundle": "esbuild src/motion.js --bundle --minify --format=iife --target=es2020 --outfile=site/assets/motion.min.js",
     "serve": "node serve.mjs",
     "typecheck": "tsc -p tsconfig.json",
     "test": "node --test test/site.test.mjs test/enquiry.test.mjs",

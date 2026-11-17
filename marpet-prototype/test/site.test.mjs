@@ -117,5 +117,15 @@ test('the shipped 3D bundle is the minified one and stays under budget', () => {
   const size = readFileSync(new URL('assets/viewer.min.js', SITE)).length;
   assert.ok(size < 900_000, 'viewer bundle is ' + size + ' bytes');
   assert.ok(readFileSync(new URL('assets/render/conveyor.glb', SITE)).length < 1_600_000);
-  assert.match(read('index.html'), /data-hero[^>]*data-model="assets\/render\/conveyor\.glb"/);
+  assert.match(read('material-test.html'), /data-model="assets\/render\/conveyor\.glb"/);   // the 3D model stays available on the test pages
+});
+
+test('homepage opening uses genuine Marpet photographs only, and does not load the 3D bundle', () => {
+  const html = read('index.html');
+  assert.doesNotMatch(html, /viewer\.min\.js|data-model=/);
+  const srcs = [...html.matchAll(/src="assets\/img\/cine\/([^"]+)"/g)].map((m) => m[1]);
+  assert.ok(srcs.length >= 8, 'photographic layers present');
+  const allowed = new Set(['macro-panel', 'macro-frame', ...readdirSync(new URL('assets/img/', SITE)).filter((f) => /\.(jpe?g|png)$/i.test(f)).map((f) => f.replace(/\.\w+$/, ''))]);
+  for (const s of srcs) assert.ok(allowed.has(s.replace(/(-bg)?\.webp$/, '')), s + ' is derived from a Marpet photograph');
+  for (const s of srcs) assert.ok(existsSync(new URL('assets/img/cine/' + s, SITE)), s + ' exists');
 });
