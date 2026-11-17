@@ -1,0 +1,27 @@
+{
+  "name": "Tooly",
+  "ground": 0.94,
+  "anchors": {
+    "cx": 0.5036,
+    "top": 0.3008,
+    "left": 0.3389,
+    "right": 0.6709
+  },
+  "shadow": {
+    "w": 0.259
+  },
+  "colours": {
+    "body": "#2e56bc",
+    "ink": "#1b2337",
+    "accent": "#FFC93C",
+    "confetti": [
+      "#2e56bc",
+      "#FFC93C",
+      "#4CC9F0",
+      "#7BD88F",
+      "#FF4F7B",
+      "#FFFFFF"
+    ]
+  },
+  "ext": "webp"
+}

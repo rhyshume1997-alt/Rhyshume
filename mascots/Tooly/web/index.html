@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tooly · every move</title>
+<style>
+  body{margin:0;min-height:100vh;display:grid;place-items:center;background:radial-gradient(circle at 50% 60%,#fff,#e8eefc);font:16px/1.4 ui-rounded,system-ui,sans-serif;color:#1b2337}
+  main{text-align:center;padding:24px}
+  mascot-view{width:min(360px,80vw)}
+  nav{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:620px;margin:8px auto 0}
+  button{font:inherit;font-weight:700;border:0;border-radius:999px;padding:10px 16px;background:#fff;color:#1b2337;box-shadow:0 0 0 1.5px #2e56bc55,0 6px 16px -10px #0005;cursor:pointer}
+  button[aria-pressed=true]{background:#2e56bc;color:#fff}
+  p{opacity:.6;margin-top:18px}
+</style></head>
+<body><main>
+  <mascot-view id="m" src="./tooly" state="appear"></mascot-view>
+  <nav><button data-move="idle">idle</button><button data-move="appear">appear</button><button data-move="hello">hello</button><button data-move="think">think</button><button data-move="celebrate">celebrate</button><button data-move="oops">oops</button><button data-move="sleep">sleep</button><button data-move="point">point</button><button data-move="love">love</button><button data-side="left">point left</button></nav>
+  <p>Tap Tooly for a squish. This page needs a local server (npx serve) because browsers don't load files from file://.</p>
+</main>
+<script type="module">
+  import "./mascot.js";
+  const m = document.getElementById("m");
+  const bs = [...document.querySelectorAll("button")];
+  for (const b of bs) b.onclick = () => { m.play(b.dataset.move || "point", { side: b.dataset.side || "right" }); bs.forEach((x) => x.setAttribute("aria-pressed", x === b)); };
+</script></body></html>

@@ -1,0 +1,141 @@
+{
+  "ground": 0.94,
+  "anchors": {
+    "cx": 0.5036,
+    "top": 0.3008,
+    "left": 0.3389,
+    "right": 0.6709
+  },
+  "shadow": {
+    "w": 0.259
+  },
+  "body": {
+    "hex": "#2e56bc",
+    "h": 223.2,
+    "s": 0.604,
+    "l": 0.46
+  },
+  "palette": [
+    {
+      "hex": "#2855c5",
+      "share": 0.391
+    },
+    {
+      "hex": "#fb7603",
+      "share": 0.069
+    },
+    {
+      "hex": "#161a2a",
+      "share": 0.054
+    },
+    {
+      "hex": "#7d9ced",
+      "share": 0.034
+    },
+    {
+      "hex": "#d6dff7",
+      "share": 0.005
+    }
+  ],
+  "align": {
+    "idle": {
+      "scale": 0.7298,
+      "correction": 1
+    },
+    "blink": {
+      "scale": 0.7298,
+      "correction": 1
+    },
+    "wave": {
+      "scale": 0.7298,
+      "correction": 1
+    },
+    "think": {
+      "scale": 0.7298,
+      "correction": 1
+    },
+    "celebrate": {
+      "scale": 0.7298,
+      "correction": 1
+    },
+    "oops": {
+      "scale": 0.7298,
+      "correction": 1
+    },
+    "sleep": {
+      "scale": 0.7298,
+      "correction": 1
+    },
+    "point": {
+      "scale": 0.6969,
+      "correction": 0.955
+    },
+    "love": {
+      "scale": 0.6995,
+      "correction": 0.958
+    }
+  },
+  "colours": {
+    "body": "#2e56bc",
+    "ink": "#1b2337",
+    "accent": "#FFC93C",
+    "confetti": [
+      "#2e56bc",
+      "#FFC93C",
+      "#4CC9F0",
+      "#7BD88F",
+      "#FF4F7B",
+      "#FFFFFF"
+    ]
+  },
+  "name": "Tooly",
+  "app": "Tolra",
+  "style": "vinyl",
+  "role": "A spanner you can talk to: ask Tooly, and the job gets sorted.",
+  "represents": "Tolra's built-in AI helper: ask in plain words, and the job gets sorted",
+  "personality": "capable, quick, plain-spoken; a workshop hand who gets on with it",
+  "brand": "#1E3472",
+  "lines": {
+    "hello": "Ask me anything about your jobs, quotes or invoices.",
+    "empty": "Ask a question and I'll get to work.",
+    "think": "Working on it...",
+    "success": "Done. Have a look.",
+    "toast": "Answer ready",
+    "oops": "I couldn't finish that. Nothing was changed.",
+    "tip": "Try: which jobs are late this week?",
+    "loveTitle": "Did that help?",
+    "love": "Tell me, so I get better at your workshop.",
+    "items": [
+      "Which jobs are late?",
+      "Draft a quote for ACME",
+      "Chase unpaid invoices"
+    ],
+    "itemMeta": [
+      "Answered",
+      "Draft ready",
+      "3 found"
+    ],
+    "tile": [
+      "Asked today",
+      "12"
+    ],
+    "sidebar": [
+      "Job Board",
+      "Quotes",
+      "Ask Tooly"
+    ],
+    "emptyTitle": "Nothing asked yet",
+    "oopsTitle": "That didn't work.",
+    "bannerTitle": "Tooly is switched off",
+    "bannerBody": "An admin can turn the helper on.",
+    "ctaStart": "Ask Tooly",
+    "ctaRetry": "Try again",
+    "ctaLove": "Send feedback",
+    "macTitle": "Ask Tooly",
+    "macSub": "Your workshop's helper",
+    "sync": "Reading the job board...",
+    "synced": "Up to date"
+  },
+  "ext": "webp",
+  "slug": "tooly"
+}
