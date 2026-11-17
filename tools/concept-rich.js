@@ -62,7 +62,7 @@ header.nav{position:sticky;top:0;z-index:30;background:var(--paper);border-botto
 .floor.on .spot{opacity:.85}
 .floor .lit{position:absolute;top:0;left:0;color:var(--a);will-change:transform}
 .floor .fl2{display:block;width:100%;height:100%}
-#fx{position:absolute;inset:0;width:100%;height:100%;opacity:.9;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 40%);mask-image:linear-gradient(90deg,transparent 0,#000 40%)}
+#fx{position:absolute;inset:0;width:100%;height:100%;opacity:.7;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 40%);mask-image:linear-gradient(90deg,transparent 0,#000 40%)}
 .hero .wrap{position:relative;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(28px,5vw,80px);align-items:end;padding:clamp(48px,8vw,112px) 0 clamp(48px,7vw,96px)}
 .eyebrow{display:flex;align-items:center;gap:12px;font:500 12.5px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t)}
 .eyebrow:before{content:"";width:28px;height:2px;background:var(--a)}
@@ -212,7 +212,7 @@ hr.addEventListener('pointerleave',function(){cancelAnimationFrame(raf);fl.class
     var node=ReactDOM.createRoot?ReactDOM.createRoot(root):null; if(!node) return;
     root.innerHTML=''; node.render(h(Form));
   }
-  function load(src,cb){var s=document.createElement('script');s.src=src;s.async=true;s.onload=cb;s.onerror=function(){cb(true);};document.head.appendChild(s);}
+  function load(src,cb){var s=document.createElement('script');s.src=src;s.async=true;s.onload=function(){cb();};s.onerror=function(){cb(true);};document.head.appendChild(s);}
   var base='https://cdnjs.cloudflare.com/ajax/libs/';
   load(base+'three.js/r128/three.min.js',function(err){if(!err){try{hero3d();}catch(e){}}});
   load(base+'react/18.2.0/umd/react.production.min.js',function(err){ if(err) return;
