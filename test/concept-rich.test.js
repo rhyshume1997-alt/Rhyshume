@@ -64,3 +64,9 @@ test('rich page: button labels flip, the floor grid is there and no pill buttons
   assert.ok(html.includes('class="floor"'));
   assert.ok(!/border-radius:\s*(9999|999|50)/.test(html));
 });
+
+test('rich page: the script loader calls back with no argument, so three.js and React really start', function () {
+  const html = renderRich(content(), null);
+  assert.ok(!html.includes('s.onload=cb;'));
+  assert.ok(html.includes('s.onload=function(){cb();};'));
+});
