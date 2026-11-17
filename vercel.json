@@ -95,5 +95,12 @@
     "deploymentEnabled": {
       "claude/beautiful-hawking-dh0pog": false
     }
-  }
+  },
+  "redirects": [
+    {
+      "source": "/marpet-prototype/:path*",
+      "destination": "/",
+      "permanent": false
+    }
+  ]
 }
