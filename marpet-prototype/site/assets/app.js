@@ -6,7 +6,7 @@
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const EASE_HEAVY = 'cubic-bezier(.6,.02,.2,1)';   // slow start, firm settle
   const EASE_SETTLE = 'cubic-bezier(.16,.84,.3,1)'; // decelerate to rest, no bounce
-  let busy = false, hero = null, cleanup = [];
+  let busy = false, cleanup = [];
 
   /* ---------- transition panel ---------- */
   const panel = document.createElement('div');
@@ -193,11 +193,11 @@
 
   /* ---------- per-page behaviour ---------- */
   function teardown() {
-    if (hero) { hero.destroy(); hero = null; }
     cleanup.forEach((f) => f()); cleanup = [];
   }
   const on = (el, ev, fn, o) => { el.addEventListener(ev, fn, o); cleanup.push(() => el.removeEventListener(ev, fn, o)); };
 
+  // Homepage hero: the Blender conveyor model, live. The header and quote button never wait for it.
   function initHero() {
     const root = $('[data-hero]');
     if (!root) return;
@@ -205,32 +205,32 @@
     const skip = $('[data-hero-skip]', section), replay = $('[data-hero-replay]', section);
     const q = new URLSearchParams(location.search);
     const ready = () => section.classList.add('is-ready');
+    const fallback = () => { section.classList.add('is-static'); ready(); };
     let webgl = false;
     try { webgl = !!document.createElement('canvas').getContext('webgl2'); } catch (e) {}
-    if (!webgl || !window.gsap || q.has('static')) { section.classList.add('is-static'); ready(); return; }
-    import('./hero.js').then(({ initHero }) => {
-      if (!root.isConnected) return;
-      const still = reduce.matches;
-      hero = initHero(root, {
-        still,
-        onReveal: ready,
-        onDone: () => { section.classList.add('is-done'); skip.hidden = true; replay.hidden = still; try { localStorage.setItem('mp-intro', '1'); } catch (e) {} },
-      });
-      if (!hero) { section.classList.add('is-static'); ready(); return; }
-      section.classList.add('is-live');
+    if (!webgl || q.has('static')) { fallback(); return; }
+    const giveUp = setTimeout(ready, 6000);   // slow connection: show the copy over the still image; the model joins when it arrives
+    cleanup.push(() => clearTimeout(giveUp));
+    on(root, 'viewer:reveal', ready);
+    on(root, 'viewer:done', () => {
+      section.classList.add('is-done'); skip.hidden = true; replay.hidden = reduce.matches;
+      if (!reduce.matches) root.viewer.run(true);
+      try { localStorage.setItem('mp-intro', '1'); } catch (e) {}
+    });
+    on(root, 'viewer:ready', () => {
+      clearTimeout(giveUp); section.classList.add('is-live');
       let seen = false;
       try { seen = localStorage.getItem('mp-intro') === '1'; } catch (e) {}
-      if (q.has('frame')) { hero.seek(parseFloat(q.get('frame'))); if (q.has('ui')) ready(); return; }
-      if (still || (seen && !q.has('intro'))) { hero.finish(); return; }
-      skip.hidden = false;
-      hero.play();
-      const end = () => { if (hero && hero.running) hero.finish(); };
+      if (reduce.matches || (seen && !q.has('intro')) || q.has('assembled')) { root.viewer.finish(); return; }
+      skip.hidden = false; root.viewer.play();
+      const end = () => { if (root.viewer.playing) root.viewer.finish(); };
       on(skip, 'click', end);
       on(window, 'keydown', (e) => { if (e.key === 'Escape') end(); });
       on(window, 'wheel', end, { passive: true });
       on(window, 'touchmove', end, { passive: true });
-      on(replay, 'click', () => { section.classList.remove('is-ready', 'is-done'); replay.hidden = true; skip.hidden = false; hero.play(); });
-    }).catch(() => { section.classList.add('is-static'); ready(); });
+    });
+    on(replay, 'click', () => { section.classList.remove('is-ready', 'is-done'); replay.hidden = true; skip.hidden = false; root.viewer.run(false); root.viewer.play(); });
+    import('./viewer.min.js').then((m) => root.isConnected && m.initViewer(root)).catch(fallback);
   }
 
   function initFilter() {
@@ -260,44 +260,71 @@
     cleanup.push(() => io.disconnect());
   }
 
+  // Enquiry form. Works without this script as an ordinary form post when an endpoint is set.
+  // With it: inline validation, an error summary that takes focus, and an honest status message.
   function initForm() {
-    const form = $('[data-proto-form]');
+    const form = $('[data-enquiry]');
     if (!form) return;
-    on(form, 'submit', (e) => {
+    const status = $('[data-form-status]', form), summary = $('[data-error-summary]', form), list = $('ul', summary);
+    const rules = {
+      name: (v) => (v.trim().length < 2 ? 'Enter your name.' : ''),
+      email: (v) => (/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) ? '' : 'Enter an email address, like name@example.co.uk.'),
+      tel: (v) => (v.trim() && !/^[0-9 +()\-]{6,40}$/.test(v.trim()) ? 'Enter a phone number using digits only, or leave it empty.' : ''),
+      message: (v) => (v.trim().length < 10 ? 'Tell us a little about the job (at least 10 characters).' : ''),
+    };
+    form.elements.ts.value = String(Date.now());
+    const say = (kind, html) => { status.className = 'full form-status form-status--' + kind; status.innerHTML = html; status.hidden = false; status.focus(); };
+    const check = (name) => {
+      const el = form.elements[name], err = $('#' + el.id + '-err', form), msg = rules[name](el.value);
+      err.textContent = msg; err.hidden = !msg;
+      if (msg) el.setAttribute('aria-invalid', 'true'); else el.removeAttribute('aria-invalid');
+      return msg;
+    };
+    // errors clear while typing, never on blur: hiding a message as the pointer goes down would move the Send button from under it
+    Object.keys(rules).forEach((n) => on(form.elements[n], 'input', () => { if (form.elements[n].hasAttribute('aria-invalid')) check(n); }));
+
+    const q = new URLSearchParams(location.search);
+    if (q.has('sent')) say('ok', '<b>Enquiry sent.</b> Marpet will come back to you.');
+    else if (q.has('error')) say('bad', `<b>Your enquiry was not sent.</b> Please call ${$('.contact-card .big') ? $('.contact-card .big').textContent : 'us'} or email ${form.dataset.email}.`);
+
+    on(form, 'submit', async (e) => {
+      const errors = Object.keys(rules).map((n) => [n, check(n)]).filter((x) => x[1]);
+      if (errors.length) {
+        e.preventDefault();
+        list.innerHTML = errors.map(([n, m]) => `<li><a href="#${form.elements[n].id}">${m}</a></li>`).join('');
+        summary.hidden = false; summary.focus(); status.hidden = true;
+        return;
+      }
+      summary.hidden = true;
+      const f = form.elements;
+      if (!form.getAttribute('action')) {
+        // No sending service yet: hand the enquiry to the visitor's own email program rather than pretend.
+        e.preventDefault();
+        const line = (label, v) => (v.trim() ? [`${label}: ${v.trim()}`] : []);
+        const body = [...line('Name', f.name.value), ...line('Company', f.company.value), ...line('Email', f.email.value), ...line('Phone', f.tel.value), ...line('Work', f.service.value), '', f.message.value.trim()].join('\n');
+        const href = `mailto:${form.dataset.email}?subject=${encodeURIComponent('Website enquiry from ' + f.name.value)}&body=${encodeURIComponent(body)}`;
+        say('info', `<b>Nothing has been sent yet.</b> This build has no sending service. <a href="${href}">Open your email program with this enquiry</a>, or call us.`);
+        return;
+      }
       e.preventDefault();
-      const out = $('[data-form-status]', form);
-      out.hidden = false;
-      out.focus();
+      const btn = $('button[type=submit]', form); btn.disabled = true;
+      try {
+        const res = await fetch(form.action, { method: 'POST', headers: { Accept: 'application/json', 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(new FormData(form)) });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.ok) { form.reset(); f.ts.value = String(Date.now()); say('ok', '<b>Enquiry sent.</b> Marpet will come back to you.'); }
+        else if (res.status === 400 && data.errors) {
+          list.innerHTML = Object.entries(data.errors).map(([n, m]) => `<li><a href="#${f[n] ? f[n].id : 'enquiry'}">${String(m).replace(/[<>&]/g, '')}</a></li>`).join('');
+          summary.hidden = false; summary.focus();
+        } else say('bad', `<b>Your enquiry was not sent.</b> Please call us or email ${form.dataset.email}.`);
+      } catch (err) {
+        say('bad', `<b>Your enquiry was not sent.</b> Check your connection and try again, or email ${form.dataset.email}.`);
+      }
+      btn.disabled = false;
     });
   }
 
-  // Exploration: the hero as a prerendered film. Same rules as the live hero: skippable, once per browser,
-  // still frame for reduced motion, and the header and quote button never wait for it.
-  function initFilm() {
-    const v = $('[data-film]');
-    if (!v) return;
-    const section = v.closest('.hero'), skip = $('[data-hero-skip]', section), replay = $('[data-hero-replay]', section), out = $('[data-film-stats]');
-    const q = new URLSearchParams(location.search);
-    const done = () => { section.classList.add('is-ready', 'is-done'); skip.hidden = true; replay.hidden = reduce.matches; try { localStorage.setItem('mp-film', '1'); } catch (e) {} };
-    const end = () => { v.pause(); if (v.duration) v.currentTime = v.duration; done(); };
-    let seen = false; try { seen = localStorage.getItem('mp-film') === '1'; } catch (e) {}
-    const report = () => {
-      if (!out || !v.getVideoPlaybackQuality) return;
-      const s = v.getVideoPlaybackQuality();
-      out.textContent = `Played ${s.totalVideoFrames} frames, dropped ${s.droppedVideoFrames}. Video ${v.videoWidth}x${v.videoHeight}.`;
-    };
-    on(v, 'timeupdate', () => { if (v.duration && v.currentTime > v.duration * 0.82) section.classList.add('is-ready'); });
-    on(v, 'ended', () => { done(); report(); });
-    on(skip, 'click', end);
-    on(replay, 'click', () => { section.classList.remove('is-ready', 'is-done'); replay.hidden = true; skip.hidden = false; v.currentTime = 0; v.play(); });
-    on(window, 'keydown', (e) => { if (e.key === 'Escape' && !v.paused) end(); });
-    if (reduce.matches || (seen && !q.has('intro'))) { v.removeAttribute('autoplay'); on(v, 'loadedmetadata', end); if (v.readyState > 0) end(); return; }
-    skip.hidden = false;
-    v.play().catch(done);   // autoplay refused: show the poster and the page
-  }
-
   function initTest() {
-    const viewers = $$('[data-viewer]');
+    const viewers = $$('[data-viewer]:not([data-hero])');
     if (viewers.length) {
       // the 3D bundle and model load only when a viewer is close to the screen
       const io = new IntersectionObserver((entries) => {
@@ -334,7 +361,7 @@
 
   function init() {
     document.documentElement.classList.add('js');
-    initHero(); initFilter(); initReveal(); initForm(); initTest(); initFilm();
+    initHero(); initFilter(); initReveal(); initForm(); initTest();
   }
   init();
 })();

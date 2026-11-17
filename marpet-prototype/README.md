@@ -1,4 +1,4 @@
-# Marpet Fabrications redesign prototype
+# Marpet Fabrications website (development build)
 
 Design exploration for review. Not linked from the live site, listed in `.vercelignore`, and every page carries `noindex`. Vercel previews are switched off for the working branch in `vercel.json`.
 
@@ -60,3 +60,11 @@ npx @gltf-transform/cli optimize conveyor-raw.glb site/assets/render/conveyor.gl
 ```
 
 Views are `hero`, `drive`, `weld`, `foot` and `takeup`. The HDRI is Blender's bundled `studio.exr`. `blender/plate.py` renders the navigation plate.
+
+## Checks
+
+```bash
+npm run check
+```
+
+Runs the build, the type check, the unit tests and the browser tests (Playwright with Chromium needed for the last). Status, evidence and open items are in `docs/build-status.md`. How to add projects, services and team members is in `docs/content-editing.md`. The enquiry function is described in `docs/enquiry-backend.md`.

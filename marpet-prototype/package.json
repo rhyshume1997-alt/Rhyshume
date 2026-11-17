@@ -5,9 +5,16 @@
   "scripts": {
     "build": "node build.mjs && npm run bundle",
     "bundle": "esbuild site/assets/viewer.js --bundle --minify --format=esm --target=es2020 --alias:three=./site/assets/vendor/three.module.js --outfile=site/assets/viewer.min.js",
-    "serve": "node serve.mjs"
+    "serve": "node serve.mjs",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "node --test test/site.test.mjs test/enquiry.test.mjs",
+    "test:browser": "node test/browser.cjs",
+    "check": "npm run build && npm run typecheck && npm test && npm run test:browser"
   },
   "devDependencies": {
-    "esbuild": "^0.25.0"
+    "@types/node": "^26.6.6",
+    "axe-core": "^4.14.1",
+    "esbuild": "^0.25.0",
+    "typescript": "^7.0.2"
   }
 }

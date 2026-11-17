@@ -1,8 +1,11 @@
 // Builds the static prototype into ./site from ./content/*.json.
 // Run: node build.mjs   Then serve ./site with any static server.
 import { readFileSync, writeFileSync } from 'node:fs';
-const J = (f) => JSON.parse(readFileSync(new URL(`./content/${f}.json`, import.meta.url)));
+import { validateContent } from './content/schema.mjs';
+const J = (f) => JSON.parse(readFileSync(new URL(`./content/${f}.json`, import.meta.url), 'utf8'));
 const co = J('company'), services = J('services'), projects = J('projects'), team = J('team'), li = J('linkedin'), dims = J('image-dims');
+const problems = validateContent({ company: co, services, projects, team, linkedin: li, dims });
+if (problems.length) { console.error('Content problems:\n- ' + problems.join('\n- ')); process.exit(1); }
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
 const svc = (slug) => services.find((s) => s.slug === slug);
 const img = (file, alt, attrs = '') => { const [w, h] = dims[file] || [0, 0]; return `<img src="assets/img/${file}" alt="${esc(alt)}" width="${w}" height="${h}" decoding="async" ${attrs}>`; };
@@ -10,6 +13,13 @@ const lowres = (file) => (dims[file] && dims[file][0] < 600 ? `<span class="res"
 const ph = (title, body) => `<div class="ph"><b>Placeholder: ${title}</b><p>${body}</p></div>`;
 const bolts = '<i class="bolt tl"></i><i class="bolt tr"></i><i class="bolt bl"></i><i class="bolt br"></i>';
 
+const orgLd = {
+  '@context': 'https://schema.org', '@type': 'Organization', name: co.name, url: 'https://www.marpet.co.uk/',
+  telephone: co.phoneHref, email: co.email,
+  address: { '@type': 'PostalAddress', streetAddress: co.address.slice(0, 2).join(', '), addressLocality: co.address[2], postalCode: co.address[3], addressCountry: 'GB' },
+};
+
+const built = [];
 const NAV = [['services', 'Services', 'services.html'], ['work', 'Our Work', 'work.html'], ['about', 'About', 'about.html'], ['team', 'Team', 'team.html'], ['contact', 'Contact', 'contact.html']];
 
 function page({ file, title, desc, section, page, main }) {
@@ -19,16 +29,15 @@ function page({ file, title, desc, section, page, main }) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow,noarchive">
-<title>${esc(title)} | Marpet Fabrications (prototype)</title>
+<title>${esc(title)} | Marpet Fabrications</title>
 <meta name="description" content="${esc(desc)}">
 <link rel="icon" href="data:,">
 <link rel="preload" href="assets/fonts/barlow-condensed-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/styles.css">
-<script type="importmap">{"imports":{"three":"./assets/vendor/three.module.js"}}</script>
-</head>
+${page === 'home' ? `<link rel="modulepreload" href="assets/viewer.min.js">\n<script type="application/ld+json">${JSON.stringify(orgLd)}</script>\n` : ''}</head>
 <body data-page="${page}" data-section="${section}" data-nav-scope>
 <a class="skip" href="#main">Skip to content</a>
-<p class="proto-bar">Design prototype for review. Not the live Marpet site. <a href="storyboard.html">Storyboard, concepts and open items</a> · <a href="material-test.html">Realism test</a></p>
+<p class="proto-bar">Development build. Not the live Marpet site. <a href="dev-notes.html">Open items and test pages</a></p>
 <header class="site-header">
   <div class="wrap">
     <a class="brand" href="index.html" data-name="Home"><img src="assets/img/logo.jpg" alt="Marpet Fabrications 1997 Limited, home" width="293" height="107"></a>
@@ -49,15 +58,15 @@ ${main}
       <div><h2>Company</h2><ul><li><a href="work.html">Our work</a></li><li><a href="about.html">About Marpet</a></li><li><a href="team.html">Meet the team</a></li><li><a href="contact.html" data-transition="shutter">Contact</a></li></ul></div>
       <div><h2>Contact</h2><ul><li><a href="tel:${co.phoneHref}">${co.phone}</a></li><li><a href="mailto:${co.email}">${co.email}</a></li><li>LinkedIn <span class="confirm">URL to confirm</span></li><li>Family: <a href="https://jnrengineering.co.uk/" target="_blank" rel="noopener">JNR Engineering<span class="visually-hidden"> (opens in a new tab)</span></a></li></ul></div>
     </div>
-    <p class="legal"><span>Registered in Scotland ${co.companyNumber}. VAT number ${co.vat}. <span class="confirm">Confirm before launch</span></span><span>Prototype. Photographs from marpet.co.uk.</span></p>
+    <p class="legal"><span>Registered in Scotland ${co.companyNumber}. VAT number ${co.vat}. <span class="confirm">Confirm before launch</span></span><span><a href="privacy.html">Privacy</a> · Development build. Photographs from marpet.co.uk.</span></p>
   </div>
 </footer>
-<script src="assets/vendor/gsap.min.js" defer></script>
 <script src="assets/app.js" defer></script>
 </body>
 </html>
 `;
   writeFileSync(new URL(`./site/${file}`, import.meta.url), html);
+  built.push(file);
 }
 
 const cta = (h = 'Have a drawing or a line to fit out?', p = 'Tell us what you need made and where it is going. Marpet will come back to you.') => `
@@ -93,7 +102,7 @@ const linkedin = `
   <details class="li-panel" open>
     <summary class="plate">${bolts}<b>Latest from the workshop</b><span>Panel</span></summary>
     <div class="li-body">
-      ${li.posts.map((p, i) => ph(`LinkedIn post ${i + 1}`, 'A real Marpet post: photograph, one line of text, date and a link to the post on LinkedIn. Added by hand in the content file. No likes or follower counts are shown.')).join('')}
+      ${li.posts.map((p, i) => p.url ? `<a class="li-post" href="${esc(p.url)}" target="_blank" rel="noopener">${p.image ? img(p.image, '') : ''}<span>${esc(p.summary || 'View this post on LinkedIn')}</span><small>${esc(p.date || '')}<span class="visually-hidden"> (opens LinkedIn in a new tab)</span></small></a>` : ph(`LinkedIn post ${i + 1}`, 'A real Marpet post: photograph, one line of text, date and a link to the post on LinkedIn. Added by hand in the content file. No likes or follower counts are shown.')).join('')}
     </div>
   </details>
   <div class="btn-row">${li.profileUrl ? `<a class="btn btn--primary" href="${li.profileUrl}">Follow Marpet on LinkedIn</a>` : `<span class="btn btn--steel" aria-disabled="true">Follow Marpet on LinkedIn</span> <span class="confirm">Company page URL to confirm. None is linked from the existing site.</span>`}</div>
@@ -104,11 +113,11 @@ const featured = projects.filter((p) => p.featured);
 page({ file: 'index.html', title: 'Stainless steel fabrication, Glasgow', desc: 'Marpet Fabrications design, manufacture and install stainless steel, mild steel and aluminium fabrication.', section: 'home', page: 'home', main: `
 <main id="main">
 <section class="hero">
-  <div class="hero__stage" data-hero>
-    <img class="hero__poster" src="assets/hero-poster.jpg" alt="Illustrative model of a stainless steel belt conveyor carrying the Marpet Fabrications logo plate" width="1600" height="900" fetchpriority="high">
-    <canvas aria-hidden="true"></canvas>
-    <div class="callout" data-anchor="0.1,0.92,0"><a href="service-conveyor-systems.html" data-name="Conveyor systems">Conveyor systems</a></div>
-    <div class="callout" data-anchor="-1.15,0.3,0.33"><a href="service-general-fabrication.html" data-name="General fabrication">Frames and general fabrication</a></div>
+  <div class="hero__stage" data-hero data-view="hero" data-model="assets/render/conveyor.glb" data-hdri="assets/render/studio.exr">
+    <img class="hero__poster" src="assets/render/hero.jpg" alt="Stainless steel belt conveyor with brushed side frames, orange bearing housings, a blue belt and the Marpet Fabrications logo plate" width="1600" height="1000" loading="lazy">
+    <canvas aria-label="Interactive 3D model of a stainless steel belt conveyor. Drag sideways to turn it."></canvas>
+    <div class="callout" data-anchor="1.35,0,0.9"><a href="service-conveyor-systems.html" data-name="Conveyor systems">Conveyor systems</a></div>
+    <div class="callout" data-anchor="0.45,-0.28,0.4"><a href="service-general-fabrication.html" data-name="General fabrication">Frames and general fabrication</a></div>
   </div>
   <div class="hero__copy">
     <p class="eyebrow">Sheet metal fabricators, Glasgow</p>
@@ -116,7 +125,7 @@ page({ file: 'index.html', title: 'Stainless steel fabrication, Glasgow', desc: 
     <p class="lead">Marpet design, manufacture and install stainless steel, mild steel and aluminium fabrication, in the workshop or on site.</p>
     <div class="btn-row"><a class="btn btn--primary" href="contact.html#enquiry" data-transition="shutter" data-name="Request a quote">Request a quote</a><a class="btn btn--ghost" href="services.html">Our services</a></div>
   </div>
-  <p class="hero__note">Illustrative 3D model based on Marpet belt conveyor photographs. Not a specific delivered machine.</p>
+  <p class="hero__note">3D model reconstructed from Marpet conveyor photographs. Drag to turn it. Not a specific delivered machine.</p>
   <div class="hero__ctrl"><button type="button" data-hero-skip hidden>Skip intro</button><button type="button" data-hero-replay hidden>Replay assembly</button></div>
 </section>
 <div class="facts">
@@ -131,7 +140,7 @@ page({ file: 'index.html', title: 'Stainless steel fabrication, Glasgow', desc: 
     <h2>Stainless steel work for production floors</h2>
     <p class="lead">Marpet Fabrications has built a reputation for quality across sheet metal, engineering and fabrication, with a client base across Scotland and the North of England.</p>
     <p>The work is made by skilled, time served tradesmen, either in the fabrication workshop or on site at client premises.</p>
-    <p><span class="confirm">To confirm</span> Founding date. The existing site says "early 80's", the logo says "1997 Limited".</p>
+    <p><span class="confirm">To confirm</span> Founding date. The existing site says "early 80's". Company registry listings show Marpet Fabrications (1997) Ltd incorporated in February 1997.</p>
     <a class="text-link" href="about.html">About Marpet</a>
   </div>
   <div class="beamed" data-reveal>${img('IMG_0276.jpg', 'Stainless steel side table beside a blue belt conveyor with the MF mark on its side panel', 'loading="lazy"')}</div>
@@ -241,16 +250,16 @@ for (const p of projects) {
     <p><span class="confirm">Working title</span> Named from the photograph. ${p.note || ''}</p>
     <dl class="spec">
       <dt>Service</dt><dd><a href="service-${s.slug}.html">${s.name}</a></dd>
-      <dt>Client</dt><dd>Not shown until approved</dd>
-      <dt>Date</dt><dd>To be supplied</dd>
+      <dt>Client</dt><dd>${p.client ? esc(p.client) : 'Not shown until approved'}</dd>
+      <dt>Date</dt><dd>${p.date ? esc(p.date) : 'To be supplied'}</dd>
       <dt>Location</dt><dd>To be supplied</dd>
     </dl>
   </div>
   <div class="page-head__media plate" data-frame-target>${bolts}<div class="frame__img">${img(p.hero, p.title + ', Marpet photograph')}${lowres(p.hero)}</div></div>
 </div></section>
 <section class="section on-white"><div class="wrap split" style="align-items:start">
-  <div><p class="eyebrow">Overview</p><h2>What was made</h2>${ph('overview', 'Two or three sentences from Marpet: what the customer needed and what was built.')}</div>
-  <div><p class="eyebrow">Scope</p><h2>Scope and details</h2>${ph('scope of work and technical details', 'Design, manufacture, installation. Materials, sizes, finish. Measured outcomes only if verified and approved.')}</div>
+  <div><p class="eyebrow">Overview</p><h2>What was made</h2>${p.overview ? `<p>${esc(p.overview)}</p>` : ph('overview', 'Two or three sentences from Marpet: what the customer needed and what was built.')}</div>
+  <div><p class="eyebrow">Scope</p><h2>Scope and details</h2>${p.scope ? `<p>${esc(p.scope)}</p>` : ph('scope of work and technical details', 'Design, manufacture, installation. Materials, sizes, finish. Measured outcomes only if verified and approved.')}</div>
 </div></section>
 ${p.images.length ? `<section class="section on-steel"><div class="wrap"><p class="eyebrow">Photographs</p><div class="section-head"><h2>More images</h2></div><div class="gallery">${p.images.map((f) => `<figure class="plate">${bolts}<div class="frame__img">${img(f, p.title + ', Marpet photograph', 'loading="lazy"')}${lowres(f)}</div></figure>`).join('')}</div></div></section>` : ''}
 ${rel.length ? `<section class="section on-dark"><div class="wrap"><p class="eyebrow">Related</p><div class="section-head"><h2>More ${s.short.toLowerCase()} work</h2><a class="text-link" href="service-${s.slug}.html">${s.name}</a></div><ul class="grid">${rel.map(frameCard).join('')}</ul></div></section>` : ''}
@@ -272,7 +281,7 @@ page({ file: 'about.html', title: 'About Marpet', desc: 'Marpet Fabrications, sh
     <h2>Where we are and who we work for</h2>
     <p>Marpet Fabrications is located to the east of Glasgow, placed to serve local customers and those further afield by the M74.</p>
     <p>Marpet is an established supplier to food processing, packaging and catering, working with companies locally and nationally.</p>
-    <p><span class="confirm">To confirm</span> Founding date and company history. The existing site says "established in the early 80's"; the logo reads "1997 Limited".</p>
+    <p><span class="confirm">To confirm</span> Founding date and company history. The existing site says "established in the early 80's". Company registry listings show Marpet Fabrications (1997) Ltd incorporated in February 1997.</p>
   </div>
   <div class="beamed" data-reveal>${img('general-fabrication-1.jpg', 'Stainless steel roller table with enclosure in front of a Marpet Fabrications van', 'loading="lazy"')}</div>
 </div></section>
@@ -303,7 +312,7 @@ page({ file: 'team.html', title: 'Meet the team', desc: 'The people behind Marpe
   <div class="team">${team.map((m, i) => `
     <details class="member"${i === 0 ? ' open' : ''}>
       <summary class="plate">${bolts}<b>${m.name || 'Name to be supplied'}</b><em>${m.role || 'Job title'}</em><span class="hint">Lift plate</span></summary>
-      <div class="member__body"><div class="ph member__photo"><div><b>Placeholder: photograph</b><p>Approved portrait, 4:5.</p></div></div>${ph('biography', 'Two or three sentences and responsibilities, approved by the person before publication.')}</div>
+      <div class="member__body">${m.photo ? `<img class="member__photo" src="assets/img/${esc(m.photo)}" alt="${esc(m.name || '')}" loading="lazy">` : '<div class="ph member__photo"><div><b>Placeholder: photograph</b><p>Approved portrait, 4:5.</p></div></div>'}${m.bio ? `<p>${esc(m.bio)}</p>` : ph('biography', 'Two or three sentences and responsibilities, approved by the person before publication.')}</div>
     </details>`).join('')}</div>
 </div></section>
 ${cta('Want to talk to the people who will make it?')}
@@ -323,84 +332,96 @@ page({ file: 'contact.html', title: 'Contact', desc: 'Contact Marpet Fabrication
     <p><a class="big" href="tel:${co.phoneHref}">${co.phone}</a><a href="mailto:${co.email}">${co.email}</a></p>
     <p>${co.address.join('<br>')}</p>
     <p>Fax ${co.fax} <span class="confirm">Still in use?</span></p>
-    <p><span class="confirm">To confirm</span> The existing site spells the road both "Fullarton" and "Fullerton".</p>
+    <p><span class="confirm">To confirm</span> The existing site spells the road both "Fullarton" and "Fullerton". Company registry listings use "Fullarton".</p>
     ${ph('opening hours and map', 'Hours and a map link once Marpet confirms them.')}
   </div>
-  <form class="form" id="enquiry" data-proto-form novalidate>
+  <form class="form" id="enquiry" data-enquiry method="post" ${co.enquiryEndpoint ? `action="${esc(co.enquiryEndpoint)}"` : ''} data-email="${co.email}" novalidate>
     <h2 class="full">Request a quote</h2>
-    <div><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name" required></div>
-    <div><label for="f-company">Company <span class="visually-hidden">(optional)</span></label><input id="f-company" name="company" autocomplete="organization"></div>
-    <div><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
-    <div><label for="f-tel">Phone <span class="visually-hidden">(optional)</span></label><input id="f-tel" name="tel" type="tel" autocomplete="tel"></div>
-    <div class="full"><label for="f-service">What do you need?</label><select id="f-service" name="service"><option value="">Choose one</option>${services.map((s) => `<option>${s.name}</option>`).join('')}<option>Something else</option></select></div>
-    <div class="full"><label for="f-msg">Tell us about the job</label><textarea id="f-msg" name="message" required aria-describedby="f-msg-hint"></textarea><p class="hint" id="f-msg-hint">Sizes, material, where it is going and when you need it.</p></div>
-    <div class="full"><label for="f-file">Drawing or photograph <span class="visually-hidden">(optional)</span></label><input id="f-file" name="file" type="file"></div>
+    <div class="full form-status" id="enquiry-status" data-form-status role="status" tabindex="-1" hidden></div>
+    <div class="full error-summary" data-error-summary role="alert" tabindex="-1" hidden><h3>Check the form</h3><ul></ul></div>
+    <div><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name" required minlength="2" maxlength="100" aria-describedby="f-name-err"><p class="field-error" id="f-name-err" hidden></p></div>
+    <div><label for="f-company">Company (optional)</label><input id="f-company" name="company" autocomplete="organization" maxlength="120"></div>
+    <div><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required maxlength="254" aria-describedby="f-email-err"><p class="field-error" id="f-email-err" hidden></p></div>
+    <div><label for="f-tel">Phone (optional)</label><input id="f-tel" name="tel" type="tel" autocomplete="tel" maxlength="40" aria-describedby="f-tel-err"><p class="field-error" id="f-tel-err" hidden></p></div>
+    <div class="full"><label for="f-service">What do you need? (optional)</label><select id="f-service" name="service"><option value="">Choose one</option>${services.map((s) => `<option>${s.name}</option>`).join('')}<option>Something else</option></select></div>
+    <div class="full"><label for="f-msg">Tell us about the job</label><textarea id="f-msg" name="message" required minlength="10" maxlength="5000" aria-describedby="f-msg-hint f-msg-err"></textarea><p class="hint" id="f-msg-hint">Sizes, material, where it is going and when you need it. Drawings and photographs can follow by email.</p><p class="field-error" id="f-msg-err" hidden></p></div>
+    <div class="hp" aria-hidden="true"><label for="f-website">Leave this field empty</label><input id="f-website" name="website" tabindex="-1" autocomplete="off"></div>
+    <input type="hidden" name="ts" value="">
+    ${co.turnstileSiteKey ? `<div class="full cf-turnstile" data-sitekey="${esc(co.turnstileSiteKey)}"></div>` : ''}
     <div class="full"><button class="btn btn--primary" type="submit">Send enquiry</button></div>
-    <div class="ph form-status" data-form-status hidden tabindex="-1"><b>Prototype</b><p>Nothing was sent. In production this posts to a server function that emails ${co.email}, with spam protection, and confirms on the page.</p></div>
+    <p class="full hint">We use what you send only to answer your enquiry. <a href="privacy.html">Privacy</a></p>
+    ${co.enquiryEndpoint ? '' : `<p class="full"><span class="confirm">Not connected</span> No sending service is set up yet. Until it is, this form checks what you type and then opens your email program with the enquiry ready to send to ${co.email}.</p>`}
   </form>
 </div></section>
 </main>` });
 
-/* ---------------- Concept B ---------------- */
-const foldSet = [['header13.jpg', 'Production lines', 'production-lines'], ['pipeheader.jpg', 'Pipework', 'pipework'], ['header11.jpg', 'Access platforms', 'access-platforms'], ['header7.jpg', 'Conveyors', 'conveyor-systems']];
-page({ file: 'concept-b.html', title: 'Concept B: Architectural fabrication', desc: 'Alternative homepage concept built from folding sheet metal panels.', section: 'home', page: 'concept-b', main: `
+/* ---------------- Privacy ---------------- */
+page({ file: 'privacy.html', title: 'Privacy', desc: 'How Marpet Fabrications handles enquiry information.', section: 'privacy', page: 'privacy', main: `
 <main id="main">
 <section class="page-head"><div class="wrap">
-  <p class="crumbs"><a href="storyboard.html">Review</a><span>/</span><span>Concept B</span></p>
-  <h1>Built from sheet.</h1>
-  <p class="lead">Concept B homepage. Four sheet metal panels fold open on their hinges to show Marpet's work. No 3D model, no WebGL.</p>
-  <div class="btn-row"><a class="btn btn--primary" href="contact.html#enquiry" data-transition="shutter" data-name="Request a quote">Request a quote</a><a class="btn btn--ghost" href="index.html">Compare with Concept A</a></div>
-</div></section>
-<div class="fold">${foldSet.map(([f, n, s], i) => `<div class="fold__p" style="--i:${i}">${img(f, n + ', Marpet photograph')}<div class="fold__back plate">${bolts}</div><a class="fold__tag" href="service-${s}.html" data-name="${n}">${n}</a></div>`).join('')}</div>
-<section class="section on-steel"><div class="wrap"><p class="eyebrow">Same system below the fold</p><div class="section-head"><h2>Services</h2></div>${stack(services)}</div></section>
-${cta()}
-</main>` });
-
-/* ---------------- Storyboard / review ---------------- */
-const hb = [
-  ['Arrival', '0.0 to 1.5 s', 'One brushed stainless side frame travels in along its length, close to camera. Folded lips and sheet thickness are visible. The header, navigation and quote button are already usable.'],
-  ['Legs', '1.3 to 2.6 s', 'Three square-tube leg frames with adjustable feet roll in from the far side. Camera begins to pull back.'],
-  ['Frame closes', '2.0 to 3.4 s', 'Far side frame slides in. Cross members and the slider bed lower into the frame, decelerating before contact.'],
-  ['Running gear', '2.9 to 4.5 s', 'End rollers enter axially, flange bearings and drive seat, then the blue modular belt feeds across.'],
-  ['Brand reveal', '4.5 to 6.0 s', 'The frame lowers onto its feet. The existing Marpet logo plate swings up, meets the side frame and four bolts turn in.'],
-  ['Website reveal', '6.0 to 7.5 s', 'Camera pulls back to the hero composition. Headline, intro and buttons rise in. The belt keeps running.'],
-];
-const tb = [
-  ['Select', 'The selected navigation item or plate is the source of the panel.'],
-  ['Lift and rotate', 'The plate lifts 14 px, tips toward the viewer and grows to fill the screen. 620 ms.'],
-  ['Swap', 'Behind the plate the new page is fetched and swapped in. The URL changes with history.pushState.'],
-  ['Hinge open', 'The plate swings open on its left hinge and the new page is there. 560 ms. Back reverses it.'],
-];
-const rows = [
-  ['Realism', 'High. A real-time PBR steel model with reflections, shadows and weight.', 'Medium. CSS steel reads as metal but is flat.'],
-  ['Visual impact', 'High. One memorable moment that is about Marpet’s main product.', 'Medium to high. Strong first fold, less distinctive.'],
-  ['Relevance to Marpet', 'High. Conveyors lead the existing site and photographs.', 'Medium. Sheet metal is accurate but generic.'],
-  ['User experience', 'Good. Intro is 7.5 s, skippable, shown once.', 'Good. Nothing to wait for.'],
-  ['Mobile', 'Good with care. Model sits above the copy, capped pixel ratio.', 'Very good. CSS only.'],
-  ['Performance', 'About 2.1 MB of unminified 3D library in this prototype (roughly 180 KB gzipped once tree-shaken and minified), loaded after first paint.', 'Very light. No extra libraries.'],
-  ['Build complexity', 'Higher. Model, lighting and fallbacks to maintain.', 'Low.'],
-  ['Maintenance', 'Model changes need a developer. Content does not.', 'Anyone who can edit CSS.'],
-];
-page({ file: 'storyboard.html', title: 'Storyboard, concepts and review', desc: 'Motion storyboard and concept comparison for the Marpet prototype.', section: 'review', page: 'review', main: `
-<main id="main">
-<section class="page-head"><div class="wrap">
-  <h1>Storyboard and concepts</h1>
-  <p class="lead">Frames below are captured from the working prototype, not drawn.</p>
-  <div class="btn-row"><a class="btn btn--primary" href="index.html?intro=1" data-no-nav>Play the intro</a><a class="btn btn--ghost" href="concept-b.html">Open Concept B</a><a class="btn btn--ghost" href="material-test.html">Realism test</a></div>
-</div></section>
-<section class="section on-dark"><div class="wrap">
-  <p class="eyebrow">Phase 3</p><div class="section-head"><h2>Conveyor hero storyboard</h2></div>
-  <ol class="board">${hb.map(([t, time, d], i) => `<li><img src="assets/board/hero-${i + 1}.jpg" alt="Storyboard frame ${i + 1}: ${t}" width="1280" height="800" loading="lazy"><div><b>${t}</b>${d}<small>${time}</small></div></li>`).join('')}</ol>
-</div></section>
-<section class="section on-deep"><div class="wrap">
-  <p class="eyebrow">Phase 3</p><div class="section-head"><h2>Plate page transition</h2></div>
-  <ol class="board">${tb.map(([t, d], i) => `<li><img src="assets/board/trans-${i + 1}.jpg" alt="Transition frame ${i + 1}: ${t}" width="1280" height="800" loading="lazy"><div><b>${t}</b>${d}</div></li>`).join('')}</ol>
-  <p style="margin-top:1.5rem">Two variants share the same steel, bolts and easing: a roller shutter for Contact and quote links, and a photograph frame that expands into project pages.</p>
+  <p class="crumbs"><a href="index.html">Home</a><span>/</span><span>Privacy</span></p>
+  <h1>Privacy</h1>
 </div></section>
 <section class="section on-white"><div class="wrap">
-  <p class="eyebrow">Phase 2</p><div class="section-head"><h2>Concept A against Concept B</h2></div>
-  <div class="table-wrap"><table><thead><tr><th scope="col">Criterion</th><th scope="col">A: Conveyor assembly</th><th scope="col">B: Architectural fabrication</th></tr></thead><tbody>${rows.map((r) => `<tr><th scope="row">${r[0]}</th><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('')}</tbody></table></div>
-  <p style="margin-top:1.5rem"><b>Recommendation:</b> Concept A for the homepage hero, with Concept B's CSS panel system used for every page transition and component. That is what this prototype does.</p>
+  <h2>What this website collects</h2>
+  <p>The enquiry form asks for your name, email address and a description of the job. Company, phone number and type of work are optional. Nothing else is collected by the form.</p>
+  <p>This website sets no advertising or tracking cookies in this build.</p>
+  ${ph('privacy notice', 'The approved notice from Marpet: who the data controller is, how long enquiries are kept, who they are shared with, and how to ask for a copy or deletion. Required before the form goes live.')}
+</div></section>
+</main>` });
+
+/* ---------------- Not found ---------------- */
+page({ file: '404.html', title: 'Page not found', desc: 'That page does not exist.', section: 'none', page: 'notfound', main: `
+<main id="main">
+<section class="page-head"><div class="wrap">
+  <h1>Page not found</h1>
+  <p class="lead">That page has moved or does not exist.</p>
+  <div class="btn-row"><a class="btn btn--primary" href="index.html">Home</a><a class="btn btn--ghost" href="services.html">Services</a><a class="btn btn--ghost" href="contact.html" data-transition="shutter">Contact</a></div>
+</div></section>
+</main>` });
+
+/* ---------------- Old addresses, for the launch redirect rules ---------------- */
+const redirects = [
+  { from: '/index.html', to: '/' }, { from: '/about.html', to: '/about' }, { from: '/services.html', to: '/services' }, { from: '/contact.html', to: '/contact' },
+  ...services.map((s) => ({ from: '/' + s.oldUrl, to: '/services/' + s.slug })),
+];
+
+/* ---------------- Development notes (not part of the public site) ---------------- */
+const openContent = [
+  ['Logo', 'Only a 293 x 107 JPG exists. A vector or high resolution original is needed.'],
+  ['Photographs', 'Largest existing photograph is 1024 x 768. Higher resolution originals or a new shoot, plus workshop and people photographs.'],
+  ['LinkedIn', 'No company page is linked from the existing site and none was found by search. The section shows a link slot until the address is supplied.'],
+  ['Team', 'Names, job titles, biographies and approved portraits. Four empty plates are shown.'],
+  ['Projects', 'Eleven projects are grouped from existing photographs with working titles. Real titles, clients (if approved), dates, scope and technical detail are needed.'],
+  ['Service detail', 'Technical capability per service: materials, sizes, finishes, standards.'],
+  ['Company history', 'Founding date wording. The existing site says early 80s; company registry listings show incorporation in February 1997.'],
+  ['Address', 'Fullarton or Fullerton Road. Registry listings use Fullarton.'],
+  ['Customers', 'Confirmation that each named customer may still be published.'],
+  ['Services', 'Whether Dentistry and Catering are still offered, and whether the fax number is still used.'],
+  ['JNR Engineering', 'Approved wording for the relationship, and permission to use the JNR logo.'],
+  ['Privacy notice', 'Approved text.'],
+  ['Conveyor model', 'Measured drawings or more photographs. Drive, underside and belt return are not modelled.'],
+];
+const openTech = [
+  ['Enquiry sending', 'The server function is written and tested (api/enquiry.js) but not connected: it needs a Resend account with a verified sending domain, a Cloudflare Turnstile site key and secret, and a host that runs it.'],
+  ['Hosting and domain', 'Where the new site will be hosted, and access to marpet.co.uk DNS for launch and redirects.'],
+  ['Real phone test', 'Frame rate on real phones has not been measured. Use the phone test page.'],
+  ['Analytics', 'None installed. Choose one, or none, before launch.'],
+];
+page({ file: 'dev-notes.html', title: 'Development notes', desc: 'Open items and test pages for the Marpet development build.', section: 'review', page: 'notes', main: `
+<main id="main">
+<section class="page-head"><div class="wrap">
+  <h1>Development notes</h1>
+  <p class="lead">Not part of the public site. What is still needed, and the test pages.</p>
+  <div class="btn-row"><a class="btn btn--ghost" href="material-test.html">Realism test</a><a class="btn btn--ghost" href="phone-test.html" data-no-nav>Phone test</a><a class="btn btn--ghost" href="index.html?intro=1" data-no-nav>Replay the homepage opening</a></div>
+</div></section>
+<section class="section on-white"><div class="wrap">
+  <h2>Content needed from Marpet</h2>
+  <div class="table-wrap"><table><tbody>${openContent.map((r) => `<tr><th scope="row">${r[0]}</th><td>${r[1]}</td></tr>`).join('')}</tbody></table></div>
+  <h2 style="margin-top:2.5rem">Technical items</h2>
+  <div class="table-wrap"><table><tbody>${openTech.map((r) => `<tr><th scope="row">${r[0]}</th><td>${r[1]}</td></tr>`).join('')}</tbody></table></div>
+  <h2 style="margin-top:2.5rem">Old addresses to redirect at launch</h2>
+  <div class="table-wrap"><table><thead><tr><th scope="col">Existing address</th><th scope="col">New address</th></tr></thead><tbody>${redirects.map((r) => `<tr><td>${r.from}</td><td>${r.to}</td></tr>`).join('')}</tbody></table></div>
 </div></section>
 </main>` });
 
@@ -433,7 +454,7 @@ const refs = [
 page({ file: 'material-test.html', title: 'Realism test', desc: 'Interactive conveyor test against a Blender Cycles benchmark.', section: 'review', page: 'test', main: `
 <main id="main">
 <section class="page-head"><div class="wrap">
-  <p class="crumbs"><a href="storyboard.html">Review</a><span>/</span><span>Realism test</span></p>
+  <p class="crumbs"><a href="dev-notes.html">Development notes</a><span>/</span><span>Realism test</span></p>
   <h1>Realism test</h1>
   <p class="lead">One Blender master model, shown two ways: rendered offline as the benchmark, and running live in Three.js. The homepage, its layout and its copy are unchanged.</p>
 </div></section>
@@ -510,4 +531,5 @@ page({ file: 'phone-test.html', title: 'Phone test', desc: 'Measure the interact
 </div></section>
 </main>` });
 
-console.log('built', 6 + services.length + projects.length + 2, 'pages');
+writeFileSync(new URL('./site/redirects.json', import.meta.url), JSON.stringify(redirects, null, 2) + String.fromCharCode(10));
+console.log('built', built.length, 'pages');

@@ -396,3 +396,54 @@ a.rplate:active{transform:translateY(1px);filter:drop-shadow(0 1px 0 rgba(0,0,0,
 .chip--range input{width:min(38vw,220px);accent-color:#8aa7e6}
 .chip-gap{flex:1}
 .stage3d .fps{padding:0 .9rem .8rem;margin:0}
+
+/* ---- complete build: hero uses the live conveyor ---- */
+.hero{background:#06080e}
+.hero__stage{background:#06080e}
+.hero__poster{object-position:50% 55%}
+.hero__stage canvas{position:absolute;inset:0;touch-action:pan-y;cursor:grab}
+.hero__stage canvas:active{cursor:grabbing}
+.hero.is-static .hero__stage canvas{display:none}
+.hero__copy{pointer-events:none}
+.hero__copy::before{content:"";position:absolute;inset:-4rem -40vw -4rem -50vw;z-index:-1;background:linear-gradient(90deg,rgba(6,8,14,.92) 0%,rgba(6,8,14,.8) 46%,rgba(6,8,14,0) 62%);pointer-events:none}
+@media (max-width:899px){
+  .hero__copy::before{display:none}
+  .hero__stage{height:auto;aspect-ratio:5/4;max-height:56svh}
+  .hero__poster{object-position:50% 50%}
+}
+
+/* ---- rendered steel on the service stack and the transition plate ---- */
+.stack .plate{background:none;box-shadow:none;border:30px solid transparent;border-image:url(render/plate.webp) 96 fill / 30px stretch;padding:.2rem 1.4rem;
+  filter:drop-shadow(0 1px 0 rgba(0,0,0,.55)) drop-shadow(0 8px 10px rgba(0,0,0,.35))}
+.stack .plate .bolt{display:none}
+.stack .plate::before{content:"";position:absolute;inset:-28px;border-radius:5px;pointer-events:none;mix-blend-mode:soft-light;
+  background:linear-gradient(180deg,rgba(255,255,255,.45),transparent 45%,rgba(0,0,0,.3)),linear-gradient(97deg,rgba(0,0,0,.35) 0%,rgba(255,255,255,.5) 18%,rgba(0,0,0,.12) 36%,rgba(255,255,255,.7) 49%,rgba(0,0,0,.28) 66%,rgba(255,255,255,.3) 84%,rgba(0,0,0,.3) 100%)}
+.stack .plate>*{position:relative}
+.stack .name,.stack .no,.stack .go{color:#23282e}
+@media (min-width:900px){
+  .stack .plate{height:6.6rem}
+  .stack a:hover .plate,.stack a:focus-visible .plate{box-shadow:none;filter:drop-shadow(0 1px 0 rgba(0,0,0,.55)) drop-shadow(0 46px 34px rgba(0,0,0,.5))}
+}
+.mp-panel__face.plate{background:none;box-shadow:none;border:70px solid transparent;border-image:url(render/plate.webp) 96 fill / 70px stretch}
+.mp-panel__face.plate .bolt{display:none}
+.mp-panel__face.plate::before{content:"";position:absolute;inset:-66px;pointer-events:none;mix-blend-mode:soft-light;
+  background:linear-gradient(100deg,rgba(0,0,0,.35) 0%,rgba(255,255,255,.55) 20%,rgba(0,0,0,.15) 40%,rgba(255,255,255,.7) 55%,rgba(0,0,0,.3) 75%,rgba(255,255,255,.3) 100%)}
+.mp-panel__hinge{left:-70px}
+.mp-panel__label{position:relative}
+
+/* ---- enquiry form ---- */
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.field-error{color:#a11616;font-weight:500;margin:.35rem 0 0;font-size:.95rem}
+.form [aria-invalid=true]{border-color:#a11616;box-shadow:0 0 0 2px rgba(161,22,22,.25)}
+.error-summary{border:3px solid #a11616;background:#fff;padding:1rem 1.2rem;border-radius:3px}
+.error-summary h3{margin:0 0 .4rem;font-size:1.2rem;color:#a11616}
+.error-summary ul{margin:0;padding-left:1.1rem}
+.error-summary a{color:#a11616}
+.form-status{padding:1rem 1.2rem;border-radius:3px;background:#fff;border-left:6px solid var(--blue)}
+.form-status--ok{border-left-color:#1c7a3a}
+.form-status--bad{border-left-color:#a11616}
+.form button[disabled]{opacity:.6;cursor:progress}
+
+/* the still image is only for browsers that cannot run the 3D model */
+.hero__poster{display:none}
+.hero.is-static .hero__poster{display:block;opacity:1}

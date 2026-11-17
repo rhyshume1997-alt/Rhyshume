@@ -87,7 +87,9 @@ function load(model, hdri, onProgress) {
 
 export function initViewer(root) {
   const canvas = root.querySelector('canvas');
-  const interactive = root.hasAttribute('data-interactive');
+  const heroMode = root.hasAttribute('data-hero');   // homepage hero: no zoom, page scroll stays free, labels pinned to the model
+  const interactive = root.hasAttribute('data-interactive') || heroMode;
+  const emit = (name) => root.dispatchEvent(new CustomEvent('viewer:' + name));
   const mobile = matchMedia('(max-width: 760px), (pointer: coarse)').matches;
   const q = new URLSearchParams(location.search);
   const tier = q.get('tier') || (mobile ? 'mobile' : 'desktop');
@@ -97,7 +99,7 @@ export function initViewer(root) {
   renderer.toneMapping = THREE.AgXToneMapping; renderer.toneMappingExposure = 1.4;
   renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFShadowMap; renderer.shadowMap.autoUpdate = false;
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color().setRGB(0.004, 0.006, 0.014);
+  scene.background = new THREE.Color(0x06080e);   // same as the far edge of the floor, so no horizon line shows
   const [pos, aim, lens] = VIEWS[root.dataset.view || 'hero'];
   const fov = (l) => THREE.MathUtils.radToDeg(2 * Math.atan((18 / l) * 0.625));
   const cam = new THREE.PerspectiveCamera(fov(lens), 1.6, 0.02, 80);
@@ -183,7 +185,9 @@ export function initViewer(root) {
     }
     dirty = shadowsDirty = true;
   }
-  function play() { playing = performance.now(); setAssembly(0); }
+  let revealed = false;
+  function play() { playing = performance.now(); revealed = false; setAssembly(0); }
+  function finish() { playing = 0; setAssembly(1); if (!revealed) { revealed = true; emit('reveal'); } emit('done'); }
 
   const t0 = performance.now(); let tAssets = 0;
   const url = root.dataset.model;
@@ -231,7 +235,7 @@ export function initViewer(root) {
     root.dataset.triangles = renderer.info.render.triangles; root.dataset.calls = renderer.info.render.calls; root.dataset.tier = tier;
     root.dataset.pixels = canvas.width + 'x' + canvas.height;
     root.dataset.assetsMs = Math.round(tAssets); root.dataset.readyMs = Math.round(performance.now() - t0); root.dataset.model = url;
-    root.classList.add('is-loaded'); dirty = true;
+    root.classList.add('is-loaded'); dirty = true; emit('ready');
     if (hud) hud.textContent = `Model ready in ${(root.dataset.readyMs / 1000).toFixed(1)} s · ${tier} tier`;
   }).catch((e) => { root.dataset.error = String(e && e.stack || e); });
 
@@ -242,6 +246,17 @@ export function initViewer(root) {
     controls.target.copy(aim); controls.enableDamping = true; controls.dampingFactor = 0.06; controls.enablePan = false;
     controls.minDistance = 0.9; controls.maxDistance = 6.5; controls.minPolarAngle = 0.25 * Math.PI; controls.maxPolarAngle = 0.495 * Math.PI;
     controls.addEventListener('change', () => { dirty = true; });
+    if (heroMode) {
+      controls.enableZoom = false; canvas.style.touchAction = 'pan-y';   // vertical swipes scroll the page, sideways drags turn the machine
+      controls.minPolarAngle = 0.34 * Math.PI; controls.maxPolarAngle = 0.47 * Math.PI;
+      const az = Math.atan2(pos.x - aim.x, pos.z - aim.z); controls.minAzimuthAngle = az - 0.6; controls.maxAzimuthAngle = az + 0.6;
+    }
+  }
+  const callouts = [...root.querySelectorAll('[data-anchor]')].map((el) => { const [x, y, z] = el.dataset.anchor.split(',').map(Number); return { el, p: B(x, y, z) }; });
+  const proj = new THREE.Vector3();
+  function placeCallouts() {
+    const w = root.clientWidth, h = root.clientHeight;
+    for (const c of callouts) { proj.copy(c.p).project(cam); c.el.style.transform = `translate(${((proj.x + 1) / 2) * w}px, ${((1 - proj.y) / 2) * h}px)`; }
   }
   function flyTo(name) {
     const [p, a, l] = VIEWS[name]; const p0 = cam.position.clone(), a0 = controls ? controls.target.clone() : aim.clone(), f0 = cam.fov, f1 = fov(l), t0 = performance.now();
@@ -283,9 +298,19 @@ export function initViewer(root) {
       screen: screen.width + 'x' + screen.height, userAgent: navigator.userAgent,
     };
   }
-  root.viewer = { benchmark, play, setAssembly, run: (v) => { running = v; dirty = true; }, spin: (v) => { if (controls) { controls.autoRotate = v; controls.autoRotateSpeed = 6; } } };
+  root.viewer = { benchmark, play, finish, setAssembly, get playing() { return !!playing; }, run: (v) => { running = v; dirty = true; }, spin: (v) => { if (controls) { controls.autoRotate = v; controls.autoRotateSpeed = 6; } } };
 
-  const size = () => { const w = root.clientWidth, h = root.clientHeight; if (!w) return; renderer.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix(); dirty = true; };
+  const size = () => {
+    const w = root.clientWidth, h = root.clientHeight; if (!w) return;
+    renderer.setSize(w, h, false); cam.aspect = w / h;
+    // keep the machine's width in frame on tall, narrow stages
+    if (heroMode) {
+      const hf = Math.atan(18 / lens) * (w < 900 ? 1.2 : 1.62);
+      cam.fov = THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(hf) / Math.max(cam.aspect, 1.1)));
+      if (w >= 900) cam.setViewOffset(w, h, -w * 0.2, -h * 0.02, w, h); else cam.clearViewOffset();   // model sits right of the copy
+    }
+    cam.updateProjectionMatrix(); dirty = true;
+  };
   new ResizeObserver(size).observe(root); size();
   let visible = true; new IntersectionObserver((e) => { visible = e[0].isIntersecting; }).observe(root);
   let last = performance.now();
@@ -294,7 +319,9 @@ export function initViewer(root) {
     if (!visible || document.hidden || !model) { last = now; return; }
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
     if (playing) {
-      const p = Math.min(1, (now - playing) / 5200); setAssembly(p); if (range) range.value = Math.round(p * 1000); if (p >= 1) playing = 0;
+      const p = Math.min(1, (now - playing) / 5200); setAssembly(p); if (range) range.value = Math.round(p * 1000);
+      if (p >= 0.55 && !revealed) { revealed = true; emit('reveal'); }
+      if (p >= 1) { playing = 0; emit('done'); }
     }
     if (running && assembly >= 1) {
       beltTex.offset.x -= dt * 2.4; drums.forEach((d) => { d.rotation.z += dt * 4.8; }); dirty = true;
@@ -304,6 +331,7 @@ export function initViewer(root) {
     const t = performance.now();
     if (shadowsDirty) { contactShadows(); renderer.shadowMap.needsUpdate = true; shadowsDirty = false; }
     renderer.render(scene, cam);
+    if (callouts.length) placeCallouts();
     stat.ms.push(performance.now() - t); stat.frames++;
     if (now - stat.t0 > 1000) {
       const fps = Math.round(stat.frames * 1000 / (now - stat.t0)), avg = stat.ms.reduce((a, b) => a + b, 0) / stat.ms.length;

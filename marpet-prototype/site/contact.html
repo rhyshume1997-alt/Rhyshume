@@ -4,16 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow,noarchive">
-<title>Contact | Marpet Fabrications (prototype)</title>
+<title>Contact | Marpet Fabrications</title>
 <meta name="description" content="Contact Marpet Fabrications to discuss your fabrication requirements.">
 <link rel="icon" href="data:,">
 <link rel="preload" href="assets/fonts/barlow-condensed-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/styles.css">
-<script type="importmap">{"imports":{"three":"./assets/vendor/three.module.js"}}</script>
 </head>
 <body data-page="contact" data-section="contact" data-nav-scope>
 <a class="skip" href="#main">Skip to content</a>
-<p class="proto-bar">Design prototype for review. Not the live Marpet site. <a href="storyboard.html">Storyboard, concepts and open items</a> · <a href="material-test.html">Realism test</a></p>
+<p class="proto-bar">Development build. Not the live Marpet site. <a href="dev-notes.html">Open items and test pages</a></p>
 <header class="site-header">
   <div class="wrap">
     <a class="brand" href="index.html" data-name="Home"><img src="assets/img/logo.jpg" alt="Marpet Fabrications 1997 Limited, home" width="293" height="107"></a>
@@ -38,20 +37,25 @@
     <p><a class="big" href="tel:+441416411778">0141 641 1778</a><a href="mailto:info@marpet.co.uk">info@marpet.co.uk</a></p>
     <p>Unit 4 Clyde Workshops<br>Fullarton Road<br>Glasgow<br>G32 8YL</p>
     <p>Fax 0141 641 7118 <span class="confirm">Still in use?</span></p>
-    <p><span class="confirm">To confirm</span> The existing site spells the road both "Fullarton" and "Fullerton".</p>
+    <p><span class="confirm">To confirm</span> The existing site spells the road both "Fullarton" and "Fullerton". Company registry listings use "Fullarton".</p>
     <div class="ph"><b>Placeholder: opening hours and map</b><p>Hours and a map link once Marpet confirms them.</p></div>
   </div>
-  <form class="form" id="enquiry" data-proto-form novalidate>
+  <form class="form" id="enquiry" data-enquiry method="post"  data-email="info@marpet.co.uk" novalidate>
     <h2 class="full">Request a quote</h2>
-    <div><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name" required></div>
-    <div><label for="f-company">Company <span class="visually-hidden">(optional)</span></label><input id="f-company" name="company" autocomplete="organization"></div>
-    <div><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required></div>
-    <div><label for="f-tel">Phone <span class="visually-hidden">(optional)</span></label><input id="f-tel" name="tel" type="tel" autocomplete="tel"></div>
-    <div class="full"><label for="f-service">What do you need?</label><select id="f-service" name="service"><option value="">Choose one</option><option>Conveyor systems</option><option>Production lines</option><option>Industrial pipework</option><option>Access platforms</option><option>Catering fabrication</option><option>Dentistry equipment</option><option>General fabrication</option><option>Something else</option></select></div>
-    <div class="full"><label for="f-msg">Tell us about the job</label><textarea id="f-msg" name="message" required aria-describedby="f-msg-hint"></textarea><p class="hint" id="f-msg-hint">Sizes, material, where it is going and when you need it.</p></div>
-    <div class="full"><label for="f-file">Drawing or photograph <span class="visually-hidden">(optional)</span></label><input id="f-file" name="file" type="file"></div>
+    <div class="full form-status" id="enquiry-status" data-form-status role="status" tabindex="-1" hidden></div>
+    <div class="full error-summary" data-error-summary role="alert" tabindex="-1" hidden><h3>Check the form</h3><ul></ul></div>
+    <div><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name" required minlength="2" maxlength="100" aria-describedby="f-name-err"><p class="field-error" id="f-name-err" hidden></p></div>
+    <div><label for="f-company">Company (optional)</label><input id="f-company" name="company" autocomplete="organization" maxlength="120"></div>
+    <div><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" required maxlength="254" aria-describedby="f-email-err"><p class="field-error" id="f-email-err" hidden></p></div>
+    <div><label for="f-tel">Phone (optional)</label><input id="f-tel" name="tel" type="tel" autocomplete="tel" maxlength="40" aria-describedby="f-tel-err"><p class="field-error" id="f-tel-err" hidden></p></div>
+    <div class="full"><label for="f-service">What do you need? (optional)</label><select id="f-service" name="service"><option value="">Choose one</option><option>Conveyor systems</option><option>Production lines</option><option>Industrial pipework</option><option>Access platforms</option><option>Catering fabrication</option><option>Dentistry equipment</option><option>General fabrication</option><option>Something else</option></select></div>
+    <div class="full"><label for="f-msg">Tell us about the job</label><textarea id="f-msg" name="message" required minlength="10" maxlength="5000" aria-describedby="f-msg-hint f-msg-err"></textarea><p class="hint" id="f-msg-hint">Sizes, material, where it is going and when you need it. Drawings and photographs can follow by email.</p><p class="field-error" id="f-msg-err" hidden></p></div>
+    <div class="hp" aria-hidden="true"><label for="f-website">Leave this field empty</label><input id="f-website" name="website" tabindex="-1" autocomplete="off"></div>
+    <input type="hidden" name="ts" value="">
+    
     <div class="full"><button class="btn btn--primary" type="submit">Send enquiry</button></div>
-    <div class="ph form-status" data-form-status hidden tabindex="-1"><b>Prototype</b><p>Nothing was sent. In production this posts to a server function that emails info@marpet.co.uk, with spam protection, and confirms on the page.</p></div>
+    <p class="full hint">We use what you send only to answer your enquiry. <a href="privacy.html">Privacy</a></p>
+    <p class="full"><span class="confirm">Not connected</span> No sending service is set up yet. Until it is, this form checks what you type and then opens your email program with the enquiry ready to send to info@marpet.co.uk.</p>
   </form>
 </div></section>
 </main>
@@ -63,10 +67,9 @@
       <div><h2>Company</h2><ul><li><a href="work.html">Our work</a></li><li><a href="about.html">About Marpet</a></li><li><a href="team.html">Meet the team</a></li><li><a href="contact.html" data-transition="shutter">Contact</a></li></ul></div>
       <div><h2>Contact</h2><ul><li><a href="tel:+441416411778">0141 641 1778</a></li><li><a href="mailto:info@marpet.co.uk">info@marpet.co.uk</a></li><li>LinkedIn <span class="confirm">URL to confirm</span></li><li>Family: <a href="https://jnrengineering.co.uk/" target="_blank" rel="noopener">JNR Engineering<span class="visually-hidden"> (opens in a new tab)</span></a></li></ul></div>
     </div>
-    <p class="legal"><span>Registered in Scotland 172812. VAT number 680561724. <span class="confirm">Confirm before launch</span></span><span>Prototype. Photographs from marpet.co.uk.</span></p>
+    <p class="legal"><span>Registered in Scotland 172812. VAT number 680561724. <span class="confirm">Confirm before launch</span></span><span><a href="privacy.html">Privacy</a> · Development build. Photographs from marpet.co.uk.</span></p>
   </div>
 </footer>
-<script src="assets/vendor/gsap.min.js" defer></script>
 <script src="assets/app.js" defer></script>
 </body>
 </html>

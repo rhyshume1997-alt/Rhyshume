@@ -1,0 +1,46 @@
+[
+  {
+    "from": "/index.html",
+    "to": "/"
+  },
+  {
+    "from": "/about.html",
+    "to": "/about"
+  },
+  {
+    "from": "/services.html",
+    "to": "/services"
+  },
+  {
+    "from": "/contact.html",
+    "to": "/contact"
+  },
+  {
+    "from": "/conveyor-belts.html",
+    "to": "/services/conveyor-systems"
+  },
+  {
+    "from": "/production-lines.html",
+    "to": "/services/production-lines"
+  },
+  {
+    "from": "/pipework.html",
+    "to": "/services/pipework"
+  },
+  {
+    "from": "/access-platform.html",
+    "to": "/services/access-platforms"
+  },
+  {
+    "from": "/catering.html",
+    "to": "/services/catering"
+  },
+  {
+    "from": "/dentistry.html",
+    "to": "/services/dentistry"
+  },
+  {
+    "from": "/generalfabrication.html",
+    "to": "/services/general-fabrication"
+  }
+]
