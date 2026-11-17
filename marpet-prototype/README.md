@@ -20,7 +20,7 @@ npm run bundle
 node serve.mjs
 ```
 
-Open `http://localhost:4173/`. The server also prints an address for a phone on the same Wi-Fi; `phone-test.html` measures the interactive conveyor on that device. `npm install` and `npm run bundle` are only needed after editing `site/assets/viewer.js`; the bundled file is committed. Add `?intro=1` to replay the opening, `?static` to see the no-WebGL fallback.
+Open `http://localhost:4173/`. The server also prints an address for a phone on the same Wi-Fi; `phone-test.html` measures the interactive conveyor on that device. `npm install` and `npm run bundle` are only needed after editing `src/viewer.js`; the bundled file is committed. Add `?intro=1` to replay the opening, `?static` to see the no-WebGL fallback.
 
 ## What is here
 

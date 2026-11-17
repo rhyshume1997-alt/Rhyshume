@@ -3,13 +3,13 @@
 // blender/conveyor.py: camera presets, HDRI strength, light positions, material values.
 // Blender is Z-up, glTF/Three is Y-up: (x, y, z) -> (x, z, -y).
 import * as THREE from 'three';
-import { GLTFLoader } from './vendor/loaders/GLTFLoader.js';
-import { EXRLoader } from './vendor/loaders/EXRLoader.js';
-import { MeshoptDecoder } from './vendor/libs/meshopt_decoder.module.js';
-import { OrbitControls } from './vendor/controls/OrbitControls.js';
-import { Reflector } from './vendor/objects/Reflector.js';
-import { HorizontalBlurShader } from './vendor/shaders/HorizontalBlurShader.js';
-import { VerticalBlurShader } from './vendor/shaders/VerticalBlurShader.js';
+import { GLTFLoader } from '../vendor/loaders/GLTFLoader.js';
+import { EXRLoader } from '../vendor/loaders/EXRLoader.js';
+import { MeshoptDecoder } from '../vendor/libs/meshopt_decoder.module.js';
+import { OrbitControls } from '../vendor/controls/OrbitControls.js';
+import { Reflector } from '../vendor/objects/Reflector.js';
+import { HorizontalBlurShader } from '../vendor/shaders/HorizontalBlurShader.js';
+import { VerticalBlurShader } from '../vendor/shaders/VerticalBlurShader.js';
 
 const B = (x, y, z) => new THREE.Vector3(x, z, -y);
 const LEN = 2.2;
