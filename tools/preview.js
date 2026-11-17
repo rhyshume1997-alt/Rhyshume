@@ -335,11 +335,14 @@ function extractFacts(pages, nameOverride, cssTexts) {
   if (!name) name = bareHost(home.url);
   name = plain(name);
   // A title that is really a list of services is not a name. Look for the firm's own name in its text, else use the web address.
-  if (name.length > 48 || (name.match(/,/g) || []).length >= 2) {
-    const label = bareHost(home.url).split('.')[0].replace(/[^a-z0-9]/gi, '');
-    const loose = new RegExp(label.split('').join('\\s*') + '(?:\\s+(?:ltd|limited|llp))?', 'i');
-    const found = label.length >= 4 ? (plain(text).match(loose) || [''])[0].trim() : '';
-    name = found && found.length <= 48 ? found : label.charAt(0).toUpperCase() + label.slice(1);
+  const hostLabel = bareHost(home.url).split('.')[0].replace(/[^a-z0-9]/gi, '');
+  const tooLong = name.length > 48 || (name.match(/,/g) || []).length >= 2;
+  const unrelated = hostLabel.length >= 4 && name.toLowerCase().replace(/[^a-z0-9]/g, '').indexOf(hostLabel.slice(0, 4).toLowerCase()) === -1;
+  if (tooLong || unrelated) {
+    const loose = new RegExp(hostLabel.split('').join('\\s*') + '(?:\\s+(?:ltd|limited|llp))?', 'i');
+    const found = hostLabel.length >= 4 ? (plain(text).match(loose) || [''])[0].trim() : '';
+    if (found && found.length <= 48) name = found;
+    else if (tooLong) name = hostLabel.charAt(0).toUpperCase() + hostLabel.slice(1);
   }
 
   // phones: tel: links first, then numbers in the text
@@ -593,8 +596,11 @@ async function writeCopy(facts, pageTexts, competitor, opts) {
   const first = buildUserMessage(facts, pageTexts, competitor && competitor.text, competitor && competitor.host);
   const messages = [{ role: 'user', content: first }];
   let reply = await callClaude(messages, opts);
-  let ai = normaliseAi(parseJson(reply));
-  let result = checkCopy(ai, sourceText);
+  let ai = null;
+  let parseError = null;
+  try { ai = normaliseAi(parseJson(reply)); } catch (e) { parseError = e; }
+  let result = ai ? checkCopy(ai, sourceText)
+    : { problems: ['Your reply was not valid JSON (' + String(parseError && parseError.message).slice(0, 120) + '). Return the whole object again as valid JSON, escaping any double quote that sits inside a string.'], warnings: [] };
   if (result.problems.length) {
     messages.push({ role: 'assistant', content: reply });
     messages.push({ role: 'user', content: 'Fix these problems and return the full JSON object again:\n- ' + result.problems.join('\n- ') });
