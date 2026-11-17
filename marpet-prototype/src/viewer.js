@@ -35,6 +35,21 @@ const PLAN = [
   ['endplates_far', [0, 0.3, 0], 0.50, 0.72], ['endplates', [0, -0.3, 0], 0.50, 0.72], ['bearings', [0, -0.34, 0], 0.58, 0.80],
   ['takeup', [0, -0.22, 0], 0.64, 0.84], ['bolts', [0, -0.14, 0], 0.72, 0.90], ['logo', [0, -0.2, 0.05], 0.76, 0.92],
 ];
+// homepage opening: the machine stands part-built; these parts arrive while the camera pulls back
+const PLAN_INTRO = [
+  ['belt', [0, 0, 0.5], 0.30, 0.60], ['endplates_far', [0, 0.3, 0], 0.40, 0.64], ['endplates', [0, -0.3, 0], 0.42, 0.66],
+  ['bearings', [0, -0.34, 0], 0.52, 0.76], ['takeup', [0, -0.22, 0], 0.60, 0.82], ['bolts', [0, -0.14, 0], 0.70, 0.90], ['logo', [0, -0.2, 0.05], 0.74, 0.92],
+];
+// homepage scene: scroll progress -> camera position and aim (Blender axes). Held on the last key.
+const SCENE_KEYS = [
+  [0.00, [-1.45, -2.6, 1.38], [0.95, -0.2, 0.56]],     // whole machine
+  [0.30, [-0.95, -1.5, 1.12], [0.12, -0.3, 0.82]],     // drive end
+  [0.58, [-0.05, -1.4, 0.64], [0.5, -0.28, 0.62]],     // leg, gusset and weld
+  [0.86, [1.1, -1.9, 2.7], [1.1, -0.05, 0.85]],        // over the belt
+  [1.00, [1.1, -1.3, 3.5], [1.1, -0.05, 0.85]],
+];
+const MACRO = [[0.86, -0.74, 0.95], [1.22, -0.3, 0.86]];   // opening shot: the brushed side frame, close
+const smooth = (x) => { x = Math.min(1, Math.max(0, x)); return x * x * (3 - 2 * x); };
 const ease = (t) => 1 - Math.pow(1 - Math.min(1, Math.max(0, t)), 3);   // decelerate into place, no bounce
 
 // One texture for the whole side panel (2.2 m x 0.21 m), not a tile: grain, a few off-axis
@@ -177,7 +192,7 @@ export function initViewer(root) {
 
   function setAssembly(p) {
     assembly = p;
-    for (const [name, off, a, b] of PLAN) {
+    for (const [name, off, a, b] of (heroMode ? PLAN_INTRO : PLAN)) {
       const o = parts[name]; if (!o) continue;
       const k = 1 - ease((p - a) / (b - a));
       o.position.copy(o.userData.home).addScaledVector(B(...off), k);
@@ -186,8 +201,9 @@ export function initViewer(root) {
     dirty = shadowsDirty = true;
   }
   let revealed = false;
-  function play() { playing = performance.now(); revealed = false; setAssembly(0); }
-  function finish() { playing = 0; setAssembly(1); if (!revealed) { revealed = true; emit('reveal'); } emit('done'); }
+  const DURATION = heroMode ? 6400 : 5200;
+  function play() { playing = performance.now(); revealed = false; rig.intro = 0; setAssembly(0); }
+  function finish() { playing = 0; rig.intro = 1; setAssembly(1); if (!revealed) { revealed = true; emit('reveal'); } emit('done'); }
 
   const t0 = performance.now(); let tAssets = 0;
   const url = root.dataset.model;
@@ -234,6 +250,7 @@ export function initViewer(root) {
     scene.add(model);
     if (interactive && q.has('play') && !matchMedia('(prefers-reduced-motion: reduce)').matches) play(); else setAssembly(1);
     contactShadows(); renderer.shadowMap.needsUpdate = true; shadowsDirty = false;
+    if (heroMode) applyRig();
     renderer.render(scene, cam);
     root.dataset.triangles = renderer.info.render.triangles; root.dataset.calls = renderer.info.render.calls; root.dataset.tier = tier;
     root.dataset.pixels = canvas.width + 'x' + canvas.height;
@@ -244,16 +261,36 @@ export function initViewer(root) {
 
   // interaction
   let controls = null;
-  if (interactive) {
+  // ---- homepage scene: scripted camera. Opening by time, then by scroll, plus a little yaw from dragging. ----
+  const rig = { s: 0, sTarget: 0, intro: 1, yaw: 0, yawTarget: 0 };
+  const P = new THREE.Vector3(), A = new THREE.Vector3(), P2 = new THREE.Vector3(), A2 = new THREE.Vector3();
+  function scenePose(s, outP, outA) {
+    let i = 0; while (i < SCENE_KEYS.length - 2 && s > SCENE_KEYS[i + 1][0]) i++;
+    const k0 = SCENE_KEYS[i], k1 = SCENE_KEYS[i + 1], k = smooth((s - k0[0]) / (k1[0] - k0[0]));
+    outP.copy(B(...k0[1])).lerp(B(...k1[1]), k); outA.copy(B(...k0[2])).lerp(B(...k1[2]), k);
+  }
+  function applyRig() {
+    scenePose(rig.s, P, A);
+    if (rig.intro < 1) {   // hold on the steel, drift, then pull back
+      const pull = smooth((rig.intro - 0.2) / 0.5); const kk = pull * pull * (3 - 2 * pull);
+      P2.copy(B(...MACRO[0])); A2.copy(B(...MACRO[1])); P2.x -= rig.intro * 0.22; A2.x -= rig.intro * 0.22;
+      P.lerpVectors(P2, P, kk); A.lerpVectors(A2, A, kk);
+    }
+    if (rig.yaw) { const dx = P.x - A.x, dz = P.z - A.z, c = Math.cos(rig.yaw), s = Math.sin(rig.yaw); P.x = A.x + dx * c - dz * s; P.z = A.z + dx * s + dz * c; }
+    cam.position.copy(P); cam.lookAt(A);
+  }
+  if (heroMode) {
+    canvas.style.touchAction = 'pan-y';   // vertical swipes scroll the page, sideways drags turn the machine
+    let drag = null;
+    canvas.addEventListener('pointerdown', (e) => { drag = { x: e.clientX, yaw: rig.yawTarget }; canvas.setPointerCapture(e.pointerId); });
+    canvas.addEventListener('pointermove', (e) => { if (drag) { rig.yawTarget = Math.max(-0.6, Math.min(0.6, drag.yaw - (e.clientX - drag.x) / root.clientWidth * 1.6)); dirty = true; } });
+    const end = () => { drag = null; }; canvas.addEventListener('pointerup', end); canvas.addEventListener('pointercancel', end);
+  }
+  if (interactive && !heroMode) {
     controls = new OrbitControls(cam, canvas);
     controls.target.copy(aim); controls.enableDamping = true; controls.dampingFactor = 0.06; controls.enablePan = false;
     controls.minDistance = 0.9; controls.maxDistance = 6.5; controls.minPolarAngle = 0.25 * Math.PI; controls.maxPolarAngle = 0.495 * Math.PI;
     controls.addEventListener('change', () => { dirty = true; });
-    if (heroMode) {
-      controls.enableZoom = false; canvas.style.touchAction = 'pan-y';   // vertical swipes scroll the page, sideways drags turn the machine
-      controls.minPolarAngle = 0.34 * Math.PI; controls.maxPolarAngle = 0.47 * Math.PI;
-      const az = Math.atan2(pos.x - aim.x, pos.z - aim.z); controls.minAzimuthAngle = az - 0.6; controls.maxAzimuthAngle = az + 0.6;
-    }
   }
   const callouts = [...root.querySelectorAll('[data-anchor]')].map((el) => { const [x, y, z] = el.dataset.anchor.split(',').map(Number); return { el, p: B(x, y, z) }; });
   const proj = new THREE.Vector3();
@@ -301,7 +338,12 @@ export function initViewer(root) {
       screen: screen.width + 'x' + screen.height, userAgent: navigator.userAgent,
     };
   }
-  root.viewer = { benchmark, play, finish, setAssembly, get playing() { return !!playing; }, run: (v) => { running = v; dirty = true; }, spin: (v) => { if (controls) { controls.autoRotate = v; controls.autoRotateSpeed = 6; } } };
+  // seekIntro and jumpScroll are for frame-by-frame capture: they set the state with no clock and no damping
+  const seekIntro = (p) => { playing = 0; rig.intro = p; setAssembly(p); if (p >= 0.55 && !revealed) { revealed = true; emit('reveal'); } dirty = true; };
+  const jumpScroll = (s) => { rig.s = rig.sTarget = s; dirty = true; };
+  const jumpYaw = (y) => { rig.yaw = rig.yawTarget = y; dirty = true; };
+  root.viewer = { jumpYaw, setScroll: (s) => { rig.sTarget = Math.min(1, Math.max(0, s)); }, seekIntro, jumpScroll, renderNow: () => { if (model) { if (heroMode) applyRig(); if (shadowsDirty) { contactShadows(); renderer.shadowMap.needsUpdate = true; shadowsDirty = false; } renderer.render(scene, cam); if (callouts.length) placeCallouts(); } },
+    benchmark, play, finish, setAssembly, get playing() { return !!playing; }, run: (v) => { running = v; dirty = true; }, spin: (v) => { if (controls) { controls.autoRotate = v; controls.autoRotateSpeed = 6; } } };
 
   const size = () => {
     const w = root.clientWidth, h = root.clientHeight; if (!w) return;
@@ -322,7 +364,7 @@ export function initViewer(root) {
     if (!visible || document.hidden || !model) { last = now; return; }
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
     if (playing) {
-      const p = Math.min(1, (now - playing) / 5200); setAssembly(p); if (range) range.value = Math.round(p * 1000);
+      const p = Math.min(1, (now - playing) / DURATION); if (heroMode) rig.intro = p; setAssembly(p); if (range) range.value = Math.round(p * 1000);
       if (p >= 0.55 && !revealed) { revealed = true; emit('reveal'); }
       if (p >= 1) { playing = 0; emit('done'); }
     }
@@ -330,9 +372,18 @@ export function initViewer(root) {
       beltTex.offset.x -= dt * 2.4; drums.forEach((d) => { d.rotation.z += dt * 4.8; }); dirty = true;
     }
     if (controls) { controls.update(); if (controls.autoRotate) dirty = true; }
+    if (heroMode) {   // frame-rate independent damping toward the scroll target, snapping when close
+      if (rig.sTarget > 0.04 && rig.yawTarget !== 0) rig.yawTarget = Math.abs(rig.yawTarget) < 0.002 ? 0 : rig.yawTarget * 0.9;
+      const k = 1 - Math.pow(1 - 0.22, dt * 60);
+      for (const [cur, tgt] of [['s', 'sTarget'], ['yaw', 'yawTarget']]) {
+        const d = rig[tgt] - rig[cur];
+        if (d !== 0) { rig[cur] = Math.abs(d) < 0.0004 ? rig[tgt] : rig[cur] + d * k; dirty = true; }
+      }
+    }
     if (!dirty) return; dirty = false;
     const t = performance.now();
     if (shadowsDirty) { contactShadows(); renderer.shadowMap.needsUpdate = true; shadowsDirty = false; }
+    if (heroMode) applyRig();
     renderer.render(scene, cam);
     if (callouts.length) placeCallouts();
     stat.ms.push(performance.now() - t); stat.frames++;

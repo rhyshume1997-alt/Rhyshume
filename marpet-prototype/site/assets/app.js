@@ -44,13 +44,13 @@
           { transform: rectTransform(r, 'rotateX(0deg)'), boxShadow: '0 2px 6px rgba(0,0,0,.4)', opacity: src ? 1 : 0 },
           { transform: rectTransform({ left: r.left, top: r.top - 14, width: r.width, height: r.height }, 'rotateX(-14deg)'), boxShadow: '0 30px 40px rgba(0,0,0,.5)', opacity: 1, offset: 0.22, easing: EASE_HEAVY },
           { transform: 'translate(0,0) scale(1,1) rotateX(0deg)', boxShadow: '0 0 0 rgba(0,0,0,0)', opacity: 1 },
-        ], { duration: 620, easing: 'ease-out' });
+        ], { duration: 520, easing: 'ease-out' });
         await swap();
         face.style.transformOrigin = '0 50%';
         await anim(face, [
           { transform: 'rotateY(0deg)', filter: 'brightness(1)' },
           { transform: 'rotateY(-97deg)', filter: 'brightness(.55)' },
-        ], { duration: 560, easing: EASE_HEAVY });
+        ], { duration: 470, easing: EASE_HEAVY });
       } else {
         // going back: the hinged plate closes, then lowers away
         face.style.transformOrigin = '0 50%';
@@ -218,7 +218,7 @@
       try { localStorage.setItem('mp-intro', '1'); } catch (e) {}
     });
     on(root, 'viewer:ready', () => {
-      clearTimeout(giveUp); section.classList.add('is-live');
+      clearTimeout(giveUp); section.classList.add('is-live'); initScene(section, root);
       let seen = false;
       try { seen = localStorage.getItem('mp-intro') === '1'; } catch (e) {}
       if (reduce.matches || (seen && !q.has('intro')) || q.has('assembled')) { root.viewer.finish(); return; }
@@ -233,6 +233,94 @@
     import('./viewer.min.js').then((m) => root.isConnected && m.initViewer(root)).catch(fallback);
   }
 
+  // ---- Homepage scene: one pinned 3D stage. Scroll moves the camera and swaps the chapters of copy. ----
+  const clamp01 = (x) => Math.min(1, Math.max(0, x));
+  function initScene(section, root) {
+    if (reduce.matches) return;
+    section.classList.add('is-scrolly');
+    const chapters = $$('[data-ch]', section).map((el) => ({ el, from: +el.dataset.from, to: +el.dataset.to }));
+    const rail = $$('.scene__rail i', section), stage = $('.hero__stage', section);
+    let ticking = false, lastOn = -1;
+    const update = () => {
+      ticking = false;
+      const r = section.getBoundingClientRect(), span = r.height - innerHeight;
+      const p = span > 0 ? clamp01(-r.top / span) : 0;
+      if (root.viewer) root.viewer.setScroll(Math.min(1, p / 0.9));   // camera reaches its last position at 90% and holds
+      let on = -1;
+      chapters.forEach((c, i) => { const live = p >= c.from && p < c.to; c.el.classList.toggle('is-on', live); c.el.inert = !live; if (live) on = i; });
+      if (on !== lastOn) { lastOn = on; rail.forEach((d, i) => d.classList.toggle('is-on', i === on)); }
+      stage.style.opacity = String(1 - clamp01((p - 0.93) / 0.07) * 0.85);
+      section.classList.toggle('is-scrolled', p > 0.02);
+    };
+    const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+    on(window, 'scroll', onScroll, { passive: true }); on(window, 'resize', onScroll);
+    update();
+  }
+
+  // ---- Services: the selected plate brings its photographs into the viewing frame with a directional wipe ----
+  function initSvc() {
+    const box = $('[data-svc]');
+    if (!box) return;
+    const items = $$('[data-svc-item]', box), slides = $$('[data-svc-slide]', box);
+    let current = 0, running = false, queued = null;
+    items[0].classList.add('is-current');
+    const FACTOR = { svc__bg: 0.12, svc__fg: 0.5, svc__cap: 0.3 };   // how far each layer travels, as a share of the frame height
+    const show = async (i) => {
+      if (i === current) return;
+      if (running) { queued = i; return; }
+      running = true;
+      const dir = i > current ? 1 : -1, A = slides[current], Bn = slides[i], H = A.offsetHeight;
+      items.forEach((el, k) => el.classList.toggle('is-current', k === i));
+      Bn.classList.add('is-on'); A.style.zIndex = '2'; Bn.style.zIndex = '1';
+      if (reduce.matches) { A.classList.remove('is-on'); A.style.zIndex = Bn.style.zIndex = ''; current = i; running = false; return; }
+      const wipe = dir > 0 ? ['inset(0 0 0 0)', 'inset(0 0 100% 0)'] : ['inset(0 0 0 0)', 'inset(100% 0 0 0)'];
+      const jobs = [A.animate({ clipPath: wipe }, { duration: 720, easing: 'cubic-bezier(.65,0,.35,1)', fill: 'forwards' }).finished];
+      for (const layer of A.children) layer.animate({ transform: ['none', `translateY(${-dir * 0.14 * H}px)`] }, { duration: 720, easing: 'cubic-bezier(.65,0,.35,1)' });
+      for (const layer of Bn.children) {
+        const f = FACTOR[layer.className] || 0.2;
+        jobs.push(layer.animate({ transform: [`translateY(${dir * f * H}px)`, 'none'] }, { duration: 760, delay: 140, easing: 'cubic-bezier(.22,.8,.3,1)', fill: 'backwards' }).finished);
+      }
+      await Promise.all(jobs).catch(() => {});
+      A.classList.remove('is-on'); A.getAnimations().forEach((a) => a.cancel()); A.style.zIndex = Bn.style.zIndex = '';
+      current = i; running = false;
+      if (queued !== null && queued !== current) { const q = queued; queued = null; show(q); } else queued = null;
+    };
+    items.forEach((el, i) => { on(el, 'pointerenter', () => show(i)); on(el, 'focus', () => show(i)); });
+  }
+
+  // ---- Our Work: photographs drift at different rates as the page scrolls and lean toward the pointer ----
+  function initWork() {
+    const list = $('[data-work]');
+    if (!list || reduce.matches) return;
+    const cards = $$('.wk', list).map((el, i) => ({ el, img: $('img', el), speed: [0.05, -0.03, 0.02, -0.05][i % 4] }));
+    const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const vh = innerHeight;
+      for (const c of cards) {
+        if (c.el.hidden) continue;
+        const r = c.el.getBoundingClientRect();
+        if (r.bottom < -200 || r.top > vh + 200) continue;
+        const d = (r.top + r.height / 2 - vh / 2) / vh;                // -0.5 .. 0.5 across the screen
+        c.el.style.setProperty('--drift', (d * c.speed * vh).toFixed(1) + 'px');
+        c.el.style.setProperty('--pan', (d * -9).toFixed(2) + '%');   // the photograph slides inside its frame
+        if (r.top < vh * 0.9) c.el.classList.add('is-in');
+      }
+    };
+    const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+    on(window, 'scroll', onScroll, { passive: true }); on(window, 'resize', onScroll);
+    update();
+    if (fine) cards.forEach((c) => {
+      on(c.el, 'pointermove', (e) => {
+        const r = c.el.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+        c.el.style.setProperty('--rx', (-y * 4).toFixed(2) + 'deg'); c.el.style.setProperty('--ry', (x * 5).toFixed(2) + 'deg');
+        c.el.style.setProperty('--px', (-x * 2.4).toFixed(2) + '%'); c.el.style.setProperty('--py', (-y * 2.4).toFixed(2) + '%');
+      });
+      on(c.el, 'pointerleave', () => { for (const v of ['--rx', '--ry', '--px', '--py']) c.el.style.removeProperty(v); });
+    });
+  }
+
   function initFilter() {
     const bar = $('[data-filter]');
     if (!bar) return;
@@ -242,6 +330,8 @@
       let n = 0;
       cards.forEach((c) => { const show = val === 'all' || c.dataset.service === val; c.hidden = !show; if (show) n++; });
       $$('button', bar).forEach((b) => b.setAttribute('aria-pressed', String(b.value === val)));
+      $('[data-filter-list]').classList.toggle('is-filtered', val !== 'all');
+      dispatchEvent(new Event('scroll'));
       if (count) count.textContent = `${n} ${n === 1 ? 'project' : 'projects'} shown`;
     };
     on(bar, 'click', (e) => { const b = e.target.closest('button'); if (b) apply(b.value); });
@@ -361,7 +451,7 @@
 
   function init() {
     document.documentElement.classList.add('js');
-    initHero(); initFilter(); initReveal(); initForm(); initTest();
+    initHero(); initSvc(); initWork(); initFilter(); initReveal(); initForm(); initTest();
   }
   init();
 })();

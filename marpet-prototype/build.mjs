@@ -76,6 +76,18 @@ const frameCard = (p) => `<li data-service="${p.service}"><a class="frame plate"
 
 const stack = (list) => `<div class="stack-scene"><ol class="stack">${list.map((s, i) => `<li><a href="service-${s.slug}.html" data-name="${esc(s.name)}"><span class="plate" data-plate>${bolts}<span class="no">${String(i + 1).padStart(2, '0')}</span><span class="name">${s.name}</span>${img(s.hero, '', 'class="thumb" loading="lazy"')}<span class="go">View</span></span></a></li>`).join('')}</ol></div>`;
 
+const svcSelector = `<div class="svc" data-svc>
+  <ol class="stack stack--flat">${services.map((s, i) => `<li><a href="service-${s.slug}.html" data-svc-item="${i}" data-name="${esc(s.name)}"><span class="plate" data-plate>${bolts}<span class="no">${String(i + 1).padStart(2, '0')}</span><span class="name">${s.name}</span><span class="go">View</span></span><span class="svc__lead">${s.lead}</span></a></li>`).join('')}</ol>
+  <div class="svc__stage" aria-hidden="true">${services.map((s, i) => `<div class="svc__slide${i === 0 ? ' is-on' : ''}" data-svc-slide="${i}">
+    <div class="svc__bg">${img(s.hero, '', i === 0 ? '' : 'loading="lazy"')}</div>
+    <div class="svc__fg">${img(s.images[0], '', 'loading="lazy"')}</div>
+    <div class="svc__cap"><span class="svc__no">${String(i + 1).padStart(2, '0')}</span><b>${s.name}</b><p>${s.lead}</p><ul>${s.capability.slice(0, 3).map((c) => `<li>${c}</li>`).join('')}</ul></div>
+  </div>`).join('')}</div>
+</div>`;
+
+const WK_SPAN = [7, 5, 5, 7, 4, 4, 4, 7, 5, 5, 7];
+const workCard = (p, i) => `<li class="wk" data-service="${p.service}" style="--span:${WK_SPAN[i % WK_SPAN.length]};--ar:${dims[p.hero][0] >= dims[p.hero][1] ? '4/3' : '4/5'}"><a href="project-${p.slug}.html" data-transition="frame" data-plate data-name="${esc(p.title)}"><span class="wk__no" aria-hidden="true" data-no="${String(i + 1).padStart(2, '0')}"></span><span class="wk__frame">${img(p.hero, p.title + ', Marpet photograph', i < 2 ? '' : 'loading="lazy"')}</span><span class="wk__cap"><b>${p.title}</b><span>${svc(p.service).short}</span></span></a></li>`;
+
 const jnr = `
 <section class="section on-dark" id="jnr"><div class="wrap">
   <p class="eyebrow">Fabrication and machining</p>
@@ -112,28 +124,35 @@ const linkedin = `
 const featured = projects.filter((p) => p.featured);
 page({ file: 'index.html', title: 'Stainless steel fabrication, Glasgow', desc: 'Marpet Fabrications design, manufacture and install stainless steel, mild steel and aluminium fabrication.', section: 'home', page: 'home', main: `
 <main id="main">
-<section class="hero">
-  <div class="hero__stage" data-hero data-view="hero" data-logo="assets/img/${co.logo}" data-model="assets/render/conveyor.glb" data-hdri="assets/render/studio.exr">
-    <img class="hero__poster" src="assets/render/hero.jpg" alt="Stainless steel belt conveyor with brushed side frames, orange bearing housings, a blue belt and the Marpet Fabrications logo plate" width="1600" height="1000" loading="lazy">
-    <canvas aria-label="Interactive 3D model of a stainless steel belt conveyor. Drag sideways to turn it."></canvas>
-    <div class="callout" data-anchor="1.35,0,0.9"><a href="service-conveyor-systems.html" data-name="Conveyor systems">Conveyor systems</a></div>
-    <div class="callout" data-anchor="0.45,-0.28,0.4"><a href="service-general-fabrication.html" data-name="General fabrication">Frames and general fabrication</a></div>
+<section class="hero scene" data-scene>
+  <div class="scene__pin">
+    <div class="hero__stage" data-hero data-view="hero" data-logo="assets/img/${co.logo}" data-model="assets/render/conveyor.glb" data-hdri="assets/render/studio.exr">
+      <img class="hero__poster" src="assets/render/hero.jpg" alt="Stainless steel belt conveyor with brushed side frames, orange bearing housings, a blue belt and the Marpet Fabrications logo plate" width="1600" height="1000" loading="lazy">
+      <canvas aria-label="Interactive 3D model of a stainless steel belt conveyor. Drag sideways to turn it."></canvas>
+      <div class="callout" data-anchor="1.35,0,0.9"><a href="service-conveyor-systems.html" data-name="Conveyor systems">Conveyor systems</a></div>
+      <div class="callout" data-anchor="0.45,-0.28,0.4"><a href="service-general-fabrication.html" data-name="General fabrication">Frames and general fabrication</a></div>
+    </div>
+    <div class="scene__ch hero__copy" data-ch data-from="-1" data-to="0.13">
+      <p class="eyebrow">Sheet metal fabricators, Glasgow</p>
+      <h1><span class="ln"><span>Fabricated</span></span> <span class="ln ln--hi"><span>into place.</span></span></h1>
+      <p class="lead">Marpet design, manufacture and install stainless steel, mild steel and aluminium fabrication, in the workshop or on site.</p>
+      <div class="btn-row"><a class="btn btn--primary" href="contact.html#enquiry" data-transition="shutter" data-name="Request a quote">Request a quote</a><a class="btn btn--ghost" href="services.html">Our services</a></div>
+    </div>
+    ${[
+      ['0.2', '0.42', 'Design, manufacture, install', 'One firm from drawing to fitted on site.', 'services.html', 'Our services'],
+      ['0.48', '0.7', 'Stainless, mild steel, aluminium', 'Sheet metal and fabricated steelwork, made by skilled, time served tradesmen.', 'about.html', 'About Marpet'],
+      ['0.76', '2', 'Food and drink', 'Food processing, packaging and catering sectors, across Scotland and the North of England by the M74.', 'work.html', 'Our work'],
+    ].map(([a, z, h, p, href, label], i) => `<div class="scene__ch scene__fact" data-ch data-from="${a}" data-to="${z}">
+      <p class="eyebrow">${String(i + 1).padStart(2, '0')} / 03</p>
+      <h2><span class="ln"><span>${h}</span></span></h2>
+      <p class="lead">${p}</p>
+      <a class="text-link" href="${href}">${label}</a>
+    </div>`).join('\n    ')}
+    <div class="scene__rail" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <p class="hero__note">3D model reconstructed from Marpet conveyor photographs. Drag to turn it. Not a specific delivered machine.</p>
+    <div class="hero__ctrl"><button type="button" data-hero-skip hidden>Skip intro</button><button type="button" data-hero-replay hidden>Replay opening</button></div>
   </div>
-  <div class="hero__copy">
-    <p class="eyebrow">Sheet metal fabricators, Glasgow</p>
-    <h1>Fabricated <span>into place.</span></h1>
-    <p class="lead">Marpet design, manufacture and install stainless steel, mild steel and aluminium fabrication, in the workshop or on site.</p>
-    <div class="btn-row"><a class="btn btn--primary" href="contact.html#enquiry" data-transition="shutter" data-name="Request a quote">Request a quote</a><a class="btn btn--ghost" href="services.html">Our services</a></div>
-  </div>
-  <p class="hero__note">3D model reconstructed from Marpet conveyor photographs. Drag to turn it. Not a specific delivered machine.</p>
-  <div class="hero__ctrl"><button type="button" data-hero-skip hidden>Skip intro</button><button type="button" data-hero-replay hidden>Replay assembly</button></div>
 </section>
-<div class="facts">
-  <div><b>Design, manufacture, install</b>One firm from drawing to fitted on site.</div>
-  <div><b>Stainless, mild steel, aluminium</b>Sheet metal and fabricated steelwork.</div>
-  <div><b>Food and drink</b>Food processing, packaging and catering sectors.</div>
-  <div><b>East of Glasgow</b>Scotland and the North of England by the M74.</div>
-</div>
 <section class="section on-white"><div class="wrap split">
   <div data-reveal>
     <p class="eyebrow">About Marpet</p>
@@ -172,11 +191,11 @@ page({ file: 'services.html', title: 'Services', desc: 'Conveyor systems, produc
 <section class="page-head"><div class="wrap">
   <p class="crumbs"><a href="index.html">Home</a><span>/</span><span>Services</span></p>
   <h1>Services</h1>
-  <p class="lead">Seven kinds of work, all taken from the existing Marpet website. Pick a plate.</p>
+  <p class="lead">Seven kinds of fabrication. Pick a plate.</p>
 </div></section>
-<section class="section on-steel"><div class="wrap">
+<section class="section on-deep svc-sec"><div class="wrap">
   <h2 class="visually-hidden">All services</h2>
-  ${stack(services)}
+  ${svcSelector}
 </div></section>
 <section class="section on-white"><div class="wrap split">
   <div><p class="eyebrow">Food and drink processing</p><h2>On the production floor</h2><ul class="ticks">${['Conveyor systems, designed and installed', 'Access platforms', 'Pipework', 'Handrails', 'Work stations', 'Ducting', 'Tables', 'Wall sheeting', 'Sinks'].map((t) => `<li>${t}</li>`).join('')}</ul></div>
@@ -227,13 +246,13 @@ page({ file: 'work.html', title: 'Our work', desc: 'Completed fabrication work b
 <section class="page-head"><div class="wrap">
   <p class="crumbs"><a href="index.html">Home</a><span>/</span><span>Our work</span></p>
   <h1>Our work</h1>
-  <p class="lead">Marpet's own photographs, grouped into projects. Titles are working titles until Marpet confirms them.</p>
+  <p class="lead">Conveyors, production lines, pipework, platforms and stainless fit-outs, photographed in the workshop and on site.</p>
 </div></section>
-<section class="section on-steel"><div class="wrap">
+<section class="section on-deep wk-sec"><div class="wrap">
   <h2 class="visually-hidden">Projects</h2>
   <div class="filter" data-filter role="group" aria-label="Filter projects by service"><button type="button" value="all" aria-pressed="true">All</button>${used.map((u) => `<button type="button" value="${u}" aria-pressed="false">${svc(u).short}</button>`).join('')}</div>
   <p class="filter-count" data-filter-count aria-live="polite">${projects.length} projects shown</p>
-  <ul class="grid" data-filter-list>${projects.map(frameCard).join('')}</ul>
+  <ul class="wk-grid" data-filter-list data-work>${projects.map(workCard).join('')}</ul>
 </div></section>
 ${cta()}
 </main>` });

@@ -68,6 +68,32 @@ async function main() {
     ok(await p.isHidden('[data-hero-skip]'), 'opening does not replay for a returning visitor');
     ok(await p.locator('.callout a').first().isVisible(), 'service labels on the model are links');
 
+    // ---- pinned homepage scene ----
+    ok(await p.evaluate(() => document.querySelector('.scene').classList.contains('is-scrolly')), 'homepage scene is pinned when motion is allowed');
+    const toScene = (v) => p.evaluate((v) => { const s = document.querySelector('[data-scene]'); scrollTo(0, s.offsetTop + (s.offsetHeight - innerHeight) * v); }, v);
+    const chapterIs = (n) => p.waitForFunction((n) => [...document.querySelectorAll('[data-ch]')].findIndex((c) => c.classList.contains('is-on')) === n, n, { timeout: 30000 }).then(() => true, () => false);
+    await toScene(0.3);
+    ok(await chapterIs(1), 'scrolling brings in the first chapter');
+    ok(Math.abs(await p.evaluate(() => document.querySelector('.scene__pin').getBoundingClientRect().top) - 72) < 2, 'the stage stays pinned under the header');
+    await toScene(0.6);
+    ok(await chapterIs(2), 'then the second chapter');
+    ok(await p.evaluate(() => document.querySelector('[data-ch]').inert), 'chapters that are off screen cannot be tabbed into');
+    ok(await p.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth) <= 0, 'pinned scene causes no sideways scroll');
+    await toScene(0);
+    ok(await chapterIs(0), 'scrolling back restores the headline');
+    await p.evaluate(() => { const s = document.querySelector('[data-scene]'); scrollTo(0, s.offsetTop + s.offsetHeight + 200); }); await p.waitForTimeout(400);
+    ok(await p.isVisible('#main > section:nth-of-type(2) h2'), 'the page continues after the scene');
+
+    // ---- services viewing frame ----
+    await p.goto(U + 'services.html'); await p.waitForTimeout(400);
+    await p.hover('[data-svc-item="3"]'); await p.waitForTimeout(1300);
+    ok(await p.evaluate(() => { const on = [...document.querySelectorAll('.svc__slide.is-on')]; return on.length === 1 && on[0].dataset.svcSlide === '3'; }), 'hovering a plate wipes its photographs into the frame');
+    await p.hover('[data-svc-item="1"]'); await p.hover('[data-svc-item="5"]'); await p.waitForTimeout(2300);
+    ok(await p.evaluate(() => { const on = [...document.querySelectorAll('.svc__slide.is-on')]; return on.length === 1 && on[0].dataset.svcSlide === '5'; }), 'quick changes settle on the last plate');
+    ok(await p.isVisible('.svc__slide.is-on .svc__cap p'), 'the frame shows what the service is');
+    await p.goto(U + 'work.html'); await p.waitForTimeout(700);
+    ok(await p.locator('.wk.is-in').count() >= 1, 'work frames open as they come into view');
+
     await p.goto(U + 'services.html'); await p.waitForTimeout(300);
     await p.click('.stack li:nth-child(3) a'); await p.waitForURL('**/service-pipework.html', { timeout: 8000 });
     ok((await p.textContent('h1')).includes('pipework'), 'plate opens its service page');
@@ -83,7 +109,7 @@ async function main() {
     ok((await p.textContent('[data-filter-count]')).startsWith('1 project'), 'project filter works');
     ok(await p.locator('[data-filter-list] li:not([hidden])').count() === 1, 'filter hides other projects');
     await p.click('[data-filter] button[value=all]');
-    await p.click('.grid a.frame >> nth=0'); await p.waitForURL('**/project-*.html', { timeout: 8000 }); await p.waitForTimeout(900);
+    await p.click('.wk a >> nth=0'); await p.waitForURL('**/project-*.html', { timeout: 8000 }); await p.waitForTimeout(900);
     ok(await p.isVisible('[data-frame-target] img'), 'project photograph opens its page');
     const direct = await ctx.newPage(); await direct.goto(U + 'project-process-pipework.html');
     ok((await direct.textContent('h1')) === 'Process pipework', 'project page works as a direct address'); await direct.close();
