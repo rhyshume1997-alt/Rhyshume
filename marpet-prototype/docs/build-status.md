@@ -10,6 +10,8 @@ Development build on branch `claude/beautiful-hawking-dh0pog`. Not merged and no
 - Each push to this branch builds a new preview at the long branch address. The short address above is pointed at a build by hand, so it needs re-pointing after changes.
 - To take it down, delete the `marpet-fabrications-preview` project in Vercel.
 
+The visual upgrade (pinned homepage scene, services viewing frame, staggered work gallery) is described in `visual-upgrade.md`, with measurements and screen recordings.
+
 ## What is built
 
 | Area | Pages | Notes |
@@ -32,7 +34,7 @@ Development build on branch `claude/beautiful-hawking-dh0pog`. Not merged and no
 | Build, with content validation | `npm run build` | 29 pages built; viewer bundle 709 KB (156 KB compressed) |
 | Type check (build script, server, content schema, enquiry function) | `npm run typecheck` | 0 errors |
 | Unit and build-output tests | `npm test` | 135 passed, 0 failed |
-| Browser tests | `npm run test:browser` | 280 passed, 0 failed |
+| Browser tests | `npm run test:browser` | 292 passed, 0 failed |
 | Existing site tests (repository root) | `node --test test/*.test.js` | 154 passed, 0 failed |
 
 The site itself is plain HTML, CSS and JavaScript, so there is no TypeScript source. Type checking covers the Node-side code through JSDoc types.
