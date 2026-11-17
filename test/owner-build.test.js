@@ -100,3 +100,9 @@ test('a name that is a short list of services but unrelated to the web address i
   const brand = preview.extractFacts([{ url: 'https://mdk-fab.com/', html: '<html><head><title>MDK Fab | Steel</title></head><body>x</body></html>' }], '', []);
   assert.strictEqual(brand.name, 'MDK Fab');
 });
+
+test('comparison table cannot push the page sideways on a phone', () => {
+  const html = rich.renderRich(base, null, null, { cta: { mail: 'mailto:rhys@rhyshume.co.uk' }, evidence: { host: 'a-very-long-hostname-example.co.uk', checkedOn: '2026-11-17', problems: [{ issue: 'x', proof: 'y', why: 'z' }], compHost: 'another-very-long-hostname-example.co.uk', compare: [{ label: 'Business details machines can read', theirs: false, comp: true }] } });
+  assert.ok(/\.evd table\{[^}]*table-layout:fixed/.test(html));
+  assert.ok(/\.evd th,\.evd td\{overflow-wrap:anywhere\}/.test(html));
+});
