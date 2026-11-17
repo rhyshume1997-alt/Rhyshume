@@ -89,7 +89,7 @@ The whole integration for a plain HTML page:
   const hero = new rive.Rive({
     src: 'hero.riv',
     canvas: document.getElementById('hero'),
-    stateMachines: 'State Machine 1',
+    stateMachine: 'State Machine 1',
     autoplay: true,
     autoBind: true,
   });

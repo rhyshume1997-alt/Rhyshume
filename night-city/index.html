@@ -29,6 +29,7 @@
   html, body { height: 100%; margin: 0; background: var(--night); color: var(--text); font-family: var(--body); overflow: hidden; }
   #city { position: fixed; inset: 0; width: 100%; height: 100%; display: block; outline: none; touch-action: none; }
   #city:focus-visible { box-shadow: inset 0 0 0 2px var(--cyan); }
+  #city[hidden], .card[hidden], .help[hidden] { display: none; }
 
   .card {
     position: fixed; left: 16px; top: 16px; width: min(300px, calc(100% - 32px));
@@ -57,12 +58,25 @@
   }
   #status[hidden] { display: none; }
   #status strong { display: block; color: var(--pink); margin-bottom: 6px; }
+
+  /* Shown in place of the live scene when it cannot run here. */
+  #recording { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; background: var(--night); }
+  #recording[hidden] { display: none; }
+  .notice {
+    position: fixed; left: 16px; right: 16px; bottom: 16px; margin: 0 auto; max-width: 560px;
+    background: var(--panel); border: 1px solid var(--pink); border-radius: 12px; padding: 12px 16px;
+    font-size: 13px; line-height: 1.5; color: var(--text);
+  }
+  .notice[hidden] { display: none; }
+  .notice b { color: var(--pink); font-family: var(--display); }
 </style>
 </head>
 <body>
 <canvas id="city" tabindex="0" aria-label="A hovercar cockpit flying through a city at night. Use the keyboard to drive."></canvas>
 
+<video id="recording" hidden muted loop playsinline poster="preview/poster.jpg" aria-label="A recording of the hovercar flying through the city"></video>
 <div id="status" role="status">Starting the engine…</div>
+<p class="notice" id="notice" role="status" hidden></p>
 
 <aside class="card" id="card" aria-label="Controls">
   <h1>Night City</h1>
@@ -86,12 +100,23 @@
   var card = document.getElementById('card');
   var help = document.getElementById('help');
 
+  // The live scene cannot run: play the recording and say why.
   function fail(title, detail) {
-    status.hidden = false;
-    status.innerHTML = '';
-    var strong = document.createElement('strong');
-    strong.textContent = title;
-    status.append(strong, detail);
+    var video = document.getElementById('recording');
+    var notice = document.getElementById('notice');
+    status.hidden = true;
+    canvas.hidden = true;
+    card.hidden = true;
+    help.hidden = true;
+    video.src = 'preview/flythrough.mp4';
+    video.hidden = false;
+    var play = video.play();
+    if (play && play.catch) play.catch(function () { video.controls = true; });
+    notice.textContent = '';
+    var b = document.createElement('b');
+    b.textContent = 'This is a recording. ';
+    notice.append(b, title + ' ' + detail);
+    notice.hidden = false;
   }
 
   function setCard(shown) {
@@ -111,11 +136,11 @@
   canvas.addEventListener('pointerdown', function () { canvas.focus(); });
 
   if (!window.rive) {
-    fail('The Rive runtime did not load.', 'Check that vendor/rive.js is next to this page.');
+    fail('The Rive player did not load.', 'vendor/rive.js has to sit next to this page.');
     return;
   }
   if (!document.createElement('canvas').getContext('webgl2')) {
-    fail('This browser has no WebGL 2.', 'The city is drawn on the GPU. Try a current Chrome, Edge, Firefox or Safari.');
+    fail('This browser has no WebGL 2, which the live city needs.', 'Try a current Chrome, Edge, Firefox or Safari to drive it yourself.');
     return;
   }
 
@@ -126,7 +151,7 @@
     src: 'nightcity.riv',
     canvas: canvas,
     artboard: 'Main',
-    stateMachines: 'State Machine 1',
+    stateMachine: 'State Machine 1',
     autoplay: true,
     // The 3D scene is drawn by a script on a GPU Canvas. Without this the file loads and draws nothing.
     enableGPUCanvas: true,
@@ -138,7 +163,7 @@
       canvas.focus();
     },
     onLoadError: function () {
-      fail('The city file did not load.', 'nightcity.riv has to sit next to this page, and be a signed build (rive --publish).');
+      fail('The live, drivable city needs its signed Rive file, nightcity.riv, which is not here yet.', 'It is built with night-city/build.sh after signing in to Rive once.');
     }
   });
 

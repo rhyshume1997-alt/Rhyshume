@@ -82,8 +82,8 @@ fn fs_sky(i: SkyOut) -> @location(0) vec4<f32> {
     // moon
     let moonDir = normalize(vec3<f32>(-0.45, 0.42, -0.78));
     let m = dot(dir, moonDir);
-    c += vec3<f32>(1.0, 0.86, 0.92) * smoothstep(0.9965, 0.9975, m);
-    c += vec3<f32>(0.9, 0.35, 0.7) * pow(max(m, 0.0), 40.0) * 0.25;
+    c = mix(c, vec3<f32>(0.98, 0.80, 0.88), smoothstep(0.99880, 0.99905, m) * 0.92);
+    c += vec3<f32>(0.9, 0.35, 0.7) * pow(max(m, 0.0), 90.0) * 0.22;
     return vec4<f32>(c, 1.0);
 }
 

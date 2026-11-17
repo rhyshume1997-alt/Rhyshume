@@ -51,7 +51,8 @@
 
   .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
   figure { margin: 0; display: grid; gap: 8px; }
-  figure canvas { width: 100%; height: auto; display: block; border-radius: 8px; background: #000; cursor: pointer; }
+  figure canvas, figure img { width: 100%; height: auto; display: block; border-radius: 8px; background: #000; }
+  figure canvas { cursor: pointer; }
   .sign canvas { aspect-ratio: 16 / 9; }
   .screen canvas { aspect-ratio: 8 / 5; cursor: default; }
   .screen.tap canvas { cursor: pointer; }
@@ -76,7 +77,7 @@
 
   .steps { counter-reset: step; list-style: none; padding: 0; gap: 20px; }
   .steps > li { counter-increment: step; display: grid; gap: 10px; }
-  .steps > li > b::before { content: counter(step) ". "; color: var(--pink); font-family: var(--display); }
+  .steps > li > p > b::before { content: counter(step) ". "; color: var(--pink); font-family: var(--display); }
 
   #missing { border: 1px solid var(--pink); border-radius: 10px; padding: 14px 16px; font-size: 15px; }
   #missing[hidden] { display: none; }
@@ -139,17 +140,17 @@ dash.boolean('boost').value = true;</code></pre>
     <div class="prose">
       <h2>Putting one on your own page</h2>
       <ol class="steps">
-        <li><b>Put two files next to your page.</b> Your graphic, <code>hero.riv</code>, and the Rive player, which is a script plus a <code>.wasm</code> file from the free <code>@rive-app/webgl2</code> package.</li>
-        <li><b>Add a canvas where the graphic should appear.</b>
+        <li><p><b>Put two files next to your page.</b> Your graphic, <code>hero.riv</code>, and the Rive player, which is a script plus a <code>.wasm</code> file from the free <code>@rive-app/webgl2</code> package.</p></li>
+        <li><p><b>Add a canvas where the graphic should appear.</b></p>
 <pre><code>&lt;canvas id="hero" width="640" height="360"&gt;&lt;/canvas&gt;
 &lt;script src="vendor/rive.js"&gt;&lt;/script&gt;</code></pre></li>
-        <li><b>Tell the player which file and which canvas.</b>
+        <li><p><b>Tell the player which file and which canvas.</b></p>
 <pre><code>&lt;script&gt;
   rive.RuntimeLoader.setWasmUrl('vendor/rive.wasm');
   const hero = new rive.Rive({
     src: 'hero.riv',
     canvas: document.getElementById('hero'),
-    stateMachines: 'State Machine 1',  // the rules inside the file
+    stateMachine: 'State Machine 1',  // the rules inside the file
     autoplay: true,
     autoBind: true,                    // lets the page set its values
   });
@@ -193,6 +194,20 @@ dash.boolean('boost').value = true;</code></pre>
 (function () {
   var missing = document.getElementById('missing');
   function warn(text) { missing.hidden = false; missing.textContent = text; }
+  // Without the Rive file, show a still of each example so the page is not blank.
+  var stilled = false;
+  function showStills() {
+    if (stilled) return;
+    stilled = true;
+    document.querySelectorAll('canvas[data-artboard]').forEach(function (canvas) {
+      var img = new Image();
+      img.src = 'preview/' + canvas.dataset.artboard + '.png';
+      img.alt = canvas.getAttribute('aria-label') + ' (still image)';
+      img.width = canvas.width;
+      img.height = canvas.height;
+      canvas.replaceWith(img);
+    });
+  }
   if (!window.rive) { warn('The Rive player did not load, so the examples below are blank. vendor/rive.js has to sit next to this page.'); return; }
 
   rive.RuntimeLoader.setWasmUrl('vendor/rive.wasm');
@@ -204,7 +219,7 @@ dash.boolean('boost').value = true;</code></pre>
       src: 'nightcity.riv',
       canvas: canvas,
       artboard: name,
-      stateMachines: 'State Machine 1',
+      stateMachine: 'State Machine 1',
       autoplay: true,
       autoBind: true,
       // Several small canvases share one GPU context this way.
@@ -215,7 +230,8 @@ dash.boolean('boost').value = true;</code></pre>
         if (name === 'Speedo') wireGauge(players[name]);
       },
       onLoadError: function () {
-        warn('The examples need nightcity.riv next to this page. It is built with: rive night-city/rive --publish');
+        showStills();
+        warn('These are still pictures, not the live examples. The live ones need the signed Rive file, nightcity.riv, which is not here yet. It is built with night-city/build.sh after signing in to Rive once.');
       }
     });
   });
