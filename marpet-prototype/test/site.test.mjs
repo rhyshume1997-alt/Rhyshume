@@ -64,8 +64,22 @@ test('nothing is invented: team, LinkedIn and projects stay marked until content
   const t = read('team.html');
   assert.equal((t.match(/Name to be supplied/g) || []).length, team.filter((m) => !m.name).length);
   if (!company.linkedin && !linkedin.profileUrl) assert.doesNotMatch(read('index.html'), /href="https:\/\/[a-z.]*linkedin\.com/);
-  for (const p of projects.filter((x) => !x.overview)) assert.match(read(`project-${p.slug}.html`), /Placeholder: overview/);
+  for (const p of projects.filter((x) => !x.client)) assert.doesNotMatch(read(`project-${p.slug}.html`), /<dt>Client<\/dt>/, 'no client is named without approval');
   for (const f of pages) assert.doesNotMatch(read(f), /testimonial|ISO ?9001|accredited|award-winning/i, f + ' contains an unverified claim');
+});
+
+test('director decisions of 17 November 2026 are reflected', () => {
+  const about = read('about.html'), home = read('index.html'), contact = read('contact.html');
+  assert.match(about, /incorporated in 1997/); assert.doesNotMatch(about + home, /early 80/);
+  assert.match(home, /sister company/); assert.match(read('services.html'), /Sister company: <a href="https:\/\/jnrengineering\.co\.uk\/"/);
+  assert.match(contact, /Fullarton Road/); assert.doesNotMatch(contact, /Fullerton/);
+  assert.match(contact, /google\.com\/maps\/search/); assert.match(contact, /Fax 0141 641 7118/);
+  assert.match(home, /SC172812/);
+  for (const c of company.customers) assert.ok(home.includes(c), c);
+  for (const s of services) { const h = read(`service-${s.slug}.html`); assert.ok(s.capability.length >= 3); for (const c of s.capability) assert.ok(h.includes(c), s.slug + ': ' + c); }
+  const privacy = read('privacy.html');
+  for (const h of ['Who we are', 'What we collect', 'Why we use it', 'Who sees it', 'How long we keep it', 'Your rights']) assert.ok(privacy.includes(`<h2>${h}</h2>`), h);
+  for (const f of pages.filter((x) => !DEV.has(x) && !['index.html', 'contact.html'].includes(x))) assert.doesNotMatch(read(f), /class="confirm"/, f + ' still carries a to-confirm flag');
 });
 
 test('enquiry form: fields, labels, honeypot and status region', () => {

@@ -1,32 +1,205 @@
 [
-  {"slug":"conveyor-systems","name":"Conveyor systems","short":"Conveyors","oldUrl":"conveyor-belts.html","motion":"belt",
-   "lead":"Design and installation of stainless steel conveyor systems for food and drink production.",
-   "body":["Marpet designs, manufactures and installs conveyor systems, in the workshop or on site at client premises.","The photographs below are Marpet conveyors from the existing website: modular belt conveyors, roller conveyors, inclined sections and pin conveyor lines."],
-   "hero":"IMG_0283.jpg","images":["IMG_0276.jpg","IMG_0272.jpg","header7.jpg","header2.jpg","header1.jpg","header3.jpg","header6.jpg","belts3.jpg","belts4.jpg","belts5.jpg","Conveyor-Belts6.jpg"]},
-  {"slug":"production-lines","name":"Production lines","short":"Production lines","oldUrl":"production-lines.html","motion":"line",
-   "lead":"Bespoke production line fabrications, designed and supplied by Marpet.",
-   "body":["Production line work brings conveyors, work stations, tables and guarding together into one line."],
-   "hero":"header13.jpg","images":["header4.jpg","prod1.jpg","prod2.jpg","cater2.jpg","cater3.jpg"]},
-  {"slug":"pipework","name":"Industrial pipework","short":"Pipework","oldUrl":"pipework.html","motion":"pipe",
-   "lead":"Stainless steel pipework fabrication for food and drink processing.",
-   "body":["Marpet designs and supplies bespoke pipework fabrications, installed on site."],
-   "hero":"pipeheader.jpg","images":["header5.jpg","Pipework1.jpg","Pipework2.jpg","Pipework3.jpg","Pipework4.jpg","Pipework5.jpg","Pipework6.jpg"]},
-  {"slug":"access-platforms","name":"Access platforms","short":"Access platforms","oldUrl":"access-platform.html","motion":"steps",
-   "lead":"Bespoke stainless steel access platforms, stairs and handrails.",
-   "body":["Marpet designs and supplies bespoke access platform fabrications for production areas."],
-   "hero":"header11.jpg","images":["access1.jpg","access2.jpg","access3.jpg","access4.jpg"]},
-  {"slug":"catering","name":"Catering fabrication","short":"Catering","oldUrl":"catering.html","motion":"none",
-   "lead":"Stainless fabrication for cafes, bars, clubs and restaurants, to your design or ours.",
-   "body":["Marpet's catering division provides cafes, bars, clubs and restaurants with stainless fabrication, in standard and bespoke sizes."],
-   "list":["Extract canopies","Wall sheeting","Preparation tables","Sinks and taps","Wall shelves","Ice dumps"],
-   "hero":"caterhead.jpg","images":["newCatering1.jpg","newCatering2.jpg","newCatering3.jpg","Catering1.jpg","Catering2.jpg","Catering4.jpg","Catering5.jpg","Catering6.jpg"]},
-  {"slug":"dentistry","name":"Dentistry equipment","short":"Dentistry","oldUrl":"dentistry.html","motion":"none","confirm":"Confirm this is still offered.",
-   "lead":"A range of dentistry equipment, fabricated to your design or ours.",
-   "body":["Marpet produces a range of dentistry equipment in standard and bespoke sizes."],
-   "hero":"banner1.jpg","images":["denist1.jpg","denist2.jpg"]},
-  {"slug":"general-fabrication","name":"General fabrication","short":"General fabrication","oldUrl":"generalfabrication.html","motion":"none",
-   "lead":"Stainless steel, mild steel and aluminium fabrication, designed, manufactured and installed.",
-   "body":["Marpet will design, manufacture and install on site virtually all types of stainless steel, mild steel or aluminium fabrication."],
-   "list":["Handrails","Work stations","Ducting","Tables","Wall sheeting","Sinks"],
-   "hero":"general-fabrication-1.jpg","images":["general-fabrication-2.jpg","General-Fabrication1.jpg","General-Fabrication2.jpg","cater1.jpg"]}
+  {
+    "slug": "conveyor-systems",
+    "name": "Conveyor systems",
+    "short": "Conveyors",
+    "oldUrl": "conveyor-belts.html",
+    "motion": "belt",
+    "lead": "Design and installation of stainless steel conveyor systems for food and drink production.",
+    "body": [
+      "Marpet designs, manufactures and installs conveyor systems, in the workshop or on site at client premises.",
+      "The photographs below are Marpet conveyors from the existing website: modular belt conveyors, roller conveyors, inclined sections and pin conveyor lines."
+    ],
+    "hero": "IMG_0283.jpg",
+    "images": [
+      "IMG_0276.jpg",
+      "IMG_0272.jpg",
+      "header7.jpg",
+      "header2.jpg",
+      "header1.jpg",
+      "header3.jpg",
+      "header6.jpg",
+      "belts3.jpg",
+      "belts4.jpg",
+      "belts5.jpg",
+      "Conveyor-Belts6.jpg"
+    ],
+    "capability": [
+      "Conveyor systems for food and drink processing",
+      "Design, manufacture and installation",
+      "Stainless steel, mild steel or aluminium",
+      "Made in the workshop or on site at your premises",
+      "Skilled, time served tradesmen"
+    ]
+  },
+  {
+    "slug": "production-lines",
+    "name": "Production lines",
+    "short": "Production lines",
+    "oldUrl": "production-lines.html",
+    "motion": "line",
+    "lead": "Bespoke production line fabrications, designed and supplied by Marpet.",
+    "body": [
+      "Production line work brings conveyors, work stations, tables and guarding together into one line."
+    ],
+    "hero": "header13.jpg",
+    "images": [
+      "header4.jpg",
+      "prod1.jpg",
+      "prod2.jpg",
+      "cater2.jpg",
+      "cater3.jpg"
+    ],
+    "capability": [
+      "Work stations, tables and conveyors for production lines",
+      "Design, manufacture and installation",
+      "Stainless steel, mild steel or aluminium",
+      "Made in the workshop or on site at your premises",
+      "Skilled, time served tradesmen"
+    ]
+  },
+  {
+    "slug": "pipework",
+    "name": "Industrial pipework",
+    "short": "Pipework",
+    "oldUrl": "pipework.html",
+    "motion": "pipe",
+    "lead": "Stainless steel pipework fabrication for food and drink processing.",
+    "body": [
+      "Marpet designs and supplies bespoke pipework fabrications, installed on site."
+    ],
+    "hero": "pipeheader.jpg",
+    "images": [
+      "header5.jpg",
+      "Pipework1.jpg",
+      "Pipework2.jpg",
+      "Pipework3.jpg",
+      "Pipework4.jpg",
+      "Pipework5.jpg",
+      "Pipework6.jpg"
+    ],
+    "capability": [
+      "Stainless steel pipework for food and drink processing",
+      "Design, manufacture and installation",
+      "Stainless steel, mild steel or aluminium",
+      "Made in the workshop or on site at your premises",
+      "Skilled, time served tradesmen"
+    ]
+  },
+  {
+    "slug": "access-platforms",
+    "name": "Access platforms",
+    "short": "Access platforms",
+    "oldUrl": "access-platform.html",
+    "motion": "steps",
+    "lead": "Bespoke stainless steel access platforms, stairs and handrails.",
+    "body": [
+      "Marpet designs and supplies bespoke access platform fabrications for production areas."
+    ],
+    "hero": "header11.jpg",
+    "images": [
+      "access1.jpg",
+      "access2.jpg",
+      "access3.jpg",
+      "access4.jpg"
+    ],
+    "capability": [
+      "Bespoke access platforms, stairs and handrails",
+      "Design, manufacture and installation",
+      "Stainless steel, mild steel or aluminium",
+      "Made in the workshop or on site at your premises",
+      "Skilled, time served tradesmen"
+    ]
+  },
+  {
+    "slug": "catering",
+    "name": "Catering fabrication",
+    "short": "Catering",
+    "oldUrl": "catering.html",
+    "motion": "none",
+    "lead": "Stainless fabrication for cafes, bars, clubs and restaurants, to your design or ours.",
+    "body": [
+      "Marpet's catering division provides cafes, bars, clubs and restaurants with stainless fabrication, in standard and bespoke sizes."
+    ],
+    "list": [
+      "Extract canopies",
+      "Wall sheeting",
+      "Preparation tables",
+      "Sinks and taps",
+      "Wall shelves",
+      "Ice dumps"
+    ],
+    "hero": "caterhead.jpg",
+    "images": [
+      "newCatering1.jpg",
+      "newCatering2.jpg",
+      "newCatering3.jpg",
+      "Catering1.jpg",
+      "Catering2.jpg",
+      "Catering4.jpg",
+      "Catering5.jpg",
+      "Catering6.jpg"
+    ],
+    "capability": [
+      "Made to your design or ours",
+      "Standard and bespoke sizes",
+      "For cafes, bars, clubs and restaurants",
+      "Stainless steel fabrication",
+      "Skilled, time served tradesmen"
+    ]
+  },
+  {
+    "slug": "dentistry",
+    "name": "Dentistry equipment",
+    "short": "Dentistry",
+    "oldUrl": "dentistry.html",
+    "motion": "none",
+    "lead": "A range of dentistry equipment, fabricated to your design or ours.",
+    "body": [
+      "Marpet produces a range of dentistry equipment in standard and bespoke sizes."
+    ],
+    "hero": "banner1.jpg",
+    "images": [
+      "denist1.jpg",
+      "denist2.jpg"
+    ],
+    "capability": [
+      "Made to your design or ours",
+      "Standard and bespoke sizes",
+      "Stainless steel fabrication",
+      "Skilled, time served tradesmen"
+    ]
+  },
+  {
+    "slug": "general-fabrication",
+    "name": "General fabrication",
+    "short": "General fabrication",
+    "oldUrl": "generalfabrication.html",
+    "motion": "none",
+    "lead": "Stainless steel, mild steel and aluminium fabrication, designed, manufactured and installed.",
+    "body": [
+      "Marpet will design, manufacture and install on site virtually all types of stainless steel, mild steel or aluminium fabrication."
+    ],
+    "list": [
+      "Handrails",
+      "Work stations",
+      "Ducting",
+      "Tables",
+      "Wall sheeting",
+      "Sinks"
+    ],
+    "hero": "general-fabrication-1.jpg",
+    "images": [
+      "general-fabrication-2.jpg",
+      "General-Fabrication1.jpg",
+      "General-Fabrication2.jpg",
+      "cater1.jpg"
+    ],
+    "capability": [
+      "Design, manufacture and installation",
+      "Stainless steel, mild steel or aluminium",
+      "Made in the workshop or on site at your premises",
+      "Skilled, time served tradesmen"
+    ]
+  }
 ]

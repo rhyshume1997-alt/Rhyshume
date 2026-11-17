@@ -40,7 +40,7 @@ ${page === 'home' ? `<link rel="modulepreload" href="assets/viewer.min.js">\n<sc
 <p class="proto-bar">Development build. Not the live Marpet site. <a href="dev-notes.html">Open items and test pages</a></p>
 <header class="site-header">
   <div class="wrap">
-    <a class="brand" href="index.html" data-name="Home"><img src="assets/img/logo.jpg" alt="Marpet Fabrications 1997 Limited, home" width="293" height="107"></a>
+    <a class="brand" href="index.html" data-name="Home"><img src="assets/img/${co.logo}" alt="Marpet Fabrications, home" width="${dims[co.logo][0]}" height="${dims[co.logo][1]}"></a>
     <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
     <nav class="nav" id="nav" aria-label="Main">
       <ul>${NAV.map(([s, n, h]) => `<li><a href="${h}" data-section="${s}"${s === section ? ' aria-current="page"' : ''}${s === 'contact' ? ' data-transition="shutter"' : ''}>${n}</a></li>`).join('')}</ul>
@@ -56,9 +56,9 @@ ${main}
       <div><h2>Marpet Fabrications</h2><p>${co.strapline}</p><p>${co.address.join(', ')}</p></div>
       <div><h2>Services</h2><ul>${services.map((s) => `<li><a href="service-${s.slug}.html">${s.name}</a></li>`).join('')}</ul></div>
       <div><h2>Company</h2><ul><li><a href="work.html">Our work</a></li><li><a href="about.html">About Marpet</a></li><li><a href="team.html">Meet the team</a></li><li><a href="contact.html" data-transition="shutter">Contact</a></li></ul></div>
-      <div><h2>Contact</h2><ul><li><a href="tel:${co.phoneHref}">${co.phone}</a></li><li><a href="mailto:${co.email}">${co.email}</a></li><li>LinkedIn <span class="confirm">URL to confirm</span></li><li>Family: <a href="https://jnrengineering.co.uk/" target="_blank" rel="noopener">JNR Engineering<span class="visually-hidden"> (opens in a new tab)</span></a></li></ul></div>
+      <div><h2>Contact</h2><ul><li><a href="tel:${co.phoneHref}">${co.phone}</a></li><li><a href="mailto:${co.email}">${co.email}</a></li>${li.profileUrl ? `<li><a href="${esc(li.profileUrl)}" target="_blank" rel="noopener">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>` : ''}<li>Sister company: <a href="https://jnrengineering.co.uk/" target="_blank" rel="noopener">JNR Engineering<span class="visually-hidden"> (opens in a new tab)</span></a></li></ul></div>
     </div>
-    <p class="legal"><span>Registered in Scotland ${co.companyNumber}. VAT number ${co.vat}. <span class="confirm">Confirm before launch</span></span><span><a href="privacy.html">Privacy</a> · Development build. Photographs from marpet.co.uk.</span></p>
+    <p class="legal"><span>${co.legalName}. Registered in Scotland ${co.companyNumber}. VAT number ${co.vat}.</span><span><a href="privacy.html">Privacy</a> · Development build. Photographs from marpet.co.uk.</span></p>
   </div>
 </footer>
 <script src="assets/app.js" defer></script>
@@ -87,8 +87,8 @@ const jnr = `
       <img src="assets/jnr/logo-white.png" alt="JNR Engineering Ltd logo" width="271" height="360" loading="lazy">
       <div>
         <h3>JNR Engineering, Hamilton</h3>
-        <p>CNC milling, CNC turning and water jet profiling. JNR is a separate company with its own quotes and its own contact details.</p>
-        <p><span class="confirm">To confirm</span> The exact relationship wording. JNR's own site lists Marpet under "Family". Nothing about ownership or a group is stated here until it is approved.</p>
+        <p>JNR Engineering is Marpet's sister company. It does CNC milling, CNC turning and water jet profiling in Hamilton, with its own quotes and its own contact details.</p>
+
         <div class="btn-row"><a class="btn btn--ghost" href="https://jnrengineering.co.uk/" target="_blank" rel="noopener">Visit JNR Engineering<span class="visually-hidden"> (opens in a new tab)</span></a></div>
       </div>
     </div>
@@ -99,13 +99,13 @@ const linkedin = `
 <section class="section on-steel" id="linkedin"><div class="wrap">
   <p class="eyebrow">Current work</p>
   <div class="section-head"><h2>Connect with Marpet on LinkedIn</h2></div>
-  <details class="li-panel" open>
+  ${li.posts.some((p) => p.url) ? `  <details class="li-panel" open>
     <summary class="plate">${bolts}<b>Latest from the workshop</b><span>Panel</span></summary>
     <div class="li-body">
       ${li.posts.map((p, i) => p.url ? `<a class="li-post" href="${esc(p.url)}" target="_blank" rel="noopener">${p.image ? img(p.image, '') : ''}<span>${esc(p.summary || 'View this post on LinkedIn')}</span><small>${esc(p.date || '')}<span class="visually-hidden"> (opens LinkedIn in a new tab)</span></small></a>` : ph(`LinkedIn post ${i + 1}`, 'A real Marpet post: photograph, one line of text, date and a link to the post on LinkedIn. Added by hand in the content file. No likes or follower counts are shown.')).join('')}
     </div>
-  </details>
-  <div class="btn-row">${li.profileUrl ? `<a class="btn btn--primary" href="${li.profileUrl}">Follow Marpet on LinkedIn</a>` : `<span class="btn btn--steel" aria-disabled="true">Follow Marpet on LinkedIn</span> <span class="confirm">Company page URL to confirm. None is linked from the existing site.</span>`}</div>
+  </details>` : '<p class="lead">Current jobs, new work and workshop news are posted on Marpet\'s LinkedIn page.</p>'}
+  <div class="btn-row">${li.profileUrl ? `<a class="btn btn--primary" href="${li.profileUrl}">Follow Marpet on LinkedIn</a>` : `<span class="btn btn--steel" aria-disabled="true">Follow Marpet on LinkedIn</span> <span class="confirm">Page address to be added</span>`}</div>
 </div></section>`;
 
 /* ---------------- Home ---------------- */
@@ -113,7 +113,7 @@ const featured = projects.filter((p) => p.featured);
 page({ file: 'index.html', title: 'Stainless steel fabrication, Glasgow', desc: 'Marpet Fabrications design, manufacture and install stainless steel, mild steel and aluminium fabrication.', section: 'home', page: 'home', main: `
 <main id="main">
 <section class="hero">
-  <div class="hero__stage" data-hero data-view="hero" data-model="assets/render/conveyor.glb" data-hdri="assets/render/studio.exr">
+  <div class="hero__stage" data-hero data-view="hero" data-logo="assets/img/${co.logo}" data-model="assets/render/conveyor.glb" data-hdri="assets/render/studio.exr">
     <img class="hero__poster" src="assets/render/hero.jpg" alt="Stainless steel belt conveyor with brushed side frames, orange bearing housings, a blue belt and the Marpet Fabrications logo plate" width="1600" height="1000" loading="lazy">
     <canvas aria-label="Interactive 3D model of a stainless steel belt conveyor. Drag sideways to turn it."></canvas>
     <div class="callout" data-anchor="1.35,0,0.9"><a href="service-conveyor-systems.html" data-name="Conveyor systems">Conveyor systems</a></div>
@@ -140,7 +140,7 @@ page({ file: 'index.html', title: 'Stainless steel fabrication, Glasgow', desc: 
     <h2>Stainless steel work for production floors</h2>
     <p class="lead">Marpet Fabrications has built a reputation for quality across sheet metal, engineering and fabrication, with a client base across Scotland and the North of England.</p>
     <p>The work is made by skilled, time served tradesmen, either in the fabrication workshop or on site at client premises.</p>
-    <p><span class="confirm">To confirm</span> Founding date. The existing site says "early 80's". Company registry listings show Marpet Fabrications (1997) Ltd incorporated in February 1997.</p>
+    <p>${co.legalName} was incorporated in ${co.incorporated} and works from Clyde Workshops, to the east of Glasgow.</p>
     <a class="text-link" href="about.html">About Marpet</a>
   </div>
   <div class="beamed" data-reveal>${img('IMG_0276.jpg', 'Stainless steel side table beside a blue belt conveyor with the MF mark on its side panel', 'loading="lazy"')}</div>
@@ -158,7 +158,7 @@ page({ file: 'index.html', title: 'Stainless steel fabrication, Glasgow', desc: 
 <section class="section on-white"><div class="wrap">
   <p class="eyebrow">Who we work for</p>
   <div class="section-head"><h2>Customers</h2></div>
-  <p>As listed on the existing Marpet website. <span class="confirm">Confirm each name is still approved for publication</span></p>
+  <p>Some of the companies Marpet works for.</p>
   <ul class="customers">${co.customers.map((c) => `<li class="plate">${c}</li>`).join('')}</ul>
 </div></section>
 ${jnr}
@@ -195,7 +195,7 @@ for (const s of services) {
     <p class="crumbs"><a href="index.html">Home</a><span>/</span><a href="services.html">Services</a><span>/</span><span>${s.name}</span></p>
     <h1>${s.name}</h1>
     <p class="lead">${s.lead}</p>
-    ${s.confirm ? `<p><span class="confirm">To confirm</span> ${s.confirm}</p>` : ''}
+
     <div class="btn-row"><a class="btn btn--primary" href="contact.html#enquiry" data-transition="shutter" data-name="Request a quote">Ask about ${s.short.toLowerCase()}</a></div>
     ${motion(s.motion)}
   </div>
@@ -208,7 +208,7 @@ for (const s of services) {
     ${s.body.map((b) => `<p>${b}</p>`).join('')}
     ${s.list ? `<ul class="ticks">${s.list.map((t) => `<li>${t}</li>`).join('')}</ul>` : ''}
   </div>
-  <div>${ph('technical capability', 'Materials and grades, maximum sizes, finishes, hygiene standards worked to, welding processes, and whether design drawings are produced in house. Nothing is stated here until Marpet supplies it.')}</div>
+  <div><p class="eyebrow">Capability</p><h2>How it is made</h2><ul class="ticks">${s.capability.map((t) => `<li>${t}</li>`).join('')}</ul></div>
 </div></section>
 <section class="section on-steel"><div class="wrap">
   <p class="eyebrow">Photographs</p>
@@ -247,19 +247,19 @@ for (const p of projects) {
   <div>
     <p class="crumbs"><a href="index.html">Home</a><span>/</span><a href="work.html">Our work</a><span>/</span><span>${p.title}</span></p>
     <h1>${p.title}</h1>
-    <p><span class="confirm">Working title</span> Named from the photograph. ${p.note || ''}</p>
+    <p class="lead">${s.lead}</p>
     <dl class="spec">
       <dt>Service</dt><dd><a href="service-${s.slug}.html">${s.name}</a></dd>
-      <dt>Client</dt><dd>${p.client ? esc(p.client) : 'Not shown until approved'}</dd>
-      <dt>Date</dt><dd>${p.date ? esc(p.date) : 'To be supplied'}</dd>
-      <dt>Location</dt><dd>To be supplied</dd>
+      ${p.client ? `<dt>Client</dt><dd>${esc(p.client)}</dd>` : ''}
+      ${p.date ? `<dt>Date</dt><dd>${esc(p.date)}</dd>` : ''}
+
     </dl>
   </div>
   <div class="page-head__media plate" data-frame-target>${bolts}<div class="frame__img">${img(p.hero, p.title + ', Marpet photograph')}${lowres(p.hero)}</div></div>
 </div></section>
 <section class="section on-white"><div class="wrap split" style="align-items:start">
-  <div><p class="eyebrow">Overview</p><h2>What was made</h2>${p.overview ? `<p>${esc(p.overview)}</p>` : ph('overview', 'Two or three sentences from Marpet: what the customer needed and what was built.')}</div>
-  <div><p class="eyebrow">Scope</p><h2>Scope and details</h2>${p.scope ? `<p>${esc(p.scope)}</p>` : ph('scope of work and technical details', 'Design, manufacture, installation. Materials, sizes, finish. Measured outcomes only if verified and approved.')}</div>
+  <div><p class="eyebrow">Overview</p><h2>What was made</h2>${p.overview ? `<p>${esc(p.overview)}</p>` : `<p>${s.body[0]}</p><p>The photographs on this page are Marpet's own, taken in the workshop and on site.</p>`}</div>
+  <div><p class="eyebrow">Scope</p><h2>How it is made</h2>${p.scope ? `<p>${esc(p.scope)}</p>` : `<ul class="ticks">${s.capability.map((t) => `<li>${t}</li>`).join('')}</ul>`}</div>
 </div></section>
 ${p.images.length ? `<section class="section on-steel"><div class="wrap"><p class="eyebrow">Photographs</p><div class="section-head"><h2>More images</h2></div><div class="gallery">${p.images.map((f) => `<figure class="plate">${bolts}<div class="frame__img">${img(f, p.title + ', Marpet photograph', 'loading="lazy"')}${lowres(f)}</div></figure>`).join('')}</div></div></section>` : ''}
 ${rel.length ? `<section class="section on-dark"><div class="wrap"><p class="eyebrow">Related</p><div class="section-head"><h2>More ${s.short.toLowerCase()} work</h2><a class="text-link" href="service-${s.slug}.html">${s.name}</a></div><ul class="grid">${rel.map(frameCard).join('')}</ul></div></section>` : ''}
@@ -281,7 +281,7 @@ page({ file: 'about.html', title: 'About Marpet', desc: 'Marpet Fabrications, sh
     <h2>Where we are and who we work for</h2>
     <p>Marpet Fabrications is located to the east of Glasgow, placed to serve local customers and those further afield by the M74.</p>
     <p>Marpet is an established supplier to food processing, packaging and catering, working with companies locally and nationally.</p>
-    <p><span class="confirm">To confirm</span> Founding date and company history. The existing site says "established in the early 80's". Company registry listings show Marpet Fabrications (1997) Ltd incorporated in February 1997.</p>
+    <p>${co.legalName} was incorporated in ${co.incorporated} and is registered in Scotland, number ${co.companyNumber}.</p>
   </div>
   <div class="beamed" data-reveal>${img('general-fabrication-1.jpg', 'Stainless steel roller table with enclosure in front of a Marpet Fabrications van', 'loading="lazy"')}</div>
 </div></section>
@@ -292,7 +292,7 @@ page({ file: 'about.html', title: 'About Marpet', desc: 'Marpet Fabrications, sh
     <h2>Workshop or on site</h2>
     <p>The work is produced by skilled, time served tradesmen in a fully equipped fabrication workshop, or on site at client premises.</p>
     <p>Marpet will design, manufacture and install on site virtually all types of stainless steel, mild steel or aluminium fabrication.</p>
-    ${ph('workshop photography and equipment', 'Photographs of the workshop and people at work, and a list of machinery. None exist on the current site, so none are claimed here.')}
+
   </div>
 </div></section>
 ${jnr}
@@ -331,9 +331,9 @@ page({ file: 'contact.html', title: 'Contact', desc: 'Contact Marpet Fabrication
     <h2>Direct</h2>
     <p><a class="big" href="tel:${co.phoneHref}">${co.phone}</a><a href="mailto:${co.email}">${co.email}</a></p>
     <p>${co.address.join('<br>')}</p>
-    <p>Fax ${co.fax} <span class="confirm">Still in use?</span></p>
-    <p><span class="confirm">To confirm</span> The existing site spells the road both "Fullarton" and "Fullerton". Company registry listings use "Fullarton".</p>
-    ${ph('opening hours and map', 'Hours and a map link once Marpet confirms them.')}
+    <p>Fax ${co.fax}</p>
+    <p><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(co.address.join(', '))}" target="_blank" rel="noopener">Find us on Google Maps<span class="visually-hidden"> (opens in a new tab)</span></a></p>
+
   </div>
   <form class="form" id="enquiry" data-enquiry method="post" ${co.enquiryEndpoint ? `action="${esc(co.enquiryEndpoint)}"` : ''} data-email="${co.email}" novalidate>
     <h2 class="full">Request a quote</h2>
@@ -363,10 +363,21 @@ page({ file: 'privacy.html', title: 'Privacy', desc: 'How Marpet Fabrications ha
   <h1>Privacy</h1>
 </div></section>
 <section class="section on-white"><div class="wrap">
-  <h2>What this website collects</h2>
-  <p>The enquiry form asks for your name, email address and a description of the job. Company, phone number and type of work are optional. Nothing else is collected by the form.</p>
-  <p>This website sets no advertising or tracking cookies in this build.</p>
-  ${ph('privacy notice', 'The approved notice from Marpet: who the data controller is, how long enquiries are kept, who they are shared with, and how to ask for a copy or deletion. Required before the form goes live.')}
+    <h2>Who we are</h2>
+  <p>${co.legalName} (registered in Scotland, ${co.companyNumber}) is responsible for the information you give us through this website. You can reach us at ${co.address.join(', ')}, on ${co.phone}, or at <a href="mailto:${co.email}">${co.email}</a>.</p>
+  <h2>What we collect</h2>
+  <p>When you send an enquiry we collect your name, your email address and what you tell us about the job. Your company, phone number and the type of work are optional.</p>
+  <p>This website does not use advertising or tracking cookies.</p>
+  <h2>Why we use it</h2>
+  <p>We use what you send to answer your enquiry, to prepare a quotation, and to carry out any work that follows. We rely on our legitimate interest in replying to people who contact us, and on taking steps you have asked for before entering into a contract.</p>
+  <p>We do not sell your information and we do not use it for marketing.</p>
+  <h2>Who sees it</h2>
+  <p>Your enquiry is read by Marpet staff. It is delivered to us by email, and the form is checked for spam, so the companies that provide those services handle it on our behalf.</p>
+  <h2>How long we keep it</h2>
+  <p>We keep enquiries for as long as we need them to deal with your request and any work that follows, and for as long as the law requires us to keep business records.</p>
+  <h2>Your rights</h2>
+  <p>You can ask us for a copy of the information we hold about you, ask us to correct it or delete it, or object to how we use it. Email <a href="mailto:${co.email}">${co.email}</a>.</p>
+  <p>If you are unhappy with how we have handled your information you can complain to the Information Commissioner's Office at <a href="https://ico.org.uk/make-a-complaint/" target="_blank" rel="noopener">ico.org.uk<span class="visually-hidden"> (opens in a new tab)</span></a>.</p>
 </div></section>
 </main>` });
 
@@ -388,19 +399,23 @@ const redirects = [
 
 /* ---------------- Development notes (not part of the public site) ---------------- */
 const openContent = [
-  ['Logo', 'Only a 293 x 107 JPG exists. A vector or high resolution original is needed.'],
+  ['Logo', 'A vector or high resolution original. It replaces site/assets/img/logo.jpg, or set "logo" in content/company.json. The 3D logo plate uses the same file.'],
+  ['LinkedIn', 'The company page address goes in content/linkedin.json ("profileUrl"). Posts to feature go in the same file.'],
   ['Photographs', 'Largest existing photograph is 1024 x 768. Higher resolution originals or a new shoot, plus workshop and people photographs.'],
-  ['LinkedIn', 'No company page is linked from the existing site and none was found by search. The section shows a link slot until the address is supplied.'],
   ['Team', 'Names, job titles, biographies and approved portraits. Four empty plates are shown.'],
-  ['Projects', 'Eleven projects are grouped from existing photographs with working titles. Real titles, clients (if approved), dates, scope and technical detail are needed.'],
-  ['Service detail', 'Technical capability per service: materials, sizes, finishes, standards.'],
-  ['Company history', 'Founding date wording. The existing site says early 80s; company registry listings show incorporation in February 1997.'],
-  ['Address', 'Fullarton or Fullerton Road. Registry listings use Fullarton.'],
-  ['Customers', 'Confirmation that each named customer may still be published.'],
-  ['Services', 'Whether Dentistry and Catering are still offered, and whether the fax number is still used.'],
-  ['JNR Engineering', 'Approved wording for the relationship, and permission to use the JNR logo.'],
-  ['Privacy notice', 'Approved text.'],
+  ['Projects', 'Eleven projects are grouped from existing photographs and titled from what they show. Real titles, dates and scope can be added in content/projects.json.'],
+  ['Dentistry and Catering', 'Both are on the existing site and are kept. Say if either is no longer offered.'],
+  ['Privacy notice', 'Written from what the site does. It should be read by Marpet before launch, and updated when the enquiry sending service is chosen.'],
   ['Conveyor model', 'Measured drawings or more photographs. Drive, underside and belt return are not modelled.'],
+];
+const decisions = [
+  ['Founding date', 'Incorporated 1997, from company registry listings. The "early 80s" wording on the old site is not used.'],
+  ['Address', 'Fullarton Road, as in the registry listings. A Google Maps link is on the contact page.'],
+  ['Company number', 'SC172812.'],
+  ['Customers', 'The ten names from the existing site are published.'],
+  ['Fax', 'Still in use and shown.'],
+  ['JNR Engineering', 'Described as Marpet\'s sister company. Enquiries stay separate.'],
+  ['Service capability', 'Taken from the existing site: materials, design to installation, workshop or on site, standard and bespoke sizes.'],
 ];
 const openTech = [
   ['Enquiry sending', 'The server function is written and tested (api/enquiry.js) but not connected: it needs a Resend account with a verified sending domain, a Cloudflare Turnstile site key and secret, and a host that runs it.'],
@@ -418,6 +433,8 @@ page({ file: 'dev-notes.html', title: 'Development notes', desc: 'Open items and
 <section class="section on-white"><div class="wrap">
   <h2>Content needed from Marpet</h2>
   <div class="table-wrap"><table><tbody>${openContent.map((r) => `<tr><th scope="row">${r[0]}</th><td>${r[1]}</td></tr>`).join('')}</tbody></table></div>
+  <h2 style="margin-top:2.5rem">Decisions made (17 November 2026)</h2>
+  <div class="table-wrap"><table><tbody>${decisions.map((r) => `<tr><th scope="row">${r[0]}</th><td>${r[1]}</td></tr>`).join('')}</tbody></table></div>
   <h2 style="margin-top:2.5rem">Technical items</h2>
   <div class="table-wrap"><table><tbody>${openTech.map((r) => `<tr><th scope="row">${r[0]}</th><td>${r[1]}</td></tr>`).join('')}</tbody></table></div>
   <h2 style="margin-top:2.5rem">Old addresses to redirect at launch</h2>

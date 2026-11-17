@@ -8,6 +8,9 @@
  * @property {string} phone
  * @property {string} phoneHref
  * @property {string} email
+ * @property {string} logo              File in site/assets/img; swap this to change the logo everywhere
+ * @property {string} legalName
+ * @property {string} companyNumber
  * @property {string[]} address
  * @property {string[]} customers
  * @property {string|null} linkedin         Company page address, or null until confirmed
@@ -23,6 +26,7 @@
  * @property {string} lead
  * @property {string[]} body
  * @property {string[]} [list]
+ * @property {string[]} capability  How the work is done; shown on the service page and its projects
  * @property {string} [confirm]
  * @property {string} hero
  * @property {string[]} images
@@ -78,6 +82,7 @@ export function validateContent(c) {
     need(!serviceSlugs.has(s.slug), `${at}: slug is used twice`); serviceSlugs.add(s.slug);
     for (const k of ['name', 'short', 'oldUrl', 'lead', 'hero']) need(str(s[k]), `${at}: "${k}" is missing`);
     need(Array.isArray(s.body) && s.body.length > 0, `${at}: "body" needs at least one paragraph`);
+    need(Array.isArray(s.capability) && s.capability.length > 0, `${at}: "capability" needs at least one line`);
     need(['belt', 'line', 'pipe', 'steps', 'none'].includes(s.motion), `${at}: "motion" is not one of belt, line, pipe, steps, none`);
     if (str(s.hero)) img(s.hero, at);
     (s.images || []).forEach((f) => img(f, at));

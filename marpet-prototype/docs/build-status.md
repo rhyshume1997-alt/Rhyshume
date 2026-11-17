@@ -23,7 +23,7 @@ Development build on branch `claude/beautiful-hawking-dh0pog`. Not merged, not l
 |---|---|---|
 | Build, with content validation | `npm run build` | 29 pages built; viewer bundle 709 KB (156 KB compressed) |
 | Type check (build script, server, content schema, enquiry function) | `npm run typecheck` | 0 errors |
-| Unit and build-output tests | `npm test` | 134 passed, 0 failed |
+| Unit and build-output tests | `npm test` | 135 passed, 0 failed |
 | Browser tests | `npm run test:browser` | 280 passed, 0 failed |
 | Existing site tests (repository root) | `node --test test/*.test.js` | 154 passed, 0 failed |
 
@@ -46,21 +46,29 @@ Limits of that evidence: browsers were headless Chromium with a software GPU. Sa
 - The server function `api/enquiry.js` is written and unit tested against mocked services. It verifies Cloudflare Turnstile, then sends through Resend, and reports success only after the email is accepted.
 - **It is not connected.** No sending account, sending domain, Turnstile keys or host exist yet. Until they do, the form says plainly that nothing was sent and offers the enquiry as a ready-written email to info@marpet.co.uk.
 
+## Decisions applied (director, 17 November 2026)
+
+- Founding date: incorporated 1997, from company registry listings. The "early 80s" wording is not used.
+- Address: Fullarton Road, as in the registry listings, with a Google Maps link. Company number SC172812.
+- Customers: the ten names from the existing site are published.
+- Fax number: still in use and shown.
+- JNR Engineering: described as Marpet's sister company. Enquiries stay separate.
+- Service capability: taken from the existing site and shown on every service and project page.
+- Privacy notice: written from what the site actually does.
+- Enquiry sending: to be connected later.
+
+The registry details came from company listing sites found by search, not from Companies House directly.
+
 ## Remaining content needed from Marpet
 
-1. Vector or high resolution logo.
-2. Higher resolution photographs, and workshop and people photographs. The largest existing image is 1024 x 768.
-3. LinkedIn company page address. None is linked from the existing site and none was found by search.
-4. Team names, roles, biographies and approved portraits.
-5. Real project titles, dates, scope and technical detail; client names only where approved.
-6. Technical capability for each service.
-7. Founding date wording (existing site: early 80s; registry listings: incorporated February 1997).
-8. Road spelling: Fullarton or Fullerton (registry listings use Fullarton).
-9. Confirmation that each named customer may still be published.
-10. Whether Dentistry and Catering are still offered, and whether the fax number is still used.
-11. Approved wording for the JNR Engineering relationship and permission to use its logo.
-12. Privacy notice text.
-13. Measured drawings or more photographs of a conveyor. Drive, underside and belt return are not modelled.
+1. Logo: a vector or high resolution file. Replace `site/assets/img/logo.jpg` or set `logo` in `content/company.json`; the header and the 3D logo plate both use it.
+2. LinkedIn company page address, in `content/linkedin.json`. Until then the section shows "Page address to be added".
+3. Team names, roles, biographies and approved portraits. Four empty plates are shown.
+4. Higher resolution photographs, and workshop and people photographs. The largest existing image is 1024 x 768.
+5. Real project titles, dates and scope. Project pages currently use the service description and capability; no client is named.
+6. Whether Dentistry and Catering are still offered. Both are kept from the existing site.
+7. A read of the privacy notice before launch, and an update once the sending service is chosen.
+8. Measured drawings or more photographs of a conveyor. Drive, underside and belt return are not modelled.
 
 ## Remaining technical items
 

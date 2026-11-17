@@ -1,7 +1,6 @@
 {
   "name": "Marpet Fabrications",
-  "legalName": "Marpet Fabrications 1997 Limited",
-  "legalNameNote": "As shown in the existing logo. Confirm against Companies House before use in structured data.",
+  "legalName": "Marpet Fabrications (1997) Ltd",
   "strapline": "Sheet metal fabricators. Stainless steel, mild steel and aluminium.",
   "phone": "0141 641 1778",
   "phoneHref": "+441416411778",
@@ -13,7 +12,7 @@
     "Glasgow",
     "G32 8YL"
   ],
-  "companyNumber": "172812",
+  "companyNumber": "SC172812",
   "vat": "680561724",
   "linkedin": null,
   "customers": [
@@ -31,5 +30,12 @@
   "source": "https://www.marpet.co.uk (all pages, fetched 17 Nov 2026)",
   "enquiryEndpoint": null,
   "turnstileSiteKey": null,
-  "registryNote": "Company registry listings (not Companies House directly) show Marpet Fabrications (1997) Ltd, SC172812, incorporated 21 February 1997, registered at Unit 04 Clyde Workshops, Fullarton Road, Glasgow G32 8YL. Confirm."
+  "registryNote": "Founding year, company number and road spelling follow company registry listings, as instructed by the director on 17 November 2026.",
+  "incorporated": "1997",
+  "logo": "logo.jpg",
+  "sisterCompany": {
+    "name": "JNR Engineering",
+    "url": "https://jnrengineering.co.uk/",
+    "place": "Hamilton"
+  }
 }

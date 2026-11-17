@@ -224,6 +224,9 @@ export function initViewer(root) {
       if (mats[n]) { o.material = mats[n]; if (n === 'Brushed sheet') o.receiveShadow = false; } else {
         o.material = o.material.clone(); o.material.vertexColors = true;
         if (n === 'PU belt') { o.material.map = beltTex; o.material.color.set(0xffffff); o.material.roughness = 0.45; }
+        if (n === 'Logo plate' && root.dataset.logo) {   // the site's logo file, so a new logo changes the plate too
+          new THREE.TextureLoader().load(root.dataset.logo, (tx) => { tx.colorSpace = THREE.SRGBColorSpace; tx.flipY = false; tx.anisotropy = 8; o.material.map = tx; o.material.needsUpdate = true; dirty = true; });
+        }
       }
     });
     for (const o of model.children) { parts[o.name] = o; o.userData.home = o.position.clone(); }
