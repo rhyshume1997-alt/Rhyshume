@@ -1,0 +1,1469 @@
+<Rive version="1" kind="fragment">
+    <!-- The billboards. Each is its own artboard with the same three layers:
+         a looping animation, a tagged state a click toggles, and a hover state.
+         All five read the Ad view model. -->
+
+    <Artboard defaultStateMachineId="0:1077" viewModelId="0:60" viewModelInstanceId="0:69" clip="true" width="640" height="360" x="0" y="1300" styleId="0:1108" name="AdCola" id="0:400">
+        <LayoutComponentStyle name="AdCola Style" id="0:1108"/>
+        <!-- the stamp a click leaves on the sign -->
+        <Node x="320" y="180" opacity="0" name="Stamp" id="0:1081">
+            <Text x="0" y="0" originX="0.5" originY="0.5" rotation="-0.14" name="StampText">
+                <TextStylePaint fontSize="104" fontAssetId="0:91" name="Style" id="0:1093">
+                    <Fill name="Fill"><SolidColor colorValue="FF59FFA0" name="Color"/></Fill>
+                </TextStylePaint>
+                <TextValueRun styleId="0:1093" text="TAGGED" name="Run0"></TextValueRun>
+            </Text>
+            <Shape rotation="-0.14" name="StampBox">
+                <Rectangle width="470" height="150" cornerRadiusTL="14" name="Path"></Rectangle>
+                <Stroke thickness="10" name="Stroke"><SolidColor colorValue="FF59FFA0" name="Color"/></Stroke>
+            </Shape>
+            <Shape name="Dim">
+                <Rectangle width="640" height="360" name="Path"></Rectangle>
+                <Fill name="Fill"><SolidColor colorValue="B3050810" name="Color"/></Fill>
+            </Shape>
+        </Node>
+
+        <Shape x="320" y="180" id="0:1079" opacity="0.55" name="Border">
+            <Rectangle width="616" height="336" cornerRadiusTL="10" name="Path"></Rectangle>
+            <Stroke thickness="6" name="Stroke" id="0:1080"><SolidColor colorValue="FFFFE14D" name="Color"/></Stroke>
+        </Shape>
+
+        <Text x="40" y="150" originX="0" originY="0.5" name="Title">
+            <TextStylePaint fontSize="84" fontAssetId="0:91" name="Style" id="0:1094">
+                <Fill name="Fill"><SolidColor colorValue="FFFFFFFF" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1094" text="NOVA COLA" name="Run0"></TextValueRun>
+        </Text>
+
+        <Text x="40" y="228" originX="0" originY="0.5" name="Sub">
+            <TextStylePaint fontSize="26" fontAssetId="0:90" name="Style" id="0:1095">
+                <Fill name="Fill"><SolidColor colorValue="FFFFE14D" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1095" text="TASTE THE AFTERGLOW" name="Run0"></TextValueRun>
+        </Text>
+
+        <Shape x="430" y="400" id="0:1087" opacity="0.85" name="Bubble0">
+            <Ellipse width="26" height="26" name="Path"/>
+            <Stroke thickness="4" name="Stroke"><SolidColor colorValue="FFFFFFFF" name="Color"/></Stroke>
+        </Shape>
+
+        <Shape x="478" y="272" id="0:1088" opacity="0.85" name="Bubble1">
+            <Ellipse width="40" height="40" name="Path"/>
+            <Stroke thickness="4" name="Stroke"><SolidColor colorValue="FFFFFFFF" name="Color"/></Stroke>
+        </Shape>
+
+        <Shape x="520" y="143" id="0:1089" opacity="0.85" name="Bubble2">
+            <Ellipse width="22" height="22" name="Path"/>
+            <Stroke thickness="4" name="Stroke"><SolidColor colorValue="FFFFFFFF" name="Color"/></Stroke>
+        </Shape>
+
+        <Shape x="556" y="345" id="0:1090" opacity="0.85" name="Bubble3">
+            <Ellipse width="34" height="34" name="Path"/>
+            <Stroke thickness="4" name="Stroke"><SolidColor colorValue="FFFFFFFF" name="Color"/></Stroke>
+        </Shape>
+
+        <Shape x="596" y="198" id="0:1091" opacity="0.85" name="Bubble4">
+            <Ellipse width="28" height="28" name="Path"/>
+            <Stroke thickness="4" name="Stroke"><SolidColor colorValue="FFFFFFFF" name="Color"/></Stroke>
+        </Shape>
+
+        <Shape x="505" y="52" id="0:1092" opacity="0.85" name="Bubble5">
+            <Ellipse width="18" height="18" name="Path"/>
+            <Stroke thickness="4" name="Stroke"><SolidColor colorValue="FFFFFFFF" name="Color"/></Stroke>
+        </Shape>
+
+        <!-- fills the sign: the listeners below watch it -->
+        <Shape id="0:1078" name="Face">
+            <Rectangle width="640" height="360" originX="0" originY="0" name="Path"></Rectangle>
+            <Fill name="Fill">
+                <LinearGradient startX="0" startY="0" endX="640" endY="360" name="Gradient">
+                    <GradientStop colorValue="FFFF2E8B" position="0"/>
+                    <GradientStop colorValue="FFFF8A1F" position="1"/>
+                </LinearGradient>
+            </Fill>
+        </Shape>
+
+        <StateMachine name="State Machine 1" id="0:1077">
+            <StateMachineListenerSingle targetId="0:1078" listenerTypeValue="click" name="Tag" id="0:1097">
+                <ListenerViewModelChange fromViewModelProperty="true" fromDataBindId="0:1096">
+                    <BindablePropertyBoolean>
+                        <DataBindContext sourcePathIds="0:60-0:61" propertyKey="634" id="0:1096" converterId="0:75"/>
+                        <DataBindContext sourcePathIds="0:60-0:61" propertyKey="634" direction="true"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+            <StateMachineListenerSingle targetId="0:1078" listenerTypeValue="enter" name="HoverIn" id="0:1098">
+                <ListenerViewModelChange>
+                    <BindablePropertyBoolean propertyValue="true">
+                        <DataBindContext sourcePathIds="0:60-0:62" propertyKey="634" direction="true"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+            <StateMachineListenerSingle targetId="0:1078" listenerTypeValue="exit" name="HoverOut" id="0:1099">
+                <ListenerViewModelChange>
+                    <BindablePropertyBoolean propertyValue="false">
+                        <DataBindContext sourcePathIds="0:60-0:62" propertyKey="634" direction="true"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+            <StateMachineLayer name="Idle" id="0:1101">
+                <EntryState><StateTransition stateToId="0:1100"/></EntryState>
+                <AnimationState x="220" y="0" animationId="0:1082" id="0:1100"/>
+            </StateMachineLayer>
+            <StateMachineLayer name="Tagged" id="0:1104">
+                <EntryState><StateTransition stateToId="0:1102"/></EntryState>
+                <AnimationState x="220" y="0" animationId="0:1083" id="0:1102">
+                    <StateTransition stateToId="0:1103" duration="280">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:60-0:61" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="true"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+                <AnimationState x="460" y="0" animationId="0:1084" id="0:1103">
+                    <StateTransition stateToId="0:1102" duration="280">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:60-0:61" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="false"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+            </StateMachineLayer>
+            <StateMachineLayer name="Hover" id="0:1107">
+                <EntryState><StateTransition stateToId="0:1105"/></EntryState>
+                <AnimationState x="220" y="0" animationId="0:1085" id="0:1105">
+                    <StateTransition stateToId="0:1106" duration="140">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:60-0:62" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="true"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+                <AnimationState x="460" y="0" animationId="0:1086" id="0:1106">
+                    <StateTransition stateToId="0:1105" duration="140">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:60-0:62" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="false"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+            </StateMachineLayer>
+        </StateMachine>
+
+        <LinearAnimation loopValue="loop" duration="120" name="Loop" id="0:1082">
+            <KeyedObject objectId="0:1087">
+                <KeyedProperty property="y">
+                    <KeyFrameDouble value="400" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="-40" frame="120" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1088">
+                <KeyedProperty property="y">
+                    <KeyFrameDouble value="272" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="-40" frame="85" interpolationType="hold"/>
+                    <KeyFrameDouble value="400" frame="86" interpolationType="linear"/>
+                    <KeyFrameDouble value="272" frame="120" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1089">
+                <KeyedProperty property="y">
+                    <KeyFrameDouble value="143" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="-40" frame="50" interpolationType="hold"/>
+                    <KeyFrameDouble value="400" frame="51" interpolationType="linear"/>
+                    <KeyFrameDouble value="143" frame="120" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1090">
+                <KeyedProperty property="y">
+                    <KeyFrameDouble value="345" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="-40" frame="105" interpolationType="hold"/>
+                    <KeyFrameDouble value="400" frame="106" interpolationType="linear"/>
+                    <KeyFrameDouble value="345" frame="120" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1091">
+                <KeyedProperty property="y">
+                    <KeyFrameDouble value="198" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="-40" frame="65" interpolationType="hold"/>
+                    <KeyFrameDouble value="400" frame="66" interpolationType="linear"/>
+                    <KeyFrameDouble value="198" frame="120" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1092">
+                <KeyedProperty property="y">
+                    <KeyFrameDouble value="52" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="-40" frame="25" interpolationType="hold"/>
+                    <KeyFrameDouble value="400" frame="26" interpolationType="linear"/>
+                    <KeyFrameDouble value="52" frame="120" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="Untagged" id="0:1083">
+            <KeyedObject objectId="0:1081">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="0" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+                <KeyedProperty property="scaleX">
+                    <KeyFrameDouble value="1.5" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+                <KeyedProperty property="scaleY">
+                    <KeyFrameDouble value="1.5" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="Tagged" id="0:1084">
+            <KeyedObject objectId="0:1081">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+                <KeyedProperty property="scaleX">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+                <KeyedProperty property="scaleY">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="HoverOff" id="0:1085">
+            <KeyedObject objectId="0:1079">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="0.55" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1080">
+                <KeyedProperty property="thickness">
+                    <KeyFrameDouble value="6" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="HoverOn" id="0:1086">
+            <KeyedObject objectId="0:1079">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1080">
+                <KeyedProperty property="thickness">
+                    <KeyFrameDouble value="16" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+    </Artboard>
+
+    <Artboard defaultStateMachineId="0:1109" viewModelId="0:60" viewModelInstanceId="0:69" clip="true" width="640" height="360" x="720" y="1300" styleId="0:1137" name="AdRamen" id="0:500">
+        <LayoutComponentStyle name="AdRamen Style" id="0:1137"/>
+        <!-- the stamp a click leaves on the sign -->
+        <Node x="320" y="180" opacity="0" name="Stamp" id="0:1113">
+            <Text x="0" y="0" originX="0.5" originY="0.5" rotation="-0.14" name="StampText">
+                <TextStylePaint fontSize="104" fontAssetId="0:91" name="Style" id="0:1122">
+                    <Fill name="Fill"><SolidColor colorValue="FF59FFA0" name="Color"/></Fill>
+                </TextStylePaint>
+                <TextValueRun styleId="0:1122" text="TAGGED" name="Run0"></TextValueRun>
+            </Text>
+            <Shape rotation="-0.14" name="StampBox">
+                <Rectangle width="470" height="150" cornerRadiusTL="14" name="Path"></Rectangle>
+                <Stroke thickness="10" name="Stroke"><SolidColor colorValue="FF59FFA0" name="Color"/></Stroke>
+            </Shape>
+            <Shape name="Dim">
+                <Rectangle width="640" height="360" name="Path"></Rectangle>
+                <Fill name="Fill"><SolidColor colorValue="B3050810" name="Color"/></Fill>
+            </Shape>
+        </Node>
+
+        <Shape x="320" y="180" id="0:1111" opacity="0.55" name="Border">
+            <Rectangle width="616" height="336" cornerRadiusTL="10" name="Path"></Rectangle>
+            <Stroke thickness="6" name="Stroke" id="0:1112"><SolidColor colorValue="FFFFB13D" name="Color"/></Stroke>
+        </Shape>
+
+        <Text x="40" y="236" originX="0" originY="0.5" name="Title">
+            <TextStylePaint fontSize="66" fontAssetId="0:91" name="Style" id="0:1123">
+                <Fill name="Fill"><SolidColor colorValue="FFFFFFFF" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1123" text="RAMEN 24H" name="Run0"></TextValueRun>
+        </Text>
+
+        <Text x="40" y="314" originX="0" originY="0.5" name="Sub">
+            <TextStylePaint fontSize="26" fontAssetId="0:90" name="Style" id="0:1124">
+                <Fill name="Fill"><SolidColor colorValue="FFFFB13D" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1124" text="LEVEL 9 - ALWAYS OPEN" name="Run0"></TextValueRun>
+        </Text>
+
+        <Shape x="476" y="84" id="0:1119" name="Steam0">
+            <Rectangle width="12" height="64" cornerRadiusTL="6" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FFFFFFFF" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="520" y="84" id="0:1120" name="Steam1">
+            <Rectangle width="12" height="64" cornerRadiusTL="6" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FFFFFFFF" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="564" y="84" id="0:1121" name="Steam2">
+            <Rectangle width="12" height="64" cornerRadiusTL="6" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FFFFFFFF" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="566" y="92" rotation="0.9" name="Sticks">
+            <Rectangle width="8" height="150" cornerRadiusTL="4" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FFFFE9C9" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="520" y="122" name="Rim">
+            <Rectangle width="216" height="14" cornerRadiusTL="8" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FFFFFFFF" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="520" y="126" name="Bowl">
+            <Rectangle width="192" height="74" originY="0" linkCornerRadius="false" cornerRadiusBL="74" cornerRadiusBR="74" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FFFFB13D" name="Color"/></Fill>
+        </Shape>
+
+        <!-- fills the sign: the listeners below watch it -->
+        <Shape id="0:1110" name="Face">
+            <Rectangle width="640" height="360" originX="0" originY="0" name="Path"></Rectangle>
+            <Fill name="Fill">
+                <LinearGradient startX="0" startY="0" endX="640" endY="360" name="Gradient">
+                    <GradientStop colorValue="FF3A0612" position="0"/>
+                    <GradientStop colorValue="FF8E1420" position="1"/>
+                </LinearGradient>
+            </Fill>
+        </Shape>
+
+        <StateMachine name="State Machine 1" id="0:1109">
+            <StateMachineListenerSingle targetId="0:1110" listenerTypeValue="click" name="Tag" id="0:1126">
+                <ListenerViewModelChange fromViewModelProperty="true" fromDataBindId="0:1125">
+                    <BindablePropertyBoolean>
+                        <DataBindContext sourcePathIds="0:60-0:61" propertyKey="634" id="0:1125" converterId="0:75"/>
+                        <DataBindContext sourcePathIds="0:60-0:61" propertyKey="634" direction="true"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+            <StateMachineListenerSingle targetId="0:1110" listenerTypeValue="enter" name="HoverIn" id="0:1127">
+                <ListenerViewModelChange>
+                    <BindablePropertyBoolean propertyValue="true">
+                        <DataBindContext sourcePathIds="0:60-0:62" propertyKey="634" direction="true"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+            <StateMachineListenerSingle targetId="0:1110" listenerTypeValue="exit" name="HoverOut" id="0:1128">
+                <ListenerViewModelChange>
+                    <BindablePropertyBoolean propertyValue="false">
+                        <DataBindContext sourcePathIds="0:60-0:62" propertyKey="634" direction="true"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+            <StateMachineLayer name="Idle" id="0:1130">
+                <EntryState><StateTransition stateToId="0:1129"/></EntryState>
+                <AnimationState x="220" y="0" animationId="0:1114" id="0:1129"/>
+            </StateMachineLayer>
+            <StateMachineLayer name="Tagged" id="0:1133">
+                <EntryState><StateTransition stateToId="0:1131"/></EntryState>
+                <AnimationState x="220" y="0" animationId="0:1115" id="0:1131">
+                    <StateTransition stateToId="0:1132" duration="280">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:60-0:61" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="true"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+                <AnimationState x="460" y="0" animationId="0:1116" id="0:1132">
+                    <StateTransition stateToId="0:1131" duration="280">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:60-0:61" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="false"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+            </StateMachineLayer>
+            <StateMachineLayer name="Hover" id="0:1136">
+                <EntryState><StateTransition stateToId="0:1134"/></EntryState>
+                <AnimationState x="220" y="0" animationId="0:1117" id="0:1134">
+                    <StateTransition stateToId="0:1135" duration="140">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:60-0:62" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="true"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+                <AnimationState x="460" y="0" animationId="0:1118" id="0:1135">
+                    <StateTransition stateToId="0:1134" duration="140">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:60-0:62" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="false"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+            </StateMachineLayer>
+        </StateMachine>
+
+        <LinearAnimation loopValue="loop" duration="90" name="Loop" id="0:1114">
+            <KeyedObject objectId="0:1119">
+                <KeyedProperty property="y">
+                    <KeyFrameDouble value="84" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="36" frame="90" interpolationType="hold"/>
+                    <KeyFrameDouble value="84" frame="91" interpolationType="linear"/>
+                </KeyedProperty>
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="0.75" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="0" frame="90" interpolationType="hold"/>
+                    <KeyFrameDouble value="0.75" frame="91" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1120">
+                <KeyedProperty property="y">
+                    <KeyFrameDouble value="69" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="36" frame="60" interpolationType="hold"/>
+                    <KeyFrameDouble value="84" frame="61" interpolationType="linear"/>
+                    <KeyFrameDouble value="69" frame="90" interpolationType="linear"/>
+                </KeyedProperty>
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="0.5" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="0" frame="60" interpolationType="hold"/>
+                    <KeyFrameDouble value="0.75" frame="61" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.5" frame="90" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1121">
+                <KeyedProperty property="y">
+                    <KeyFrameDouble value="54" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="36" frame="30" interpolationType="hold"/>
+                    <KeyFrameDouble value="84" frame="31" interpolationType="linear"/>
+                    <KeyFrameDouble value="54" frame="90" interpolationType="linear"/>
+                </KeyedProperty>
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="0.25" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="0" frame="30" interpolationType="hold"/>
+                    <KeyFrameDouble value="0.75" frame="31" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.25" frame="90" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="Untagged" id="0:1115">
+            <KeyedObject objectId="0:1113">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="0" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+                <KeyedProperty property="scaleX">
+                    <KeyFrameDouble value="1.5" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+                <KeyedProperty property="scaleY">
+                    <KeyFrameDouble value="1.5" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="Tagged" id="0:1116">
+            <KeyedObject objectId="0:1113">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+                <KeyedProperty property="scaleX">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+                <KeyedProperty property="scaleY">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="HoverOff" id="0:1117">
+            <KeyedObject objectId="0:1111">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="0.55" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1112">
+                <KeyedProperty property="thickness">
+                    <KeyFrameDouble value="6" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="HoverOn" id="0:1118">
+            <KeyedObject objectId="0:1111">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1112">
+                <KeyedProperty property="thickness">
+                    <KeyFrameDouble value="16" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+    </Artboard>
+
+    <Artboard defaultStateMachineId="0:1138" viewModelId="0:60" viewModelInstanceId="0:69" clip="true" width="640" height="360" x="1440" y="1300" styleId="0:1165" name="AdCabs" id="0:600">
+        <LayoutComponentStyle name="AdCabs Style" id="0:1165"/>
+        <!-- the stamp a click leaves on the sign -->
+        <Node x="320" y="180" opacity="0" name="Stamp" id="0:1142">
+            <Text x="0" y="0" originX="0.5" originY="0.5" rotation="-0.14" name="StampText">
+                <TextStylePaint fontSize="104" fontAssetId="0:91" name="Style" id="0:1150">
+                    <Fill name="Fill"><SolidColor colorValue="FF59FFA0" name="Color"/></Fill>
+                </TextStylePaint>
+                <TextValueRun styleId="0:1150" text="TAGGED" name="Run0"></TextValueRun>
+            </Text>
+            <Shape rotation="-0.14" name="StampBox">
+                <Rectangle width="470" height="150" cornerRadiusTL="14" name="Path"></Rectangle>
+                <Stroke thickness="10" name="Stroke"><SolidColor colorValue="FF59FFA0" name="Color"/></Stroke>
+            </Shape>
+            <Shape name="Dim">
+                <Rectangle width="640" height="360" name="Path"></Rectangle>
+                <Fill name="Fill"><SolidColor colorValue="B3050810" name="Color"/></Fill>
+            </Shape>
+        </Node>
+
+        <Shape x="320" y="180" id="0:1140" opacity="0.55" name="Border">
+            <Rectangle width="616" height="336" cornerRadiusTL="10" name="Path"></Rectangle>
+            <Stroke thickness="6" name="Stroke" id="0:1141"><SolidColor colorValue="FF111111" name="Color"/></Stroke>
+        </Shape>
+
+        <Text x="40" y="96" originX="0" originY="0.5" name="Title">
+            <TextStylePaint fontSize="72" fontAssetId="0:91" name="Style" id="0:1151">
+                <Fill name="Fill"><SolidColor colorValue="FF111111" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1151" text="SKYLINE CABS" name="Run0"></TextValueRun>
+        </Text>
+
+        <Text x="40" y="174" originX="0" originY="0.5" name="Sub">
+            <TextStylePaint fontSize="26" fontAssetId="0:90" name="Style" id="0:1152">
+                <Fill name="Fill"><SolidColor colorValue="FF111111" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1152" text="ANY ROOFTOP IN 4 MIN" name="Run0"></TextValueRun>
+        </Text>
+
+        <Node x="-120" y="262" name="Cab" id="0:1148">
+            <Shape x="-6" y="-30" name="Cabin">
+                <Rectangle width="84" height="34" cornerRadiusTL="14" name="Path"></Rectangle>
+                <Fill name="Fill"><SolidColor colorValue="FF2B2B2B" name="Color"/></Fill>
+            </Shape>
+            <Shape name="Body">
+                <Rectangle width="170" height="46" cornerRadiusTL="20" name="Path"></Rectangle>
+                <Fill name="Fill"><SolidColor colorValue="FF111111" name="Color"/></Fill>
+            </Shape>
+            <Shape x="-96" y="4" id="0:1149" name="Jet">
+                <Ellipse width="44" height="18" name="Path"/>
+                <Fill name="Fill"><SolidColor colorValue="FF19E3FF" name="Color"/></Fill>
+            </Shape>
+        </Node>
+
+        <Shape x="32" y="330" name="Check0">
+            <Rectangle width="32" height="20" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FF111111" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="96" y="330" name="Check1">
+            <Rectangle width="32" height="20" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FF111111" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="160" y="330" name="Check2">
+            <Rectangle width="32" height="20" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FF111111" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="224" y="330" name="Check3">
+            <Rectangle width="32" height="20" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FF111111" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="288" y="330" name="Check4">
+            <Rectangle width="32" height="20" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FF111111" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="352" y="330" name="Check5">
+            <Rectangle width="32" height="20" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FF111111" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="416" y="330" name="Check6">
+            <Rectangle width="32" height="20" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FF111111" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="480" y="330" name="Check7">
+            <Rectangle width="32" height="20" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FF111111" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="544" y="330" name="Check8">
+            <Rectangle width="32" height="20" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FF111111" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="608" y="330" name="Check9">
+            <Rectangle width="32" height="20" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FF111111" name="Color"/></Fill>
+        </Shape>
+
+        <!-- fills the sign: the listeners below watch it -->
+        <Shape id="0:1139" name="Face">
+            <Rectangle width="640" height="360" originX="0" originY="0" name="Path"></Rectangle>
+            <Fill name="Fill">
+                <LinearGradient startX="0" startY="0" endX="640" endY="360" name="Gradient">
+                    <GradientStop colorValue="FFFFD21F" position="0"/>
+                    <GradientStop colorValue="FFFF9F1C" position="1"/>
+                </LinearGradient>
+            </Fill>
+        </Shape>
+
+        <StateMachine name="State Machine 1" id="0:1138">
+            <StateMachineListenerSingle targetId="0:1139" listenerTypeValue="click" name="Tag" id="0:1154">
+                <ListenerViewModelChange fromViewModelProperty="true" fromDataBindId="0:1153">
+                    <BindablePropertyBoolean>
+                        <DataBindContext sourcePathIds="0:60-0:61" propertyKey="634" id="0:1153" converterId="0:75"/>
+                        <DataBindContext sourcePathIds="0:60-0:61" propertyKey="634" direction="true"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+            <StateMachineListenerSingle targetId="0:1139" listenerTypeValue="enter" name="HoverIn" id="0:1155">
+                <ListenerViewModelChange>
+                    <BindablePropertyBoolean propertyValue="true">
+                        <DataBindContext sourcePathIds="0:60-0:62" propertyKey="634" direction="true"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+            <StateMachineListenerSingle targetId="0:1139" listenerTypeValue="exit" name="HoverOut" id="0:1156">
+                <ListenerViewModelChange>
+                    <BindablePropertyBoolean propertyValue="false">
+                        <DataBindContext sourcePathIds="0:60-0:62" propertyKey="634" direction="true"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+            <StateMachineLayer name="Idle" id="0:1158">
+                <EntryState><StateTransition stateToId="0:1157"/></EntryState>
+                <AnimationState x="220" y="0" animationId="0:1143" id="0:1157"/>
+            </StateMachineLayer>
+            <StateMachineLayer name="Tagged" id="0:1161">
+                <EntryState><StateTransition stateToId="0:1159"/></EntryState>
+                <AnimationState x="220" y="0" animationId="0:1144" id="0:1159">
+                    <StateTransition stateToId="0:1160" duration="280">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:60-0:61" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="true"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+                <AnimationState x="460" y="0" animationId="0:1145" id="0:1160">
+                    <StateTransition stateToId="0:1159" duration="280">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:60-0:61" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="false"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+            </StateMachineLayer>
+            <StateMachineLayer name="Hover" id="0:1164">
+                <EntryState><StateTransition stateToId="0:1162"/></EntryState>
+                <AnimationState x="220" y="0" animationId="0:1146" id="0:1162">
+                    <StateTransition stateToId="0:1163" duration="140">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:60-0:62" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="true"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+                <AnimationState x="460" y="0" animationId="0:1147" id="0:1163">
+                    <StateTransition stateToId="0:1162" duration="140">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:60-0:62" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="false"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+            </StateMachineLayer>
+        </StateMachine>
+
+        <LinearAnimation loopValue="loop" duration="150" name="Loop" id="0:1143">
+            <KeyedObject objectId="0:1148">
+                <KeyedProperty property="x">
+                    <KeyFrameDouble value="-120" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="760" frame="150" interpolationType="linear"/>
+                </KeyedProperty>
+                <KeyedProperty property="y">
+                    <KeyFrameDouble value="262" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="252" frame="38" interpolationType="linear"/>
+                    <KeyFrameDouble value="262" frame="75" interpolationType="linear"/>
+                    <KeyFrameDouble value="252" frame="112" interpolationType="linear"/>
+                    <KeyFrameDouble value="262" frame="150" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1149">
+                <KeyedProperty property="scaleX">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="1.6" frame="8" interpolationType="linear"/>
+                    <KeyFrameDouble value="1" frame="16" interpolationType="linear"/>
+                    <KeyFrameDouble value="1" frame="150" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="Untagged" id="0:1144">
+            <KeyedObject objectId="0:1142">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="0" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+                <KeyedProperty property="scaleX">
+                    <KeyFrameDouble value="1.5" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+                <KeyedProperty property="scaleY">
+                    <KeyFrameDouble value="1.5" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="Tagged" id="0:1145">
+            <KeyedObject objectId="0:1142">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+                <KeyedProperty property="scaleX">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+                <KeyedProperty property="scaleY">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="HoverOff" id="0:1146">
+            <KeyedObject objectId="0:1140">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="0.55" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1141">
+                <KeyedProperty property="thickness">
+                    <KeyFrameDouble value="6" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="HoverOn" id="0:1147">
+            <KeyedObject objectId="0:1140">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1141">
+                <KeyedProperty property="thickness">
+                    <KeyFrameDouble value="16" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+    </Artboard>
+
+    <Artboard defaultStateMachineId="0:1166" viewModelId="0:60" viewModelInstanceId="0:69" clip="true" width="640" height="360" x="2160" y="1300" styleId="0:1198" name="AdHotel" id="0:700">
+        <LayoutComponentStyle name="AdHotel Style" id="0:1198"/>
+        <!-- the stamp a click leaves on the sign -->
+        <Node x="320" y="180" opacity="0" name="Stamp" id="0:1170">
+            <Text x="0" y="0" originX="0.5" originY="0.5" rotation="-0.14" name="StampText">
+                <TextStylePaint fontSize="104" fontAssetId="0:91" name="Style" id="0:1183">
+                    <Fill name="Fill"><SolidColor colorValue="FF59FFA0" name="Color"/></Fill>
+                </TextStylePaint>
+                <TextValueRun styleId="0:1183" text="TAGGED" name="Run0"></TextValueRun>
+            </Text>
+            <Shape rotation="-0.14" name="StampBox">
+                <Rectangle width="470" height="150" cornerRadiusTL="14" name="Path"></Rectangle>
+                <Stroke thickness="10" name="Stroke"><SolidColor colorValue="FF59FFA0" name="Color"/></Stroke>
+            </Shape>
+            <Shape name="Dim">
+                <Rectangle width="640" height="360" name="Path"></Rectangle>
+                <Fill name="Fill"><SolidColor colorValue="B3050810" name="Color"/></Fill>
+            </Shape>
+        </Node>
+
+        <Shape x="320" y="180" id="0:1168" opacity="0.55" name="Border">
+            <Rectangle width="616" height="336" cornerRadiusTL="10" name="Path"></Rectangle>
+            <Stroke thickness="6" name="Stroke" id="0:1169"><SolidColor colorValue="FF7CE8FF" name="Color"/></Stroke>
+        </Shape>
+
+        <Text x="40" y="214" originX="0" originY="0.5" name="Title">
+            <TextStylePaint fontSize="70" fontAssetId="0:91" name="Style" id="0:1184">
+                <Fill name="Fill"><SolidColor colorValue="FFFFFFFF" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1184" text="HOTEL ORBIT" name="Run0"></TextValueRun>
+        </Text>
+
+        <Text x="40" y="292" originX="0" originY="0.5" name="Sub">
+            <TextStylePaint fontSize="26" fontAssetId="0:90" name="Style" id="0:1185">
+                <Fill name="Fill"><SolidColor colorValue="FF7CE8FF" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1185" text="SLEEP ABOVE THE WEATHER" name="Run0"></TextValueRun>
+        </Text>
+
+        <Node x="510" y="98" rotation="-0.35" name="Ring">
+            <Node scaleY="0.3" name="Tilt">
+                <Node name="Spin" id="0:1176">
+                    <Shape x="110" name="Moon">
+                        <Ellipse width="26" height="86" name="Path"/>
+                        <Fill name="Fill"><SolidColor colorValue="FFFFFFFF" name="Color"/></Fill>
+                    </Shape>
+                </Node>
+                <Shape name="Path">
+                    <Ellipse width="220" height="220" name="Path"/>
+                    <Stroke thickness="5" name="Stroke"><SolidColor colorValue="FF7CE8FF" name="Color"/></Stroke>
+                </Shape>
+            </Node>
+        </Node>
+
+        <Shape x="510" y="98" name="Planet">
+            <Ellipse width="112" height="112" name="Path"/>
+            <Fill name="Fill">
+                <LinearGradient startX="-50" startY="-60" endX="60" endY="66" name="Gradient">
+                    <GradientStop colorValue="FFFF7AC8" position="0"/>
+                    <GradientStop colorValue="FF6A2BD9" position="1"/>
+                </LinearGradient>
+            </Fill>
+        </Shape>
+
+        <Shape x="60" y="40" id="0:1177" name="Star0">
+            <Ellipse width="6" height="6" name="Path"/>
+            <Fill name="Fill"><SolidColor colorValue="FFFFFFFF" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="210" y="70" id="0:1178" name="Star1">
+            <Ellipse width="6" height="6" name="Path"/>
+            <Fill name="Fill"><SolidColor colorValue="FFFFFFFF" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="330" y="36" id="0:1179" name="Star2">
+            <Ellipse width="6" height="6" name="Path"/>
+            <Fill name="Fill"><SolidColor colorValue="FFFFFFFF" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="596" y="320" id="0:1180" name="Star3">
+            <Ellipse width="6" height="6" name="Path"/>
+            <Fill name="Fill"><SolidColor colorValue="FFFFFFFF" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="420" y="330" id="0:1181" name="Star4">
+            <Ellipse width="6" height="6" name="Path"/>
+            <Fill name="Fill"><SolidColor colorValue="FFFFFFFF" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="120" y="300" id="0:1182" name="Star5">
+            <Ellipse width="6" height="6" name="Path"/>
+            <Fill name="Fill"><SolidColor colorValue="FFFFFFFF" name="Color"/></Fill>
+        </Shape>
+
+        <!-- fills the sign: the listeners below watch it -->
+        <Shape id="0:1167" name="Face">
+            <Rectangle width="640" height="360" originX="0" originY="0" name="Path"></Rectangle>
+            <Fill name="Fill">
+                <LinearGradient startX="0" startY="0" endX="640" endY="360" name="Gradient">
+                    <GradientStop colorValue="FF070B2E" position="0"/>
+                    <GradientStop colorValue="FF2B1B6B" position="1"/>
+                </LinearGradient>
+            </Fill>
+        </Shape>
+
+        <StateMachine name="State Machine 1" id="0:1166">
+            <StateMachineListenerSingle targetId="0:1167" listenerTypeValue="click" name="Tag" id="0:1187">
+                <ListenerViewModelChange fromViewModelProperty="true" fromDataBindId="0:1186">
+                    <BindablePropertyBoolean>
+                        <DataBindContext sourcePathIds="0:60-0:61" propertyKey="634" id="0:1186" converterId="0:75"/>
+                        <DataBindContext sourcePathIds="0:60-0:61" propertyKey="634" direction="true"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+            <StateMachineListenerSingle targetId="0:1167" listenerTypeValue="enter" name="HoverIn" id="0:1188">
+                <ListenerViewModelChange>
+                    <BindablePropertyBoolean propertyValue="true">
+                        <DataBindContext sourcePathIds="0:60-0:62" propertyKey="634" direction="true"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+            <StateMachineListenerSingle targetId="0:1167" listenerTypeValue="exit" name="HoverOut" id="0:1189">
+                <ListenerViewModelChange>
+                    <BindablePropertyBoolean propertyValue="false">
+                        <DataBindContext sourcePathIds="0:60-0:62" propertyKey="634" direction="true"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+            <StateMachineLayer name="Idle" id="0:1191">
+                <EntryState><StateTransition stateToId="0:1190"/></EntryState>
+                <AnimationState x="220" y="0" animationId="0:1171" id="0:1190"/>
+            </StateMachineLayer>
+            <StateMachineLayer name="Tagged" id="0:1194">
+                <EntryState><StateTransition stateToId="0:1192"/></EntryState>
+                <AnimationState x="220" y="0" animationId="0:1172" id="0:1192">
+                    <StateTransition stateToId="0:1193" duration="280">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:60-0:61" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="true"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+                <AnimationState x="460" y="0" animationId="0:1173" id="0:1193">
+                    <StateTransition stateToId="0:1192" duration="280">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:60-0:61" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="false"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+            </StateMachineLayer>
+            <StateMachineLayer name="Hover" id="0:1197">
+                <EntryState><StateTransition stateToId="0:1195"/></EntryState>
+                <AnimationState x="220" y="0" animationId="0:1174" id="0:1195">
+                    <StateTransition stateToId="0:1196" duration="140">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:60-0:62" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="true"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+                <AnimationState x="460" y="0" animationId="0:1175" id="0:1196">
+                    <StateTransition stateToId="0:1195" duration="140">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:60-0:62" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="false"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+            </StateMachineLayer>
+        </StateMachine>
+
+        <LinearAnimation loopValue="loop" duration="200" name="Loop" id="0:1171">
+            <KeyedObject objectId="0:1176">
+                <KeyedProperty property="rotation">
+                    <KeyFrameDouble value="0" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="6.2831855" frame="200" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1177">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="0.2" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="1" frame="60" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.1" frame="140" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.2" frame="200" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1178">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="0.5" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="1" frame="75" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.1" frame="148" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.5" frame="200" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1179">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="0.8" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="1" frame="90" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.1" frame="156" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.8" frame="200" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1180">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="0.2" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="1" frame="105" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.1" frame="164" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.2" frame="200" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1181">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="0.5" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="1" frame="120" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.1" frame="172" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.5" frame="200" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1182">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="0.8" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="1" frame="135" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.1" frame="180" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.8" frame="200" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="Untagged" id="0:1172">
+            <KeyedObject objectId="0:1170">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="0" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+                <KeyedProperty property="scaleX">
+                    <KeyFrameDouble value="1.5" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+                <KeyedProperty property="scaleY">
+                    <KeyFrameDouble value="1.5" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="Tagged" id="0:1173">
+            <KeyedObject objectId="0:1170">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+                <KeyedProperty property="scaleX">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+                <KeyedProperty property="scaleY">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="HoverOff" id="0:1174">
+            <KeyedObject objectId="0:1168">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="0.55" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1169">
+                <KeyedProperty property="thickness">
+                    <KeyFrameDouble value="6" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="HoverOn" id="0:1175">
+            <KeyedObject objectId="0:1168">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1169">
+                <KeyedProperty property="thickness">
+                    <KeyFrameDouble value="16" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+    </Artboard>
+
+    <Artboard defaultStateMachineId="0:1199" viewModelId="0:60" viewModelInstanceId="0:69" clip="true" width="640" height="360" x="2880" y="1300" styleId="0:1236" name="AdSynth" id="0:800">
+        <LayoutComponentStyle name="AdSynth Style" id="0:1236"/>
+        <!-- the stamp a click leaves on the sign -->
+        <Node x="320" y="180" opacity="0" name="Stamp" id="0:1203">
+            <Text x="0" y="0" originX="0.5" originY="0.5" rotation="-0.14" name="StampText">
+                <TextStylePaint fontSize="104" fontAssetId="0:91" name="Style" id="0:1221">
+                    <Fill name="Fill"><SolidColor colorValue="FF59FFA0" name="Color"/></Fill>
+                </TextStylePaint>
+                <TextValueRun styleId="0:1221" text="TAGGED" name="Run0"></TextValueRun>
+            </Text>
+            <Shape rotation="-0.14" name="StampBox">
+                <Rectangle width="470" height="150" cornerRadiusTL="14" name="Path"></Rectangle>
+                <Stroke thickness="10" name="Stroke"><SolidColor colorValue="FF59FFA0" name="Color"/></Stroke>
+            </Shape>
+            <Shape name="Dim">
+                <Rectangle width="640" height="360" name="Path"></Rectangle>
+                <Fill name="Fill"><SolidColor colorValue="B3050810" name="Color"/></Fill>
+            </Shape>
+        </Node>
+
+        <Shape x="320" y="180" id="0:1201" opacity="0.55" name="Border">
+            <Rectangle width="616" height="336" cornerRadiusTL="10" name="Path"></Rectangle>
+            <Stroke thickness="6" name="Stroke" id="0:1202"><SolidColor colorValue="FF45FFD0" name="Color"/></Stroke>
+        </Shape>
+
+        <Text x="40" y="110" originX="0" originY="0.5" name="Title">
+            <TextStylePaint fontSize="84" fontAssetId="0:91" name="Style" id="0:1222">
+                <Fill name="Fill"><SolidColor colorValue="FFFFFFFF" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1222" text="SYNTH FM" name="Run0"></TextValueRun>
+        </Text>
+
+        <Text x="40" y="188" originX="0" originY="0.5" name="Sub">
+            <TextStylePaint fontSize="26" fontAssetId="0:90" name="Style" id="0:1223">
+                <Fill name="Fill"><SolidColor colorValue="FF45FFD0" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1223" text="98.6 - NIGHT DRIVE RADIO" name="Run0"></TextValueRun>
+        </Text>
+
+        <Shape x="60" y="330" id="0:1209" scaleY="0.3" name="Bar0">
+            <Rectangle width="30" height="110" originY="1" cornerRadiusTL="4" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FFFF4FB0" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="106" y="330" id="0:1210" scaleY="0.8" name="Bar1">
+            <Rectangle width="30" height="110" originY="1" cornerRadiusTL="4" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FF45FFD0" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="152" y="330" id="0:1211" scaleY="0.5" name="Bar2">
+            <Rectangle width="30" height="110" originY="1" cornerRadiusTL="4" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FF45FFD0" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="198" y="330" id="0:1212" scaleY="1" name="Bar3">
+            <Rectangle width="30" height="110" originY="1" cornerRadiusTL="4" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FFFF4FB0" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="244" y="330" id="0:1213" scaleY="0.65" name="Bar4">
+            <Rectangle width="30" height="110" originY="1" cornerRadiusTL="4" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FF45FFD0" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="290" y="330" id="0:1214" scaleY="0.9" name="Bar5">
+            <Rectangle width="30" height="110" originY="1" cornerRadiusTL="4" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FF45FFD0" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="336" y="330" id="0:1215" scaleY="0.4" name="Bar6">
+            <Rectangle width="30" height="110" originY="1" cornerRadiusTL="4" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FFFF4FB0" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="382" y="330" id="0:1216" scaleY="0.75" name="Bar7">
+            <Rectangle width="30" height="110" originY="1" cornerRadiusTL="4" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FF45FFD0" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="428" y="330" id="0:1217" scaleY="0.55" name="Bar8">
+            <Rectangle width="30" height="110" originY="1" cornerRadiusTL="4" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FF45FFD0" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="474" y="330" id="0:1218" scaleY="0.95" name="Bar9">
+            <Rectangle width="30" height="110" originY="1" cornerRadiusTL="4" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FFFF4FB0" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="520" y="330" id="0:1219" scaleY="0.35" name="Bar10">
+            <Rectangle width="30" height="110" originY="1" cornerRadiusTL="4" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FF45FFD0" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="566" y="330" id="0:1220" scaleY="0.7" name="Bar11">
+            <Rectangle width="30" height="110" originY="1" cornerRadiusTL="4" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FF45FFD0" name="Color"/></Fill>
+        </Shape>
+
+        <!-- fills the sign: the listeners below watch it -->
+        <Shape id="0:1200" name="Face">
+            <Rectangle width="640" height="360" originX="0" originY="0" name="Path"></Rectangle>
+            <Fill name="Fill">
+                <LinearGradient startX="0" startY="0" endX="640" endY="360" name="Gradient">
+                    <GradientStop colorValue="FF2A0A5E" position="0"/>
+                    <GradientStop colorValue="FF7A1FA8" position="1"/>
+                </LinearGradient>
+            </Fill>
+        </Shape>
+
+        <StateMachine name="State Machine 1" id="0:1199">
+            <StateMachineListenerSingle targetId="0:1200" listenerTypeValue="click" name="Tag" id="0:1225">
+                <ListenerViewModelChange fromViewModelProperty="true" fromDataBindId="0:1224">
+                    <BindablePropertyBoolean>
+                        <DataBindContext sourcePathIds="0:60-0:61" propertyKey="634" id="0:1224" converterId="0:75"/>
+                        <DataBindContext sourcePathIds="0:60-0:61" propertyKey="634" direction="true"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+            <StateMachineListenerSingle targetId="0:1200" listenerTypeValue="enter" name="HoverIn" id="0:1226">
+                <ListenerViewModelChange>
+                    <BindablePropertyBoolean propertyValue="true">
+                        <DataBindContext sourcePathIds="0:60-0:62" propertyKey="634" direction="true"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+            <StateMachineListenerSingle targetId="0:1200" listenerTypeValue="exit" name="HoverOut" id="0:1227">
+                <ListenerViewModelChange>
+                    <BindablePropertyBoolean propertyValue="false">
+                        <DataBindContext sourcePathIds="0:60-0:62" propertyKey="634" direction="true"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+            <StateMachineLayer name="Idle" id="0:1229">
+                <EntryState><StateTransition stateToId="0:1228"/></EntryState>
+                <AnimationState x="220" y="0" animationId="0:1204" id="0:1228"/>
+            </StateMachineLayer>
+            <StateMachineLayer name="Tagged" id="0:1232">
+                <EntryState><StateTransition stateToId="0:1230"/></EntryState>
+                <AnimationState x="220" y="0" animationId="0:1205" id="0:1230">
+                    <StateTransition stateToId="0:1231" duration="280">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:60-0:61" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="true"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+                <AnimationState x="460" y="0" animationId="0:1206" id="0:1231">
+                    <StateTransition stateToId="0:1230" duration="280">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:60-0:61" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="false"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+            </StateMachineLayer>
+            <StateMachineLayer name="Hover" id="0:1235">
+                <EntryState><StateTransition stateToId="0:1233"/></EntryState>
+                <AnimationState x="220" y="0" animationId="0:1207" id="0:1233">
+                    <StateTransition stateToId="0:1234" duration="140">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:60-0:62" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="true"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+                <AnimationState x="460" y="0" animationId="0:1208" id="0:1234">
+                    <StateTransition stateToId="0:1233" duration="140">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:60-0:62" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="false"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+            </StateMachineLayer>
+        </StateMachine>
+
+        <LinearAnimation loopValue="loop" duration="60" name="Loop" id="0:1204">
+            <KeyedObject objectId="0:1209">
+                <KeyedProperty property="scaleY">
+                    <KeyFrameDouble value="0.3" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.9" frame="15" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.5" frame="30" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.95" frame="45" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.3" frame="60" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1210">
+                <KeyedProperty property="scaleY">
+                    <KeyFrameDouble value="0.8" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.4" frame="15" interpolationType="linear"/>
+                    <KeyFrameDouble value="1" frame="30" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.35" frame="45" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.8" frame="60" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1211">
+                <KeyedProperty property="scaleY">
+                    <KeyFrameDouble value="0.5" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.75" frame="15" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.65" frame="30" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.7" frame="45" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.5" frame="60" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1212">
+                <KeyedProperty property="scaleY">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.55" frame="15" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.9" frame="30" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.3" frame="45" interpolationType="linear"/>
+                    <KeyFrameDouble value="1" frame="60" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1213">
+                <KeyedProperty property="scaleY">
+                    <KeyFrameDouble value="0.65" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.95" frame="15" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.4" frame="30" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.8" frame="45" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.65" frame="60" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1214">
+                <KeyedProperty property="scaleY">
+                    <KeyFrameDouble value="0.9" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.35" frame="15" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.75" frame="30" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.5" frame="45" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.9" frame="60" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1215">
+                <KeyedProperty property="scaleY">
+                    <KeyFrameDouble value="0.4" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.7" frame="15" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.55" frame="30" interpolationType="linear"/>
+                    <KeyFrameDouble value="1" frame="45" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.4" frame="60" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1216">
+                <KeyedProperty property="scaleY">
+                    <KeyFrameDouble value="0.75" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.3" frame="15" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.95" frame="30" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.65" frame="45" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.75" frame="60" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1217">
+                <KeyedProperty property="scaleY">
+                    <KeyFrameDouble value="0.55" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.8" frame="15" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.35" frame="30" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.9" frame="45" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.55" frame="60" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1218">
+                <KeyedProperty property="scaleY">
+                    <KeyFrameDouble value="0.95" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.5" frame="15" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.7" frame="30" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.4" frame="45" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.95" frame="60" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1219">
+                <KeyedProperty property="scaleY">
+                    <KeyFrameDouble value="0.35" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="1" frame="15" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.3" frame="30" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.75" frame="45" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.35" frame="60" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1220">
+                <KeyedProperty property="scaleY">
+                    <KeyFrameDouble value="0.7" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.65" frame="15" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.8" frame="30" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.55" frame="45" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.7" frame="60" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="Untagged" id="0:1205">
+            <KeyedObject objectId="0:1203">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="0" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+                <KeyedProperty property="scaleX">
+                    <KeyFrameDouble value="1.5" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+                <KeyedProperty property="scaleY">
+                    <KeyFrameDouble value="1.5" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="Tagged" id="0:1206">
+            <KeyedObject objectId="0:1203">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+                <KeyedProperty property="scaleX">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+                <KeyedProperty property="scaleY">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="HoverOff" id="0:1207">
+            <KeyedObject objectId="0:1201">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="0.55" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1202">
+                <KeyedProperty property="thickness">
+                    <KeyFrameDouble value="6" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="HoverOn" id="0:1208">
+            <KeyedObject objectId="0:1201">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1202">
+                <KeyedProperty property="thickness">
+                    <KeyFrameDouble value="16" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+    </Artboard>
+</Rive>

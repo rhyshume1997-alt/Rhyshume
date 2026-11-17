@@ -1,0 +1,51 @@
+<Rive version="1" kind="fragment">
+    <!-- What the car knows. The driving script writes these every frame; the
+         dashboard screens and the windshield display are bound to them. -->
+    <ViewModel defaultInstanceId="0:59" name="Dash" id="0:40">
+        <ViewModelPropertyNumber name="speed" id="0:41"/>
+        <ViewModelPropertyNumber name="altitude" id="0:42"/>
+        <ViewModelPropertyNumber name="heading" id="0:43"/>
+        <ViewModelPropertyBoolean name="boost" id="0:44"/>
+        <ViewModelPropertyBoolean name="warning" id="0:45"/>
+        <ViewModelPropertyNumber name="tagged" id="0:46"/>
+        <ViewModelPropertyNumber name="power" id="0:47"/>
+        <ViewModelPropertyNumber name="posX" id="0:48"/>
+        <ViewModelPropertyNumber name="posZ" id="0:49"/>
+        <ViewModelPropertyBoolean name="navMode" id="0:50"/>
+        <ViewModelInstance exports="true" name="Default" id="0:59">
+            <ViewModelInstanceNumber propertyValue="96" viewModelPropertyId="0:41"/>
+            <ViewModelInstanceNumber propertyValue="28" viewModelPropertyId="0:42"/>
+            <ViewModelInstanceNumber propertyValue="0" viewModelPropertyId="0:43"/>
+            <ViewModelInstanceBoolean propertyValue="false" viewModelPropertyId="0:44"/>
+            <ViewModelInstanceBoolean propertyValue="false" viewModelPropertyId="0:45"/>
+            <ViewModelInstanceNumber propertyValue="0" viewModelPropertyId="0:46"/>
+            <ViewModelInstanceNumber propertyValue="100" viewModelPropertyId="0:47"/>
+            <ViewModelInstanceNumber propertyValue="0" viewModelPropertyId="0:48"/>
+            <ViewModelInstanceNumber propertyValue="0" viewModelPropertyId="0:49"/>
+            <ViewModelInstanceBoolean propertyValue="false" viewModelPropertyId="0:50"/>
+        </ViewModelInstance>
+    </ViewModel>
+
+    <!-- One per billboard. A click on the sign flips tagged; the pointer
+         entering and leaving sets hover. -->
+    <ViewModel defaultInstanceId="0:69" name="Ad" id="0:60">
+        <ViewModelPropertyBoolean name="tagged" id="0:61"/>
+        <ViewModelPropertyBoolean name="hover" id="0:62"/>
+        <ViewModelInstance exports="true" name="Default" id="0:69">
+            <ViewModelInstanceBoolean propertyValue="false" viewModelPropertyId="0:61"/>
+            <ViewModelInstanceBoolean propertyValue="false" viewModelPropertyId="0:62"/>
+        </ViewModelInstance>
+    </ViewModel>
+
+    <DataConverterToString decimals="0" round="true" name="Whole" id="0:70"/>
+    <!-- 0..400 km/h onto the needle's 270 degree sweep and the arc's trim -->
+    <DataConverterRangeMapper minInput="0" maxInput="400" minOutput="-2.3561945" maxOutput="2.3561945" clampLower="true" clampUpper="true" name="SpeedToNeedle" id="0:71"/>
+    <DataConverterRangeMapper minInput="0" maxInput="400" minOutput="0" maxOutput="0.75" clampLower="true" clampUpper="true" name="SpeedToArc" id="0:72"/>
+    <!-- the compass card turns against the heading -->
+    <DataConverterRangeMapper minInput="0" maxInput="360" minOutput="0" maxOutput="-6.2831855" name="HeadingToCard" id="0:73"/>
+    <DataConverterRangeMapper minInput="0" maxInput="100" minOutput="0" maxOutput="400" clampLower="true" clampUpper="true" name="PowerToBar" id="0:74"/>
+    <DataConverterBooleanNegate name="Not" id="0:75"/>
+
+    <FontAsset file="fonts/JetBrainsMono.ttf" name="JetBrainsMono" id="0:90"/>
+    <FontAsset file="fonts/Inter.ttf" name="Inter" id="0:91"/>
+</Rive>

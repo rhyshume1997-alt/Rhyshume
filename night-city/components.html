@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rive for Web Design</title>
+<meta name="description" content="What Rive is in plain words, live Rive components you can click, and the three lines that put one on a web page.">
+<meta name="robots" content="noindex">
+<style>
+  /* A reading column with live examples set into it. One dark world, shared with the city. */
+  :root {
+    color-scheme: dark;
+    --night: #070912;
+    --panel: #0d1220;
+    --line: #1d2a44;
+    --text: #dfe6f2;
+    --dim: #8c9bb3;
+    --cyan: #5cf2ff;
+    --pink: #ff3ea5;
+    --amber: #ffa63d;
+    --display: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @font-face {
+    font-family: "JetBrains Mono";
+    src: url("rive/fonts/JetBrainsMono.ttf") format("truetype");
+    font-display: swap;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--night); }
+  body { margin: 0; background: var(--night); color: var(--text); font: 17px/1.6 var(--body); }
+  main { max-width: 1040px; margin: 0 auto; padding: 40px 20px 80px; display: grid; gap: 56px; }
+  section { display: grid; gap: 18px; }
+  .prose { max-width: 66ch; display: grid; gap: 14px; }
+  h1 { font: 700 clamp(30px, 6vw, 46px)/1.1 var(--display); margin: 0; letter-spacing: -0.02em; text-wrap: balance; }
+  h1 em { font-style: normal; color: var(--pink); }
+  h2 { font: 700 22px/1.25 var(--display); margin: 0; color: var(--cyan); text-wrap: balance; }
+  h3 { font: 700 13px/1.3 var(--display); margin: 0; letter-spacing: 0.08em; text-transform: uppercase; color: var(--dim); }
+  p, ul, ol { margin: 0; }
+  ul, ol { padding-left: 1.2em; display: grid; gap: 8px; }
+  a { color: var(--cyan); }
+  a:focus-visible, button:focus-visible, input:focus-visible, canvas:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+  code { font: 0.9em var(--display); color: var(--amber); }
+  pre {
+    margin: 0; padding: 16px 18px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+    overflow-x: auto; font: 13.5px/1.6 var(--display); color: var(--text); tab-size: 2;
+  }
+  pre code { color: inherit; font-size: inherit; }
+  .note { color: var(--dim); font-size: 15px; }
+  .lede { font-size: 20px; line-height: 1.5; }
+
+  .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  figure { margin: 0; display: grid; gap: 8px; }
+  figure canvas { width: 100%; height: auto; display: block; border-radius: 8px; background: #000; cursor: pointer; }
+  .sign canvas { aspect-ratio: 16 / 9; }
+  .screen canvas { aspect-ratio: 8 / 5; cursor: default; }
+  .screen.tap canvas { cursor: pointer; }
+  figcaption { font-size: 14px; color: var(--dim); }
+  figcaption b { color: var(--text); font-weight: 600; }
+
+  .bench { display: grid; gap: 20px; grid-template-columns: minmax(260px, 420px) minmax(240px, 1fr); align-items: center;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 20px; }
+  @media (max-width: 720px) { .bench { grid-template-columns: 1fr; } }
+  .controls { display: grid; gap: 16px; }
+  .control { display: grid; gap: 6px; }
+  .control label { font: 13px var(--display); color: var(--dim); display: flex; justify-content: space-between; gap: 12px; }
+  .control output { color: var(--text); font-variant-numeric: tabular-nums; }
+  input[type="range"] { width: 100%; accent-color: var(--pink); }
+  .switch { display: flex; align-items: center; gap: 10px; font: 13px var(--display); color: var(--text); }
+  .switch input { width: 18px; height: 18px; accent-color: var(--pink); }
+
+  .uses { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); padding: 0; list-style: none; }
+  .uses li { border-left: 2px solid var(--pink); padding: 2px 0 2px 14px; }
+  .uses b { display: block; }
+  .uses span { color: var(--dim); font-size: 15px; }
+
+  .steps { counter-reset: step; list-style: none; padding: 0; gap: 20px; }
+  .steps > li { counter-increment: step; display: grid; gap: 10px; }
+  .steps > li > b::before { content: counter(step) ". "; color: var(--pink); font-family: var(--display); }
+
+  #missing { border: 1px solid var(--pink); border-radius: 10px; padding: 14px 16px; font-size: 15px; }
+  #missing[hidden] { display: none; }
+  .cta { display: inline-block; font: 700 14px var(--display); letter-spacing: 0.04em; text-decoration: none;
+    color: var(--night); background: var(--cyan); padding: 12px 18px; border-radius: 8px; justify-self: start; }
+</style>
+</head>
+<body>
+<main>
+  <section>
+    <div class="prose">
+      <h1>Rive, for <em>web design</em></h1>
+      <p class="lede">A Rive file is a small animated, clickable graphic that you drop into a page the way you drop in an image. It moves, it reacts to the mouse, and your page can feed it numbers.</p>
+      <p>Think of the difference between a photo of a light switch and a real one. A PNG or a video is the photo. A Rive file is the switch: it has states (off, on, hovered), it knows how to move between them, and it does that live in the browser. One file with the extension <code>.riv</code> holds the artwork, the animation and the rules.</p>
+    </div>
+    <p id="missing" hidden></p>
+  </section>
+
+  <section>
+    <div class="prose">
+      <h2>Five live ones. Hover them, then click.</h2>
+      <p>Each sign below is a Rive artboard playing on this page. The loop, the thicker border on hover and the stamp on click are all inside the file. This page only says where to draw it.</p>
+    </div>
+    <div class="grid">
+      <figure class="sign"><canvas data-artboard="AdCola" width="640" height="360" tabindex="0" aria-label="Animated sign: Nova Cola"></canvas><figcaption><b>Nova Cola.</b> Rising bubbles on a loop.</figcaption></figure>
+      <figure class="sign"><canvas data-artboard="AdRamen" width="640" height="360" tabindex="0" aria-label="Animated sign: Ramen 24H"></canvas><figcaption><b>Ramen 24H.</b> Steam that fades as it rises.</figcaption></figure>
+      <figure class="sign"><canvas data-artboard="AdCabs" width="640" height="360" tabindex="0" aria-label="Animated sign: Skyline Cabs"></canvas><figcaption><b>Skyline Cabs.</b> A cab crossing the sign.</figcaption></figure>
+      <figure class="sign"><canvas data-artboard="AdHotel" width="640" height="360" tabindex="0" aria-label="Animated sign: Hotel Orbit"></canvas><figcaption><b>Hotel Orbit.</b> A moon circling a planet.</figcaption></figure>
+      <figure class="sign"><canvas data-artboard="AdSynth" width="640" height="360" tabindex="0" aria-label="Animated sign: Synth FM"></canvas><figcaption><b>Synth FM.</b> Twelve bars keyed by hand.</figcaption></figure>
+      <figure class="screen tap"><canvas data-artboard="Nav" width="512" height="320" tabindex="0" aria-label="Navigation screen with a radar sweep"></canvas><figcaption><b>Nav screen.</b> Click it to switch between scan and map.</figcaption></figure>
+    </div>
+  </section>
+
+  <section>
+    <div class="prose">
+      <h2>Your page can drive it</h2>
+      <p>A Rive file can expose named values, such as <code>speed</code>. Your page sets the value and the graphic follows: the needle turns, the arc grows, the number changes. This is how a gauge, a progress bar, a price or a user's name gets into an animation.</p>
+    </div>
+    <div class="bench">
+      <figure class="screen"><canvas id="speedo" data-artboard="Speedo" width="512" height="320" aria-label="Speedometer driven by the sliders beside it"></canvas></figure>
+      <div class="controls">
+        <div class="control">
+          <label for="speed">speed <output id="speed-out" for="speed">96 km/h</output></label>
+          <input id="speed" type="range" min="0" max="400" value="96">
+        </div>
+        <div class="control">
+          <label for="power">power <output id="power-out" for="power">100%</output></label>
+          <input id="power" type="range" min="0" max="100" value="100">
+        </div>
+        <label class="switch" for="boost"><input id="boost" type="checkbox"> boost (switches the file to another state)</label>
+      </div>
+    </div>
+    <pre><code>// the three lines behind those sliders
+const dash = gauge.viewModelInstance;
+dash.number('speed').value = 240;
+dash.boolean('boost').value = true;</code></pre>
+  </section>
+
+  <section>
+    <div class="prose">
+      <h2>Putting one on your own page</h2>
+      <ol class="steps">
+        <li><b>Put two files next to your page.</b> Your graphic, <code>hero.riv</code>, and the Rive player, which is a script plus a <code>.wasm</code> file from the free <code>@rive-app/webgl2</code> package.</li>
+        <li><b>Add a canvas where the graphic should appear.</b>
+<pre><code>&lt;canvas id="hero" width="640" height="360"&gt;&lt;/canvas&gt;
+&lt;script src="vendor/rive.js"&gt;&lt;/script&gt;</code></pre></li>
+        <li><b>Tell the player which file and which canvas.</b>
+<pre><code>&lt;script&gt;
+  rive.RuntimeLoader.setWasmUrl('vendor/rive.wasm');
+  const hero = new rive.Rive({
+    src: 'hero.riv',
+    canvas: document.getElementById('hero'),
+    stateMachines: 'State Machine 1',  // the rules inside the file
+    autoplay: true,
+    autoBind: true,                    // lets the page set its values
+  });
+&lt;/script&gt;</code></pre></li>
+      </ol>
+      <p class="note">That is the whole integration for a plain HTML site. In React the same thing is one component from <code>@rive-app/react-webgl2</code>. On iOS, Android and Flutter there is a matching player, and the same <code>.riv</code> file runs in all of them.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="prose">
+      <h2>Where it earns its place</h2>
+    </div>
+    <ul class="uses">
+      <li><b>Hero graphics</b><span>An illustration that moves and follows the cursor, at a fraction of a video's size.</span></li>
+      <li><b>Buttons and toggles</b><span>Hover, press and success states drawn once and reused everywhere.</span></li>
+      <li><b>Loaders and empty states</b><span>Something pleasant to watch while a page works.</span></li>
+      <li><b>Icons</b><span>A menu icon that becomes a close icon, a heart that fills.</span></li>
+      <li><b>Mascots</b><span>A character that blinks, waves and reacts to what the visitor does.</span></li>
+      <li><b>Live numbers</b><span>Gauges, progress rings and charts driven by your data.</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <div class="prose">
+      <h2>Making a new one</h2>
+      <p>There are two ways in, and they produce the same file.</p>
+      <ul>
+        <li><b>Ask for it.</b> With the Rive CLI installed, describe what you want to Claude Code: an animated logo, a pricing toggle, a loader in your brand colours. It writes the scene as text files, checks it by rendering frames, and builds the <code>.riv</code>.</li>
+        <li><b>Draw it.</b> Open the <a href="https://rive.app/editor">Rive Editor</a> in a browser and design, rig and animate by hand. A file made by the CLI opens there too, so a designer can take over.</li>
+      </ul>
+      <p>Building the finished file takes one command, <code>rive &lt;project&gt; --publish</code>, after signing in once with <code>rive login</code>. A free account works; free builds open with a short Rive splash.</p>
+      <p>The signs and screens on this page are also the billboards and dashboard of a 3D city you can drive through, all in the same file.</p>
+    </div>
+    <a class="cta" href="index.html">Drive the night city</a>
+  </section>
+</main>
+
+<script src="vendor/rive.js"></script>
+<script>
+(function () {
+  var missing = document.getElementById('missing');
+  function warn(text) { missing.hidden = false; missing.textContent = text; }
+  if (!window.rive) { warn('The Rive player did not load, so the examples below are blank. vendor/rive.js has to sit next to this page.'); return; }
+
+  rive.RuntimeLoader.setWasmUrl('vendor/rive.wasm');
+  var players = {};
+
+  document.querySelectorAll('canvas[data-artboard]').forEach(function (canvas) {
+    var name = canvas.dataset.artboard;
+    players[name] = new rive.Rive({
+      src: 'nightcity.riv',
+      canvas: canvas,
+      artboard: name,
+      stateMachines: 'State Machine 1',
+      autoplay: true,
+      autoBind: true,
+      // Several small canvases share one GPU context this way.
+      useOffscreenRenderer: true,
+      layout: new rive.Layout({ fit: rive.Fit.Contain }),
+      onLoad: function () {
+        players[name].resizeDrawingSurfaceToCanvas();
+        if (name === 'Speedo') wireGauge(players[name]);
+      },
+      onLoadError: function () {
+        warn('The examples need nightcity.riv next to this page. It is built with: rive night-city/rive --publish');
+      }
+    });
+  });
+
+  function wireGauge(gauge) {
+    var dash = gauge.viewModelInstance;
+    if (!dash) return;
+    var speed = document.getElementById('speed'), power = document.getElementById('power'), boost = document.getElementById('boost');
+    function push() {
+      dash.number('speed').value = Number(speed.value);
+      dash.number('power').value = Number(power.value);
+      dash.boolean('boost').value = boost.checked;
+      document.getElementById('speed-out').textContent = speed.value + ' km/h';
+      document.getElementById('power-out').textContent = power.value + '%';
+    }
+    speed.addEventListener('input', push);
+    power.addEventListener('input', push);
+    boost.addEventListener('change', push);
+    push();
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<Rive version="1" kind="fragment">
+    <!-- What the player sees: one scripted layout that fills the artboard.
+         The script draws the city, the cockpit and everything in it on a GPU
+         canvas, and is handed the other artboards to use as live textures. -->
+    <Artboard defaultStateMachineId="0:7" clip="true" width="1280" height="720" styleId="0:5" name="Main" id="0:2">
+        <Fill name="Background">
+            <SolidColor colorValue="FF05060C" name="Color"/>
+        </Fill>
+        <LayoutComponentStyle name="Artboard Style" id="0:5"/>
+        <LayoutComponent width="1280" height="720" styleId="0:11" name="Root Layout" id="0:10">
+            <LayoutComponentStyle layoutWidthScaleType="1" layoutHeightScaleType="1" widthUnitsValue="3" heightUnitsValue="3" name="Layout Style" id="0:11"/>
+            <ScriptedLayout scriptAssetId="0:80" name="City" id="0:12">
+                <!-- keys only reach a script that owns a FocusData -->
+                <FocusData/>
+                <ScriptInputArtboard artboardId="0:100" name="speedo" id="0:13"/>
+                <ScriptInputArtboard artboardId="0:200" name="nav" id="0:14"/>
+                <ScriptInputArtboard artboardId="0:300" name="hud" id="0:15"/>
+                <ScriptInputArtboard artboardId="0:400" name="ad1" id="0:16"/>
+                <ScriptInputArtboard artboardId="0:500" name="ad2" id="0:17"/>
+                <ScriptInputArtboard artboardId="0:600" name="ad3" id="0:18"/>
+                <ScriptInputArtboard artboardId="0:700" name="ad4" id="0:19"/>
+                <ScriptInputArtboard artboardId="0:800" name="ad5" id="0:20"/>
+            </ScriptedLayout>
+        </LayoutComponent>
+        <StateMachine name="State Machine 1" id="0:7">
+            <StateMachineLayer name="Layer 1" id="0:8">
+                <EntryState/>
+            </StateMachineLayer>
+        </StateMachine>
+    </Artboard>
+
+    <ScriptAsset file="city.luau" name="city" id="0:80"/>
+</Rive>

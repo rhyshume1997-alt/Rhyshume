@@ -1,0 +1,637 @@
+<Rive version="1" kind="fragment">
+    <!-- The two dashboard screens and the windshield display. All three read
+         the Dash view model; the city script owns one instance of each. -->
+
+    <Artboard defaultStateMachineId="0:1000" viewModelId="0:40" viewModelInstanceId="0:59" clip="true" width="512" height="320" x="0" y="800" styleId="0:1017" name="Speedo" id="0:100">
+        <LayoutComponentStyle name="Speedo Style" id="0:1017"/>
+        <Fill name="Background"><SolidColor colorValue="FF070B16" name="Color"/></Fill>
+
+        <Text x="440" y="40" originX="0.5" originY="0.5" name="BoostLabel" id="0:1003">
+            <TextStylePaint fontSize="20" fontAssetId="0:90" name="Style" id="0:1007">
+                <Fill name="Fill"><SolidColor colorValue="FFFF3EA5" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1007" text="BOOST" name="Run0"></TextValueRun>
+        </Text>
+
+        <Text x="76" y="40" originX="0.5" originY="0.5" name="Title">
+            <TextStylePaint fontSize="16" fontAssetId="0:90" name="Style" id="0:1008">
+                <Fill name="Fill"><SolidColor colorValue="FF3B5A78" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1008" text="VELOCITY" name="Run0"></TextValueRun>
+        </Text>
+
+        <Text x="256" y="232" originX="0.5" originY="0.5" name="Speed">
+            <TextStylePaint fontSize="52" fontAssetId="0:90" name="Style" id="0:1009">
+                <Fill name="Fill"><SolidColor colorValue="FFFFFFFF" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1009" text="096" name="Run0"><DataBindContext sourcePathIds="0:40-0:41" propertyKey="268" converterId="0:70"/></TextValueRun>
+        </Text>
+
+        <Text x="256" y="272" originX="0.5" originY="0.5" name="Unit">
+            <TextStylePaint fontSize="14" fontAssetId="0:90" name="Style" id="0:1010">
+                <Fill name="Fill"><SolidColor colorValue="FF5CF2FF" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1010" text="KM/H" name="Run0"></TextValueRun>
+        </Text>
+
+        <Shape x="256" y="168" name="Hub">
+            <Ellipse width="22" height="22" name="Path"/>
+            <Fill name="Fill"><SolidColor colorValue="FFFFFFFF" name="Color"/></Fill>
+        </Shape>
+
+        <!-- the needle points straight up at rest; the bind turns it -->
+        <Shape x="256" y="168" id="0:1011" name="Needle">
+            <DataBindContext sourcePathIds="0:40-0:41" propertyKey="15" converterId="0:71"/>
+            <Rectangle width="5" height="104" originY="1" cornerRadiusTL="2" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FFFF3EA5" name="Color"/></Fill>
+        </Shape>
+
+        <Node x="256" y="168" name="Orbit" id="0:1001">
+            <Shape x="132.0" y="0.0" name="Dot0">
+                <Ellipse width="7" height="7" name="Path"/>
+                <Fill name="Fill"><SolidColor colorValue="FF5CF2FF" name="Color"/></Fill>
+            </Shape>
+            <Shape x="-66.0" y="114.3" name="Dot1">
+                <Ellipse width="7" height="7" name="Path"/>
+                <Fill name="Fill"><SolidColor colorValue="FF5CF2FF" name="Color"/></Fill>
+            </Shape>
+            <Shape x="-66.0" y="-114.3" name="Dot2">
+                <Ellipse width="7" height="7" name="Path"/>
+                <Fill name="Fill"><SolidColor colorValue="FF5CF2FF" name="Color"/></Fill>
+            </Shape>
+        </Node>
+
+        <Shape x="256" y="168" rotation="3.9269908" name="Arc">
+            <Ellipse width="232" height="232" name="Path"/>
+            <Stroke thickness="12" cap="round" name="Stroke"><SolidColor colorValue="FF5CF2FF" name="Color" id="0:1002"/><TrimPath start="0" end="0.2" modeValue="sequential" name="Trim"><DataBindContext sourcePathIds="0:40-0:41" propertyKey="115" converterId="0:72"/></TrimPath></Stroke>
+        </Shape>
+
+        <Shape x="256" y="168" rotation="3.9269908" name="ArcTrack">
+            <Ellipse width="232" height="232" name="Path"/>
+            <Stroke thickness="12" cap="round" name="Stroke"><SolidColor colorValue="FF15233A" name="Color"/><TrimPath start="0" end="0.75" modeValue="sequential" name="Trim"/></Stroke>
+        </Shape>
+
+        <Shape x="56" y="302" name="PowerFill">
+            <Rectangle width="400" height="6" originX="0" cornerRadiusTL="3" name="Path"><DataBindContext sourcePathIds="0:40-0:47" propertyKey="20" converterId="0:74"/></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FFFFA63D" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="56" y="302" name="PowerTrack">
+            <Rectangle width="400" height="6" originX="0" cornerRadiusTL="3" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FF15233A" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="256" y="160" name="Bezel">
+            <Rectangle width="500" height="308" cornerRadiusTL="18" name="Path"></Rectangle>
+            <Stroke thickness="3" name="Stroke"><SolidColor colorValue="FF1D3350" name="Color"/></Stroke>
+        </Shape>
+
+        <StateMachine name="State Machine 1" id="0:1000">
+            <StateMachineLayer name="Idle" id="0:1013">
+                <EntryState><StateTransition stateToId="0:1012"/></EntryState>
+                <AnimationState x="220" y="0" animationId="0:1004" id="0:1012"/>
+            </StateMachineLayer>
+            <StateMachineLayer name="Boost" id="0:1016">
+                <EntryState><StateTransition stateToId="0:1014"/></EntryState>
+                <AnimationState x="220" y="0" animationId="0:1005" id="0:1014">
+                    <StateTransition stateToId="0:1015" duration="200">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:40-0:44" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="true"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+                <AnimationState x="460" y="0" animationId="0:1006" id="0:1015">
+                    <StateTransition stateToId="0:1014" duration="200">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:40-0:44" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="false"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+            </StateMachineLayer>
+        </StateMachine>
+
+        <LinearAnimation loopValue="loop" duration="360" name="Spin" id="0:1004">
+            <KeyedObject objectId="0:1001">
+                <KeyedProperty property="rotation">
+                    <KeyFrameDouble value="0" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="6.2831855" frame="360" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="Normal" id="0:1005">
+            <KeyedObject objectId="0:1003">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="0.18" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1002">
+                <KeyedProperty property="colorValue">
+                    <KeyFrameColor value="FF5CF2FF" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation loopValue="loop" duration="40" name="Boosting" id="0:1006">
+            <KeyedObject objectId="0:1003">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.35" frame="20" interpolationType="linear"/>
+                    <KeyFrameDouble value="1" frame="40" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1002">
+                <KeyedProperty property="colorValue">
+                    <KeyFrameColor value="FFFF3EA5" frame="0" interpolationType="linear"/>
+                    <KeyFrameColor value="FFFFA63D" frame="20" interpolationType="linear"/>
+                    <KeyFrameColor value="FFFF3EA5" frame="40" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+    </Artboard>
+
+    <Artboard defaultStateMachineId="0:1018" viewModelId="0:40" viewModelInstanceId="0:59" clip="true" width="512" height="320" x="600" y="800" styleId="0:1050" name="Nav" id="0:200">
+        <LayoutComponentStyle name="Nav Style" id="0:1050"/>
+        <Text x="300" y="44" originX="0" originY="0.5" name="Scan" id="0:1024">
+            <TextStylePaint fontSize="20" fontAssetId="0:90" name="Style" id="0:1030">
+                <Fill name="Fill"><SolidColor colorValue="FF5CF2FF" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1030" text="SCAN" name="Run0"></TextValueRun>
+        </Text>
+
+        <Text x="490" y="44" originX="1" originY="0.5" name="Map" id="0:1025">
+            <TextStylePaint fontSize="20" fontAssetId="0:90" name="Style" id="0:1031">
+                <Fill name="Fill"><SolidColor colorValue="FFFFA63D" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1031" text="MAP" name="Run0"></TextValueRun>
+        </Text>
+
+        <Text x="300" y="104" originX="0" originY="0.5" name="HeadingLabel">
+            <TextStylePaint fontSize="14" fontAssetId="0:90" name="Style" id="0:1032">
+                <Fill name="Fill"><SolidColor colorValue="FF3B5A78" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1032" text="HDG" name="Run0"></TextValueRun>
+        </Text>
+        <Text x="490" y="104" originX="1" originY="0.5" name="Heading">
+            <TextStylePaint fontSize="26" fontAssetId="0:90" name="Style" id="0:1033">
+                <Fill name="Fill"><SolidColor colorValue="FFFFFFFF" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1033" text="000" name="Run0"><DataBindContext sourcePathIds="0:40-0:43" propertyKey="268" converterId="0:70"/></TextValueRun>
+        </Text>
+
+        <Text x="300" y="152" originX="0" originY="0.5" name="AltitudeLabel">
+            <TextStylePaint fontSize="14" fontAssetId="0:90" name="Style" id="0:1034">
+                <Fill name="Fill"><SolidColor colorValue="FF3B5A78" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1034" text="ALT" name="Run0"></TextValueRun>
+        </Text>
+        <Text x="490" y="152" originX="1" originY="0.5" name="Altitude">
+            <TextStylePaint fontSize="26" fontAssetId="0:90" name="Style" id="0:1035">
+                <Fill name="Fill"><SolidColor colorValue="FFFFFFFF" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1035" text="000" name="Run0"><DataBindContext sourcePathIds="0:40-0:42" propertyKey="268" converterId="0:70"/></TextValueRun>
+        </Text>
+
+        <Text x="300" y="200" originX="0" originY="0.5" name="PosXLabel">
+            <TextStylePaint fontSize="14" fontAssetId="0:90" name="Style" id="0:1036">
+                <Fill name="Fill"><SolidColor colorValue="FF3B5A78" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1036" text="X" name="Run0"></TextValueRun>
+        </Text>
+        <Text x="490" y="200" originX="1" originY="0.5" name="PosX">
+            <TextStylePaint fontSize="26" fontAssetId="0:90" name="Style" id="0:1037">
+                <Fill name="Fill"><SolidColor colorValue="FFFFFFFF" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1037" text="000" name="Run0"><DataBindContext sourcePathIds="0:40-0:48" propertyKey="268" converterId="0:70"/></TextValueRun>
+        </Text>
+
+        <Text x="300" y="248" originX="0" originY="0.5" name="PosZLabel">
+            <TextStylePaint fontSize="14" fontAssetId="0:90" name="Style" id="0:1038">
+                <Fill name="Fill"><SolidColor colorValue="FF3B5A78" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1038" text="Z" name="Run0"></TextValueRun>
+        </Text>
+        <Text x="490" y="248" originX="1" originY="0.5" name="PosZ">
+            <TextStylePaint fontSize="26" fontAssetId="0:90" name="Style" id="0:1039">
+                <Fill name="Fill"><SolidColor colorValue="FFFFFFFF" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1039" text="000" name="Run0"><DataBindContext sourcePathIds="0:40-0:49" propertyKey="268" converterId="0:70"/></TextValueRun>
+        </Text>
+
+        <Text x="395" y="292" originX="0.5" originY="0.5" name="Hint">
+            <TextStylePaint fontSize="11" fontAssetId="0:90" name="Style" id="0:1040">
+                <Fill name="Fill"><SolidColor colorValue="FF3B5A78" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1040" text="TAP TO SWITCH" name="Run0"></TextValueRun>
+        </Text>
+
+        <Shape x="150" y="165" name="Car">
+            <PointsPath isClosed="true" name="Path">
+                <StraightVertex x="0" y="-12"/>
+                <StraightVertex x="9" y="10"/>
+                <StraightVertex x="-9" y="10"/>
+            </PointsPath>
+            <Fill name="Fill"><SolidColor colorValue="FFFFFFFF" name="Color"/></Fill>
+        </Shape>
+
+        <!-- the card turns against the car's heading, so N stays north -->
+        <Node x="150" y="165" name="Card" id="0:1041">
+            <DataBindContext sourcePathIds="0:40-0:43" propertyKey="15" converterId="0:73"/>
+            <Text x="0" y="-128" originX="0.5" originY="0.5" name="N">
+                <TextStylePaint fontSize="18" fontAssetId="0:90" name="Style" id="0:1042">
+                    <Fill name="Fill"><SolidColor colorValue="FFFF3EA5" name="Color"/></Fill>
+                </TextStylePaint>
+                <TextValueRun styleId="0:1042" text="N" name="Run0"></TextValueRun>
+            </Text>
+            <Shape x="46" y="-60" id="0:1021" name="Blip1">
+                <Ellipse width="9" height="9" name="Path"/>
+                <Fill name="Fill"><SolidColor colorValue="FFFFA63D" name="Color"/></Fill>
+            </Shape>
+            <Shape x="-70" y="22" id="0:1022" name="Blip2">
+                <Ellipse width="9" height="9" name="Path"/>
+                <Fill name="Fill"><SolidColor colorValue="FFFF3EA5" name="Color"/></Fill>
+            </Shape>
+            <Shape x="20" y="78" id="0:1023" name="Blip3">
+                <Ellipse width="9" height="9" name="Path"/>
+                <Fill name="Fill"><SolidColor colorValue="FFFFA63D" name="Color"/></Fill>
+            </Shape>
+        </Node>
+
+        <Node x="150" y="165" name="Sweep" id="0:1020">
+            <Shape opacity="0.4" name="Beam">
+                <PointsPath isClosed="true" name="Path">
+                    <StraightVertex x="0" y="0"/>
+                    <StraightVertex x="-26" y="-108"/>
+                    <StraightVertex x="26" y="-108"/>
+                </PointsPath>
+                <Fill name="Fill"><SolidColor colorValue="FF5CF2FF" name="Color"/></Fill>
+            </Shape>
+        </Node>
+
+        <Shape x="150" y="165" name="RingOuter">
+            <Ellipse width="220" height="220" name="Path"/>
+            <Stroke thickness="2" name="Stroke"><SolidColor colorValue="FF5CF2FF" name="Color" id="0:1026"/></Stroke>
+        </Shape>
+
+        <Shape x="150" y="165" name="RingMid">
+            <Ellipse width="146" height="146" name="Path"/>
+            <Stroke thickness="2" name="Stroke"><SolidColor colorValue="FF1D3350" name="Color"/></Stroke>
+        </Shape>
+
+        <Shape x="150" y="165" name="RingInner">
+            <Ellipse width="72" height="72" name="Path"/>
+            <Stroke thickness="2" name="Stroke"><SolidColor colorValue="FF1D3350" name="Color"/></Stroke>
+        </Shape>
+
+        <Shape x="256" y="160" name="Bezel">
+            <Rectangle width="500" height="308" cornerRadiusTL="18" name="Path"></Rectangle>
+            <Stroke thickness="3" name="Stroke"><SolidColor colorValue="FF1D3350" name="Color"/></Stroke>
+        </Shape>
+
+        <!-- the whole screen is the button -->
+        <Shape id="0:1019" name="Touch">
+            <Rectangle width="512" height="320" originX="0" originY="0" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FF070B16" name="Color"/></Fill>
+        </Shape>
+
+        <StateMachine name="State Machine 1" id="0:1018">
+            <StateMachineListenerSingle targetId="0:1019" listenerTypeValue="click" name="Tap" id="0:1044">
+                <ListenerViewModelChange fromViewModelProperty="true" fromDataBindId="0:1043">
+                    <BindablePropertyBoolean>
+                        <DataBindContext sourcePathIds="0:40-0:50" propertyKey="634" id="0:1043" converterId="0:75"/>
+                        <DataBindContext sourcePathIds="0:40-0:50" propertyKey="634" direction="true"/>
+                    </BindablePropertyBoolean>
+                </ListenerViewModelChange>
+            </StateMachineListenerSingle>
+            <StateMachineLayer name="Idle" id="0:1046">
+                <EntryState><StateTransition stateToId="0:1045"/></EntryState>
+                <AnimationState x="220" y="0" animationId="0:1027" id="0:1045"/>
+            </StateMachineLayer>
+            <StateMachineLayer name="Mode" id="0:1049">
+                <EntryState><StateTransition stateToId="0:1047"/></EntryState>
+                <AnimationState x="220" y="0" animationId="0:1028" id="0:1047">
+                    <StateTransition stateToId="0:1048" duration="250">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:40-0:50" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="true"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+                <AnimationState x="460" y="0" animationId="0:1029" id="0:1048">
+                    <StateTransition stateToId="0:1047" duration="250">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:40-0:50" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="false"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+            </StateMachineLayer>
+        </StateMachine>
+
+        <LinearAnimation loopValue="loop" duration="150" name="Sweep" id="0:1027">
+            <KeyedObject objectId="0:1020">
+                <KeyedProperty property="rotation">
+                    <KeyFrameDouble value="0" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="6.2831855" frame="150" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1021">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.15" frame="50" interpolationType="linear"/>
+                    <KeyFrameDouble value="1" frame="150" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1022">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="0.2" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="1" frame="60" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.2" frame="150" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1023">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="0.6" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="1" frame="100" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.1" frame="130" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.6" frame="150" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="ScanMode" id="0:1028">
+            <KeyedObject objectId="0:1024">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1025">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="0.2" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1020">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1026">
+                <KeyedProperty property="colorValue">
+                    <KeyFrameColor value="FF5CF2FF" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="MapMode" id="0:1029">
+            <KeyedObject objectId="0:1024">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="0.2" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1025">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1020">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="0" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+            <KeyedObject objectId="0:1026">
+                <KeyedProperty property="colorValue">
+                    <KeyFrameColor value="FFFFA63D" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+    </Artboard>
+
+    <Artboard defaultStateMachineId="0:1051" viewModelId="0:40" viewModelInstanceId="0:59" clip="true" width="1024" height="384" x="1200" y="800" styleId="0:1076" name="Hud" id="0:300">
+        <LayoutComponentStyle name="Hud Style" id="0:1076"/>
+        <!-- no background: the windshield adds this light to the city behind it -->
+
+        <Text x="190" y="180" originX="0.5" originY="0.5" name="Speed">
+            <TextStylePaint fontSize="84" fontAssetId="0:90" name="Style" id="0:1060">
+                <Fill name="Fill"><SolidColor colorValue="FF5CF2FF" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1060" text="096" name="Run0"><DataBindContext sourcePathIds="0:40-0:41" propertyKey="268" converterId="0:70"/></TextValueRun>
+        </Text>
+
+        <Text x="190" y="248" originX="0.5" originY="0.5" name="SpeedUnit">
+            <TextStylePaint fontSize="20" fontAssetId="0:90" name="Style" id="0:1061">
+                <Fill name="Fill"><SolidColor colorValue="FF5CF2FF" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1061" text="KM/H" name="Run0"></TextValueRun>
+        </Text>
+
+        <Text x="834" y="180" originX="0.5" originY="0.5" name="Altitude">
+            <TextStylePaint fontSize="84" fontAssetId="0:90" name="Style" id="0:1062">
+                <Fill name="Fill"><SolidColor colorValue="FF5CF2FF" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1062" text="028" name="Run0"><DataBindContext sourcePathIds="0:40-0:42" propertyKey="268" converterId="0:70"/></TextValueRun>
+        </Text>
+
+        <Text x="834" y="248" originX="0.5" originY="0.5" name="AltUnit">
+            <TextStylePaint fontSize="20" fontAssetId="0:90" name="Style" id="0:1063">
+                <Fill name="Fill"><SolidColor colorValue="FF5CF2FF" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1063" text="ALT M" name="Run0"></TextValueRun>
+        </Text>
+
+        <Text x="512" y="44" originX="0.5" originY="0.5" name="Heading">
+            <TextStylePaint fontSize="34" fontAssetId="0:90" name="Style" id="0:1064">
+                <Fill name="Fill"><SolidColor colorValue="FF5CF2FF" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1064" text="HDG " name="Run0"></TextValueRun>
+            <TextValueRun styleId="0:1064" text="000" name="Run1"><DataBindContext sourcePathIds="0:40-0:43" propertyKey="268" converterId="0:70"/></TextValueRun>
+        </Text>
+
+        <Text x="512" y="350" originX="0.5" originY="0.5" name="Tagged">
+            <TextStylePaint fontSize="22" fontAssetId="0:90" name="Style" id="0:1065">
+                <Fill name="Fill"><SolidColor colorValue="FF5CF2FF" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1065" text="SIGNS TAGGED " name="Run0"></TextValueRun>
+            <TextValueRun styleId="0:1065" text="0" name="Run1"><DataBindContext sourcePathIds="0:40-0:46" propertyKey="268" converterId="0:70"/></TextValueRun>
+            <TextValueRun styleId="0:1065" text=" / 8" name="Run2"></TextValueRun>
+        </Text>
+
+        <Text x="512" y="296" originX="0.5" originY="0.5" opacity="0" name="Warning" id="0:1053">
+            <TextStylePaint fontSize="40" fontAssetId="0:90" name="Style" id="0:1066">
+                <Fill name="Fill"><SolidColor colorValue="FFFF4A3D" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1066" text="PULL UP" name="Run0"></TextValueRun>
+        </Text>
+
+        <Text x="512" y="98" originX="0.5" originY="0.5" opacity="0" name="Boost" id="0:1054">
+            <TextStylePaint fontSize="22" fontAssetId="0:90" name="Style" id="0:1067">
+                <Fill name="Fill"><SolidColor colorValue="FFFFA63D" name="Color"/></Fill>
+            </TextStylePaint>
+            <TextValueRun styleId="0:1067" text="&gt;&gt;&gt;  BOOST  &gt;&gt;&gt;" name="Run0"></TextValueRun>
+        </Text>
+
+        <Shape x="512" y="196" name="Reticle">
+            <Ellipse width="64" height="64" name="Path"/>
+            <Stroke thickness="2.5" name="Stroke"><SolidColor colorValue="FF5CF2FF" name="Color"/></Stroke>
+        </Shape>
+
+        <Shape x="450" y="196" name="TickL">
+            <Rectangle width="34" height="2.5" cornerRadiusTL="1" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FF5CF2FF" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="574" y="196" name="TickR">
+            <Rectangle width="34" height="2.5" cornerRadiusTL="1" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FF5CF2FF" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="512" y="140" name="TickT">
+            <Rectangle width="2.5" height="22" cornerRadiusTL="1" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FF5CF2FF" name="Color"/></Fill>
+        </Shape>
+
+        <Node x="512" y="196" name="Brackets" id="0:1052">
+            <Shape rotation="0" name="Bracket0">
+                <Ellipse width="132" height="132" name="Path"/>
+                <Stroke thickness="4" cap="round" name="Stroke"><SolidColor colorValue="FF5CF2FF" name="Color"/><TrimPath start="0" end="0.18" modeValue="sequential" name="Trim"/></Stroke>
+            </Shape>
+            <Shape rotation="3.1415927" name="Bracket1">
+                <Ellipse width="132" height="132" name="Path"/>
+                <Stroke thickness="4" cap="round" name="Stroke"><SolidColor colorValue="FF5CF2FF" name="Color"/><TrimPath start="0" end="0.18" modeValue="sequential" name="Trim"/></Stroke>
+            </Shape>
+        </Node>
+
+        <Shape x="330" y="196" name="RailL">
+            <Rectangle width="3" height="150" cornerRadiusTL="1" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FF5CF2FF" name="Color"/></Fill>
+        </Shape>
+
+        <Shape x="694" y="196" name="RailR">
+            <Rectangle width="3" height="150" cornerRadiusTL="1" name="Path"></Rectangle>
+            <Fill name="Fill"><SolidColor colorValue="FF5CF2FF" name="Color"/></Fill>
+        </Shape>
+
+        <StateMachine name="State Machine 1" id="0:1051">
+            <StateMachineLayer name="Idle" id="0:1069">
+                <EntryState><StateTransition stateToId="0:1068"/></EntryState>
+                <AnimationState x="220" y="0" animationId="0:1055" id="0:1068"/>
+            </StateMachineLayer>
+            <StateMachineLayer name="Warn" id="0:1072">
+                <EntryState><StateTransition stateToId="0:1070"/></EntryState>
+                <AnimationState x="220" y="0" animationId="0:1056" id="0:1070">
+                    <StateTransition stateToId="0:1071" duration="80">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:40-0:45" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="true"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+                <AnimationState x="460" y="0" animationId="0:1057" id="0:1071">
+                    <StateTransition stateToId="0:1070" duration="80">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:40-0:45" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="false"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+            </StateMachineLayer>
+            <StateMachineLayer name="Boost" id="0:1075">
+                <EntryState><StateTransition stateToId="0:1073"/></EntryState>
+                <AnimationState x="220" y="0" animationId="0:1058" id="0:1073">
+                    <StateTransition stateToId="0:1074" duration="150">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:40-0:44" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="true"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+                <AnimationState x="460" y="0" animationId="0:1059" id="0:1074">
+                    <StateTransition stateToId="0:1073" duration="150">
+                        <TransitionViewModelCondition>
+                            <TransitionPropertyViewModelComparator>
+                                <BindablePropertyBoolean>
+                                    <DataBindContext sourcePathIds="0:40-0:44" propertyKey="634"/>
+                                </BindablePropertyBoolean>
+                            </TransitionPropertyViewModelComparator>
+                            <TransitionValueBooleanComparator value="false"/>
+                        </TransitionViewModelCondition>
+                    </StateTransition>
+                </AnimationState>
+            </StateMachineLayer>
+        </StateMachine>
+
+        <LinearAnimation loopValue="loop" duration="240" name="Scan" id="0:1055">
+            <KeyedObject objectId="0:1052">
+                <KeyedProperty property="rotation">
+                    <KeyFrameDouble value="0" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="6.2831855" frame="240" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="Calm" id="0:1056">
+            <KeyedObject objectId="0:1053">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="0" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation loopValue="loop" duration="24" name="Alarm" id="0:1057">
+            <KeyedObject objectId="0:1053">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="hold"/>
+                    <KeyFrameDouble value="0.15" frame="12" interpolationType="hold"/>
+                    <KeyFrameDouble value="1" frame="24" interpolationType="hold"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation duration="1" name="BoostOff" id="0:1058">
+            <KeyedObject objectId="0:1054">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="0" frame="0" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+
+        <LinearAnimation loopValue="loop" duration="30" name="BoostOn" id="0:1059">
+            <KeyedObject objectId="0:1054">
+                <KeyedProperty property="opacity">
+                    <KeyFrameDouble value="1" frame="0" interpolationType="linear"/>
+                    <KeyFrameDouble value="0.4" frame="15" interpolationType="linear"/>
+                    <KeyFrameDouble value="1" frame="30" interpolationType="linear"/>
+                </KeyedProperty>
+            </KeyedObject>
+        </LinearAnimation>
+    </Artboard>
+</Rive>

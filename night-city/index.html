@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Night City Hovercar</title>
+<meta name="description" content="Drive a hovercar through a neon city. The whole scene is one Rive file: the 3D city is drawn on a GPU Canvas and every screen and billboard is a live Rive artboard.">
+<meta name="robots" content="noindex">
+<style>
+  /* One screen, one canvas. The page is a frame for the Rive file and stays out of its way. */
+  :root {
+    color-scheme: dark;
+    --night: #05060c;
+    --panel: rgba(7, 11, 22, 0.82);
+    --line: #1d3350;
+    --text: #dfe9f5;
+    --dim: #7f95ad;
+    --cyan: #5cf2ff;
+    --pink: #ff3ea5;
+    --display: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @font-face {
+    font-family: "JetBrains Mono";
+    src: url("rive/fonts/JetBrainsMono.ttf") format("truetype");
+    font-display: swap;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; background: var(--night); color: var(--text); font-family: var(--body); overflow: hidden; }
+  #city { position: fixed; inset: 0; width: 100%; height: 100%; display: block; outline: none; touch-action: none; }
+  #city:focus-visible { box-shadow: inset 0 0 0 2px var(--cyan); }
+
+  .card {
+    position: fixed; left: 16px; top: 16px; width: min(300px, calc(100% - 32px));
+    background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+    padding: 14px 16px; backdrop-filter: blur(6px);
+    transition: opacity 0.4s;
+  }
+  .card.quiet { opacity: 0; pointer-events: none; }
+  .card h1 { font: 700 15px/1.2 var(--display); letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 10px; color: var(--cyan); }
+  .keys { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; margin: 0; font-size: 13px; line-height: 1.35; }
+  .keys dt { font-family: var(--display); color: var(--pink); white-space: nowrap; }
+  .keys dd { margin: 0; color: var(--text); }
+  .card p { margin: 10px 0 0; font-size: 12px; line-height: 1.45; color: var(--dim); }
+  .card a { color: var(--cyan); }
+
+  .help {
+    position: fixed; right: 16px; top: 16px; width: 36px; height: 36px; border-radius: 50%;
+    border: 1px solid var(--line); background: var(--panel); color: var(--cyan);
+    font: 700 15px var(--display); cursor: pointer;
+  }
+  .help:focus-visible, .card a:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+
+  #status {
+    position: fixed; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center;
+    font: 14px/1.5 var(--display); color: var(--dim); pointer-events: none;
+  }
+  #status[hidden] { display: none; }
+  #status strong { display: block; color: var(--pink); margin-bottom: 6px; }
+</style>
+</head>
+<body>
+<canvas id="city" tabindex="0" aria-label="A hovercar cockpit flying through a city at night. Use the keyboard to drive."></canvas>
+
+<div id="status" role="status">Starting the engine…</div>
+
+<aside class="card" id="card" aria-label="Controls">
+  <h1>Night City</h1>
+  <dl class="keys">
+    <dt>W S / ↑ ↓</dt><dd>Speed up, brake</dd>
+    <dt>A D / ← →</dt><dd>Steer</dd>
+    <dt>E Q</dt><dd>Climb, descend</dd>
+    <dt>Space</dt><dd>Boost</dd>
+    <dt>Click</dt><dd>Tag a billboard, or tap the map screen</dd>
+    <dt>Drag</dt><dd>On the sky: steer and climb by touch</dd>
+  </dl>
+  <p>The car cruises on its own until you take over. This box hides once you start driving. <a href="components.html">How it is built, and how to use Rive on your own pages</a></p>
+</aside>
+<button class="help" id="help" type="button" aria-label="Show or hide the controls" aria-controls="card" aria-expanded="true">?</button>
+
+<script src="vendor/rive.js"></script>
+<script>
+(function () {
+  var canvas = document.getElementById('city');
+  var status = document.getElementById('status');
+  var card = document.getElementById('card');
+  var help = document.getElementById('help');
+
+  function fail(title, detail) {
+    status.hidden = false;
+    status.innerHTML = '';
+    var strong = document.createElement('strong');
+    strong.textContent = title;
+    status.append(strong, detail);
+  }
+
+  function setCard(shown) {
+    card.classList.toggle('quiet', !shown);
+    help.setAttribute('aria-expanded', String(shown));
+  }
+  help.addEventListener('click', function () {
+    setCard(card.classList.contains('quiet'));
+    canvas.focus();
+  });
+  // Driving keys hide the controls so the view is clear.
+  canvas.addEventListener('keydown', function (e) {
+    if (e.key.length === 1 || e.key.indexOf('Arrow') === 0) setCard(false);
+    // Keep the page from scrolling under the arrow keys and space.
+    if (e.key === ' ' || e.key.indexOf('Arrow') === 0 || e.key.indexOf('Page') === 0) e.preventDefault();
+  });
+  canvas.addEventListener('pointerdown', function () { canvas.focus(); });
+
+  if (!window.rive) {
+    fail('The Rive runtime did not load.', 'Check that vendor/rive.js is next to this page.');
+    return;
+  }
+  if (!document.createElement('canvas').getContext('webgl2')) {
+    fail('This browser has no WebGL 2.', 'The city is drawn on the GPU. Try a current Chrome, Edge, Firefox or Safari.');
+    return;
+  }
+
+  // The runtime's engine is a .wasm file. Serve it from this site, not a CDN.
+  rive.RuntimeLoader.setWasmUrl('vendor/rive.wasm');
+
+  var city = new rive.Rive({
+    src: 'nightcity.riv',
+    canvas: canvas,
+    artboard: 'Main',
+    stateMachines: 'State Machine 1',
+    autoplay: true,
+    // The 3D scene is drawn by a script on a GPU Canvas. Without this the file loads and draws nothing.
+    enableGPUCanvas: true,
+    // Lay the artboard out at the size of the canvas, so the view fills any window.
+    layout: new rive.Layout({ fit: rive.Fit.Layout }),
+    onLoad: function () {
+      city.resizeDrawingSurfaceToCanvas();
+      status.hidden = true;
+      canvas.focus();
+    },
+    onLoadError: function () {
+      fail('The city file did not load.', 'nightcity.riv has to sit next to this page, and be a signed build (rive --publish).');
+    }
+  });
+
+  var pending = 0;
+  window.addEventListener('resize', function () {
+    cancelAnimationFrame(pending);
+    pending = requestAnimationFrame(function () { city.resizeDrawingSurfaceToCanvas(); });
+  });
+})();
+</script>
+</body>
+</html>
