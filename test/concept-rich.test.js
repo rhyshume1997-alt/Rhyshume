@@ -45,3 +45,22 @@ test('rich page: still a complete page with no phone, no photo and no about text
   assert.ok(!html.includes('class="callbar"'));
   assert.ok(html.includes('Placeholder'));
 });
+
+test('rich page: shows what was read and what changed only when the engine gives a change list', function () {
+  const brand = extractBrand([{ text: '.a{color:#0a3d62}.e{color:#e55039}' }], '');
+  const plain = renderRich(content(), brand);
+  assert.ok(!plain.includes('id="changes"'));
+  const html = renderRich(content(), brand, ['Phone at the top. Why: ring without scrolling.', '<script>x</script> one']);
+  assert.ok(html.includes('id="changes"'));
+  assert.ok(html.includes('Built from acme.co.uk'));
+  assert.ok(html.includes('Ring without scrolling.'));
+  assert.ok(html.includes('#0a3d62') && html.includes('#e55039'));
+  assert.ok(!html.includes('<script>x</script>'));
+});
+
+test('rich page: button labels flip, the floor grid is there and no pill buttons are used', function () {
+  const html = renderRich(content(), null);
+  assert.ok(html.includes('class="fl"'));
+  assert.ok(html.includes('class="floor"'));
+  assert.ok(!/border-radius:\s*(9999|999|50)/.test(html));
+});
