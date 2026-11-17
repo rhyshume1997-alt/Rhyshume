@@ -5,39 +5,69 @@
   "character": "a small open-ended spanner standing upright as a creature: the handle is its compact body with short stubby arms and legs, and the open C-shaped jaw at the top forms two rounded prongs above its oversized head like a pair of ears, with a hi-vis orange grip band around its middle",
   "colour": "bright cobalt blue body like #2E52B8, hi-vis safety orange grip band",
   "feature": "the open spanner jaw on top of its head, like two rounded ears",
-  "personality": "capable, upbeat, quietly proud of a job done right",
-  "represents": "Every job in hand, from quote to despatch",
-  "role": "A spanner with the next job already in its jaw: your workshop, on track.",
+  "personality": "capable, quick, plain-spoken; a workshop hand who gets on with it",
+  "represents": "Tolra's built-in AI helper: ask in plain words, and the job gets sorted",
+  "role": "A spanner you can talk to: ask Tooly, and the job gets sorted.",
   "concepts": [
-    { "character": "a small open-ended spanner standing upright as a creature: the handle is its compact body with short stubby arms and legs, and the open C-shaped jaw at the top forms two rounded prongs above its oversized head like a pair of ears, with a hi-vis orange grip band around its middle", "colour": "bright cobalt blue body like #2E52B8, hi-vis safety orange grip band", "feature": "the open spanner jaw on top of its head, like two rounded ears", "role": "A spanner with the next job already in its jaw: your workshop, on track." },
-    { "character": "a chunky adjustable spanner creature, wide and sturdy: a big square-jawed head with one fixed jaw and one sliding jaw forming a broad grin-shaped profile, a round knurled thumbwheel on its cheek, a short thick handle body with stubby arms and legs", "colour": "bright cobalt blue body like #2E52B8, hi-vis safety orange thumbwheel", "feature": "the orange knurled thumbwheel on its cheek", "role": "An adjustable spanner that fits whatever comes in: every job, sized up and sorted." },
-    { "character": "a ring spanner creature with a big round ring-shaped head: the face sits on a solid disc inside a thick ring with twelve tiny notches around its inner edge, on a short tapering handle body with stubby arms and legs and a small hexagonal nut held in one hand", "colour": "bright cobalt blue body like #2E52B8, hi-vis safety orange hexagonal nut", "feature": "the thick notched ring around its round face", "role": "A ring spanner that never slips: nothing in the workshop gets missed." }
+    {
+      "character": "a small open-ended spanner standing upright as a creature: the handle is its compact body with short stubby arms and legs, and the open C-shaped jaw at the top forms two rounded prongs above its oversized head like a pair of ears, with a hi-vis orange grip band around its middle",
+      "colour": "bright cobalt blue body like #2E52B8, hi-vis safety orange grip band",
+      "feature": "the open spanner jaw on top of its head, like two rounded ears",
+      "role": "A spanner you can talk to: ask Tooly, and the job gets sorted."
+    },
+    {
+      "character": "a chunky adjustable spanner creature, wide and sturdy: a big square-jawed head with one fixed jaw and one sliding jaw forming a broad grin-shaped profile, a round knurled thumbwheel on its cheek, a short thick handle body with stubby arms and legs",
+      "colour": "bright cobalt blue body like #2E52B8, hi-vis safety orange thumbwheel",
+      "feature": "the orange knurled thumbwheel on its cheek",
+      "role": "An adjustable spanner that fits whatever you ask: Tolra's helper, sized to the job."
+    },
+    {
+      "character": "a ring spanner creature with a big round ring-shaped head: the face sits on a solid disc inside a thick ring with twelve tiny notches around its inner edge, on a short tapering handle body with stubby arms and legs and a small hexagonal nut held in one hand",
+      "colour": "bright cobalt blue body like #2E52B8, hi-vis safety orange hexagonal nut",
+      "feature": "the thick notched ring around its round face",
+      "role": "A ring spanner that never slips: ask Tooly, and nothing gets missed."
+    }
   ],
   "brand": "#1E3472",
   "lines": {
-    "hello": "I keep every job moving, quote to despatch.",
-    "empty": "Add your first job and I'll track it.",
-    "think": "Checking the job board...",
-    "success": "Job despatched. Nice work.",
-    "toast": "Inspection passed",
-    "oops": "I couldn't save that. Your changes are safe.",
-    "tip": "Tap a job to see its drawings.",
-    "loveTitle": "Workshop running smoothly?",
-    "love": "Tell another workshop about Tolra.",
-    "items": ["Bracket, 40 off", "Shaft repair", "Housing rework"],
-    "itemMeta": ["On machine", "Inspection", "Quoted"],
-    "tile": ["On time", "94%"],
-    "sidebar": ["Job Board", "Quotes", "Invoices"],
-    "emptyTitle": "No jobs yet",
-    "oopsTitle": "That didn't save.",
-    "bannerTitle": "No connection",
-    "bannerBody": "Working offline until you're back.",
-    "ctaStart": "Add a job",
+    "hello": "Ask me anything about your jobs, quotes or invoices.",
+    "empty": "Ask a question and I'll get to work.",
+    "think": "Working on it...",
+    "success": "Done. Have a look.",
+    "toast": "Answer ready",
+    "oops": "I couldn't finish that. Nothing was changed.",
+    "tip": "Try: which jobs are late this week?",
+    "loveTitle": "Did that help?",
+    "love": "Tell me, so I get better at your workshop.",
+    "items": [
+      "Which jobs are late?",
+      "Draft a quote for ACME",
+      "Chase unpaid invoices"
+    ],
+    "itemMeta": [
+      "Answered",
+      "Draft ready",
+      "3 found"
+    ],
+    "tile": [
+      "Asked today",
+      "12"
+    ],
+    "sidebar": [
+      "Job Board",
+      "Quotes",
+      "Ask Tooly"
+    ],
+    "emptyTitle": "Nothing asked yet",
+    "oopsTitle": "That didn't work.",
+    "bannerTitle": "Tooly is switched off",
+    "bannerBody": "An admin can turn the helper on.",
+    "ctaStart": "Ask Tooly",
     "ctaRetry": "Try again",
-    "ctaLove": "Share Tolra",
-    "macTitle": "Today's jobs",
-    "macSub": "3 in the workshop",
-    "sync": "Syncing jobs...",
-    "synced": "All jobs up to date"
+    "ctaLove": "Send feedback",
+    "macTitle": "Ask Tooly",
+    "macSub": "Your workshop's helper",
+    "sync": "Reading the job board...",
+    "synced": "Up to date"
   }
 }
