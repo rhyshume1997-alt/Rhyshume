@@ -334,6 +334,13 @@ function extractFacts(pages, nameOverride, cssTexts) {
   }
   if (!name) name = bareHost(home.url);
   name = plain(name);
+  // A title that is really a list of services is not a name. Look for the firm's own name in its text, else use the web address.
+  if (name.length > 48 || (name.match(/,/g) || []).length >= 2) {
+    const label = bareHost(home.url).split('.')[0].replace(/[^a-z0-9]/gi, '');
+    const loose = new RegExp(label.split('').join('\\s*') + '(?:\\s+(?:ltd|limited|llp))?', 'i');
+    const found = label.length >= 4 ? (plain(text).match(loose) || [''])[0].trim() : '';
+    name = found && found.length <= 48 ? found : label.charAt(0).toUpperCase() + label.slice(1);
+  }
 
   // phones: tel: links first, then numbers in the text
   const phones = [];

@@ -129,6 +129,15 @@ form.qf textarea{min-height:120px;resize:vertical}
 .contact .mail{display:block;margin-top:22px;font:400 17px/1.3 var(--mono);color:var(--mute);text-decoration:none}
 footer{background:var(--d);color:var(--lt);font:400 12.5px/1.5 var(--mono);padding:26px 0;letter-spacing:.03em}
 .callbar{display:none}
+.help{padding:clamp(56px,8vw,104px) 0;border-top:1px solid var(--rule)}
+.help h2{font:700 clamp(28px,3.6vw,44px)/1.08 var(--disp);margin:14px 0 10px;color:var(--ink)}
+.help .lede{max-width:40em;color:var(--mute);margin:0 0 34px}
+.help .hr{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,4fr) minmax(0,4fr);gap:10px clamp(20px,4vw,56px);padding:24px 0;border-top:1px solid var(--rule)}
+.help .hr small{display:block;font:500 11.5px/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--t);margin-bottom:7px}
+.help .hr p{margin:0;color:var(--ink)}
+.help .hr .k{font:600 18px/1.3 var(--disp)}
+.help .note{margin:26px 0 0;font:400 13px/1.5 var(--mono);color:var(--mute);max-width:52em}
+@media(max-width:900px){.help .hr{grid-template-columns:1fr}}
 .fromrhys{background:var(--paper2);border-top:1px solid var(--rule);padding:34px 0}
 .fromrhys .wrap{display:flex;flex-wrap:wrap;gap:14px 34px;align-items:baseline}
 .fromrhys p{font:600 19px/1.3 var(--disp);margin:0;color:var(--ink)}
@@ -257,10 +266,33 @@ function changesSection(c, b, fonts, points) {
   return '<section class="chg" id="changes"><div class="wrap split"><div class="head reveal"><span class="eyebrow">Built from ' + esc(c.host || c.name) + '</span><h2>What changed</h2><dl class="read">' + read + '</dl></div><ol>' + items + '</ol></div></section>';
 }
 
+function helpSection(c) {
+  const area = c.areaLine || '';
+  const rows = [];
+  rows.push(['Customers look on their phone first',
+    c.phone ? 'Your number and a Get a quote button stay at the top of every screen, and on a phone a call bar sits at the bottom.' : 'A Get a quote button stays at the top of every screen, so a visitor on a phone never has to hunt for how to reach you.',
+    'Most first visits to a trades or engineering firm now happen on a phone, often on site or between jobs. If calling or asking takes more than one tap, many people give up and try the next firm.']);
+  rows.push(['AI assistants answer "who does this near me" before anyone clicks a website',
+    'Each service has its own plain line, the headline names the town and area, and your contact details are written as real text, not buried in images or sliders.',
+    'People now ask Google AI answers, ChatGPT and similar tools for suppliers. Those tools read clear page text to decide who you are and what you do. Clear text helps them describe you correctly. It does not guarantee a listing.']);
+  rows.push(['Buyers with a drawing or photo have to ring or email and wait',
+    'A quote form takes drawings and photos in one go and asks only what you need to price the job.',
+    'It saves the back and forth and lets you quote from something you can see. In this prototype the form posts nowhere. In a live version it would go straight to your inbox.']);
+  rows.push(['Old or thin pages make a visitor wonder if you are still trading',
+    'One light, current page with no leftover placeholder text, out of date years or dead links. Everything on it comes from your own site.',
+    'A buyer decides in seconds whether you are open and sorted. A site that looks tended supports your price and your reputation before you speak to them.']);
+  const body = rows.map(function (r) {
+    return '<div class="hr reveal"><div><small>Problem today</small><p class="k">' + esc(r[0]) + '</p></div><div><small>What this prototype does</small><p>' + esc(r[1]) + '</p></div><div><small>Why it matters now</small><p>' + esc(r[2]) + '</p></div></div>';
+  }).join('');
+  return '<section class="help" id="help"><div class="wrap"><div class="reveal"><span class="eyebrow">For ' + esc(c.name) + '</span><h2>How this helps your business</h2>' +
+    '<p class="lede">This is a prototype built from your current site, so you can see the idea. Colours, wording, photos, layout and pages can all be changed to your spec. Tell me what you would like different and I will change it.</p></div>' +
+    body + '<p class="note">Nothing here is live and nothing has been published for you. No customer names or private details were added.</p></div></section>';
+}
+
 function fromRhys(o) {
   if (!o || !o.cta) return '';
   const link = function (href, label) { return /^(https:|mailto:)/.test(href || '') ? '<a href="' + esc(href) + '">' + esc(label) + '</a>' : ''; };
-  return '<section class="fromrhys" id="from-rhys"><div class="wrap"><p>Like it? Reply to my email or book 20 minutes.</p>' +
+  return '<section class="fromrhys" id="from-rhys"><div class="wrap"><p>Like it? Reply to my email or book 20 minutes, and we change it to your spec.</p>' +
     link(o.cta.mail, 'Reply by email') + link(o.cta.book, 'Book 20 minutes') + '</div></section>';
 }
 
@@ -304,7 +336,7 @@ function renderRich(c, brandIn, points, opts) {
     '<title>Concept: ' + esc(c.name) + '</title><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="' + b.primary + '">' +
     fontLinks + '<style>' + css(b, fonts) + '</style></head>\n' +
     '<body id="top" class="' + (c.phone ? 'has-call' : '') + '">' +
-    '<div class="banner" role="note">' + esc(c.banner) + '</div>' +
+    '<div class="banner" role="note">' + esc(opts.cta ? 'Prototype by Rhys Hume, built from your current site. Not live, and every part can be changed to your spec.' : c.banner) + '</div>' +
     '<header class="nav"><div class="wrap">' + brand +
     '<nav aria-label="Main"><a href="#services">' + esc(c.servicesHeading) + '</a>' + (c.about ? '<a href="#about">' + esc(c.aboutHeading) + '</a>' : '') +
     '<a href="#quote">' + esc(c.quoteHeading) + '</a><a href="#contact">' + esc(c.contactHeading) + '</a></nav>' + phone +
@@ -314,7 +346,7 @@ function renderRich(c, brandIn, points, opts) {
     '<div><span class="eyebrow rise r1">' + esc(c.name) + '</span><h1 class="rise r2' + (String(c.headline || '').length > 58 ? ' long' : '') + '">' + esc(c.headline) + '</h1>' +
     '<p class="intro rise r3">' + esc(c.intro) + '</p>' + (c.area ? '<p class="area rise r3">' + esc(c.area) + '</p>' : '') +
     '<div class="ctas rise r4"><a class="btn pri" href="#quote">' + flip(c.quoteButton) + '</a>' + (c.phone ? '<a class="tlink" href="tel:' + esc(c.phone.href) + '">' + esc(c.phone.display) + '</a>' : '') + '</div></div>' +
-    hero + '</div></section>' + proof + changesSection(c, b, fonts, points) +
+    hero + '</div></section>' + proof + changesSection(c, b, fonts, points) + (opts.cta ? helpSection(c) : '') +
     '<section id="services"><div class="wrap"><div class="split"><div class="head reveal"><span class="eyebrow">' + esc(c.name) + '</span><h2>' + esc(c.servicesHeading) + '</h2></div>' +
     '<div class="rows">' + services + '</div></div>' + (photos ? '<div class="photos">' + photos + '</div>' : '') + '</div></section>' +
     about +
