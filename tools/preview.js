@@ -1020,9 +1020,31 @@ async function run(opts) {
     try {
       const cu = assertPublicUrl(opts.competitor);
       const cp = await fetchPage(cu, fetchImpl);
-      competitor = { host: bareHost(cp.url), url: cp.url, text: htmlToText(cp.html) };
+      competitor = { host: bareHost(cp.url), url: cp.url, text: htmlToText(cp.html), html: cp.html };
     } catch (e) { log('Competitor skipped: ' + e.message); }
   }
+
+  // Evidence of problems on their current site, read from the pages already fetched. Never stops the build.
+  let evidence = null;
+  try {
+    const ev = require('./evidence');
+    let sitemap;
+    try {
+      const sm = await fetchText(new URL('/sitemap.xml', home.url).href, fetchImpl);
+      sitemap = /<urlset|<sitemapindex/i.test(sm.text);
+    } catch (e) { sitemap = /status (404|410)/.test(String(e && e.message)) ? false : undefined; }
+    const theirs = ev.checkSite(pages, { sitemap: sitemap });
+    evidence = {
+      host: bareHost(home.url),
+      checkedOn: new Date().toISOString().slice(0, 10),
+      problems: ev.topProblems(theirs, 6),
+      compare: null, compHost: null
+    };
+    if (competitor && competitor.html) {
+      evidence.compare = ev.compare(theirs, ev.checkSite([{ url: competitor.url, html: competitor.html }], {}));
+      evidence.compHost = competitor.host;
+    }
+  } catch (e) { log('Evidence skipped: ' + e.message); }
 
   const facts = extractFacts(pages, opts.name, cssTexts);
   const pageTexts = pages.map(function (p) { return { url: p.url, text: htmlToText(p.html) }; });
@@ -1060,7 +1082,7 @@ async function run(opts) {
   fs.writeFileSync(path.join(dir, 'index.html'), html);
   fs.writeFileSync(path.join(dir, 'notes.md'), notes);
   const brand = require('./brand').extractBrand(cssTexts, home.html);
-  return { dir: dir, html: html, notes: notes, content: content, warnings: warnings, points: points, brand: brand };
+  return { dir: dir, html: html, notes: notes, content: content, warnings: warnings, points: points, brand: brand, evidence: evidence };
 }
 
 async function main(argv) {

@@ -129,6 +129,23 @@ form.qf textarea{min-height:120px;resize:vertical}
 .contact .mail{display:block;margin-top:22px;font:400 17px/1.3 var(--mono);color:var(--mute);text-decoration:none}
 footer{background:var(--d);color:var(--lt);font:400 12.5px/1.5 var(--mono);padding:26px 0;letter-spacing:.03em}
 .callbar{display:none}
+.evd{padding:clamp(56px,8vw,104px) 0;border-top:1px solid var(--rule);background:var(--paper2)}
+.evd h2{font:700 clamp(28px,3.6vw,44px)/1.08 var(--disp);margin:14px 0 10px;color:var(--ink);max-width:18em}
+.evd .lede{max-width:42em;color:var(--mute);margin:0 0 34px}
+.evd ol{list-style:none;margin:0;padding:0}
+.evd li{display:grid;grid-template-columns:48px minmax(0,5fr) minmax(0,6fr);gap:8px clamp(18px,3vw,44px);padding:22px 0;border-top:1px solid var(--rule)}
+.evd li .n{font:500 13px/1.6 var(--mono);color:var(--t)}
+.evd li h3{font:600 19px/1.3 var(--disp);margin:0;color:var(--ink)}
+.evd li .pf{font:400 13px/1.55 var(--mono);color:var(--ink);margin:0 0 8px;padding-left:12px;border-left:2px solid var(--a)}
+.evd li .wy{margin:0;color:var(--mute)}
+.evd .cmp{margin:40px 0 0;max-width:640px}
+.evd .cmp h3{font:600 19px/1.3 var(--disp);margin:0 0 12px}
+.evd table{width:100%;border-collapse:collapse;font:400 14px/1.4 var(--body)}
+.evd th{font:500 11.5px/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase;text-align:left;padding:8px 10px 8px 0;border-bottom:1px solid var(--rule);color:var(--t)}
+.evd td{padding:9px 10px 9px 0;border-bottom:1px solid var(--rule);color:var(--ink)}
+.evd td.no{font-weight:600;color:var(--a)}
+.evd .note{margin:26px 0 0;font:400 13px/1.5 var(--mono);color:var(--mute);max-width:52em}
+@media(max-width:900px){.evd li{grid-template-columns:34px 1fr}.evd li>div:last-child{grid-column:1 / -1}}
 .help{padding:clamp(56px,8vw,104px) 0;border-top:1px solid var(--rule)}
 .help h2{font:700 clamp(28px,3.6vw,44px)/1.08 var(--disp);margin:14px 0 10px;color:var(--ink)}
 .help .lede{max-width:40em;color:var(--mute);margin:0 0 34px}
@@ -266,6 +283,30 @@ function changesSection(c, b, fonts, points) {
   return '<section class="chg" id="changes"><div class="wrap split"><div class="head reveal"><span class="eyebrow">Built from ' + esc(c.host || c.name) + '</span><h2>What changed</h2><dl class="read">' + read + '</dl></div><ol>' + items + '</ol></div></section>';
 }
 
+function niceDate(iso) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(iso || ''));
+  if (!m) return String(iso || '');
+  return Number(m[3]) + ' ' + ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][Number(m[2]) - 1] + ' ' + m[1];
+}
+
+function evidenceSection(ev) {
+  if (!ev || !Array.isArray(ev.problems) || !ev.problems.length) return '';
+  const items = ev.problems.map(function (p, i) {
+    return '<li class="reveal"><span class="n">' + String(i + 1).padStart(2, '0') + '</span><div><h3>' + esc(p.issue) + '</h3></div>' +
+      '<div><p class="pf">' + esc(p.proof) + '</p><p class="wy">' + esc(p.why) + '</p></div></li>';
+  }).join('');
+  let cmp = '';
+  if (ev.compare && ev.compare.length && ev.compHost) {
+    const yn = function (v) { return v ? '<td>Yes</td>' : '<td class="no">No</td>'; };
+    cmp = '<div class="cmp reveal"><h3>The same checks on ' + esc(ev.compHost) + '</h3><table><thead><tr><th>Check</th><th>' + esc(ev.host) + '</th><th>' + esc(ev.compHost) + '</th></tr></thead><tbody>' +
+      ev.compare.map(function (r) { return '<tr><td>' + esc(r.label) + '</td>' + yn(r.theirs) + yn(r.comp) + '</tr>'; }).join('') + '</tbody></table></div>';
+  }
+  return '<section class="evd" id="evidence"><div class="wrap"><div class="reveal"><span class="eyebrow">Found on ' + esc(ev.host) + '</span><h2>Problems on your current site you may not know about</h2>' +
+    '<p class="lede">Each one below was found by reading the public page source of ' + esc(ev.host) + ' on ' + esc(niceDate(ev.checkedOn)) + '. The proof line shows exactly what was found. Nothing is estimated.</p></div>' +
+    '<ol>' + items + '</ol>' + cmp +
+    '<p class="note">These checks read page source only. They do not measure your Google ranking or visitor numbers, and fixing them does not guarantee more enquiries. They are the things search engines, phones and AI tools can see straight away.</p></div></section>';
+}
+
 function helpSection(c) {
   const area = c.areaLine || '';
   const rows = [];
@@ -346,7 +387,7 @@ function renderRich(c, brandIn, points, opts) {
     '<div><span class="eyebrow rise r1">' + esc(c.name) + '</span><h1 class="rise r2' + (String(c.headline || '').length > 58 ? ' long' : '') + '">' + esc(c.headline) + '</h1>' +
     '<p class="intro rise r3">' + esc(c.intro) + '</p>' + (c.area ? '<p class="area rise r3">' + esc(c.area) + '</p>' : '') +
     '<div class="ctas rise r4"><a class="btn pri" href="#quote">' + flip(c.quoteButton) + '</a>' + (c.phone ? '<a class="tlink" href="tel:' + esc(c.phone.href) + '">' + esc(c.phone.display) + '</a>' : '') + '</div></div>' +
-    hero + '</div></section>' + proof + changesSection(c, b, fonts, points) + (opts.cta ? helpSection(c) : '') +
+    hero + '</div></section>' + proof + changesSection(c, b, fonts, points) + (opts.cta ? evidenceSection(opts.evidence) + helpSection(c) : '') +
     '<section id="services"><div class="wrap"><div class="split"><div class="head reveal"><span class="eyebrow">' + esc(c.name) + '</span><h2>' + esc(c.servicesHeading) + '</h2></div>' +
     '<div class="rows">' + services + '</div></div>' + (photos ? '<div class="photos">' + photos + '</div>' : '') + '</div></section>' +
     about +
