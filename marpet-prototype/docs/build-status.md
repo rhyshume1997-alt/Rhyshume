@@ -1,6 +1,14 @@
 # Marpet Fabrications website: development build status
 
-Development build on branch `claude/beautiful-hawking-dh0pog`. Not merged, not launched, not deployed. Every page carries `noindex`.
+Development build on branch `claude/beautiful-hawking-dh0pog`. Not merged and not launched. Every page carries `noindex`.
+
+## Shareable preview
+
+- Address: https://marpet-fabrications-preview.vercel.app
+- A separate Vercel project (`marpet-fabrications-preview`), serving only `marpet-prototype/site` from this branch. It is unlisted: anyone with the link can open it, no login, and search engines are told not to index it.
+- The rhyshume.co.uk project is not involved. Its deployments stay off for this branch, and a redirect in the root `vercel.json` keeps this folder off that site.
+- Each push to this branch builds a new preview at the long branch address. The short address above is pointed at a build by hand, so it needs re-pointing after changes.
+- To take it down, delete the `marpet-fabrications-preview` project in Vercel.
 
 ## What is built
 
@@ -81,5 +89,6 @@ The registry details came from company listing sites found by search, not from C
 
 ## Changes outside this folder
 
-- `vercel.json`: deployments switched off for this branch only (made in the previous round, to stop automatic previews).
+- `vercel.json`: deployments switched off for this branch only, and a redirect that keeps `/marpet-prototype/` off rhyshume.co.uk.
+- `.vercelignore`: hides everything in this folder from Vercel except the built `site` folder.
 - `test/pages.test.js`: this folder added to the skip list of the existing site's page test.
