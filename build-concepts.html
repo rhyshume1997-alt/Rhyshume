@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="no-referrer">
+<title>Build concepts</title>
+<style>
+body{margin:0;background:#f4f2ee;color:#1d2330;font:16px/1.5 "IBM Plex Sans",system-ui,sans-serif}
+main{max-width:760px;margin:0 auto;padding:40px 22px 80px}
+h1{font:700 28px/1.2 Archivo,system-ui,sans-serif;margin:0 0 6px}
+p.s{margin:0 0 26px;color:#5a6070}
+label{display:block;font:500 13px/1 "IBM Plex Mono",monospace;margin:20px 0 8px}
+input,textarea{width:100%;box-sizing:border-box;font:16px/1.4 "IBM Plex Mono",monospace;padding:11px;border:1px solid #b9bcc4;background:#fbfaf7;color:#1d2330;border-radius:2px}
+textarea{min-height:150px}
+button{margin-top:18px;font:600 16px/1 "IBM Plex Sans",sans-serif;padding:14px 22px;border:0;background:#1d2330;color:#f4f2ee;cursor:pointer;border-radius:2px}
+button:disabled{opacity:.5;cursor:default}
+ul{list-style:none;padding:0;margin:30px 0 0}
+li{border-top:1px solid #cfcdc7;padding:14px 0;display:grid;gap:6px}
+li b{font:500 14px/1.3 "IBM Plex Mono",monospace}
+li a{word-break:break-all}
+li .st{color:#5a6070;font-size:14px}
+li.err .st{color:#9a3412}
+li button{margin:0;padding:8px 12px;font-size:14px;width:max-content}
+</style></head><body><main>
+<h1>Build concepts</h1>
+<p class="s">One address per line. Each one is built from their live site and saved under a private link you can paste into an email.</p>
+<label for="k">Your key</label><input id="k" type="password" autocomplete="off">
+<label for="a">Websites</label><textarea id="a" placeholder="example-plumbing.co.uk"></textarea>
+<button id="go" type="button">Build</button>
+<ul id="out"></ul>
+<script>
+(function(){
+var go=document.getElementById('go'),out=document.getElementById('out');
+function row(site){var li=document.createElement('li');var b=document.createElement('b');b.textContent=site;var s=document.createElement('span');s.className='st';s.textContent='Building, about a minute';li.appendChild(b);li.appendChild(s);out.appendChild(li);return {li:li,st:s};}
+function done(r,d){
+  if(!d||!d.ok){r.li.className='err';r.st.textContent=d&&d.error==='key'?'Wrong key':'Could not build this one'+(d&&d.note?': '+d.note:'');return;}
+  r.st.textContent='';var a=document.createElement('a');a.href=d.link;a.target='_blank';a.rel='noopener';a.textContent=d.link;r.li.appendChild(a);
+  var c=document.createElement('button');c.type='button';c.textContent='Copy link';c.onclick=function(){navigator.clipboard.writeText(d.link);c.textContent='Copied';};r.li.appendChild(c);
+}
+go.onclick=async function(){
+  var key=document.getElementById('k').value.trim();
+  var sites=document.getElementById('a').value.split(/\n+/).map(function(x){return x.trim();}).filter(Boolean);
+  if(!key||!sites.length)return;
+  go.disabled=true;out.textContent='';
+  for(var i=0;i<sites.length;i++){
+    var r=row(sites[i]);
+    try{var res=await fetch('/api/owner-build',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:key,website:sites[i]})});done(r,await res.json().catch(function(){return null;}));}
+    catch(e){done(r,null);}
+  }
+  go.disabled=false;
+};
+})();
+</script></main></body></html>

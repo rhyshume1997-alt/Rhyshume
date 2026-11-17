@@ -60,12 +60,35 @@
           "value": "no-store"
         }
       ]
+    },
+    {
+      "source": "/build-concepts",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
     }
   ],
   "functions": {
     "api/upgrade-live.js": {
       "maxDuration": 120,
       "includeFiles": "{styles.css,preview/preview.css}"
+    },
+    "api/owner-build.js": {
+      "maxDuration": 120,
+      "includeFiles": "{styles.css,preview/preview.css}"
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/c/:id",
+      "destination": "/api/c?id=:id"
+    }
+  ]
 }
