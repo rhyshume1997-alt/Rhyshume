@@ -15,7 +15,7 @@ test('Like it bar only appears with a cta, and only with safe links', () => {
   const none = rich.renderRich(base, null, null);
   assert.ok(!none.includes('Like it?'));
   const withCta = rich.renderRich(base, null, null, { cta: { mail: 'mailto:rhys@rhyshume.co.uk', book: 'javascript:alert(1)' } });
-  assert.ok(withCta.includes('Like it? Reply to my email or book 20 minutes.'));
+  assert.ok(withCta.includes('Like it? Reply to my email or book 20 minutes'));
   assert.ok(withCta.includes('Reply by email'));
   assert.ok(!withCta.includes('javascript:'));
   assert.ok(!withCta.includes('—'));
@@ -47,4 +47,23 @@ test('saved concept route is noindex and 404s on bad ids', async () => {
   await page({ query: { id: '../x' } }, r);
   assert.strictEqual(r.statusCode, 404);
   assert.match(r.headers['x-robots-tag'], /noindex/);
+});
+
+test('a title that is a list of services is not used as the firm name', () => {
+  const preview = require('../tools/preview');
+  const html = '<html><head><title>Mechanical Engineering, Fabrication, Welding, Hire subsea baskets, Offshore fabrication</title></head><body><h1>Welcome</h1><p>Calder Engineering Ltd offers fabrication from its base in Thurso.</p></body></html>';
+  const facts = preview.extractFacts([{ url: 'https://www.calderengineering.co.uk/', html: html }], '', []);
+  assert.strictEqual(facts.name, 'Calder Engineering Ltd');
+  const bare = preview.extractFacts([{ url: 'https://www.calderengineering.co.uk/', html: html.replace('Calder Engineering Ltd', 'We') }], '', []);
+  assert.strictEqual(bare.name, 'Calderengineering');
+});
+
+test('prototype notice and the how this helps section appear with a cta and cover the problems', () => {
+  const html = rich.renderRich(Object.assign({}, base, { phone: { display: '01382 810737', href: '+441382810737' } }), null, ['One. Why: because.'], { cta: { mail: 'mailto:rhys@rhyshume.co.uk' } });
+  assert.ok(html.includes('Prototype by Rhys Hume'));
+  assert.ok(html.includes('How this helps your business'));
+  assert.ok(/AI assistants/.test(html) && /phone/i.test(html) && /changed to your spec/.test(html));
+  assert.ok(!html.includes('—'));
+  const plain = rich.renderRich(base, null, null);
+  assert.ok(!plain.includes('How this helps your business'));
 });
