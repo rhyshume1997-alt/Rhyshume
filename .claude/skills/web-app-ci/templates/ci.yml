@@ -1,0 +1,191 @@
+# CI for a SaaS or web app. Installed by the web-app-ci skill.
+# Structure follows openclaw's CI (references/openclaw-ci.yml): a preflight
+# job decides what runs, each check is its own job, and one gate job is the
+# only check branch protection has to require.
+name: CI
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "**/*.md"
+      - "docs/**"
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+  workflow_dispatch:
+
+# Least privilege: jobs that need more ask for it themselves.
+permissions:
+  contents: read
+
+# A new push to a pull request cancels the run it replaces. Runs on main finish.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  NODE_VERSION: "__NODE_VERSION__"
+
+jobs:
+  preflight:
+    name: Preflight
+    # Draft pull requests do not spend CI minutes.
+    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      app: ${{ steps.scope.outputs.app }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Decide what changed
+        id: scope
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          # Pushes and manual runs check everything. A pull request that only
+          # touches docs skips the app jobs; the gate still reports.
+          if [ "$GITHUB_EVENT_NAME" != "pull_request" ]; then
+            echo "app=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if git diff --name-only "$BASE_SHA" HEAD | grep -qvE '(\.md$|^docs/)'; then
+            echo "app=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "app=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  lint:
+    name: Lint
+    needs: [preflight]
+    if: needs.preflight.outputs.app == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: __PM__
+      - run: __INSTALL__
+      - run: __LINT__
+
+  typecheck:
+    name: Typecheck
+    needs: [preflight]
+    if: needs.preflight.outputs.app == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: __PM__
+      - run: __INSTALL__
+      - run: __TYPECHECK__
+
+  test:
+    name: Test
+    needs: [preflight]
+    if: needs.preflight.outputs.app == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    # OPTION postgres: keep this block only if the tests need a database.
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: app_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/app_test
+    # END OPTION postgres
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: __PM__
+      - run: __INSTALL__
+      - run: __TEST__
+
+  build:
+    name: Build
+    needs: [preflight]
+    if: needs.preflight.outputs.app == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: __PM__
+      - run: __INSTALL__
+      # Build with placeholder public env values only. Real secrets stay in the host.
+      - run: __BUILD__
+
+  # OPTION e2e: keep this job only if the app has Playwright tests.
+  e2e:
+    name: End to end
+    needs: [preflight]
+    if: needs.preflight.outputs.app == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: __PM__
+      - run: __INSTALL__
+      - run: npx playwright install --with-deps chromium
+      - run: __E2E__
+      - name: Upload the report when a test fails
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+  # END OPTION e2e
+
+  # The one check to mark as required in branch protection. It passes when
+  # every job it needs passed or was skipped on purpose, and fails otherwise,
+  # so adding or removing a job never means editing branch protection.
+  ci-gate:
+    name: ci-gate
+    needs: [preflight, lint, typecheck, test, build, e2e]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      - name: Check every job
+        env:
+          RESULTS: ${{ toJSON(needs.*.result) }}
+        run: |
+          echo "$RESULTS"
+          if echo "$RESULTS" | grep -qE '"(failure|cancelled)"'; then
+            echo "A required job failed or was cancelled." >&2
+            exit 1
+          fi
