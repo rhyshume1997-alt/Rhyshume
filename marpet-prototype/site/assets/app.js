@@ -80,7 +80,7 @@
     },
     // Frame: a framed photograph lifts off the wall and expands into the project page.
     async frame(src, name, swap) {
-      const img = src && $('img', src);
+      const img = src && ($('.wk__frame img', src) || $('img', src));
       if (!img) return transitions.plate(src, name, swap);
       const r = img.getBoundingClientRect();
       const fly = document.createElement('div');
@@ -194,23 +194,51 @@
   /* ---------- per-page behaviour ---------- */
   function teardown() {
     cleanup.forEach((f) => f()); cleanup = [];
+    if (window.MP) window.MP.kill();
   }
   const on = (el, ev, fn, o) => { el.addEventListener(ev, fn, o); cleanup.push(() => el.removeEventListener(ev, fn, o)); };
 
-  // Homepage hero: the Blender conveyor model, live. The header and quote button never wait for it.
+  // Homepage hero. On wide screens the opening is a rendered film (close on a weld, across the steel,
+  // pull back) that ends on the exact view the live 3D scene starts from, then fades to it.
+  // Phones, and any case where the film cannot play, use the live scene's own opening instead.
+  // The header and quote button never wait for any of it.
   function initHero() {
     const root = $('[data-hero]');
     if (!root) return;
     const section = root.closest('.hero');
-    const skip = $('[data-hero-skip]', section), replay = $('[data-hero-replay]', section);
+    const skip = $('[data-hero-skip]', section), replay = $('[data-hero-replay]', section), film = $('[data-film]', section);
     const q = new URLSearchParams(location.search);
     const ready = () => section.classList.add('is-ready');
     const fallback = () => { section.classList.add('is-static'); ready(); };
     let webgl = false;
     try { webgl = !!document.createElement('canvas').getContext('webgl2'); } catch (e) {}
     if (!webgl || q.has('static')) { fallback(); return; }
-    const giveUp = setTimeout(ready, 6000);   // slow connection: show the copy over the still image; the model joins when it arrives
+    let seen = false;
+    try { seen = localStorage.getItem('mp-intro') === '1'; } catch (e) {}
+    const wantIntro = !reduce.matches && (!seen || q.has('intro')) && !q.has('assembled');
+    const filmOK = film && innerWidth >= 900 && !q.has('nofilm');
+    const filmSrc = () => (film.canPlayType('video/webm; codecs="vp9"') ? film.dataset.src.replace('.mp4', '.webm') : film.dataset.src);
+    let useFilm = wantIntro && filmOK, viewerReady = false, filmStarted = false, filmDone = !useFilm, finished = false;
+    const giveUp = setTimeout(ready, 6000);   // slow connection: show the copy; the scene joins when it arrives
     cleanup.push(() => clearTimeout(giveUp));
+
+    const handOver = () => {   // film finished and the live scene is ready: fade one into the other
+      if (finished || !viewerReady || !filmDone) return;
+      finished = true; root.viewer.finish(); if (film) film.classList.add('is-out');
+    };
+    const liveIntro = () => { skip.hidden = false; root.viewer.play(); };
+    const endIntro = () => {
+      if (useFilm && filmStarted && !filmDone) { film.pause(); filmDone = true; ready(); handOver(); }
+      else if (root.viewer && root.viewer.playing) root.viewer.finish();
+    };
+    const filmFailed = () => { if (filmStarted || !useFilm) return; useFilm = false; filmDone = true; if (viewerReady && !finished) liveIntro(); };
+    const playFilm = () => {
+      filmStarted = true; filmDone = false; finished = false;
+      section.classList.add('is-film'); film.classList.remove('is-out'); skip.hidden = false;
+      film.currentTime = 0;
+      film.play().catch(() => { filmStarted = false; filmFailed(); });
+    };
+
     on(root, 'viewer:reveal', ready);
     on(root, 'viewer:done', () => {
       section.classList.add('is-done'); skip.hidden = true; replay.hidden = reduce.matches;
@@ -218,18 +246,31 @@
       try { localStorage.setItem('mp-intro', '1'); } catch (e) {}
     });
     on(root, 'viewer:ready', () => {
-      clearTimeout(giveUp); section.classList.add('is-live'); initScene(section, root);
-      let seen = false;
-      try { seen = localStorage.getItem('mp-intro') === '1'; } catch (e) {}
-      if (reduce.matches || (seen && !q.has('intro')) || q.has('assembled')) { root.viewer.finish(); return; }
-      skip.hidden = false; root.viewer.play();
-      const end = () => { if (root.viewer.playing) root.viewer.finish(); };
-      on(skip, 'click', end);
-      on(window, 'keydown', (e) => { if (e.key === 'Escape') end(); });
-      on(window, 'wheel', end, { passive: true });
-      on(window, 'touchmove', end, { passive: true });
+      viewerReady = true; clearTimeout(giveUp); section.classList.add('is-live'); initScene(section, root);
+      if (!wantIntro) { root.viewer.finish(); return; }
+      if (useFilm) handOver(); else liveIntro();
     });
-    on(replay, 'click', () => { section.classList.remove('is-ready', 'is-done'); replay.hidden = true; skip.hidden = false; root.viewer.run(false); root.viewer.play(); });
+    if (wantIntro) {
+      on(skip, 'click', endIntro);
+      on(window, 'keydown', (e) => { if (e.key === 'Escape') endIntro(); });
+      on(window, 'wheel', endIntro, { passive: true });
+      on(window, 'touchmove', endIntro, { passive: true });
+    }
+    if (film && filmOK) {
+      on(film, 'timeupdate', () => { if (film.duration && film.currentTime > film.duration * 0.6) ready(); });
+      on(film, 'ended', () => { filmDone = true; ready(); handOver(); });
+      on(film, 'error', filmFailed);
+    }
+    if (useFilm) {
+      const slow = setTimeout(filmFailed, 3500);   // film not ready in time: use the live opening
+      cleanup.push(() => clearTimeout(slow));
+      on(film, 'canplaythrough', () => { clearTimeout(slow); if (!filmStarted && useFilm) playFilm(); });
+      film.src = filmSrc(); film.load();
+    }
+    on(replay, 'click', () => {
+      section.classList.remove('is-ready', 'is-done'); replay.hidden = true; root.viewer.run(false); scrollTo(0, 0);
+      if (filmOK) { useFilm = true; if (!film.getAttribute('src')) film.src = filmSrc(); playFilm(); } else liveIntro();
+    });
     import('./viewer.min.js').then((m) => root.isConnected && m.initViewer(root)).catch(fallback);
   }
 
@@ -288,39 +329,6 @@
     items.forEach((el, i) => { on(el, 'pointerenter', () => show(i)); on(el, 'focus', () => show(i)); });
   }
 
-  // ---- Our Work: photographs drift at different rates as the page scrolls and lean toward the pointer ----
-  function initWork() {
-    const list = $('[data-work]');
-    if (!list || reduce.matches) return;
-    const cards = $$('.wk', list).map((el, i) => ({ el, img: $('img', el), speed: [0.05, -0.03, 0.02, -0.05][i % 4] }));
-    const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
-    let ticking = false;
-    const update = () => {
-      ticking = false;
-      const vh = innerHeight;
-      for (const c of cards) {
-        if (c.el.hidden) continue;
-        const r = c.el.getBoundingClientRect();
-        if (r.bottom < -200 || r.top > vh + 200) continue;
-        const d = (r.top + r.height / 2 - vh / 2) / vh;                // -0.5 .. 0.5 across the screen
-        c.el.style.setProperty('--drift', (d * c.speed * vh).toFixed(1) + 'px');
-        c.el.style.setProperty('--pan', (d * -9).toFixed(2) + '%');   // the photograph slides inside its frame
-        if (r.top < vh * 0.9) c.el.classList.add('is-in');
-      }
-    };
-    const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
-    on(window, 'scroll', onScroll, { passive: true }); on(window, 'resize', onScroll);
-    update();
-    if (fine) cards.forEach((c) => {
-      on(c.el, 'pointermove', (e) => {
-        const r = c.el.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
-        c.el.style.setProperty('--rx', (-y * 4).toFixed(2) + 'deg'); c.el.style.setProperty('--ry', (x * 5).toFixed(2) + 'deg');
-        c.el.style.setProperty('--px', (-x * 2.4).toFixed(2) + '%'); c.el.style.setProperty('--py', (-y * 2.4).toFixed(2) + '%');
-      });
-      on(c.el, 'pointerleave', () => { for (const v of ['--rx', '--ry', '--px', '--py']) c.el.style.removeProperty(v); });
-    });
-  }
-
   function initFilter() {
     const bar = $('[data-filter]');
     if (!bar) return;
@@ -330,8 +338,7 @@
       let n = 0;
       cards.forEach((c) => { const show = val === 'all' || c.dataset.service === val; c.hidden = !show; if (show) n++; });
       $$('button', bar).forEach((b) => b.setAttribute('aria-pressed', String(b.value === val)));
-      $('[data-filter-list]').classList.toggle('is-filtered', val !== 'all');
-      dispatchEvent(new Event('scroll'));
+      if (window.MP) window.MP.ScrollTrigger.refresh();
       if (count) count.textContent = `${n} ${n === 1 ? 'project' : 'projects'} shown`;
     };
     on(bar, 'click', (e) => { const b = e.target.closest('button'); if (b) apply(b.value); });
@@ -451,7 +458,8 @@
 
   function init() {
     document.documentElement.classList.add('js');
-    initHero(); initSvc(); initWork(); initFilter(); initReveal(); initForm(); initTest();
+    initHero(); initSvc(); initFilter(); initReveal(); initForm(); initTest();
+    if (window.MP) window.MP.init($('main'));
   }
   init();
 })();

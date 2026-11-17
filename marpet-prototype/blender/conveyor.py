@@ -14,7 +14,7 @@ def opt(name, default=None):
     return argv[argv.index(name) + 1] if name in argv else default
 OUT = argv[0]
 VIEW = opt('--view', 'hero'); SAMPLES = int(opt('--samples', 64)); RESX = int(opt('--width', 960))
-GLB = opt('--glb'); ANIM = int(opt('--anim', 0))
+GLB = opt('--glb'); ANIM = int(opt('--anim', 0)); FILM = int(opt('--film', 0)); FRAME = opt('--frame')
 HERE = os.path.dirname(os.path.abspath(__file__))
 LOGO = os.path.join(HERE, '..', 'site', 'assets', 'img', 'logo.jpg')
 HDRI = os.path.join(bpy.utils.resource_path('LOCAL'), 'datafiles', 'studiolights', 'world', 'studio.exr')
@@ -329,6 +329,8 @@ area('Rim', (LEN + 1.6, 2.6, 1.9), T, 1.6, 120, 1.0, (0.75, 0.84, 1.0))
 area('Low fill', (-3.0, -1.4, 0.5), T, 1.4, 14, 0.8, (0.8, 0.86, 1.0))
 
 cam = bpy.data.cameras.new('Cam'); co = bpy.data.objects.new('Cam', cam); sc.collection.objects.link(co); sc.camera = co
+HERO_LENS = 18 / math.tan(math.atan(18 / 50) * 1.62)   # the homepage scene widens the hero lens by this factor
+SHIFT_X = float(opt('--shift', -0.2)); SHIFT_Y = 0.02 * 16 / 9
 VIEWS = {
     'hero': ((-1.45, -2.6, 1.38), (0.95, -0.2, 0.56), (0.3, -0.3, 0.85), 50, 9),
     'drive': ((-0.62, -0.98, 1.0), (0.13, -0.3, 0.8), (AX, -0.3, AZ), 58, 11),
@@ -343,13 +345,38 @@ cam.dof.use_dof = True; cam.dof.aperture_fstop = fstop; cam.dof.focus_distance =
 
 sc.render.engine = 'CYCLES'; sc.cycles.samples = SAMPLES; sc.cycles.use_denoising = True
 sc.cycles.use_adaptive_sampling = True; sc.cycles.adaptive_threshold = 0.02
-sc.render.resolution_x = RESX; sc.render.resolution_y = int(RESX * 0.625)
+sc.render.resolution_x = RESX; sc.render.resolution_y = int(RESX * (0.5625 if FILM else 0.625))
 sc.view_settings.view_transform = 'AgX'
 try: sc.view_settings.look = 'AgX - Medium High Contrast'
 except Exception: pass
 sc.render.image_settings.file_format = 'PNG'
 
-if ANIM:
+if FILM:
+    # Opening film for the homepage: close on a weld, travel along the brushed frame, pull back to the
+    # exact camera the live Three.js scene starts from (same position, aim, horizontal field of view and shift).
+    tgt = bpy.data.objects.new('Aim', None); sc.collection.objects.link(tgt)
+    con = co.constraints.new('TRACK_TO'); con.target = tgt; con.track_axis = 'TRACK_NEGATIVE_Z'; con.up_axis = 'UP_Y'
+    cam.dof.focus_object = tgt
+    keys = [  # time, camera, aim, lens, f-stop, shift x, shift y
+        (0.00, (0.27, -0.60, 0.705), (0.455, -0.30, 0.738), 90, 2.8, 0.0, 0.0),
+        (0.20, (0.50, -0.62, 0.80), (0.66, -0.30, 0.80), 85, 3.2, 0.0, 0.0),
+        (0.42, (0.80, -0.70, 0.93), (0.98, -0.30, 0.86), 70, 4.0, 0.0, 0.0),
+        (0.70, (-0.55, -1.75, 1.2), (0.9, -0.24, 0.66), 40, 8.0, SHIFT_X * 0.6, SHIFT_Y * 0.6),
+        (1.00, (-1.45, -2.6, 1.38), (0.95, -0.2, 0.56), HERO_LENS, 11.0, SHIFT_X, SHIFT_Y),
+    ]
+    sc.frame_start = 1; sc.frame_end = FILM; sc.render.fps = 20
+    for t, cl, al, lens, fs, sx, sy in keys:
+        f = 1 + round(t * (FILM - 1))
+        co.location = cl; co.keyframe_insert('location', frame=f); tgt.location = al; tgt.keyframe_insert('location', frame=f)
+        cam.lens = lens; cam.keyframe_insert('lens', frame=f)
+        cam.dof.aperture_fstop = fs; cam.dof.keyframe_insert('aperture_fstop', frame=f)
+        cam.shift_x = sx; cam.shift_y = sy; cam.keyframe_insert('shift_x', frame=f); cam.keyframe_insert('shift_y', frame=f)
+    sc.render.use_motion_blur = True; sc.render.motion_blur_shutter = 0.35
+    if FRAME:
+        sc.frame_set(int(FRAME)); sc.render.filepath = OUT; bpy.ops.render.render(write_still=True)
+    else:
+        os.makedirs(OUT, exist_ok=True); sc.render.filepath = os.path.join(OUT, 'f_'); bpy.ops.render.render(animation=True)
+elif ANIM:
     # Assembly test. Each group travels in from an offset and decelerates into place.
     plan = [  # group, offset (x, y, z), start frame, end frame as fractions of the shot
         ('frame_near', (0, 0, 0.55), 0.00, 0.36), ('frame_far', (0, 0, 0.55), 0.08, 0.44), ('bed', (0, 0, 0.7), 0.16, 0.46),

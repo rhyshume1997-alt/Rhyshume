@@ -48,6 +48,7 @@ const SCENE_KEYS = [
   [0.86, [1.1, -1.9, 2.7], [1.1, -0.05, 0.85]],        // over the belt
   [1.00, [1.1, -1.3, 3.5], [1.1, -0.05, 0.85]],
 ];
+const EXPLODE = [['endplates', 0.07], ['takeup', 0.11], ['bearings', 0.17], ['bolts', 0.26]];   // metres each group moves out from the frame
 const MACRO = [[0.86, -0.74, 0.95], [1.22, -0.3, 0.86]];   // opening shot: the brushed side frame, close
 const smooth = (x) => { x = Math.min(1, Math.max(0, x)); return x * x * (3 - 2 * x); };
 const ease = (t) => 1 - Math.pow(1 - Math.min(1, Math.max(0, t)), 3);   // decelerate into place, no bounce
@@ -262,7 +263,7 @@ export function initViewer(root) {
   // interaction
   let controls = null;
   // ---- homepage scene: scripted camera. Opening by time, then by scroll, plus a little yaw from dragging. ----
-  const rig = { s: 0, sTarget: 0, intro: 1, yaw: 0, yawTarget: 0 };
+  const rig = { s: 0, sTarget: 0, intro: 1, yaw: 0, yawTarget: 0, explode: 0 };
   const P = new THREE.Vector3(), A = new THREE.Vector3(), P2 = new THREE.Vector3(), A2 = new THREE.Vector3();
   function scenePose(s, outP, outA) {
     let i = 0; while (i < SCENE_KEYS.length - 2 && s > SCENE_KEYS[i + 1][0]) i++;
@@ -372,6 +373,14 @@ export function initViewer(root) {
       beltTex.offset.x -= dt * 2.4; drums.forEach((d) => { d.rotation.z += dt * 4.8; }); dirty = true;
     }
     if (controls) { controls.update(); if (controls.autoRotate) dirty = true; }
+    if (heroMode && !playing && assembly >= 1) {   // drive end opens up around the first chapter, then closes
+      const k = smooth(1 - Math.abs(rig.s - 0.31) / 0.13);
+      if (k !== rig.explode) {
+        rig.explode = k;
+        for (const [name, d] of EXPLODE) { const o = parts[name]; if (o) o.position.copy(o.userData.home).addScaledVector(B(0, -d, 0), k); }
+        dirty = shadowsDirty = true;
+      }
+    }
     if (heroMode) {   // frame-rate independent damping toward the scroll target, snapping when close
       if (rig.sTarget > 0.04 && rig.yawTarget !== 0) rig.yawTarget = Math.abs(rig.yawTarget) < 0.002 ? 0 : rig.yawTarget * 0.9;
       const k = 1 - Math.pow(1 - 0.22, dt * 60);

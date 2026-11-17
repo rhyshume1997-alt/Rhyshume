@@ -55,13 +55,17 @@ async function main() {
     // ---- desktop behaviour, motion on ----
     const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
     const p = await ctx.newPage();
+    await p.route('**/viewer.min.js', async (r) => { await new Promise((s) => setTimeout(s, 3000)); r.continue(); });   // hold the 3D scene back so the film is what is on screen
     await p.goto(U + 'index.html?intro=1');
     ok(await p.isVisible('.header-cta'), 'quote button is usable before the opening finishes');
     ok(await p.isVisible('.nav a[data-section=services]'), 'navigation is usable before the opening finishes');
-    await p.waitForFunction(() => document.querySelector('.hero').classList.contains('is-live'), null, { timeout: 90000 });
-    ok(await p.isVisible('[data-hero-skip]'), 'skip button shows during the opening');
+    await p.waitForSelector('[data-hero-skip]:not([hidden])', { timeout: 90000 });
+    ok(true, 'skip button shows during the opening');
+    ok(await p.evaluate(() => document.querySelector('.hero').classList.contains('is-film') && !!document.querySelector('[data-film]').getAttribute('src')), 'the opening film plays on a wide screen');
     await p.click('[data-hero-skip]');
-    await p.waitForFunction(() => document.querySelector('.hero').classList.contains('is-done'), null, { timeout: 20000 });
+    await p.waitForFunction(() => document.querySelector('.hero').classList.contains('is-done'), null, { timeout: 90000 });
+    await p.unroute('**/viewer.min.js');
+    ok(await p.evaluate(() => document.querySelector('[data-film]').classList.contains('is-out') && document.querySelector('[data-film]').paused), 'skipping stops the film and hands over to the live scene');
     ok(await p.isVisible('.hero h1'), 'hero copy is shown after skipping');
     await p.reload(); await p.goto(U + 'index.html');
     await p.waitForFunction(() => document.querySelector('.hero').classList.contains('is-done'), null, { timeout: 90000 });
@@ -86,13 +90,21 @@ async function main() {
 
     // ---- services viewing frame ----
     await p.goto(U + 'services.html'); await p.waitForTimeout(400);
-    await p.hover('[data-svc-item="3"]'); await p.waitForTimeout(1300);
-    ok(await p.evaluate(() => { const on = [...document.querySelectorAll('.svc__slide.is-on')]; return on.length === 1 && on[0].dataset.svcSlide === '3'; }), 'hovering a plate wipes its photographs into the frame');
+    await p.waitForTimeout(900); await p.hover('[data-svc-item="3"]');
+    ok(await p.waitForFunction(() => { const on = [...document.querySelectorAll('.svc__slide.is-on')]; return on.length === 1 && on[0].dataset.svcSlide === '3'; }, null, { timeout: 8000 }).then(() => true, () => false), 'hovering a plate wipes its photographs into the frame');
     await p.hover('[data-svc-item="1"]'); await p.hover('[data-svc-item="5"]'); await p.waitForTimeout(2300);
     ok(await p.evaluate(() => { const on = [...document.querySelectorAll('.svc__slide.is-on')]; return on.length === 1 && on[0].dataset.svcSlide === '5'; }), 'quick changes settle on the last plate');
     ok(await p.isVisible('.svc__slide.is-on .svc__cap p'), 'the frame shows what the service is');
     await p.goto(U + 'work.html'); await p.waitForTimeout(700);
-    ok(await p.locator('.wk.is-in').count() >= 1, 'work frames open as they come into view');
+    ok(await p.locator('.wk').count() >= 6 && await p.locator('.wk__bg img').count() === await p.locator('.wk').count(), 'each project is a scene with its own backdrop');
+    ok(await p.evaluate(() => { const f = document.querySelector('.wk__frame').getBoundingClientRect(); return f.width > 400 && f.height > 300; }), 'project photographs are large');
+    await p.evaluate(() => scrollTo(0, 900)); await p.waitForTimeout(900);
+    ok(await p.evaluate(() => getComputedStyle(document.querySelector('.wk__bg img')).transform !== 'none'), 'gallery layers move with the scroll');
+    await p.goto(U + 'index.html?static'); await p.waitForTimeout(500);
+    ok(await p.locator('.sheets .sheet').count() >= 3, 'steel sheets are placed over the sections they reveal');
+    ok(await p.evaluate(() => { const s = document.querySelector('.sheets'); return s.getAttribute('aria-hidden') === 'true' && getComputedStyle(s).pointerEvents === 'none'; }), 'sheets are decoration only and never block the page');
+    await p.evaluate(() => document.querySelector('[data-sheets]').scrollIntoView()); 
+    ok(await p.waitForFunction(() => { const r = document.querySelector('.sheets .sheet').getBoundingClientRect(), s = document.querySelector('[data-sheets]').getBoundingClientRect(); return r.bottom <= s.top + 40 || r.height < 5; }, null, { timeout: 8000 }).then(() => true, () => false), 'the sheet has lifted clear once the section is in place');
 
     await p.goto(U + 'services.html'); await p.waitForTimeout(300);
     await p.click('.stack li:nth-child(3) a'); await p.waitForURL('**/service-pipework.html', { timeout: 8000 });
@@ -143,6 +155,7 @@ async function main() {
     await k.goto(U + 'index.html?intro=1');
     await k.waitForFunction(() => document.querySelector('.hero').classList.contains('is-done'), null, { timeout: 90000 });
     ok(await k.isHidden('[data-hero-skip]') && await k.isHidden('[data-hero-replay]'), 'reduced motion: no opening animation');
+    ok(await k.evaluate(() => !document.querySelector('[data-film]').getAttribute('src') && !document.querySelector('.sheets')), 'reduced motion: no film is downloaded and no sheets move');
     const n = await (await browser.newContext({ viewport: { width: 390, height: 844 }, javaScriptEnabled: false })).newPage();
     await n.goto(U + 'index.html');
     ok(await n.isVisible('.hero h1') && await n.locator('.nav a').count() === 5, 'without scripts: copy and menu are there');

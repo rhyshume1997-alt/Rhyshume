@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = fileURLToPath(new URL('./site/', import.meta.url));
 const PORT = Number(process.argv[2]) || 4173;
-const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.jpg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp', '.woff2': 'font/woff2', '.glb': 'model/gltf-binary', '.exr': 'application/octet-stream', '.txt': 'text/plain' };
+const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.jpg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp', '.woff2': 'font/woff2', '.glb': 'model/gltf-binary', '.mp4': 'video/mp4', '.webm': 'video/webm', '.exr': 'application/octet-stream', '.txt': 'text/plain' };
 const COMPRESS = new Set(['.html', '.js', '.mjs', '.css', '.json', '.glb', '.exr', '.txt']);
 const cache = new Map();
 
@@ -32,6 +32,14 @@ createServer(async (req, res) => {
     }
     const head = { 'Content-Type': TYPES[ext] || 'application/octet-stream', 'Content-Length': body.length, 'Cache-Control': 'no-cache', 'X-Robots-Tag': 'noindex, nofollow' };
     if (enc) head['Content-Encoding'] = enc;
+    const range = !enc && /^bytes=(\d*)-(\d*)$/.exec(req.headers.range || '');   // video needs byte ranges to seek (and to play at all in Safari)
+    if (range) {
+      const from = range[1] ? Number(range[1]) : body.length - Number(range[2]), to = range[1] && range[2] ? Math.min(Number(range[2]), body.length - 1) : body.length - 1;
+      if (!(from >= 0 && from <= to)) { res.writeHead(416, { 'Content-Range': `bytes */${body.length}` }).end(); return; }
+      res.writeHead(206, { ...head, 'Accept-Ranges': 'bytes', 'Content-Range': `bytes ${from}-${to}/${body.length}`, 'Content-Length': to - from + 1 }).end(req.method === 'HEAD' ? undefined : body.subarray(from, to + 1));
+      return;
+    }
+    if (!enc) head['Accept-Ranges'] = 'bytes';
     res.writeHead(200, head).end(req.method === 'HEAD' ? undefined : body);
   } catch (e) { res.writeHead(404, { 'Content-Type': 'text/plain' }).end('Not found'); }
 }).listen(PORT, '0.0.0.0', () => {

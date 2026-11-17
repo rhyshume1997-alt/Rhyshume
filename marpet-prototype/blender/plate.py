@@ -4,7 +4,8 @@
 import bpy, bmesh, sys, math
 OUT = sys.argv[1]; SAMPLES = int(sys.argv[2]) if len(sys.argv) > 2 else 96
 bpy.ops.wm.read_factory_settings(use_empty=True); sc = bpy.context.scene
-PW, PH, T, R = 0.60, 0.11, 0.004, 0.005
+SHEET = '--sheet' in sys.argv   # a full 16:9 sheet for the page-transition and section layers, instead of the small plate
+PW, PH, T, R = (1.92, 1.08, 0.004, 0.006) if SHEET else (0.60, 0.11, 0.004, 0.005)
 
 m = bpy.data.materials.new('Brushed 304'); m.use_nodes = True; nt = m.node_tree; b = nt.nodes['Principled BSDF']; N = nt.nodes; Lk = nt.links.new
 b.inputs['Base Color'].default_value = (0.62, 0.62, 0.63, 1); b.inputs['Metallic'].default_value = 1
@@ -74,7 +75,8 @@ w = bpy.data.worlds.new('W'); sc.world = w; w.use_nodes = True; w.node_tree.node
 cam = bpy.data.cameras.new('C'); cam.lens = 200; cam.sensor_width = 36
 co = bpy.data.objects.new('C', cam); sc.collection.objects.link(co); sc.camera = co; co.location = (0, 0, (PW + 0.004) / 2 / (18 / 200))
 sc.render.engine = 'CYCLES'; sc.cycles.samples = SAMPLES; sc.cycles.use_denoising = True; sc.render.film_transparent = True
-sc.render.resolution_x = 1812; sc.render.resolution_y = round(1812 * (PH + 0.004) / (PW + 0.004))
+RES = 1920 if SHEET else 1812
+sc.render.resolution_x = RES; sc.render.resolution_y = round(RES * (PH + 0.004) / (PW + 0.004))
 sc.view_settings.view_transform = 'AgX'
 sc.render.image_settings.file_format = 'PNG'; sc.render.image_settings.color_mode = 'RGBA'; sc.render.filepath = OUT
 bpy.ops.render.render(write_still=True)

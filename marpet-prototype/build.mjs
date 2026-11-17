@@ -61,6 +61,7 @@ ${main}
     <p class="legal"><span>${co.legalName}. Registered in Scotland ${co.companyNumber}. VAT number ${co.vat}.</span><span><a href="privacy.html">Privacy</a> · Development build. Photographs from marpet.co.uk.</span></p>
   </div>
 </footer>
+<script src="assets/motion.min.js" defer></script>
 <script src="assets/app.js" defer></script>
 </body>
 </html>
@@ -85,8 +86,7 @@ const svcSelector = `<div class="svc" data-svc>
   </div>`).join('')}</div>
 </div>`;
 
-const WK_SPAN = [7, 5, 5, 7, 4, 4, 4, 7, 5, 5, 7];
-const workCard = (p, i) => `<li class="wk" data-service="${p.service}" style="--span:${WK_SPAN[i % WK_SPAN.length]};--ar:${dims[p.hero][0] >= dims[p.hero][1] ? '4/3' : '4/5'}"><a href="project-${p.slug}.html" data-transition="frame" data-plate data-name="${esc(p.title)}"><span class="wk__no" aria-hidden="true" data-no="${String(i + 1).padStart(2, '0')}"></span><span class="wk__frame">${img(p.hero, p.title + ', Marpet photograph', i < 2 ? '' : 'loading="lazy"')}</span><span class="wk__cap"><b>${p.title}</b><span>${svc(p.service).short}</span></span></a></li>`;
+const workCard = (p, i) => `<li class="wk${i % 2 ? ' wk--alt' : ''}" data-service="${p.service}" style="--ar:${dims[p.hero][0] >= dims[p.hero][1] ? '4/3' : '4/5'};--max:${Math.round(dims[p.hero][0] * 1.15)}px"><a href="project-${p.slug}.html" data-transition="frame" data-plate data-name="${esc(p.title)}"><span class="wk__bg" aria-hidden="true"><img src="assets/img/bg/${p.hero.replace(/\.\w+$/, '.jpg')}" alt="" width="240" height="180" decoding="async" loading="lazy"></span><span class="wk__frame">${img(p.hero, p.title + ', Marpet photograph', i < 1 ? '' : 'loading="lazy"')}</span><span class="wk__cap"><span class="wk__no" aria-hidden="true" data-no="${String(i + 1).padStart(2, '0')}"></span><b>${p.title}</b><span class="wk__svc">${svc(p.service).name}</span><span class="wk__go">View project</span></span></a></li>`;
 
 const jnr = `
 <section class="section on-dark" id="jnr"><div class="wrap">
@@ -129,6 +129,7 @@ page({ file: 'index.html', title: 'Stainless steel fabrication, Glasgow', desc: 
     <div class="hero__stage" data-hero data-view="hero" data-logo="assets/img/${co.logo}" data-model="assets/render/conveyor.glb" data-hdri="assets/render/studio.exr">
       <img class="hero__poster" src="assets/render/hero.jpg" alt="Stainless steel belt conveyor with brushed side frames, orange bearing housings, a blue belt and the Marpet Fabrications logo plate" width="1600" height="1000" loading="lazy">
       <canvas aria-label="Interactive 3D model of a stainless steel belt conveyor. Drag sideways to turn it."></canvas>
+      <video class="hero__film" data-film muted playsinline preload="none" data-src="assets/render/opening.mp4" aria-hidden="true" tabindex="-1"></video>
       <div class="callout" data-anchor="1.35,0,0.9"><a href="service-conveyor-systems.html" data-name="Conveyor systems">Conveyor systems</a></div>
       <div class="callout" data-anchor="0.45,-0.28,0.4"><a href="service-general-fabrication.html" data-name="General fabrication">Frames and general fabrication</a></div>
     </div>
@@ -138,21 +139,23 @@ page({ file: 'index.html', title: 'Stainless steel fabrication, Glasgow', desc: 
       <p class="lead">Marpet design, manufacture and install stainless steel, mild steel and aluminium fabrication, in the workshop or on site.</p>
       <div class="btn-row"><a class="btn btn--primary" href="contact.html#enquiry" data-transition="shutter" data-name="Request a quote">Request a quote</a><a class="btn btn--ghost" href="services.html">Our services</a></div>
     </div>
-    ${[
-      ['0.2', '0.42', 'Design, manufacture, install', 'One firm from drawing to fitted on site.', 'services.html', 'Our services'],
-      ['0.48', '0.7', 'Stainless, mild steel, aluminium', 'Sheet metal and fabricated steelwork, made by skilled, time served tradesmen.', 'about.html', 'About Marpet'],
-      ['0.76', '2', 'Food and drink', 'Food processing, packaging and catering sectors, across Scotland and the North of England by the M74.', 'work.html', 'Our work'],
-    ].map(([a, z, h, p, href, label], i) => `<div class="scene__ch scene__fact" data-ch data-from="${a}" data-to="${z}">
+    ${[['0.2', '0.42', 'conveyor-systems'], ['0.48', '0.7', 'general-fabrication'], ['0.76', '2', 'production-lines']].map(([a, z, slug], i) => `<div class="scene__ch scene__fact" data-ch data-from="${a}" data-to="${z}">
       <p class="eyebrow">${String(i + 1).padStart(2, '0')} / 03</p>
-      <h2><span class="ln"><span>${h}</span></span></h2>
-      <p class="lead">${p}</p>
-      <a class="text-link" href="${href}">${label}</a>
+      <h2><span class="ln"><span>${svc(slug).name}</span></span></h2>
+      <p class="lead">${svc(slug).lead}</p>
+      <a class="text-link" href="service-${slug}.html" data-name="${esc(svc(slug).name)}">View ${svc(slug).short.toLowerCase()}</a>
     </div>`).join('\n    ')}
     <div class="scene__rail" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
     <p class="hero__note">3D model reconstructed from Marpet conveyor photographs. Drag to turn it. Not a specific delivered machine.</p>
     <div class="hero__ctrl"><button type="button" data-hero-skip hidden>Skip intro</button><button type="button" data-hero-replay hidden>Replay opening</button></div>
   </div>
 </section>
+<div class="facts">
+  <div><b>Design, manufacture, install</b>One firm from drawing to fitted on site.</div>
+  <div><b>Stainless, mild steel, aluminium</b>Sheet metal and fabricated steelwork.</div>
+  <div><b>Food and drink</b>Food processing, packaging and catering sectors.</div>
+  <div><b>East of Glasgow</b>Scotland and the North of England by the M74.</div>
+</div>
 <section class="section on-white"><div class="wrap split">
   <div data-reveal>
     <p class="eyebrow">About Marpet</p>
@@ -164,12 +167,12 @@ page({ file: 'index.html', title: 'Stainless steel fabrication, Glasgow', desc: 
   </div>
   <div class="beamed" data-reveal>${img('IMG_0276.jpg', 'Stainless steel side table beside a blue belt conveyor with the MF mark on its side panel', 'loading="lazy"')}</div>
 </div></section>
-<section class="section on-steel"><div class="wrap">
+<section class="section on-steel" data-sheets="lift"><div class="wrap">
   <p class="eyebrow">What we make</p>
   <div class="section-head"><h2>Services</h2><a class="text-link" href="services.html">All services</a></div>
   ${stack(services.slice(0, 5))}
 </div></section>
-<section class="section on-dark"><div class="wrap">
+<section class="section on-dark" data-sheets="split"><div class="wrap">
   <p class="eyebrow">Completed work</p>
   <div class="section-head"><h2>Featured work</h2><a class="text-link" href="work.html">All work</a></div>
   <ul class="grid">${featured.map(frameCard).join('')}</ul>
@@ -229,7 +232,7 @@ for (const s of services) {
   </div>
   <div><p class="eyebrow">Capability</p><h2>How it is made</h2><ul class="ticks">${s.capability.map((t) => `<li>${t}</li>`).join('')}</ul></div>
 </div></section>
-<section class="section on-steel"><div class="wrap">
+<section class="section on-steel" data-sheets="lift"><div class="wrap">
   <p class="eyebrow">Photographs</p>
   <div class="section-head"><h2>Examples of ${s.short.toLowerCase()}</h2></div>
   <div class="gallery">${s.images.map((f) => `<figure class="plate">${bolts}<div class="frame__img">${img(f, s.name + ', Marpet photograph', 'loading="lazy"')}${lowres(f)}</div></figure>`).join('')}</div>
@@ -248,7 +251,7 @@ page({ file: 'work.html', title: 'Our work', desc: 'Completed fabrication work b
   <h1>Our work</h1>
   <p class="lead">Conveyors, production lines, pipework, platforms and stainless fit-outs, photographed in the workshop and on site.</p>
 </div></section>
-<section class="section on-deep wk-sec"><div class="wrap">
+<section class="section on-deep wk-sec"><div class="wk-wrap">
   <h2 class="visually-hidden">Projects</h2>
   <div class="filter" data-filter role="group" aria-label="Filter projects by service"><button type="button" value="all" aria-pressed="true">All</button>${used.map((u) => `<button type="button" value="${u}" aria-pressed="false">${svc(u).short}</button>`).join('')}</div>
   <p class="filter-count" data-filter-count aria-live="polite">${projects.length} projects shown</p>
@@ -304,7 +307,7 @@ page({ file: 'about.html', title: 'About Marpet', desc: 'Marpet Fabrications, sh
   </div>
   <div class="beamed" data-reveal>${img('general-fabrication-1.jpg', 'Stainless steel roller table with enclosure in front of a Marpet Fabrications van', 'loading="lazy"')}</div>
 </div></section>
-<section class="section on-steel"><div class="wrap split">
+<section class="section on-steel" data-sheets="split"><div class="wrap split">
   <div class="beamed" data-reveal>${img('IMG_0283.jpg', 'Long stainless steel belt conveyor installed in a food production hall', 'loading="lazy"')}</div>
   <div data-reveal>
     <p class="eyebrow">How we work</p>

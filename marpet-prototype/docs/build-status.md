@@ -34,7 +34,7 @@ The visual upgrade (pinned homepage scene, services viewing frame, staggered wor
 | Build, with content validation | `npm run build` | 29 pages built; viewer bundle 709 KB (156 KB compressed) |
 | Type check (build script, server, content schema, enquiry function) | `npm run typecheck` | 0 errors |
 | Unit and build-output tests | `npm test` | 135 passed, 0 failed |
-| Browser tests | `npm run test:browser` | 292 passed, 0 failed |
+| Browser tests | `npm run test:browser` | 300 passed, 0 failed |
 | Existing site tests (repository root) | `node --test test/*.test.js` | 154 passed, 0 failed |
 
 The site itself is plain HTML, CSS and JavaScript, so there is no TypeScript source. Type checking covers the Node-side code through JSDoc types.
@@ -44,6 +44,9 @@ The browser suite covers, at 1440, 820 and 412 pixels wide:
 - every page: no script errors, no sideways scrolling, and no serious or critical accessibility failures from axe-core (WCAG 2.1 A and AA rules plus best practice);
 - navigation by plate, menu and photograph; back and forward; direct addresses; focus moving to the new page;
 - the homepage opening: menu and quote button usable from the start, skip, no replay for returning visitors;
+- the opening film: plays on a wide screen, skip stops it and hands over to the live model, not downloaded with reduced motion;
+- steel sheet reveals: decoration only, never block the page, clear of the section once it is in place;
+- Our Work scenes: one backdrop per project, large photographs, layers moving with scroll;
 - the project filter;
 - the enquiry form: error summary, focus, field marking, recovery, and the honest "not sent" state;
 - keyboard skip link, reduced motion, and the site with scripts switched off.
