@@ -1,0 +1,16 @@
+{
+  "name": "Marpet Fabrications",
+  "legalName": "Marpet Fabrications 1997 Limited",
+  "legalNameNote": "As shown in the existing logo. Confirm against Companies House before use in structured data.",
+  "strapline": "Sheet metal fabricators. Stainless steel, mild steel and aluminium.",
+  "phone": "0141 641 1778",
+  "phoneHref": "+441416411778",
+  "fax": "0141 641 7118",
+  "email": "info@marpet.co.uk",
+  "address": ["Unit 4 Clyde Workshops", "Fullarton Road", "Glasgow", "G32 8YL"],
+  "companyNumber": "172812",
+  "vat": "680561724",
+  "linkedin": null,
+  "customers": ["Warburtons Bread Bakery", "Diageo Whisky Distillery", "Barrs Soft Drinks", "Lightbody Celebration Cakes", "Lees of Scotland", "Aulds Delicious Desserts", "Pinneys of Annan", "Walter Black Foods", "Scotbeef", "Vion (formerly Grampian)"],
+  "source": "https://www.marpet.co.uk (all pages, fetched 17 Nov 2026)"
+}

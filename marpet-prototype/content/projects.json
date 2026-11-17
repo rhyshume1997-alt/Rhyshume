@@ -1,0 +1,13 @@
+[
+  {"slug":"belt-conveyor-with-side-tables","title":"Belt conveyor with side tables","service":"conveyor-systems","hero":"IMG_0283.jpg","images":["IMG_0276.jpg","IMG_0272.jpg"],"featured":true},
+  {"slug":"pin-conveyor-line","title":"Pin conveyor line","service":"conveyor-systems","hero":"conheaeder.jpg","images":["Conveyor-Belts1.jpg","Conveyor-Belts2.jpg","Conveyor-Belts3.jpg","Conveyor-Belts5.jpg"],"note":"The existing site labels these photographs \"Trout Conveyors\".","featured":true},
+  {"slug":"curved-modular-belt-conveyor","title":"Curved modular belt conveyor","service":"conveyor-systems","hero":"header7.jpg","images":["header6.jpg","Conveyor-Belts4.jpg","Conveyor-Belts6.jpg","Conveyor-Belts7.jpg"]},
+  {"slug":"inclined-roller-and-belt-conveyors","title":"Inclined roller and belt conveyors","service":"conveyor-systems","hero":"header1.jpg","images":["header3.jpg","belts1.jpg","belts2.jpg","belts4.jpg","belts6.jpg"]},
+  {"slug":"biscuit-line-conveyors","title":"Biscuit line conveyors","service":"production-lines","hero":"header13.jpg","images":["header4.jpg","cater2.jpg"],"featured":true},
+  {"slug":"crate-handling-line","title":"Crate handling line","service":"production-lines","hero":"prod1.jpg","images":["prod2.jpg"]},
+  {"slug":"process-pipework","title":"Process pipework","service":"pipework","hero":"pipeheader.jpg","images":["header5.jpg","Pipework2.jpg","Pipework4.jpg","Pipework5.jpg","Pipework6.jpg"]},
+  {"slug":"access-platform-and-stairs","title":"Access platform and stairs","service":"access-platforms","hero":"header11.jpg","images":["access2.jpg","access3.jpg","access4.jpg","access1.jpg"]},
+  {"slug":"stainless-kitchen-fit-out","title":"Stainless kitchen fit-out","service":"catering","hero":"newCatering2.jpg","images":["newCatering1.jpg","newCatering3.jpg"]},
+  {"slug":"roller-table-with-enclosure","title":"Roller table with enclosure","service":"general-fabrication","hero":"general-fabrication-1.jpg","images":["general-fabrication-2.jpg"]},
+  {"slug":"dental-surgery-cabinets","title":"Dental surgery cabinets","service":"dentistry","hero":"banner1.jpg","images":["denist1.jpg","denist2.jpg"]}
+]
