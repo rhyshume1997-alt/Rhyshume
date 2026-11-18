@@ -1,5 +1,10 @@
 # Photographic motion: what changed
 
+> **Update, 18 November 2026: footage-led direction.** The site is now built around media slots that take real
+> Marpet footage when it is filmed (see `docs/footage.md` and `shot-list.html`). The homepage tells the process:
+> welding opening, then Designed, Made in the workshop, Installed on site, then completed Marpet projects revealed
+> as large scenes. Everything below still applies: the same motion runs on footage or on the current stills.
+
 Direction (November 2026): the site should feel like cinematic industrial photography that moves. The supplied
 reference board (five AI-generated concept images) sets the look: dark tungsten-and-teal grade, crushed
 blacks, directional light, haze, shallow focus, macro steel. The reference images themselves are **not** used

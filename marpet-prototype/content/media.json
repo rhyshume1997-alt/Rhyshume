@@ -1,0 +1,190 @@
+{
+  "_readme": "Every photographic or video section on the site reads from this file. To add footage: put the files in site/assets/video/, fill in 'video' (and optionally 'videoMobile', 'poster'), then run npm run build. 'photo' is a genuine Marpet photograph from site/assets/img; 'still' is a path under site/assets/ for a crop made by tools/cine.py. 'mode' is 'loop' (plays while on screen) or 'scrub' (scroll moves through the clip). 'brief' says what to film. See docs/footage.md.",
+  "showShotNotes": true,
+  "slots": {
+    "home-weld": {
+      "use": "Homepage opening, first shot",
+      "still": "img/cine/macro-panel.webp",
+      "w": 2000,
+      "h": 706,
+      "alt": "",
+      "video": null,
+      "videoMobile": null,
+      "poster": null,
+      "mode": "loop",
+      "brief": {
+        "shot": "TIG welding stainless steel, extreme close-up",
+        "detail": "The arc lighting the steel and the welder's glove. Slow slide along the seam. Shoot the same seam wide afterwards.",
+        "length": "10 to 15 s",
+        "where": "Marpet workshop"
+      }
+    },
+    "home-detail": {
+      "use": "Homepage opening, second shot",
+      "still": "img/cine/macro-frame.webp",
+      "w": 1800,
+      "h": 821,
+      "alt": "",
+      "video": null,
+      "videoMobile": null,
+      "poster": null,
+      "mode": "loop",
+      "brief": {
+        "shot": "Finished weld or brushed frame with the Marpet plate, close",
+        "detail": "Slow slide along a finished conveyor side frame, ending on the Marpet logo plate. Raking light from one side.",
+        "length": "6 to 10 s",
+        "where": "Marpet workshop, before dispatch"
+      }
+    },
+    "home-reveal": {
+      "use": "Homepage opening, pull back (headline arrives here)",
+      "photo": "IMG_0283.jpg",
+      "alt": "Long stainless steel belt conveyor by Marpet in a food production hall",
+      "video": null,
+      "videoMobile": null,
+      "poster": null,
+      "mode": "loop",
+      "brief": {
+        "shot": "Wide pull back from the welder to the whole workshop",
+        "detail": "Same scene as the welding close-up, revealed wide: benches, stock, work in progress. Lights on, doors closed, no clutter in the foreground.",
+        "length": "8 to 12 s",
+        "where": "Marpet workshop"
+      }
+    },
+    "home-design": {
+      "use": "Homepage scroll, chapter 1: Designed",
+      "photo": "IMG_0272.jpg",
+      "alt": "",
+      "video": null,
+      "videoMobile": null,
+      "poster": null,
+      "mode": "loop",
+      "brief": {
+        "shot": "Measuring and marking out",
+        "detail": "Tape and square on sheet or on site, a drawing on the bench, a hand marking a line. Close and medium shots.",
+        "length": "8 to 12 s",
+        "where": "Workshop or a client site (with permission)"
+      }
+    },
+    "home-workshop": {
+      "use": "Homepage scroll, chapter 2: Made in the workshop",
+      "photo": "general-fabrication-1.jpg",
+      "alt": "",
+      "video": null,
+      "videoMobile": null,
+      "poster": null,
+      "mode": "loop",
+      "brief": {
+        "shot": "Fabrication in progress",
+        "detail": "Folding or cutting sheet, grinding and dressing a weld, fitting a frame together. Sparks welcome. Several short takes.",
+        "length": "8 to 12 s each",
+        "where": "Marpet workshop"
+      }
+    },
+    "home-site": {
+      "use": "Homepage scroll, chapter 3: Installed on site",
+      "photo": "header13.jpg",
+      "alt": "",
+      "video": null,
+      "videoMobile": null,
+      "poster": null,
+      "mode": "loop",
+      "brief": {
+        "shot": "Installation and a finished line running",
+        "detail": "Fitting a section at a client site, then the finished conveyor or line running with product. Needs the client's written permission.",
+        "length": "8 to 12 s",
+        "where": "Client site"
+      }
+    },
+    "page-services": {
+      "use": "Services page header",
+      "photo": "IMG_0283.jpg",
+      "alt": "",
+      "video": null,
+      "videoMobile": null,
+      "poster": null,
+      "mode": "loop",
+      "brief": {
+        "shot": "Workshop wide, work in progress",
+        "detail": "A slow move across the workshop with several jobs on the go.",
+        "length": "8 to 12 s",
+        "where": "Marpet workshop"
+      }
+    },
+    "page-work": {
+      "use": "Our Work header",
+      "photo": "conheaeder.jpg",
+      "alt": "",
+      "video": null,
+      "videoMobile": null,
+      "poster": null,
+      "mode": "loop",
+      "brief": {
+        "shot": "A completed Marpet line running",
+        "detail": "Slow move along a finished, installed line with product on it. Needs the client's written permission.",
+        "length": "8 to 12 s",
+        "where": "Client site"
+      }
+    },
+    "page-about": {
+      "use": "About header",
+      "photo": "general-fabrication-1.jpg",
+      "alt": "",
+      "video": null,
+      "videoMobile": null,
+      "poster": null,
+      "mode": "loop",
+      "brief": {
+        "shot": "Clyde Workshops: the yard, a van loading, the workshop door",
+        "detail": "Establishing shots of the premises and a job leaving for site.",
+        "length": "8 to 12 s",
+        "where": "Clyde Workshops"
+      }
+    },
+    "page-team": {
+      "use": "Team header",
+      "photo": "IMG_0272.jpg",
+      "alt": "",
+      "video": null,
+      "videoMobile": null,
+      "poster": null,
+      "mode": "loop",
+      "brief": {
+        "shot": "The team at work",
+        "detail": "Hands, tools and faces at work. Only people who have agreed to appear.",
+        "length": "8 to 12 s",
+        "where": "Marpet workshop"
+      }
+    },
+    "page-contact": {
+      "use": "Contact header",
+      "photo": "IMG_0276.jpg",
+      "alt": "",
+      "video": null,
+      "videoMobile": null,
+      "poster": null,
+      "mode": "loop",
+      "brief": {
+        "shot": "Quiet workshop detail",
+        "detail": "A slow, calm shot: light on a finished bench or a stack of sheet. Text sits over it, so keep the left side simple.",
+        "length": "8 to 12 s",
+        "where": "Marpet workshop"
+      }
+    },
+    "band-about": {
+      "use": "About page, film band",
+      "photo": "IMG_0276.jpg",
+      "alt": "",
+      "video": null,
+      "videoMobile": null,
+      "poster": null,
+      "mode": "loop",
+      "brief": {
+        "shot": "A fabricator at the bench, then fitting on site",
+        "detail": "Medium shot of hands and tools at work in the workshop, then the same job being fitted at a client site.",
+        "length": "10 to 15 s",
+        "where": "Marpet workshop and a client site (with permission)"
+      }
+    }
+  }
+}

@@ -199,6 +199,58 @@
   }
   const on = (el, ev, fn, o) => { el.addEventListener(ev, fn, o); cleanup.push(() => el.removeEventListener(ev, fn, o)); };
 
+  // ---- Video slots (content/media.json). A slot with footage renders as <video data-video>; this loads it
+  // only when needed, plays it only while it can be seen, and in "scrub" mode lets scroll move through it.
+  // Reduced motion, data saver, or a failed load leave the poster frame in place. ----
+  const saveData = () => Boolean(navigator.connection && navigator.connection.saveData);
+  const videoOK = () => !reduce.matches && !saveData();
+  function loadVideo(v) {
+    if (v.dataset.loaded || !videoOK()) return false;
+    v.dataset.loaded = '1';
+    v.src = (innerWidth < 760 && v.dataset.srcMobile) || v.dataset.src;
+    v.addEventListener('error', () => v.removeAttribute('src'), { once: true });   // back to the poster
+    v.load();
+    return true;
+  }
+  const playVideo = (v) => { if (v.dataset.mode === 'scrub') return; loadVideo(v); if (v.getAttribute('src') && v.paused) v.play().catch(() => {}); };
+  const pauseVideo = (v) => { if (!v.paused) v.pause(); };
+  // videos on the homepage stage: only the shot that is showing plays
+  // (shots stack, so the last visible one is on top: only it plays, and only its "to film" note shows)
+  function syncStage(section) {
+    const shots = $$('.shot', section), shown = shots.filter((s) => getComputedStyle(s).visibility === 'visible' && +getComputedStyle(s).opacity > 0.01);
+    const top = shown[shown.length - 1];
+    shots.forEach((s) => {
+      s.classList.toggle('is-top', s === top);
+      const v = $('video[data-video]', s);
+      if (!v) return;
+      if (s === top || (shown.includes(s) && top && +getComputedStyle(top).opacity < 0.99)) playVideo(v); else pauseVideo(v);
+    });
+  }
+  function initVideo() {
+    const vids = $$('video[data-video]').filter((v) => !v.closest('.shot'));
+    if (!vids.length || !videoOK()) return;
+    const io = new IntersectionObserver((es) => es.forEach((e) => (e.isIntersecting ? playVideo(e.target) : pauseVideo(e.target))), { threshold: 0.15 });
+    vids.filter((v) => v.dataset.mode !== 'scrub').forEach((v) => io.observe(v));
+    cleanup.push(() => io.disconnect());
+    const scrub = vids.filter((v) => v.dataset.mode === 'scrub');
+    if (!scrub.length) return;
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      scrub.forEach((v) => {
+        const box = v.closest('[data-film-band]') || v.parentElement, r = box.getBoundingClientRect();
+        if (r.bottom < -innerHeight || r.top > innerHeight * 2) return;
+        loadVideo(v);
+        const span = r.height - innerHeight, p = span > 0 ? clamp01(-r.top / span) : clamp01((innerHeight - r.top) / (innerHeight + r.height));
+        if (v.duration && Math.abs(v.currentTime - p * v.duration) > 0.04 && !v.seeking) v.currentTime = Math.min(v.duration - 0.05, p * v.duration);
+      });
+    };
+    const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+    on(window, 'scroll', onScroll, { passive: true });
+    scrub.forEach((v) => on(v, 'loadedmetadata', onScroll));
+    update();
+  }
+
   // Homepage opening, built from Marpet photographs: close on the brushed side panel of a Marpet conveyor,
   // a light travels across it, the camera drifts along the steel, then dissolves and pulls back into the
   // production hall where the headline arrives. Scroll then carries the camera on through three scenes.
@@ -219,16 +271,20 @@
       section.classList.add('is-done'); ready(); skip.hidden = true; replay.hidden = false;
       try { localStorage.setItem('mp-intro', '1'); } catch (e) {}
       if (!scene) scene = initScene(section);
+      syncStage(section);
     };
     const end = () => { if (tl && tl.isActive()) tl.progress(1); };
     if (wantIntro) {
       tl = MP.opening(section).eventCallback('onComplete', done);
       skip.hidden = false;
       const start = () => { if (section.isConnected) tl.play(0); };
-      const first = $('[data-shot=macro] img', section);
-      // start when the first close-up has arrived, or after a second and a half whatever happens
+      const first = $('[data-shot=macro] .m', section);
+      // start when the first shot has arrived (photograph, or the first frame of footage), or after 1.5 s whatever happens
       const go = setTimeout(start, 1500); cleanup.push(() => clearTimeout(go));
-      if (first.complete) { clearTimeout(go); start(); } else on(first, 'load', () => { clearTimeout(go); start(); });
+      const ready_ = () => { clearTimeout(go); start(); };
+      if (first.tagName === 'VIDEO') { if (loadVideo(first)) { first.play().catch(() => {}); on(first, 'loadeddata', ready_); } else ready_(); }
+      else if (first.complete) ready_(); else on(first, 'load', ready_);
+      tl.eventCallback('onUpdate', () => syncStage(section));
       on(skip, 'click', end);
       on(window, 'keydown', (e) => { if (e.key === 'Escape') end(); });
       on(window, 'wheel', end, { passive: true });
@@ -241,7 +297,7 @@
     on(replay, 'click', () => {
       scrollTo(0, 0); section.classList.remove('is-ready', 'is-done'); replay.hidden = true; skip.hidden = false;
       if (scene) { scene.kill(); scene = null; }
-      tl = MP.opening(section).eventCallback('onComplete', done); tl.play(0);
+      tl = MP.opening(section).eventCallback('onComplete', done).eventCallback('onUpdate', () => syncStage(section)); tl.play(0);
     });
   }
 
@@ -258,7 +314,7 @@
       if (!alive) return;
       const r = section.getBoundingClientRect(), span = r.height - innerHeight;
       const p = span > 0 ? clamp01(-r.top / span) : 0;
-      MP.gsap.to(tl, { progress: Math.min(1, p / 0.94), duration: 0.7, ease: 'power2.out', overwrite: true });   // a little weight, like a camera on a slider
+      MP.gsap.to(tl, { progress: Math.min(1, p / 0.94), duration: 0.7, ease: 'power2.out', overwrite: true, onUpdate: () => syncStage(section) });   // a little weight, like a camera on a slider
       let on_ = -1;
       chapters.forEach((c, i) => { const live = p >= c.from && p < c.to; c.el.classList.toggle('is-on', live); c.el.inert = !live; if (live) on_ = i; });
       if (on_ !== lastOn) { lastOn = on_; rail.forEach((d, i) => d.classList.toggle('is-on', i === on_)); }
@@ -445,7 +501,7 @@
   function init() {
     document.documentElement.classList.add('js');
     if (window.MP) window.MP.init($('main'));
-    initHero(); initSvc(); initFilter(); initReveal(); initForm(); initTest();
+    initHero(); initVideo(); initSvc(); initFilter(); initReveal(); initForm(); initTest();
   }
   init();
 })();

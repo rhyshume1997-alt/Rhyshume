@@ -20,7 +20,7 @@ function splitWords(el) {
 
 function headings(root) {
   root.querySelectorAll('.section h2:not(.visually-hidden), .page-head h1, .cta h2').forEach((h) => {
-    if (h.closest('[data-scene]') || h.querySelector('a, span.confirm')) return;
+    if (h.closest('[data-scene], [data-film-band]') || h.querySelector('a, span.confirm')) return;
     const parts = splitWords(h);
     gsap.from(parts, { yPercent: 108, duration: 0.95, ease: 'power3.out', stagger: 0.045, scrollTrigger: { trigger: h, start: 'top 88%', once: true } });
   });
@@ -73,6 +73,20 @@ function heads(root) {
   });
 }
 
+// Film bands: the media is pinned while the section passes; it settles from a push-in and the copy rises
+// through it, word by word. Works the same whether the slot holds footage or a photograph.
+function bands(root) {
+  root.querySelectorAll('[data-film-band]').forEach((band) => {
+    const media = band.querySelector('.film-band__media'), copy = band.querySelector('.film-band__copy');
+    const tl = gsap.timeline({ scrollTrigger: { trigger: band, start: 'top bottom', end: 'bottom bottom', scrub: 0.5 } });
+    tl.fromTo(media, { scale: 1.22, yPercent: -4 }, { scale: 1.02, yPercent: 3, ease: 'none', duration: 1 }, 0)
+      .fromTo(copy, { yPercent: 40, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, ease: 'power2.out', duration: 0.35 }, 0.25)
+      .to(copy, { yPercent: -30, autoAlpha: 0, ease: 'power2.in', duration: 0.2 }, 0.8);
+    const light = band.querySelector('.fx__light');
+    if (light) tl.fromTo(light, { xPercent: -110 }, { xPercent: 110, ease: 'none', duration: 1 }, 0);
+  });
+}
+
 // Our Work: each project is a scene. A soft enlarged copy of the photograph fills the background and
 // drifts slowly; the sharp photograph and the title move at their own rates in front of it.
 function work(root) {
@@ -102,7 +116,7 @@ function work(root) {
 export function opening(section) {
   const q = (s) => section.querySelector(s);
   const macro = q('[data-shot=macro]'), frame = q('[data-shot=frame]'), hall = q('[data-shot=hall]'), light = q('.fx__light');
-  const mi = macro.querySelector('img'), fi = frame.querySelector('img'), hi = hall.querySelector('.shot__img img'), hb = hall.querySelector('.shot__bg img');
+  const mi = macro.querySelector('.m'), fi = frame.querySelector('.m'), hi = hall.querySelector('.shot__img .m'), hb = hall.querySelector('.shot__bg img');
   gsap.set([macro], { autoAlpha: 1 }); gsap.set([frame, hall], { autoAlpha: 0 });
   section.classList.add('is-opening');
   const tl = gsap.timeline({ paused: true, defaults: { ease: 'none' }, onComplete: () => section.classList.remove('is-opening') });
@@ -133,7 +147,7 @@ export function scene(section) {
   gsap.set(sheet, { xPercent: 115, yPercent: 0 });
   shots.forEach((s, i) => {
     const [a, z] = seg[i], d = z - a + 0.04;
-    const img = s.querySelector('.shot__img img'), bg = s.querySelector('.shot__bg img'), fg = s.querySelector('.shot__fg img');
+    const img = s.querySelector('.shot__img .m'), bg = s.querySelector('.shot__bg img'), fg = s.querySelector('.shot__fg img');
     if (i) {
       const from = [null, { xPercent: 115, yPercent: 0 }, { xPercent: 0, yPercent: 115 }, { xPercent: -115, yPercent: 0 }][i];
       const to = [null, { xPercent: -115, yPercent: 0 }, { xPercent: 0, yPercent: -115 }, { xPercent: 115, yPercent: 0 }][i];
@@ -151,7 +165,7 @@ export function init(root = document) {
   kill();
   if (reduce.matches) return;
   document.documentElement.classList.add('has-motion');
-  ctx = gsap.context(() => { headings(root); sheets(root); photos(root); work(root); heads(root); });
+  ctx = gsap.context(() => { headings(root); sheets(root); photos(root); work(root); heads(root); bands(root); });
   ScrollTrigger.refresh();
 }
 export function kill() {

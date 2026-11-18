@@ -103,8 +103,8 @@ async function main() {
     await p.goto(U + 'index.html?static'); await p.waitForTimeout(500);
     ok(await p.locator('.sheets .sheet').count() >= 3, 'steel sheets are placed over the sections they reveal');
     ok(await p.evaluate(() => { const s = document.querySelector('.sheets'); return s.getAttribute('aria-hidden') === 'true' && getComputedStyle(s).pointerEvents === 'none'; }), 'sheets are decoration only and never block the page');
-    await p.evaluate(() => document.querySelector('[data-sheets]').scrollIntoView()); 
-    ok(await p.waitForFunction(() => { const r = document.querySelector('.sheets .sheet').getBoundingClientRect(), s = document.querySelector('[data-sheets]').getBoundingClientRect(); return r.bottom <= s.top + 40 || r.height < 5; }, null, { timeout: 8000 }).then(() => true, () => false), 'the sheet has lifted clear once the section is in place');
+    await p.evaluate(() => document.querySelector('[data-sheets=lift]').scrollIntoView()); 
+    ok(await p.waitForFunction(() => { const r = document.querySelector('[data-sheets=lift] .sheets .sheet').getBoundingClientRect(), s = document.querySelector('[data-sheets=lift]').getBoundingClientRect(); return r.bottom <= s.top + 40 || r.right <= s.left + 40 || r.left >= s.right - 40 || r.height < 5; }, null, { timeout: 8000 }).then(() => true, () => false), 'the sheet has lifted clear once the section is in place');
 
     await p.goto(U + 'services.html'); await p.waitForTimeout(300);
     await p.click('.stack li:nth-child(3) a'); await p.waitForURL('**/service-pipework.html', { timeout: 8000 });
@@ -144,6 +144,18 @@ async function main() {
     ok(/Nothing has been sent yet/.test(status), 'with no sending service, the form says nothing was sent');
     ok((await p.getAttribute('#enquiry-status a', 'href')).startsWith('mailto:info@marpet.co.uk?subject='), 'and offers the enquiry by email');
     ok((await p.inputValue('input[name=ts]')).length > 10 && (await p.inputValue('#f-website')) === '', 'spam fields are in place');
+    // ---- video sections (labelled test pattern on the test page; real footage drops into the same slots) ----
+    await p.goto(U + 'index.html');
+    ok(await p.locator('[data-shot=hall] .shot-note').count() === 1 && /To film/.test(await p.textContent('[data-shot=hall] .shot-note')), 'placeholder stills say what needs filming');
+    await p.goto(U + 'media-test.html'); await p.waitForTimeout(300);
+    const vstate = () => p.evaluate(() => [...document.querySelectorAll('video[data-video]')].map((v) => ({ mode: v.dataset.mode, src: !!v.getAttribute('src'), paused: v.paused, t: v.currentTime })));
+    ok(await p.waitForFunction(() => { const v = document.querySelector('.page-head video[data-video]'); return v && !v.paused && v.currentTime > 0.2; }, null, { timeout: 15000 }).then(() => true, () => false), 'a looping video section plays while on screen');
+    await p.evaluate(() => document.querySelectorAll('[data-film-band]')[1].scrollIntoView()); await p.waitForTimeout(1200);
+    ok((await vstate())[0].paused, 'and pauses once it has left the screen');
+    const scrubAt = async (f) => { await p.evaluate((f) => { const b = document.querySelectorAll('[data-film-band]')[1]; scrollTo(0, b.offsetTop + (b.offsetHeight - innerHeight) * f); }, f); await p.waitForTimeout(900); return p.evaluate(() => document.querySelectorAll('[data-film-band]')[1].querySelector('video').currentTime); };
+    const t1 = await scrubAt(0.2), t2 = await scrubAt(0.8), t3 = await scrubAt(0.3);
+    ok(t2 > t1 + 2 && t3 < t2 - 2, `scroll moves through a scrub video, both ways (${t1.toFixed(1)}s, ${t2.toFixed(1)}s, ${t3.toFixed(1)}s)`);
+    ok((await vstate()).find((v) => v.mode === 'scrub').paused, 'a scrub video never plays by itself');
     await ctx.close();
 
     // ---- keyboard, reduced motion, no script ----
@@ -158,6 +170,8 @@ async function main() {
     ok(await k.evaluate(() => !document.querySelector('.sheets') && getComputedStyle(document.querySelector('[data-shot=hall]')).visibility === 'visible' && !document.querySelector('.has-motion')), 'reduced motion: a still photograph, no moving sheets or panels');
     await k.goto(U + 'work.html');
     ok(await k.evaluate(() => getComputedStyle(document.querySelector('.wk__panel')).display === 'none'), 'reduced motion: project photographs are never covered');
+    await k.goto(U + 'media-test.html'); await k.waitForTimeout(1500);
+    ok(await k.evaluate(() => [...document.querySelectorAll('video[data-video]')].every((v) => !v.getAttribute('src') && v.poster)), 'reduced motion: video sections show their still frame and download no footage');
     const n = await (await browser.newContext({ viewport: { width: 390, height: 844 }, javaScriptEnabled: false })).newPage();
     await n.goto(U + 'index.html');
     ok(await n.isVisible('.hero h1') && await n.locator('.nav a').count() === 5, 'without scripts: copy and menu are there');

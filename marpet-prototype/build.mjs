@@ -1,10 +1,15 @@
 // Builds the static prototype into ./site from ./content/*.json.
 // Run: node build.mjs   Then serve ./site with any static server.
 import { readFileSync, writeFileSync } from 'node:fs';
-import { validateContent } from './content/schema.mjs';
+import { validateContent, validateMedia } from './content/schema.mjs';
 const J = (f) => JSON.parse(readFileSync(new URL(`./content/${f}.json`, import.meta.url), 'utf8'));
 const co = J('company'), services = J('services'), projects = J('projects'), team = J('team'), li = J('linkedin'), dims = J('image-dims');
+const mediaCfg = J('media'), slots = mediaCfg.slots;
+// every service page header is a media slot too; it starts on the service's own photograph
+for (const s of services) slots[`service-${s.slug}`] ??= { use: `${s.name} page header`, photo: s.hero, alt: '', video: null, videoMobile: null, poster: null, mode: 'loop',
+  brief: { shot: `${s.name}: work in progress, then the finished job`, detail: 'This kind of work being fabricated in the workshop, then the finished job in place. Client sites need written permission.', length: '8 to 12 s', where: 'Workshop and client site' } };
 const problems = validateContent({ company: co, services, projects, team, linkedin: li, dims });
+problems.push(...validateMedia(mediaCfg, dims, new URL('./site/assets/', import.meta.url)));
 if (problems.length) { console.error('Content problems:\n- ' + problems.join('\n- ')); process.exit(1); }
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
 const svc = (slug) => services.find((s) => s.slug === slug);
@@ -13,11 +18,34 @@ const stem = (f) => f.replace(/\.\w+$/, '');
 // graded copy of a genuine Marpet photograph (tools/cine.py): same picture, cinematic colour and tone
 const cimg = (file, alt, attrs = '') => { const [w, h] = dims[file] || [4, 3]; const W = w >= 900 ? 1600 : 1280; return `<img src="assets/img/cine/${stem(file)}.webp" alt="${esc(alt)}" width="${W}" height="${Math.round(h * W / w)}" decoding="async" ${attrs}>`; };
 const cbg = (file) => `<img src="assets/img/cine/${stem(file)}-bg.webp" alt="" width="480" height="${Math.round(480 * (dims[file] || [4, 3])[1] / (dims[file] || [4, 3])[0])}" decoding="async">`;
+// ---- media slots (content/media.json): video when supplied, otherwise the genuine Marpet still ----
+const slot = (id) => { const s = slots[id]; if (!s) throw new Error('No media slot ' + id); return s; };
+const stillSrc = (s) => (s.still ? `assets/${s.still}` : `assets/img/cine/${stem(s.photo)}.webp`);
+const stillDims = (s) => { if (s.still) return [s.w, s.h]; const [w, h] = dims[s.photo]; const W = w >= 900 ? 1600 : 1280; return [W, Math.round(h * W / w)]; };
+const media = (id, { alt = null, attrs = '' } = {}) => {
+  const s = slot(id), a = alt ?? s.alt ?? '', [w, h] = stillDims(s);
+  if (s.video) {
+    const label = a ? `role="img" aria-label="${esc(a)}"` : 'aria-hidden="true"';
+    return `<video class="m" data-video data-slot="${id}" data-mode="${s.mode || 'loop'}" data-src="assets/${s.video}"${s.videoMobile ? ` data-src-mobile="assets/${s.videoMobile}"` : ''} poster="${s.poster ? 'assets/' + s.poster : stillSrc(s)}" muted playsinline loop preload="none" width="${w}" height="${h}" ${label}></video>`;
+  }
+  return `<img class="m" data-slot="${id}" src="${stillSrc(s)}" alt="${esc(a)}" width="${w}" height="${h}" decoding="async" ${attrs}>`;
+};
+// soft backdrop for a slot: the blurred copy of its photograph
+const mbg = (id) => { const s = slot(id); return s.photo ? cbg(s.photo) : `<img src="${stillSrc(s)}" alt="" decoding="async" class="is-soft">`; };
+// development builds label every placeholder still with what needs filming (showShotNotes in media.json)
+const note = (id) => { const s = slot(id); return mediaCfg.showShotNotes && !s.video ? `<span class="shot-note" aria-hidden="true"><b>Placeholder still</b>To film: ${esc(s.brief.shot)}</span>` : ''; };
 const FX = '<div class="fx" aria-hidden="true"><i class="fx__light"></i><i class="fx__haze"></i><i class="fx__grain"></i><i class="fx__vig"></i></div>';
 // full-bleed photographic header for pages without their own lead photograph
-const cineBg = (file) => `<div class="ph-scene" aria-hidden="true"><div class="ph-scene__img">${cimg(file, '')}</div>${FX}</div>`;
+const cineScene = (id) => `<div class="ph-scene" aria-hidden="true"><div class="ph-scene__img">${media(id, { alt: '' })}</div>${FX}${note(id)}</div>`;
 // layered header for service and project pages: soft backdrop of the same photograph behind the sharp one
-const layerBg = (file) => `<div class="ph-scene ph-scene--soft" aria-hidden="true"><div class="ph-scene__img">${cbg(file)}</div>${FX}</div>`;
+const layerScene = (id) => (slot(id).video ? cineScene(id) : `<div class="ph-scene ph-scene--soft" aria-hidden="true"><div class="ph-scene__img">${mbg(id)}</div>${FX}${note(id)}</div>`);
+// full-width film section: the media stays pinned while the copy passes over it; scroll can also drive the clip
+const layerScene_p = (p) => `<div class="ph-scene ph-scene--soft" aria-hidden="true"><div class="ph-scene__img">${cbg(p.hero)}</div>${FX}</div>`;   // projects use their own photographs only
+const filmBand = (id, { eyebrow, heading, text = '', link = '' }) => `<section class="film-band" data-film-band>
+  <div class="film-band__pin"><div class="film-band__media">${media(id)}</div>${FX}${note(id)}
+    <div class="wrap film-band__copy"><p class="eyebrow">${eyebrow}</p><h2>${heading}</h2>${text ? `<p class="lead">${text}</p>` : ''}${link}</div>
+  </div>
+</section>`;
 const lowres = (file) => (dims[file] && dims[file][0] < 600 ? `<span class="res">Source ${dims[file][0]}px wide</span>` : '');
 const ph = (title, body) => `<div class="ph"><b>Placeholder: ${title}</b><p>${body}</p></div>`;
 const bolts = '<i class="bolt tl"></i><i class="bolt tr"></i><i class="bolt bl"></i><i class="bolt br"></i>';
@@ -47,7 +75,7 @@ function page({ file, title, desc, section, page, main }) {
 ${page === 'home' ? `<link rel="preload" href="assets/img/cine/macro-panel.webp" as="image" fetchpriority="high">\n<script type="application/ld+json">${JSON.stringify(orgLd)}</script>\n` : ''}</head>
 <body data-page="${page}" data-section="${section}" data-nav-scope>
 <a class="skip" href="#main">Skip to content</a>
-<p class="proto-bar">Development build. Not the live Marpet site. <a href="dev-notes.html">Open items and test pages</a></p>
+<p class="proto-bar">Development build. Not the live Marpet site. <a href="dev-notes.html">Open items and test pages</a> · <a href="shot-list.html">Shot list</a></p>
 <header class="site-header">
   <div class="wrap">
     <a class="brand" href="index.html" data-name="Home"><img src="assets/img/${co.logo}" alt="Marpet Fabrications, home" width="${dims[co.logo][0]}" height="${dims[co.logo][1]}"></a>
@@ -137,12 +165,12 @@ page({ file: 'index.html', title: 'Stainless steel fabrication, Glasgow', desc: 
 <section class="hero scene cine" data-scene data-open>
   <div class="scene__pin">
     <div class="hero__stage cine__stage" data-stage>
-      <div class="shot shot--macro" data-shot="macro"><img src="assets/img/cine/macro-panel.webp" alt="" width="2000" height="706" decoding="async" fetchpriority="high"></div>
-      <div class="shot shot--frame" data-shot="frame"><img src="assets/img/cine/macro-frame.webp" alt="" width="1800" height="821" decoding="async"></div>
-      <div class="shot shot--hall" data-shot="hall"><div class="shot__bg">${cbg('IMG_0283.jpg')}</div><div class="shot__img">${cimg('IMG_0283.jpg', 'Long stainless steel belt conveyor by Marpet in a food production hall')}</div></div>
-      <div class="shot shot--ch" data-shot="ch1"><div class="shot__bg">${cbg('conheaeder.jpg')}</div><div class="shot__img">${cimg('conheaeder.jpg', '')}</div><div class="shot__fg">${cbg('conheaeder.jpg')}</div></div>
-      <div class="shot shot--ch" data-shot="ch2"><div class="shot__bg">${cbg('general-fabrication-1.jpg')}</div><div class="shot__img">${cimg('general-fabrication-1.jpg', '')}</div><div class="shot__fg">${cbg('general-fabrication-1.jpg')}</div></div>
-      <div class="shot shot--ch" data-shot="ch3"><div class="shot__bg">${cbg('header13.jpg')}</div><div class="shot__img">${cimg('header13.jpg', '')}</div><div class="shot__fg">${cbg('header13.jpg')}</div></div>
+      <div class="shot shot--macro" data-shot="macro">${media('home-weld', { attrs: 'fetchpriority="high"' })}${note('home-weld')}</div>
+      <div class="shot shot--frame" data-shot="frame">${media('home-detail')}${note('home-detail')}</div>
+      <div class="shot shot--hall" data-shot="hall"><div class="shot__bg">${mbg('home-reveal')}</div><div class="shot__img">${media('home-reveal')}</div>${note('home-reveal')}</div>
+      <div class="shot shot--ch" data-shot="ch1"><div class="shot__bg">${mbg('home-design')}</div><div class="shot__img">${media('home-design')}</div><div class="shot__fg">${mbg('home-design')}</div>${note('home-design')}</div>
+      <div class="shot shot--ch" data-shot="ch2"><div class="shot__bg">${mbg('home-workshop')}</div><div class="shot__img">${media('home-workshop')}</div><div class="shot__fg">${mbg('home-workshop')}</div>${note('home-workshop')}</div>
+      <div class="shot shot--ch" data-shot="ch3"><div class="shot__bg">${mbg('home-site')}</div><div class="shot__img">${media('home-site')}</div><div class="shot__fg">${mbg('home-site')}</div>${note('home-site')}</div>
       ${FX}
       <div class="wipe" aria-hidden="true"><i class="wipe__sheet"></i></div>
     </div>
@@ -152,11 +180,15 @@ page({ file: 'index.html', title: 'Stainless steel fabrication, Glasgow', desc: 
       <p class="lead">Marpet design, manufacture and install stainless steel, mild steel and aluminium fabrication, in the workshop or on site.</p>
       <div class="btn-row"><a class="btn btn--primary" href="contact.html#enquiry" data-transition="shutter" data-name="Request a quote">Request a quote</a><a class="btn btn--ghost" href="services.html">Our services</a></div>
     </div>
-    ${[['0.22', '0.44', 'conveyor-systems'], ['0.5', '0.72', 'general-fabrication'], ['0.78', '2', 'production-lines']].map(([a, z, slug], i) => `<div class="scene__ch scene__fact" data-ch data-from="${a}" data-to="${z}">
+    ${[
+      ['0.22', '0.44', 'Designed', 'Marpet designs the work, or makes it to your design.', 'services.html', 'Our services'],
+      ['0.5', '0.72', 'Made in the workshop', 'Made by skilled, time served tradesmen in the fabrication workshop.', 'about.html', 'About Marpet'],
+      ['0.78', '2', 'Installed on site', 'Fitted at your premises, from a single table to a complete production line.', 'work.html', 'Completed work'],
+    ].map(([a, z, h, lead, href, label], i) => `<div class="scene__ch scene__fact" data-ch data-from="${a}" data-to="${z}">
       <p class="eyebrow">${String(i + 1).padStart(2, '0')} / 03</p>
-      <h2><span class="ln"><span>${svc(slug).name}</span></span></h2>
-      <p class="lead">${svc(slug).lead}</p>
-      <a class="text-link" href="service-${slug}.html" data-name="${esc(svc(slug).name)}">View ${svc(slug).short.toLowerCase()}</a>
+      <h2><span class="ln"><span>${h}</span></span></h2>
+      <p class="lead">${lead}</p>
+      <a class="text-link" href="${href}">${label}</a>
     </div>`).join('\n    ')}
     <div class="scene__rail" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
     <p class="hero__note">Marpet photographs, colour graded. No generated imagery.</p>
@@ -169,6 +201,10 @@ page({ file: 'index.html', title: 'Stainless steel fabrication, Glasgow', desc: 
   <div><b>Food and drink</b>Food processing, packaging and catering sectors.</div>
   <div><b>East of Glasgow</b>Scotland and the North of England by the M74.</div>
 </div>
+<section class="section on-deep wk-sec done-sec" data-sheets="split"><div class="wk-wrap">
+  <div class="done-head"><p class="eyebrow">Completed work</p><h2 class="done-title"><span>Finished,</span> <span>fitted,</span> <span>in production.</span></h2><a class="text-link" href="work.html">All completed work</a></div>
+  <ul class="wk-grid">${featured.map(workCard).join('')}</ul>
+</div></section>
 <section class="section on-white"><div class="wrap split">
   <div data-reveal>
     <p class="eyebrow">About Marpet</p>
@@ -185,11 +221,6 @@ page({ file: 'index.html', title: 'Stainless steel fabrication, Glasgow', desc: 
   <div class="section-head"><h2>Services</h2><a class="text-link" href="services.html">All services</a></div>
   ${stack(services.slice(0, 5))}
 </div></section>
-<section class="section on-dark" data-sheets="split"><div class="wrap">
-  <p class="eyebrow">Completed work</p>
-  <div class="section-head"><h2>Featured work</h2><a class="text-link" href="work.html">All work</a></div>
-  <ul class="grid">${featured.map(frameCard).join('')}</ul>
-</div></section>
 <section class="section on-white"><div class="wrap">
   <p class="eyebrow">Who we work for</p>
   <div class="section-head"><h2>Customers</h2></div>
@@ -201,10 +232,55 @@ ${linkedin}
 ${cta()}
 </main>` });
 
+/* ---------------- Shot list (development) ---------------- */
+{
+  const ids = Object.keys(slots).filter((k) => !k.startsWith('test-'));
+  const todo = ids.filter((k) => !slots[k].video).length;
+  page({ file: 'shot-list.html', title: 'Shot list', desc: 'What to film for each section of the Marpet site.', section: 'review', page: 'notes', main: `
+<main id="main">
+<section class="page-head"><div class="wrap">
+  <p class="crumbs"><a href="dev-notes.html">Development notes</a><span>/</span><span>Shot list</span></p>
+  <h1>Shot list</h1>
+  <p class="lead">Every photographic section of the site, what it shows today and what to film for it. ${todo} of ${ids.length} still show a placeholder photograph.</p>
+</div></section>
+<section class="section on-white"><div class="wrap">
+  <div class="table-wrap" tabindex="0" role="region" aria-label="Shot list table"><table class="shots">
+    <thead><tr><th scope="col">Section</th><th scope="col">Shows now</th><th scope="col">To film</th><th scope="col">Length</th><th scope="col">Where</th><th scope="col">Status</th></tr></thead>
+    <tbody>${ids.map((k) => { const s = slots[k]; return `<tr><th scope="row">${esc(s.use)}<br><code>${k}</code></th><td><img src="${stillSrc(s)}" alt="" width="160" height="${Math.round(160 * stillDims(s)[1] / stillDims(s)[0])}" loading="lazy"></td><td><b>${esc(s.brief.shot)}</b><br>${esc(s.brief.detail)}</td><td>${esc(s.brief.length)}</td><td>${esc(s.brief.where)}</td><td>${s.video ? 'Footage supplied' : 'Placeholder still'}</td></tr>`; }).join('')}</tbody>
+  </table></div>
+  <h2>How to supply footage</h2>
+  <ul class="plain">
+    <li>Real Marpet work only. People in shot must have agreed; client sites need written permission.</li>
+    <li>Landscape, 4K or 1080p, 25 fps, no audio needed. Steady: tripod, slider or gimbal.</li>
+    <li>Keep the left third of the frame calm: headlines sit there.</li>
+    <li>Send the original files. They are trimmed to 8 to 15 second loops and compressed for the web (see docs/footage.md).</li>
+  </ul>
+</div></section>
+</main>` });
+}
+
+/* ---------------- Media test (development) ---------------- */
+{
+  const T = (mode, shot) => ({ use: 'Test page', still: 'video/test/test-pattern.jpg', w: 1280, h: 720, alt: '', video: 'video/test/test-pattern.mp4', videoMobile: null, poster: 'video/test/test-pattern.jpg', mode, brief: { shot, detail: '', length: '', where: '' } });
+  slots['test-loop'] = T('loop', 'Test pattern, loop');
+  slots['test-scrub'] = T('scrub', 'Test pattern, scroll scrub');
+  page({ file: 'media-test.html', title: 'Video sections test', desc: 'Checks that video sections play, pause and follow scroll.', section: 'review', page: 'notes', main: `
+<main id="main">
+<section class="page-head page-head--cine">${cineScene('test-loop')}<div class="wrap">
+  <p class="crumbs"><a href="dev-notes.html">Development notes</a><span>/</span><span>Video sections test</span></p>
+  <h1>Video sections</h1>
+  <p class="lead">A generated test pattern, not Marpet footage. It shows how real footage will behave in each kind of section: header loop, pinned film band, and scroll-controlled clip.</p>
+</div></section>
+${filmBand('test-loop', { eyebrow: 'Loop', heading: 'Plays while on screen.', text: 'Pauses when it leaves the screen. With reduced motion or data saver, only the still frame is shown.' })}
+${filmBand('test-scrub', { eyebrow: 'Scroll controlled', heading: 'Scroll moves through the clip.', text: 'Forward and back with the page.' })}
+<section class="section on-white"><div class="wrap"><p><a class="text-link" href="shot-list.html">Shot list</a></p></div></section>
+</main>` });
+}
+
 /* ---------------- Services ---------------- */
 page({ file: 'services.html', title: 'Services', desc: 'Conveyor systems, production lines, pipework, access platforms, catering, dentistry and general fabrication.', section: 'services', page: 'services', main: `
 <main id="main">
-<section class="page-head page-head--cine">${cineBg('IMG_0283.jpg')}<div class="wrap">
+<section class="page-head page-head--cine">${cineScene('page-services')}<div class="wrap">
   <p class="crumbs"><a href="index.html">Home</a><span>/</span><span>Services</span></p>
   <h1>Services</h1>
   <p class="lead">Seven kinds of fabrication. Pick a plate.</p>
@@ -225,7 +301,7 @@ for (const s of services) {
   const rel = projects.filter((p) => p.service === s.slug);
   page({ file: `service-${s.slug}.html`, title: s.name, desc: s.lead, section: 'services', page: 'service', main: `
 <main id="main">
-<section class="page-head page-head--cine page-head--layered">${layerBg(s.hero)}<div class="wrap split">
+<section class="page-head page-head--cine page-head--layered">${layerScene(`service-${s.slug}`)}<div class="wrap split">
   <div>
     <p class="crumbs"><a href="index.html">Home</a><span>/</span><a href="services.html">Services</a><span>/</span><span>${s.name}</span></p>
     <h1>${s.name}</h1>
@@ -259,7 +335,7 @@ ${cta(`Need ${s.short.toLowerCase()} made?`)}
 const used = [...new Set(projects.map((p) => p.service))];
 page({ file: 'work.html', title: 'Our work', desc: 'Completed fabrication work by Marpet Fabrications.', section: 'work', page: 'work', main: `
 <main id="main">
-<section class="page-head page-head--cine">${cineBg('conheaeder.jpg')}<div class="wrap">
+<section class="page-head page-head--cine">${cineScene('page-work')}<div class="wrap">
   <p class="crumbs"><a href="index.html">Home</a><span>/</span><span>Our work</span></p>
   <h1>Our work</h1>
   <p class="lead">Conveyors, production lines, pipework, platforms and stainless fit-outs, photographed in the workshop and on site.</p>
@@ -278,7 +354,7 @@ for (const p of projects) {
   const rel = projects.filter((x) => x.service === p.service && x.slug !== p.slug).slice(0, 3);
   page({ file: `project-${p.slug}.html`, title: p.title, desc: `${p.title}. ${s.name} by Marpet Fabrications.`, section: 'work', page: 'project', main: `
 <main id="main">
-<section class="page-head page-head--cine page-head--layered">${layerBg(p.hero)}<div class="wrap split">
+<section class="page-head page-head--cine page-head--layered">${layerScene_p(p)}<div class="wrap split">
   <div>
     <p class="crumbs"><a href="index.html">Home</a><span>/</span><a href="work.html">Our work</a><span>/</span><span>${p.title}</span></p>
     <h1>${p.title}</h1>
@@ -305,11 +381,12 @@ ${cta('Need something similar?')}
 /* ---------------- About ---------------- */
 page({ file: 'about.html', title: 'About Marpet', desc: 'Marpet Fabrications, sheet metal fabricators to the east of Glasgow.', section: 'about', page: 'about', main: `
 <main id="main">
-<section class="page-head page-head--cine">${cineBg('general-fabrication-1.jpg')}<div class="wrap">
+<section class="page-head page-head--cine">${cineScene('page-about')}<div class="wrap">
   <p class="crumbs"><a href="index.html">Home</a><span>/</span><span>About</span></p>
   <h1>About Marpet</h1>
   <p class="lead">Sheet metal fabricators to the east of Glasgow, serving food processing, packaging and catering.</p>
 </div></section>
+${filmBand('band-about', { eyebrow: 'In the workshop', heading: 'Made by hand, fitted on site.', text: 'Skilled, time served tradesmen, in the fabrication workshop or at your premises.' })}
 <section class="section on-white"><div class="wrap split">
   <div data-reveal>
     <p class="eyebrow">The company</p>
@@ -337,7 +414,7 @@ ${cta()}
 /* ---------------- Team ---------------- */
 page({ file: 'team.html', title: 'Meet the team', desc: 'The people behind Marpet Fabrications.', section: 'team', page: 'team', main: `
 <main id="main">
-<section class="page-head page-head--cine">${cineBg('IMG_0272.jpg')}<div class="wrap">
+<section class="page-head page-head--cine">${cineScene('page-team')}<div class="wrap">
   <p class="crumbs"><a href="index.html">Home</a><span>/</span><span>Team</span></p>
   <h1>Meet the team</h1>
   <p class="lead">Team content will be supplied by Marpet. Every plate below is an empty slot.</p>
@@ -356,7 +433,7 @@ ${cta('Want to talk to the people who will make it?')}
 /* ---------------- Contact ---------------- */
 page({ file: 'contact.html', title: 'Contact', desc: 'Contact Marpet Fabrications to discuss your fabrication requirements.', section: 'contact', page: 'contact', main: `
 <main id="main">
-<section class="page-head page-head--cine">${cineBg('IMG_0276.jpg')}<div class="wrap">
+<section class="page-head page-head--cine">${cineScene('page-contact')}<div class="wrap">
   <p class="crumbs"><a href="index.html">Home</a><span>/</span><span>Contact</span></p>
   <h1>Contact Marpet</h1>
   <p class="lead">Call, email, or send the form. The form needs nothing but a name, a way to reach you and what you need.</p>

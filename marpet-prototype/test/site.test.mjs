@@ -9,7 +9,7 @@ const read = (f) => readFileSync(new URL(f, SITE), 'utf8');
 const json = (f) => JSON.parse(readFileSync(new URL('../content/' + f + '.json', import.meta.url), 'utf8'));
 const pages = readdirSync(SITE).filter((f) => f.endsWith('.html'));
 const services = json('services'), projects = json('projects'), team = json('team'), company = json('company'), linkedin = json('linkedin');
-const DEV = new Set(['dev-notes.html', 'material-test.html', 'phone-test.html']);
+const DEV = new Set(['shot-list.html', 'media-test.html', 'dev-notes.html', 'material-test.html', 'phone-test.html']);
 
 test('content files are valid', () => {
   assert.deepEqual(validateContent({ company, services, projects, team, linkedin, dims: json('image-dims') }), []);
@@ -128,4 +128,15 @@ test('homepage opening uses genuine Marpet photographs only, and does not load t
   const allowed = new Set(['macro-panel', 'macro-frame', ...readdirSync(new URL('assets/img/', SITE)).filter((f) => /\.(jpe?g|png)$/i.test(f)).map((f) => f.replace(/\.\w+$/, ''))]);
   for (const s of srcs) assert.ok(allowed.has(s.replace(/(-bg)?\.webp$/, '')), s + ' is derived from a Marpet photograph');
   for (const s of srcs) assert.ok(existsSync(new URL('assets/img/cine/' + s, SITE)), s + ' exists');
+});
+
+test('media slots: every slot is in the shot list, and footage shows only where a video file is named', () => {
+  const m = JSON.parse(readFileSync(new URL('../content/media.json', import.meta.url), 'utf8'));
+  const list = read('shot-list.html');
+  for (const [id, s] of Object.entries(m.slots)) {
+    assert.ok(list.includes(`<code>${id}</code>`), id + ' is in the shot list');
+    if (!s.video) for (const f of pages) assert.doesNotMatch(read(f), new RegExp(`<video[^>]*data-slot="${id}"`), `${id} has no footage, so ${f} shows its still`);
+  }
+  // no generated or invented footage anywhere: the only video file is the labelled test pattern, used only on the test page
+  for (const f of pages.filter((p) => p !== 'media-test.html')) assert.doesNotMatch(read(f), /test-pattern/, f);
 });

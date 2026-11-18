@@ -1,6 +1,7 @@
 // Shapes of the content files, and a check that runs on every build.
 // To add a project, service or team member, edit the JSON in this folder and run `npm run build`.
 // The build stops with a plain message if something is missing or misspelt.
+import { statSync } from 'node:fs';
 
 /**
  * @typedef {Object} Company
@@ -105,5 +106,30 @@ export function validateContent(c) {
   });
   need(c.linkedin.profileUrl === null || /^https:\/\/([a-z]+\.)?linkedin\.com\//.test(c.linkedin.profileUrl), 'linkedin.json: "profileUrl" must be null or a linkedin.com address');
   c.linkedin.posts.forEach((p, i) => need(p.url === null || /^https:\/\/([a-z]+\.)?linkedin\.com\//.test(p.url), `linkedin.json post ${i + 1}: "url" must be null or a linkedin.com address`));
+  return out;
+}
+
+/**
+ * Checks content/media.json: every slot has a genuine still and a filming brief, and any footage named exists.
+ * @param {any} m  parsed media.json
+ * @param {Record<string, number[]>} dims  image-dims.json
+ * @param {URL} assets  URL of site/assets/
+ * @returns {string[]}
+ */
+export function validateMedia(m, dims, assets) {
+  /** @type {string[]} */
+  const out = [];
+  const need = (ok, msg) => { if (!ok) out.push(msg); };
+  const has = (p) => { try { return statSync(new URL(p, assets)).isFile(); } catch { return false; } };
+  need(m && typeof m.slots === 'object', 'media.json: missing "slots"');
+  for (const [id, s] of Object.entries(m.slots || {})) {
+    const at = `media.json slot "${id}"`;
+    need(Boolean(s.photo) !== Boolean(s.still), `${at}: give exactly one of "photo" or "still"`);
+    if (s.photo) need(Boolean(dims[s.photo]), `${at}: photo "${s.photo}" is not in site/assets/img`);
+    if (s.still) { need(has(s.still), `${at}: still "${s.still}" not found under site/assets`); need(s.w > 0 && s.h > 0, `${at}: still needs "w" and "h"`); }
+    need(s.brief && typeof s.brief.shot === 'string' && s.brief.shot.length > 0, `${at}: needs a "brief" with "shot"`);
+    need(!s.mode || s.mode === 'loop' || s.mode === 'scrub', `${at}: mode must be "loop" or "scrub"`);
+    for (const k of ['video', 'videoMobile', 'poster']) if (s[k]) need(has(s[k]), `${at}: ${k} "${s[k]}" not found under site/assets`);
+  }
   return out;
 }
