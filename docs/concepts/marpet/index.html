@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marpet Fabrications, concept</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* Concept: a night workshop. Near-black ink, brushed-steel greys, Marpet's royal blue as the only colour,
+     a weld-spark amber used once per screen. Layout idea: one big statement per screen, photos as duotone windows. */
+  :root {
+    color-scheme: dark;
+    --ink: #060912;
+    --ink-2: #0c1222;
+    --steel: #b9c2d0;
+    --steel-dim: #7d8aa0;
+    --line: #1b2540;
+    --blue: #3f6df0;
+    --blue-deep: #1a2f78;
+    --spark: #ffb454;
+    --display: "Archivo", "Arial Narrow", Impact, sans-serif;
+    --body: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--ink); scroll-behavior: smooth; }
+  body { margin: 0; background: var(--ink); color: var(--steel); font: 17px/1.65 var(--body); overflow-x: hidden; }
+  a { color: inherit; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--spark); outline-offset: 3px; }
+  h1, h2, h3 { font-family: var(--display); font-stretch: 112%; font-weight: 800; margin: 0; color: #fff; text-wrap: balance; letter-spacing: -0.01em; }
+  p { margin: 0; }
+  .wrap { width: min(1180px, 100% - 40px); margin: 0 auto; }
+  .eyebrow { font: 600 12px/1 var(--body); letter-spacing: 0.22em; text-transform: uppercase; color: var(--blue); }
+
+  /* ---------- opening sequence ---------- */
+  .curtain { position: fixed; inset: 0; z-index: 50; pointer-events: none; }
+  .curtain .half { position: absolute; left: 0; right: 0; height: 50.2%; background: var(--ink); will-change: transform; }
+  .curtain .top { top: 0; transform-origin: top; }
+  .curtain .bottom { bottom: 0; transform-origin: bottom; }
+  .weld { position: absolute; left: 0; right: 0; top: 50%; height: 2px; margin-top: -1px; background: linear-gradient(90deg, transparent, #fff 20%, #fff 80%, transparent); transform: scaleX(0); box-shadow: 0 0 18px 2px var(--spark), 0 0 60px 8px #ff8a1e66; }
+  .spark { position: absolute; top: 50%; left: 0; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: #fff; box-shadow: 0 0 14px 6px var(--spark); opacity: 0; }
+  .mark { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font: 800 clamp(20px, 3.4vw, 34px)/1 var(--display); font-stretch: 125%; letter-spacing: 0.4em; color: #fff; opacity: 0; white-space: nowrap; padding-left: 0.4em; }
+  .skip { position: fixed; right: 20px; bottom: 20px; z-index: 60; font: 600 12px var(--body); letter-spacing: 0.14em; text-transform: uppercase; color: var(--steel-dim); background: none; border: 1px solid var(--line); border-radius: 999px; padding: 8px 14px; cursor: pointer; opacity: 0; transition: opacity 0.4s; }
+  body.intro .skip { opacity: 1; }
+
+  body.intro { overflow: hidden; }
+  body.intro.play .weld { animation: weld 1.1s 0.15s var(--ease) forwards; }
+  body.intro.play .spark { animation: spark 1.1s 0.15s var(--ease) forwards; }
+  body.intro.play .mark { animation: markIn 1.5s 0.55s var(--ease) forwards; }
+  body.intro.play .top { animation: openTop 1.05s 1.9s var(--ease) forwards; }
+  body.intro.play .bottom { animation: openBottom 1.05s 1.9s var(--ease) forwards; }
+  body.intro.play .weld, body.intro.play .mark { animation-fill-mode: forwards; }
+  body.intro.play .curtain-fade { animation: none; }
+  @keyframes weld { 0% { transform: scaleX(0); opacity: 1; } 70% { transform: scaleX(1); opacity: 1; } 100% { transform: scaleX(1); opacity: 0; } }
+  @keyframes spark { 0% { left: 0; opacity: 1; } 70% { left: 100%; opacity: 1; } 100% { left: 100%; opacity: 0; } }
+  @keyframes markIn { 0% { opacity: 0; letter-spacing: 0.9em; } 30% { opacity: 1; } 75% { opacity: 1; } 100% { opacity: 0; letter-spacing: 0.4em; } }
+  @keyframes openTop { to { transform: translateY(-101%); } }
+  @keyframes openBottom { to { transform: translateY(101%); } }
+  .curtain.done { display: none; }
+
+  /* ---------- nav ---------- */
+  header.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 30; transition: background 0.4s var(--ease), padding 0.4s var(--ease); padding: 22px 0; }
+  header.nav.solid { background: #060912ee; backdrop-filter: blur(10px); padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+  .logo { text-decoration: none; display: grid; line-height: 1; }
+  .logo b { font: 800 22px var(--display); font-stretch: 125%; color: #fff; letter-spacing: 0.06em; }
+  .logo span { font: 600 9px var(--body); letter-spacing: 0.42em; color: var(--steel-dim); margin-top: 5px; text-transform: uppercase; }
+  .nav nav { display: flex; gap: 26px; align-items: center; }
+  .nav nav a { text-decoration: none; font: 500 14px var(--body); color: var(--steel); position: relative; padding: 4px 0; }
+  .nav nav a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--blue); transform: scaleX(0); transform-origin: left; transition: transform 0.35s var(--ease); }
+  @media (hover: hover) { .nav nav a:hover::after { transform: scaleX(1); } }
+  .btn { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font: 700 14px var(--body); letter-spacing: 0.04em; padding: 14px 22px; border-radius: 999px; background: var(--blue); color: #fff; transition: transform 0.25s var(--ease), background 0.25s; }
+  .btn.ghost { background: transparent; box-shadow: inset 0 0 0 1.5px #3b4a70; color: #fff; }
+  @media (hover: hover) { .btn:hover { transform: translateY(-2px); background: #5580ff; } .btn.ghost:hover { background: #ffffff10; } }
+  .btn:active { transform: scale(0.97); }
+  .nav nav a.btn { padding: 11px 20px; color: #fff; }
+  .nav nav a.btn::after { display: none; }
+  @media (max-width: 720px) { .nav nav a.hide-sm { display: none; } }
+
+  /* ---------- hero ---------- */
+  .hero { position: relative; min-height: 100svh; display: grid; align-items: end; padding: 120px 0 56px; overflow: hidden; isolation: isolate; }
+  .hero-bg { position: absolute; inset: 0; z-index: -2; background: #4f7dff; }
+  .hero-bg img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.2) brightness(1.3); mix-blend-mode: multiply; opacity: 0; transform: scale(1.12); transition: opacity 1.6s ease; }
+  .hero-bg img.on { opacity: 1; animation: push 14s linear forwards; }
+  @keyframes push { from { transform: scale(1.12); } to { transform: scale(1.24) translate3d(-1.5%, -1%, 0); } }
+  .hero::before { content: ""; position: absolute; inset: 0; z-index: -1; background: radial-gradient(130% 100% at 12% 100%, #060912f0 18%, #060912a8 48%, #06091226 100%), linear-gradient(180deg, #060912b0, transparent 28%); }
+  .hero::after { content: ""; position: absolute; inset: 0; z-index: -1; opacity: 0.07; background-image: repeating-linear-gradient(0deg, #fff 0 1px, transparent 1px 3px); mix-blend-mode: overlay; pointer-events: none; }
+  .hero .eyebrow { color: #cfdcff; margin-bottom: 14px; }
+  .hero h1 { font-size: clamp(44px, 8.2vw, 124px); line-height: 0.95; max-width: 14ch; }
+  .line { display: block; overflow: hidden; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+  .line > span { display: block; transform: translateY(105%); transition: transform 1.1s var(--ease); }
+  .hero.go .line > span { transform: none; }
+  .hero.go .line:nth-child(2) > span { transition-delay: 0.12s; }
+  .hero h1 .acc { color: var(--blue); }
+  .fade { opacity: 0; transform: translateY(18px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
+  .hero.go .fade { opacity: 1; transform: none; }
+  .hero.go .fade.d1 { transition-delay: 0.45s; } .hero.go .fade.d2 { transition-delay: 0.6s; } .hero.go .fade.d3 { transition-delay: 0.8s; }
+  .hero .lead { max-width: 52ch; font-size: clamp(17px, 1.7vw, 20px); margin-top: 26px; color: #d3dae6; }
+  .hero .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+  .facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; margin-top: 40px; border-top: 1px solid #ffffff22; }
+  .facts div { padding: 16px 18px 0 0; }
+  .facts b { display: block; font: 800 clamp(15px, 1.7vw, 20px)/1.2 var(--display); font-stretch: 112%; color: #fff; }
+  .facts span { font-size: 13px; color: var(--steel-dim); }
+  @media (max-width: 640px) { .facts { grid-template-columns: 1fr; } .facts div { padding-bottom: 6px; } }
+
+  /* ---------- customers ---------- */
+  .customers { border-block: 1px solid var(--line); padding: 26px 0; overflow: hidden; background: var(--ink-2); }
+  .customers .label { text-align: center; margin-bottom: 16px; }
+  .marquee { display: flex; width: max-content; animation: slide 46s linear infinite; }
+  .marquee span { font: 700 clamp(18px, 2.3vw, 26px)/1 var(--display); font-stretch: 112%; color: #566380; white-space: nowrap; padding: 0 28px; }
+  .marquee span::after { content: "/"; margin-left: 56px; color: var(--blue-deep); }
+  @keyframes slide { to { transform: translateX(-50%); } }
+  @media (hover: hover) { .customers:hover .marquee { animation-play-state: paused; } }
+
+  /* ---------- sections ---------- */
+  section.block { padding: clamp(72px, 11vw, 140px) 0; }
+  .head { display: grid; gap: 18px; max-width: 760px; margin-bottom: 52px; }
+  .head h2 { font-size: clamp(32px, 5.2vw, 62px); line-height: 1; }
+  .head p { font-size: 19px; color: var(--steel); }
+  .rv { opacity: 0; transform: translateY(28px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
+  .rv.in { opacity: 1; transform: none; }
+
+  .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
+  .card { position: relative; border-radius: 20px; overflow: hidden; min-height: 300px; background: #4f7dff; isolation: isolate; text-decoration: none; display: flex; align-items: flex-end; }
+  .card:nth-child(1), .card:nth-child(2) { grid-column: span 6; min-height: 380px; }
+  .card:nth-child(n+3) { grid-column: span 4; }
+  .card:nth-child(7) { grid-column: span 12; min-height: 260px; }
+  .card img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.15) brightness(1.2); mix-blend-mode: multiply; transition: transform 1.2s var(--ease), filter 0.6s; z-index: -2; }
+  .card::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, transparent 30%, #060912e6 100%); }
+  .card .inner { padding: 26px; display: grid; gap: 8px; width: 100%; }
+  .card h3 { font-size: clamp(22px, 2.6vw, 30px); }
+  .card p { font-size: 15px; color: #cfd6e3; max-width: 44ch; }
+  .card .more { font: 700 12px var(--body); letter-spacing: 0.16em; text-transform: uppercase; color: var(--spark); margin-top: 4px; }
+  .card .num { position: absolute; top: 20px; left: 24px; font: 700 12px var(--body); letter-spacing: 0.2em; color: #ffffffaa; }
+  @media (hover: hover) { .card:hover img { transform: scale(1.06); filter: grayscale(0.15) contrast(1.05) brightness(1.1); } }
+  @media (max-width: 860px) { .card:nth-child(n) { grid-column: span 12; min-height: 260px; } }
+
+  /* ---------- two divisions ---------- */
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--line); border-radius: 22px; overflow: hidden; }
+  .split > div { padding: clamp(26px, 4vw, 48px); display: grid; gap: 16px; align-content: start; background: var(--ink-2); }
+  .split > div + div { border-left: 1px solid var(--line); background: #0a1020; }
+  .split h3 { font-size: clamp(24px, 3vw, 34px); }
+  .split ul { list-style: none; padding: 0; margin: 6px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 22px; }
+  .split li { font-size: 15px; padding-left: 16px; position: relative; color: #c2cadb; }
+  .split li::before { content: ""; position: absolute; left: 0; top: 0.7em; width: 7px; height: 1px; background: var(--blue); }
+  @media (max-width: 800px) { .split { grid-template-columns: 1fr; } .split > div + div { border-left: 0; border-top: 1px solid var(--line); } }
+
+  /* ---------- about ---------- */
+  .about { display: grid; grid-template-columns: 1.05fr 1fr; gap: clamp(28px, 5vw, 72px); align-items: center; }
+  .frame { position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4 / 3; background: #4f7dff; clip-path: inset(0 100% 0 0 round 20px); transition: clip-path 1.3s var(--ease); }
+  .frame.in { clip-path: inset(0 0 0 0 round 20px); }
+  .frame img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.15) brightness(1.25); mix-blend-mode: multiply; }
+  .about h2 { font-size: clamp(30px, 4.6vw, 54px); line-height: 1; margin: 14px 0 20px; }
+  .about p + p { margin-top: 14px; }
+  @media (max-width: 800px) { .about { grid-template-columns: 1fr; } }
+
+  /* ---------- contact ---------- */
+  .contact { background: var(--blue); color: #fff; position: relative; overflow: hidden; }
+  .contact::before { content: ""; position: absolute; inset: 0; background: radial-gradient(80% 120% at 100% 0%, #6d93ff 0%, transparent 60%); opacity: 0.6; }
+  .contact .wrap { position: relative; display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: end; }
+  .contact h2 { font-size: clamp(36px, 6.4vw, 84px); line-height: 0.95; }
+  .contact .eyebrow { color: #cfdcff; }
+  .contact .big { font: 800 clamp(24px, 3.6vw, 40px)/1.15 var(--display); font-stretch: 112%; display: block; text-decoration: none; margin-top: 8px; }
+  .contact address { font-style: normal; font-size: 16px; color: #e6edff; margin-top: 18px; }
+  .contact .btn { background: #fff; color: var(--blue-deep); margin-top: 22px; }
+  @media (max-width: 800px) { .contact .wrap { grid-template-columns: 1fr; } }
+
+  footer { padding: 28px 0 40px; font-size: 13px; color: var(--steel-dim); }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+  footer button { background: none; border: 0; color: var(--steel-dim); font: inherit; text-decoration: underline; cursor: pointer; padding: 0; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .curtain { display: none; }
+    body.intro { overflow: auto; }
+    .line > span, .fade, .rv, .frame { transition: none; transform: none; opacity: 1; clip-path: none; }
+    .hero-bg img.on { animation: none; transform: scale(1.05); }
+    .marquee { animation: none; }
+  }
+</style>
+</head>
+<body class="intro">
+
+<div class="curtain" id="curtain" aria-hidden="true">
+  <div class="half top"></div><div class="half bottom"></div>
+  <div class="weld"></div><div class="spark"></div>
+  <div class="mark">MARPET</div>
+</div>
+<button class="skip" id="skip" type="button">Skip intro</button>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Marpet Fabrications, home"><b>MARPET</b><span>Fabrications</span></a>
+    <nav aria-label="Main">
+      <a class="hide-sm" href="#services">Services</a>
+      <a class="hide-sm" href="#about">About</a>
+      <a href="#contact" class="btn">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" id="hero">
+    <div class="hero-bg" aria-hidden="true">
+      <img src="img/hero1.webp" alt="" class="on">
+      <img src="img/hero2.webp" alt="">
+      <img src="img/hero3.webp" alt="">
+      <img src="img/hero4.webp" alt="">
+    </div>
+    <div class="wrap">
+      <p class="eyebrow fade">Stainless steel fabrication, Glasgow</p>
+      <h1 aria-label="Made in Glasgow. Installed on your line.">
+        <span class="line"><span>Made in Glasgow.</span></span>
+        <span class="line"><span><span class="acc">Installed</span> on your line.</span></span>
+      </h1>
+      <p class="lead fade d1">We design, manufacture and install on site virtually all types of stainless steel, mild steel or aluminium fabrication, for food and drink producers across Scotland and the North of England.</p>
+      <div class="cta fade d2">
+        <a class="btn" href="tel:01416411778">Call 0141 641 1778</a>
+        <a class="btn ghost" href="#services">See what we make</a>
+      </div>
+      <div class="facts fade d3">
+        <div><b>Early 1980s</b><span>Established in Glasgow</span></div>
+        <div><b>Skilled, time-served tradesmen</b><span>Producing the work</span></div>
+        <div><b>Our workshop or your site</b><span>Wherever the job is</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="customers" aria-label="Customers">
+    <p class="label eyebrow">Trusted by</p>
+    <div class="marquee" aria-hidden="true">
+      <span>Warburtons Bread Bakery</span><span>Diageo Whisky Distillery</span><span>Barrs Soft Drinks</span><span>Lightbody Celebration Cakes</span><span>Lees of Scotland</span><span>Aulds Delicious Desserts</span><span>Pinneys of Annan</span><span>Walter Black Foods</span><span>Scotbeef</span><span>Vion</span>
+      <span>Warburtons Bread Bakery</span><span>Diageo Whisky Distillery</span><span>Barrs Soft Drinks</span><span>Lightbody Celebration Cakes</span><span>Lees of Scotland</span><span>Aulds Delicious Desserts</span><span>Pinneys of Annan</span><span>Walter Black Foods</span><span>Scotbeef</span><span>Vion</span>
+    </div>
+    <p class="sr" style="position:absolute;left:-9999px">Warburtons, Diageo, Barrs, Lightbody, Lees of Scotland, Aulds, Pinneys of Annan, Walter Black Foods, Scotbeef, Vion, to name a few.</p>
+  </div>
+
+  <section class="block" id="services">
+    <div class="wrap">
+      <div class="head rv">
+        <p class="eyebrow">What we make</p>
+        <h2>Seven kinds of work. One standard.</h2>
+        <p>Work is produced to the highest standards by skilled, time-served tradesmen, from our fully equipped workshop or on site at your premises.</p>
+      </div>
+      <div class="grid">
+        <a class="card rv" href="#contact"><img src="img/s-conveyors.webp" alt="A long stainless steel conveyor on a food production floor"><span class="num">01</span><div class="inner"><h3>Conveyor systems</h3><p>Design and installation of stainless steel conveyors for food and drink lines.</p><span class="more">Enquire →</span></div></a>
+        <a class="card rv" href="#contact"><img src="img/s-production.webp" alt="A stainless steel production line with a blue belt"><span class="num">02</span><div class="inner"><h3>Production lines</h3><p>Fabricated to suit your process, built in our workshop and installed on site.</p><span class="more">Enquire →</span></div></a>
+        <a class="card rv" href="#contact"><img src="img/s-access.webp" alt="Stainless steel access platform with handrails"><span class="num">03</span><div class="inner"><h3>Access platforms</h3><p>Platforms, steps and handrails.</p><span class="more">Enquire →</span></div></a>
+        <a class="card rv" href="#contact"><img src="img/s-pipework.webp" alt="Stainless steel pipework"><span class="num">04</span><div class="inner"><h3>Pipework</h3><p>Stainless steel pipework for processing plant.</p><span class="more">Enquire →</span></div></a>
+        <a class="card rv" href="#contact"><img src="img/s-catering.webp" alt="Stainless steel sinks and worktop"><span class="num">05</span><div class="inner"><h3>Catering</h3><p>Cafes, bars, clubs and restaurants, to your design or ours.</p><span class="more">Enquire →</span></div></a>
+        <a class="card rv" href="#contact"><img src="img/s-dentistry.webp" alt="Stainless steel dental surgery cabinets"><span class="num">06</span><div class="inner"><h3>Dentistry</h3><p>Dentistry equipment in standard and bespoke sizes.</p><span class="more">Enquire →</span></div></a>
+        <a class="card rv" href="#contact"><img src="img/s-general.webp" alt="A stainless steel unit being fabricated"><span class="num">07</span><div class="inner"><h3>General fabrication</h3><p>If it can be made in stainless steel, mild steel or aluminium, ask us.</p><span class="more">Enquire →</span></div></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" style="padding-top:0">
+    <div class="wrap">
+      <div class="head rv">
+        <p class="eyebrow">Two sides of the business</p>
+        <h2>Cutting-edge production. Everyday catering.</h2>
+      </div>
+      <div class="split rv">
+        <div>
+          <h3>Food and drink processing</h3>
+          <p>One of the region's most highly regarded fabricators in the food and drinks industry. We can offer the following, and much more:</p>
+          <ul><li>Conveyor systems</li><li>Access platforms</li><li>Pipework</li><li>Handrails</li><li>Work stations</li><li>Ducting</li><li>Tables</li><li>Wall sheeting</li><li>Sinks</li></ul>
+        </div>
+        <div>
+          <h3>Catering</h3>
+          <p>A catering division for cafes, bars, clubs and restaurants, in standard and bespoke sizes.</p>
+          <ul><li>Extract canopies</li><li>Wall sheeting</li><li>Preparation tables</li><li>Sinks and taps</li><li>Wall shelves</li><li>Ice dumps</li><li>Bar frames</li><li>Racking</li><li>Bain marie hot cupboards</li></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="about" style="padding-top:0">
+    <div class="wrap about">
+      <div class="frame" id="frame"><img src="img/about.webp" alt="Stainless steel access steps and platform in a food factory"></div>
+      <div class="rv">
+        <p class="eyebrow">About Marpet</p>
+        <h2>Distance is no issue.</h2>
+        <p>Marpet Fabrications was established in the early 1980s in Glasgow and has built a reputation for quality with competitiveness across the sheet metal, engineering and fabrication industry. That has given us a large client base across Scotland and the North of England, in the food and drinks sector in particular.</p>
+        <p>We are east of Glasgow, ideally placed for local customers and for those further afield by the M74 road network.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block contact" id="contact">
+    <div class="wrap">
+      <div class="rv">
+        <p class="eyebrow">Contact</p>
+        <h2>Tell us what you need built.</h2>
+      </div>
+      <div class="rv">
+        <a class="big" href="tel:01416411778">0141 641 1778</a>
+        <a class="big" href="mailto:info@marpet.co.uk" style="font-size:clamp(18px,2.4vw,26px);word-break:break-all">info@marpet.co.uk</a>
+        <address>Marpet Fabrications<br>Unit 04, Clyde Workshops, Fullarton Road<br>Glasgow G32 8YL</address>
+        <a class="btn" href="mailto:info@marpet.co.uk?subject=Fabrication%20enquiry">Email an enquiry</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Marpet Fabrications. Registered in Scotland 172812. VAT 680561724.</span>
+    <button type="button" id="replay">Replay the opening</button>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var body = document.body, hero = document.getElementById('hero'), curtain = document.getElementById('curtain');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var timers = [];
+
+  function reveal() {
+    body.classList.remove('intro', 'play');
+    curtain.classList.add('done');
+    hero.classList.add('go');
+  }
+  function play() {
+    timers.forEach(clearTimeout); timers = [];
+    window.scrollTo(0, 0);
+    curtain.classList.remove('done');
+    hero.classList.remove('go');
+    body.classList.add('intro');
+    void curtain.offsetWidth;
+    if (reduce) { reveal(); return; }
+    body.classList.add('play');
+    timers.push(setTimeout(function () { hero.classList.add('go'); }, 2300));
+    timers.push(setTimeout(reveal, 3100));
+  }
+  document.getElementById('skip').addEventListener('click', function () { timers.forEach(clearTimeout); reveal(); });
+  document.getElementById('replay').addEventListener('click', play);
+
+  // hero photos cross-fade, one after another
+  var imgs = [].slice.call(document.querySelectorAll('.hero-bg img')), i = 0;
+  if (!reduce) setInterval(function () {
+    imgs[i].classList.remove('on'); i = (i + 1) % imgs.length;
+    imgs[i].style.animation = 'none'; void imgs[i].offsetWidth; imgs[i].style.animation = ''; imgs[i].classList.add('on');
+  }, 6500);
+
+  // nav turns solid after the hero starts to leave
+  var nav = document.getElementById('nav');
+  function onScroll() { nav.classList.toggle('solid', window.scrollY > 60); }
+  window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  // reveal on scroll; if there is no observer, everything is simply shown
+  var items = [].slice.call(document.querySelectorAll('.rv, .frame'));
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    items.forEach(function (el) { io.observe(el); });
+  } else { items.forEach(function (el) { el.classList.add('in'); }); }
+
+  play();
+})();
+</script>
+</body>
+</html>
