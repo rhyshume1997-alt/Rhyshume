@@ -1,6 +1,6 @@
 {
   "_readme": "Every photographic or video section on the site reads from this file. To add footage: put the files in site/assets/video/, fill in 'video' (and optionally 'videoMobile', 'poster'), then run npm run build. 'photo' is a genuine Marpet photograph from site/assets/img; 'still' is a path under site/assets/ for a crop made by tools/cine.py. 'mode' is 'loop' (plays while on screen) or 'scrub' (scroll moves through the clip). 'brief' says what to film. See docs/footage.md.",
-  "showShotNotes": true,
+  "showShotNotes": false,
   "slots": {
     "home-weld": {
       "use": "Homepage opening, first shot",

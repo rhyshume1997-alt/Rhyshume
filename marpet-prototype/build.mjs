@@ -79,7 +79,7 @@ ${page === 'home' ? `<link rel="preload" href="assets/img/cine/IMG_0283.webp" as
 <p class="proto-bar">Development build. Not the live Marpet site. <a href="dev-notes.html">Open items and test pages</a> · <a href="shot-list.html">Shot list</a></p>
 <header class="site-header">
   <div class="wrap">
-    <a class="brand" href="index.html" data-name="Home"><img src="assets/img/${co.logo}" alt="Marpet Fabrications, home" width="${dims[co.logo][0]}" height="${dims[co.logo][1]}"></a>
+    <a class="brand${co.logoSvg ? ' brand--svg' : ''}" href="index.html" data-name="Home"><img src="assets/img/${co.logoSvg || co.logo}" alt="Marpet Fabrications, home" width="${co.logoSvg ? 3516 : dims[co.logo][0]}" height="${co.logoSvg ? 1284 : dims[co.logo][1]}"></a>
     <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
     <nav class="nav" id="nav" aria-label="Main">
       <ul>${NAV.map(([s, n, h]) => `<li><a href="${h}" data-section="${s}"${s === section ? ' aria-current="page"' : ''}${s === 'contact' ? '' : ''}>${n}</a></li>`).join('')}</ul>

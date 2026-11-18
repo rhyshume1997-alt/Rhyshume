@@ -917,3 +917,29 @@ h3{font-size:clamp(1.2rem,1.7vw,1.45rem);font-weight:700;line-height:1.15;letter
 .stack.stack--grid .thumb{display:none}
 .stack.stack--grid .name{font:700 1rem/1.2 var(--head);letter-spacing:.06em}
 @media (prefers-reduced-motion:reduce){.stack.stack--grid .plate{transition:none}}
+
+/* ===== review fixes =====
+   1. Header fits a 390 px phone: the Request a quote button used to run off the right edge.
+   2. The logo is drawn as a clean one-colour vector on the dark header instead of a boxed JPG.
+   3. The opening's photographs are lifted and cooled so they read as steel, not mud. */
+.brand--svg{box-shadow:none;border-radius:0;overflow:visible}
+.brand--svg img{height:46px;width:auto}
+.header-cta{white-space:nowrap}
+@media (max-width:900px){
+  .site-header .wrap{gap:.6rem}
+  .brand--svg img{height:36px}
+  .menu-btn{padding:.7rem .3rem}
+  .header-cta{padding:.65rem .8rem;font-size:.74rem;letter-spacing:.08em}
+}
+@media (max-width:400px){
+  .site-header .wrap{gap:.4rem}
+  .brand--svg img{height:32px}
+  .header-cta{padding:.6rem .65rem;font-size:.68rem;letter-spacing:.06em}
+}
+.hero__poster,.scene .hero__stage img,.ph-scene__img img{filter:brightness(1.22) contrast(1.07) saturate(.78)}
+.scene.is-scrolly .scene__pin::after{background:linear-gradient(90deg,rgba(6,8,14,.84) 0%,rgba(6,8,14,.6) 34%,rgba(6,8,14,0) 58%)}
+:root{--accent:#f2d3a0}
+
+/* cool the olive and brown of the workshop photographs towards the brand navy; luminance is kept */
+.hero__stage,.ph-scene__img{isolation:isolate}
+.hero__stage::after,.ph-scene__img::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:#2a4d9c;mix-blend-mode:color;opacity:.62}
