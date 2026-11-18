@@ -78,3 +78,9 @@ encoding, or ask for it to be graded. The photographs are graded by `tools/cine.
 
 All of this is checked by the browser tests on `media-test.html`, which uses a generated test pattern labelled
 "TEST PATTERN - NOT MARPET FOOTAGE". That clip appears nowhere else, and a test enforces it.
+
+## Recordings (`review/video/`)
+
+- `desktop-01` and `mobile-01`: homepage opening. `desktop-02` and `mobile-02`: the scroll story into completed work. Captured frame by frame at the designed speed, with the yellow "To film" labels visible.
+- `desktop-05-video-sections-test-sped-up-6x.mp4`: the video test page (labelled test pattern: loop, film band, scroll-scrub) and the About film band. Recorded in real time, then **sped up six times**, because the capture ran about six times slower than real time in the build container.
+- `desktop-03`, `desktop-04`, `mobile-03` and `mobile-04` (Services, Our Work) are from the previous round. Those pages are unchanged apart from the new "To film" label on the Services header.
