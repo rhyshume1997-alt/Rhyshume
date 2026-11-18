@@ -727,7 +727,7 @@ a.rplate:active{transform:translateY(1px);filter:drop-shadow(0 1px 0 rgba(0,0,0,
 .on-white p,.on-steel p,.on-white li,.on-steel li{color:#c3cad8}
 .on-white .eyebrow,.on-steel .eyebrow,.on-dark .eyebrow,.on-deep .eyebrow,.page-head .eyebrow{color:#e9c08a}
 .on-white .eyebrow::before,.on-steel .eyebrow::before,.on-dark .eyebrow::before,.on-deep .eyebrow::before{background:#e9c08a}
-.on-white a:not(.btn):not(.plate):not([data-plate]),.on-steel a:not(.btn):not(.plate):not([data-plate]){color:#f1f3f8}
+.on-white a:not(.btn):not(.plate):not([data-plate]):not(.plate a),.on-steel a:not(.btn):not(.plate):not([data-plate]):not(.plate a){color:#f1f3f8}
 .on-dark{background:#0d1015}.on-deep{background:#07090c}
 .facts{background:rgba(255,255,255,.08)}.facts div{background:#07090c}
 /* first paint already matches the opening, before any script runs */
@@ -887,3 +887,33 @@ h3{font-size:clamp(1.2rem,1.7vw,1.45rem);font-weight:700;line-height:1.15;letter
 .cine .hero__note{position:absolute}
 .cine .hero__copy{flex:0 0 auto}
 .page-head--cine h1,.page-head--layered h1{margin-bottom:.28em}
+
+/* ---- steel plates: dark ink on light steel, wherever the plate sits, and room to breathe ---- */
+.on-white .plate,.on-steel .plate,.on-dark .plate,.on-deep .plate,li.plate,.plate p,.plate li,.plate h2,.plate h3,.plate a:not(.btn){color:#15191f}
+.plate p{color:#2b3139}
+.plate a:not(.btn){text-decoration-color:rgba(21,25,31,.45)}
+.plate a:not(.btn):hover{text-decoration-color:#15191f}
+
+/* customers: evenly spaced plates, one line where possible, text centred vertically */
+.customers{grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem 1.1rem}
+.customers li.plate{display:flex;align-items:center;min-height:4.6rem;padding:1.1rem 1.4rem;font:650 .8rem/1.35 var(--head);letter-spacing:.07em;text-transform:uppercase;color:#15191f;max-width:none}
+
+/* contact card: more padding and clearer spacing between the details */
+.contact-card{padding:2.8rem 3.2rem}
+.contact-card h2{margin-bottom:1rem}
+.contact-card p{margin:0 0 1.2rem;line-height:1.7}
+.contact-card .big{color:#15191f;margin-bottom:.35rem}
+@media (max-width:600px){.contact-card{padding:2rem 1.6rem}}
+
+/* homepage services: a calm grid of plates instead of the tilted, overlapping stack */
+.stack-scene:has(.stack--grid){perspective:none;padding:.5rem 0 0}
+.stack.stack--grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr));gap:1.1rem 1.4rem;max-width:none;margin:0}
+.stack.stack--grid li{height:auto;max-width:none}
+.stack.stack--grid a{height:auto;position:relative}
+.stack.stack--grid .plate,.stack.stack--grid li:nth-child(odd) .plate,.stack.stack--grid li:nth-child(even) .plate{position:relative;left:0;right:0;top:auto;height:auto;min-height:5.4rem;transform:none;pointer-events:auto;
+  grid-template-columns:3rem 1fr auto;padding:.4rem 1.6rem;filter:drop-shadow(0 1px 0 rgba(0,0,0,.5)) drop-shadow(0 10px 14px rgba(0,0,0,.35));transition:transform .25s ease,filter .25s ease}
+.stack.stack--grid a:hover .plate,.stack.stack--grid a:focus-visible .plate{transform:translateY(-3px);filter:drop-shadow(0 1px 0 rgba(0,0,0,.5)) drop-shadow(0 16px 20px rgba(0,0,0,.45))}
+.stack.stack--grid li:has(a:hover)~li .plate,.stack.stack--grid li:has(a:focus-visible)~li .plate{filter:drop-shadow(0 1px 0 rgba(0,0,0,.5)) drop-shadow(0 10px 14px rgba(0,0,0,.35))}
+.stack.stack--grid .thumb{display:none}
+.stack.stack--grid .name{font:700 1rem/1.2 var(--head);letter-spacing:.06em}
+@media (prefers-reduced-motion:reduce){.stack.stack--grid .plate{transition:none}}

@@ -114,7 +114,7 @@ const cta = (h = 'Have a drawing or a line to fit out?', p = 'Tell us what you n
 
 const frameCard = (p) => `<li data-service="${p.service}"><a class="frame plate" href="project-${p.slug}.html" data-plate data-name="${esc(p.title)}">${bolts}<div class="frame__img">${img(p.hero, p.title + ', Marpet photograph', 'loading="lazy"')}</div><div class="frame__cap"><b>${p.title}</b><span>${svc(p.service).short}</span></div></a></li>`;
 
-const stack = (list) => `<div class="stack-scene"><ol class="stack">${list.map((s, i) => `<li><a href="service-${s.slug}.html" data-name="${esc(s.name)}"><span class="plate" data-plate>${bolts}<span class="no">${String(i + 1).padStart(2, '0')}</span><span class="name">${s.name}</span>${img(s.hero, '', 'class="thumb" loading="lazy"')}<span class="go">View</span></span></a></li>`).join('')}</ol></div>`;
+const stack = (list) => `<div class="stack-scene"><ol class="stack stack--grid">${list.map((s, i) => `<li><a href="service-${s.slug}.html" data-name="${esc(s.name)}"><span class="plate" data-plate>${bolts}<span class="no">${String(i + 1).padStart(2, '0')}</span><span class="name">${s.name}</span>${img(s.hero, '', 'class="thumb" loading="lazy"')}<span class="go">View</span></span></a></li>`).join('')}</ol></div>`;
 
 const svcSelector = `<div class="svc" data-svc>
   <ol class="stack stack--flat">${services.map((s, i) => `<li><a href="service-${s.slug}.html" data-svc-item="${i}" data-name="${esc(s.name)}"><span class="plate" data-plate>${bolts}<span class="no">${String(i + 1).padStart(2, '0')}</span><span class="name">${s.name}</span><span class="go">View</span></span><span class="svc__lead">${s.lead}</span></a></li>`).join('')}</ol>
