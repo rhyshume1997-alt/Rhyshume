@@ -86,3 +86,17 @@ structure. The enquiry form keeps white fields with dark text.
 `build.mjs`, `site/assets/styles.css`, `site/assets/app.js`, `src/motion.js` → `site/assets/motion.min.js`,
 `tools/cine.py` (new), `site/assets/img/cine/` (new), `test/site.test.mjs`, `test/browser.cjs`,
 `package.json` (the 3D bundle is now built only by `npm run bundle:viewer`).
+
+## Recordings (`review/video/`)
+
+| File | Shows | How it was captured |
+|---|---|---|
+| `desktop-01-homepage-opening.mp4` | The opening: steel close-up, light, logo plate, pull back, headline | Frame by frame, 25 fps |
+| `desktop-02-homepage-scroll-scenes.mp4` | Scrolling through the four scenes and steel-sheet wipes, then down the page | Frame by frame, 25 fps |
+| `desktop-03-services.mp4` | Services header, shutter transitions between services, into a service page | Real time |
+| `desktop-04-our-work-and-project.mp4` | Our Work scenes and steel panels, opening a project | Real time |
+| `mobile-01` to `mobile-04` | The same on a Pixel 7-sized screen | As above |
+
+Frame-by-frame captures step GSAP and every CSS animation by the same amount per frame, so they show the
+motion exactly as timed. The real-time captures run a little slower than a real visit, because the
+recording script scrolls in small steps. Neither is a measurement of frame rate on a real device.
