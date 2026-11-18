@@ -34,6 +34,13 @@
   }
 
   const transitions = {
+    // Default: the page dims for a moment and the new one fades in. Navigation never waits on theatre.
+    fade: async (src, name, swap) => {
+      const m = $('main');
+      await m.animate({ opacity: [1, 0] }, { duration: 120, easing: 'ease-out', fill: 'forwards' }).finished.catch(() => {});
+      await swap();
+      $('main').animate({ opacity: [0, 1], transform: ['translateY(6px)', 'none'] }, { duration: 240, easing: 'cubic-bezier(.2,.7,.3,1)' });
+    },
     // Plate: lifts from the selected item, swings up to face the viewer, then opens on its hinge.
     async plate(src, name, swap, back) {
       label.textContent = name;
@@ -145,7 +152,7 @@
     init();
   }
 
-  async function navigate(url, { src = null, type = 'plate', name = '', push = true, back = false } = {}) {
+  async function navigate(url, { src = null, type = 'fade', name = '', push = true, back = false } = {}) {
     if (busy) return;
     busy = true;
     document.documentElement.classList.add('is-navigating');
@@ -154,7 +161,7 @@
     try {
       const swap = async () => applyPage(await pending, url, push);
       if (reduce.matches) await swap();
-      else await (transitions[type] || transitions.plate)(src, name, swap, back);
+      else await (transitions[type] || transitions.fade)(src, name, swap, back);
     } catch (e) {
       location.href = url; // anything goes wrong: ordinary navigation
       return;
@@ -172,7 +179,7 @@
     e.preventDefault();
     if (a.href === location.href) { scrollTo({ top: 0, behavior: reduce.matches ? 'auto' : 'smooth' }); return; }
     const src = a.querySelector('[data-plate]') || a.closest('[data-plate]') || a;
-    navigate(a.href, { src, type: a.dataset.transition || 'plate', name: a.dataset.name || a.textContent.trim().slice(0, 40) });
+    navigate(a.href, { src, type: a.dataset.transition || 'fade', name: a.dataset.name || a.textContent.trim().slice(0, 40) });
   });
   history.replaceState({ mp: 1 }, '');
   let lastPath = location.pathname;
@@ -251,122 +258,83 @@
     update();
   }
 
-  // Homepage opening, built from Marpet photographs: close on the brushed side panel of a Marpet conveyor,
-  // a light travels across it, the camera drifts along the steel, then dissolves and pulls back into the
-  // production hall where the headline arrives. Scroll then carries the camera on through three scenes.
-  // The header, menu and quote button never wait for any of it.
+  // Homepage opening: a short fabrication sequence on the first visit (about 4 s), homepage only.
+  // It never holds anything up: the headline, quote button and menu are live from the first frame, the
+  // page scrolls freely, and Skip, Escape or any scroll ends it at once. If the first picture is slow to
+  // arrive, or motion is reduced, the finished still is shown straight away instead. When footage is
+  // supplied in the home-weld slot, that clip plays once in place of the photographs.
   function initHero() {
     const section = $('[data-open]');
     if (!section) return;
     const skip = $('[data-hero-skip]', section), replay = $('[data-hero-replay]', section);
     const MP = window.MP, q = new URLSearchParams(location.search);
-    const ready = () => section.classList.add('is-ready');
-    if (!MP || reduce.matches || q.has('static')) { section.classList.add('is-static', 'is-done'); ready(); return; }
-    section.classList.add('is-scrolly');   // pinned layout from the first frame, so no copy shows through the opening
+    section.classList.add('is-ready');   // the copy is never held back
+    const still = () => { section.classList.add('is-static', 'is-done'); section.classList.remove('is-playing'); skip.hidden = true; };
+    if (!MP || reduce.matches || q.has('static')) { still(); return; }
     let seen = false;
     try { seen = localStorage.getItem('mp-intro') === '1'; } catch (e) {}
-    const wantIntro = (!seen || q.has('intro')) && !q.has('assembled');
-    let tl = null, scene = null;
+    const film = $('[data-shot=film] video', section);
+    let tl = null, started = false, gate = 0;
     const done = () => {
-      section.classList.add('is-done'); ready(); skip.hidden = true; replay.hidden = false;
+      section.classList.add('is-done'); section.classList.remove('is-playing');
+      skip.hidden = true; replay.hidden = false;
       try { localStorage.setItem('mp-intro', '1'); } catch (e) {}
-      if (!scene) scene = initScene(section);
-      syncStage(section);
     };
-    const end = () => { if (tl && tl.isActive()) tl.progress(1); };
-    if (wantIntro) {
-      tl = MP.opening(section).eventCallback('onComplete', done);
-      skip.hidden = false;
-      const start = () => { if (section.isConnected) tl.play(0); };
-      const first = $('[data-shot=macro] .m', section);
-      // start when the first shot has arrived (photograph, or the first frame of footage), or after 1.5 s whatever happens
-      const go = setTimeout(start, 1500); cleanup.push(() => clearTimeout(go));
-      const ready_ = () => { clearTimeout(go); start(); };
-      if (first.tagName === 'VIDEO') { if (loadVideo(first)) { first.play().catch(() => {}); on(first, 'loadeddata', ready_); } else ready_(); }
-      else if (first.complete) ready_(); else on(first, 'load', ready_);
-      tl.eventCallback('onUpdate', () => syncStage(section));
-      on(skip, 'click', end);
-      on(window, 'keydown', (e) => { if (e.key === 'Escape') end(); });
-      on(window, 'wheel', end, { passive: true });
-      on(window, 'touchmove', end, { passive: true });
-      cleanup.push(() => tl.kill());
-    } else {
-      MP.opening(section).progress(1).kill();
-      done();
+    const endFilm = () => { film.pause(); MP.gsap.to(film.closest('.shot'), { autoAlpha: 0, duration: 0.5 }); done(); };
+    const end = () => {
+      if (!section.classList.contains('is-playing')) return;
+      if (tl) tl.progress(1); else if (film) endFilm();
+    };
+    const begin = () => {
+      if (started || section.classList.contains('is-static')) return;
+      started = true; clearTimeout(gate);
+      section.classList.add('is-playing'); skip.hidden = false;
+      if (film) return;   // already playing; it ends itself
+      tl = MP.opening(section).eventCallback('onComplete', done); tl.play(0);
+    };
+    if (seen && !q.has('intro')) { still(); replay.hidden = false; }
+    else {
+      // only start if the first shot arrives quickly; otherwise show the finished still and move on
+      gate = setTimeout(() => { if (!started) { if (film) film.pause(); still(); replay.hidden = false; } }, film ? 1200 : 700);
+      cleanup.push(() => clearTimeout(gate));
+      if (film) {
+        if (loadVideo(film)) { film.loop = false; on(film, 'playing', begin); on(film, 'ended', endFilm); film.play().catch(() => {}); }
+        else still();
+      } else {
+        const first = $('[data-shot=macro] .m', section);
+        if (first.complete && first.naturalWidth) begin(); else on(first, 'load', begin);
+      }
     }
+    on(skip, 'click', end);
+    on(window, 'keydown', (e) => { if (e.key === 'Escape') end(); });
+    on(window, 'wheel', end, { passive: true });
+    on(window, 'touchmove', end, { passive: true });
+    on(window, 'scroll', end, { passive: true });
+    cleanup.push(() => { if (tl) tl.kill(); });
     on(replay, 'click', () => {
-      scrollTo(0, 0); section.classList.remove('is-ready', 'is-done'); replay.hidden = true; skip.hidden = false;
-      if (scene) { scene.kill(); scene = null; }
-      tl = MP.opening(section).eventCallback('onComplete', done).eventCallback('onUpdate', () => syncStage(section)); tl.play(0);
+      section.classList.remove('is-static', 'is-done'); replay.hidden = true; started = false;
+      if (film) { MP.gsap.set(film.closest('.shot'), { autoAlpha: 1 }); loadVideo(film); film.loop = false; film.currentTime = 0; film.play().then(begin, still); }
+      else { started = true; section.classList.add('is-playing'); skip.hidden = false; tl = MP.opening(section).eventCallback('onComplete', done); tl.play(0); }
     });
   }
 
-  // ---- Homepage scenes: the stage stays pinned while scroll moves the camera through four photographs.
-  // A steel sheet crosses the frame between them; each chapter of copy arrives with its scene. ----
-  function initScene(section) {
-    section.classList.add('is-scrolly');
-    const MP = window.MP, tl = MP.scene(section);
-    const chapters = $$('[data-ch]', section).map((el) => ({ el, from: +el.dataset.from, to: +el.dataset.to }));
-    const rail = $$('.scene__rail i', section), stage = $('.hero__stage', section);
-    let ticking = false, lastOn = -1, alive = true;
-    const update = () => {
-      ticking = false;
-      if (!alive) return;
-      const r = section.getBoundingClientRect(), span = r.height - innerHeight;
-      const p = span > 0 ? clamp01(-r.top / span) : 0;
-      MP.gsap.to(tl, { progress: Math.min(1, p / 0.94), duration: 0.7, ease: 'power2.out', overwrite: true, onUpdate: () => syncStage(section) });   // a little weight, like a camera on a slider
-      let on_ = -1;
-      chapters.forEach((c, i) => { const live = p >= c.from && p < c.to; c.el.classList.toggle('is-on', live); c.el.inert = !live; if (live) on_ = i; });
-      if (on_ !== lastOn) { lastOn = on_; rail.forEach((d, i) => d.classList.toggle('is-on', i === on_)); }
-      stage.style.opacity = String(1 - clamp01((p - 0.95) / 0.05) * 0.8);
-      section.classList.toggle('is-scrolled', p > 0.02);
-    };
-    const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
-    on(window, 'scroll', onScroll, { passive: true }); on(window, 'resize', onScroll);
-    update();
-    return { kill: () => { alive = false; MP.gsap.killTweensOf(tl); tl.kill(); } };
-  }
-
-  // ---- Services: two brushed steel shutters close over the viewing frame, the photographs change behind
-  // them, and they part again on the new service. ----
+  // ---- Services: the viewing frame crossfades to the selected service's photographs ----
   function initSvc() {
     const box = $('[data-svc]');
     if (!box) return;
     const items = $$('[data-svc-item]', box), slides = $$('[data-svc-slide]', box);
-    const A_ = $('.shutter__a', box), B_ = $('.shutter__b', box);
-    let current = 0, running = false, queued = null;
+    let current = 0;
     items[0].classList.add('is-current');
-    const E_IN = 'cubic-bezier(.7,0,.84,0)', E_OUT = 'cubic-bezier(.16,1,.3,1)';
-    const show = async (i) => {
+    const show = (i) => {
       if (i === current) return;
-      if (running) { queued = i; return; }
-      running = true;
-      const dir = i > current ? 1 : -1, A = slides[current], Bn = slides[i];
+      const A = slides[current], Bn = slides[i];
       items.forEach((el, k) => el.classList.toggle('is-current', k === i));
-      if (reduce.matches || !A_) { A.classList.remove('is-on'); Bn.classList.add('is-on'); current = i; running = false; return; }
-      // close: the sheets travel in from top and bottom (reversed when moving back up the list) and meet
-      const fromA = '-101%', fromB = '101%';   // top sheet from above, bottom sheet from below
-      for (const layer of A.children) layer.animate({ transform: ['none', 'scale(1.06)'] }, { duration: 420, easing: E_IN, fill: 'forwards' });
-      await Promise.all([
-        A_.animate({ transform: [`translateY(${fromA})`, 'translateY(0)'] }, { duration: 420, easing: E_IN, fill: 'forwards' }).finished,
-        B_.animate({ transform: [`translateY(${fromB})`, 'translateY(0)'] }, { duration: 420, easing: E_IN, fill: 'forwards' }).finished,
-      ]).catch(() => {});
-      A.classList.remove('is-on'); A.getAnimations({ subtree: true }).forEach((a) => a.cancel());
-      Bn.classList.add('is-on');
-      // open on the new photographs, which settle from a slight push-in; the caption rises after
-      const jobs = [
-        A_.animate({ transform: ['translateY(0)', `translateY(${fromA})`] }, { duration: 620, easing: E_OUT, fill: 'forwards' }).finished,
-        B_.animate({ transform: ['translateY(0)', `translateY(${fromB})`] }, { duration: 620, easing: E_OUT, fill: 'forwards' }).finished,
-      ];
-      for (const layer of Bn.children) {
-        const cap = layer.classList.contains('svc__cap');
-        jobs.push(layer.animate(cap ? { transform: ['translateY(36px)', 'none'], opacity: [0, 1] } : { transform: [layer.classList.contains('svc__bg') ? 'scale(1.16)' : 'scale(1.1) translateY(4%)', 'none'] },
-          { duration: cap ? 640 : 1100, delay: cap ? 220 : 0, easing: E_OUT, fill: 'backwards' }).finished);
+      Bn.classList.add('is-on'); A.classList.remove('is-on');
+      if (!reduce.matches) {
+        Bn.animate({ opacity: [0, 1] }, { duration: 320, easing: 'ease-out' });
+        const bg = $('.svc__bg', Bn); if (bg) bg.animate({ transform: ['scale(1.05)', 'none'] }, { duration: 900, easing: 'cubic-bezier(.2,.7,.3,1)' });
       }
-      await Promise.all(jobs).catch(() => {});
-      [A_, B_].forEach((s) => { s.getAnimations().forEach((a) => a.cancel()); });
-      current = i; running = false;
-      if (queued !== null && queued !== current) { const q = queued; queued = null; show(q); } else queued = null;
+      current = i;
     };
     items.forEach((el, i) => { on(el, 'pointerenter', () => show(i)); on(el, 'focus', () => show(i)); });
   }

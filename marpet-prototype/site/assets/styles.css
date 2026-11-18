@@ -732,9 +732,6 @@ a.rplate:active{transform:translateY(1px);filter:drop-shadow(0 1px 0 rgba(0,0,0,
 .facts{background:rgba(255,255,255,.08)}.facts div{background:#07090c}
 /* first paint already matches the opening, before any script runs */
 @media (prefers-reduced-motion:no-preference){
-  .js .cine:not(.is-static):not(.is-scrolly) .scene__fact{display:none}
-  .js .cine:not(.is-static):not(.is-done) .shot--macro{opacity:1;visibility:visible}
-  .js .cine:not(.is-static):not(.is-done) .shot--hall{opacity:0}
 }
 /* if the scripts never arrive, the copy still appears */
 @keyframes copy-fallback{to{opacity:1;transform:none}}
@@ -791,3 +788,102 @@ ul.plain{padding-left:1.1rem}
 
 .shot .shot-note{display:none}
 .shot.is-top .shot-note,.cine.is-static .shot--hall .shot-note{display:block}
+
+/* =====================================================================
+   Refinement (18 Nov 2026): Archivo headings, Inter text, one short
+   homepage opening, restrained motion. These rules take precedence.
+   ===================================================================== */
+@font-face{font-family:"Archivo";font-style:normal;font-weight:100 900;font-display:swap;src:url(fonts/archivo-latin-wght-normal.woff2) format("woff2")}
+@font-face{font-family:"Inter";font-style:normal;font-weight:100 900;font-display:swap;src:url(fonts/inter-latin-wght-normal.woff2) format("woff2")}
+:root{--head:"Archivo","Helvetica Neue",Arial,sans-serif;--body:"Inter",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;--accent:#e9c08a}
+body{font:400 1rem/1.65 var(--body);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+p{max-width:68ch}
+
+/* hierarchy: sentence case, tight, heavy; small labels carry the uppercase */
+h1,h2,h3{font-family:var(--head);text-transform:none;text-wrap:balance}
+h1{font-size:clamp(2.6rem,5.8vw,5rem);font-weight:800;line-height:.98;letter-spacing:-.032em}
+h2{font-size:clamp(1.85rem,3.4vw,2.9rem);font-weight:750;line-height:1.04;letter-spacing:-.024em}
+h3{font-size:clamp(1.2rem,1.7vw,1.45rem);font-weight:700;line-height:1.15;letter-spacing:-.012em}
+.lead{font-size:clamp(1.06rem,1.25vw,1.22rem);line-height:1.6;font-weight:400}
+.eyebrow{font:600 .72rem/1.2 var(--head);letter-spacing:.18em;text-transform:uppercase}
+.crumbs{font:500 .72rem/1.2 var(--head);letter-spacing:.12em;text-transform:uppercase}
+.nav a{font:600 .78rem/1 var(--head);letter-spacing:.1em;text-transform:uppercase}
+.header-tel{font:600 .88rem/1 var(--head);letter-spacing:.02em}
+.menu-btn{font:600 .78rem/1 var(--head);letter-spacing:.12em;text-transform:uppercase}
+.btn{font:650 .8rem/1 var(--head);letter-spacing:.1em;text-transform:uppercase}
+.text-link{font:600 .76rem/1.2 var(--head);letter-spacing:.12em;text-transform:uppercase}
+.filter button,.hero__ctrl button,.chip{font:600 .72rem/1 var(--head);letter-spacing:.12em;text-transform:uppercase}
+.facts b{font:700 1rem/1.25 var(--head);letter-spacing:-.005em;text-transform:none}
+.stack .name{font:700 .98rem/1.1 var(--head);letter-spacing:.06em;text-transform:uppercase}
+.stack .no,.stack .go{font:600 .7rem/1 var(--head);letter-spacing:.12em}
+.customers li{font:600 .78rem/1.2 var(--head);letter-spacing:.08em;text-transform:uppercase}
+.frame__cap b{font:700 1.15rem/1.15 var(--head);letter-spacing:-.01em;text-transform:none}
+.frame__cap span,.spec dt,th{font-family:var(--head)}
+.contact-card .big{font:750 clamp(1.5rem,2.6vw,2.2rem)/1.1 var(--head);letter-spacing:-.02em;text-transform:none}
+.member>summary b{font:700 1.05rem/1.2 var(--head);letter-spacing:-.005em;text-transform:none}
+
+/* page headers */
+.page-head--cine h1{font-size:clamp(2.8rem,6.4vw,5.8rem);font-weight:800;letter-spacing:-.036em;line-height:.95;text-transform:none}
+.page-head--layered h1{font-size:clamp(2.3rem,4.4vw,4rem);letter-spacing:-.03em}
+.page-head h1{text-transform:none}
+
+/* Services viewer and Our Work scenes */
+.svc__cap b{font:750 clamp(1.7rem,2.8vw,2.6rem)/1.02 var(--head);letter-spacing:-.024em;text-transform:none}
+.svc__no{font:600 .72rem/1 var(--head);letter-spacing:.16em;color:var(--accent)}
+.svc__cap li{font:600 .66rem/1 var(--head);letter-spacing:.1em}
+.wk__no{font:250 clamp(3rem,6vw,5.4rem)/.8 var(--head);letter-spacing:-.05em;color:rgba(233,192,138,.55)}
+.wk__cap b{font:750 clamp(1.9rem,3.4vw,3.2rem)/1.02 var(--head);letter-spacing:-.028em;text-transform:none}
+.wk__svc{font:600 .72rem/1.2 var(--head);letter-spacing:.16em}
+.wk__go{font:650 .74rem/1 var(--head);letter-spacing:.12em}
+.done-title{font:800 clamp(2.8rem,7vw,6.4rem)/.94 var(--head);letter-spacing:-.04em;text-transform:none}
+.film-band__copy h2{font:800 clamp(2.4rem,5.6vw,5.2rem)/.96 var(--head);letter-spacing:-.036em;text-transform:none}
+.cta h2{text-transform:none}
+
+/* ---- homepage hero: full-bleed photograph, copy bottom-left, no pinning ---- */
+.cine.hero{display:flex;align-items:flex-end;min-height:min(920px,calc(100svh - 72px));background:#050608;overflow:hidden}
+.cine .hero__stage{position:absolute;inset:0;height:auto;aspect-ratio:auto;max-height:none;min-height:0}
+.cine .hero__copy{position:relative;z-index:4;width:var(--wrap);margin:0 auto;padding:6rem 0 clamp(4.5rem,11vh,7.5rem)}
+.cine .hero__copy>*{max-width:38rem}
+.cine .hero__copy h1{max-width:none;font-size:clamp(3rem,7.4vw,7rem);font-weight:800;line-height:.92;letter-spacing:-.045em;margin-bottom:.32em}
+.cine .hero__copy h1 span{display:block}
+.cine .hero__copy .lead{font-size:clamp(1.05rem,1.35vw,1.25rem);color:#dfe4ee;max-width:34rem}
+.cine .hero__note{z-index:4;left:auto;right:1.25rem;bottom:4rem;max-width:none;text-align:right;font-size:.72rem;color:rgba(220,226,238,.5)}
+.cine .hero__ctrl{z-index:5}
+/* the finished frame drifts very slowly; nothing else moves once the opening is over */
+.cine.is-done .shot--hall .shot__img{animation:hall-drift 28s ease-in-out infinite alternate}
+@keyframes hall-drift{from{transform:scale(1) translate3d(0,0,0)}to{transform:scale(1.05) translate3d(-1%,-.6%,0)}}
+/* first paint: the finished still. The opening, when it runs, takes over from the script */
+.cine .shot--hall{opacity:1;visibility:visible}
+.fx__grain{animation:none}
+@media (max-width:899px){
+  .cine.hero{min-height:calc(100svh - 64px)}
+  .cine .hero__copy{padding:5rem 0 4.5rem}
+  .cine .hero__copy h1{font-size:clamp(2.7rem,12.5vw,4.4rem)}
+  .cine .hero__note{right:auto;left:1.25rem;bottom:1rem;text-align:left}
+  .cine .hero__ctrl{top:.8rem;bottom:auto;right:.8rem}
+  .shot--hall .shot__img .m{object-position:30% 50%}
+}
+
+/* ---- homepage: the process, as an ordinary section ---- */
+.process__head{max-width:44rem;margin-bottom:clamp(2rem,4vw,3.5rem)}
+.process__list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(1.25rem,2.6vw,2.25rem)}
+.process__media{position:relative;aspect-ratio:4/5;overflow:hidden;background:#0b0e13;margin-bottom:1.3rem}
+.process__media .m{display:block;width:100%;height:100%;object-fit:cover;max-width:none}
+.process__media::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(4,6,10,.55),rgba(4,6,10,0) 45%);pointer-events:none}
+.process__media .shot-note{top:auto;bottom:.6rem;right:.6rem;z-index:2}
+.process__no{font:250 2.8rem/1 var(--head);letter-spacing:-.05em;color:var(--accent);margin:0 0 .5rem}
+.process__item h3{margin:0 0 .45rem}
+.process__item p{color:#c3cad8;margin:0 0 1rem;max-width:30ch}
+@media (max-width:820px){.process__list{grid-template-columns:1fr;gap:2.75rem}.process__media{aspect-ratio:16/10}}
+
+/* ---- film band: no longer pinned ---- */
+.film-band{height:auto}
+.film-band__pin{position:relative;top:0;height:min(78svh,760px)}
+
+/* ---- no theatrical layers left over ---- */
+.wk__panel,.sheets,.wipe,.shutter{display:none!important}
+@media (prefers-reduced-motion:reduce){.cine.is-done .shot--hall .shot__img{animation:none}}
+.process .process__no{color:var(--accent)}
+.cine .hero__note{position:absolute}
+.cine .hero__copy{flex:0 0 auto}
+.page-head--cine h1,.page-head--layered h1{margin-bottom:.28em}

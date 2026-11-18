@@ -70,9 +70,10 @@ function page({ file, title, desc, section, page, main }) {
 <title>${esc(title)} | Marpet Fabrications</title>
 <meta name="description" content="${esc(desc)}">
 <link rel="icon" href="data:,">
-<link rel="preload" href="assets/fonts/barlow-condensed-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/archivo-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/styles.css">
-${page === 'home' ? `<link rel="preload" href="assets/img/cine/macro-panel.webp" as="image" fetchpriority="high">\n<script type="application/ld+json">${JSON.stringify(orgLd)}</script>\n` : ''}</head>
+${page === 'home' ? `<link rel="preload" href="assets/img/cine/IMG_0283.webp" as="image" fetchpriority="high">\n<script type="application/ld+json">${JSON.stringify(orgLd)}</script>\n` : ''}</head>
 <body data-page="${page}" data-section="${section}" data-nav-scope>
 <a class="skip" href="#main">Skip to content</a>
 <p class="proto-bar">Development build. Not the live Marpet site. <a href="dev-notes.html">Open items and test pages</a> · <a href="shot-list.html">Shot list</a></p>
@@ -81,10 +82,10 @@ ${page === 'home' ? `<link rel="preload" href="assets/img/cine/macro-panel.webp"
     <a class="brand" href="index.html" data-name="Home"><img src="assets/img/${co.logo}" alt="Marpet Fabrications, home" width="${dims[co.logo][0]}" height="${dims[co.logo][1]}"></a>
     <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
     <nav class="nav" id="nav" aria-label="Main">
-      <ul>${NAV.map(([s, n, h]) => `<li><a href="${h}" data-section="${s}"${s === section ? ' aria-current="page"' : ''}${s === 'contact' ? ' data-transition="shutter"' : ''}>${n}</a></li>`).join('')}</ul>
+      <ul>${NAV.map(([s, n, h]) => `<li><a href="${h}" data-section="${s}"${s === section ? ' aria-current="page"' : ''}${s === 'contact' ? '' : ''}>${n}</a></li>`).join('')}</ul>
     </nav>
     <a class="header-tel" href="tel:${co.phoneHref}">${co.phone}</a>
-    <a class="btn btn--primary header-cta" href="contact.html#enquiry" data-transition="shutter" data-name="Request a quote">Request a quote</a>
+    <a class="btn btn--primary header-cta" href="contact.html#enquiry" data-name="Request a quote">Request a quote</a>
   </div>
 </header>
 ${main}
@@ -93,7 +94,7 @@ ${main}
     <div class="cols">
       <div><h2>Marpet Fabrications</h2><p>${co.strapline}</p><p>${co.address.join(', ')}</p></div>
       <div><h2>Services</h2><ul>${services.map((s) => `<li><a href="service-${s.slug}.html">${s.name}</a></li>`).join('')}</ul></div>
-      <div><h2>Company</h2><ul><li><a href="work.html">Our work</a></li><li><a href="about.html">About Marpet</a></li><li><a href="team.html">Meet the team</a></li><li><a href="contact.html" data-transition="shutter">Contact</a></li></ul></div>
+      <div><h2>Company</h2><ul><li><a href="work.html">Our work</a></li><li><a href="about.html">About Marpet</a></li><li><a href="team.html">Meet the team</a></li><li><a href="contact.html">Contact</a></li></ul></div>
       <div><h2>Contact</h2><ul><li><a href="tel:${co.phoneHref}">${co.phone}</a></li><li><a href="mailto:${co.email}">${co.email}</a></li>${li.profileUrl ? `<li><a href="${esc(li.profileUrl)}" target="_blank" rel="noopener">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>` : ''}<li>Sister company: <a href="https://jnrengineering.co.uk/" target="_blank" rel="noopener">JNR Engineering<span class="visually-hidden"> (opens in a new tab)</span></a></li></ul></div>
     </div>
     <p class="legal"><span>${co.legalName}. Registered in Scotland ${co.companyNumber}. VAT number ${co.vat}.</span><span><a href="privacy.html">Privacy</a> · Development build. Photographs from marpet.co.uk.</span></p>
@@ -109,22 +110,22 @@ ${main}
 }
 
 const cta = (h = 'Have a drawing or a line to fit out?', p = 'Tell us what you need made and where it is going. Marpet will come back to you.') => `
-<section class="cta"><div class="wrap"><div><h2>${h}</h2><p>${p}</p></div><div class="btn-row" style="margin:0"><a class="btn btn--primary" href="contact.html#enquiry" data-transition="shutter" data-name="Request a quote">Request a quote</a><a class="btn btn--steel" href="tel:${co.phoneHref}">Call ${co.phone}</a></div></div></section>`;
+<section class="cta"><div class="wrap"><div><h2>${h}</h2><p>${p}</p></div><div class="btn-row" style="margin:0"><a class="btn btn--primary" href="contact.html#enquiry" data-name="Request a quote">Request a quote</a><a class="btn btn--steel" href="tel:${co.phoneHref}">Call ${co.phone}</a></div></div></section>`;
 
-const frameCard = (p) => `<li data-service="${p.service}"><a class="frame plate" href="project-${p.slug}.html" data-transition="frame" data-plate data-name="${esc(p.title)}">${bolts}<div class="frame__img">${img(p.hero, p.title + ', Marpet photograph', 'loading="lazy"')}</div><div class="frame__cap"><b>${p.title}</b><span>${svc(p.service).short}</span></div></a></li>`;
+const frameCard = (p) => `<li data-service="${p.service}"><a class="frame plate" href="project-${p.slug}.html" data-plate data-name="${esc(p.title)}">${bolts}<div class="frame__img">${img(p.hero, p.title + ', Marpet photograph', 'loading="lazy"')}</div><div class="frame__cap"><b>${p.title}</b><span>${svc(p.service).short}</span></div></a></li>`;
 
 const stack = (list) => `<div class="stack-scene"><ol class="stack">${list.map((s, i) => `<li><a href="service-${s.slug}.html" data-name="${esc(s.name)}"><span class="plate" data-plate>${bolts}<span class="no">${String(i + 1).padStart(2, '0')}</span><span class="name">${s.name}</span>${img(s.hero, '', 'class="thumb" loading="lazy"')}<span class="go">View</span></span></a></li>`).join('')}</ol></div>`;
 
 const svcSelector = `<div class="svc" data-svc>
   <ol class="stack stack--flat">${services.map((s, i) => `<li><a href="service-${s.slug}.html" data-svc-item="${i}" data-name="${esc(s.name)}"><span class="plate" data-plate>${bolts}<span class="no">${String(i + 1).padStart(2, '0')}</span><span class="name">${s.name}</span><span class="go">View</span></span><span class="svc__lead">${s.lead}</span></a></li>`).join('')}</ol>
-  <div class="svc__stage" aria-hidden="true"><div class="shutter"><i class="shutter__a"></i><i class="shutter__b"></i></div>${FX}${services.map((s, i) => `<div class="svc__slide${i === 0 ? ' is-on' : ''}" data-svc-slide="${i}">
+  <div class="svc__stage" aria-hidden="true">${FX}${services.map((s, i) => `<div class="svc__slide${i === 0 ? ' is-on' : ''}" data-svc-slide="${i}">
     <div class="svc__bg">${cimg(s.hero, '', i === 0 ? '' : 'loading="lazy"')}</div>
     <div class="svc__fg">${img(s.images[0], '', 'loading="lazy"')}</div>
     <div class="svc__cap"><span class="svc__no">${String(i + 1).padStart(2, '0')}</span><b>${s.name}</b><p>${s.lead}</p><ul>${s.capability.slice(0, 3).map((c) => `<li>${c}</li>`).join('')}</ul></div>
   </div>`).join('')}</div>
 </div>`;
 
-const workCard = (p, i) => `<li class="wk${i % 2 ? ' wk--alt' : ''}" data-service="${p.service}" style="--ar:${dims[p.hero][0] >= dims[p.hero][1] ? '4/3' : '4/5'};--max:${Math.round(dims[p.hero][0] * 1.15)}px"><a href="project-${p.slug}.html" data-transition="frame" data-plate data-name="${esc(p.title)}"><span class="wk__bg" aria-hidden="true">${cbg(p.hero)}</span><span class="wk__frame">${cimg(p.hero, p.title + ', Marpet photograph', i < 1 ? '' : 'loading="lazy"')}<i class="wk__panel wk__panel--a" aria-hidden="true"></i><i class="wk__panel wk__panel--b" aria-hidden="true"></i></span><span class="wk__cap"><span class="wk__no" aria-hidden="true" data-no="${String(i + 1).padStart(2, '0')}"></span><b>${p.title}</b><span class="wk__svc">${svc(p.service).name}</span><span class="wk__go">View project</span></span></a></li>`;
+const workCard = (p, i) => `<li class="wk${i % 2 ? ' wk--alt' : ''}" data-service="${p.service}" style="--ar:${dims[p.hero][0] >= dims[p.hero][1] ? '4/3' : '4/5'};--max:${Math.round(dims[p.hero][0] * 1.15)}px"><a href="project-${p.slug}.html" data-plate data-name="${esc(p.title)}"><span class="wk__bg" aria-hidden="true">${cbg(p.hero)}</span><span class="wk__frame">${cimg(p.hero, p.title + ', Marpet photograph', i < 1 ? '' : 'loading="lazy"')}</span><span class="wk__cap"><span class="wk__no" aria-hidden="true" data-no="${String(i + 1).padStart(2, '0')}"></span><b>${p.title}</b><span class="wk__svc">${svc(p.service).name}</span><span class="wk__go">View project</span></span></a></li>`;
 
 const jnr = `
 <section class="section on-dark" id="jnr"><div class="wrap">
@@ -162,46 +163,47 @@ const linkedin = `
 const featured = projects.filter((p) => p.featured);
 page({ file: 'index.html', title: 'Stainless steel fabrication, Glasgow', desc: 'Marpet Fabrications design, manufacture and install stainless steel, mild steel and aluminium fabrication.', section: 'home', page: 'home', main: `
 <main id="main">
-<section class="hero scene cine" data-scene data-open>
-  <div class="scene__pin">
-    <div class="hero__stage cine__stage" data-stage>
-      <div class="shot shot--macro" data-shot="macro">${media('home-weld', { attrs: 'fetchpriority="high"' })}${note('home-weld')}</div>
-      <div class="shot shot--frame" data-shot="frame">${media('home-detail')}${note('home-detail')}</div>
-      <div class="shot shot--hall" data-shot="hall"><div class="shot__bg">${mbg('home-reveal')}</div><div class="shot__img">${media('home-reveal')}</div>${note('home-reveal')}</div>
-      <div class="shot shot--ch" data-shot="ch1"><div class="shot__bg">${mbg('home-design')}</div><div class="shot__img">${media('home-design')}</div><div class="shot__fg">${mbg('home-design')}</div>${note('home-design')}</div>
-      <div class="shot shot--ch" data-shot="ch2"><div class="shot__bg">${mbg('home-workshop')}</div><div class="shot__img">${media('home-workshop')}</div><div class="shot__fg">${mbg('home-workshop')}</div>${note('home-workshop')}</div>
-      <div class="shot shot--ch" data-shot="ch3"><div class="shot__bg">${mbg('home-site')}</div><div class="shot__img">${media('home-site')}</div><div class="shot__fg">${mbg('home-site')}</div>${note('home-site')}</div>
-      ${FX}
-      <div class="wipe" aria-hidden="true"><i class="wipe__sheet"></i></div>
-    </div>
-    <div class="scene__ch hero__copy" data-ch data-from="-1" data-to="0.14">
-      <p class="eyebrow">Sheet metal fabricators, Glasgow</p>
-      <h1><span class="ln"><span>Fabricated</span></span> <span class="ln ln--hi"><span>into place.</span></span></h1>
-      <p class="lead">Marpet design, manufacture and install stainless steel, mild steel and aluminium fabrication, in the workshop or on site.</p>
-      <div class="btn-row"><a class="btn btn--primary" href="contact.html#enquiry" data-transition="shutter" data-name="Request a quote">Request a quote</a><a class="btn btn--ghost" href="services.html">Our services</a></div>
-    </div>
-    ${[
-      ['0.22', '0.44', 'Designed', 'Marpet designs the work, or makes it to your design.', 'services.html', 'Our services'],
-      ['0.5', '0.72', 'Made in the workshop', 'Made by skilled, time served tradesmen in the fabrication workshop.', 'about.html', 'About Marpet'],
-      ['0.78', '2', 'Installed on site', 'Fitted at your premises, from a single table to a complete production line.', 'work.html', 'Completed work'],
-    ].map(([a, z, h, lead, href, label], i) => `<div class="scene__ch scene__fact" data-ch data-from="${a}" data-to="${z}">
-      <p class="eyebrow">${String(i + 1).padStart(2, '0')} / 03</p>
-      <h2><span class="ln"><span>${h}</span></span></h2>
-      <p class="lead">${lead}</p>
-      <a class="text-link" href="${href}">${label}</a>
-    </div>`).join('\n    ')}
-    <div class="scene__rail" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-    <p class="hero__note">Marpet photographs, colour graded. No generated imagery.</p>
-    <div class="hero__ctrl"><button type="button" data-hero-skip hidden>Skip intro</button><button type="button" data-hero-replay hidden>Replay opening</button></div>
+<section class="hero cine" data-open>
+  <div class="hero__stage" data-stage>
+    ${slot('home-weld').video
+    ? `<div class="shot shot--film" data-shot="film">${media('home-weld')}</div>`
+    : `<div class="shot shot--macro" data-shot="macro">${media('home-weld', { attrs: 'fetchpriority="high"' })}${note('home-weld')}</div>
+    <div class="shot shot--frame" data-shot="frame">${media('home-detail')}${note('home-detail')}</div>`}
+    <div class="shot shot--hall" data-shot="hall"><div class="shot__bg">${mbg('home-reveal')}</div><div class="shot__img">${media('home-reveal', { attrs: 'fetchpriority="high"' })}</div>${note('home-reveal')}</div>
+    ${FX}
   </div>
+  <div class="hero__copy">
+    <p class="eyebrow">Sheet metal fabricators, Glasgow</p>
+    <h1><span class="ln"><span>Fabricated</span></span> <span class="ln ln--hi"><span>into place.</span></span></h1>
+    <p class="lead">Marpet design, manufacture and install stainless steel, mild steel and aluminium fabrication, in the workshop or on site.</p>
+    <div class="btn-row"><a class="btn btn--primary" href="contact.html#enquiry" data-name="Request a quote">Request a quote</a><a class="btn btn--ghost" href="services.html">Our services</a></div>
+  </div>
+  <p class="hero__note">Marpet photographs, colour graded.</p>
+  <div class="hero__ctrl"><button type="button" data-hero-skip hidden>Skip intro</button><button type="button" data-hero-replay hidden>Replay</button></div>
 </section>
+<section class="section on-deep process"><div class="wrap">
+  <div class="process__head"><p class="eyebrow">How Marpet works</p><h2>One firm from drawing to fitted on site.</h2></div>
+  <ol class="process__list">
+    ${[
+      ['home-design', 'Designed', 'Marpet designs the work, or makes it to your design.', 'services.html', 'Our services'],
+      ['home-workshop', 'Made in the workshop', 'Made by skilled, time served tradesmen in the fabrication workshop.', 'about.html', 'About Marpet'],
+      ['home-site', 'Installed on site', 'Fitted at your premises, from a single table to a complete production line.', 'work.html', 'Completed work'],
+    ].map(([id, h, lead, href, label], i) => `<li class="process__item">
+      <div class="process__media">${media(id, { attrs: 'loading="lazy"' })}${note(id)}</div>
+      <p class="process__no">${String(i + 1).padStart(2, '0')}</p>
+      <h3>${h}</h3>
+      <p>${lead}</p>
+      <a class="text-link" href="${href}">${label}</a>
+    </li>`).join('\n    ')}
+  </ol>
+</div></section>
 <div class="facts">
   <div><b>Design, manufacture, install</b>One firm from drawing to fitted on site.</div>
   <div><b>Stainless, mild steel, aluminium</b>Sheet metal and fabricated steelwork.</div>
   <div><b>Food and drink</b>Food processing, packaging and catering sectors.</div>
   <div><b>East of Glasgow</b>Scotland and the North of England by the M74.</div>
 </div>
-<section class="section on-deep wk-sec done-sec" data-sheets="split"><div class="wk-wrap">
+<section class="section on-deep wk-sec done-sec"><div class="wk-wrap">
   <div class="done-head"><p class="eyebrow">Completed work</p><h2 class="done-title"><span>Finished,</span> <span>fitted,</span> <span>in production.</span></h2><a class="text-link" href="work.html">All completed work</a></div>
   <ul class="wk-grid">${featured.map(workCard).join('')}</ul>
 </div></section>
@@ -216,7 +218,7 @@ page({ file: 'index.html', title: 'Stainless steel fabrication, Glasgow', desc: 
   </div>
   <div class="beamed" data-reveal>${img('IMG_0276.jpg', 'Stainless steel side table beside a blue belt conveyor with the MF mark on its side panel', 'loading="lazy"')}</div>
 </div></section>
-<section class="section on-steel" data-sheets="lift"><div class="wrap">
+<section class="section on-steel"><div class="wrap">
   <p class="eyebrow">What we make</p>
   <div class="section-head"><h2>Services</h2><a class="text-link" href="services.html">All services</a></div>
   ${stack(services.slice(0, 5))}
@@ -307,7 +309,7 @@ for (const s of services) {
     <h1>${s.name}</h1>
     <p class="lead">${s.lead}</p>
 
-    <div class="btn-row"><a class="btn btn--primary" href="contact.html#enquiry" data-transition="shutter" data-name="Request a quote">Ask about ${s.short.toLowerCase()}</a></div>
+    <div class="btn-row"><a class="btn btn--primary" href="contact.html#enquiry" data-name="Request a quote">Ask about ${s.short.toLowerCase()}</a></div>
     ${motion(s.motion)}
   </div>
   <div class="page-head__media plate" data-frame-target>${bolts}<div class="frame__img">${cimg(s.hero, s.name + ', Marpet photograph')}${lowres(s.hero)}</div></div>
@@ -321,7 +323,7 @@ for (const s of services) {
   </div>
   <div><p class="eyebrow">Capability</p><h2>How it is made</h2><ul class="ticks">${s.capability.map((t) => `<li>${t}</li>`).join('')}</ul></div>
 </div></section>
-<section class="section on-steel" data-sheets="lift"><div class="wrap">
+<section class="section on-steel"><div class="wrap">
   <p class="eyebrow">Photographs</p>
   <div class="section-head"><h2>Examples of ${s.short.toLowerCase()}</h2></div>
   <div class="gallery">${s.images.map((f) => `<figure class="plate">${bolts}<div class="frame__img">${img(f, s.name + ', Marpet photograph', 'loading="lazy"')}${lowres(f)}</div></figure>`).join('')}</div>
@@ -397,7 +399,7 @@ ${filmBand('band-about', { eyebrow: 'In the workshop', heading: 'Made by hand, f
   </div>
   <div class="beamed" data-reveal>${img('general-fabrication-1.jpg', 'Stainless steel roller table with enclosure in front of a Marpet Fabrications van', 'loading="lazy"')}</div>
 </div></section>
-<section class="section on-steel" data-sheets="split"><div class="wrap split">
+<section class="section on-steel"><div class="wrap split">
   <div class="beamed" data-reveal>${img('IMG_0283.jpg', 'Long stainless steel belt conveyor installed in a food production hall', 'loading="lazy"')}</div>
   <div data-reveal>
     <p class="eyebrow">How we work</p>
@@ -499,7 +501,7 @@ page({ file: '404.html', title: 'Page not found', desc: 'That page does not exis
 <section class="page-head"><div class="wrap">
   <h1>Page not found</h1>
   <p class="lead">That page has moved or does not exist.</p>
-  <div class="btn-row"><a class="btn btn--primary" href="index.html">Home</a><a class="btn btn--ghost" href="services.html">Services</a><a class="btn btn--ghost" href="contact.html" data-transition="shutter">Contact</a></div>
+  <div class="btn-row"><a class="btn btn--primary" href="index.html">Home</a><a class="btn btn--ghost" href="services.html">Services</a><a class="btn btn--ghost" href="contact.html">Contact</a></div>
 </div></section>
 </main>` });
 
