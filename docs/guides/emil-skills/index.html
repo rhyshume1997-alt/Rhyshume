@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Emil's Skills, Explained</title>
+<meta name="robots" content="noindex">
+<style>
+  /* A working manual: cool paper, graphite ink, one indigo accent. Light by choice. */
+  :root {
+    color-scheme: light;
+    --paper: #f5f6f9;
+    --card: #ffffff;
+    --ink: #161b2c;
+    --soft: #5a6479;
+    --line: #dde1ea;
+    --accent: #4338ca;
+    --accent-soft: #e8e6fb;
+    --warn: #9a4b00;
+    --warn-soft: #fff1de;
+    --good: #14683b;
+    --display: ui-rounded, "SF Pro Rounded", "Segoe UI Variable Display", system-ui, sans-serif;
+    --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--paper); }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.6 var(--body); }
+  main { max-width: 960px; margin: 0 auto; padding: 40px 20px 80px; display: grid; gap: 52px; }
+  main > *, section > * { min-width: 0; }
+  section { display: grid; gap: 16px; }
+  .prose { max-width: 64ch; display: grid; gap: 12px; }
+  h1 { font: 800 clamp(32px, 6.5vw, 52px)/1.08 var(--display); margin: 0; text-wrap: balance; }
+  h2 { font: 800 25px/1.2 var(--display); margin: 0; text-wrap: balance; }
+  h3 { font: 700 16px/1.3 var(--display); margin: 0; }
+  p, ul, ol { margin: 0; }
+  ul, ol { padding-left: 1.2em; display: grid; gap: 8px; }
+  .lede { font-size: 20px; line-height: 1.5; }
+  .note { color: var(--soft); font-size: 15px; }
+  a { color: var(--accent); }
+  a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  code { font: 0.88em var(--mono); background: #e7eaf2; padding: 1px 6px; border-radius: 6px; }
+  pre { margin: 0; padding: 16px 18px; background: var(--ink); color: #eef1f8; border-radius: 12px; overflow-x: auto; font: 13.5px/1.6 var(--mono); }
+  pre code { background: none; padding: 0; font-size: inherit; }
+
+  .callout { background: var(--warn-soft); border: 1px solid #f0cf9f; border-radius: 12px; padding: 14px 18px; display: grid; gap: 6px; }
+  .callout b { color: var(--warn); }
+
+  /* the one live demo */
+  .demo { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px; display: grid; gap: 14px; }
+  .lanes { display: grid; gap: 10px; }
+  .lane { display: grid; grid-template-columns: 88px 1fr; align-items: center; gap: 12px; }
+  .lane span { font: 700 13px var(--mono); color: var(--soft); }
+  .track { height: 44px; background: var(--paper); border-radius: 10px; position: relative; overflow: hidden; }
+  .puck { position: absolute; left: 6px; top: 6px; width: 32px; height: 32px; border-radius: 8px; background: var(--accent); }
+  .lane.bad .puck { background: #a3a8b8; }
+  .demo button { justify-self: start; font: 700 15px var(--display); border: 0; border-radius: 999px; padding: 10px 18px; background: var(--ink); color: #fff; cursor: pointer; }
+  .puck.go { transform: translateX(var(--run)); }
+  .ease-in .puck { transition: transform 600ms cubic-bezier(0.55, 0, 1, 0.45); }
+  .ease-out .puck { transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1); }
+  @media (prefers-reduced-motion: reduce) { .puck { transition: none !important; } }
+
+  .two { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); }
+  .way { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; display: grid; gap: 8px; align-content: start; }
+  .way.slash { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+
+  .tag { display: inline-block; font: 700 11px var(--mono); letter-spacing: 0.04em; padding: 2px 8px; border-radius: 999px; vertical-align: middle; }
+  .tag.auto { background: #dff3e7; color: var(--good); }
+  .tag.slash { background: var(--accent-soft); color: var(--accent); }
+  .tag.read { background: #eceef4; color: var(--soft); }
+
+  .scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+  table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 15px; }
+  th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font: 700 12px var(--display); letter-spacing: 0.06em; text-transform: uppercase; color: var(--soft); }
+  tr:last-child td { border-bottom: 0; }
+  td:first-child { font-weight: 600; }
+  td code { white-space: nowrap; }
+
+  .steps { counter-reset: s; list-style: none; padding: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+  .steps li { counter-increment: s; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; display: grid; gap: 4px; align-content: start; }
+  .steps li::before { content: counter(s); font: 800 20px var(--display); color: var(--accent); }
+  .steps b { font-family: var(--display); }
+  .steps span { color: var(--soft); font-size: 15px; }
+  footer { color: var(--soft); font-size: 14px; border-top: 1px solid var(--line); padding-top: 18px; }
+</style>
+</head>
+<body>
+<main>
+  <section>
+    <div class="prose">
+      <h1>Emil's skills, explained</h1>
+      <p class="lede">19 checklists from a design engineer that stop an AI making small, common mistakes in animations and interfaces. You install them once. Claude then builds, reviews and tidies your UI to his standards.</p>
+      <p>The source is Emil Kowalski's repository, github.com/emilkowalski/skills (MIT licence). They are installed in this workspace's repository under <code>.claude/skills</code>.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="prose">
+      <h2>The idea, in five-year-old words</h2>
+      <p>An AI can build a button that slides in. It cannot always tell whether the slide <em>feels</em> right. The usual slip: it picks the wrong curve, so things start slow and then rush, which feels sticky. A good curve starts fast and settles gently.</p>
+      <p>Emil's skills are a list of these small slips, with the fix for each. Claude reads the list before it builds, so it doesn't make them. Press the button and watch the same slide drawn both ways.</p>
+    </div>
+    <div class="demo">
+      <div class="lanes">
+        <div class="lane bad ease-in"><span>ease-in</span><div class="track"><div class="puck" data-run="auto"></div></div></div>
+        <div class="lane ease-out"><span>ease-out</span><div class="track"><div class="puck" data-run="auto"></div></div></div>
+      </div>
+      <button type="button" id="play">Play both</button>
+      <p class="note">Same distance, same 600 ms. The grey one hangs and then lunges, which is what "ease-in" does to something entering. The blue one arrives quickly and settles, which is what the skills ask for. Slowed down here so you can see it. Real interface motion is usually under 300 ms.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Two ways to start a skill</h2>
+    <div class="callout">
+      <b>Correction to what I said earlier.</b>
+      <span>I told you to just ask in plain words for any of them. That is true for 14 of the 19. Five only run when you type their name with a slash, and plain words will not start them: <code>/review-animations</code>, <code>/prototype</code>, <code>/pick-ui-library</code>, <code>/learn-taste</code> and <code>/ask-emil</code>.</span>
+    </div>
+    <div class="two">
+      <div class="way">
+        <h3><span class="tag auto">AUTO</span> Just describe the job</h3>
+        <p>Say "animate this drawer" or "it stutters when I scroll". Claude picks the skill whose description matches. Works for the other 14.</p>
+      </div>
+      <div class="way slash">
+        <h3><span class="tag slash">/SLASH</span> Type the name</h3>
+        <p>Type <code>/review-animations</code> in Claude Code, then say what to look at. These five are deliberately manual so they never fire unasked.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Quick start: three things to try</h2>
+    <ol class="steps">
+      <li><b>Not sure which skill?</b><span>Type <code>/ask-emil</code> and describe what you are doing. It names the one to use and why.</span></li>
+      <li><b>Building something</b><span>"Animate the quote drawer opening." The <code>animate</code> skill decides whether it should move at all, then the curve, length and how it can be interrupted.</span></li>
+      <li><b>Checking before you ship</b><span>Type <code>/review-animations</code> on your changes. It is strict by design: it flags first and approves only when earned.</span></li>
+    </ol>
+  </section>
+
+  <section>
+    <div class="prose">
+      <h2>What to say for what</h2>
+    </div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>You say</th><th>Skill</th></tr></thead>
+        <tbody>
+          <tr><td>"Animate this"</td><td><code>animate</code></td></tr>
+          <tr><td>"These should come in one after another"</td><td><code>choreograph</code></td></tr>
+          <tr><td>"It doesn't follow my finger" or "jumps when I let go"</td><td><code>gestures</code></td></tr>
+          <tr><td>"It stutters" or "it's janky"</td><td><code>animation-performance</code></td></tr>
+          <tr><td>"Does this animation feel right?"</td><td><code>/review-animations</code></td></tr>
+          <tr><td>"Make the app feel better"</td><td><code>improve-animations</code></td></tr>
+          <tr><td>"What could move here?"</td><td><code>find-animation-opportunities</code></td></tr>
+          <tr><td>"Too much is moving" or "feels slow"</td><td><code>remove-animations</code></td></tr>
+          <tr><td>"Give me a few options"</td><td><code>/prototype</code></td></tr>
+          <tr><td>"Which library should I use?"</td><td><code>/pick-ui-library</code></td></tr>
+          <tr><td>"Works in Chrome but feels wrong on my phone"</td><td><code>mobile-native</code></td></tr>
+          <tr><td>"Try the worst case"</td><td><code>break-ui</code></td></tr>
+          <tr><td>"What is that bouncy thing called?"</td><td><code>animation-vocabulary</code></td></tr>
+          <tr><td>"Stop making that mistake"</td><td><code>/learn-taste</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="prose">
+      <h2>The manual: all 19</h2>
+      <p><span class="tag auto">AUTO</span> start by describing the job. <span class="tag slash">/SLASH</span> start by typing the name. <span class="tag read">READ-ONLY</span> never edits your code.</p>
+    </div>
+
+    <h3>Build</h3>
+    <div class="scroll"><table><tbody>
+      <tr><td><code>animate</code> <span class="tag auto">AUTO</span></td><td>One animation on the web, decided in order: should it move, why, which properties, which curve and length, how it is interrupted, how it leaves. Then it writes it.</td></tr>
+      <tr><td><code>choreograph</code> <span class="tag auto">AUTO</span></td><td>Several things moving together: what leads, what follows, what overlaps, what stays still. Staggers, hero entrances, one view swapping for another.</td></tr>
+      <tr><td><code>gestures</code> <span class="tag auto">AUTO</span></td><td>Drag, swipe, sheets and drawers that follow the finger one for one, carry the speed of the release and can be caught mid-move.</td></tr>
+      <tr><td><code>animate-expo</code> <span class="tag auto">AUTO</span></td><td>The same, for React Native and Expo apps: gestures, sheets, haptics, screen changes.</td></tr>
+      <tr><td><code>prototype</code> <span class="tag slash">/SLASH</span></td><td>Builds several genuinely different versions of a piece of UI behind a switcher, so you flip through them live and pick. Three shades of one idea defeats the point, so it forces real differences.</td></tr>
+      <tr><td><code>pick-ui-library</code> <span class="tag slash">/SLASH</span></td><td>Picks a library from Emil's trusted list (dropdowns, toasts, drawers, charts, drag and drop) instead of hand-rolling one or installing something abandoned. It checks what you already use first.</td></tr>
+      <tr><td><code>ask-sonner</code> <span class="tag auto">AUTO</span></td><td>Everything about the Sonner toast library: setup, loading and promise toasts, styling, and toasts that do not appear or appear twice.</td></tr>
+    </tbody></table></div>
+
+    <h3>Check</h3>
+    <div class="scroll"><table><tbody>
+      <tr><td><code>review-animations</code> <span class="tag slash">/SLASH</span></td><td>Strict review of the motion in a diff against ten non-negotiable standards. Flags by default.</td></tr>
+      <tr><td><code>break-ui</code> <span class="tag auto">AUTO</span></td><td>Feeds a screen worst-case data (long names, empty lists, huge counts, emoji, non-Latin text) behind a "Demo data / Worst case" toggle, then reports what broke and how to fix it.</td></tr>
+      <tr><td><code>animation-performance</code> <span class="tag auto">AUTO</span></td><td>Fixes motion that drops frames: which properties are cheap to animate, when to use CSS or JS, and finding the real cause.</td></tr>
+      <tr><td><code>mobile-native</code> <span class="tag auto">AUTO</span></td><td>The small fixes that make a web app feel installed on a phone: sticky hover, tap flashes, the 100vh bug, inputs that zoom the page, the notch, and testing on real hardware.</td></tr>
+    </tbody></table></div>
+
+    <h3>Upkeep, on a codebase that already exists</h3>
+    <div class="scroll"><table><tbody>
+      <tr><td><code>improve-animations</code> <span class="tag auto">AUTO</span> <span class="tag read">READ-ONLY</span></td><td>Audits all the motion in a project and writes prioritised plans another agent can carry out.</td></tr>
+      <tr><td><code>find-animation-opportunities</code> <span class="tag auto">AUTO</span> <span class="tag read">READ-ONLY</span></td><td>Finds places that should animate and, as importantly, rejects the ones that should not. Proposes exact values; does not build them.</td></tr>
+      <tr><td><code>remove-animations</code> <span class="tag auto">AUTO</span></td><td>Takes out motion the app does not need: on keyboard shortcuts, on things used constantly, decoration. It only subtracts.</td></tr>
+    </tbody></table></div>
+
+    <h3>Knowledge underneath</h3>
+    <div class="scroll"><table><tbody>
+      <tr><td><code>emil-design-eng</code> <span class="tag auto">AUTO</span></td><td>His core philosophy for polish: press and hover states, where a popover grows from, tooltip timing, the invisible details. The fallback when no narrower skill fits.</td></tr>
+      <tr><td><code>apple-design</code> <span class="tag auto">AUTO</span></td><td>Apple's approach to fluid, physical interfaces from their design talks, translated for the web.</td></tr>
+      <tr><td><code>animation-vocabulary</code> <span class="tag auto">AUTO</span></td><td>Turns a vague description into the exact term ("the iOS rubber-band scroll" is rubber-banding) so you can prompt precisely.</td></tr>
+      <tr><td><code>write-swift</code> <span class="tag auto">AUTO</span></td><td>Modern Swift 6, concurrency and native iOS code. Nothing to do with the web.</td></tr>
+    </tbody></table></div>
+
+    <h3>Helpers</h3>
+    <div class="scroll"><table><tbody>
+      <tr><td><code>ask-emil</code> <span class="tag slash">/SLASH</span></td><td>A router. Describe your situation and it recommends one skill and says why.</td></tr>
+      <tr><td><code>learn-taste</code> <span class="tag slash">/SLASH</span></td><td>Run at the end of a working session. It collects every correction you made, including edits you made yourself, and turns each into a written rule with its reason so the next session does not repeat the mistake. It proposes first and writes only what you approve.</td></tr>
+    </tbody></table></div>
+  </section>
+
+  <section>
+    <div class="prose">
+      <h2>Three habits that get the most out of them</h2>
+      <ol>
+        <li><b>Build, then break, then review.</b> After <code>animate</code> or <code>choreograph</code>, run <code>break-ui</code> and <code>/review-animations</code> before calling it done.</li>
+        <li><b>Use <code>/prototype</code> when you cannot settle it in words.</b> Looking at four versions beats describing one.</li>
+        <li><b>End long sessions with <code>/learn-taste</code>.</b> Run it before you clear the conversation, so your corrections become rules in the project.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <div class="prose">
+      <h2>Applying them to all your sites, now and later</h2>
+      <p>Skills load from the folder of whatever project Claude Code is opened in, so each repository needs its own copy, or you need a copy that follows you everywhere. Here is what is true today.</p>
+    </div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Where</th><th>Status</th><th>What to do</th></tr></thead>
+        <tbody>
+          <tr><td>This repository (rhyshume.co.uk)</td><td>Installed and pushed</td><td>Nothing. They load in any session on it.</td></tr>
+          <tr><td>Your other repositories</td><td>Not installed. I can only reach this one from here</td><td>Open a session on each repo, say "copy Emil's skills into this repo's <code>.claude/skills</code> from the rhyshume repo, then commit". The folder is plain files.</td></tr>
+          <tr><td>Your own computer, every project</td><td>Not set up</td><td>Run <code>npx skills@latest add emilkowalski/skills</code>, the repository's own installer. Claude Code reads skills kept in <code>~/.claude/skills</code> in every project, and the Mascot Designer and Google Ads installers use that same place.</td></tr>
+          <tr><td>Cloud sessions, every repo</td><td>Possible, untested</td><td>A setup script on your cloud environment could download the skills into the container each time it starts. I have not tried it, and changing the environment needs your approval. Ask me if you want it.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="prose">
+      <h3>Make new projects pick them up</h3>
+      <p>For any new site, add this line to the project's <code>CLAUDE.md</code>, so Claude reaches for the skills without being told:</p>
+    </div>
+<pre><code>For UI, animation or interaction work, use the installed skills
+(animate, choreograph, gestures, mobile-native, break-ui). Run
+/review-animations before finishing motion changes.</code></pre>
+    <div class="callout">
+      <b>One thing to watch on Tolra.</b>
+      <span>Its CLAUDE.md says "do not go looking for problems; only do what is asked". Three of these skills (<code>improve-animations</code>, <code>find-animation-opportunities</code>, <code>remove-animations</code>) are exactly that kind of search. Run them only when you ask, and leave them out of the line above.</span>
+    </div>
+    <p class="note">Updating later: run the same <code>npx skills@latest add emilkowalski/skills</code> on your computer, or ask Claude to re-copy the folder from the repository. Licence: MIT, kept alongside the skills in <code>.claude/skills/_emilkowalski/</code>.</p>
+  </section>
+
+  <footer>Skills by Emil Kowalski, from github.com/emilkowalski/skills at commit 64eb3de. This page is a guide to them, written from the skills' own instructions.</footer>
+</main>
+<script>
+  (function () {
+    var go = document.getElementById('play');
+    var pucks = document.querySelectorAll('.puck');
+    var on = false;
+    function run() {
+      pucks.forEach(function (p) {
+        var room = p.parentElement.clientWidth - 32 - 12;
+        p.style.setProperty('--run', (on ? 0 : room) + 'px');
+        p.classList.add('go');
+      });
+      on = !on;
+      go.textContent = on ? 'Play back' : 'Play both';
+    }
+    go.addEventListener('click', run);
+  })();
+</script>
+</body>
+</html>
