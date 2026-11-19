@@ -23,7 +23,8 @@ test('home page: the headline, one line under it, the preview button and the sma
   assert.ok(/<a class="btn"[^>]*>Get a free preview of your site</.test(home.match(/<section class="hero"[\s\S]*?<\/section>/)[0]));
   assert.ok(/<p class="small">[^]*?<a [^>]*>Book a free 20-minute chat/.test(home), 'the 20 minute chat stays as a smaller link');
   assert.ok(!/<a class="btn[^"]*"[^>]*>Book a free 20-minute chat/.test(home), 'the chat is never a main button');
-  assert.ok(home.split(BOOKING).length - 1 >= 3, 'booking link is in the header, the hero and the bottom');
+  assert.ok(home.split(BOOKING).length - 1 >= 2, 'booking link stays as the smaller chat link in the hero and at the bottom');
+  assert.ok((home.match(/<a class="btn[^"]*" href="\/contact">/g) || []).length >= 3, 'the free preview buttons lead to the three step page');
   assert.ok(home.includes('href="tel:+447908041480"'));
   assert.ok(/<title>[^<]{10,70}<\/title>/.test(home));
   const d = home.match(/<meta name="description" content="([^"]+)"/);

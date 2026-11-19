@@ -262,3 +262,27 @@ html:not(.js) .ba input { display: none; }
 @media (prefers-reduced-motion: reduce) {
   .btn, .text-link::after, .site-nav a::after { transition: none; }
 }
+
+/* ---------- the three steps as actual stairs: each one higher than the last ---------- */
+.steps { max-width: none; margin-top: 2.2rem; }
+.steps li { display: block; border: 0; border-left: 8px solid var(--ink); background: var(--paper-2); padding: 1.2rem 1.3rem 1.4rem; }
+.steps li:last-child { border-bottom: 0; }
+.steps li:nth-child(2) { background: var(--accent-soft); }
+.steps li:nth-child(3) { background: var(--ink); color: var(--paper); border-left-color: var(--accent); }
+.steps li:nth-child(3) h3 { color: var(--paper); }
+.steps li:nth-child(3) p { color: #cdd5e4; }
+.steps li:nth-child(3) .n { color: #9db8e0; }
+.steps .n { display: block; margin-bottom: 0.5rem; }
+.steps li:nth-child(1) { margin-left: 0; }
+.steps li:nth-child(2) { margin-left: 1.5rem; }
+.steps li:nth-child(3) { margin-left: 3rem; }
+.steps li + li { margin-top: 0.5rem; }
+@media (min-width: 48rem) {
+  .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: end; gap: 0; }
+  .steps li, .steps li:nth-child(n) { margin: 0; border-left: 0; border-top: 8px solid var(--ink); }
+  .steps li:nth-child(3) { border-top-color: var(--accent); }
+  .steps li + li { margin-top: 0; }
+  .steps li:nth-child(1) { min-height: 11rem; }
+  .steps li:nth-child(2) { min-height: 15rem; }
+  .steps li:nth-child(3) { min-height: 19rem; }
+}
