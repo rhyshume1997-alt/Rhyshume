@@ -1,0 +1,54 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Procedural fire render lab</title>
+<style>html,body{margin:0;background:#1f1612}canvas{display:block}</style></head>
+<body><canvas id="c" width="1280" height="720"></canvas>
+<script>
+/* A procedural fire loop, rendered frame by frame so it can be encoded as real video.
+   Every noise layer scrolls by exactly one period per loop, so the first and last frames match and the loop is seamless. */
+var FRAG = [
+'precision highp float;',
+'uniform vec2 res;uniform float ph;',
+'float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}',
+'float vn(vec2 p,float per){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);float y0=mod(i.y,per),y1=mod(i.y+1.,per);',
+' return mix(mix(h(vec2(i.x,y0)),h(vec2(i.x+1.,y0)),f.x),mix(h(vec2(i.x,y1)),h(vec2(i.x+1.,y1)),f.x),f.y);}',
+'float fbm(vec2 p,float per){float a=.5,s=0.;for(int k=0;k<5;k++){s+=a*vn(p,per);p*=2.;per*=2.;a*=.5;}return s;}',
+'void main(){',
+' vec2 uv=gl_FragCoord.xy/res;float asp=res.x/res.y;float x=(uv.x-.40)*asp;float y=uv.y;',
+' float w=fbm(vec2(x*3.+1.7,y*3.-ph*6.),6.);',
+' float w2=fbm(vec2(x*6.+9.1,y*5.-ph*6.),6.);',
+' float lean=(w-.5)*.55*y+(w2-.5)*.18*y;',
+' float width=mix(.46,.10,pow(y,.7));',
+' float dd=abs(x+lean)/width;',
+' float n=fbm(vec2(x*4.5+(w-.5)*1.6,y*3.6-ph*6.),6.);',
+' float tongue=fbm(vec2(x*9.+3.3,y*8.-ph*6.),6.);',
+' float f=n*1.25+(tongue-.5)*.55-y*1.15-dd*.62+.18;',
+' f=clamp(f*1.7,0.,1.);',
+' f=f*f*(3.-2.*f);',
+' float baseglow=exp(-y*9.)*.35*smoothstep(.5,0.,abs(x));',
+' f=clamp(f+baseglow*(.4+.6*n),0.,1.);',
+' vec3 c=vec3(.025,.012,.008);',
+' c=mix(c,vec3(.55,.06,.01),smoothstep(.06,.38,f));',
+' c=mix(c,vec3(1.,.42,.05),smoothstep(.32,.66,f));',
+' c=mix(c,vec3(1.,.8,.38),smoothstep(.86,1.,f));',
+/* warm light the fire throws on the dark around it */
+' c+=vec3(.20,.06,.01)*exp(-length(vec2(x*.9,(y-.12)*1.1))*2.6)*.55;',
+/* embers: three layers of sparks rising in cells, periodic over the loop */
+' float e=0.;',
+' for(int k=0;k<3;k++){float fk=float(k);float sc=7.+fk*5.;vec2 g=vec2(uv.x*asp*sc*1.2,uv.y*sc-ph*sc);vec2 id=floor(g);float idy=mod(id.y,sc);',
+'  float r=h(vec2(id.x+fk*17.,idy));vec2 fp=fract(g)-.5;vec2 jit=vec2(h(vec2(id.x,idy+3.))-.5,h(vec2(id.x+5.,idy))-.5)*.6;',
+'  jit.x+=sin(ph*6.2831*(1.+fk)+r*6.28)*.25;',
+'  float d=length(fp-jit);float on=step(.88-.02*fk,r)*smoothstep(.0,.25,1.-abs((uv.x*asp-(.40*asp))*.9+.05)*1.5);',
+'  float life=smoothstep(.0,.15,uv.y)*smoothstep(1.,.3,uv.y);',
+'  e+=on*life*smoothstep(.09-.015*fk,0.,d)*(.6+.4*sin(ph*18.85+r*40.));}',
+' c+=vec3(1.,.55,.15)*e;',
+' float vg=smoothstep(1.15,.35,length((uv-.5)*vec2(asp*.7,1.)));c*=mix(.55,1.,vg);',
+' gl_FragColor=vec4(c,1.);',
+'}'].join('\n');
+var cv=document.getElementById('c'),gl=cv.getContext('webgl',{preserveDrawingBuffer:true});
+function sh(t,s){var o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(o));return o;}
+var pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}'));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,FRAG));gl.linkProgram(pr);gl.useProgram(pr);
+var b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);var l=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(l);gl.vertexAttribPointer(l,2,gl.FLOAT,false,0,0);
+var uR=gl.getUniformLocation(pr,'res'),uP=gl.getUniformLocation(pr,'ph');
+window.draw=function(ph){gl.viewport(0,0,cv.width,cv.height);gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uP,ph);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);return cv.toDataURL('image/jpeg',0.93);};
+window.ready=true;
+</script></body></html>
