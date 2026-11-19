@@ -195,6 +195,7 @@ footer{background:var(--d);color:var(--lt);font:400 12.5px/1.5 var(--mono);paddi
 .fromrhys{background:var(--paper2);border-top:1px solid var(--rule);padding:34px 0}
 .fromrhys .wrap{display:flex;flex-wrap:wrap;gap:14px 34px;align-items:baseline}
 .fromrhys p{font:600 19px/1.3 var(--disp);margin:0;color:var(--ink)}
+.fromrhys .livenote{font:400 13px/1.5 var(--mono);color:var(--mute);margin:14px 0 0;max-width:52em}
 .fromrhys a{font:500 14px/1.3 var(--mono);color:var(--t);text-underline-offset:4px}
 .rise{animation:rise 1s var(--ease) both}.r1{animation-delay:.05s}.r2{animation-delay:.18s}.r3{animation-delay:.3s}.r4{animation-delay:.42s}
 @keyframes rise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
@@ -414,17 +415,19 @@ function helpSection(c) {
   }).join('');
   return '<section class="help" id="help"><div class="wrap"><div class="reveal"><span class="eyebrow">For ' + esc(c.name) + '</span><h2>How this helps your business</h2>' +
     '<p class="lede">This is a prototype built from your current site, so you can see the idea. Colours, wording, photos, layout and pages can all be changed to your spec. Tell me what you would like different and I will change it.</p></div>' +
-    body + '<p class="note">Nothing here is live and nothing has been published for you. No customer names or private details were added.</p></div></section>';
+    body + '</div></section>';
 }
 
 // Every concept carries the Prototype line at the top and the reply bar at the end. With no cta given, the default is a reply by email.
+// Said on every concept, in the reply bar at the end, so it cannot go missing with the other parts.
+const LIVE_NOTE = '<div class="wrap"><p class="livenote">Nothing here is live and nothing has been published for you. No customer names or private details were added.</p></div>';
 const DEFAULT_CTA = { mail: 'mailto:rhys@rhyshume.co.uk?subject=' + encodeURIComponent('Re: the concept'), book: '' };
 
 function fromRhys(o) {
   o = { cta: (o && o.cta) || DEFAULT_CTA };
   const link = function (href, label) { return /^(https:|mailto:)/.test(href || '') ? '<a href="' + esc(href) + '">' + esc(label) + '</a>' : ''; };
   return '<section class="fromrhys" id="from-rhys"><div class="wrap"><p>Like it? Reply to my email or book 20 minutes, and we change it to your spec.</p>' +
-    link(o.cta.mail, 'Reply by email') + link(o.cta.book, 'Book 20 minutes') + '</div></section>';
+    link(o.cta.mail, 'Reply by email') + link(o.cta.book, 'Book 20 minutes') + '</div>' + LIVE_NOTE + '</section>';
 }
 
 function renderRich(c, brandIn, points, opts) {

@@ -346,3 +346,24 @@ test('drawings claim: the quote form has the file field the page talks about, or
   const photosOnly = renderRich(content({ labels: Object.assign({}, L, { files: 'Photos of the job (optional)' }) }), null, null, ownerOpts());
   assert.ok(photosOnly.includes('lets a visitor attach photos and'));
 });
+
+// ---------------------------------------------------------------- every concept carries the same two lines
+
+test('the "Nothing here is live" note is on every concept, with or without options, and only once', function () {
+  const note = 'Nothing here is live and nothing has been published for you. No customer names or private details were added.';
+  [renderRich(content(), null), renderRich(content(), null, null, {}), renderRich(content(), null, ['One. Why: two.'], ownerOpts()),
+    renderRich(content({ phone: null, email: null, photos: [], heroPhoto: null, about: '', services: [] }), null, [])].forEach(function (html, i) {
+    assert.strictEqual(html.split(note).length - 1, 1, 'note once on page ' + i);
+    const at = html.indexOf(note);
+    assert.ok(at > html.indexOf('id="from-rhys"') && at < html.indexOf('<footer>'), 'the note sits in the reply bar, before the footer ' + i);
+  });
+});
+
+test('the Prototype line is the first thing on every concept page, above the nav, whatever is passed in', function () {
+  const line = '<div class="banner" role="note">Prototype by Rhys Hume, built from your current site. Not live, and every part can be changed to your spec.</div>';
+  [renderRich(content(), null), renderRich(content({ banner: 'Something else entirely' }), null), renderRich(content(), null, null, ownerOpts()),
+    renderRich(content(), null, null, { cta: { mail: 'mailto:x@y.co' }, evidence: null })].forEach(function (html, i) {
+    assert.ok(html.includes('<body id="top" class="has-call">' + line) || html.includes('<body id="top" class="">' + line), 'banner first in body ' + i);
+    assert.ok(!html.includes('Something else entirely') || i === 1 && !html.includes('role="note">Something'));
+  });
+});
