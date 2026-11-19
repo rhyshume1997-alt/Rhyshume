@@ -1,7 +1,7 @@
 {
-  "_readme": "Set available to true once the footage files exist in the video folder. No rebuild or code change is needed. File names are the key plus .webm and .mp4. See docs/concepts/asset-manifest.md for the specification of each clip.",
-  "se-hero-fire-4x5": { "available": false, "page": "salt-ember", "note": "Hero fire loop, 4:5, desktop and tablet" },
-  "se-hero-fire-4x5-mobile": { "available": false, "page": "salt-ember", "note": "Hero fire loop, 4:5, lighter encode for phones" },
-  "oi-hero-window-4x5": { "available": false, "page": "olive-ivory", "note": "Window and curtains opening loop, 4:5, desktop and tablet" },
-  "oi-hero-window-4x5-mobile": { "available": false, "page": "olive-ivory", "note": "Window and curtains opening loop, 4:5, lighter encode for phones" }
+  "_readme": "One entry per clip. Set available to true once the files exist. File names are the key plus .webm and .mp4 in video/. layout says which composition the clip is: wide (landscape scene, desktop and tablet) or portrait (phones). poster is an optional still of the same composition, as img/<poster>.webp and .jpg. Nothing else changes. Specifications: docs/concepts/asset-manifest.md",
+  "se-hero-fire-16x9":        { "available": false, "layout": "wide",     "poster": "se-hero-fire-16x9", "page": "salt-ember",  "note": "Salt & Ember desktop and tablet hero, 16:9, fire right, dark space left" },
+  "se-hero-fire-mobile-4x5":  { "available": false, "layout": "portrait", "page": "salt-ember",  "note": "Salt & Ember phone hero, composed separately in 4:5" },
+  "oi-hero-window-16x9":      { "available": false, "layout": "wide",     "poster": "oi-hero-window-16x9", "page": "olive-ivory", "note": "Olive & Ivory desktop and tablet background scene, 16:9, dress and window right" },
+  "oi-hero-portrait-4x5":     { "available": false, "layout": "portrait", "page": "olive-ivory", "note": "Olive & Ivory phone hero, portrait 4:5, becomes the docking element on phones" }
 }

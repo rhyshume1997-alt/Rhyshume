@@ -51,13 +51,18 @@ body { --bg: #1f1612; --fg: #f2e7d6; --acc: #dd6b40; --acc-ink: #1f1612; --bg2: 
 .scroll-cue { position: absolute; z-index: 6; inset: auto auto 1rem var(--gut); display: flex; gap: 0.7rem; align-items: center; opacity: 0.85; }
 .scroll-cue i { inline-size: 2.4rem; block-size: 1px; background: currentColor; display: block; }
 
-/* with real footage: the plate takes the room it deserves */
-.stage.footage .plate { inset-inline-end: 0; block-size: 100%; inline-size: min(54vw, 52rem); aspect-ratio: auto; }
+/* the wide scene (desktop and tablet footage or poster): the plate becomes the whole stage, fire to the right, the name over the dark on the left.
+   The composition of the footage is what keeps the type readable: its left half must stay dark. See docs/concepts/asset-manifest.md. */
+.stage.wide .plate { inset: 0; margin: 0; inline-size: 100%; block-size: 100%; max-block-size: none; aspect-ratio: auto; transform-origin: 72% 55%; }
+.stage.wide .plate::before { display: none; }
+.stage.wide .plate img, .stage.wide .plate video { object-position: 72% 50%; }
+.stage.wide .plate .tag { inset: auto var(--gut) 1rem auto; }
+.stage.wide .type { align-self: end; }
 
 @media (max-width: 55.99rem) {
   .stage { display: block; min-block-size: 0; }
   .stage .plate { position: relative; inset: auto; margin: 0; inline-size: 100%; block-size: auto; aspect-ratio: 4 / 5; max-block-size: 50svh; }
-  .stage.footage .plate { inline-size: 100%; block-size: auto; }
+  .stage.wide .plate { position: relative; inset: auto; inline-size: 100%; block-size: auto; aspect-ratio: 16 / 9; max-block-size: none; }
   .type { padding-block-start: 1.2rem; }
   .name { font-size: clamp(4.2rem, 21vw, 7rem); }
   .lede { font-size: 1rem; margin-block-start: 1rem; }

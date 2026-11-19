@@ -61,6 +61,12 @@ test('cinematic: footage slots are manifest driven, optional and fall back to th
   const man = JSON.parse(read(DIR + '/data/footage.json'));
   const keys = Object.keys(man).filter(function (k) { return k[0] !== '_'; });
   assert.ok(keys.length >= 4, 'four clips declared');
+  ['se-hero-fire-16x9', 'se-hero-fire-mobile-4x5', 'oi-hero-window-16x9', 'oi-hero-portrait-4x5'].forEach(function (k) {
+    assert.ok(man[k], k + ' declared');
+    assert.ok(man[k].layout === 'wide' || man[k].layout === 'portrait', k + ' says which composition it is');
+    if (man[k].poster && man[k].available) assert.ok(exists(DIR + '/img/' + man[k].poster + '.jpg') && exists(DIR + '/img/' + man[k].poster + '.webp'), k + ' poster files exist');
+  });
+  assert.equal(man['se-hero-fire-16x9'].layout, 'wide'); assert.equal(man['oi-hero-portrait-4x5'].layout, 'portrait');
   keys.forEach(function (k) {
     assert.equal(typeof man[k].available, 'boolean', k + ' has an available flag');
     if (man[k].available) assert.ok(exists(DIR + '/video/' + k + '.webm') || exists(DIR + '/video/' + k + '.mp4'), k + ' is declared available but has no file');
@@ -69,12 +75,23 @@ test('cinematic: footage slots are manifest driven, optional and fall back to th
   assert.ok(/prefers-reduced-motion: reduce/.test(f), 'reduced motion skips footage');
   assert.ok(/saveData/.test(f), 'data saver skips footage');
   assert.ok(/'poster'/.test(f) && /error/.test(f), 'a failed load falls back to the poster');
+  assert.ok(/39\.99rem/.test(f), 'phones get the phone composition');
   const e = read(DIR + '/salt-ember.html'), o = read(DIR + '/olive-ivory.html');
-  assert.ok(/id="fire-plate"[\s\S]*?<video[^>]*data-desktop="se-hero-fire-4x5"[^>]*data-mobile="se-hero-fire-4x5-mobile"/.test(e));
-  assert.ok(/id="hero-plate"[\s\S]*?<video[^>]*data-desktop="oi-hero-window-4x5"[^>]*data-mobile="oi-hero-window-4x5-mobile"/.test(o));
+  assert.ok(/id="fire-plate"[\s\S]*?<video[^>]*data-desktop="se-hero-fire-16x9"[^>]*data-mobile="se-hero-fire-mobile-4x5"/.test(e));
+  assert.ok(/id="hero-bg"[\s\S]*?<video[^>]*data-desktop="oi-hero-window-16x9"/.test(o), 'landscape backdrop slot');
+  assert.ok(/id="hero-plate"[\s\S]*?<video[^>]*data-mobile="oi-hero-portrait-4x5"/.test(o), 'portrait phone slot');
   assert.ok(/id="fire-plate"[\s\S]*?<img [^>]*src="img\/se-01-fire-grill\.jpg"/.test(e), 'poster in the page');
   assert.ok(/id="hero-plate"[\s\S]*?<img [^>]*src="img\/oi-03-dress-window\.jpg"/.test(o), 'poster in the page');
   assert.ok(/muted/.test(e) && /muted/.test(o) && /playsinline/.test(e) && /playsinline/.test(o), 'videos are muted and inline');
+});
+
+test('cinematic: wide scenes are layouts of their own and the portrait plate remains the docking object', function () {
+  const ec = read(DIR + '/ember.css'), oc = read(DIR + '/olive.css'), oj = read(DIR + '/olive.js'), ej = read(DIR + '/ember.js');
+  assert.ok(/\.stage\.wide \.plate/.test(ec) && /object-position: 72% 50%/.test(ec), 'salt wide stage, fire anchored right');
+  assert.ok(/\.open\.wide \.scene-bg/.test(oc) && /\.open\.wide \.stage-plate/.test(oc), 'olive wide backdrop and print');
+  assert.ok(/function leave\(\)/.test(oj) && /--bgo/.test(oj), 'the backdrop leaves on its own schedule');
+  assert.ok(/plate\.style\.transform = p === 0/.test(oj), 'the plate still docks into frame 01');
+  assert.ok(/layout/.test(ej) && /'wide'/.test(ej), 'salt reads the layout the footage declares');
 });
 
 test('cinematic: motion respects reduced motion and the content works without it', function () {

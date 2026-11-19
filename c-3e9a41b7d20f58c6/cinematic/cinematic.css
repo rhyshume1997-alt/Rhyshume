@@ -37,6 +37,7 @@ input:focus-within, select:focus-within, textarea:focus-within { outline: 3px so
 .plate picture, .plate img { inline-size: 100%; block-size: 100%; object-fit: cover; }
 .plate video { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; opacity: 0; transition: opacity 700ms var(--ease); }
 .plate.has-footage video { opacity: 1; }
+.fg-wait .plate, .fg-wait .scene-bg { visibility: hidden; }
 .plate video[hidden] { display: none; }
 .plate .tag { position: absolute; inset: auto 0.7rem 0.6rem auto; z-index: 3; }
 /* until real footage arrives the poster takes a very slow camera push. Honest, and removed for reduced motion. */

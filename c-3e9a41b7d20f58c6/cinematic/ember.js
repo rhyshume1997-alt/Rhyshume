@@ -10,8 +10,14 @@
   /* the opening: footage if it exists, the photograph if not */
   var scene = $('#fire'), stage = $('#stage'), plate = $('#fire-plate'), name = $('.name');
   var slot = window.Footage ? window.Footage.mount(plate) : null;
-  if (slot) slot.listeners.push(function () { stage.classList.add('footage'); var t = $('#fire-tag'); if (t) t.textContent = 'Concept footage'; });
-  if (slot) window.Footage.light(slot, function (v) { stage.style.setProperty('--heat', Math.max(0, Math.min(1, (v - 0.12) / 0.35)).toFixed(3)); });
+  if (slot) slot.listeners.push(function (what) {
+    var t = $('#fire-tag');
+    if (what === 'layout' && slot.layout === 'wide') stage.classList.add('wide');
+    if (what === 'live') { stage.classList.add('footage'); if (t) t.textContent = 'Concept footage'; }
+    if (what === 'poster') { stage.classList.remove('footage'); if (slot.layout !== 'wide') stage.classList.remove('wide'); if (t) t.textContent = 'Generated concept image'; }
+  });
+  /* in the wide scene the fire is on the right, so the name reads the brightness of the right hand side only */
+  if (slot) window.Footage.light(slot, function (v) { stage.style.setProperty('--heat', Math.max(0, Math.min(1, (v - 0.12) / 0.35)).toFixed(3)); }, slot.plate.getAttribute('data-layout') === 'wide' ? { x: 0.45, y: 0, w: 0.55, h: 1 } : null);
 
   /* ignition starts once fonts are ready (and, if footage is loading, once it can play, or after a short wait) */
   function nameWidth() { if (name) name.style.setProperty('--nw', Math.round(name.getBoundingClientRect().width) + 'px'); }

@@ -53,3 +53,11 @@ The eight existing concept pages on `main` are **not changed** by this branch, s
 - Olive & Ivory shows 4 real frames of the planned 12.
 - Performance numbers were taken locally with software rendering. No real phone or GPU was tested.
 - No screen reader testing. Keyboard testing covered tab order, the dialog, the menu tabs and the reply card.
+
+## Rev 3.1: hero compositions
+
+| ID | Issue | Fix or status | Evidence |
+|---|---|---|---|
+| R31-01 | With a wide scene declared, Salt & Ember reflowed after first paint (layout shift 0.587 at 1440 px) because the composition was only known once the footage manifest had loaded. | The plates stay hidden until every slot knows its composition (`fg-wait`), the manifest is preloaded, and a 900 ms safety release stops it ever blocking. Layout shift 0.001 or less in all eight tested states. | `cls.js` runs, stand-in and shipped, 390 and 1440 px |
+| R31-02 | Wide scene with no poster declared would still reflow when the clip is ready to play. | Not fixed by design: a wide entry must declare a poster. Documented in the manifest and `video/README.md`. | `asset-manifest.md` |
+| R31-03 | axe reports a transient contrast failure on the menu heading if it is run before the page has been scrolled (words warm up as they arrive). | Not a defect. Clean after scrolling through the page. | `t9.js` 0 violations, 12 runs |

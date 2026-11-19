@@ -27,9 +27,27 @@
   }
 
   /* ---------- the footage slot on the opening ---------- */
-  var plate = $('#hero-plate'), open = $('#open');
+  var plate = $('#hero-plate'), open = $('#open'), bg = $('#hero-bg');
+  var wideQ = window.matchMedia('(min-width: 56rem)');
+  /* phones: the portrait scene lives in the plate, which is also the docking object.
+     tablet and desktop: a landscape scene sits behind the opening (its own slot) and the plate stays the portrait photograph. */
   var slot = window.Footage ? window.Footage.mount(plate) : null;
-  if (slot) slot.listeners.push(function () { open.classList.add('footage'); $('#hero-cap').textContent = 'Frame 01. Concept footage.'; measure(); });
+  if (slot) slot.listeners.push(function (what) {
+    if (what === 'live') { open.classList.add('footage'); $('#hero-cap').textContent = 'Frame 01. Concept footage.'; measure(); }
+    if (what === 'poster') { open.classList.remove('footage'); $('#hero-cap').textContent = 'Frame 01. Generated concept image.'; measure(); }
+  });
+  var bgSlot = bg && window.Footage ? window.Footage.mount(bg) : null;
+  if (bgSlot) bgSlot.listeners.push(function (what) {
+    if (what === 'layout' && bgSlot.layout === 'wide') open.classList.add('wide');
+    if (what === 'poster' && bgSlot.layout !== 'wide') open.classList.remove('wide');
+    measure(); leave();
+  });
+  /* the landscape scene leaves on its own schedule: it fades and drifts while the plate is still travelling to the sheet */
+  function leave() {
+    if (calm || !bg || !open.classList.contains('wide') || !wideQ.matches) { open.style.removeProperty('--bgo'); open.style.removeProperty('--bgy'); return; }
+    var q = Math.max(0, Math.min(1, window.scrollY / (window.innerHeight * 0.55)));
+    open.style.setProperty('--bgo', (1 - q).toFixed(3)); open.style.setProperty('--bgy', (window.scrollY * 0.22).toFixed(1) + 'px');
+  }
 
   /* ---------- the proof sheet ---------- */
   function buildSheet() {
@@ -81,7 +99,7 @@
     if (d !== docked) { docked = d; plate.classList.toggle('docked', d); $('.cell.dock').classList.toggle('docking', !d); }
   }
   var tick = false;
-  function onScroll() { if (!tick) { tick = true; requestAnimationFrame(function () { tick = false; apply(); }); } }
+  function onScroll() { if (!tick) { tick = true; requestAnimationFrame(function () { tick = false; apply(); leave(); }); } }
 
   /* ---------- the light table ---------- */
   var dlg = $('#table'), timg = $('#tb-img'), tpr = $('#tb-pr'), curIdx = 0, lastBtn = null;

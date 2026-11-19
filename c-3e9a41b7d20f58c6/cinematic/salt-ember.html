@@ -11,7 +11,8 @@
 <link rel="preload" href="../fonts/ibm-plex-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="cinematic.css">
 <link rel="stylesheet" href="ember.css">
-<script>document.documentElement.classList.add("js")</script>
+<link rel="preload" href="data/footage.json" as="fetch" crossorigin>
+<script>document.documentElement.classList.add("js","fg-wait");setTimeout(function(){document.documentElement.classList.remove("fg-wait")},900)</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to the content</a>
@@ -28,7 +29,7 @@
   <div class="stage" id="stage">
     <figure class="plate" id="fire-plate" data-footage="poster">
       <picture><source srcset="img/se-01-fire-grill.webp" type="image/webp"><img src="img/se-01-fire-grill.jpg" width="367" height="537" alt="Flames and sparks rising from a charcoal grill with a steak searing on the bars. A generated concept image." fetchpriority="high"></picture>
-      <video muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" data-desktop="se-hero-fire-4x5" data-mobile="se-hero-fire-4x5-mobile"></video>
+      <video muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" data-desktop="se-hero-fire-16x9" data-mobile="se-hero-fire-mobile-4x5"></video>
       <p class="tag mono" id="fire-tag">Generated concept image</p>
     </figure>
     <div class="wrap type">
