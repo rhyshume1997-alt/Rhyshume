@@ -17,15 +17,22 @@ const home = read('index.html');
 const css = read('home.css');
 const js = read('home.js');
 
-test('home page: the headline, one line under it and the booking button', function () {
-  assert.ok(/<h1[^>]*>Websites for Glasgow trades that get you found on Google<\/h1>/.test(home));
-  assert.ok(home.includes('Book a free 20-minute chat'));
+test('home page: the headline, one line under it, the preview button and the smaller chat link', function () {
+  assert.ok(/<h1[^>]*>Websites that get Glasgow trades more calls and quotes<\/h1>/.test(home));
+  assert.ok(!/found on google/i.test(home), 'no found on Google claim beside the no guarantee line');
+  assert.ok(/<a class="btn"[^>]*>Get a free preview of your site</.test(home.match(/<section class="hero"[\s\S]*?<\/section>/)[0]));
+  assert.ok(/<p class="small">[^]*?<a [^>]*>Book a free 20-minute chat/.test(home), 'the 20 minute chat stays as a smaller link');
+  assert.ok(!/<a class="btn[^"]*"[^>]*>Book a free 20-minute chat/.test(home), 'the chat is never a main button');
   assert.ok(home.split(BOOKING).length - 1 >= 3, 'booking link is in the header, the hero and the bottom');
   assert.ok(home.includes('href="tel:+447908041480"'));
   assert.ok(/<title>[^<]{10,70}<\/title>/.test(home));
   const d = home.match(/<meta name="description" content="([^"]+)"/);
   assert.ok(d && d[1].length <= 160, 'description length');
   assert.ok(home.includes('<link rel="canonical" href="https://www.rhyshume.co.uk/">'));
+});
+
+test('home page: the JNR Engineering line sits straight after the Marpet slider', function () {
+  assert.ok(/<\/section>\s*<section class="result"[\s\S]*?\/work\/jnr-engineering[\s\S]*?<\/section>\s*<section class="services"/.test(home.slice(home.indexOf('<section class="proof"'))));
 });
 
 test('home page: the before and after slider is a native range input and says what the after side is', function () {
@@ -42,7 +49,7 @@ test('home page: the before and after slider is a native range input and says wh
 });
 
 test('home page: three services with their existing from prices, and the three automation add-ons in plain words', function () {
-  [['Website', 'From £1,500 one-off'], ['Google profile and SEO', 'From £150'], ['Automation add-ons', 'From £200']].forEach(function (p) {
+  [['Website', 'From £1,500 one-off'], ['Google profile and SEO', 'From £150'], ['Automatic replies and review requests', 'From £200']].forEach(function (p) {
     assert.ok(new RegExp(p[1] + '</p>\\s*<h3>' + p[0] + '</h3>').test(home), p.join(' ') + ' missing');
   });
   assert.ok(home.includes('Care plan from £35 a month'));

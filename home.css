@@ -120,9 +120,9 @@ button, a { touch-action: manipulation; }
 .hero-grid { display: grid; gap: 2.75rem 4rem; align-items: start; }
 @media (min-width: 62rem) { .hero-grid { grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); } .tile { margin-top: 9.5rem; } }
 .hero h1 {
-  font-size: clamp(2.45rem, 6.6vw, 5.1rem);
+  font-size: clamp(2.35rem, 5.4vw, 4.3rem);
   font-weight: 700; line-height: 1.02; letter-spacing: -0.028em;
-  margin: 1rem 0 1.5rem; max-width: 14.5ch;
+  margin: 1rem 0 1.5rem; max-width: 16ch;
 }
 .sub { font-size: clamp(1.1rem, 1.6vw, 1.3rem); line-height: 1.5; color: var(--ink-2); max-width: 33rem; }
 .cta { margin-top: 2rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.9rem 1.5rem; }
@@ -154,7 +154,7 @@ h2.title { font-size: clamp(1.65rem, 3.3vw, 2.5rem); font-weight: 700; line-heig
 }
 
 /* ---------- before and after ---------- */
-.proof { padding-block: clamp(1.5rem, 4vw, 3rem) clamp(3.5rem, 8vw, 6.5rem); }
+.proof { padding-block: clamp(1.5rem, 4vw, 3rem) clamp(1.75rem, 4vw, 3rem); }
 .proof-grid { display: grid; gap: 1.6rem 3rem; margin-top: 1.6rem; align-items: end; }
 @media (min-width: 62rem) { .proof-grid { grid-template-columns: minmax(0, 8fr) minmax(0, 3.4fr); } }
 .proof .lede { margin-top: 0.9rem; max-width: 34rem; color: var(--ink-2); }
