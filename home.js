@@ -16,6 +16,19 @@
     items.forEach(function (el) { io.observe(el); });
   }
 
+  /* ---- main buttons lean a few pixels toward a mouse pointer. Fine pointers only, never touch, never reduced motion ---- */
+  if (!calm && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    [].slice.call(document.querySelectorAll('.cta .btn, .last .btn')).forEach(function (b) {
+      b.addEventListener('pointermove', function (e) {
+        var r = b.getBoundingClientRect();
+        var x = (e.clientX - (r.left + r.width / 2)) / r.width, y = (e.clientY - (r.top + r.height / 2)) / r.height;
+        b.style.setProperty('--mx', (x * 10).toFixed(1) + 'px');
+        b.style.setProperty('--my', (y * 8).toFixed(1) + 'px');
+      });
+      b.addEventListener('pointerleave', function () { b.style.removeProperty('--mx'); b.style.removeProperty('--my'); });
+    });
+  }
+
   /* ---- before and after ---- */
   var ba = document.getElementById('ba');
   var input = ba && ba.querySelector('input[type="range"]');

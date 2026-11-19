@@ -18,7 +18,8 @@ const css = read('home.css');
 const js = read('home.js');
 
 test('home page: the headline, one line under it, the preview button and the smaller chat link', function () {
-  assert.ok(/<h1[^>]*>Websites that get Glasgow trades more calls and quotes<\/h1>/.test(home));
+  const h1 = home.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)[1].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+  assert.equal(h1, 'Websites that get Glasgow trades more calls and quotes');
   assert.ok(!/found on google/i.test(home), 'no found on Google claim beside the no guarantee line');
   assert.ok(/<a class="btn"[^>]*>Get a free preview of your site</.test(home.match(/<section class="hero"[\s\S]*?<\/section>/)[0]));
   assert.ok(/<p class="small">[^]*?<a [^>]*>Book a free 20-minute chat/.test(home), 'the 20 minute chat stays as a smaller link');
@@ -154,4 +155,19 @@ test('engineering page: carries the old pitch, with Tolra in pilot, no validatio
   const sitemap = read('sitemap.xml');
   assert.ok(sitemap.includes('https://www.rhyshume.co.uk/engineering</loc>'));
   assert.ok(read('llms.txt').includes('https://www.rhyshume.co.uk/engineering'));
+});
+
+test('home page: handwritten signature top left, Marpet described as a family firm with sister company JNR Engineering', function () {
+  assert.ok(/<header[\s\S]*?<a class=\"sig\" href=\"\/\" aria-label=\"Rhys Hume, home\"><span class=\"sig-ink\" aria-hidden=\"true\">Rhys Hume<\/span><\/a>/.test(home));
+  assert.ok(fs.existsSync(path.join(ROOT, 'fonts/greatvibes-signature.woff2')));
+  assert.ok(fs.existsSync(path.join(ROOT, 'fonts/GREATVIBES-OFL.txt')));
+  assert.ok(home.includes('A family firm, with sister company JNR Engineering.'));
+  assert.ok(!home.includes('My family’s firm'));
+});
+
+test('home page: the new effects only move transform and opacity, and stop for reduced motion', function () {
+  assert.ok(/@keyframes write \{ to \{ transform: scaleX\(0\); \} \}/.test(css));
+  assert.ok(/@keyframes word \{ from \{ transform: translateY\(112%\); \} \}/.test(css));
+  assert.ok(/prefers-reduced-motion: no-preference\) \{\s*\.sig::after/.test(css));
+  assert.ok(js.includes('(hover: hover) and (pointer: fine)'));
 });
