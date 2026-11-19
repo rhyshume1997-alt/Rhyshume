@@ -1,0 +1,109 @@
+[
+ {
+  "slug": "olive-ivory",
+  "name": "Olive & Ivory",
+  "kind": "Wedding photographer",
+  "blurb": "Soft and elegant: cream, charcoal and olive green. The name writes itself in handwriting, then a photo contact sheet lets you mark favourites Keep or Pass.",
+  "shows": "Photo gallery that feels like a photographer's proof sheet, a big-photo viewer, an enquiry form.",
+  "palette": [
+   "#f6f0e7",
+   "#2c2a25",
+   "#5b6f55"
+  ],
+  "fonts": "Newsreader and a handwriting script"
+ },
+ {
+  "slug": "bright-circuit",
+  "name": "Bright Circuit Electrical",
+  "kind": "Electrician",
+  "blurb": "Bold navy and safety yellow, like a technical drawing. A line runs down the page like an electrical circuit, and an Emergency call button is always on screen.",
+  "shows": "Service switches you can flip, a step-by-step enquiry, an urgent call button that is always in reach.",
+  "palette": [
+   "#f1f1ec",
+   "#17212d",
+   "#f1b400"
+  ],
+  "fonts": "Archivo and IBM Plex Sans"
+ },
+ {
+  "slug": "salt-ember",
+  "name": "Salt & Ember",
+  "kind": "Restaurant",
+  "blurb": "Dark, warm and dramatic. Real fire footage, and the name lights up letter by letter. The menu photo changes as you pick a course.",
+  "shows": "Menu with photos, a table booking request, film in the opening.",
+  "palette": [
+   "#1f1612",
+   "#f2e7d6",
+   "#dd6b40"
+  ],
+  "fonts": "Newsreader and IBM Plex Sans"
+ },
+ {
+  "slug": "sunny-hours",
+  "name": "Sunny Hours Club",
+  "kind": "After school club",
+  "blurb": "Bright, playful shapes and colours. Parents can build a weekly timetable by dragging or tapping activities onto days.",
+  "shows": "An interactive weekly planner, clear practical information for parents, an enquiry form.",
+  "palette": [
+   "#fff6df",
+   "#1d2947",
+   "#e5432a",
+   "#12907f",
+   "#ffc830"
+  ],
+  "fonts": "Archivo and IBM Plex Sans"
+ },
+ {
+  "slug": "clear-ground",
+  "name": "Clear Ground Coaching",
+  "kind": "Coach",
+  "blurb": "Calm and spacious, like a magazine. One hand-drawn line follows you down the page, and a few gentle questions lead to an enquiry.",
+  "shows": "A guided enquiry that feels like a conversation, a scrolling story, a calm film window.",
+  "palette": [
+   "#ebe8df",
+   "#1d2a24",
+   "#2f5d4b"
+  ],
+  "fonts": "Newsreader and IBM Plex Sans"
+ },
+ {
+  "slug": "little-kettle",
+  "name": "Little Kettle Café",
+  "kind": "Café",
+  "blurb": "Warm and friendly, with coffee being poured in a window-shaped film. A specials board of tiles that flip over, and a menu you tap to build an order.",
+  "shows": "A flip-tile specials board, a tabbed menu, a table order, a booking request.",
+  "palette": [
+   "#fbf3e4",
+   "#3a2418",
+   "#e0674a",
+   "#4f7a5a"
+  ],
+  "fonts": "Newsreader and IBM Plex Sans"
+ },
+ {
+  "slug": "corner-shelf",
+  "name": "The Corner Shelf",
+  "kind": "Gift and home shop",
+  "blurb": "Like a catalogue: big type and drawn products sitting on shelves you can filter and turn over. A basket shows how shopping could work.",
+  "shows": "Filter by category, look closely at a product, a basket (demonstration only, no payment).",
+  "palette": [
+   "#f2eee6",
+   "#1d1c19",
+   "#c4442b"
+  ],
+  "fonts": "Archivo and IBM Plex Sans"
+ },
+ {
+  "slug": "oak-razor",
+  "name": "Oak & Razor",
+  "kind": "Barber",
+  "blurb": "Dark, confident and bold, with huge lettering that moves with the film. Services open up as you tap, then a step-by-step appointment request.",
+  "shows": "An expanding services list, an appointment picker (example times only), film behind the name.",
+  "palette": [
+   "#1a1a1d",
+   "#ece6d8",
+   "#c9a05a"
+  ],
+  "fonts": "Archivo and IBM Plex Sans"
+ }
+]

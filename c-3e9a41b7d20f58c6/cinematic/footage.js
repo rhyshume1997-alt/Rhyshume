@@ -15,10 +15,13 @@
   var saver = !!(navigator.connection && navigator.connection.saveData);
   var phone = window.matchMedia('(max-width: 39.99rem)');
 
+  /* Built in copy of data/footage.json, used when the file cannot be fetched (a page opened straight from a folder, with no web server). Kept equal to the file by a test. */
+  var FALLBACK = {"se-hero-fire-16x9":{"available":true,"layout":"wide","poster":"se-hero-fire-16x9","page":"salt-ember","note":"Salt & Ember desktop and tablet hero, 16:9, fire right, dark space left"},"se-hero-fire-mobile-4x5":{"available":false,"layout":"portrait","page":"salt-ember","note":"Salt & Ember phone hero, composed separately in 4:5"},"oi-hero-window-16x9":{"available":true,"layout":"wide","poster":"oi-hero-window-16x9","page":"olive-ivory","note":"Olive & Ivory desktop and tablet background scene, 16:9, dress and window right"},"oi-hero-portrait-4x5":{"available":false,"layout":"portrait","page":"olive-ivory","note":"Olive & Ivory phone hero, portrait 4:5, becomes the docking element on phones"},"bright-circuit-16x9":{"available":true,"layout":"wide","poster":"bright-circuit-16x9","page":"bright-circuit","note":"Bright Circuit Electrical hero, supplied 736 x 400 clip, loop-safe encode"},"sunny-hours-16x9":{"available":true,"layout":"wide","poster":"sunny-hours-16x9","page":"sunny-hours","note":"Sunny Hours Club hero, supplied 736 x 400 clip, loop-safe encode"},"clear-ground-16x9":{"available":true,"layout":"wide","poster":"clear-ground-16x9","page":"clear-ground","note":"Clear Ground Coaching hero, supplied 736 x 400 clip, loop-safe encode"},"little-kettle-16x9":{"available":true,"layout":"wide","poster":"little-kettle-16x9","page":"little-kettle","note":"Little Kettle Cafe hero, supplied 736 x 400 clip, loop-safe encode"},"corner-shelf-16x9":{"available":true,"layout":"wide","poster":"corner-shelf-16x9","page":"corner-shelf","note":"The Corner Shelf hero, supplied 736 x 400 clip, loop-safe encode"},"oak-razor-16x9":{"available":true,"layout":"wide","poster":"oak-razor-16x9","page":"oak-razor","note":"Oak and Razor hero, supplied 736 x 400 clip, loop-safe encode"}};
   var manifest = null;
   function loadManifest() {
     if (manifest) return manifest;
-    manifest = fetch('data/footage.json').then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; });
+    if (location.protocol === 'file:') { manifest = Promise.resolve(FALLBACK); return manifest; }
+    manifest = fetch('data/footage.json').then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return FALLBACK; });
     return manifest;
   }
 
