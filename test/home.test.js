@@ -171,3 +171,11 @@ test('home page: the new effects only move transform and opacity, and stop for r
   assert.ok(/prefers-reduced-motion: no-preference\) \{\s*\.sig::after/.test(css));
   assert.ok(js.includes('(hover: hover) and (pointer: fine)'));
 });
+
+test('home page: a scroll-firmed statement and an honest list, using only facts already on the site', function () {
+  assert.ok(home.includes('class="statement"') && home.includes('class="scrub"'));
+  const honest = home.match(/<ul class="honest-list">[\s\S]*?<\/ul>/)[0];
+  ['one person, not an agency', 'can’t promise rankings', 'isn’t live yet', 'in pilot with a Glasgow shop. There’s no price yet', 'not VAT registered'].forEach(function (t) { assert.ok(honest.includes(t), t); });
+  assert.ok(/@keyframes firm \{ from \{ opacity: 0\.18; \} \}/.test(css));
+  assert.ok(/@supports \(animation-timeline: view\(\)\)/.test(css));
+});
