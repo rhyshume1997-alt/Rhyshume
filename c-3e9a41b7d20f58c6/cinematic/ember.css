@@ -1,0 +1,118 @@
+/* Salt & Ember: Hearth Film with a restrained ignition. Flat colour, oversized Newsreader, hard edges. */
+body { --bg: #1f1612; --fg: #f2e7d6; --acc: #dd6b40; --acc-ink: #1f1612; --bg2: #2a1d16; --ph: #2a1d16; --field: #2a1d16; --rule: color-mix(in srgb, var(--fg) 24%, transparent); --unlit: #4b2c1f; --hot: #ffb066; --lit: color-mix(in srgb, #f2e7d6, #ffc58a calc(var(--heat, 0) * 38%)); }
+
+/* header stays put through every animation: the way to book is always one tap away */
+.top { position: sticky; inset-block-start: 0; z-index: 30; background: var(--bg); block-size: var(--hdr); display: flex; align-items: center; border-block-end: 1px solid var(--rule); }
+.top-in { display: flex; align-items: center; gap: 0.6rem 1.4rem; }
+.brand { margin-inline-end: auto; text-decoration: none; font: 400 italic 1.7rem/1 "Newsreader", Georgia, serif; padding-block: 0.4rem; }
+.top nav { display: flex; gap: 0.2rem 1.6rem; }
+.top nav a { text-decoration: none; padding-block: 0.7rem; font-weight: 500; }
+.top .btn { display: none; }
+@media (min-width: 52rem) { .top .btn { display: inline-flex; } }
+@media (max-width: 30rem) { .brand { font-size: 1.45rem; } .top nav { gap: 0.2rem 1rem; } }
+
+/* 1. the fire opening: a pinned stage that the scroll carries into the menu */
+.scene { --p: 0; position: relative; }
+.stage { position: relative; overflow: hidden; min-block-size: calc(100svh - var(--hdr) - 2.2rem); display: grid; align-items: end; }
+.stage .plate { position: absolute; z-index: 1; inset-block: 0; margin-block: auto; inset-inline-end: max(var(--gut), calc((100vw - 78rem) / 2 + var(--gut) * 0.4)); block-size: min(34rem, 86%); aspect-ratio: 367 / 537; transform-origin: 50% 55%; }
+.stage .plate::before { content: ""; position: absolute; inset: 0 auto 0 0; inline-size: 2px; background: var(--rule); z-index: 4; }
+.type { position: relative; z-index: 3; padding-block: clamp(1.4rem, 4vw, 3rem) clamp(2rem, 5vw, 4rem); }
+.type .mono { opacity: 0.85; margin-block-end: 1.2rem; }
+.name { font: 300 clamp(4.4rem, 13vw, 12rem)/0.86 "Newsreader", Georgia, serif; letter-spacing: -0.04em; position: relative; inline-size: max-content; max-inline-size: 100%; }
+.name .l { display: block; }
+.name .c { display: inline-block; color: var(--lit); white-space: pre; }
+.name .amp { font-style: italic; color: var(--acc); }
+.lede { margin-block-start: 1.6rem; max-inline-size: 25rem; font-size: 1.15rem; }
+.cta { margin-block-start: 1.6rem; display: flex; flex-wrap: wrap; gap: 0.8rem 1.4rem; align-items: center; }
+.dim { position: absolute; inset: 0; z-index: 5; background: var(--bg2); opacity: 0; pointer-events: none; }
+.tagline { position: absolute; inset: auto var(--gut) 1.1rem auto; z-index: 6; opacity: 0.8; }
+
+/* ignition: the name lights from the side nearest the fire. It runs once, and the final state is plain cream. */
+.spark { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .js .name .c { animation: ignite 1500ms var(--ease) calc(500ms + var(--i, 0) * 95ms) both; animation-play-state: paused; }
+  .js .stage.go .name .c { animation-play-state: running; }
+  .js .spark { display: block; position: absolute; z-index: 4; inset-block-start: 58%; inset-inline-end: 0; inline-size: 0.55rem; block-size: 0.55rem; background: var(--hot); border-radius: 50%; opacity: 0; transform: translateX(0); animation: front 1450ms cubic-bezier(0.45, 0, 0.2, 1) 500ms both; animation-play-state: paused; }
+  .js .stage.go .spark { animation-play-state: running; }
+}
+@keyframes ignite { 0% { color: var(--unlit); transform: translateY(0.045em); } 28% { color: var(--hot); transform: none; } 52% { color: #ffd9a8; } 100% { color: var(--lit); } }
+@keyframes front { 0% { opacity: 0; transform: translateX(0); } 8% { opacity: 1; } 92% { opacity: 1; } 100% { opacity: 0; transform: translateX(calc(-1 * var(--nw, 30rem))); } }
+
+/* pinned, scroll-carried transition: only with motion allowed and a script */
+@media (prefers-reduced-motion: no-preference) {
+  .js .scene { block-size: calc(100svh - var(--hdr) + 78svh); }
+  .js .stage { position: sticky; inset-block-start: var(--hdr); block-size: calc(100svh - var(--hdr)); min-block-size: 0; }
+  .js .type { opacity: clamp(0, calc(1.08 - var(--p) * 2.4), 1); transform: translateY(calc(var(--p) * -3.5rem)); }
+  .js .stage .plate { transform: scale(calc(1 + var(--p) * 0.42)); opacity: clamp(0, calc(1.7 - var(--p) * 1.35), 1); }
+  .js .dim { opacity: clamp(0, calc((var(--p) - 0.3) * 1.9), 1); }
+  .js .menu { position: relative; z-index: 7; margin-block-start: -52svh; padding-block-start: 4.5rem; }
+  .js .scroll-cue { opacity: clamp(0, calc(1 - var(--p) * 6), 1); }
+}
+.scroll-cue { position: absolute; z-index: 6; inset: auto auto 1rem var(--gut); display: flex; gap: 0.7rem; align-items: center; opacity: 0.85; }
+.scroll-cue i { inline-size: 2.4rem; block-size: 1px; background: currentColor; display: block; }
+
+/* with real footage: the plate takes the room it deserves */
+.stage.footage .plate { inset-inline-end: 0; block-size: 100%; inline-size: min(54vw, 52rem); aspect-ratio: auto; }
+
+@media (max-width: 55.99rem) {
+  .stage { display: block; min-block-size: 0; }
+  .stage .plate { position: relative; inset: auto; margin: 0; inline-size: 100%; block-size: auto; aspect-ratio: 4 / 5; max-block-size: 50svh; }
+  .stage.footage .plate { inline-size: 100%; block-size: auto; }
+  .type { padding-block-start: 1.2rem; }
+  .name { font-size: clamp(4.2rem, 21vw, 7rem); }
+  .lede { font-size: 1rem; margin-block-start: 1rem; }
+  .cta { margin-block-start: 1rem; }
+  .scroll-cue { display: none; }
+  .js .scene { block-size: calc(100svh - var(--hdr) + 58svh); }
+  .js .menu { margin-block-start: -56svh; }
+}
+
+/* 2. the menu: the fire arrives here as the first photograph, and each course brings its own */
+.menu { background: var(--bg2); padding-block: clamp(2.5rem, 6vw, 5rem); }
+.menu-head { max-inline-size: 38rem; }
+.menu h2, .reserve h2 { font: 300 clamp(2.2rem, 5vw, 4rem)/1.04 "Newsreader", Georgia, serif; letter-spacing: -0.02em; margin-block-start: 0.5rem; }
+.menu .hint { margin-block-start: 0.7rem; }
+.menu-grid { margin-block-start: 1.8rem; display: grid; gap: 1.2rem 4rem; align-items: stretch; }
+@media (min-width: 56rem) { .menu-grid { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); } }
+.tabs { display: grid; grid-auto-rows: 1fr; border-block-start: 1px solid var(--rule); }
+.tab { display: grid; grid-template-columns: 3rem 1fr; align-items: center; gap: 0.2rem 1rem; inline-size: 100%; text-align: start; padding: 0.9rem 0.2rem; background: none; border: 0; border-block-end: 1px solid var(--rule); min-block-size: 4.2rem; transition: padding-inline-start 260ms var(--ease), color 200ms var(--ease); }
+.tab b { font: 300 clamp(1.9rem, 4.4vw, 3.4rem)/1.04 "Newsreader", Georgia, serif; letter-spacing: -0.02em; }
+.tab .mono { opacity: 0.85; }
+.tab[aria-selected="true"] { color: var(--acc); padding-inline-start: 1.1rem; }
+.tab[aria-selected="true"] .mono { opacity: 1; }
+@media (hover: hover) and (pointer: fine) { .tab:hover { color: var(--acc); } }
+.panel { position: relative; display: flex; flex-direction: column; gap: 0.9rem; }
+.panel-plate { position: relative; flex: 1 1 auto; min-block-size: 20rem; max-block-size: 34rem; inline-size: 100%; overflow: hidden; background: var(--bg); }
+.panel-plate img { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; opacity: 0; transform: scale(1.05); transition: opacity 600ms var(--ease), transform 900ms var(--ease); }
+.panel-plate img.on { opacity: 1; transform: none; }
+.panel-text h3 { font: 400 italic 1.6rem/1.1 "Newsreader", Georgia, serif; }
+.panel-text p { margin-block-start: 0.2rem; max-inline-size: 28rem; }
+.panel-text .hint { margin-block-start: 0.5rem; }
+/* phones: the photograph stays pinned at the top while the courses scroll beneath it, so a tap always shows its result */
+@media (max-width: 55.99rem) {
+  .panel { position: sticky; inset-block-start: var(--hdr); z-index: 8; order: -1; background: var(--bg2); padding-block: 0.6rem 0.7rem; margin-inline: calc(-1 * var(--gut)); padding-inline: var(--gut); border-block-end: 1px solid var(--rule); gap: 0.5rem; }
+  .panel-plate { flex: none; min-block-size: 0; block-size: 34svh; max-block-size: none; }
+  .panel-text .hint { display: none; }
+  .panel-text h3 { font-size: 1.3rem; }
+  .panel-text p { font-size: 0.95rem; }
+  .tab { min-block-size: 3.6rem; }
+  .tabs { grid-auto-rows: auto; }
+}
+@media (prefers-reduced-motion: reduce) { .panel-plate img, .tab { transition: none; } }
+
+/* 3. reserve: a closing statement and a booking slip */
+.reserve { padding-block: clamp(3rem, 7vw, 5.5rem); }
+.reserve-in { display: grid; gap: 2rem 4rem; align-items: start; }
+@media (min-width: 56rem) { .reserve-in { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); } }
+.state { font: 300 italic clamp(2.4rem, 6.4vw, 5.6rem)/1 "Newsreader", Georgia, serif; letter-spacing: -0.03em; max-inline-size: 11ch; }
+.state .w { color: var(--lit); }
+.slip { background: var(--bg2); padding: clamp(1.2rem, 3vw, 2rem); border-block-start: 3px solid var(--acc); }
+.slip form { display: grid; gap: 1rem; }
+.stamp { display: none; font: 400 0.95rem "IBM Plex Mono", monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--acc); border: 2px solid var(--acc); padding: 0.6rem 0.9rem; inline-size: fit-content; }
+.stamp.on { display: inline-block; }
+.reserve h2 { margin-block-end: 0.6rem; }
+/* section words warm up as they arrive */
+@media (prefers-reduced-motion: no-preference) {
+  .js .warm .w { color: var(--unlit); transition: color 900ms var(--ease) calc(var(--i, 0) * 70ms); }
+  .js .warm.in .w { color: var(--lit); }
+}

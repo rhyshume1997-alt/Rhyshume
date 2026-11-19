@@ -1,0 +1,7 @@
+{
+  "_readme": "Set available to true once the footage files exist in the video folder. No rebuild or code change is needed. File names are the key plus .webm and .mp4. See docs/concepts/asset-manifest.md for the specification of each clip.",
+  "se-hero-fire-4x5": { "available": false, "page": "salt-ember", "note": "Hero fire loop, 4:5, desktop and tablet" },
+  "se-hero-fire-4x5-mobile": { "available": false, "page": "salt-ember", "note": "Hero fire loop, 4:5, lighter encode for phones" },
+  "oi-hero-window-4x5": { "available": false, "page": "olive-ivory", "note": "Window and curtains opening loop, 4:5, desktop and tablet" },
+  "oi-hero-window-4x5-mobile": { "available": false, "page": "olive-ivory", "note": "Window and curtains opening loop, 4:5, lighter encode for phones" }
+}

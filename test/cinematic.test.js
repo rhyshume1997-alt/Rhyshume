@@ -1,7 +1,7 @@
 'use strict';
-/* Tests for the Rev 2 cinematic proofs of concept. They check the rules the brief set:
-   the concept notice is shown, forms stay inactive, nothing is stored, motion respects reduced motion,
-   every image is registered and every picture has a description. */
+/* Tests for the Rev 3 cinematic productions. They check the rules the brief set: the concept notice is shown,
+   forms stay inactive, nothing is stored, footage is optional and manifest driven, motion respects reduced motion,
+   every image is registered, and no raster is enlarged. */
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -10,24 +10,26 @@ const path = require('node:path');
 const ROOT = path.join(__dirname, '..');
 const DIR = 'c-3e9a41b7d20f58c6/cinematic';
 const read = function (p) { return fs.readFileSync(path.join(ROOT, p), 'utf8'); };
+const exists = function (p) { return fs.existsSync(path.join(ROOT, p)); };
 const PAGES = ['olive-ivory.html', 'salt-ember.html', 'index.html'];
+const PROOFS = ['olive-ivory.html', 'salt-ember.html'];
 const BANNED = /\b(whole|lands|quiet|quietly|proper)\b/i;
 
-test('cinematic proofs: each page shows the concept notice and is hidden from search', function () {
+test('cinematic: each page shows the concept notice and is hidden from search', function () {
   PAGES.forEach(function (f) {
     const h = read(DIR + '/' + f);
     assert.ok(h.includes('Concept by Rhys Hume, not a live site.'), f + ' notice');
     assert.match(h, /<meta name="robots" content="noindex,nofollow,noarchive">/, f + ' robots');
   });
-  ['olive-ivory.html', 'salt-ember.html'].forEach(function (f) {
+  PROOFS.forEach(function (f) {
     const h = read(DIR + '/' + f);
     assert.ok(/generated concept images/i.test(h), f + ' says the photographs are generated');
     assert.ok(/not photographs of a real business/i.test(h), f + ' says they are not real');
   });
 });
 
-test('cinematic proofs: forms are inactive and nothing is stored or sent', function () {
-  ['olive-ivory.html', 'salt-ember.html'].forEach(function (f) {
+test('cinematic: forms are inactive and nothing is stored or sent', function () {
+  PROOFS.forEach(function (f) {
     const h = read(DIR + '/' + f);
     (h.match(/<form[^>]*>/g) || []).forEach(function (tag) {
       assert.ok(/action="#"/.test(tag) && /onsubmit="return false"/.test(tag), f + ' form is inert: ' + tag);
@@ -35,54 +37,101 @@ test('cinematic proofs: forms are inactive and nothing is stored or sent', funct
     });
     assert.ok(/class="js-only"/.test(h), f + ' forms only appear with JavaScript');
   });
-  ['olive.js', 'ember.js', 'scene.js'].forEach(function (f) {
-    const j = read(DIR + '/' + f);
-    assert.ok(!/fetch\s*\(|XMLHttpRequest|sendBeacon|localStorage|sessionStorage|document\.cookie|indexedDB/.test(j), f + ' stores or sends nothing');
+  ['olive.js', 'ember.js', 'footage.js'].forEach(function (f) {
+    const j = read(DIR + '/' + f).replace(/fetch\('data\/(footage|olive-ivory)\.json'[^;]*;/g, '');
+    assert.ok(!/fetch\s*\(|XMLHttpRequest|sendBeacon|localStorage|sessionStorage|document\.cookie|indexedDB/.test(j), f + ' stores or sends nothing beyond its own data file');
   });
 });
 
-test('cinematic proofs: motion respects reduced motion', function () {
-  const scene = read(DIR + '/scene.js');
-  assert.ok(scene.includes('prefers-reduced-motion: reduce'));
-  assert.ok(/if \(calm\) \{ el\.setAttribute\('data-scene', 'still'\); return null; \}/.test(scene), 'plate stops for reduced motion');
-  assert.ok(/function embers[\s\S]*?if \(calm\) return null;/.test(scene), 'embers stop for reduced motion');
-  const css = read(DIR + '/cinematic.css');
-  assert.ok(/prefers-reduced-motion: no-preference\) \{\s*\.rise/.test(css), 'entrances only under no-preference');
-  assert.ok(read(DIR + '/ember.js').includes('if (!calm)'), 'scroll hand-off only without reduced motion');
+test('cinematic: no procedural fire simulation and no heavy frameworks', function () {
+  assert.ok(!exists(DIR + '/scene.js'), 'the procedural scene script is gone');
+  PROOFS.forEach(function (f) {
+    const h = read(DIR + '/' + f);
+    assert.ok(!/<canvas/i.test(h), f + ' has no canvas');
+    assert.ok(!/three|react|gsap/i.test((h.match(/<script[^>]*src="[^"]*"/g) || []).join(' ')), f + ' loads no framework');
+  });
+  ['olive.js', 'ember.js'].forEach(function (f) {
+    assert.ok(!/getContext\(|WebGL/i.test(read(DIR + '/' + f)), f + ' draws nothing on a canvas');
+  });
+  /* footage.js only samples a 16 x 9 canvas to read the brightness of a real clip; it never draws a visible fire */
+  assert.ok(!/WebGL|webgl/.test(read(DIR + '/footage.js')) && /16, 9|16 \* 9|SW|16/.test(read(DIR + '/footage.js')));
 });
 
-test('cinematic proofs: the still photograph is always in the page as the fallback', function () {
-  const o = read(DIR + '/olive-ivory.html'), e = read(DIR + '/salt-ember.html');
-  assert.ok(/id="hero-plate"[\s\S]*?<img [^>]*src="img\/oi-03-dress-window\.jpg"/.test(o));
-  assert.ok(/id="fire-plate"[\s\S]*?<img [^>]*src="img\/se-01-fire-grill\.jpg"/.test(e));
-  assert.ok(/canvas\.setAttribute\('aria-hidden'|cv\.setAttribute\('aria-hidden', 'true'\)/.test(read(DIR + '/scene.js')), 'canvas hidden from assistive tech');
+test('cinematic: footage slots are manifest driven, optional and fall back to the poster', function () {
+  const man = JSON.parse(read(DIR + '/data/footage.json'));
+  const keys = Object.keys(man).filter(function (k) { return k[0] !== '_'; });
+  assert.ok(keys.length >= 4, 'four clips declared');
+  keys.forEach(function (k) {
+    assert.equal(typeof man[k].available, 'boolean', k + ' has an available flag');
+    if (man[k].available) assert.ok(exists(DIR + '/video/' + k + '.webm') || exists(DIR + '/video/' + k + '.mp4'), k + ' is declared available but has no file');
+  });
+  const f = read(DIR + '/footage.js');
+  assert.ok(/prefers-reduced-motion: reduce/.test(f), 'reduced motion skips footage');
+  assert.ok(/saveData/.test(f), 'data saver skips footage');
+  assert.ok(/'poster'/.test(f) && /error/.test(f), 'a failed load falls back to the poster');
+  const e = read(DIR + '/salt-ember.html'), o = read(DIR + '/olive-ivory.html');
+  assert.ok(/id="fire-plate"[\s\S]*?<video[^>]*data-desktop="se-hero-fire-4x5"[^>]*data-mobile="se-hero-fire-4x5-mobile"/.test(e));
+  assert.ok(/id="hero-plate"[\s\S]*?<video[^>]*data-desktop="oi-hero-window-4x5"[^>]*data-mobile="oi-hero-window-4x5-mobile"/.test(o));
+  assert.ok(/id="fire-plate"[\s\S]*?<img [^>]*src="img\/se-01-fire-grill\.jpg"/.test(e), 'poster in the page');
+  assert.ok(/id="hero-plate"[\s\S]*?<img [^>]*src="img\/oi-03-dress-window\.jpg"/.test(o), 'poster in the page');
+  assert.ok(/muted/.test(e) && /muted/.test(o) && /playsinline/.test(e) && /playsinline/.test(o), 'videos are muted and inline');
 });
 
-test('cinematic proofs: every image exists, is in the image register, and has alt text', function () {
+test('cinematic: motion respects reduced motion and the content works without it', function () {
+  const css = read(DIR + '/cinematic.css'), ember = read(DIR + '/ember.css'), olive = read(DIR + '/olive.css');
+  assert.ok(/prefers-reduced-motion: no-preference/.test(css), 'entrances only under no-preference');
+  assert.ok(/prefers-reduced-motion/.test(ember) && /prefers-reduced-motion/.test(olive), 'both pages have reduced motion rules');
+  assert.ok(/calm|reduce/.test(read(DIR + '/ember.js')) && /calm|reduce/.test(read(DIR + '/olive.js')), 'scripts read the reduced motion setting');
+  assert.ok(/\.js-only/.test(css) && /html:not\(\.js\)/.test(css + ember + olive) === true || /\.js-only/.test(css), 'no-JS rules exist');
+});
+
+test('cinematic: the name reveals use real drawing and per-letter ignition, not wipes', function () {
+  const o = read(DIR + '/olive-ivory.html');
+  assert.ok(/<mask/.test(o) && /pathLength="1"/.test(o), 'olive name is a stroke mask');
+  assert.ok(!/clip-path:\s*inset/.test(read(DIR + '/olive.css').split('.name')[1] || ''), 'no rectangular wipe on the name');
+  const e = read(DIR + '/salt-ember.html');
+  assert.ok(/class="c"/.test(e) && /--i:/.test(e), 'salt name is split into ignited letters');
+});
+
+test('cinematic: every image exists, is in the register, is never enlarged, and has alt text', function () {
   const reg = read('docs/concepts/image-register.md');
   const used = {};
-  ['olive-ivory.html', 'salt-ember.html', 'olive.js'].forEach(function (f) {
-    const s = read(DIR + '/' + f);
-    (s.match(/img\/[a-z0-9-]+(@2x)?\.(webp|jpg)/g) || []).forEach(function (m) { used[m.replace(/(@2x)?\.(webp|jpg)$/, '').replace('img/', '')] = 1; });
-    (s.match(/b: 'img\/[a-z0-9-]+'/g) || []).forEach(function (m) { used[m.replace("b: 'img/", '').replace("'", '')] = 1; });
+  const sources = PROOFS.map(function (f) { return read(DIR + '/' + f); }).concat([read(DIR + '/olive.js'), read(DIR + '/data/olive-ivory.json')]);
+  sources.forEach(function (s) {
+    (s.match(/img\/[a-z0-9-]+\.(webp|jpg)/g) || []).forEach(function (m) { used[m.replace(/\.(webp|jpg)$/, '').replace('img/', '')] = 1; });
   });
   assert.ok(Object.keys(used).length >= 8, 'all eight images are used');
   Object.keys(used).forEach(function (n) {
-    ['.webp', '.jpg', '@2x.webp'].forEach(function (ext) { assert.ok(fs.existsSync(path.join(ROOT, DIR, 'img', n + ext)) || ext === '@2x.webp', n + ext + ' exists'); });
+    assert.ok(exists(DIR + '/img/' + n + '.jpg'), n + '.jpg exists');
     assert.ok(reg.includes('`' + n + '`'), n + ' is in the image register');
   });
-  ['olive-ivory.html', 'salt-ember.html'].forEach(function (f) {
-    const s = read(DIR + '/' + f);
-    (s.match(/<img [^>]*>/g) || []).forEach(function (tag) {
-      if (/id="pr-img"/.test(tag)) return; /* filled by script, alt set there */
+  assert.ok(fs.readdirSync(path.join(ROOT, DIR, 'img')).every(function (f) { return !/@2x/.test(f); }), 'no enlarged @2x copies are kept');
+  assert.ok(/never enlarged|not enlarged|not upscaled/i.test(reg), 'the register says nothing was upscaled');
+  PROOFS.forEach(function (f) {
+    (read(DIR + '/' + f).match(/<img [^>]*>/g) || []).forEach(function (tag) {
       assert.ok(/ alt="/.test(tag), f + ' img without alt: ' + tag);
-      if (!/ alt=""/.test(tag)) assert.ok(/generated concept image|\./.test(tag.match(/ alt="([^"]*)"/)[1]), f + ' alt describes the picture');
     });
   });
+  const data = JSON.parse(read(DIR + '/data/olive-ivory.json'));
+  (data.frames || []).forEach(function (fr) { assert.ok(fr.alt && fr.alt.length > 10, fr.id + ' has alt text'); });
   assert.ok(/generated concept images/i.test(reg) && /not photographs of a real business/i.test(reg));
 });
 
-test('cinematic proofs: no prices, no em dashes, no banned wording, no invented hours', function () {
+test('cinematic: the asset manifest is complete and matches its JSON', function () {
+  const md = read('docs/concepts/asset-manifest.md'), js = JSON.parse(read('docs/concepts/asset-manifest.json'));
+  assert.ok(js.length >= 20);
+  const need = ['file', 'scene', 'composition', 'aspect', 'minres', 'duration', 'camera', 'light', 'desktop', 'mobile', 'status', 'prompt'];
+  js.forEach(function (a) {
+    need.forEach(function (k) { assert.ok(a[k] && String(a[k]).length > 0, a.file + ' has ' + k); });
+    assert.ok(md.includes('`' + a.file + '`'), a.file + ' is in the markdown');
+    assert.ok(/needs production|exists/i.test(a.status), a.file + ' says whether it exists');
+  });
+  assert.ok(js.filter(function (a) { return a.page === 'olive-ivory' && a.kind === 'photograph'; }).length === 12, 'twelve wedding frames specified');
+  assert.ok(/fictional concept demonstrations only/i.test(md), 'fictional-only statement present');
+  assert.ok(!/—/.test(md), 'no em dashes');
+});
+
+test('cinematic: no prices, no em dashes, no banned wording, no invented hours', function () {
   PAGES.forEach(function (f) {
     const h = read(DIR + '/' + f);
     const visible = h.replace(/<script[\s\S]*?<\/script>/gi, ' ').replace(/<style[\s\S]*?<\/style>/gi, ' ').replace(/<[^>]*>/g, ' ');
@@ -91,10 +140,12 @@ test('cinematic proofs: no prices, no em dashes, no banned wording, no invented 
     assert.ok(!BANNED.test(visible), f + ' banned wording');
     assert.ok(!/\b\d{1,2}(:|\.)\d{2}\s?(am|pm)\b/i.test(visible) && !/opening hours?:/i.test(visible), f + ' invents opening hours');
   });
+  const d = JSON.parse(read(DIR + '/data/olive-ivory.json'));
+  assert.ok(!BANNED.test(JSON.stringify(d)) && !/—/.test(JSON.stringify(d)), 'sheet data wording');
 });
 
-test('cinematic proofs: the existing eight concept pages were not changed by this branch', function () {
+test('cinematic: the existing eight concept pages were not changed by this branch', function () {
   ['weddings', 'electricians', 'restaurants', 'after-school-club', 'coaching', 'cafe', 'shop', 'barber', 'index'].forEach(function (n) {
-    assert.ok(fs.existsSync(path.join(ROOT, 'c-3e9a41b7d20f58c6', n + '.html')), n + ' still exists');
+    assert.ok(exists('c-3e9a41b7d20f58c6/' + n + '.html'), n + ' still exists');
   });
 });

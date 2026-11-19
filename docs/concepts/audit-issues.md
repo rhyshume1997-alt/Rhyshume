@@ -34,9 +34,22 @@ The eight existing concept pages on `main` are **not changed** by this branch, s
 | P-06 | The date field showed no focus outline in Chromium. | Explicit `:focus-within` outline on fields. |
 | P-07 | A hero class name collided with the button class, giving the "Start again" button the wrong font. | Renamed. |
 
+## Rev 3: verified issues fixed on the two productions
+
+| ID | Issue | Fix | Evidence |
+|---|---|---|---|
+| R3-01 | Salt & Ember mobile menu: choosing a course did not visibly change the photograph. | Photograph is pinned at the top of the screen and swaps on tap. | `t5.js`: new photograph on screen after tap, 390 px |
+| R3-02 | Salt & Ember desktop: large dead area after the opening. | Pinned scene hands off into the menu with an overlap; course list matches the photograph column. | `t5.js` heights within 60 px |
+| R3-03 | Olive & Ivory name used a rectangular wipe. | Pen-stroke mask drawn from the real outline of the script font. | Recording, reduced motion shows it complete |
+| R3-04 | Hero plate crossed text and header wrapped on phones. | Text first on mobile, header does not wrap. | 390 px screenshots |
+| R3-05 | `aria-label` and `role="text"` on word spans (A-04 pattern). | Removed; words are plain text. | axe, no prohibited attributes |
+| R3-06 | Enlarged `@2x` images implied detail that does not exist. | Deleted. | `image-register.md` |
+| R3-07 | 404 console errors from probing for missing video. | Manifest declares availability; no request until a clip exists. | No console errors in `t5.js` |
+
 ## Still open on the proofs
 
 - The photographs are about 0.2 megapixels. Large screens show them soft. Needs real high resolution files.
-- The opening motion is an animation drawn over a still photograph, not film. Real footage is needed for a true cinematic opening.
+- No footage exists. The openings are photographs with a slow camera push until clips are added (see `asset-manifest.md`). Footage integration was tested with throwaway stand-in clips only.
+- Olive & Ivory shows 4 real frames of the planned 12.
 - Performance numbers were taken locally with software rendering. No real phone or GPU was tested.
 - No screen reader testing. Keyboard testing covered tab order, the dialog, the menu tabs and the reply card.

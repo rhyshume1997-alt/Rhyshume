@@ -4,89 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow,noarchive">
-<title>Salt &amp; Ember cinematic proof of concept | Rhys Hume</title>
-<meta name="description" content="Proof of concept for a restaurant: a moving fire opening, drifting embers, and a menu where the photograph follows your choice. Concept only, not a live site.">
+<title>Salt &amp; Ember cinematic production | Rhys Hume</title>
+<meta name="description" content="A restaurant concept: a fire opening that lights the name, a scroll transition into the menu, and a menu where each course brings its own photograph. Concept only, not a live site.">
 <link rel="preload" href="../fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/ibm-plex-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="cinematic.css">
-<style>
-body { --bg: #1f1612; --fg: #f2e7d6; --acc: #dd6b40; --acc-ink: #1f1612; --bg2: #2a1d16; --ph: #2a1d16; --field: #2a1d16; --rule: color-mix(in srgb, var(--fg) 22%, transparent); }
-.serif { font-family: "Newsreader", Georgia, serif; }
-.top { position: relative; z-index: 6; padding-block: 0.9rem; }
-.top-in { display: flex; align-items: center; gap: 0.6rem 1.4rem; flex-wrap: nowrap; }
-@media (max-width: 30rem) { .brand { font-size: 1.5rem; } .top nav { gap: 0.2rem 1rem; } }
-.brand { margin-inline-end: auto; text-decoration: none; font: 400 italic 1.8rem/1 "Newsreader", Georgia, serif; padding-block: 0.3rem; }
-.top nav { display: flex; gap: 0.2rem 1.6rem; }
-.top nav a { text-decoration: none; padding-block: 0.6rem; font-weight: 500; }
-.top .btn { display: none; }
-@media (min-width: 52rem) { .top .btn { display: inline-flex; } }
-
-/* 1. the fire */
-.fire { position: relative; overflow: hidden; min-block-size: calc(100svh - 7.4rem); display: grid; align-items: end; --p: 0; }
-.fire-type { position: relative; z-index: 4; padding-block: clamp(1rem, 4vw, 3rem) clamp(2rem, 6vw, 4.5rem); transform: translateY(calc(var(--p) * -2.5rem)); opacity: calc(1 - var(--p) * 1.15); }
-.fire h1 { font: 300 clamp(3.3rem, 8.6vw, 8.4rem)/0.95 "Newsreader", Georgia, serif; letter-spacing: -0.035em; max-inline-size: 9.5em; }
-.fire h1 em { color: var(--acc); font-style: italic; }
-.fire .lede { margin-block-start: 1.4rem; max-inline-size: 25rem; }
-.fire .cta { margin-block-start: 1.6rem; display: flex; flex-wrap: wrap; gap: 0.8rem 1.4rem; align-items: center; }
-.fire .mono { opacity: 0.75; margin-block-end: 1.2rem; }
-.plate-fire { position: absolute; z-index: 1; inset-block: 0; inset-inline-end: 0; inline-size: min(48vw, 40rem); transform: translateY(calc(var(--p) * -4rem)) scale(calc(1 + var(--p) * 0.05)); transform-origin: 50% 70%; }
-.plate-fire .cap { position: absolute; inset: auto 0.8rem 0.7rem auto; z-index: 3; opacity: 0.75; text-shadow: 0 0 6px #1f1612; }
-.fire .embers { z-index: 3; opacity: calc(1 - var(--p) * 1.5); }
-@media (max-width: 55.99rem) {
-  .fire { min-block-size: 0; display: block; }
-  .plate-fire { position: relative; inline-size: 100%; aspect-ratio: 4 / 5; max-block-size: 64svh; }
-  .fire-type { padding-block-start: 1.4rem; }
-  .fire h1 { font-size: clamp(3rem, 15vw, 4.6rem); }
-}
-/* hard edge where the photograph ends and the page begins: a flat dark panel, no gradient */
-.plate-fire::before { content: ""; position: absolute; inset-block: 0; inset-inline-start: 0; inline-size: 2px; background: var(--rule); z-index: 3; }
-
-/* 2. the menu */
-.menu { background: var(--bg2); padding-block: clamp(3.5rem, 9vw, 7rem); }
-.menu-grid { display: grid; gap: 2rem 4rem; align-items: start; }
-@media (min-width: 56rem) { .menu-grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); } }
-.menu h2 { font: 300 clamp(2.2rem, 5vw, 4rem)/1.04 "Newsreader", Georgia, serif; letter-spacing: -0.02em; margin-block-start: 0.5rem; }
-.menu .hint { margin-block-start: 0.8rem; }
-.tabs { margin-block-start: 1.6rem; border-block-start: 1px solid var(--rule); }
-.tab { display: grid; grid-template-columns: 3rem 1fr; align-items: baseline; gap: 0.2rem 1rem; inline-size: 100%; text-align: start; padding: 1.15rem 0.2rem; background: none; border: 0; border-block-end: 1px solid var(--rule); transition: padding-inline-start 260ms var(--ease), color 200ms var(--ease); min-block-size: 3.4rem; }
-.tab b { font: 300 clamp(1.9rem, 4.4vw, 3.3rem)/1.04 "Newsreader", Georgia, serif; font-weight: 300; letter-spacing: -0.02em; }
-.tab[aria-selected="true"] { color: var(--acc); padding-inline-start: 1.1rem; }
-.tab .mono { opacity: 0.85; }
-.tab[aria-selected="true"] .mono { opacity: 1; }
-@media (hover: hover) and (pointer: fine) { .tab:hover { color: var(--acc); } }
-.panel { position: sticky; inset-block-start: 1.2rem; }
-.panel-plate { position: relative; aspect-ratio: 2 / 3; max-block-size: 74svh; inline-size: 100%; margin-inline: auto; overflow: hidden; background: var(--bg); }
-.panel-plate img { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; opacity: 0; transform: scale(1.05); transition: opacity 600ms var(--ease), transform 900ms var(--ease); }
-.panel-plate img.on { opacity: 1; transform: none; }
-.panel-text { margin-block-start: 1rem; min-block-size: 6.5rem; }
-.panel-text h3 { font: 400 italic 1.7rem/1.1 "Newsreader", Georgia, serif; }
-.panel-text p { margin-block-start: 0.3rem; max-inline-size: 26rem; }
-@media (max-width: 55.99rem) { .panel { position: static; order: -1; } .panel-plate { aspect-ratio: 4 / 5; max-block-size: 58svh; } }
-@media (prefers-reduced-motion: reduce) { .panel-plate img, .tab { transition: none; } }
-
-/* 3. reserve (demonstration) */
-.reserve { padding-block: clamp(3rem, 8vw, 6rem); }
-.reserve-in { display: grid; gap: 2rem 4rem; }
-@media (min-width: 56rem) { .reserve-in { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); align-items: start; } }
-.reserve h2 { font: 300 clamp(2rem, 4.6vw, 3.6rem)/1.05 "Newsreader", Georgia, serif; letter-spacing: -0.02em; margin-block-start: 0.5rem; }
-.reserve form { display: grid; gap: 1rem; }
-.stamp { display: none; font: 400 0.95rem "IBM Plex Mono", monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--acc); border: 2px solid var(--acc); padding: 0.6rem 0.9rem; inline-size: fit-content; }
-.stamp.on { display: inline-block; }
-.js-only { display: none; } .js .js-only { display: block; }
-.callbar { display: none; }
-@media (max-width: 47.99rem) {
-  .callbar { position: fixed; inset: auto 0 0 0; z-index: 60; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 0.6rem; background: var(--fg); color: var(--bg); padding: 0.4rem 0.8rem calc(0.4rem + env(safe-area-inset-bottom, 0px)); }
-  .callbar .mono { font-size: 0.7rem; }
-  .callbar a { display: inline-flex; align-items: center; min-block-size: 2.9rem; padding: 0 1.1rem; background: var(--acc); color: var(--acc-ink); text-decoration: none; font-weight: 600; }
-  body { padding-block-end: 3.9rem; }
-}
-</style>
+<link rel="stylesheet" href="ember.css">
 <script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to the content</a>
-<div class="banner">Concept by Rhys Hume, not a live site. Sample business. The photographs are generated concept images, not photographs of a real business, customers or work. <a href="./">All proofs</a></div>
+<aside class="banner" aria-label="Concept notice">Concept by Rhys Hume, not a live site. Sample business. The photographs are generated concept images, not photographs of a real business, customers or work. <a href="./">All proofs</a></aside>
 
 <header class="top"><div class="wrap top-in">
   <a class="brand" href="#fire" aria-label="Salt &amp; Ember, back to the top">Salt &amp; Ember</a>
@@ -95,45 +24,50 @@ body { --bg: #1f1612; --fg: #f2e7d6; --acc: #dd6b40; --acc-ink: #1f1612; --bg2: 
 </div></header>
 
 <main id="main">
-<section class="fire" id="fire" aria-labelledby="h1">
-  <figure class="plate plate-fire" id="fire-plate" data-mode="fire">
-    <picture><source srcset="img/se-01-fire-grill@2x.webp" type="image/webp"><img src="img/se-01-fire-grill.jpg" width="734" height="1074" alt="Flames and sparks rising from a charcoal grill with a steak searing on the bars. A generated concept image." fetchpriority="high"></picture>
-    <p class="cap mono">Generated concept image</p>
-  </figure>
-  <div class="wrap fire-type">
-    <p class="mono fade">Restaurant, Glasgow</p>
-    <h1 id="h1" class="rise" style="--d:200ms; --y:28px">Fire, salt and something good to <em>share.</em></h1>
-    <p class="lede rise" style="--d:700ms">Cooked over coals and put in the middle of the table. Come with people you like.</p>
-    <div class="cta rise" style="--d:900ms"><a class="btn" href="#reserve">Book a table</a><a class="tlink" href="#menu">See the menu</a></div>
+<section class="scene" id="fire" aria-labelledby="h1">
+  <div class="stage" id="stage">
+    <figure class="plate" id="fire-plate" data-footage="poster">
+      <picture><source srcset="img/se-01-fire-grill.webp" type="image/webp"><img src="img/se-01-fire-grill.jpg" width="367" height="537" alt="Flames and sparks rising from a charcoal grill with a steak searing on the bars. A generated concept image." fetchpriority="high"></picture>
+      <video muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" data-desktop="se-hero-fire-4x5" data-mobile="se-hero-fire-4x5-mobile"></video>
+      <p class="tag mono" id="fire-tag">Generated concept image</p>
+    </figure>
+    <div class="wrap type">
+      <p class="mono fade">Restaurant, Glasgow</p>
+      <h1 id="h1" class="name"><span class="vh">Salt &amp; Ember</span><span aria-hidden="true"><span class="l"><span class="c" style="--i:5">S</span><span class="c" style="--i:4">a</span><span class="c" style="--i:3">l</span><span class="c" style="--i:2">t</span><span class="c"> </span><span class="c amp" style="--i:0">&amp;</span></span><span class="l"><span class="c" style="--i:5.8">E</span><span class="c" style="--i:4.8">m</span><span class="c" style="--i:3.8">b</span><span class="c" style="--i:2.8">e</span><span class="c" style="--i:1.8">r</span></span></span><span class="spark" aria-hidden="true"></span></h1>
+      <p class="lede rise" style="--d:1700ms">Fire, salt and something good to share. Cooked over coals and put in the middle of the table.</p>
+      <div class="cta rise" style="--d:1900ms"><a class="btn" href="#reserve">Book a table</a><a class="tlink" href="#menu">See the menu</a></div>
+    </div>
+    <div class="dim" aria-hidden="true"></div>
+    <p class="scroll-cue mono" aria-hidden="true"><i></i>Scroll</p>
   </div>
 </section>
 
-<section class="menu" id="menu" aria-labelledby="menu-h"><div class="wrap menu-grid">
-  <div>
-    <p class="mono">The menu</p>
-    <h2 id="menu-h">Choose a course.</h2>
-    <p class="hint">Tap or hover a course to see it. Arrow keys work too.</p>
+<section class="menu" id="menu" aria-labelledby="menu-h"><div class="wrap">
+  <div class="menu-head"><p class="mono">The menu</p><h2 id="menu-h" class="warm">Choose a course.</h2><p class="hint">Tap or hover a course to see it. Arrow keys work too.</p></div>
+  <div class="menu-grid">
     <div class="tabs" role="tablist" aria-label="Menu courses" id="tabs">
-      <button class="tab" role="tab" id="t0" aria-selected="true" aria-controls="panel" data-i="0"><span class="mono">01</span><b>To start</b></button>
-      <button class="tab" role="tab" id="t1" aria-selected="false" aria-controls="panel" data-i="1" tabindex="-1"><span class="mono">02</span><b>From the fire</b></button>
+      <button class="tab" role="tab" id="t0" aria-selected="false" aria-controls="panel" data-i="0" tabindex="-1"><span class="mono">01</span><b>To start</b></button>
+      <button class="tab" role="tab" id="t1" aria-selected="true" aria-controls="panel" data-i="1"><span class="mono">02</span><b>From the fire</b></button>
       <button class="tab" role="tab" id="t2" aria-selected="false" aria-controls="panel" data-i="2" tabindex="-1"><span class="mono">03</span><b>To drink</b></button>
       <button class="tab" role="tab" id="t3" aria-selected="false" aria-controls="panel" data-i="3" tabindex="-1"><span class="mono">04</span><b>Something sweet</b></button>
     </div>
-  </div>
-  <div class="panel" id="panel" role="tabpanel" aria-labelledby="t0" tabindex="0">
-    <div class="panel-plate" id="pplate">
-      <img class="on" src="img/se-02-plated-food.jpg" srcset="img/se-02-plated-food@2x.webp" width="678" height="1074" alt="A dark bowl of charred vegetables and leaves on a wooden table, lit warmly. A generated concept image.">
-      <img src="img/se-01-fire-grill.jpg" srcset="img/se-01-fire-grill@2x.webp" width="734" height="1074" alt="A steak searing over open flames. A generated concept image." loading="lazy">
-      <img src="img/se-03-wine-pour.jpg" srcset="img/se-03-wine-pour@2x.webp" width="646" height="1074" alt="Red wine being poured into a glass, candlelit background. A generated concept image." loading="lazy">
-      <img src="img/se-04-dessert.jpg" srcset="img/se-04-dessert@2x.webp" width="814" height="1074" alt="A sponge pudding with cream and berries, icing sugar falling over it. A generated concept image." loading="lazy">
+    <div class="panel" id="panel" role="tabpanel" aria-labelledby="t1" tabindex="0">
+      <div class="panel-plate" id="pplate">
+        <img src="img/se-02-plated-food.jpg" width="339" height="537" alt="A dark bowl of charred vegetables and leaves on a wooden table, lit warmly. A generated concept image." loading="lazy">
+        <img class="on" src="img/se-01-fire-grill.jpg" width="367" height="537" alt="A steak searing over open flames. A generated concept image.">
+        <img src="img/se-03-wine-pour.jpg" width="323" height="537" alt="Red wine being poured into a glass, candlelit background. A generated concept image." loading="lazy">
+        <img src="img/se-04-dessert.jpg" width="407" height="537" alt="A sponge pudding with cream and berries, icing sugar falling over it. A generated concept image." loading="lazy">
+      </div>
+      <div class="panel-text" aria-live="polite"><h3 id="ptitle">From the fire</h3><p id="pdesc">The big plates, cooked over coals and put in the middle of the table.</p><p class="hint">Dish names, prices, allergens and opening hours come from the restaurant and are not shown on this concept.</p></div>
     </div>
-    <div class="panel-text" aria-live="polite"><h3 id="ptitle">To start</h3><p id="pdesc">Small plates to share while you decide what comes next.</p><p class="hint">Dish names, prices, allergens and opening hours come from the restaurant and are not shown on this concept.</p></div>
   </div>
 </div></section>
 
 <section class="reserve" id="reserve" aria-labelledby="res-h"><div class="wrap reserve-in">
-  <div><p class="mono">Reserve</p><h2 id="res-h">Book a table.</h2><p style="margin-block-start:1rem;max-inline-size:26rem">A demonstration. Nothing is booked, sent or saved, and no availability is shown.</p></div>
-  <div>
+  <div><p class="mono">Reserve</p><p class="state warm" aria-hidden="false">Cooked over coals. Put in the middle of the table.</p></div>
+  <div class="slip">
+    <h2 id="res-h">Book a table.</h2>
+    <p class="hint" style="margin-block-end:1rem">A demonstration. Nothing is booked, sent or saved, and no availability is shown.</p>
     <noscript><p>The demonstration needs JavaScript. Nothing would be booked either way.</p></noscript>
     <div class="js-only"><form id="res" action="#" novalidate onsubmit="return false">
       <label>Day<input type="date" id="r-day"></label>
@@ -149,13 +83,13 @@ body { --bg: #1f1612; --fg: #f2e7d6; --acc: #dd6b40; --acc-ink: #1f1612; --bg2: 
 
 <footer class="foot"><div class="wrap">
   <p class="mono">Concept by Rhys Hume, not a live site.</p>
-  <p>Salt &amp; Ember is a fictional business. The photographs are generated concept images and are not photographs of a real business, customers or completed client work. The fire is an animation drawn over a still photograph, not film footage. The reservation is a demonstration: it books and stores nothing.</p>
-  <p><a href="olive-ivory.html">See the Olive &amp; Ivory proof</a> · <a href="./">All proofs</a></p>
+  <p>Salt &amp; Ember is a fictional business. The photographs are generated concept images and are not photographs of a real business, customers or completed client work. The opening is a photograph with a slow camera push until real footage is added. The reservation is a demonstration: it books and stores nothing.</p>
+  <p><a href="olive-ivory.html">See the Olive &amp; Ivory production</a> · <a href="./">All proofs</a></p>
 </div></footer>
 
-<div class="callbar" aria-label="Reserve"><span class="mono">Concept, nothing is booked</span><a href="#reserve">Book a table</a></div>
+<nav class="callbar" aria-label="Reserve"><span class="mono">Concept, nothing is booked</span><a href="#reserve">Book a table</a></nav>
 
-<script src="scene.js"></script>
+<script src="footage.js"></script>
 <script src="ember.js"></script>
 </body>
 </html>

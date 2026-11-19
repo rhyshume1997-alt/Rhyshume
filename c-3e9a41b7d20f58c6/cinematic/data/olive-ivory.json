@@ -1,0 +1,16 @@
+{
+  "_readme": "The proof sheet and the day are built from this file. To add a photograph: put name.webp and name.jpg in the img folder, add an entry to frames (id, file, w, h, alt, title, time, caption), and optionally a moment that points at it by id. No code change. target is the number of frames the finished sheet should hold.",
+  "target": 12,
+  "frames": [
+    { "id": "f01", "file": "oi-03-dress-window", "w": 349, "h": 544, "title": "Getting ready", "time": "08:40", "alt": "A wedding dress hanging in a tall window, daylight through old curtains.", "caption": "The room before everyone arrives, and a few minutes that belong only to you." },
+    { "id": "f02", "file": "oi-02-flowers", "w": 395, "h": 544, "title": "The details", "time": "11:20", "alt": "A bouquet of white roses on a stone sill.", "caption": "Flowers, rings, stationery. The small things you spent months choosing." },
+    { "id": "f03", "file": "oi-04-rings-vows", "w": 332, "h": 544, "title": "The vows", "time": "14:00", "alt": "Two hands joined during the vows, a book open behind.", "caption": "Hands, faces and the pause before the words." },
+    { "id": "f04", "file": "oi-01-couple-walking", "w": 358, "h": 544, "title": "Golden hour", "time": "18:30", "alt": "A couple walking hand in hand through long grass towards a castle, low evening sun.", "caption": "Ten minutes away from everyone, with the light low and nothing to organise." }
+  ],
+  "moments": [
+    { "frame": "f01", "time": "08:40", "title": "Getting ready", "text": "The room before everyone arrives. A dress by the window, and a few minutes that belong only to you." },
+    { "frame": "f02", "time": "11:20", "title": "The details", "text": "Flowers, rings, stationery. The small things you spent months choosing, photographed once and done well." },
+    { "frame": "f03", "time": "14:00", "title": "The vows", "text": "Seen from where the guests sit and from where you stand. Hands, faces, the pause before the words." },
+    { "frame": "f04", "time": "18:30", "title": "Golden hour", "text": "Ten minutes away from everyone, with the light low and nothing to organise." }
+  ]
+}
