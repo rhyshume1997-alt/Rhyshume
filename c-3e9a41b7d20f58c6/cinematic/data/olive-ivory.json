@@ -1,16 +1,122 @@
 {
-  "_readme": "The proof sheet and the day are built from this file. To add a photograph: put name.webp and name.jpg in the img folder, add an entry to frames (id, file, w, h, alt, title, time, caption), and optionally a moment that points at it by id. No code change. target is the number of frames the finished sheet should hold.",
-  "target": 12,
-  "frames": [
-    { "id": "f01", "file": "oi-03-dress-window", "w": 349, "h": 544, "title": "Getting ready", "time": "08:40", "alt": "A wedding dress hanging in a tall window, daylight through old curtains.", "caption": "The room before everyone arrives, and a few minutes that belong only to you." },
-    { "id": "f02", "file": "oi-02-flowers", "w": 395, "h": 544, "title": "The details", "time": "11:20", "alt": "A bouquet of white roses on a stone sill.", "caption": "Flowers, rings, stationery. The small things you spent months choosing." },
-    { "id": "f03", "file": "oi-04-rings-vows", "w": 332, "h": 544, "title": "The vows", "time": "14:00", "alt": "Two hands joined during the vows, a book open behind.", "caption": "Hands, faces and the pause before the words." },
-    { "id": "f04", "file": "oi-01-couple-walking", "w": 358, "h": 544, "title": "Golden hour", "time": "18:30", "alt": "A couple walking hand in hand through long grass towards a castle, low evening sun.", "caption": "Ten minutes away from everyone, with the light low and nothing to organise." }
-  ],
-  "moments": [
-    { "frame": "f01", "time": "08:40", "title": "Getting ready", "text": "The room before everyone arrives. A dress by the window, and a few minutes that belong only to you." },
-    { "frame": "f02", "time": "11:20", "title": "The details", "text": "Flowers, rings, stationery. The small things you spent months choosing, photographed once and done well." },
-    { "frame": "f03", "time": "14:00", "title": "The vows", "text": "Seen from where the guests sit and from where you stand. Hands, faces, the pause before the words." },
-    { "frame": "f04", "time": "18:30", "title": "Golden hour", "text": "Ten minutes away from everyone, with the light low and nothing to organise." }
-  ]
+ "_readme": "The proof sheet and the day are built from this file. To add a photograph: put name.webp and name.jpg in the img folder, add an entry to frames (id, file, w, h, alt, title, time, caption), and optionally a moment that points at it by id. No code change. target is the number of frames the finished sheet should hold.",
+ "target": 12,
+ "frames": [
+  {
+   "id": "f01",
+   "file": "oi-03-dress-window",
+   "w": 349,
+   "h": 544,
+   "title": "Getting ready",
+   "time": "08:40",
+   "alt": "A wedding dress hanging in a tall window, daylight through old curtains.",
+   "caption": "The room before everyone arrives, and a few minutes that belong only to you."
+  },
+  {
+   "id": "f02",
+   "file": "oi-02-flowers",
+   "w": 395,
+   "h": 544,
+   "title": "The details",
+   "time": "11:20",
+   "alt": "A bouquet of white roses on a stone sill.",
+   "caption": "Flowers, rings, stationery. The small things you spent months choosing."
+  },
+  {
+   "id": "f05",
+   "file": "oi-05-ceremony-room",
+   "w": 521,
+   "h": 391,
+   "title": "The ceremony room",
+   "time": "13:10",
+   "alt": "A bright room set for a ceremony, rows of chairs facing the front, daylight from tall windows.",
+   "caption": "The room set and waiting, before anyone sits down."
+  },
+  {
+   "id": "f03",
+   "file": "oi-04-rings-vows",
+   "w": 332,
+   "h": 544,
+   "title": "The vows",
+   "time": "14:00",
+   "alt": "Two hands joined during the vows, a book open behind.",
+   "caption": "Hands, faces and the pause before the words."
+  },
+  {
+   "id": "f07",
+   "file": "oi-07-vows-over-shoulder",
+   "w": 391,
+   "h": 293,
+   "title": "The vows, over a shoulder",
+   "time": "14:00",
+   "alt": "A couple exchanging vows, seen from over one shoulder.",
+   "caption": "Listening from just behind, so you see what they see."
+  },
+  {
+   "id": "f06",
+   "file": "oi-06-hands-rings-bouquet",
+   "w": 391,
+   "h": 391,
+   "title": "Rings and bouquet",
+   "time": "14:30",
+   "alt": "Two hands holding a bouquet of white flowers, wedding rings visible.",
+   "caption": "The small things that end up mattering most."
+  },
+  {
+   "id": "f04",
+   "file": "oi-01-couple-walking",
+   "w": 358,
+   "h": 544,
+   "title": "Golden hour",
+   "time": "18:30",
+   "alt": "A couple walking hand in hand through long grass towards a castle, low evening sun.",
+   "caption": "Ten minutes away from everyone, with the light low and nothing to organise."
+  },
+  {
+   "id": "f08",
+   "file": "oi-08-speeches-laughing",
+   "w": 391,
+   "h": 293,
+   "title": "The speeches",
+   "time": "19:30",
+   "alt": "Guests at a long table laughing during the speeches.",
+   "caption": "The laugh that arrives a second before the punchline ends."
+  },
+  {
+   "id": "f09",
+   "file": "oi-09-dance-floor",
+   "w": 367,
+   "h": 275,
+   "title": "The dance floor",
+   "time": "21:00",
+   "alt": "Guests dancing on a crowded dance floor under warm lights.",
+   "caption": "Late, loud and nobody checking the time."
+  }
+ ],
+ "moments": [
+  {
+   "frame": "f01",
+   "time": "08:40",
+   "title": "Getting ready",
+   "text": "The room before everyone arrives. A dress by the window, and a few minutes that belong only to you."
+  },
+  {
+   "frame": "f02",
+   "time": "11:20",
+   "title": "The details",
+   "text": "Flowers, rings, stationery. The small things you spent months choosing, photographed once and done well."
+  },
+  {
+   "frame": "f03",
+   "time": "14:00",
+   "title": "The vows",
+   "text": "Seen from where the guests sit and from where you stand. Hands, faces, the pause before the words."
+  },
+  {
+   "frame": "f04",
+   "time": "18:30",
+   "title": "Golden hour",
+   "text": "Ten minutes away from everyone, with the light low and nothing to organise."
+  }
+ ]
 }

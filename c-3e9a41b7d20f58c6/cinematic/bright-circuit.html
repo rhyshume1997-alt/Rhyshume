@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Bright Circuit Electrical, a schematic concept | Rhys Hume</title>
+<meta name="description" content="An electrical services concept drawn as a schematic: a bus line that energises each section as you scroll, services as breakers you can switch, and a demonstration enquiry board. Concept only, not a live site.">
+<link rel="preload" href="../fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="cinematic.css">
+<link rel="stylesheet" href="bright-circuit.css">
+<script>document.documentElement.classList.add("js")</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<aside class="banner" aria-label="Concept notice">Concept by Rhys Hume, not a live site. Sample business. The footage and images are generated concept material, not a real electrician, customer or job. <a href="./">All proofs</a></aside>
+
+<header class="top"><div class="wrap top-in">
+  <a class="brand" href="#top">
+    <svg class="mark" viewBox="0 0 32 32" width="32" height="32" aria-hidden="true" focusable="false"><rect x="1.5" y="1.5" width="29" height="29" fill="#17212d"/><path d="M6 22h8v-12h6v12h6" fill="none" stroke="#f1b400" stroke-width="3" stroke-linejoin="miter"/></svg>
+    <span>Bright Circuit<small class="mono">Electrical</small></span>
+  </a>
+  <nav aria-label="Main"><a href="#flow">How it flows</a><a href="#services">Services</a><a href="#enquire">Enquire</a></nav>
+  <a class="em-btn" href="#emergency" id="em-open" aria-haspopup="dialog"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false"><path d="M9.5 1 3 9h4l-1 6 7-9H9z" fill="currentColor"/></svg>Emergency call</a>
+</div></header>
+
+<main id="main">
+<section class="hero dark" id="top" aria-labelledby="h1">
+  <div class="wrap hero-in">
+    <div class="hero-copy">
+      <p class="mono eyebrow">Electrical services <i aria-hidden="true">/</i> sample business</p>
+      <h1 id="h1"><span class="ln l1"><span>Bright</span></span><span class="ln l2"><span>Circuit</span></span><span class="ln l3"><span>Electrical</span></span></h1>
+      <span class="bar" aria-hidden="true"></span>
+      <p class="lede">Fault finding, lighting, sockets, consumer units, testing and EV charger points. Call it in when something is wrong, plan it in when it is not.</p>
+      <div class="cta"><a class="btn y" href="#emergency" data-em>Emergency call</a><a class="btn ghost" href="#enquire">Start an enquiry</a></div>
+    </div>
+
+    <div class="win" id="win">
+      <div class="win-head mono" aria-hidden="true"><span>Inspection window A</span><span class="lux">Light level <i><b id="lux"></b></i></span><span id="mode">Still</span></div>
+      <div class="ruler top" aria-hidden="true"></div>
+      <div class="ruler side" aria-hidden="true"></div>
+      <div class="frame">
+        <figure class="plate" id="hero-plate" data-footage="poster">
+          <picture><source srcset="img/bright-circuit-16x9.webp" type="image/webp"><img src="img/bright-circuit-16x9.jpg" width="1672" height="941" alt="An electrician in black work clothes and yellow gloves working inside an open consumer unit with a screwdriver. A yellow toolbox, a meter and a tool tray sit on a shelf below, against a dark charcoal wall. A generated concept image." fetchpriority="high"></picture>
+          <video muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" data-desktop="bright-circuit-16x9"></video>
+          <p class="tag mono" id="hero-tag">Generated concept image</p>
+        </figure>
+        <i class="reg r1" aria-hidden="true"></i><i class="reg r2" aria-hidden="true"></i><i class="reg r3" aria-hidden="true"></i><i class="reg r4" aria-hidden="true"></i>
+        <div class="pins" aria-hidden="true">
+          <i class="pin pA" style="--x:61%;--y:21%">A</i>
+          <i class="pin pB" style="--x:60%;--y:66%">B</i>
+          <i class="pin pC" style="--x:45%;--y:80%">C</i>
+          <i class="pin pD" style="--x:63%;--y:87%">D</i>
+          <i class="pin pE" style="--x:84%;--y:88%">E</i>
+          <span class="lead h" style="--y:21%;--x0:3%;--x1:61%"></span><span class="lab" style="--x:3%;--y:21%">A<b>Consumer unit</b></span>
+          <span class="lead h" style="--y:66%;--x0:3%;--x1:60%"></span><span class="lab" style="--x:3%;--y:66%">B<b>Socket outlet</b></span>
+          <span class="lead h" style="--y:80%;--x0:3%;--x1:45%"></span><span class="lab" style="--x:3%;--y:80%">C<b>Toolbox</b></span>
+          <span class="lead v" style="--x:63%;--y0:87%;--b:1.3rem;--len:0"></span><span class="lab below" style="--x:63%;--b:1.3rem">D<b>Test equipment</b></span>
+          <span class="lead v" style="--x:84%;--y0:88%;--b:3.4rem;--len:0"></span><span class="lab below" style="--x:84%;--b:3.4rem">E<b>Tool tray</b></span>
+        </div>
+      </div>
+      <ol class="key mono" aria-label="Parts visible in the footage">
+        <li><b>A</b> Consumer unit</li><li><b>B</b> Socket outlet</li><li><b>C</b> Toolbox</li><li><b>D</b> Test equipment</li><li><b>E</b> Tool tray</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<div class="bus" id="bus">
+  <svg class="rail" id="rail" aria-hidden="true" focusable="false"></svg>
+
+  <section class="sec flow" id="flow" data-node="N1 Flow" aria-labelledby="flow-h"><div class="wrap">
+    <p class="mono node-h"><b>N1</b> How the work flows <span class="stat"></span></p>
+    <h2 id="flow-h">From the first call to a tested circuit.</h2>
+    <p class="intro">Read it as a series circuit: the job enters at the supply and every stage has to pass before the next one has power.</p>
+    <ol class="steps">
+      <li class="rv">
+        <svg viewBox="0 0 64 40" width="64" height="40" aria-hidden="true" focusable="false"><circle cx="14" cy="20" r="9" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M10 20c2-4 4-4 4 0s2 4 4 0" fill="none" stroke="currentColor" stroke-width="2"/><path d="M23 20h41" stroke="currentColor" stroke-width="2.5"/></svg>
+        <p class="mono">01 Supply</p><h3>You tell us what is wrong</h3><p>Use the enquiry board or the emergency button. Say what you can see, where it is and how soon you need someone.</p></li>
+      <li class="rv" style="--d:120ms">
+        <svg viewBox="0 0 64 40" width="64" height="40" aria-hidden="true" focusable="false"><path d="M0 20h14M50 20h14" stroke="currentColor" stroke-width="2.5"/><circle cx="32" cy="20" r="17" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M24 14l8 14 8-14" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>
+        <p class="mono">02 Measure</p><h3>We find the fault</h3><p>Test equipment comes out before anything is changed, so the repair is based on a reading and not a guess.</p></li>
+      <li class="rv" style="--d:240ms">
+        <svg viewBox="0 0 64 40" width="64" height="40" aria-hidden="true" focusable="false"><path d="M0 28h18M46 28h18" stroke="currentColor" stroke-width="2.5"/><circle cx="18" cy="28" r="3" fill="currentColor"/><circle cx="46" cy="28" r="3" fill="currentColor"/><path d="M18 28l24-16" stroke="currentColor" stroke-width="2.5"/></svg>
+        <p class="mono">03 Switch</p><h3>We repair or fit</h3><p>Sockets, lighting, a consumer unit, an EV charger point or smoke alarms. The plan is agreed with you first.</p></li>
+      <li class="rv" style="--d:360ms">
+        <svg viewBox="0 0 64 40" width="64" height="40" aria-hidden="true" focusable="false"><path d="M0 10h26M26 10h0V22" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M12 22h28M17 28h18M22 34h8" stroke="currentColor" stroke-width="2.5"/></svg>
+        <p class="mono">04 Earth</p><h3>We test and write it up</h3><p>Circuits are tested after the work and you get a plain summary of what was done. Any paperwork depends on the job.</p></li>
+    </ol>
+  </div></section>
+
+  <section class="sec services" id="services" data-node="N2 Services" aria-labelledby="svc-h"><div class="wrap">
+    <p class="mono node-h"><b>N2</b> Services <span class="stat"></span></p>
+    <div class="svc-grid">
+      <div class="svc-intro">
+        <h2 id="svc-h">Flip a breaker to see what it covers.</h2>
+        <p class="intro">Each way on the board is a service. The switch is a real control: tap it, click it, or focus it and press Space or Enter.</p>
+        <figure class="detail rv">
+          <div class="crop"><img src="img/bright-circuit-16x9.jpg" width="1672" height="941" alt="A close view of the open consumer unit, with a row of breakers and coloured cables, cropped from the concept image. A generated concept image." loading="lazy"></div>
+          <figcaption class="mono"><b>Detail A</b> Consumer unit. Generated concept image.</figcaption>
+        </figure>
+      </div>
+      <div class="board dark">
+        <div class="board-head mono"><span>DB-1 Services board</span><span id="count" aria-live="polite">1 of 6 ways on</span></div>
+        <ul class="ways" id="ways">
+          <li class="way"><button class="sw" type="button" role="switch" aria-checked="true" aria-controls="c1"><span class="hs" aria-hidden="true"><i></i></span><span class="mono num">B1</span><span class="nm">Fault finding</span><span class="st mono" aria-hidden="true">On</span></button>
+            <div class="cover" id="c1"><p>Circuits that trip, sockets that have gone dead, lights that flicker or fail. We trace the fault with test equipment and tell you what we found before changing anything.</p></div></li>
+          <li class="way"><button class="sw" type="button" role="switch" aria-checked="true" aria-controls="c2"><span class="hs" aria-hidden="true"><i></i></span><span class="mono num">B2</span><span class="nm">Lighting</span><span class="st mono" aria-hidden="true">On</span></button>
+            <div class="cover" id="c2"><p>New or replacement light fittings, switches and dimmers, indoors and outdoors, and extra lighting where a room needs it.</p></div></li>
+          <li class="way"><button class="sw" type="button" role="switch" aria-checked="true" aria-controls="c3"><span class="hs" aria-hidden="true"><i></i></span><span class="mono num">B3</span><span class="nm">Sockets and consumer units</span><span class="st mono" aria-hidden="true">On</span></button>
+            <div class="cover" id="c3"><p>Adding, moving or replacing sockets, and replacing or extending a consumer unit.</p></div></li>
+          <li class="way"><button class="sw" type="button" role="switch" aria-checked="true" aria-controls="c4"><span class="hs" aria-hidden="true"><i></i></span><span class="mono num">B4</span><span class="nm">Testing and certificates</span><span class="st mono" aria-hidden="true">On</span></button>
+            <div class="cover" id="c4"><p>Testing existing circuits and writing up the results. Which documents a job needs is confirmed with you before work starts.</p></div></li>
+          <li class="way"><button class="sw" type="button" role="switch" aria-checked="true" aria-controls="c5"><span class="hs" aria-hidden="true"><i></i></span><span class="mono num">B5</span><span class="nm">EV charger points</span><span class="st mono" aria-hidden="true">On</span></button>
+            <div class="cover" id="c5"><p>Fitting a charge point at a home or on site, including the cable route and a separate circuit where the job needs one.</p></div></li>
+          <li class="way"><button class="sw" type="button" role="switch" aria-checked="true" aria-controls="c6"><span class="hs" aria-hidden="true"><i></i></span><span class="mono num">B6</span><span class="nm">Smoke alarm installs</span><span class="st mono" aria-hidden="true">On</span></button>
+            <div class="cover" id="c6"><p>Fitting smoke and heat alarms, linked together where the layout suits.</p></div></li>
+        </ul>
+        <p class="board-foot js-only"><button class="mini" type="button" id="all-on">All ways on</button><button class="mini" type="button" id="all-off">All ways off</button></p>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="sec enquire" id="enquire" data-node="N3 Enquiry" aria-labelledby="enq-h"><div class="wrap">
+    <p class="mono node-h"><b>N3</b> Enquiry board <span class="stat"></span></p>
+    <h2 id="enq-h">Wire up an enquiry.</h2>
+    <p class="intro">A demonstration of the enquiry journey. Five short steps and a review. Nothing is sent, stored or booked, and no real details are needed.</p>
+    <noscript><p class="nojs">The enquiry demonstration needs JavaScript. In a live site it would collect the service, how urgent it is, the postcode area, details and a contact preference, and pass them to the business. Here it would send nothing.</p></noscript>
+    <div class="js-only">
+    <div class="dboard dark" id="dboard">
+      <div class="board-head mono"><span>DB-2 Enquiry board</span><span>Demonstration</span></div>
+      <ol class="prail" id="prail" aria-label="Progress">
+        <li data-s="0"><i></i><span>Service</span></li><li data-s="1"><i></i><span>Urgency</span></li><li data-s="2"><i></i><span>Area</span></li><li data-s="3"><i></i><span>Details</span></li><li data-s="4"><i></i><span>Contact</span></li><li data-s="5"><i></i><span>Review</span></li>
+      </ol>
+      <p class="mono now" id="now" aria-live="polite"></p>
+      <form id="enq" action="#" novalidate onsubmit="return false">
+        <fieldset class="step" data-step="0"><legend class="vh">Step 1, service type</legend><h3 tabindex="-1">What do you need?</h3>
+          <div class="tiles" id="o-service"></div></fieldset>
+        <fieldset class="step" data-step="1" hidden><legend class="vh">Step 2, urgency</legend><h3 tabindex="-1">How soon?</h3>
+          <div class="tiles four" id="o-urgency"></div>
+          <p class="hint em-note" id="em-note" hidden>For an urgent problem on a live site, the Emergency call button at the top of every page is always one tap away. In this demonstration it only opens a dialog. <button type="button" class="linkbtn" data-em>Open the emergency dialog</button></p></fieldset>
+        <fieldset class="step" data-step="2" hidden><legend class="vh">Step 3, postcode area</legend><h3 tabindex="-1">Where is the job?</h3>
+          <label>Postcode area<input type="text" id="f-area" autocomplete="off" placeholder="[postcode area placeholder]" maxlength="12"></label>
+          <p class="hint">Optional. Please do not enter a real address or postcode.</p></fieldset>
+        <fieldset class="step" data-step="3" hidden><legend class="vh">Step 4, details</legend><h3 tabindex="-1">What is happening?</h3>
+          <label>Details<textarea id="f-details" rows="4" maxlength="400" placeholder="For example: which room, what stopped working, when it started."></textarea></label>
+          <p class="hint">Optional. Please do not enter personal details.</p></fieldset>
+        <fieldset class="step" data-step="4" hidden><legend class="vh">Step 5, contact preference</legend><h3 tabindex="-1">How should we reach you?</h3>
+          <div class="tiles four" id="o-contact"></div>
+          <p class="hint">Only the preference is asked for here. No phone number or email address is collected.</p></fieldset>
+        <fieldset class="step" data-step="5" hidden><legend class="vh">Step 6, review</legend><h3 tabindex="-1">Check the circuit</h3>
+          <dl class="review" id="review"></dl></fieldset>
+        <p class="err" id="err" role="alert"></p>
+        <div class="nav"><button type="button" class="btn ghost" id="back">Back</button><button type="button" class="btn y" id="next">Next</button></div>
+      </form>
+      <div class="result" id="result" tabindex="-1" hidden>
+        <p class="stamp mono">Demonstration: nothing was sent</p>
+        <h3>Enquiry summary</h3>
+        <dl class="review" id="r-sum"></dl>
+        <p class="hint">In a live site this would reach the business. Here it goes nowhere: nothing was sent, stored or booked, and no reply will follow.</p>
+        <div class="nav"><button type="button" class="btn y" id="again">Start again</button></div>
+      </div>
+    </div>
+    </div>
+  </div></section>
+</div>
+</main>
+
+<footer class="foot dark" id="emergency"><div class="wrap">
+  <div class="earth" aria-hidden="true"><svg viewBox="0 0 60 44" width="60" height="44" focusable="false"><path d="M30 0v14M8 14h44M16 24h28M24 34h12" fill="none" stroke="currentColor" stroke-width="3"/></svg><span class="mono">E Earth</span></div>
+  <p class="mono">Concept by Rhys Hume, not a live site.</p>
+  <p>Bright Circuit Electrical is a fictional business. The footage and images are generated concept material and do not show a real electrician, customer or completed job. The enquiry and the emergency call are demonstrations: nothing is sent, stored, booked or dialled.</p>
+  <div class="em-plain"><p class="mono">Emergency call (demonstration)</p><p>In a live site this would dial the business. Nothing is called here. Number: <b>[phone number placeholder]</b></p><p>If there is a fire or someone is in danger, call the emergency services first.</p></div>
+  <p><a href="./">All proofs</a></p>
+</div></footer>
+
+<dialog id="em" aria-labelledby="em-h">
+  <form class="em-in" action="#" novalidate onsubmit="return false">
+    <p class="mono">Demonstration</p>
+    <h2 id="em-h">Emergency call</h2>
+    <p>In a live site this would dial the business. Nothing is called here.</p>
+    <p class="phone" aria-label="Phone number placeholder">[phone number placeholder]</p>
+    <p class="safe">If there is a fire or someone is in danger, call the emergency services first.</p>
+    <button class="btn y" type="button" id="em-close" autofocus>Close</button>
+  </form>
+</dialog>
+
+<nav class="callbar" aria-label="Quick actions"><a class="cb-em" href="#emergency" data-em>Emergency call</a><a class="cb-enq" href="#enquire">Enquire</a></nav>
+
+<script src="footage.js"></script>
+<script src="bright-circuit.js"></script>
+</body>
+</html>

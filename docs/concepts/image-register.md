@@ -10,6 +10,19 @@ Source for all files: supplied by Rhys as `Website Concept Photos.zip` (generate
 | `oi-02-flowers` | Olive & Ivory | Frame 02, the details | 395 x 544 | 395:544 | `.webp` 34 KB, `.jpg` 42 KB |
 | `oi-03-dress-window` | Olive & Ivory | Opening scene (cloth movement) and frame 01 | 349 x 544 | 349:544 | `.webp` 19 KB, `.jpg` 31 KB |
 | `oi-04-rings-vows` | Olive & Ivory | Frame 03, the vows | 332 x 544 | 83:136 | `.webp` 8 KB, `.jpg` 17 KB |
+| `oi-05-ceremony-room` | Olive & Ivory | Sheet frame 03 | 521 x 391 | 521:391 | `.webp`, `.jpg` (collage crop) |
+| `oi-06-hands-rings-bouquet` | Olive & Ivory | Sheet frame 06 | 391 x 391 | 1:1 | `.webp`, `.jpg` (collage crop) |
+| `oi-07-vows-over-shoulder` | Olive & Ivory | Sheet frame 05 | 391 x 293 | 391:293 | `.webp`, `.jpg` (collage crop) |
+| `oi-08-speeches-laughing` | Olive & Ivory | Sheet frame 08 | 391 x 293 | 391:293 | `.webp`, `.jpg` (collage crop) |
+| `oi-09-dance-floor` | Olive & Ivory | Sheet frame 09 | 367 x 275 | 367:275 | `.webp`, `.jpg` (collage crop) |
+| `oi-hero-window-16x9` | Olive & Ivory | Hero poster (supplied 1672 x 941 still, not enlarged) | 1672 x 941 | 16:9 | `.webp`, `.jpg` |
+| `se-hero-fire-16x9` | Salt & Ember | Hero poster (supplied 1672 x 941 still, not enlarged) | 1672 x 941 | 16:9 | `.webp`, `.jpg` |
+| `bright-circuit-16x9` | Bright Circuit Electrical | Hero poster (supplied 1672 x 941 still, not enlarged) | 1672 x 941 | 16:9 | `.webp`, `.jpg` |
+| `sunny-hours-16x9` | Sunny Hours Club | Hero poster (supplied 1672 x 941 still, not enlarged) | 1672 x 941 | 16:9 | `.webp`, `.jpg` |
+| `clear-ground-16x9` | Clear Ground Coaching | Hero poster (supplied 1672 x 941 still, not enlarged) | 1672 x 941 | 16:9 | `.webp`, `.jpg` |
+| `little-kettle-16x9` | Little Kettle Café | Hero poster (supplied 1672 x 941 still, not enlarged) | 1672 x 941 | 16:9 | `.webp`, `.jpg` |
+| `corner-shelf-16x9` | The Corner Shelf | Hero poster (supplied 1672 x 941 still, not enlarged) | 1672 x 941 | 16:9 | `.webp`, `.jpg` |
+| `oak-razor-16x9` | Oak & Razor | Hero poster (supplied 1672 x 941 still, not enlarged) | 1672 x 941 | 16:9 | `.webp`, `.jpg` |
 | `se-01-fire-grill` | Salt & Ember | Opening scene (fire movement) and "From the fire" | 367 x 537 | 367:537 | `.webp` 31 KB, `.jpg` 36 KB |
 | `se-02-plated-food` | Salt & Ember | "To start" | 339 x 537 | 113:179 | `.webp` 21 KB, `.jpg` 27 KB |
 | `se-03-wine-pour` | Salt & Ember | "To drink" | 323 x 537 | 323:537 | `.webp` 14 KB, `.jpg` 22 KB |
@@ -34,3 +47,5 @@ Source for all files: supplied by Rhys as `Website Concept Photos.zip` (generate
 ## Footage
 
 No footage exists yet. The hero slots read `data/footage.json`; until a clip is marked available the registered photograph is shown with a slow camera push. See `asset-manifest.md` for every clip and photograph still to be produced, with generation prompts.
+
+Rev 6 added the hero posters and five wedding sheet frames. See `asset-register.md` for the full list of eight hero clips and posters.

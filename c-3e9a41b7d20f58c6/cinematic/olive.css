@@ -55,7 +55,7 @@ body { --bg: #f6f0e7; --fg: #2c2a25; --acc: #5b6f55; --acc-ink: #fbf8f0; --ivory
 @media (min-width: 52rem) { .frames { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 2.4rem 1rem; } .cell { grid-column: span 3; } .cell:nth-child(4n+2) { margin-block-start: 2.2rem; } .cell:nth-child(4n+3) { margin-block-start: 0.6rem; } .cell:nth-child(4n) { margin-block-start: 1.6rem; } }
 @media (max-width: 51.99rem) { .cell:nth-child(even) { margin-block-start: 1.6rem; } }
 .cell { position: relative; }
-.film { position: relative; display: block; inline-size: 100%; padding: 0; border: 2px solid var(--fg); background: var(--fg); aspect-ratio: 349 / 544; overflow: hidden; }
+.film { position: relative; display: block; inline-size: 100%; padding: 0; border: 2px solid var(--fg); background: var(--fg); aspect-ratio: var(--ar, 349 / 544); overflow: hidden; }
 .film picture, .film img { inline-size: 100%; block-size: 100%; object-fit: cover; transition: transform 500ms var(--ease); }
 .cell.docking .film img, .cell.docking .film picture { visibility: hidden; }
 @media (hover: hover) and (pointer: fine) { .film:hover img { transform: scale(1.04); } }
@@ -92,7 +92,7 @@ dialog#table::backdrop { background: var(--table); }
 .tb-arrow { inline-size: 3rem; block-size: 3rem; border: 1px solid var(--bg); background: transparent; color: var(--bg); font-size: 1.4rem; line-height: 1; }
 .tb-print { display: grid; justify-items: center; align-content: center; gap: 0.9rem; min-block-size: 0; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
 .print { position: relative; background: var(--bg); padding: clamp(0.5rem, 1.6vw, 0.9rem); max-block-size: calc(100dvh - 15.5rem); }
-.print img { display: block; inline-size: auto; block-size: auto; max-block-size: calc(100dvh - 18rem); max-inline-size: 100%; aspect-ratio: var(--ar, 349 / 544); object-fit: cover; }
+.print img { display: block; inline-size: auto; block-size: auto; max-block-size: calc(100dvh - 18rem); max-inline-size: min(100%, calc(var(--nw, 9999px) * 1.3)); aspect-ratio: var(--ar, 349 / 544); object-fit: cover; }
 .print::before, .print::after { content: ""; position: absolute; inline-size: 1rem; block-size: 1rem; border: 0 solid var(--bg); }
 .print::before { inset: -0.7rem auto auto -0.7rem; border-width: 0 1px 1px 0; } .print::after { inset: auto -0.7rem -0.7rem auto; border-width: 1px 0 0 1px; }
 .tb-cap { text-align: center; max-inline-size: 30rem; }
@@ -182,18 +182,23 @@ dialog#table::backdrop { background: var(--table); }
    The portrait plate stays on top as the photograph that docks into the sheet; the backdrop leaves on its own. */
 .scene-bg { display: none; }
 .open.wide { position: relative; overflow: clip; }
-.open.wide .scene-bg { display: block; position: absolute; inset: 0; z-index: 0; background: var(--ivory2); opacity: var(--bgo, 1); transform: translateY(var(--bgy, 0px)); will-change: opacity, transform; }
-.scene-bg picture, .scene-bg img, .scene-bg video { inline-size: 100%; block-size: 100%; object-fit: cover; object-position: 72% 50%; display: block; }
+/* the film is a framed 16:9 window on the right, an ivory page around it: sharper (smaller than full bleed), and the type stays on ivory */
+.open.wide .scene-bg { display: block; position: absolute; z-index: 0; inset-block-start: 50%; inset-inline-end: var(--gut); inline-size: min(56%, 60rem); aspect-ratio: 16 / 9; background: var(--ivory2); opacity: var(--bgo, 1); transform: translateY(calc(-50% + var(--bgy, 0px))); will-change: opacity, transform; outline: 2px solid var(--fg); outline-offset: 0; }
+.scene-bg picture, .scene-bg img, .scene-bg video { inline-size: 100%; block-size: 100%; object-fit: cover; object-position: 50% 50%; display: block; }
 .scene-bg video { position: absolute; inset: 0; opacity: 0; transition: opacity 700ms var(--ease); }
 .scene-bg.has-footage video { opacity: 1; }
+/* contact-strip marks on the film frame: frame number and edge code, drawn as text on the ivory around it */
+.open.wide .scene-bg::before, .open.wide .scene-bg::after { position: absolute; font: 400 0.7rem/1 "IBM Plex Mono", monospace; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg); }
+.open.wide .scene-bg::before { content: "A1  OLIVE & IVORY  FILM 01"; inset-block-start: -1.6rem; inset-inline-start: 0; }
+.open.wide .scene-bg::after { content: "01A"; inset-block-end: -1.6rem; inset-inline-end: 0; }
 .open.wide .open-in { position: relative; z-index: 2; }
-.open.wide .stage-plate { justify-self: center; inline-size: min(100%, 15rem); }
-/* the print sits in the calm band between the type and the dress, so the composition keeps the dress and window in the right third */
-@media (min-width: 56rem) { .open.wide .open-in { grid-template-columns: minmax(0, 6fr) minmax(0, 3fr) minmax(0, 3fr); } .open.wide .open-type { grid-column: 1; } .open.wide .stage-plate { grid-column: 2; } }
+.open.wide .stage-plate { justify-self: start; inline-size: min(100%, 14rem); }
+@media (min-width: 56rem) { .open.wide .open-in { grid-template-columns: minmax(0, 5fr) minmax(0, 2.6fr) minmax(0, 4.4fr); } .open.wide .open-type { grid-column: 1; } .open.wide .stage-plate { grid-column: 2; align-self: end; margin-block-end: -1rem; } }
 .open.wide .cap { background: var(--bg); padding: 0.2rem 0.5rem; inline-size: fit-content; opacity: var(--bgo, 1); }
 @media (max-width: 55.99rem) {
   .open.wide { overflow: visible; display: block; padding-block-start: 0; }
-  .open.wide .scene-bg { position: relative; inset: auto; aspect-ratio: 16 / 9; opacity: 1; transform: none; }
+  .open.wide .scene-bg { position: relative; inset: auto; inline-size: 100%; opacity: 1; transform: none; outline: 0; }
+  .open.wide .scene-bg::before, .open.wide .scene-bg::after { display: none; }
   .open.wide .open-in { padding-block-start: 1.6rem; }
   .open.wide .stage-plate { justify-self: start; }
 }

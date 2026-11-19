@@ -55,13 +55,13 @@
     FR.forEach(function (f, i) {
       var li = el('li', 'cell' + (i === 0 ? ' dock' : ''));
       li.dataset.id = f.id; li.style.setProperty('--k', i);
-      li.innerHTML = '<span class="crop a"></span><span class="crop b"></span><button class="film" type="button" data-i="' + i + '" aria-haspopup="dialog" aria-label="Open frame ' + num(i) + ', ' + esc(f.title) + '"><span class="no mono">' + num(i) + '</span>' + picture(f, i > 0) + marksSvg() + '</button>' +
+      li.innerHTML = '<span class="crop a"></span><span class="crop b"></span><button class="film" type="button" style="--ar:' + f.w + ' / ' + f.h + '" data-i="' + i + '" aria-haspopup="dialog" aria-label="Open frame ' + num(i) + ', ' + esc(f.title) + '"><span class="no mono">' + num(i) + '</span>' + picture(f, i > 0) + marksSvg() + '</button>' +
         '<p class="edge mono"><span>&#9656; ' + num(i) + '</span><span>' + num(i) + 'A</span></p><p class="cap2"><span>' + esc(f.title) + '</span><span class="mono">' + esc(f.time) + '</span></p>';
       ol.appendChild(li);
     });
     var missing = Math.max(0, TARGET - FR.length);
     if (missing) {
-      var r = el('li', 'reserve-strip'); r.innerHTML = '<b>Frames ' + num(FR.length) + ' to ' + num(TARGET - 1) + ' are not photographed yet</b><span class="mono">' + missing + ' more needed. See the asset manifest.</span>';
+      var r = el('li', 'reserve-strip'); r.innerHTML = '<b>Frames ' + num(FR.length) + ' to ' + num(TARGET - 1) + ' are not photographed yet</b><span class="mono">' + missing + ' more frames to come</span>';
       ol.appendChild(r);
     }
     $('#sheet-count').textContent = 'Frames 01 to ' + num(FR.length - 1) + (missing ? ' of ' + TARGET : '');
@@ -105,7 +105,7 @@
   var dlg = $('#table'), timg = $('#tb-img'), tpr = $('#tb-pr'), curIdx = 0, lastBtn = null;
   function fillTable(i, dir) {
     var f = FR[i]; curIdx = i;
-    timg.width = f.w; timg.height = f.h; timg.src = 'img/' + f.file + '.jpg'; timg.alt = f.alt; tpr.style.setProperty('--ar', f.w + ' / ' + f.h);
+    timg.width = f.w; timg.height = f.h; tpr.style.setProperty('--nw', f.w + 'px'); timg.src = 'img/' + f.file + '.jpg'; timg.alt = f.alt; tpr.style.setProperty('--ar', f.w + ' / ' + f.h);
     $('#tb-no').textContent = 'Frame ' + num(i) + ' of ' + num(FR.length - 1) + ', ' + f.time; $('#tb-t').textContent = f.title; $('#tb-c').textContent = f.caption;
     $$('#tb-strip button').forEach(function (b, k) { b.setAttribute('aria-current', k === i); });
     var cb = $('#tb-strip button[aria-current="true"]'); if (cb && cb.scrollIntoView) cb.scrollIntoView({ block: 'nearest', inline: 'center' });
