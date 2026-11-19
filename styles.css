@@ -1009,3 +1009,18 @@ figure.exhibit img {
 /* Same look as the home page: Archivo headings, bold and tight. */
 h1, h2, h3, .wordmark { font-weight: 700; letter-spacing: -0.02em; }
 h1 { line-height: 1.05; letter-spacing: -0.025em; }
+
+/* Closing band and phone bar, the same as the home page. */
+.last { background: var(--ink); color: var(--paper); padding-block: clamp(3rem, 7vw, 5rem); margin-top: clamp(2.5rem, 6vw, 4.5rem); }
+.last h2 { color: var(--paper); font-size: clamp(1.85rem, 4.4vw, 3rem); font-weight: 700; letter-spacing: -0.022em; line-height: 1.05; max-width: 20ch; }
+.last p { margin-top: 1rem; color: #cdd5e4; max-width: 34rem; }
+.last .btn { margin-top: 1.6rem; }
+.btn-on-ink { background: var(--paper); color: var(--ink); }
+.btn-on-ink:hover { background: #fff; color: var(--ink); }
+.callbar { display: none; }
+@media (max-width: 47.99rem) {
+  .callbar { display: grid; grid-template-columns: 1fr 1fr; position: fixed; inset-inline: 0; bottom: 0; z-index: 30; background: var(--ink); padding-bottom: env(safe-area-inset-bottom, 0px); border-top: 1px solid #28457c; }
+  .callbar a { display: flex; align-items: center; justify-content: center; min-block-size: 3.5rem; padding: 0.5rem 0.8rem; font: 600 0.98rem/1.2 var(--sans); color: var(--paper); text-decoration: none; text-align: center; }
+  .callbar .book { background: var(--paper); color: var(--ink); }
+  .colophon { padding-bottom: 4rem; }
+}
