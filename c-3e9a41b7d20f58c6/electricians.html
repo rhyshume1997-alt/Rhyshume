@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Electrician website concept | Rhys Hume</title>
+<meta name="description" content="A concept page for an electrician: bold type, a call strip, a drifting jobs band and stacking job panels.">
+<link rel="stylesheet" href="kit.css">
+<style>
+
+body { --r: 2px; }
+.top { padding-block: 1rem; }
+.top-in { display: flex; align-items: center; gap: 0.8rem 2rem; flex-wrap: wrap; }
+.brand { margin-inline-end: auto; text-decoration: none; }
+.top nav { display: flex; gap: 0.4rem 1.6rem; flex-wrap: wrap; font-weight: 500; font-size: 0.97rem; }
+.top nav a { text-decoration: none; padding-block: 0.5rem; }
+.top .btn { display: none; }
+@media (min-width: 48rem) { .top .btn { display: inline-flex; } }
+section { padding-block: clamp(3rem, 8vw, 6rem); }
+
+body { --bg:#f1f1ec; --fg:#17212d; --acc:#f1b400; --acc-ink:#17212d; --ph:#dfe1d9; --display:"Archivo", "Helvetica Neue", Arial, sans-serif; --text:"IBM Plex Sans", system-ui, sans-serif; }
+.brand { font: 800 1.25rem/1 var(--display); letter-spacing: -0.01em; text-transform: uppercase; }
+.brand i { font-style: normal; background: var(--acc); padding: 0.1em 0.3em; margin-right: 0.25em; }
+.alert { background: var(--acc); color: var(--acc-ink); }
+.alert .wrap { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; align-items: center; justify-content: space-between; padding-block: 0.7rem; font-weight: 600; }
+.alert a { font: 800 1.15rem/1 var(--display); text-decoration: none; }
+.hero { padding-block: clamp(2rem, 6vw, 4.5rem) clamp(2.5rem, 5vw, 4rem); }
+.hero-g { display: grid; gap: 2rem 4rem; align-items: end; }
+@media (min-width: 60rem) { .hero-g { grid-template-columns: 7fr 5fr; } }
+.hero h1 { font: 900 clamp(2.7rem, 8.2vw, 6.4rem)/0.96 var(--display); letter-spacing: -0.035em; text-transform: uppercase; }
+.hero h1 em { font-style: normal; background: var(--acc); padding: 0 0.12em; }
+.hero p.sub { margin-top: 1.4rem; font-size: 1.2rem; max-width: 30rem; }
+.hero .cta { margin-top: 1.8rem; display: flex; flex-wrap: wrap; gap: 0.8rem 1.4rem; align-items: center; }
+.marq { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.marq .mono { font-size: 0.85rem; }
+.svc h2, .how h2 { font: 900 clamp(2rem, 5vw, 3.6rem)/1 var(--display); text-transform: uppercase; letter-spacing: -0.03em; }
+.svc .stack { margin-top: 2.2rem; }
+.svc .stack > li { padding: 1.4rem 1.6rem 1.8rem; border: 2px solid var(--fg); background: var(--bg); display: grid; gap: 0.6rem 2.4rem; }
+.svc .stack > li:nth-child(2) { background: var(--acc); }
+.svc .stack > li:nth-child(3) { background: var(--fg); color: var(--bg); }
+.svc .stack > li:nth-child(4) { background: #dfe1d9; }
+@media (min-width: 48rem) { .svc .stack > li { grid-template-columns: 6rem 1fr 1fr; align-items: start; min-block-size: 11rem; } .svc .stack > li:nth-child(2) { margin-inline: 2rem 0; } .svc .stack > li:nth-child(3) { margin-inline: 4rem 0; } .svc .stack > li:nth-child(4) { margin-inline: 6rem 0; } }
+.svc .n { font: 900 3.4rem/0.9 var(--display); }
+.svc h3 { font: 800 clamp(1.5rem, 3vw, 2.2rem)/1.05 var(--display); text-transform: uppercase; letter-spacing: -0.02em; }
+.how { background: var(--fg); color: var(--bg); }
+.how ol { list-style: none; margin: 2.2rem 0 0; padding: 0; display: grid; gap: 0; border-top: 1px solid color-mix(in srgb, var(--bg) 35%, transparent); }
+.how li { display: grid; grid-template-columns: 3.2rem 1fr; gap: 0.4rem 1rem; padding-block: 1.3rem; border-bottom: 1px solid color-mix(in srgb, var(--bg) 35%, transparent); }
+@media (min-width: 48rem) { .how li { grid-template-columns: 6rem 14rem 1fr; } }
+.how li b { font: 800 1.5rem/1.1 var(--display); text-transform: uppercase; }
+.how .acc { color: var(--acc); }
+.how .btn { margin-top: 2.2rem; }
+.enq-in { display: grid; gap: 2rem 4rem; }
+@media (min-width: 56rem) { .enq-in { grid-template-columns: 5fr 6fr; align-items: start; } }
+.enq h2 { font: 900 clamp(2rem, 4.6vw, 3.4rem)/1 var(--display); text-transform: uppercase; letter-spacing: -0.03em; }
+
+</style>
+<script>document.documentElement.classList.add("js")</script>
+<script src="kit.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<div class="banner">Concept by Rhys Hume, not a live site. Sample business, sample words, photo stand-ins. <a href="./">All concepts</a></div>
+<div class="alert"><div class="wrap"><span>Power out, sparks or a burning smell? Ring now.</span><a href="tel:+441414960123">0141 496 0123</a></div></div><header class="top "><div class="wrap top-in"><a class="brand" href="#main"><i>BC</i>Bright Circuit Electrical</a><nav aria-label="Main"><a href="#services">Jobs</a><a href="#how">How it works</a><a href="#enquire">Ask a question</a></nav><a class="btn magnet" href="#enquire">Get a quote</a></div></header>
+<main id="main">
+
+<section class="hero"><div class="wrap hero-g">
+  <div>
+    <h1 class="split" aria-label="Electricians in Glasgow">Electricians in <em>Glasgow</em></h1>
+    <p class="sub rise" style="--d:500ms">Faults, fuse boards, lighting and chargers. Ring, say what is wrong, and get a straight answer on what happens next.</p>
+    <div class="cta rise" style="--d:650ms"><a class="btn magnet" href="#enquire">Get a quote</a><a class="tlink" href="tel:+441414960123">Or ring 0141 496 0123</a></div>
+  </div>
+  <div class="rise" style="--d:300ms"><div class="ph " style="--ar:4 / 5;" role="img" aria-label="Photo stand-in: Your electrician at work: a tidy fuse board, door off, tools laid out neatly"><div class="ph-cap"><b>Your photo here</b><span>Your electrician at work: a tidy fuse board, door off, tools laid out neatly</span></div></div></div>
+</div></section>
+
+<div class="marq" aria-label="Jobs covered"><ul class="marq-track mono">
+  <li>Faults</li><li>Rewires</li><li>Fuse boards</li><li>Lighting</li><li>Sockets</li><li>EV chargers</li><li>Safety checks</li>
+  <li class="marq-dup" aria-hidden="true">Faults</li><li class="marq-dup" aria-hidden="true">Rewires</li><li class="marq-dup" aria-hidden="true">Fuse boards</li><li class="marq-dup" aria-hidden="true">Lighting</li><li class="marq-dup" aria-hidden="true">Sockets</li><li class="marq-dup" aria-hidden="true">EV chargers</li><li class="marq-dup" aria-hidden="true">Safety checks</li>
+</ul></div>
+
+<section class="svc" id="services"><div class="wrap">
+  <h2>What I can sort</h2>
+  <ol class="stack">
+    <li class="rv"><span class="n">01</span><h3>Faults and tripping</h3><p>Something keeps tripping or has stopped working. Ring and say what happens.</p></li>
+    <li class="rv"><span class="n">02</span><h3>Fuse boards and rewires</h3><p>Older house, older wiring. I look first, then tell you what needs doing and what can wait.</p></li>
+    <li class="rv"><span class="n">03</span><h3>Lighting and sockets</h3><p>More sockets where you need them. Lighting that suits the room.</p></li>
+    <li class="rv"><span class="n">04</span><h3>EV chargers</h3><p>A charger fitted at home, set up and tested before I go.</p></li>
+  </ol>
+</div></section>
+
+<section class="how" id="how"><div class="wrap">
+  <h2>Three steps</h2>
+  <ol>
+    <li class="rv"><span class="mono acc">Step 1</span><b>Ring or message</b><p>Say what is wrong or what you want done.</p></li>
+    <li class="rv"><span class="mono acc">Step 2</span><b>Get a quote</b><p>I tell you the price for the job before I start.</p></li>
+    <li class="rv"><span class="mono acc">Step 3</span><b>Job done</b><p>Fixed, tested, and tidied up before I leave.</p></li>
+  </ol>
+  <a class="btn magnet" href="#enquire">Get a quote</a>
+</div></section>
+
+<section class="enq" id="enquire"><div class="wrap enq-in">
+  <div><h2>What has happened?</h2><p style="margin-top:1rem;max-width:28rem">Say what is wrong, or what you want done. I will come back to you to arrange a time.</p></div>
+  <div><form class="demo-form" id="enquire-form" novalidate><label>Your name<input type="text" autocomplete="off"></label><label>Phone number<input type="tel" autocomplete="off"></label><label>What do you need?<select><option>Something is not working</option><option>Fuse board or rewire</option><option>Lighting or sockets</option><option>EV charger</option><option>Something else</option></select></label><label>A few words about it<textarea rows="3"></textarea></label><button class="btn" type="submit">Send my enquiry</button><p class="demo-note">Demo only. Nothing is sent.</p><div class="demo-card" role="status"><b>Demo, nothing was sent. In a live site this would arrive in your inbox as a tidy enquiry.</b></div></form></div>
+</div></section>
+
+</main>
+<footer class="foot"><div class="wrap">Concept page. Nothing on it is real and nothing you type is sent anywhere.</div></footer>
+<div class="callbar" aria-label="Call or enquire"><a href="tel:+441414960123">Call 0141 496 0123</a><a href="#enquire">Get a quote</a></div>
+</body>
+</html>

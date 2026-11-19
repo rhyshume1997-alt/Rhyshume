@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Restaurant website concept | Rhys Hume</title>
+<meta name="description" content="A concept page for a restaurant: large type that rises in, a menu where a photo follows your cursor, and a table request that sends nothing.">
+<link rel="stylesheet" href="kit.css">
+<style>
+
+body { --r: 2px; }
+.top { padding-block: 1rem; }
+.top-in { display: flex; align-items: center; gap: 0.8rem 2rem; flex-wrap: wrap; }
+.brand { margin-inline-end: auto; text-decoration: none; }
+.top nav { display: flex; gap: 0.4rem 1.6rem; flex-wrap: wrap; font-weight: 500; font-size: 0.97rem; }
+.top nav a { text-decoration: none; padding-block: 0.5rem; }
+.top .btn { display: none; }
+@media (min-width: 48rem) { .top .btn { display: inline-flex; } }
+section { padding-block: clamp(3rem, 8vw, 6rem); }
+
+body { --bg:#1f1612; --fg:#f2e7d6; --acc:#dd6b40; --acc-ink:#1f1612; --ph:#33261f; --field:#2a1e18; --display:"Newsreader", Georgia, serif; --text:"IBM Plex Sans", system-ui, sans-serif; }
+.brand { font: 400 italic 1.7rem/1 var(--display); }
+.top { border-bottom: 1px solid color-mix(in srgb, var(--fg) 20%, transparent); }
+.hero { padding-block: clamp(2.5rem, 7vw, 5.5rem) clamp(2.5rem, 6vw, 4.5rem); }
+.hero h1 { font: 300 clamp(3rem, 10vw, 8rem)/0.96 var(--display); letter-spacing: -0.03em; max-width: 15ch; }
+.hero h1 em { color: var(--acc); font-style: italic; }
+.hero-g { display: grid; gap: 2rem 4rem; align-items: end; }
+@media (min-width: 56rem) { .hero-g { grid-template-columns: 7fr 4fr; } }
+.hero p { max-width: 26rem; }
+.hero .cta { margin-top: 1.6rem; display: flex; flex-wrap: wrap; gap: 0.8rem 1.4rem; align-items: center; }
+.menu h2, .book h2 { font: 300 clamp(2rem, 5vw, 3.6rem)/1.05 var(--display); }
+.menu-list { list-style: none; margin: 2rem 0 0; padding: 0; border-top: 1px solid color-mix(in srgb, var(--fg) 25%, transparent); }
+.menu-list li { display: grid; grid-template-columns: 3rem 1fr; align-items: baseline; gap: 0.3rem 1rem; padding-block: 1.2rem; border-bottom: 1px solid color-mix(in srgb, var(--fg) 25%, transparent); cursor: default; transition: padding-left 240ms var(--ease); }
+@media (min-width: 48rem) { .menu-list li { grid-template-columns: 4rem 1fr 1fr; } }
+@media (hover: hover) and (pointer: fine) { .menu-list li:hover { padding-left: 1rem; } .menu-list li:hover b { color: var(--acc); } }
+.menu-list b { font: 300 clamp(1.8rem, 4.2vw, 3.2rem)/1.05 var(--display); transition: color 200ms var(--ease); }
+.menu-list p { opacity: 0.85; max-width: 30rem; }
+.follow .ph { --ar: 4 / 5; }
+.scrubs { text-align: left; }
+.scrub { font: 300 clamp(2rem, 5.4vw, 4.4rem)/1.1 var(--display); max-width: 18ch; letter-spacing: -0.02em; }
+.book { background: #2b1e18; }
+.book-in { display: grid; gap: 2rem 4rem; }
+@media (min-width: 56rem) { .book-in { grid-template-columns: 5fr 6fr; align-items: start; } }
+.demo-form select, .demo-form input { color-scheme: dark; }
+
+</style>
+<script>document.documentElement.classList.add("js")</script>
+<script src="kit.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<div class="banner">Concept by Rhys Hume, not a live site. Sample business, sample words, photo stand-ins. <a href="./">All concepts</a></div>
+<header class="top "><div class="wrap top-in"><a class="brand" href="#main">Salt &amp; Ember</a><nav aria-label="Main"><a href="#menu">The menu</a><a href="#enquire">Book a table</a></nav><a class="btn magnet" href="#enquire">Book a table</a></div></header>
+<main id="main">
+
+<section class="hero"><div class="wrap hero-g">
+  <div><p class="mono fade" style="margin-bottom:1.2rem">Restaurant, Glasgow</p><h1 class="split" aria-label="Fire, salt and something good to share.">Fire, salt and something good to <em>share.</em></h1></div>
+  <div class="rise" style="--d:600ms"><div class="ph " style="--ar:4 / 5;" role="img" aria-label="Photo stand-in: A table of shared plates from above, hands reaching in, warm candlelight"><div class="ph-cap"><b>Your photo here</b><span>A table of shared plates from above, hands reaching in, warm candlelight</span></div></div><p style="margin-top:1.4rem">Cooked over coals and put in the middle of the table. Come with people you like.</p><div class="cta"><a class="btn magnet" href="#enquire">Book a table</a><a class="tlink" href="#menu">See the menu</a></div></div>
+</div></section>
+
+<section class="scrubs" style="padding-block:clamp(1rem,3vw,2rem) clamp(3rem,7vw,5rem)"><div class="wrap"><p class="scrub">Good food is mostly good fire, good timing and not getting in its way.</p></div></section>
+
+<section class="menu" id="menu"><div class="wrap">
+  <h2>The menu</h2>
+  <p class="mono" style="margin-top:1rem;opacity:0.75">Move over a course to see the dish</p>
+  <ul class="menu-list" data-follow="#follow">
+    <li data-ph="Starters: a small plate, shot from above, warm light"><span class="mono">01</span><b>To start</b><p>Small plates to share while you decide what comes next.</p></li>
+    <li data-ph="Mains: a dish straight from the grill, steam rising"><span class="mono">02</span><b>From the fire</b><p>The big plates, cooked over coals.</p></li>
+    <li data-ph="Sides: bowls on a table, hands reaching in"><span class="mono">03</span><b>For the table</b><p>Sides, sauces and bread, put in the middle.</p></li>
+    <li data-ph="Puddings: one dessert, dark background, one spoon"><span class="mono">04</span><b>Something sweet</b><p>One last thing before you go.</p></li>
+    <li data-ph="Drinks: a glass being poured at the bar"><span class="mono">05</span><b>To drink</b><p>Wine, beer and something without alcohol.</p></li>
+  </ul>
+</div></section>
+<div class="follow" id="follow" aria-hidden="true"><div class="ph " style="--ar:4 / 5;" role="img" aria-label="Photo stand-in: The dish"><div class="ph-cap"><b>Your photo here</b><span data-cap>The dish</span></div></div></div>
+
+<section class="book" id="enquire"><div class="wrap book-in">
+  <div><h2>Book a table</h2><p style="margin-top:1rem;max-width:28rem">Pick a day and how many of you. We will confirm by message.</p></div>
+  <div><form class="demo-form" id="enquire-form" novalidate><label>Your name<input type="text" autocomplete="off"></label><label>Day<input type="date" autocomplete="off"></label><label>How many of you?<select><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7 or more</option></select></label><label>Phone number<input type="tel" autocomplete="off"></label><label>Anything we should know?<textarea rows="3"></textarea></label><button class="btn" type="submit">Request a table</button><p class="demo-note">Demo only. Nothing is sent.</p><div class="demo-card" role="status"><b>Demo, nothing was sent. In a live site this would arrive in your inbox as a tidy enquiry.</b></div></form></div>
+</div></section>
+
+</main>
+<footer class="foot"><div class="wrap">Concept page. Nothing on it is real and nothing you type is sent anywhere.</div></footer>
+<div class="callbar" aria-label="Call or enquire"><a href="tel:+441414960123">Call 0141 496 0123</a><a href="#enquire">Book a table</a></div>
+</body>
+</html>

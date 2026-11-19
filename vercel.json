@@ -36,6 +36,19 @@
       ]
     },
     {
+      "source": "/c-3e9a41b7d20f58c6(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "no-referrer"
+        }
+      ]
+    },
+    {
       "source": "/preview/(.*)",
       "headers": [
         {

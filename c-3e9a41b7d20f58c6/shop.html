@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Independent shop website concept | Rhys Hume</title>
+<meta name="description" content="A concept page for an independent gift shop: big type, a sideways product rail, a new-in band and a question form that sends nothing.">
+<link rel="stylesheet" href="kit.css">
+<style>
+
+body { --r: 2px; }
+.top { padding-block: 1rem; }
+.top-in { display: flex; align-items: center; gap: 0.8rem 2rem; flex-wrap: wrap; }
+.brand { margin-inline-end: auto; text-decoration: none; }
+.top nav { display: flex; gap: 0.4rem 1.6rem; flex-wrap: wrap; font-weight: 500; font-size: 0.97rem; }
+.top nav a { text-decoration: none; padding-block: 0.5rem; }
+.top .btn { display: none; }
+@media (min-width: 48rem) { .top .btn { display: inline-flex; } }
+section { padding-block: clamp(3rem, 8vw, 6rem); }
+
+body { --bg:#f2eee6; --fg:#1d1c19; --acc:#c4442b; --acc-ink:#f2eee6; --ph:#e2dccd; --display:"Archivo", "Helvetica Neue", Arial, sans-serif; --text:"IBM Plex Sans", system-ui, sans-serif; }
+.brand { font: 800 1.35rem/1 var(--display); letter-spacing: -0.02em; }
+.hero { padding-block: clamp(1.5rem, 4vw, 3rem) clamp(2rem, 5vw, 3.5rem); }
+.hero h1 { font: 800 clamp(3rem, 10.5vw, 8.6rem)/0.92 var(--display); letter-spacing: -0.045em; }
+.hero h1 em { font-style: normal; color: var(--acc); }
+.hero-g { display: grid; gap: 1.6rem 3rem; align-items: end; }
+@media (min-width: 56rem) { .hero-g { grid-template-columns: 8fr 4fr; } }
+.hero .sub { font-size: 1.15rem; max-width: 24rem; }
+.hero .cta { margin-top: 1.4rem; display: flex; flex-wrap: wrap; gap: 0.8rem 1.4rem; align-items: center; }
+.marq { background: var(--acc); color: var(--acc-ink); border-color: var(--acc); }
+.marq .mono { font-size: 0.9rem; } .marq-track li::after { color: var(--acc-ink); }
+.rail h2, .visit h2 { font: 800 clamp(2rem, 5vw, 3.6rem)/1 var(--display); letter-spacing: -0.035em; }
+.rail-top { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 1rem; }
+.track { list-style: none; margin: 2rem 0 0; padding: 0 var(--gut) 1rem; display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gut); overscroll-behavior-x: contain; }
+.track > li { flex: 0 0 min(72vw, 19rem); scroll-snap-align: start; }
+.track > li:nth-child(even) { margin-top: 2.4rem; }
+.card { display: block; text-decoration: none; }
+.card .ph { transition: transform 260ms var(--ease); }
+@media (hover: hover) and (pointer: fine) { .card:hover .ph { transform: translateY(-6px); } .card:hover h3 { color: var(--acc); } }
+.card h3 { font: 800 1.35rem/1.1 var(--display); letter-spacing: -0.02em; margin-top: 0.8rem; transition: color 180ms var(--ease); }
+.card p { margin-top: 0.2rem; font-size: 0.95rem; }
+.tag { position: absolute; inset: 0.8rem auto auto 2.2rem; background: var(--acc); color: var(--acc-ink); padding: 0.25rem 0.55rem; z-index: 2; }
+.visit { background: #e8e1d2; }
+.visit-g { display: grid; gap: 2rem 4rem; }
+@media (min-width: 56rem) { .visit-g { grid-template-columns: 5fr 6fr; align-items: start; } }
+.visit .demo-form { --field: #f2eee6; }
+
+</style>
+<script>document.documentElement.classList.add("js")</script>
+<script src="kit.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<div class="banner">Concept by Rhys Hume, not a live site. Sample business, sample words, photo stand-ins. <a href="./">All concepts</a></div>
+<header class="top "><div class="wrap top-in"><a class="brand" href="#main">The Corner Shelf</a><nav aria-label="Main"><a href="#shop">Shop</a><a href="#enquire">Visit</a></nav><a class="btn magnet" href="#enquire">Visit the shop</a></div></header>
+<main id="main">
+
+<section class="hero"><div class="wrap hero-g">
+  <div><h1 class="split" aria-label="Small things worth giving.">Small things worth <em>giving.</em></h1></div>
+  <div class="rise" style="--d:600ms"><div class="ph " style="--ar:4 / 5;" role="img" aria-label="Photo stand-in: The shop shelves: ceramics and candles arranged by colour, daylight from the door"><div class="ph-cap"><b>Your photo here</b><span>The shop shelves: ceramics and candles arranged by colour, daylight from the door</span></div></div><p class="sub" style="margin-top:1.4rem">Gifts and home pieces from small makers, chosen by us. Come in, or ask us what to get.</p><div class="cta"><a class="btn magnet" href="#shop">See what is in</a><a class="tlink" href="#enquire">Ask us</a></div></div>
+</div></section>
+
+<div class="marq" aria-label="New in"><ul class="marq-track mono">
+  <li>New in</li><li>Candles</li><li>Cards</li><li>Ceramics</li><li>Plants</li><li>Gift wrap</li>
+  <li class="marq-dup" aria-hidden="true">New in</li><li class="marq-dup" aria-hidden="true">Candles</li><li class="marq-dup" aria-hidden="true">Cards</li><li class="marq-dup" aria-hidden="true">Ceramics</li><li class="marq-dup" aria-hidden="true">Plants</li><li class="marq-dup" aria-hidden="true">Gift wrap</li>
+</ul></div>
+
+<section class="rail" id="shop"><div class="wrap rail-top"><div><div class="ruleg" style="inline-size:4.5rem;block-size:2px;background:var(--acc);margin-bottom:1rem"></div><h2>What is in</h2></div><p class="mono" style="opacity:0.7">Swipe or scroll sideways</p></div>
+  <ul class="track" tabindex="0" aria-label="Products, scroll sideways">
+    <li><a class="card" href="#enquire"><div style="position:relative"><span class="tag mono">New in</span><div class="ph " style="--ar:4 / 5;" role="img" aria-label="Photo stand-in: A candle on a shelf, soft side light"><div class="ph-cap"><b>Your photo here</b><span>A candle on a shelf, soft side light</span></div></div></div><h3>Candles</h3><p>For gifts and for you.</p></a></li>
+    <li><a class="card" href="#enquire"><div class="ph " style="--ar:1 / 1;" role="img" aria-label="Photo stand-in: A stack of greetings cards fanned on a table"><div class="ph-cap"><b>Your photo here</b><span>A stack of greetings cards fanned on a table</span></div></div><h3>Cards</h3><p>For every card you forgot to buy.</p></a></li>
+    <li><a class="card" href="#enquire"><div class="ph " style="--ar:4 / 5;" role="img" aria-label="Photo stand-in: Handmade mugs in a row, glaze detail"><div class="ph-cap"><b>Your photo here</b><span>Handmade mugs in a row, glaze detail</span></div></div><h3>Ceramics</h3><p>Made by hand, by people we know.</p></a></li>
+    <li><a class="card" href="#enquire"><div class="ph " style="--ar:1 / 1;" role="img" aria-label="Photo stand-in: Small plants in pots on a windowsill"><div class="ph-cap"><b>Your photo here</b><span>Small plants in pots on a windowsill</span></div></div><h3>Plants</h3><p>Easy ones, and the notes to go with them.</p></a></li>
+    <li><a class="card" href="#enquire"><div class="ph " style="--ar:4 / 5;" role="img" aria-label="Photo stand-in: A gift being wrapped, paper and string"><div class="ph-cap"><b>Your photo here</b><span>A gift being wrapped, paper and string</span></div></div><h3>Gift wrap</h3><p>Ask and we will wrap it.</p></a></li>
+  </ul>
+</section>
+
+<section class="visit" id="enquire"><div class="wrap visit-g">
+  <div><div class="ruleg" style="inline-size:4.5rem;block-size:2px;background:var(--acc);margin-bottom:1rem"></div><h2>Ask us</h2><p style="margin-top:1rem;max-width:28rem">Looking for something particular, or not sure what to get? Tell us who it is for.</p></div>
+  <div><form class="demo-form" id="enquire-form" novalidate><label>Your name<input type="text" autocomplete="off"></label><label>Email<input type="email" autocomplete="off"></label><label>Who is it for?<textarea rows="3"></textarea></label><button class="btn" type="submit">Ask the shop</button><p class="demo-note">Demo only. Nothing is sent.</p><div class="demo-card" role="status"><b>Demo, nothing was sent. In a live site this would arrive in your inbox as a tidy enquiry.</b></div></form></div>
+</div></section>
+
+</main>
+<footer class="foot"><div class="wrap">Concept page. Nothing on it is real and nothing you type is sent anywhere.</div></footer>
+<div class="callbar" aria-label="Call or enquire"><a href="tel:+441414960123">Call 0141 496 0123</a><a href="#enquire">Visit the shop</a></div>
+</body>
+</html>
