@@ -1065,3 +1065,9 @@ h1 { line-height: 1.05; letter-spacing: -0.025em; }
 .colophon { border-top: 0; padding-top: 1rem; }
 .endline { font-family: var(--sans); font-size: 0.85rem; }
 .ctrl h2 { text-transform: uppercase; letter-spacing: 0.09em; }
+@media (min-width: 62rem) {
+  .masthead .sheet { flex-wrap: nowrap; column-gap: 1.1rem; }
+  .masthead .wordmark { margin-right: auto; }
+  .nav { flex-wrap: nowrap; gap: 0.25rem 1.1rem; font-size: 0.9rem; }
+  .masthead .btn { white-space: nowrap; flex: none; }
+}
