@@ -12,8 +12,7 @@
 <link rel="preload" href="../fonts/greatvibes-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="cinematic.css">
 <link rel="stylesheet" href="olive.css">
-<link rel="preload" href="data/footage.json" as="fetch" crossorigin>
-<script>document.documentElement.classList.add("js","fg-wait");setTimeout(function(){document.documentElement.classList.remove("fg-wait")},900)</script>
+<script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to the content</a>
@@ -26,9 +25,9 @@
 </div></header>
 
 <main id="main">
-<section class="open" id="open" aria-labelledby="h1">
+<section class="open wide" id="open" aria-labelledby="h1">
   <div class="scene-bg" id="hero-bg" data-footage="poster" aria-hidden="true">
-    <picture><source srcset="" type="image/webp"><img alt="" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" decoding="async"></picture>
+    <picture><source srcset="img/oi-hero-window-16x9.webp" type="image/webp"><img alt="" src="img/oi-hero-window-16x9.jpg" width="1672" height="941" fetchpriority="high" decoding="async"></picture>
     <video muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" data-desktop="oi-hero-window-16x9"></video>
   </div>
   <div class="wrap open-in">

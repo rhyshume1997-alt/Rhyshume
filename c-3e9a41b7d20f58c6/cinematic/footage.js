@@ -41,14 +41,17 @@
     function decided() { if (done) return; done = true; pending--; settle(); }
     if (!v) { decided(); return slot; }
     plate.setAttribute('data-footage', 'poster');
-    var id = (phone.matches ? v.getAttribute('data-mobile') : v.getAttribute('data-desktop'));
+    /* phones prefer their own composition (data-mobile) when one exists; until then they use the wide clip, framed rather than stretched */
+    var wantMobile = phone.matches ? v.getAttribute('data-mobile') : null, deskId = v.getAttribute('data-desktop');
+    var id = wantMobile || deskId;
     if (!id || calm || saver) {
       /* no clip for this size, or motion is off: a declared poster for the composition may still apply */
-      if (id) loadManifest().then(function (m) { var e = m[id]; if (e && e.available === true && e.poster) { setPoster(plate, e.poster); slot.layout = e.layout || 'default'; plate.setAttribute('data-layout', slot.layout); tell('layout'); } decided(); }, decided); else decided();
+      if (id) loadManifest().then(function (m) { if (wantMobile && !(m[wantMobile] && m[wantMobile].available === true) && deskId) id = deskId; var e = m[id]; if (e && e.available === true && e.poster) { setPoster(plate, e.poster); slot.layout = e.layout || 'default'; plate.setAttribute('data-layout', slot.layout); tell('layout'); } decided(); }, decided); else decided();
       return slot;
     }
 
     loadManifest().then(function (m) {
+      if (wantMobile && !(m[wantMobile] && m[wantMobile].available === true) && deskId) id = deskId;
       var e = m[id];
       if (!e || e.available !== true) { decided(); return; }      /* no footage yet: stay on the poster, make no requests */
       if (e.layout) { slot.layout = e.layout; plate.setAttribute('data-layout', e.layout); }

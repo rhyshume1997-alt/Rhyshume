@@ -11,8 +11,7 @@
 <link rel="preload" href="../fonts/ibm-plex-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="cinematic.css">
 <link rel="stylesheet" href="ember.css">
-<link rel="preload" href="data/footage.json" as="fetch" crossorigin>
-<script>document.documentElement.classList.add("js","fg-wait");setTimeout(function(){document.documentElement.classList.remove("fg-wait")},900)</script>
+<script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to the content</a>
@@ -26,9 +25,9 @@
 
 <main id="main">
 <section class="scene" id="fire" aria-labelledby="h1">
-  <div class="stage" id="stage">
+  <div class="stage wide" id="stage">
     <figure class="plate" id="fire-plate" data-footage="poster">
-      <picture><source srcset="img/se-01-fire-grill.webp" type="image/webp"><img src="img/se-01-fire-grill.jpg" width="367" height="537" alt="Flames and sparks rising from a charcoal grill with a steak searing on the bars. A generated concept image." fetchpriority="high"></picture>
+      <picture><source srcset="img/se-hero-fire-16x9.webp" type="image/webp"><img src="img/se-hero-fire-16x9.jpg" width="1672" height="941" alt="A steak searing on a charcoal grill with flames rising behind it and a candle lit in the dark. A generated concept image." fetchpriority="high"></picture>
       <video muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" data-desktop="se-hero-fire-16x9" data-mobile="se-hero-fire-mobile-4x5"></video>
       <p class="tag mono" id="fire-tag">Generated concept image</p>
     </figure>
