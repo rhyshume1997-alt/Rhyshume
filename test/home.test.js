@@ -18,7 +18,7 @@ const css = read('home.css');
 const js = read('home.js');
 
 test('home page: the headline, one line under it, the preview button and the smaller chat link', function () {
-  assert.ok(/<h1[^>]*>Attractive websites, and the systems that make them useful<\/h1>/.test(home), 'Rev 2 headline: attractive websites and the systems behind them');
+  assert.ok(/<h1[^>]*>Websites that get found, and AI, automation and systems that win you clients and save you time<\/h1>/.test(home), 'Rev 2 headline: attractive websites and the systems behind them');
   assert.ok(!/found on google/i.test(home), 'no found on Google claim beside the no guarantee line');
   assert.ok(/<a class="btn"[^>]*>Get a free preview of your site</.test(home.match(/<section class="hero"[\s\S]*?<\/section>/)[0]));
   assert.ok(/<p class="small">[^]*?<a [^>]*>Book a free 20-minute chat/.test(home), 'the 20 minute chat stays as a smaller link');
@@ -38,7 +38,7 @@ test('home page: the JNR Engineering line sits straight after the Marpet slider'
 
 test('home page: the before and after slider is a native range input and says what the after side is', function () {
   assert.ok(/<input type="range"[^>]*aria-label="[^"]+"/.test(home));
-  assert.ok(home.includes('After: New build, launching soon'));
+  assert.ok(home.includes('After: new build, launching soon'));
   assert.ok(home.includes('Before: current site'));
   assert.ok(/<img[^>]*marpet-fabrications\.jpg[^>]*alt="[^"]{20,}/.test(home));
   assert.ok(/<img[^>]*marpet-new-build\.jpg[^>]*alt="[^"]{20,}/.test(home));
@@ -86,7 +86,7 @@ test('home page: Tolra says pilot and register interest, with no price and no bu
 test('home page: validation is one of the four things I do, and is linked from the footer too (Rev 2 positioning)', function () {
   assert.ok(/<h3><a href="\/csv">Computer system validation<\/a><\/h3>/.test(home), 'capability row');
   assert.ok(home.split('<footer')[1].includes('href="/csv"'));
-  ['Bespoke websites', 'Business software and workflow systems', 'Automation and AI integrations'].forEach(function (c) { assert.ok(home.includes(c), c); });
+  ['Websites and SEO', 'Business software and workflow systems', 'AI and automation'].forEach(function (c) { assert.ok(home.includes(c), c); });
 });
 
 test('home page: no tools talk, no ChatGPT listing, no AI automation wording', function () {
@@ -150,7 +150,7 @@ test('engineering page: carries the old pitch, with Tolra in pilot, no validatio
   const nav = e.match(/<nav class="nav"[\s\S]*?<\/nav>/)[0];
   assert.ok(!/csv/.test(nav), 'validation in the menu');
   assert.ok(!/two working shops/.test(e));
-  assert.ok(e.includes('Marpet Fabrications: new build launching soon.'));
+  assert.ok(e.includes('Marpet Fabrications, a sister company to JNR Engineering: new build launching soon.'));
   assert.ok(!/<h3 id="tolra">[\s\S]{0,400}£/.test(e), 'a price in the Tolra block');
   const sitemap = read('sitemap.xml');
   assert.ok(sitemap.includes('https://www.rhyshume.co.uk/engineering</loc>'));

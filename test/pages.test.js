@@ -142,7 +142,7 @@ test('go-live fixes: no Marpet screenshot or coming soon note, button goes to th
   assert.ok(html.includes('You pay a 50% deposit to start. If you’re applying for a grant, nothing is paid until your grant is approved. The timing is set out in your quote.'));
   publicPages.filter(function (f) { return read(f).includes('about-line'); }).forEach(function (f) {
     const h = read(f);
-    assert.ok(h.includes('for engineering firms and local businesses, from Glasgow.'), f + ' footer line');
+    assert.ok(h.includes('win you clients and save you time, from Glasgow.'), f + ' footer line');
     assert.ok(!h.includes('for engineering and manufacturing firms, from Glasgow'), f + ' old footer line');
     assert.ok(h.includes('<li><a href="/local-business">Websites and digital for local business</a></li>'), f + ' footer link');
   });

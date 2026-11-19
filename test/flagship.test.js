@@ -84,15 +84,15 @@ test('home page: four featured concepts, editorial and interactive, with the two
 });
 
 test('home page: positioning, prices, scope clarity and contact routes', function () {
-  assert.ok(/Attractive websites, and the systems that make them useful/.test(home));
-  ['Bespoke websites', 'Business software and workflow systems', 'Automation and AI integrations', 'Computer system validation'].forEach(function (c) { assert.ok(home.includes(c), c); });
+  assert.ok(/Websites that get found, and AI, automation and systems that win you clients and save you time/.test(home));
+  ['Websites and SEO', 'Business software and workflow systems', 'AI and automation', 'Computer system validation'].forEach(function (c) { assert.ok(home.includes(c), c); });
   assert.ok(home.includes('From £1,500 one-off') && home.includes('From £3,800 one-off') && home.includes('From £35 a month'), 'live starting prices kept');
   assert.ok(!/£2,200|£60 a month/.test(home), 'prices are not changed without approval');
   assert.ok(/Not in these starting prices/.test(home) && /film openings, custom interactions/.test(home), 'advanced work is not implied to be included');
   assert.ok(home.includes('href="tel:+447908041480"') && home.includes('href="mailto:rhys@rhyshume.co.uk"') && home.includes('calendar.google.com/calendar/appointments'), 'contact routes');
   assert.ok(/data-mode="plan"/.test(home) && (home.match(/data-mode="/g) || []).length === 4, 'building example with four jobs');
   assert.ok(home.includes('"@type": "Person"') && /rdhcoaching\.com/.test(home) && home.includes('/work/jnr-engineering'), 'real work and structured data kept');
-  assert.ok(/After: New build, launching soon/.test(home), 'Marpet stays labelled launching soon');
+  assert.ok(/After: new build, launching soon/.test(home), 'Marpet stays labelled launching soon');
   assert.ok(!/—/.test(home + read('featured.js') + read('featured.css')), 'em dash');
   assert.ok(!BANNED.test(text(home)), 'banned word');
   const t = text(home); assert.ok(!/AI automation|chatgpt|ai visibility|ai listing/i.test(t));

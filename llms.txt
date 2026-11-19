@@ -4,7 +4,7 @@
 
 ## The idea
 
-Systems that win work and run the job: a site that's easy to find and takes the quote request, automation that drafts quotes for a person to approve and chases them, job management in Tolra, and computer system validation for regulated manufacturers underneath.
+Websites, AI, automation and systems that win you clients and save you time: a site that's easy to find and takes the quote request, automation that drafts quotes for a person to approve and chases them, job management in Tolra, and computer system validation for regulated manufacturers underneath.
 
 ## Services
 
