@@ -64,7 +64,7 @@
  "oak-razor-16x9": {
   "available": true,
   "layout": "wide",
-  "poster": "oak-razor-16x9",
+  "poster": "oak-razor-16x9-start",
   "page": "oak-razor",
   "note": "Oak and Razor hero, supplied 736 x 400 clip, loop-safe encode"
  }

@@ -1,6 +1,6 @@
 'use strict';
-/* The flagship pass: the design concepts page, the concepts strip and the building example on the home page.
-   The concepts are fictional and their working demonstrations stay private: nothing public may link to the hidden route. */
+/* Rev 2 release: the redesigned home page, the four featured concepts, and the public portfolio at /website-concepts/ with
+   eight working demonstrations. The development copies stay hidden and are never deployed. */
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -10,68 +10,98 @@ const read = p => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const exists = p => fs.existsSync(path.join(ROOT, p));
 const text = h => h.replace(/<script[\s\S]*?<\/script>/gi, ' ').replace(/<style[\s\S]*?<\/style>/gi, ' ').replace(/<[^>]*>/g, ' ');
 const SLUGS = ['olive-ivory', 'bright-circuit', 'salt-ember', 'sunny-hours', 'clear-ground', 'little-kettle', 'corner-shelf', 'oak-razor'];
-const dc = read('design-concepts.html'), home = read('index.html');
+const FEATURED = ['sunny-hours', 'little-kettle', 'bright-circuit', 'corner-shelf'];
+const home = read('index.html'), port = read('website-concepts/index.html');
 const BANNED = /\b(whole|lands|quiet|quietly|proper)\b/i;
+const HIDDEN = ['c-3e9a41b7d20f58c6', 'c-09b37e50c043baaa', 'w-82503121e7fdf54e'];
 
-test('design concepts: all eight exhibits, each labelled as a concept and not a live site', function () {
+test('public portfolio: eight exhibits, each labelled as a concept, each linking to its public demonstration', function () {
+  assert.equal((port.match(/<article class="ex /g) || []).length, 8);
   SLUGS.forEach(function (s) {
-    const m = dc.match(new RegExp('<article class="ex[^"]*" id="' + s + '"[\\s\\S]*?</article>'));
-    assert.ok(m, s + ' exhibit');
+    const m = port.match(new RegExp('<article class="ex[^"]*" id="' + s + '"[\\s\\S]*?</article>')); assert.ok(m, s);
     assert.ok(m[0].includes('Concept by Rhys Hume, not a live site.'), s + ' notice');
-    assert.ok(/a made-up business/.test(m[0]) && /generated concept material/.test(m[0]), s + ' says it is made up and generated');
-    assert.ok(/<video[^>]*muted[^>]*loop[^>]*playsinline[^>]*preload="none"/.test(m[0]), s + ' video is muted, looping, inline and not preloaded');
-    assert.ok(/class="ex-play"[^>]*aria-pressed/.test(m[0]), s + ' has a play control');
-    assert.ok(/<img class="ex-phone"[^>]*alt="[^"]{10,}/.test(m[0]), s + ' phone view has alt text');
-    ['-poster.webp', '-thumb.webp', '-phone.webp'].forEach(function (x) { assert.ok(exists('images/concepts/' + s + x), s + x); });
-    ['.webm', '.mp4'].forEach(function (x) { assert.ok(exists('video/concepts/' + s + x), s + x); });
+    assert.ok(m[0].includes('href="/website-concepts/' + s + '">Explore this concept<'), s + ' explore link');
+    assert.ok(m[0].includes('href="/contact">Want something like this for your business?<'), s + ' enquiry link uses the existing contact process');
+    assert.ok(/<video[^>]*muted[^>]*loop[^>]*playsinline[^>]*preload="none"/.test(m[0]), s + ' video');
+    assert.ok(/<img class="ex-phone"[^>]*alt="[^"]{10,}/.test(m[0]), s + ' phone alt');
   });
-  assert.equal((dc.match(/<article class="ex /g) || []).length, 8);
-  assert.ok(/Concept by Rhys Hume, not a live site\./.test(text(dc.match(/<aside class="dc-notice[\s\S]*?<\/aside>/)[0])), 'read this first box');
-  assert.ok(/None of these are real businesses or past clients/.test(dc), 'separated from real work');
+  assert.ok(/None of these are real businesses or past clients/.test(port), 'separated from real work');
+  assert.ok(/not part of the starting prices/.test(port), 'does not imply the advanced features are in the starting price');
 });
 
-test('design concepts: the hidden concept routes are not linked from any public page and demos are preview only', function () {
-  ['c-3e9a41b7d20f58c6', 'c-09b37e50c043baaa', 'w-82503121e7fdf54e'].forEach(function (h) {
-    assert.ok(!dc.includes(h) && !home.includes(h), h + ' in the public HTML');
-    assert.ok(!read('design-concepts.js').includes(h) && !read('home.js').includes(h), h + ' in the public scripts');
+test('public demonstrations: all eight exist, are labelled, safe and self contained', function () {
+  const man = JSON.parse(read('website-concepts/data/footage.json'));
+  SLUGS.forEach(function (s) {
+    assert.ok(exists('website-concepts/' + s + '.html'), s + ' page');
+    const h = read('website-concepts/' + s + '.html');
+    assert.ok(h.includes('Concept by Rhys Hume, not a live site.'), s + ' notice');
+    assert.ok(h.includes('<meta name="robots" content="noindex,follow">'), s + ' is noindex so a made-up business is never indexed as real');
+    assert.ok(h.includes('<link rel="canonical" href="https://www.rhyshume.co.uk/website-concepts/' + s + '">'), s + ' canonical');
+    HIDDEN.forEach(function (x) { assert.ok(!h.includes(x), s + ' mentions ' + x); });
+    (h.match(/<form[^>]*>/g) || []).forEach(function (tag) { assert.ok(/action="#"/.test(tag) && /onsubmit="return false"/.test(tag), s + ' form not inert: ' + tag); });
+    assert.ok(!/href="tel:|href="mailto:|action="http/i.test(h), s + ' has a real phone, mail or form target');
+    (h.match(/(?:src|srcset|href)="((?:img|video|fonts|data)\/[^"]+)"/g) || []).forEach(function (m) { const f = m.replace(/^[a-z]+="/, '').replace(/"$/, ''); assert.ok(exists('website-concepts/' + f), s + ' missing ' + f); });
+    assert.ok(!/—/.test(h), s + ' em dash');
   });
-  assert.ok(/<a class="demo-link" data-slug="[a-z-]+" hidden>/.test(dc), 'demo links start hidden');
-  const js = read('design-concepts.js');
-  assert.ok(/vercel\\.app/.test(js) && /localhost/.test(js) && /design-concepts-private\.js/.test(js), 'demo links are enabled only on preview hosts');
-  assert.ok(/Delete this file before any launch/.test(read('design-concepts-private.js')), 'the private file says to delete it');
-  assert.ok(/not public/.test(dc), 'the page says the demonstration is not public');
+  Object.keys(man).filter(k => k[0] !== '_').forEach(function (k) { if (man[k].available) ['.webm', '.mp4'].forEach(function (e) { assert.ok(exists('website-concepts/video/' + k + e), k + e); }); });
+  SLUGS.forEach(function (s) { ['css', 'js'].forEach(function (e) { const n = s === 'olive-ivory' ? 'olive' : s === 'salt-ember' ? 'ember' : s; const f = n + '.' + e; assert.equal(read('website-concepts/' + f), read('c-3e9a41b7d20f58c6/cinematic/' + f), f + ' matches the development copy'); }); });
+  assert.equal(read('website-concepts/footage.js'), read('c-3e9a41b7d20f58c6/cinematic/footage.js'));
+  ['website-concepts/portfolio.js', 'website-concepts/footage.js'].forEach(function (f) { assert.ok(!/localStorage|sessionStorage|document\.cookie|sendBeacon/.test(read(f)), f + ' stores something'); });
 });
 
-test('design concepts: metadata, sitemap, navigation and links', function () {
-  assert.ok(/<title>[^<]{10,70}<\/title>/.test(dc));
-  const d = dc.match(/<meta name="description" content="([^"]+)"/); assert.ok(d && d[1].length <= 160, 'description length');
-  assert.ok(dc.includes('<link rel="canonical" href="https://www.rhyshume.co.uk/design-concepts">'));
-  assert.ok(!/noindex/.test(dc), 'the portfolio page itself is meant to be indexable once approved');
-  assert.ok(read('sitemap.xml').includes('https://www.rhyshume.co.uk/design-concepts'));
-  assert.ok(/<a href="\/design-concepts">Design concepts<\/a>/.test(home), 'home nav');
-  ['about.html', 'contact.html', 'engineering.html', 'tolra.html', 'csv.html', 'automation.html', 'local-business.html', 'websites.html'].forEach(function (f) { assert.ok(read(f).includes('href="/design-concepts"'), f + ' nav'); });
-  assert.equal((dc.match(/<h1[ >]/g) || []).length, 1);
-  assert.ok(dc.includes('href="tel:+447908041480"') && dc.includes('href="/contact"'), 'contact routes kept');
+test('deployment: development copies are not deployed, the workbook and hidden routes are not linked, indexing decisions are explicit', function () {
+  const ig = read('.vercelignore'); assert.ok(/^c-3e9a41b7d20f58c6\/cinematic$/m.test(ig), 'development concepts are not deployed');
+  assert.ok(/^test$/m.test(ig) && /^docs$/m.test(ig), 'tests and docs are not deployed');
+  const v = JSON.parse(read('vercel.json')); const rule = v.headers.find(h => /website-concepts/.test(h.source)); assert.ok(rule && rule.headers.some(h => h.key === 'X-Robots-Tag' && /noindex/.test(h.value) && !/nofollow/.test(h.value)), 'demonstrations carry noindex, follow');
+  ['w-82503121e7fdf54e', 'c-09b37e50c043baaa'].forEach(function (d) { assert.ok(v.headers.some(h => h.source.includes(d) && h.headers.some(x => /noindex/.test(x.value))), d + ' still noindex'); });
+  const sm = read('sitemap.xml'); assert.ok(sm.includes('https://www.rhyshume.co.uk/website-concepts/</loc>'), 'portfolio in the sitemap');
+  SLUGS.forEach(function (s) { assert.ok(!sm.includes('/website-concepts/' + s), s + ' demonstration is not in the sitemap'); });
+  assert.ok(!sm.includes('c-3e9a41b7d20f58c6'), 'hidden route not in the sitemap');
+  assert.ok(port.includes('<link rel="canonical" href="https://www.rhyshume.co.uk/website-concepts/">') && !/noindex/.test(port), 'the portfolio itself is indexable');
+  [home, port].concat(['about', 'contact', 'engineering', 'tolra', 'csv', 'automation', 'local-business', 'websites'].map(f => read(f + '.html'))).forEach(function (h) { HIDDEN.forEach(function (x) { assert.ok(!h.includes(x), 'public page links ' + x); }); });
+  assert.ok(!exists('design-concepts.html') && !exists('design-concepts-private.js'), 'the earlier preview-only files are gone');
 });
 
-test('home page: the building example, the routes, the concepts strip and the real-work divider', function () {
-  assert.ok(/<figure class="build[^"]*"[^>]*id="build"/.test(home));
-  assert.equal((home.match(/data-mode="(call|quote|book)"/g) || []).length, 3, 'three ways to get in touch');
-  assert.ok(/Concept by Rhys Hume, not a live site\./.test(home.match(/<figure class="build[\s\S]*?<\/figure>/)[0]), 'example is labelled');
-  assert.equal((home.match(/<ol class="cc-strip">[\s\S]*?<\/ol>/)[0].match(/<li/g) || []).length, 8, 'eight concepts in the strip');
-  assert.ok(/Eight websites that don&rsquo;t exist/.test(home));
-  assert.ok(home.indexOf('class="concepts"') < home.indexOf('class="kind"') && home.indexOf('class="kind"') < home.indexOf('class="proof"'), 'concepts come before the real work divider');
-  assert.ok(/Real work and work in progress/.test(home));
-  assert.ok(home.includes('Websites that get Glasgow trades more calls and quotes'), 'approved headline kept');
-  assert.ok(home.includes('"@type": "Person"') && home.includes('+447908041480'), 'structured data and phone kept');
+test('navigation: the portfolio is in the main menu of every public page', function () {
+  ['index', 'about', 'contact', 'engineering', 'tolra', 'csv', 'automation', 'local-business', 'websites'].forEach(function (f) { assert.ok(/<a href="\/website-concepts\/"[^>]*>Website concepts<\/a>/.test(read(f + '.html').split('</header>')[0]), f + ' menu'); });
+  assert.ok(/<a href="\/website-concepts\/" aria-current="page">Website concepts<\/a>/.test(port));
 });
 
-test('flagship: copy rules and flat design rules hold in the new files', function () {
-  [dc, read('design-concepts.js'), read('design-concepts.css')].forEach(function (s) { assert.ok(!/—/.test(s), 'em dash'); });
-  assert.ok(!BANNED.test(text(dc)), 'banned word');
-  const css = read('design-concepts.css').replace(/\/\*[\s\S]*?\*\//g, '');
+test('home page: four featured concepts, editorial and interactive, with the two required actions each', function () {
+  FEATURED.forEach(function (s) {
+    const m = home.match(new RegExp('<article class="ft ft-[a-z]+ rv" id="ft-' + s + '"[\\s\\S]*?</article>')); assert.ok(m, s + ' featured');
+    assert.ok(m[0].includes('href="/website-concepts/' + s + '">Explore this concept<'), s + ' explore');
+    assert.ok(m[0].includes('href="/contact">Want something like this for your business?<'), s + ' enquiry');
+    assert.ok(m[0].includes('Concept by Rhys Hume, not a live site.'), s + ' notice');
+    assert.ok(/class="ft-demo"/.test(m[0]) && /<video class="mv"/.test(m[0]) && /class="mv-btn"/.test(m[0]), s + ' demo and footage');
+    assert.ok(/data-webm="\/website-concepts\/video\//.test(m[0]), s + ' uses the shared footage');
+  });
+  assert.equal((home.match(/<article class="ft /g) || []).length, 4);
+  const order = FEATURED.map(s => home.indexOf('id="ft-' + s + '"')); assert.deepEqual(order.slice().sort((a, b) => a - b), order, 'order: Sunny Hours, Little Kettle, Bright Circuit, The Corner Shelf');
+  assert.ok(home.indexOf('class="featured"') < home.indexOf('class="kind"') && home.indexOf('class="kind"') < home.indexOf('class="proof"'), 'fictional concepts come before, and are separated from, real work');
+  assert.ok(/Real work and work in progress/.test(home) && /Four websites that don&rsquo;t exist/.test(home));
+  assert.equal((home.match(/<ol class="cc-strip">[\s\S]*?<\/ol>/)[0].match(/<li/g) || []).length, 8, 'all eight in the strip');
+});
+
+test('home page: positioning, prices, scope clarity and contact routes', function () {
+  assert.ok(/Attractive websites, and the systems that make them useful/.test(home));
+  ['Bespoke websites', 'Business software and workflow systems', 'Automation and AI integrations', 'Computer system validation'].forEach(function (c) { assert.ok(home.includes(c), c); });
+  assert.ok(home.includes('From £1,500 one-off') && home.includes('From £3,800 one-off') && home.includes('From £35 a month'), 'live starting prices kept');
+  assert.ok(!/£2,200|£60 a month/.test(home), 'prices are not changed without approval');
+  assert.ok(/Not in these starting prices/.test(home) && /film openings, custom interactions/.test(home), 'advanced work is not implied to be included');
+  assert.ok(home.includes('href="tel:+447908041480"') && home.includes('href="mailto:rhys@rhyshume.co.uk"') && home.includes('calendar.google.com/calendar/appointments'), 'contact routes');
+  assert.ok(/data-mode="plan"/.test(home) && (home.match(/data-mode="/g) || []).length === 4, 'building example with four jobs');
+  assert.ok(home.includes('"@type": "Person"') && /rdhcoaching\.com/.test(home) && home.includes('/work/jnr-engineering'), 'real work and structured data kept');
+  assert.ok(/After: New build, launching soon/.test(home), 'Marpet stays labelled launching soon');
+  assert.ok(!/—/.test(home + read('featured.js') + read('featured.css')), 'em dash');
+  assert.ok(!BANNED.test(text(home)), 'banned word');
+  const t = text(home); assert.ok(!/AI automation|chatgpt|ai visibility|ai listing/i.test(t));
+});
+
+test('featured scripts and styles: flat, safe, reduced motion respected', function () {
+  const css = read('featured.css').replace(/\/\*[\s\S]*?\*\//g, ''), js = read('featured.js');
   assert.ok(!/gradient|backdrop-filter|blur\(|text-shadow|box-shadow|drop-shadow/i.test(css), 'gradient, glow or blur');
-  css.match(/transition:[^;]+;/g).forEach(function (t) { t.replace(/^transition:/, '').split(/,(?![^(]*\))/).forEach(function (p) { assert.ok(/^\s*(none;?$|transform\b|opacity\b)/.test(p), 'transition on ' + p.trim()); }); });
-  assert.ok(/prefers-reduced-motion/.test(read('design-concepts.css')) && /calm/.test(read('design-concepts.js')), 'reduced motion handled');
-  assert.ok(!/fetch\s*\(|XMLHttpRequest|localStorage|sessionStorage|document\.cookie/.test(read('design-concepts.js')), 'no network or storage');
+  assert.ok(/prefers-reduced-motion/.test(css) && /calm/.test(js) && /saveData/.test(js), 'reduced motion and data saver');
+  assert.ok(!/fetch\s*\(|XMLHttpRequest|localStorage|sessionStorage|document\.cookie|sendBeacon/.test(js), 'no network or storage');
+  assert.ok(/Demonstration only, no payment/.test(read('index.html')) && /Nothing is sent, booked, bought or saved/.test(read('index.html')));
 });

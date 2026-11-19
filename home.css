@@ -291,11 +291,12 @@ html:not(.js) .ba input { display: none; }
    Flagship pass: the building example in the hero, the routes, the concepts strip.
    Same rules as the rest of this file: flat, paper and navy, motion is transform and opacity only.
    ===================================================================== */
-.build { margin: 0; max-width: 30rem; }
-@media (min-width: 62rem) { .build { margin-top: 2.2rem; } }
-.bw { --t-bg: #17212d; --t-fg: #f1f1ec; --t-ac: #f1b400; border: 2px solid var(--ink); background: var(--t-bg); color: var(--t-fg); }
-.build[data-mode="quote"] .bw { --t-bg: #f2eee6; --t-fg: #1d1c19; --t-ac: #c4442b; }
-.build[data-mode="book"] .bw { --t-bg: #1a1a1d; --t-fg: #ece6d8; --t-ac: #c9a05a; }
+.build { margin: 0; max-width: 31rem; }
+@media (min-width: 62rem) { .build { margin-top: 1.4rem; } }
+.bw { --t-bg: #fff6df; --t-fg: #1d2947; --t-ac: #e5432a; border: 2px solid var(--ink); background: var(--t-bg); color: var(--t-fg); }
+.build[data-mode="table"] .bw { --t-bg: #fbf3e4; --t-fg: #3a2418; --t-ac: #e0674a; }
+.build[data-mode="call"] .bw { --t-bg: #17212d; --t-fg: #f1f1ec; --t-ac: #f1b400; }
+.build[data-mode="shop"] .bw { --t-bg: #f2eee6; --t-fg: #1d1c19; --t-ac: #c4442b; }
 .bw-bar { display: flex; align-items: center; gap: 0.35rem; padding: 0.45rem 0.6rem; border-bottom: 2px solid var(--ink); background: var(--paper); color: var(--ink); }
 .bw-bar i { width: 0.55rem; height: 0.55rem; border: 1.5px solid var(--ink); display: block; }
 .bw-bar span { margin-left: 0.5rem; font: 400 0.68rem var(--mono); color: var(--ink-3); letter-spacing: 0.04em; }
@@ -304,7 +305,7 @@ html:not(.js) .ba input { display: none; }
 .bw-nav span { display: block; width: 2rem; height: 0.4rem; background: var(--t-fg); }
 .bw-img { grid-area: img; border: 2px solid var(--t-ac); align-self: stretch; position: relative; overflow: hidden; min-block-size: 5.5rem; }
 .bw-img .pic { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 400ms var(--ease-out); }
-.build[data-mode="call"] .pic-call, .build[data-mode="quote"] .pic-quote, .build[data-mode="book"] .pic-book { opacity: 1; }
+.build[data-mode="plan"] .pic-plan, .build[data-mode="table"] .pic-table, .build[data-mode="call"] .pic-call, .build[data-mode="shop"] .pic-shop { opacity: 1; }
 .bw-title { grid-area: title; display: grid; gap: 0.35rem; align-content: end; }
 .bw-title i { display: block; height: 0.8rem; background: var(--t-fg); }
 .bw-title i:nth-child(2) { width: 62%; }
@@ -313,20 +314,24 @@ html:not(.js) .ba input { display: none; }
 .bw-text i:nth-child(2) { width: 85%; } .bw-text i:nth-child(3) { width: 55%; }
 .bw-act { grid-area: act; min-block-size: 4.6rem; display: grid; align-items: center; }
 .act { display: none; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
-.build[data-mode="call"] .act-call, .build[data-mode="quote"] .act-quote, .build[data-mode="book"] .act-book { display: flex; }
-.pill { display: inline-block; background: var(--t-ac); color: var(--t-bg); font: 600 0.78rem/1 var(--sans); padding: 0.6rem 0.9rem; border-radius: 2px; }
+.build[data-mode="plan"] .act-plan, .build[data-mode="table"] .act-table, .build[data-mode="call"] .act-call, .build[data-mode="shop"] .act-shop { display: flex; }
+.pill { display: inline-block; background: var(--t-fg); color: var(--t-bg); outline: 2px solid var(--t-ac); outline-offset: -2px; font: 600 0.78rem/1 var(--sans); padding: 0.6rem 0.9rem; border-radius: 2px; }
 .fld { display: block; flex: 1 1 5rem; height: 1.7rem; border: 1px solid var(--t-fg); }
 .slots { display: grid; grid-template-columns: repeat(3, 1.6rem); gap: 0.3rem; }
 .slots i { display: block; height: 1.4rem; border: 1px solid var(--t-fg); }
 .slots i:nth-child(2), .slots i:nth-child(5) { background: var(--t-ac); border-color: var(--t-ac); }
-.bc { display: flex; flex-wrap: wrap; margin-top: 0.8rem; }
-.bc button { font: 500 0.95rem/1.2 var(--sans); background: var(--paper); color: var(--ink); border: 1px solid var(--ink); margin-left: -1px; padding: 0.7rem 1rem; min-block-size: 2.75rem; cursor: pointer; border-radius: 0; flex: 1 1 auto; transition: transform 120ms var(--ease-out); }
-.bc button:first-child { margin-left: 0; }
+.tray, .bag { display: flex; gap: 0.3rem; }
+.tray i { display: block; width: 2rem; height: 1.4rem; border: 1px solid var(--t-fg); }
+.tray i:nth-child(1) { background: var(--t-ac); border-color: var(--t-ac); }
+.bag i { display: block; width: 1.6rem; height: 1.6rem; border: 1px solid var(--t-fg); }
+.bag i:nth-child(2) { background: var(--t-ac); border-color: var(--t-ac); }
+.build-q { margin-top: 0.9rem; color: var(--ink-2); }
+.bc { display: grid; grid-template-columns: 1fr 1fr; margin-top: 0.5rem; }
+.bc button { font: 500 0.92rem/1.25 var(--sans); background: var(--paper); color: var(--ink); border: 1px solid var(--ink); margin: 0 -1px -1px 0; padding: 0.7rem 0.8rem; min-block-size: 2.9rem; cursor: pointer; border-radius: 0; transition: transform 120ms var(--ease-out); text-align: left; }
 .bc button:active { transform: scale(0.98); }
 .bc button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
 .build figcaption { font-size: 0.92rem; color: var(--ink-2); margin-top: 0.7rem; line-height: 1.45; }
 .build figcaption b { color: var(--ink); }
-/* the example assembles once: blocks arrive in turn. Default (no script, reduced motion) is the finished example. */
 @media (prefers-reduced-motion: no-preference) {
   html.js .build .b { animation: assemble 700ms var(--ease-out) calc(300ms + var(--i, 0) * 130ms) both; }
   html.js .build .bw-bar { animation: fade 500ms var(--ease-out) 200ms both; }
@@ -352,3 +357,21 @@ html:not(.js) .ba input { display: none; }
 .cc-note { margin-top: 1.6rem; font: 400 0.72rem/1.4 var(--mono); letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-3); }
 .kind { padding-block: 2.2rem 0; }
 .kind .label { border-top: 2px solid var(--ink); padding-top: 0.8rem; color: var(--ink-2); }
+
+.caps { padding-block: clamp(1rem, 3vw, 2rem) clamp(1.5rem, 4vw, 2.5rem); border-top: 1px solid var(--rule); }
+.caps .label { padding-top: 1.2rem; }
+.caps-list { list-style: none; margin: 1.2rem 0 0; padding: 0; display: grid; gap: 1.4rem 2rem; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
+.caps-list li { border-top: 2px solid var(--ink); padding-top: 0.8rem; }
+.caps-list .n { font: 400 0.72rem var(--mono); color: var(--ink-3); letter-spacing: 0.08em; }
+.caps-list h3 { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.012em; line-height: 1.2; margin: 0.3rem 0 0.5rem; }
+.caps-list h3 a { color: var(--ink); text-decoration: none; }
+.caps-list h3 a:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+.caps-list p { font-size: 0.97rem; color: var(--ink-2); }
+.scope { padding-block: clamp(2.5rem, 6vw, 4.5rem); border-top: 1px solid var(--rule); }
+.scope-list { list-style: none; margin: 2rem 0 0; padding: 0; display: grid; gap: 1.6rem 2.5rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
+.scope-list li { border-top: 2px solid var(--ink); padding-top: 0.9rem; }
+.scope-list .price { font: 400 0.78rem var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2); }
+.scope-list h3 { font-size: 1.3rem; font-weight: 700; letter-spacing: -0.014em; margin: 0.3rem 0 0.5rem; }
+.scope-list p:not(.price) { font-size: 0.98rem; color: var(--ink-2); }
+.scope .fine { margin-top: 1.8rem; max-width: 46rem; }
+.result .also { margin-top: 0.9rem; font-size: 0.97rem; color: var(--ink-2); }

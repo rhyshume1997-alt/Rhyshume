@@ -50,12 +50,4 @@
     exhibits.forEach(function (x) { spy.observe(x); });
   }
 
-  /* ---- the working demonstrations exist only in a private preview. They are never offered on the public site. ---- */
-  var h = location.hostname;
-  if (/\.vercel\.app$/.test(h) || h === 'localhost' || h === '127.0.0.1') {
-    var s = document.createElement('script'); s.src = '/design-concepts-private.js'; s.onload = function () {
-      var base = window.__CONCEPT_DEMO_BASE; if (!base) return;
-      $$('.demo-link').forEach(function (a) { a.href = base + a.getAttribute('data-slug') + '.html'; a.target = '_blank'; a.rel = 'noopener'; a.hidden = false; a.closest('.ex').classList.add('demo-ready'); });
-    }; document.head.appendChild(s);
-  }
 })();

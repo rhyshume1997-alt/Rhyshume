@@ -1,0 +1,204 @@
+/* Olive & Ivory: a wedding photographer's studio. Ivory, ink and one green. The sheet, the marks and the light table are the idea. */
+body { --bg: #f6f0e7; --fg: #2c2a25; --acc: #5b6f55; --acc-ink: #fbf8f0; --ivory2: #ece4d5; --ivory3: #e2d9c7; --ph: #d9d0be; --table: #2c2a25; --rule: color-mix(in srgb, var(--fg) 24%, transparent); }
+.script { font-family: "Great Vibes", "Segoe Script", cursive; font-weight: 400; }
+
+/* header stays put through every animation */
+.top { position: sticky; inset-block-start: 0; z-index: 40; background: var(--bg); block-size: var(--hdr); display: flex; align-items: center; border-block-end: 1px solid var(--rule); }
+.top-in { display: flex; align-items: center; gap: 0.6rem 1.4rem; }
+.brand { margin-inline-end: auto; text-decoration: none; font-size: 2rem; line-height: 1; color: var(--acc); padding-block: 0.3rem; }
+.top nav { display: flex; gap: 0.2rem 1.6rem; }
+.top nav a { text-decoration: none; padding-block: 0.7rem; font-weight: 500; }
+.top .btn { display: none; }
+@media (min-width: 52rem) { .top .btn { display: inline-flex; } }
+@media (max-width: 47.99rem) { .brand { font-size: 1.6rem; white-space: nowrap; } .top nav { gap: 0.1rem 0.9rem; } .top nav a { white-space: nowrap; font-size: 0.92rem; } }
+
+/* 1. opening: the name is written, the scene is a plate that will become the first frame of the sheet */
+.open { padding-block: clamp(1rem, 3vw, 2.4rem) clamp(2.5rem, 6vw, 5rem); min-block-size: calc(100svh - var(--hdr) - 2.2rem); display: grid; align-items: center; }
+.open-in { display: grid; gap: 1.6rem 4rem; align-items: center; }
+@media (min-width: 56rem) { .open-in { grid-template-columns: minmax(0, 7fr) minmax(0, 4fr); } }
+.open .mono { opacity: 0.85; }
+.name { margin-block: 0.8rem 0.4rem; color: var(--acc); }
+.pen { stroke: #fff; fill: none; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 1; stroke-dashoffset: 0; }
+.name svg { inline-size: min(100%, 40rem); block-size: auto; overflow: visible; }
+.line { font: 300 italic clamp(1.9rem, 4vw, 3.2rem)/1.08 "Newsreader", Georgia, serif; letter-spacing: -0.015em; max-inline-size: 16ch; }
+.sub { margin-block-start: 1.1rem; max-inline-size: 28rem; }
+.cta { margin-block-start: 1.7rem; display: flex; flex-wrap: wrap; gap: 0.8rem 1.4rem; align-items: center; }
+.cue { margin-block-start: 2rem; display: inline-flex; gap: 0.8rem; align-items: center; opacity: 0.85; }
+.cue i { display: block; inline-size: 3rem; block-size: 1px; background: currentColor; transform-origin: left center; }
+.stage-plate { justify-self: center; inline-size: min(100%, 22rem); }
+.plate-hero { position: relative; z-index: 25; aspect-ratio: 349 / 544; inline-size: 100%; transform-origin: 0 0; will-change: transform; }
+.plate-hero.docked { visibility: hidden; }
+.plate-hero::after { content: ""; position: absolute; inset: 0; outline: 2px solid var(--fg); outline-offset: -2px; z-index: 4; pointer-events: none; }
+.cap { margin-block-start: 0.6rem; opacity: 0.85; }
+.open.footage .stage-plate { inline-size: min(100%, 24rem); }
+@media (max-width: 55.99rem) { .open { min-block-size: 0; } .stage-plate { inline-size: min(78%, 20rem); justify-self: start; } .cue { display: none; } }
+@media (prefers-reduced-motion: no-preference) {
+  .pen { stroke-dashoffset: 1; animation: draw var(--t) cubic-bezier(0.4, 0, 0.3, 1) calc(var(--d) + 350ms) forwards; }
+  .cue i { animation: cue 2.4s var(--ease) infinite; }
+}
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes cue { 0% { transform: scaleX(0); } 60% { transform: scaleX(1); opacity: 1; } 100% { transform: scaleX(1); opacity: 0; } }
+
+/* 2. the proof sheet: a sheet of paper, frames in their cells, edge codes, marks in grease pencil */
+.sheet { background: var(--ivory2); padding-block: clamp(2.5rem, 6vw, 5rem); position: relative; }
+.sheet h2, .day h2, .rsvp h2 { font: 300 clamp(2rem, 4.6vw, 3.6rem)/1.06 "Newsreader", Georgia, serif; letter-spacing: -0.02em; margin-block-start: 0.5rem; }
+.sheet-head { display: grid; gap: 1rem 4rem; margin-block-end: 2rem; }
+@media (min-width: 56rem) { .sheet-head { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); align-items: end; } }
+.sheet-head p { max-inline-size: 34rem; }
+.legend { display: flex; flex-wrap: wrap; gap: 0.6rem 1.4rem; align-items: center; }
+.legend span { display: inline-flex; gap: 0.5rem; align-items: center; }
+.legend svg { inline-size: 1.7rem; block-size: 1.7rem; }
+.ruleg { inline-size: 4.5rem; block-size: 2px; background: var(--acc); margin-block-end: 1rem; transform-origin: left center; }
+.paper { background: var(--bg); border: 1px solid var(--fg); padding: clamp(0.9rem, 2.4vw, 1.8rem); }
+.paper-bar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.4rem 1rem; padding-block-end: 0.8rem; margin-block-end: 1.2rem; border-block-end: 1px solid var(--fg); }
+.frames { display: grid; gap: 1.6rem 0.9rem; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+@media (min-width: 52rem) { .frames { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 2.4rem 1rem; } .cell { grid-column: span 3; } .cell:nth-child(4n+2) { margin-block-start: 2.2rem; } .cell:nth-child(4n+3) { margin-block-start: 0.6rem; } .cell:nth-child(4n) { margin-block-start: 1.6rem; } }
+@media (max-width: 51.99rem) { .cell:nth-child(even) { margin-block-start: 1.6rem; } }
+.cell { position: relative; }
+.film { position: relative; display: block; inline-size: 100%; padding: 0; border: 2px solid var(--fg); background: var(--fg); aspect-ratio: var(--ar, 349 / 544); overflow: hidden; }
+.film picture, .film img { inline-size: 100%; block-size: 100%; object-fit: cover; transition: transform 500ms var(--ease); }
+.cell.docking .film img, .cell.docking .film picture { visibility: hidden; }
+@media (hover: hover) and (pointer: fine) { .film:hover img { transform: scale(1.04); } }
+.no { position: absolute; inset: 0 auto auto 0; z-index: 3; background: var(--fg); color: var(--bg); padding: 0.2rem 0.5rem; }
+.edge { display: flex; justify-content: space-between; gap: 0.5rem; margin-block-start: 0.35rem; color: color-mix(in srgb, var(--fg) 85%, transparent); }
+.cap2 { margin-block-start: 0.3rem; font-size: 0.92rem; display: flex; justify-content: space-between; gap: 0.6rem; }
+.crop { position: absolute; inline-size: 0.9rem; block-size: 0.9rem; border: 0 solid var(--fg); pointer-events: none; z-index: 4; }
+.crop.a { inset: -0.55rem auto auto -0.55rem; border-width: 0 1px 1px 0; } .crop.b { inset: -0.55rem -0.55rem auto auto; border-width: 0 0 1px 1px; } .crop.c { inset: auto auto -1.9rem -0.55rem; border-width: 1px 1px 0 0; display: none; }
+/* grease pencil marks: an uneven ring for keep, a cross for pass, both drawn on */
+.mk { position: absolute; inset: 4%; z-index: 5; pointer-events: none; overflow: visible; }
+.mk path { fill: none; stroke: var(--acc); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1 1; stroke-dashoffset: 1; opacity: 0; transition: stroke-dashoffset 520ms var(--ease), opacity 160ms var(--ease); }
+.cell[data-mark="keep"] .mk-keep path, .cell[data-mark="pass"] .mk-pass path { stroke-dashoffset: 0; opacity: 1; }
+.cell[data-mark="pass"] .film img { opacity: 0.55; }
+@media (prefers-reduced-motion: reduce) { .mk path { transition: none; } }
+.reserve-strip { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1.5rem; padding: 1.1rem 1.2rem; border: 1px dashed var(--fg); background: color-mix(in srgb, var(--fg) 6%, var(--bg)); }
+.reserve-strip b { font: 400 italic 1.4rem/1.1 "Newsreader", Georgia, serif; }
+.kept-bar { margin-block-start: 1.6rem; display: flex; flex-wrap: wrap; gap: 0.6rem 1.4rem; align-items: center; min-block-size: 3rem; }
+.kept-bar ul { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.kept-bar li { font: 400 0.8rem "IBM Plex Mono", monospace; padding: 0.35rem 0.6rem; border: 1px solid var(--acc); color: var(--acc); }
+.kept-bar li.pass { border-style: dashed; text-decoration: line-through; }
+/* develop: prints come up in turn as the sheet scrolls in */
+@media (prefers-reduced-motion: no-preference) {
+  html.rv-on .cell:not(.dock) .film { opacity: 0; transform: scale(1.05); }
+  html.rv-on .frames.in .cell:not(.dock) .film { opacity: 1; transform: none; transition: opacity 900ms var(--ease) calc(var(--k, 0) * 130ms + 200ms), transform 1100ms var(--ease) calc(var(--k, 0) * 130ms + 200ms); }
+}
+
+/* the light table: a print lifted off the sheet onto a dark table, with the roll underneath */
+dialog#table { padding: 0; border: 0; margin: 0; background: var(--table); color: var(--bg); inline-size: 100vw; block-size: 100dvh; max-inline-size: none; max-block-size: none; overflow: hidden; }
+dialog#table[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) auto auto; }
+dialog#table::backdrop { background: var(--table); }
+.tb-top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.7rem var(--gut); }
+.tb-top button, .tb-act button { min-block-size: 2.9rem; padding: 0.4rem 1.1rem; border: 1px solid var(--bg); background: transparent; color: var(--bg); font-weight: 500; }
+.tb-mid { position: relative; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 0.6rem; padding-inline: var(--gut); min-block-size: 0; }
+.tb-arrow { inline-size: 3rem; block-size: 3rem; border: 1px solid var(--bg); background: transparent; color: var(--bg); font-size: 1.4rem; line-height: 1; }
+.tb-print { display: grid; justify-items: center; align-content: center; gap: 0.9rem; min-block-size: 0; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+.print { position: relative; background: var(--bg); padding: clamp(0.5rem, 1.6vw, 0.9rem); max-block-size: calc(100dvh - 15.5rem); }
+.print img { display: block; inline-size: auto; block-size: auto; max-block-size: calc(100dvh - 18rem); max-inline-size: min(100%, calc(var(--nw, 9999px) * 1.3)); aspect-ratio: var(--ar, 349 / 544); object-fit: cover; }
+.print::before, .print::after { content: ""; position: absolute; inline-size: 1rem; block-size: 1rem; border: 0 solid var(--bg); }
+.print::before { inset: -0.7rem auto auto -0.7rem; border-width: 0 1px 1px 0; } .print::after { inset: auto -0.7rem -0.7rem auto; border-width: 1px 0 0 1px; }
+.tb-cap { text-align: center; max-inline-size: 30rem; }
+.tb-cap h3 { font: 400 italic clamp(1.4rem, 3vw, 2rem)/1.1 "Newsreader", Georgia, serif; }
+.tb-cap p { opacity: 0.9; font-size: 0.95rem; }
+.tb-act { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.6rem; padding: 0.7rem var(--gut) 0.3rem; }
+.tb-act button[aria-pressed="true"] { background: var(--bg); color: var(--fg); }
+.tb-strip { display: flex; gap: 0.5rem; justify-content: center; padding: 0.5rem var(--gut) calc(0.8rem + env(safe-area-inset-bottom, 0px)); overflow-x: auto; }
+.tb-strip button { position: relative; inline-size: 2.6rem; flex: none; aspect-ratio: 349 / 544; padding: 0; border: 2px solid transparent; background: var(--ph); }
+.tb-strip button[aria-current="true"] { border-color: var(--bg); }
+.tb-strip img { inline-size: 100%; block-size: 100%; object-fit: cover; display: block; }
+.tb-strip button[data-mark="keep"]::after, .tb-strip button[data-mark="pass"]::after { content: ""; position: absolute; inset: auto 2px 2px auto; inline-size: 0.6rem; block-size: 0.6rem; background: var(--bg); border-radius: 50%; }
+.tb-strip button[data-mark="pass"]::after { border-radius: 0; transform: rotate(45deg) scale(0.8); }
+.tb-hint { text-align: center; opacity: 0.8; padding-block-end: 0.2rem; }
+@media (max-width: 47.99rem) { .tb-arrow { inline-size: 2.6rem; block-size: 2.6rem; } .tb-mid { gap: 0.3rem; padding-inline: 0.4rem; } .print img { max-block-size: calc(100dvh - 21rem); } .tb-hint { display: none; } }
+@media (prefers-reduced-motion: no-preference) { dialog#table { opacity: 0; transition: opacity 240ms var(--ease); } dialog#table.in { opacity: 1; } }
+
+/* 3. the day */
+.day { padding-block: clamp(3rem, 7vw, 5.5rem) 0; }
+.day-head { max-inline-size: 38rem; }
+.moments li { padding-block: 2rem; border-block-start: 1px solid var(--rule); }
+.moments .clock { font: 300 clamp(3.6rem, 12vw, 8.5rem)/0.95 "Newsreader", Georgia, serif; letter-spacing: -0.03em; color: var(--acc); }
+.moments h3 { font: 400 italic clamp(1.6rem, 3vw, 2.3rem)/1.1 "Newsreader", Georgia, serif; margin-block: 0.6rem; }
+.moments p { max-inline-size: 26rem; }
+.moments figure { margin-block-start: 1.2rem; max-inline-size: 20rem; }
+.moments figure img { inline-size: 100%; aspect-ratio: 349 / 544; object-fit: cover; background: var(--ph); }
+.seq-on .moments figure.inl { display: none; }
+.day-grid { position: relative; margin-block-start: 1.5rem; }
+.day-plate { display: none; }
+.seq-on .day-grid { display: grid; gap: 0 4rem; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); align-items: start; }
+.seq-on .moments { grid-column: 2; grid-row: 1; }
+.seq-on .moments li { min-block-size: 64svh; display: flex; flex-direction: column; justify-content: center; border-block-start: 0; padding-block: 1.5rem; }
+.seq-on .moments li:first-child { min-block-size: 56svh; }
+.seq-on .moments .clock { color: color-mix(in srgb, var(--fg) 66%, var(--bg)); transition: color 500ms var(--ease); }
+.seq-on .moments li.on .clock { color: var(--acc); }
+.seq-on .day-plate { display: grid; grid-column: 1; grid-row: 1; position: sticky; inset-block-start: calc(var(--hdr) + 1rem); block-size: calc(100svh - var(--hdr) - 4rem); max-block-size: 36rem; align-self: start; place-items: center; }
+.thread { position: absolute; inset-block: 0; inset-inline-start: -2rem; inline-size: 2px; background: var(--rule); }
+.seq-on .thread { display: block; }
+.thread i { position: absolute; inset: 0; background: var(--acc); transform: scaleY(var(--tp, 0.25)); transform-origin: top; transition: transform 700ms var(--ease); }
+.day-plate .stack { position: relative; block-size: 100%; aspect-ratio: 349 / 544; max-inline-size: 100%; outline: 2px solid var(--fg); outline-offset: -2px; }
+.day-plate .stack picture, .day-plate .stack img { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; }
+.day-plate .stack picture { opacity: 0; transform: scale(1.05); transition: opacity 700ms var(--ease), transform 1100ms var(--ease); }
+.day-plate .stack picture.on { opacity: 1; transform: none; }
+.day-plate .lab { position: absolute; inset: auto auto -1.9rem 0; }
+.thread { display: none; }
+@media (max-width: 55.99rem) {
+  .seq-on .day-grid { grid-template-columns: 1fr; }
+  .seq-on .moments { grid-column: 1; grid-row: 2; }
+  .seq-on .day-plate { grid-column: 1; grid-row: 1; inset-block-start: var(--hdr); block-size: 38svh; z-index: 5; background: var(--bg); padding-block: 0.4rem; border-block-end: 1px solid var(--rule); }
+  .day-plate .stack { aspect-ratio: auto; inline-size: 100%; }
+  .seq-on .moments li { min-block-size: 52svh; }
+  .seq-on .thread, .day-plate .lab { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .seq-on .moments .clock { transition: none; } .day-plate .stack picture { transition: none; } .thread i { transition: none; } }
+
+/* 4. the reply card: an enquiry in the language of stationery */
+.rsvp { margin-block-start: clamp(3rem, 7vw, 5rem); background: var(--ivory2); padding-block: clamp(3rem, 7vw, 5.5rem); }
+.rsvp-in { display: grid; gap: 2rem 4rem; }
+@media (min-width: 56rem) { .rsvp-in { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); align-items: start; } }
+.rsvp .lead { margin-block-start: 1rem; max-inline-size: 26rem; }
+.card { position: relative; background: var(--bg); padding: clamp(1.4rem, 3vw, 2.4rem); border: 1px solid var(--rule); outline: 1px solid var(--rule); outline-offset: -0.7rem; min-block-size: 25rem; }
+.card header { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; color: var(--acc); }
+.card .qt { font: 300 italic 1.9rem/1.1 "Newsreader", Georgia, serif; margin-block: 1rem 1.2rem; }
+.card fieldset { border: 0; padding: 0; margin: 0; display: none; gap: 1rem; }
+.card fieldset.on { display: grid; }
+.card legend { padding: 0; }
+.card .nav { display: flex; gap: 0.6rem; margin-block-start: 1.4rem; flex-wrap: wrap; }
+.card .nav button { min-block-size: 3rem; padding: 0.6rem 1.3rem; border: 1px solid var(--fg); background: transparent; font-weight: 600; }
+.card .nav button.go { background: var(--acc); border-color: var(--acc); color: var(--acc-ink); }
+.card .nav [hidden] { display: none; }
+.chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.chips span { font: 400 0.8rem "IBM Plex Mono", monospace; padding: 0.4rem 0.7rem; border: 1px solid var(--acc); color: var(--acc); }
+.done { display: none; margin-block-start: 1.6rem; }
+.card.sent .steps, .card.sent .nav { display: none; }
+.card.sent .done { display: block; }
+.done h3 { font: 300 italic 1.9rem/1.1 "Newsreader", Georgia, serif; margin-block: 0.8rem; }
+.done dl { display: grid; grid-template-columns: auto 1fr; gap: 0.4rem 1rem; margin: 1rem 0; font-size: 0.95rem; }
+.done dt { font: 400 0.72rem "IBM Plex Mono", monospace; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.8; padding-block-start: 0.2rem; }
+.done dd { margin: 0; }
+.stamp { display: inline-block; font: 400 0.95rem "IBM Plex Mono", monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--acc); border: 2px solid var(--acc); padding: 0.5rem 0.9rem; transform: rotate(-3deg); }
+@media (prefers-reduced-motion: no-preference) { .card.sent .stamp { animation: stamp 520ms var(--ease) both; } }
+@keyframes stamp { from { opacity: 0; transform: rotate(-3deg) scale(1.5); } }
+
+@media (max-width: 22.5rem) { .brand { font-size: 1.35rem; } .top nav { gap: 0.1rem 0.6rem; } .top nav a { font-size: 0.85rem; } .top-in { gap: 0.4rem 0.7rem; } }
+
+/* the landscape scene (tablet and desktop footage or poster): a backdrop behind the opening, dress and window to the right.
+   The portrait plate stays on top as the photograph that docks into the sheet; the backdrop leaves on its own. */
+.scene-bg { display: none; }
+.open.wide { position: relative; overflow: clip; }
+/* the film is a framed 16:9 window on the right, an ivory page around it: sharper (smaller than full bleed), and the type stays on ivory */
+.open.wide .scene-bg { display: block; position: absolute; z-index: 0; inset-block-start: 50%; inset-inline-end: var(--gut); inline-size: min(56%, 60rem); aspect-ratio: 16 / 9; background: var(--ivory2); opacity: var(--bgo, 1); transform: translateY(calc(-50% + var(--bgy, 0px))); will-change: opacity, transform; outline: 2px solid var(--fg); outline-offset: 0; }
+.scene-bg picture, .scene-bg img, .scene-bg video { inline-size: 100%; block-size: 100%; object-fit: cover; object-position: 50% 50%; display: block; }
+.scene-bg video { position: absolute; inset: 0; opacity: 0; transition: opacity 700ms var(--ease); }
+.scene-bg.has-footage video { opacity: 1; }
+/* contact-strip marks on the film frame: frame number and edge code, drawn as text on the ivory around it */
+.open.wide .scene-bg::before, .open.wide .scene-bg::after { position: absolute; font: 400 0.7rem/1 "IBM Plex Mono", monospace; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg); }
+.open.wide .scene-bg::before { content: "A1  OLIVE & IVORY  FILM 01"; inset-block-start: -1.6rem; inset-inline-start: 0; }
+.open.wide .scene-bg::after { content: "01A"; inset-block-end: -1.6rem; inset-inline-end: 0; }
+.open.wide .open-in { position: relative; z-index: 2; }
+.open.wide .stage-plate { justify-self: start; inline-size: min(100%, 14rem); }
+@media (min-width: 56rem) { .open.wide .open-in { grid-template-columns: minmax(0, 5fr) minmax(0, 2.6fr) minmax(0, 4.4fr); } .open.wide .open-type { grid-column: 1; } .open.wide .stage-plate { grid-column: 2; align-self: end; margin-block-end: -1rem; } }
+.open.wide .cap { background: var(--bg); padding: 0.2rem 0.5rem; inline-size: fit-content; opacity: var(--bgo, 1); }
+@media (max-width: 55.99rem) {
+  .open.wide { overflow: visible; display: block; padding-block-start: 0; }
+  .open.wide .scene-bg { position: relative; inset: auto; inline-size: 100%; opacity: 1; transform: none; outline: 0; }
+  .open.wide .scene-bg::before, .open.wide .scene-bg::after { display: none; }
+  .open.wide .open-in { padding-block-start: 1.6rem; }
+  .open.wide .stage-plate { justify-self: start; }
+}

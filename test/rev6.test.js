@@ -68,7 +68,7 @@ test('rev6: each hero slot names a registered clip with files and a poster', fun
     ['.webp', '.jpg'].forEach(function (e) { assert.ok(exists(DIR + '/img/' + man[key].poster + e), key + ' poster' + e); });
     assert.ok(h.includes('data-desktop="' + key + '"'), s + ' video slot uses ' + key);
     assert.ok(new RegExp('<video[^>]*muted[^>]*playsinline[^>]*aria-hidden="true"|<video[^>]*playsinline[^>]*muted[^>]*aria-hidden="true"').test(h), s + ' video is muted, inline and hidden from assistive tech');
-    assert.ok(/img\/[a-z0-9-]*16x9\.jpg/.test(h), s + ' has the poster in the markup');
+    assert.ok(/img\/[a-z0-9-]*16x9(-start)?\.jpg/.test(h), s + ' has the poster in the markup');
     assert.ok(/footage\.js/.test(h), s + ' loads the footage script');
   });
 });

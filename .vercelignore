@@ -4,3 +4,6 @@ preview/*/notes.md
 .claude
 .agents
 skills-lock.json
+# development copies of the eight concepts: the public ones are built into /website-concepts
+c-3e9a41b7d20f58c6/cinematic
+tools/workbook-meeting

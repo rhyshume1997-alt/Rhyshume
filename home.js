@@ -20,8 +20,8 @@
   /* ---- the building example: pick how a visitor gets in touch and the page changes to match ---- */
   var build = document.getElementById('build');
   if (build) {
-    build.setAttribute('data-mode', 'call');
-    var says = { call: 'The example site shows a phone call button.', quote: 'The example site shows a quote request form.', book: 'The example site shows a booking choice.' };
+    build.setAttribute('data-mode', 'plan');
+    var says = { plan: 'The example site is built for planning a week.', table: 'The example site is built for ordering for the table.', call: 'The example site is built for an urgent call or a quote.', shop: 'The example site is built for browsing and adding to a basket.' };
     var live = document.getElementById('build-live');
     [].slice.call(build.querySelectorAll('.bc button')).forEach(function (b) {
       b.addEventListener('click', function () {

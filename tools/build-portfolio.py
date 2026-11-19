@@ -1,7 +1,8 @@
-"""Builds design-concepts.html from the eight concept entries below. Run from the repository root."""
+"""Builds website-concepts/index.html, the public portfolio of the eight fictional concepts. Run from the repository root."""
 import html, re
 e = html.escape
 NOTICE = 'Concept by Rhys Hume, not a live site.'
+KEYS = {'olive-ivory': 'oi-hero-window-16x9', 'bright-circuit': 'bright-circuit-16x9', 'salt-ember': 'se-hero-fire-16x9', 'sunny-hours': 'sunny-hours-16x9', 'clear-ground': 'clear-ground-16x9', 'little-kettle': 'little-kettle-16x9', 'corner-shelf': 'corner-shelf-16x9', 'oak-razor': 'oak-razor-16x9'}
 C = [
  dict(id='olive-ivory', n='01', name='Olive & Ivory', kind='Wedding photographer', lay='a', tags='gallery enquiry',
   pitch='A soft, editorial site that feels like a photographer\'s contact sheet.',
@@ -59,7 +60,7 @@ def ex(c):
     return f'''<article class="ex ex-{c['lay']}" id="{c['id']}" data-tags="{c['tags']}" style="--bg:{c['bg']};--fg:{c['fg']};--ac:{c['ac']}" aria-labelledby="{c['id']}-h">
   <header class="ex-head"><span class="ex-n">{c['n']}</span><div><p class="label">{e(c['kind'])}, a made-up business</p><h2 id="{c['id']}-h">{e(c['name'])}</h2></div></header>
   <figure class="ex-film">
-    <video muted loop playsinline preload="none" poster="/images/concepts/{c['id']}-poster.webp" data-webm="/video/concepts/{c['id']}.webm" data-mp4="/video/concepts/{c['id']}.mp4" aria-label="Moving preview of the {e(c['name'])} concept. {e(c['alt'])}" width="736" height="400"></video>
+    <video muted loop playsinline preload="none" poster="/images/concepts/{c['id']}-poster.webp" data-webm="/website-concepts/video/{KEYS[c['id']]}.webm" data-mp4="/website-concepts/video/{KEYS[c['id']]}.mp4" aria-label="Moving preview of the {e(c['name'])} concept. {e(c['alt'])}" width="736" height="400"></video>
     <button class="ex-play" type="button" aria-pressed="false" aria-label="Play the moving preview of {e(c['name'])}"><span aria-hidden="true">Play</span></button>
     <figcaption>Generated concept footage</figcaption>
   </figure>
@@ -71,7 +72,7 @@ def ex(c):
       <div><h3 class="label">What it demonstrates</h3><ul class="ex-demo">{dm}</ul></div>
       <div><h3 class="label">Colours and type</h3><ul class="ex-sw">{sw}</ul><p class="ex-fonts">{e(c['fonts'])}</p></div>
     </div>
-    <p class="ex-demo-link"><a class="demo-link" data-slug="{c['id']}" hidden>Open the working demonstration</a><span class="demo-note">The working demonstration opens in a private preview only. It is not public.</span></p>
+    <p class="ex-demo-link"><a class="demo-link" href="/website-concepts/{c['id']}">Explore this concept</a><a class="ask-link" href="/contact">Want something like this for your business?</a></p>
     <p class="ex-notice">{NOTICE} A fictional business. The film and pictures are generated concept material.</p>
   </div>
 </article>'''
@@ -82,15 +83,15 @@ page = f'''<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Website design concepts | Rhys Hume</title>
-<meta name="description" content="Eight made-up websites that show how I design and build for small businesses: film openings, booking, galleries, menus and a basket. Concepts, not client work.">
+<title>Website concepts: eight working demonstrations | Rhys Hume</title>
+<meta name="description" content="Eight made-up websites you can open and use, built to show how I design for small businesses: booking, galleries, menus, planners and a basket. Concepts, not client work.">
 <meta name="theme-color" content="#f4f4f0">
-<link rel="canonical" href="https://www.rhyshume.co.uk/design-concepts">
+<link rel="canonical" href="https://www.rhyshume.co.uk/website-concepts/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Rhys Hume">
 <meta property="og:locale" content="en_GB">
-<meta property="og:url" content="https://www.rhyshume.co.uk/design-concepts">
-<meta property="og:title" content="Website design concepts | Rhys Hume">
+<meta property="og:url" content="https://www.rhyshume.co.uk/website-concepts/">
+<meta property="og:title" content="Website concepts: eight working demonstrations | Rhys Hume">
 <meta property="og:description" content="Eight made-up websites that show how I design and build for small businesses. Concepts, not client work.">
 <meta property="og:image" content="https://www.rhyshume.co.uk/images/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -99,9 +100,9 @@ page = f'''<!DOCTYPE html>
 <link rel="preload" href="/fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
 <script>document.documentElement.classList.add("js")</script>
 <link rel="stylesheet" href="/home.css">
-<link rel="stylesheet" href="/design-concepts.css">
+<link rel="stylesheet" href="/website-concepts/portfolio.css">
 <script src="/home.js" defer></script>
-<script src="/design-concepts.js" defer></script>
+<script src="/website-concepts/portfolio.js" defer></script>
 </head>
 <body class="dcp">
 <a class="skip" href="#main">Skip to content</a>
@@ -111,7 +112,7 @@ page = f'''<!DOCTYPE html>
     <a class="wordmark" href="/" aria-label="Rhys Hume, home">Rhys Hume</a>
     <nav class="site-nav" aria-label="Main">
       <a href="/#services">Services</a>
-      <a href="/design-concepts" aria-current="page">Design concepts</a>
+      <a href="/website-concepts/" aria-current="page">Website concepts</a>
       <a href="/engineering">Engineering firms</a>
       <a href="/about">About</a>
       <a href="/contact">Contact</a>
@@ -125,13 +126,13 @@ page = f'''<!DOCTYPE html>
   <div class="wrap dc-hero-grid">
     <div>
       <p class="label fade">Design concepts</p>
-      <h1 id="dc-h" class="rise" style="--y:14px">Eight websites that don&rsquo;t exist, to show what yours could be</h1>
-      <p class="sub rise" style="--d:120ms;--y:10px">Each one is a made-up business with its own look, its own film and its own way of working. Together they show the range I design and build for small businesses.</p>
+      <h1 id="dc-h" class="rise" style="--y:14px">Eight websites you can open and use, none of them real</h1>
+      <p class="sub rise" style="--d:120ms;--y:10px">Each one is a made-up business with its own look, its own film and its own way of working. Open any of them, try the booking, the planner, the menu or the basket, and see the range I design and build for small businesses.</p>
     </div>
     <aside class="dc-notice fade" style="--d:240ms" aria-labelledby="dc-n">
       <h2 id="dc-n" class="label">Read this first</h2>
       <p><b>{NOTICE}</b> None of these are real businesses or past clients. The films and pictures are generated concept material, so they are not photographs of any real place or work.</p>
-      <p>My real work is on the <a href="/#proof">home page</a> and in the <a href="/work/jnr-engineering">JNR Engineering case study</a>.</p>
+      <p>These show what is possible. Advanced film openings, custom interactions and integrations are quoted for your own project and are not part of the starting prices. My real work is on the <a href="/#proof">home page</a> and in the <a href="/work/jnr-engineering">JNR Engineering case study</a>.</p>
     </aside>
   </div>
 </section>
@@ -153,7 +154,7 @@ page = f'''<!DOCTYPE html>
 
 <section class="last" aria-labelledby="last-h">
   <div class="wrap">
-    <h2 id="last-h">Want a design like one of these for your business?</h2>
+    <h2 id="last-h">Want something like this for your business?</h2>
     <p>Yours would be its own design. I don&rsquo;t reuse these, and I only use photographs you have the right to use. Tell me about your business and I&rsquo;ll show you a free preview.</p>
     <a class="btn btn-on-ink" href="/contact">Get a free preview of your site</a>
   </div>
@@ -169,7 +170,7 @@ page = f'''<!DOCTYPE html>
       </div>
       <div>
         <h2>Contents</h2>
-        <ul><li><a href="/engineering">Websites for engineering firms</a></li><li><a href="/websites">Websites</a></li><li><a href="/design-concepts">Design concepts</a></li><li><a href="/local-business">Websites and digital for local business</a></li><li><a href="/automation">Automation</a></li><li><a href="/tolra">Tolra</a></li><li><a href="/csv">Computer system validation</a></li><li><a href="/about">About</a></li></ul>
+        <ul><li><a href="/engineering">Websites for engineering firms</a></li><li><a href="/websites">Websites</a></li><li><a href="/website-concepts/">Website concepts</a></li><li><a href="/local-business">Websites and digital for local business</a></li><li><a href="/automation">Automation</a></li><li><a href="/tolra">Tolra</a></li><li><a href="/csv">Computer system validation</a></li><li><a href="/about">About</a></li></ul>
       </div>
       <div>
         <h2>Contact</h2>
@@ -194,5 +195,5 @@ page = f'''<!DOCTYPE html>
 </body>
 </html>
 '''
-open('design-concepts.html', 'w', encoding='utf-8').write(page)
-print('design-concepts.html', len(page))
+open('website-concepts/index.html', 'w', encoding='utf-8').write(page)
+print('website-concepts/index.html', len(page))

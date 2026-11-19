@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,follow">
+<link rel="canonical" href="https://www.rhyshume.co.uk/website-concepts/clear-ground">
+<title>Clear Ground Coaching, a concept by Rhys Hume</title>
+<meta name="description" content="A one-to-one coaching concept: a single illustrated line runs down the page, a marker walks it as you read, and a short reflective enquiry adds waypoints to it. Concept only, not a live site.">
+<link rel="preload" href="fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="cinematic.css">
+<link rel="stylesheet" href="clear-ground.css">
+<script>document.documentElement.classList.add("js")</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<aside class="banner" aria-label="Concept notice">Concept by Rhys Hume, not a live site. Sample business. The room, imagery and footage are generated concept material, not a real practice, space or client. <a href="/website-concepts/">All eight concepts</a></aside>
+
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brand" href="#top" aria-label="Clear Ground Coaching, back to the top">Clear Ground <span>Coaching</span></a>
+    <nav class="topnav" aria-label="Main"><a href="#ch1">The journey</a><a href="#begin">A first conversation</a></nav>
+    <a class="btn" href="#begin">Begin</a>
+  </div>
+  <div class="prog" aria-hidden="true"><i id="prog"></i></div>
+</header>
+
+<main id="main">
+<div class="journey" id="journey">
+  <svg id="jsvg" class="jsvg" aria-hidden="true" focusable="false">
+    <path id="jghost" class="ghost"/>
+    <path id="jdraw" class="draw"/>
+    <g id="wps">
+      <g class="wpg" data-k="start"><circle r="8" class="fs k"/><circle r="2.6" class="f"/><text class="lbl" x="17" y="4">Start</text></g>
+
+      <g class="wpg" data-k="here">
+        <g class="deco ct"><path d="M-70,8 C-62,-30 28,-52 72,-18 C98,6 62,52 4,50 C-46,48 -80,34 -70,8Z"/><path d="M-104,10 C-96,-48 40,-78 104,-26 C142,6 92,78 6,76 C-70,74 -118,52 -104,10Z"/><path d="M-142,12 C-134,-66 56,-108 140,-36 C190,8 124,106 8,102 C-92,100 -158,70 -142,12Z"/></g>
+        <circle r="15" class="k fs"/><circle r="5" class="f"/><text class="lbl" x="25" y="4">You are here</text>
+      </g>
+
+      <g class="wpg" data-k="boulder">
+        <path class="k fs" d="M26,20 C20,-8 50,-24 74,-10 C96,2 94,30 70,36 C50,40 30,36 26,20Z"/>
+        <path class="k" d="M40,6 L52,-4 M50,18 L66,4 M62,30 L80,14"/>
+        <path class="k fs" d="M80,30 C78,18 92,12 102,18 C110,24 106,36 94,38 C86,38 82,36 80,30Z"/>
+        <text class="lbl" x="28" y="-34">Heavy, not stuck</text>
+      </g>
+
+      <g class="wpg" data-k="fork">
+        <path class="k dash" d="M0,0 C26,6 52,22 78,56"/><circle cx="82" cy="62" r="5" class="k fs"/>
+        <text class="lbl" x="22" y="-14">Two ways, one chosen</text>
+      </g>
+      <g class="wpg" data-k="stones">
+        <path class="k hair" d="M-110,-26 C-80,-38 -60,-14 -30,-26 S30,-14 60,-28 S100,-16 120,-26"/>
+        <path class="k hair" d="M-110,26 C-80,14 -60,38 -30,26 S30,38 60,24 S100,36 120,26"/>
+        <ellipse cx="-12" cy="-12" rx="10" ry="6" class="f"/><ellipse cx="6" cy="2" rx="11" ry="6.5" class="f"/><ellipse cx="-6" cy="17" rx="9" ry="5.5" class="f"/>
+        <text class="lbl" x="-44" y="56">Small steps</text>
+      </g>
+
+      <g class="wpg" data-k="horizon">
+        <path class="k deco" d="M-140,0 H-14 M14,0 H140"/>
+        <path class="k fs" d="M20,0 A18,18 0 0 1 56,0Z"/>
+        <path class="k deco hair" d="M-110,12 H-60 M-30,12 H20 M60,12 H110"/>
+        <text class="lbl" x="-14" y="-26">The horizon</text>
+      </g>
+      <g class="wpg" data-k="clearing">
+        <circle r="46" class="k dash fs"/>
+        <path class="k hair" d="M-22,14 l3,-9 m4,9 l2,-12 m6,12 l3,-8 m9,8 l-1,-9 m6,9 l4,-8 M-14,26 l2,-8 m8,8 l1,-10 m9,10 l3,-7"/>
+        <circle r="5" class="f" cy="-6"/>
+        <text class="lbl" x="58" y="4">A clearing</text>
+      </g>
+
+      <g class="wpg slot" data-k="slot1"><circle r="15" class="k fs empty"/>
+        <g class="filled"><circle r="15" class="k fs"/><path class="k" d="M-9,4 H9"/><path class="k f" d="M-6,4 A6,6 0 0 1 6,4Z"/></g><text class="lbl cap" y="34" text-anchor="middle"></text></g>
+      <g class="wpg slot" data-k="slot2"><circle r="15" class="k fs empty"/>
+        <g class="filled"><circle r="15" class="k fs"/><path class="f" d="M-8,6 C-9,-3 -2,-8 4,-7 C10,-5 10,4 6,7Z"/></g><text class="lbl cap" y="34" text-anchor="middle"></text></g>
+      <g class="wpg slot" data-k="slot3"><circle r="15" class="k fs empty"/>
+        <g class="filled"><circle r="15" class="k fs"/>
+          <g class="v v-online"><rect x="-8" y="-6" width="16" height="12" class="k"/><path class="k" d="M0,-6 V6 M-8,0 H8"/></g>
+          <g class="v v-person"><circle cx="-4.5" cy="-2" r="3" class="f"/><circle cx="4.5" cy="-2" r="3" class="f"/><path class="k" d="M-9,8 C-8,3 -1,3 0,8 M0,8 C1,3 8,3 9,8"/></g>
+          <g class="v v-either"><path class="k" d="M0,8 V0 M0,0 L-6,-7 M0,0 L6,-7"/></g>
+        </g><text class="lbl cap" y="34" text-anchor="middle"></text></g>
+    </g>
+    <g id="jmarker" class="marker"><circle r="13" class="fs mk"/><circle cx="0" cy="-6" r="3.4" class="f ink"/><path class="ink-s" d="M0,-2 V6 M0,6 L-3.5,11.5 M0,6 L3.5,11.5 M0,0 L-4,3 M0,0 L4,3"/></g>
+  </svg>
+
+  <section class="hero" id="top" aria-labelledby="h1">
+    <div class="wrap hero-grid">
+      <div class="hero-text">
+        <p class="mono eyebrow rise">One-to-one coaching [location to be confirmed]</p>
+        <h1 id="h1" class="rise" style="--d:120ms">A clear place to <em>begin</em>.</h1>
+        <p class="lede rise" style="--d:260ms">Clear Ground Coaching is a one-to-one practice for people who want firmer footing: to see where they are, name what is in the way, and take a next step they can keep.</p>
+        <div class="cta rise" style="--d:380ms"><a class="btn" href="#begin">Book a first conversation</a><a class="tlink" href="#ch1">Follow the line</a></div>
+        <p class="small rise" style="--d:460ms">Coaching, not therapy or medical treatment.</p>
+        <i id="start" class="start" aria-hidden="true"></i>
+      </div>
+      <div class="window fade" style="--d:200ms">
+        <figure class="plate" id="hero-plate" data-footage="poster">
+          <picture><source srcset="img/clear-ground-16x9.webp" type="image/webp"><img src="img/clear-ground-16x9.jpg" width="1672" height="941" alt="A calm interior: a deep green wall dappled with leaf shadows, an armchair with a green throw, a round stone table with a mug and an open book, and a window with greenery. A generated concept image." fetchpriority="high"></picture>
+          <video muted loop playsinline preload="none" aria-hidden="true" tabindex="-1" data-desktop="clear-ground-16x9"></video>
+          <p class="tag mono" id="hero-tag">Generated concept image</p>
+        </figure>
+        <p class="mono cap">Fig. 1 &nbsp;The room, as imagined for a first conversation</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="jgrid wrap">
+    <nav class="index" aria-label="Chapters" id="index">
+      <p class="mono idx-h">The journey</p>
+      <ol>
+        <li><a href="#ch1"><b>01</b><span class="t">Where you are now</span></a></li>
+        <li><a href="#ch2"><b>02</b><span class="t">What is in the way</span></a></li>
+        <li><a href="#ch3"><b>03</b><span class="t">The next small step</span></a></li>
+        <li><a href="#ch4"><b>04</b><span class="t">Firmer footing</span></a></li>
+        <li><a href="#begin"><b>05</b><span class="t">A first conversation</span></a></li>
+      </ol>
+    </nav>
+
+    <div class="chapters">
+      <section class="ch l" id="ch1" data-wob="1" aria-labelledby="ch1-h">
+        <div class="lane" aria-hidden="true"><i class="wp" data-kind="here" style="top:46%"></i></div>
+        <div class="body">
+          <p class="num rv" aria-hidden="true">01</p>
+          <h2 id="ch1-h" class="rv">Where you are <em>now</em></h2>
+          <p class="rv">Most people arrive with a lot going on and no clear picture of it. We start by describing where you actually are: what is working, what has gone flat, what you keep circling. No scoring and no labels. Just an honest map that you can see all of.</p>
+          <p class="rv">Nothing is rushed. A first conversation is for looking, and you decide how much to say.</p>
+          <blockquote class="principle rv"><p class="mono">A principle of the practice</p><p class="pq">You cannot choose a direction from a place you have not looked at.</p></blockquote>
+        </div>
+      </section>
+
+      <section class="ch r" id="ch2" data-wob="1.9" aria-labelledby="ch2-h">
+        <div class="lane" aria-hidden="true"><i class="wp" data-kind="knot" style="top:38%"></i><i class="wp" data-kind="boulder" style="top:70%"></i></div>
+        <div class="body">
+          <p class="num rv" aria-hidden="true">02</p>
+          <h2 id="ch2-h" class="rv">What is in the <em>way</em></h2>
+          <p class="rv">Usually it is not one large obstacle. It is a few small ones that have become familiar. We name them plainly, then sort them into the ones that are yours to move and the ones that are not.</p>
+          <ul class="points rv">
+            <li><span>The habits you stopped noticing</span></li>
+            <li><span>The beliefs you treat as facts</span></li>
+            <li><span>The things that are not yours to fix</span></li>
+          </ul>
+          <p class="note rv">This is coaching. It is not therapy or medical treatment, and it is not a substitute for either. [Scope and referral details to be confirmed]</p>
+        </div>
+      </section>
+
+      <figure class="strip rv">
+        <div class="plate" data-footage="still">
+          <picture><source srcset="img/clear-ground-16x9.webp" type="image/webp"><img src="img/clear-ground-16x9.jpg" width="1672" height="941" alt="Leaf shadows moving across a deep green wall above a stone table. A generated concept image." loading="lazy"></picture>
+          <p class="tag mono">Generated concept image</p>
+        </div>
+        <figcaption class="mono">Fig. 2 &nbsp;Light on a green wall, between chapters</figcaption>
+      </figure>
+
+      <section class="ch l" id="ch3" data-wob="0.8" aria-labelledby="ch3-h">
+        <div class="lane" aria-hidden="true"><i class="wp" data-kind="fork" style="top:34%"></i><i class="wp" data-kind="stones" style="top:68%"></i></div>
+        <div class="body">
+          <p class="num rv" aria-hidden="true">03</p>
+          <h2 id="ch3-h" class="rv">The next small <em>step</em></h2>
+          <p class="rv">We choose one step small enough to take this week. Not a plan for the year. One step with a day attached to it, and a note of what you expect to notice when you take it.</p>
+          <p class="rv">Between conversations you keep the step, and we look at what happened next time. [Session details to be confirmed]</p>
+          <blockquote class="principle rv"><p class="mono">A principle of the practice</p><p class="pq">If a step does not fit in an ordinary week, it is not yet small enough.</p></blockquote>
+        </div>
+      </section>
+
+      <section class="ch r" id="ch4" data-wob="0.15" aria-labelledby="ch4-h">
+        <div class="lane" aria-hidden="true"><i class="wp" data-kind="horizon" style="top:30%"></i><i class="wp" data-kind="clearing" style="top:72%"></i></div>
+        <div class="body">
+          <p class="num rv" aria-hidden="true">04</p>
+          <h2 id="ch4-h" class="rv">Firmer <em>footing</em></h2>
+          <p class="rv">Over time the steps add up to ground you can stand on. We look back at what changed, keep what worked, decide what comes next, and talk honestly about whether you still need us.</p>
+          <dl class="facts rv">
+            <div><dt class="mono">How we meet</dt><dd>Online or in person. [Session details to be confirmed]</dd></div>
+            <div><dt class="mono">Investment</dt><dd>[Price to be confirmed]</dd></div>
+            <div><dt class="mono">Where</dt><dd>[Location to be confirmed]</dd></div>
+          </dl>
+          <blockquote class="principle rv"><p class="mono">A principle of the practice</p><p class="pq">Good coaching should make itself less necessary.</p></blockquote>
+        </div>
+      </section>
+
+      <section class="ch l" id="begin" data-wob="0.5" aria-labelledby="begin-h">
+        <div class="lane" aria-hidden="true"><i class="wp" data-kind="slot1" style="top:36%"></i><i class="wp" data-kind="slot2" style="top:56%"></i><i class="wp" data-kind="slot3" style="top:76%"></i></div>
+        <div class="body">
+          <p class="num rv" aria-hidden="true">05</p>
+          <h2 id="begin-h" class="rv">A first <em>conversation</em></h2>
+          <p class="rv">Three short questions, one at a time. Each answer puts a marker on your line, and at the end you get a short note to bring with you. You do not have to type anything.</p>
+          <p class="nojs-note rv">With JavaScript on, this section becomes a short reflective exercise: three prompts, a marker added to the illustrated line for each answer, and a note at the end. Nothing is sent, stored or booked, in this concept or in the exercise.</p>
+
+          <div class="js-only enq-wrap">
+          <form class="panel" id="enq" action="#" novalidate onsubmit="return false" aria-labelledby="begin-h">
+            <div id="steps">
+              <ol class="trail" aria-label="Your line so far" id="trail">
+                <li data-t="0"><span class="mono">Horizon</span><b>Not yet marked</b></li>
+                <li data-t="1"><span class="mono">In the way</span><b>Not yet marked</b></li>
+                <li data-t="2"><span class="mono">Our way</span><b>Not yet marked</b></li>
+              </ol>
+              <p class="mono prompt-n" id="pn">Prompt 1 of 3</p>
+
+              <fieldset class="step" data-step="0">
+                <legend><span class="q" tabindex="-1">What would you like to be different in six months?</span></legend>
+                <label class="opt"><input type="radio" name="q1" value="work" data-short="Working week"><span>How I spend my working week</span></label>
+                <label class="opt"><input type="radio" name="q1" value="decision" data-short="A decision"><span>A decision I keep putting off</span></label>
+                <label class="opt"><input type="radio" name="q1" value="pace" data-short="Pace of life"><span>The pace of my life</span></label>
+                <label class="opt"><input type="radio" name="q1" value="else" data-short="Something else"><span>Something else, which I will explain</span></label>
+              </fieldset>
+
+              <fieldset class="step" data-step="1" hidden>
+                <legend><span class="q" tabindex="-1">What has got in the way so far?</span></legend>
+                <label class="opt"><input type="radio" name="q2" value="time" data-short="Time"><span>Not enough time</span></label>
+                <label class="opt"><input type="radio" name="q2" value="start" data-short="Where to start"><span>Not knowing where to start</span></label>
+                <label class="opt"><input type="radio" name="q2" value="others" data-short="Expectations"><span>Other people's expectations</span></label>
+                <label class="opt"><input type="radio" name="q2" value="momentum" data-short="Momentum"><span>I start well and lose momentum</span></label>
+                <label class="ta"><span>Anything to add? <span class="hint">Optional. It stays on this page and goes nowhere.</span></span><textarea id="extra" rows="3" maxlength="400"></textarea></label>
+              </fieldset>
+
+              <fieldset class="step" data-step="2" hidden>
+                <legend><span class="q" tabindex="-1">How would you like to work: online or in person?</span></legend>
+                <label class="opt"><input type="radio" name="q3" value="online" data-short="Online"><span>Online</span></label>
+                <label class="opt"><input type="radio" name="q3" value="person" data-short="In person"><span>In person</span></label>
+                <label class="opt"><input type="radio" name="q3" value="either" data-short="Either"><span>Either, I would like to talk it over</span></label>
+              </fieldset>
+
+              <p class="status" id="status" role="status" aria-live="polite">Choose an answer to add a marker to your line.</p>
+              <div class="nav">
+                <button type="button" class="btn ghost" id="back" disabled>Back</button>
+                <button type="button" class="btn" id="next" disabled>Next prompt</button>
+              </div>
+            </div>
+
+            <div class="result" id="result" hidden>
+              <p class="mono demo-flag">Demonstration: nothing is sent, stored or booked</p>
+              <h3 id="result-h" tabindex="-1">A note for your first conversation</h3>
+              <div class="paper" id="note"></div>
+              <p class="small">A real version would ask how to reach you. This demonstration does not, and the note exists only on this page until you leave it.</p>
+              <div class="nav"><button type="button" class="btn ghost" id="again">Start again</button><a class="btn" href="#ch1">Re-read the journey</a></div>
+            </div>
+          </form>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+</main>
+
+<footer class="foot"><div class="wrap">
+  <p class="mono">Concept by Rhys Hume, not a live site.</p>
+  <p>Clear Ground Coaching is a fictional business. The imagery and footage are generated concept material. The enquiry on this page is a demonstration: nothing is sent, stored or booked, and there are no real prices, contact details, credentials or client stories here. Coaching is not therapy or medical treatment. <a href="/website-concepts/">All eight concepts</a></p>
+</div></footer>
+
+<nav class="callbar" aria-label="First conversation"><span class="mono">Clear Ground</span><a href="#begin">Begin</a></nav>
+<script src="footage.js"></script><script src="clear-ground.js"></script>
+</body>
+</html>

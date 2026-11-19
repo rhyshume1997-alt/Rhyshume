@@ -18,7 +18,7 @@ const css = read('home.css');
 const js = read('home.js');
 
 test('home page: the headline, one line under it, the preview button and the smaller chat link', function () {
-  assert.ok(/<h1[^>]*>Websites that get Glasgow trades more calls and quotes<\/h1>/.test(home));
+  assert.ok(/<h1[^>]*>Attractive websites, and the systems that make them useful<\/h1>/.test(home), 'Rev 2 headline: attractive websites and the systems behind them');
   assert.ok(!/found on google/i.test(home), 'no found on Google claim beside the no guarantee line');
   assert.ok(/<a class="btn"[^>]*>Get a free preview of your site</.test(home.match(/<section class="hero"[\s\S]*?<\/section>/)[0]));
   assert.ok(/<p class="small">[^]*?<a [^>]*>Book a free 20-minute chat/.test(home), 'the 20 minute chat stays as a smaller link');
@@ -83,10 +83,10 @@ test('home page: Tolra says pilot and register interest, with no price and no bu
   assert.ok(!/£|buy|subscribe|per month|a month/i.test(around), 'price or buy wording near Tolra');
 });
 
-test('home page: validation is linked from the footer only', function () {
-  const beforeFooter = home.split('<footer')[0];
-  assert.ok(!/\/csv|validation/i.test(beforeFooter), 'validation shows above the footer');
+test('home page: validation is one of the four things I do, and is linked from the footer too (Rev 2 positioning)', function () {
+  assert.ok(/<h3><a href="\/csv">Computer system validation<\/a><\/h3>/.test(home), 'capability row');
   assert.ok(home.split('<footer')[1].includes('href="/csv"'));
+  ['Bespoke websites', 'Business software and workflow systems', 'Automation and AI integrations'].forEach(function (c) { assert.ok(home.includes(c), c); });
 });
 
 test('home page: no tools talk, no ChatGPT listing, no AI automation wording', function () {

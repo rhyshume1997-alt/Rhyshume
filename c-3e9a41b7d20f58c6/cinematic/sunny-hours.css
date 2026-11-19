@@ -157,13 +157,13 @@ html:not(.js) .nojs { display: block; }
 .nojs { background: var(--cream); border: 3px solid var(--navy); border-radius: 1.2rem; padding: 1.2rem 1.4rem; margin-block-start: 1.5rem; max-inline-size: 40rem; }
 .nojs-list { list-style: decimal inside; margin-block: 0.6rem; }
 .pl { margin-block-start: 1.6rem; }
-.hold { position: sticky; top: 4.9rem; z-index: 50; display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-block-size: 3.6rem; padding: 0.5rem 0.6rem 0.5rem 1.2rem; background: var(--navy); color: var(--cream); border-radius: 999px; font-weight: 600; margin-block-end: 1rem; }
+.hold { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-block-size: 3.6rem; padding: 0.5rem 0.6rem 0.5rem 1.2rem; background: var(--navy); color: var(--cream); border-radius: 999px; font-weight: 600; margin-block-end: 1rem; }
 .hold p { line-height: 1.3; }
 .hold[data-on="1"] { background: var(--red); color: var(--cream); }
 .hold[data-on="1"] { background: var(--navy); outline: 3px solid var(--cream); outline-offset: -6px; }
 .hold .small-btn { border-color: var(--cream); }
 .pl-grid { display: grid; grid-template-columns: 19rem minmax(0, 1fr); gap: 1.5rem; align-items: start; }
-.tray { position: sticky; top: 9.8rem; background: var(--cream); border: 3px solid var(--navy); border-radius: 1.4rem; padding: 1rem; }
+.tray { position: sticky; top: 5.6rem; background: var(--cream); border: 3px solid var(--navy); border-radius: 1.4rem; padding: 1rem; }
 .tray-h { font: 900 1.3rem/1 var(--disp); margin-block-end: 0.8rem; }
 .tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.7rem; }
 .tray-note { font-size: 0.82rem; margin-block-start: 0.8rem; line-height: 1.4; }
@@ -244,7 +244,7 @@ html:not(.js) .nojs { display: block; }
 @media (max-width: 47.99rem) {
   .planner { padding-block: 3.4rem 3.4rem; }
   .plan-head h2 { font-size: clamp(3.2rem, 17vw, 5rem); }
-  .hold { top: 4.7rem; border-radius: 1.2rem; font-size: 0.95rem; }
+  .hold { border-radius: 1.2rem; font-size: 0.95rem; }
   .board { grid-template-columns: minmax(0, 1fr); gap: 0.8rem; }
   .day { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto auto auto auto; grid-template-areas: "h h" "p p" "a b" "c c"; }
   .day > :nth-child(1) { grid-area: h; } .day > :nth-child(2) { grid-area: p; } .day > :nth-child(3) { grid-area: a; } .day > :nth-child(4) { grid-area: b; } .day > :nth-child(5) { grid-area: c; }

@@ -59,9 +59,6 @@
 .ex-fonts { font-size: 0.92rem; color: var(--mute); margin-top: 0.5rem; }
 .ex-demo-link { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; }
 .ex a.demo-link { display: inline-flex; align-items: center; min-block-size: 2.75rem; padding: 0.55rem 1rem; border: 2px solid var(--fg); color: var(--fg); background: transparent; font-weight: 600; text-decoration: none; border-radius: 2px; transition: transform 120ms var(--ease-out); }
-.ex a.demo-link[hidden] { display: none; }
-.demo-note { font-size: 0.9rem; color: var(--mute); }
-.demo-ready .demo-note { display: none; }
 .ex-notice { font: 400 0.72rem/1.4 var(--mono); letter-spacing: 0.05em; text-transform: uppercase; color: var(--mute) !important; border-top: 1px solid color-mix(in srgb, var(--fg) 30%, var(--bg)); padding-top: 0.7rem; }
 
 /* four different compositions */
@@ -88,3 +85,5 @@
   html.rv-on .ex.in { opacity: 1; transform: none; transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out); }
 }
 .dcp .callbar + * { margin: 0; }
+
+.ex a.ask-link { color: var(--fg); font-weight: 500; text-underline-offset: 0.2em; }

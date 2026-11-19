@@ -86,6 +86,19 @@
           "value": "no-store"
         }
       ]
+    },
+    {
+      "source": "/website-concepts/(olive-ivory|bright-circuit|salt-ember|sunny-hours|clear-ground|little-kettle|corner-shelf|oak-razor)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, follow"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
     }
   ],
   "functions": {

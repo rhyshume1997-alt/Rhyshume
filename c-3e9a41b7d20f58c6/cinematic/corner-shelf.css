@@ -45,14 +45,14 @@ h1, h2, h3 { font-family: "Archivo", "IBM Plex Sans", sans-serif; }
 .hero-meta { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.2rem 1.4rem; border-block-start: 2px solid var(--ink); padding-block-start: 0.55rem; }
 .hero-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: clamp(0.6rem, 1.4vw, 1.4rem); grid-template-rows: auto auto auto auto; }
 .hero h1 { grid-column: 1 / -1; grid-row: 1 / 4; display: grid; grid-template-columns: subgrid; grid-template-rows: subgrid; pointer-events: none; font-weight: 900; }
-.l1, .l2 { display: block; font-size: min(21.5vw, 20rem); line-height: 0.8; letter-spacing: -0.055em; }
+.l1, .l2 { display: block; font-size: min(21.5vw, 20rem, 25dvh); line-height: 0.8; letter-spacing: -0.055em; }
 .l1 { grid-column: 1 / -1; grid-row: 1; padding-block-start: 0.06em; display: flex; align-items: flex-end; gap: 0.12em; }
 .l1 .the { font: 300 0.17em/1 "Archivo", sans-serif; letter-spacing: -0.02em; color: var(--brick-d); align-self: flex-start; margin-block-start: 0.28em; writing-mode: vertical-rl; transform: rotate(180deg); }
 .l1 .word { color: var(--ink); }
 .l2 { grid-column: 1 / -1; grid-row: 3; justify-self: end; position: relative; z-index: 3; margin-block: -0.27em -0.07em; margin-inline-end: 0.05em; }
 .l2 .word { color: var(--brick); paint-order: stroke fill; -webkit-text-stroke: 0.045em var(--paper); display: block; }
 .c { display: inline-block; }
-.hero .plate { grid-column: 1 / 10; grid-row: 2; z-index: 2; aspect-ratio: 2 / 1; border: 6px solid var(--ink); background: var(--ink); }
+.hero .plate { grid-column: 1 / 10; grid-row: 2; z-index: 2; aspect-ratio: 2.5 / 1; border: 6px solid var(--ink); background: var(--ink); }
 .hero .plate img, .hero .plate video { object-position: 50% 24%; }
 .hero .plate .tag { inset: 0 auto auto 0; background: var(--ink); color: var(--paper); padding: 0.3rem 0.6rem; }
 .hero-side { grid-column: 10 / 13; grid-row: 2; align-self: start; padding-block-start: 0.2rem; }
@@ -160,6 +160,19 @@ h1, h2, h3 { font-family: "Archivo", "IBM Plex Sans", sans-serif; }
   .shelf:nth-child(2) { margin-inline-start: 9%; inline-size: 91%; }
   .shelf:nth-child(3) { margin-inline-start: 3%; inline-size: 96%; }
   .shelf:nth-child(4) { margin-inline-start: 17%; inline-size: 83%; }
+  /* from 48rem everything fits: no sideways strips, so no tag is ever clipped */
+  .scroller { overflow: visible; scroll-snap-type: none; }
+  .track { inline-size: 100%; padding-inline: 0.8rem 0.4rem; }
+  .item { flex: 1 1 0; min-inline-size: 0; margin-inline-end: 0.5rem; }
+  .lab { gap: 0.25rem; padding-inline: 0.2rem 0.1rem; }
+  .ptag { flex: 0 1 auto; padding-inline: 1.1rem 0.9rem; font-size: 0.74rem; }
+  .ptag i { display: none; }
+  .quick { inline-size: 2.4rem; block-size: 2.4rem; }
+}
+@media (min-width: 48rem) and (max-width: 63.99rem) {
+  .wall { --u: 6.4rem; }
+  .shelf:nth-child(n) { margin-inline-start: 0; inline-size: 100%; }
+  .shelf:nth-child(even) .track { padding-inline-start: 2.4rem; }
 }
 @media (max-width: 47.99rem) {
   .wall { --u: 7.2rem; --lab: 3.3rem; }
