@@ -11,9 +11,11 @@ function res() {
 }
 const base = { name: 'Acme', servicesHeading: 'Services', quoteHeading: 'Quote', contactHeading: 'Contact', banner: 'Concept', footer: 'f', services: [] };
 
-test('Like it bar only appears with a cta, and only with safe links', () => {
+test('the Prototype line and the Like it bar are on every page, and only safe links are used', () => {
   const none = rich.renderRich(base, null, null);
-  assert.ok(!none.includes('Like it?'));
+  assert.ok(none.includes('Like it? Reply to my email or book 20 minutes'));
+  assert.ok(none.includes('Prototype by Rhys Hume, built from your current site.'));
+  assert.ok(none.includes('href="mailto:rhys@rhyshume.co.uk'));
   const withCta = rich.renderRich(base, null, null, { cta: { mail: 'mailto:rhys@rhyshume.co.uk', book: 'javascript:alert(1)' } });
   assert.ok(withCta.includes('Like it? Reply to my email or book 20 minutes'));
   assert.ok(withCta.includes('Reply by email'));

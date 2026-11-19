@@ -105,7 +105,6 @@ test('phone and quote button are at the top, and the phone comes from their site
 test('only their own photos are used, and the others are reported', async function () {
   const r = await generate(GOOD);
   assert.ok(r.html.includes(SITE + '/img/shop.jpg'));
-  assert.ok(r.html.includes(SITE + '/img/mill.jpg'));
   assert.ok(!r.html.includes('cdn.stock.test'));
   assert.match(r.notes, /Skipped 1 photo\(s\)/);
   assert.match(r.html, /<meta name="referrer" content="no-referrer">/);
@@ -350,13 +349,13 @@ test('logo: a domain name with "light" in it is not treated as a pale logo', fun
 
 test('photos: CSS backgrounds, inline styles, linked CSS and next/image are found, off-site ones skipped', function () {
   const home = 'https://shop.test/';
-  const html = '<style>.hero{background-image:url(/img/hero-bg.jpg)}</style>' +
-    '<div style="background:url(\'/img/inline-bg.jpg\')"></div>' +
-    '<img src="/_next/image?url=%2Fimg%2Fnext-photo.jpg&w=640&q=75" alt="">' +
+  const html = '<style>.hero{background-image:url(/img/our-hero.jpg)}</style>' +
+    '<div style="background:url(\'/img/our-inline.jpg\')"></div>' +
+    '<img src="/_next/image?url=%2Fimg%2Four-next-photo.jpg&w=640&q=75" alt="">' +
     '<div style="background-image:url(https://cdn.other.test/x.jpg)"></div>';
-  const out = gen.collectImages([pg(home, html)], home, [{ url: 'https://shop.test/css/site.css', text: '.team{background:url(/img/from-css.png)}' }]);
+  const out = gen.collectImages([pg(home, html)], home, [{ url: 'https://shop.test/css/site.css', text: '.team{background:url(/img/our-from-css.png)}' }]);
   const srcs = out.photos.map(function (p) { return p.src; });
-  ['hero-bg.jpg', 'inline-bg.jpg', 'next-photo.jpg', 'from-css.png'].forEach(function (f) {
+  ['our-hero.jpg', 'our-inline.jpg', 'our-next-photo.jpg', 'our-from-css.png'].forEach(function (f) {
     assert.ok(srcs.some(function (s) { return s.endsWith('/img/' + f); }), f + ' missing: ' + srcs.join(' '));
   });
   assert.ok(!srcs.some(function (s) { return s.includes('cdn.other.test'); }));
@@ -602,4 +601,112 @@ test('niche: the build records what the page says about itself to a search engin
 
 test('niche: the command line help names every niche', function () {
   assert.match(read('tools/preview.js'), /\[--niche engineering\|trades\|hospitality\|childcare\|weddings\]/);
+});
+
+// ---------------------------------------------------------------- photos must be clearly theirs
+
+const FW = gen.firmWordsOf('Stirling Electrical Ltd');
+const verdict = function (c, route, pagePath, niche) { return gen.photoVerdict(Object.assign({ alt: '', hint: '', caption: '', via: 'img' }, c), route, pagePath || '/', FW, niche); };
+
+test('photo rule: a restaurant table photo is never used for an electrician, whatever page it is on', function () {
+  assert.strictEqual(verdict({ alt: 'Restaurant table set for dinner' }, '/uploads/table.jpg').ok, false);
+  assert.strictEqual(verdict({ alt: '' }, '/uploads/restaurant-table.jpg', '/our-work').ok, false);
+  assert.strictEqual(verdict({ alt: 'Our work' }, '/uploads/dining-room.jpg', '/gallery').ok, false);
+  assert.match(verdict({ alt: 'Restaurant table' }, '/a.jpg').why, /food or hospitality/);
+});
+
+test('photo rule: a photo with nothing saying it is theirs is not used', function () {
+  const v = verdict({ alt: '' }, '/uploads/1/2/img_4021.jpg', '/');
+  assert.strictEqual(v.ok, false);
+  assert.match(v.why, /nothing says it is their own/);
+  assert.strictEqual(verdict({ alt: 'Sunset over a field' }, '/uploads/field.jpg').ok, false);
+  assert.strictEqual(verdict({ alt: 'Light bulb' }, '/uploads/bulb.jpg').ok, false);
+});
+
+test('photo rule: stock and people photos are out even when they say "our"', function () {
+  ['Our smiling customers', 'Happy family', 'Businessman shaking hands', 'Team meeting at a laptop', 'People talking'].forEach(function (alt) {
+    assert.strictEqual(verdict({ alt: alt }, '/x.jpg').ok, false, alt);
+  });
+  assert.strictEqual(verdict({}, '/uploads/shutterstock_12345.jpg').ok, false);
+  assert.strictEqual(verdict({}, '/uploads/stock-photo.jpg').ok, false);
+});
+
+test('photo rule: their own work, van, team, premises or name is used, with the reason recorded', function () {
+  [
+    [{ alt: 'Our van outside a job' }, '/a.jpg', /own work, vehicle or team/],
+    [{ alt: 'Consumer unit installation completed' }, '/b.jpg', /own work/],
+    [{ alt: '' }, '/uploads/company-van-1.jpg', /own work/],
+    [{ alt: '' }, '/uploads/stirling-electrical-vehicle.jpg', /firm name/],
+    [{ alt: '', caption: 'The crew on site' }, '/c.jpg', /own work/],
+    [{ alt: '', hint: 'team-photo' }, '/d.jpg', /own work/]
+  ].forEach(function (t) {
+    const v = verdict(t[0], t[1]);
+    assert.strictEqual(v.ok, true, JSON.stringify(t[0]) + t[1]);
+    assert.match(v.why, t[2]);
+  });
+});
+
+test('photo rule: an image with no description on their gallery or our-work page counts, but not on the home page', function () {
+  assert.strictEqual(verdict({}, '/uploads/p7.jpg', '/gallery.html').ok, true);
+  assert.strictEqual(verdict({}, '/uploads/p7.jpg', '/our-work').ok, true);
+  assert.strictEqual(verdict({}, '/uploads/p7.jpg', '/').ok, false);
+  assert.strictEqual(verdict({ via: 'css background' }, '/uploads/p7.jpg', '/gallery.html').ok, false);
+});
+
+test('photo rule: a food business may use food photos, any other niche may not', function () {
+  assert.strictEqual(verdict({ alt: 'Our dining room' }, '/room.jpg', '/', 'hospitality').ok, true);
+  assert.strictEqual(verdict({ alt: 'Our dining room' }, '/room.jpg', '/', 'trades').ok, false);
+  assert.strictEqual(verdict({ alt: 'Our dining room' }, '/room.jpg').ok, false);
+});
+
+test('photo rule: collectImages keeps the good ones, withholds the rest and says why', function () {
+  const home = 'https://stirling.test/';
+  const html = '<img src="/u/van.jpg" alt="Our van" width="800" height="600"><img src="/u/restaurant-table.jpg" alt="" width="800" height="600">' +
+    '<img src="/u/img_1.jpg" alt="" width="800" height="600"><img src="/u/crew.jpg" alt="The crew on site" width="800" height="600">';
+  const out = gen.collectImages([{ url: home, html: html }], home, [], 'Stirling Electrical Ltd', undefined);
+  assert.deepStrictEqual(out.photos.map(function (p) { return p.src.split('/').pop(); }).sort(), ['crew.jpg', 'van.jpg']);
+  assert.deepStrictEqual(out.withheld.map(function (p) { return p.src.split('/').pop(); }).sort(), ['img_1.jpg', 'restaurant-table.jpg']);
+  out.withheld.forEach(function (w) { assert.ok(w.why.length > 10); });
+});
+
+test('photo rule: with no photo that passes, the hero is the marked space and the notes list what was withheld', async function () {
+  const saved = PAGES[SITE + '/'];
+  PAGES[SITE + '/'] = saved.replace(/<img src="\/img\/shop\.jpg"[^>]*>/, '<img src="/img/restaurant-table.jpg" alt="Restaurant table" width="800" height="600">');
+  try {
+    const r = await generate(GOOD);
+    assert.strictEqual(r.content.heroPhoto, null);
+    assert.ok(!r.html.includes('restaurant-table'));
+    assert.match(r.html, /Placeholder: your (workshop )?photo here/);
+    assert.match(r.notes, /Photo not used: .*restaurant-table\.jpg \(alt text: Restaurant table\)\. looks like food/);
+    assert.match(r.notes, /Add it by hand if it is theirs/);
+  } finally { PAGES[SITE + '/'] = saved; }
+});
+
+// ---------------------------------------------------------------- detail kept out of the page
+
+test('word counts, colours and fonts are in notes.md and not in the points shown on the page', async function () {
+  const r = await generate(GOOD);
+  r.points.forEach(function (p) { assert.ok(!/\bwords\b/i.test(p), p); assert.ok(!/#[0-9a-f]{6}/i.test(p), p); });
+  assert.match(r.notes, /- Words: the main text goes from about \d+ words on their home page to about \d+ words\./);
+  assert.match(r.notes, /- Colours: /);
+  assert.match(r.notes, /- Fonts: /);
+});
+
+test('points: the form point no longer claims drawings, and the phone point uses the niche button', function () {
+  const facts = { phones: [], emails: [] };
+  const base = { phone: null, quoteButton: 'Enquire', quoteHeading: 'Enquire', services: [{ title: 'a' }] };
+  const pts = gen.buildPoints(facts, 100, base, 40);
+  assert.ok(pts.every(function (p) { return !/drawing/i.test(p) && !/was found/i.test(p); }));
+  assert.match(pts[0], /A Enquire button|an? Enquire button|Enquire button/);
+  assert.match(pts[0], /no phone number is shown/);
+});
+
+test('the notes never say an email or phone was simply not found, only that none is shown', async function () {
+  const saved = Object.assign({}, PAGES);
+  Object.keys(PAGES).forEach(function (k) { PAGES[k] = PAGES[k].replace(/<a href="mailto:[^>]*>[^<]*<\/a>/g, '').replace(/office@hartley-metalwork\.test/g, ''); });
+  try {
+    const r = await generate(GOOD);
+    assert.match(r.notes, /- Email: none found in the text read, it may be hidden or in an image, so the page shows none/);
+    assert.ok(!/- Email: none found\n/.test(r.notes));
+  } finally { Object.keys(saved).forEach(function (k) { PAGES[k] = saved[k]; }); }
 });

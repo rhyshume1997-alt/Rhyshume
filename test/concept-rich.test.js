@@ -34,7 +34,7 @@ test('rich page: escapes text, refuses non http images, keeps the concept banner
   assert.ok(html.includes('&lt;b&gt;Engineering&lt;/b&gt;'));
   assert.ok(!html.includes('javascript:alert'));
   assert.ok(!html.includes('data:text/html'));
-  assert.ok(html.includes('Concept by Rhys Hume, not a live site'));
+  assert.ok(html.includes('Prototype by Rhys Hume, built from your current site.'));
   assert.ok(html.includes('https://acme.co.uk/a.jpg'));
   assert.ok(html.includes('tel:+441410000000'));
 });
@@ -260,4 +260,89 @@ test('niche: the help part does not talk about drawings or engineering for a del
 test('whole page: no em dash anywhere, with every new part switched on', function () {
   const html = renderRich(content({ heroPhoto: photo(1), photos: [photo(2), photo(3), photo(4)] }), null, ['One. Why: two.'], { cta: { mail: 'mailto:rhys@rhyshume.co.uk', book: 'https://example.com/book' }, evidence: seoEv() });
   assert.ok(!html.includes('—'));
+});
+
+// ---------------------------------------------------------------- review fixes
+
+const ownerOpts = function (extra) { return Object.assign({ cta: { mail: 'mailto:rhys@rhyshume.co.uk' }, evidence: { host: 'acme.co.uk', checkedOn: '2026-11-19', problems: [{ issue: 'No form', proof: 'None found.', why: 'Buyers leave.' }] } }, extra || {}); };
+
+test('order: Problems on your current site comes above What changed', function () {
+  const html = renderRich(content(), extractBrand([{ text: '.a{color:#0a3d62}.e{color:#e55039}' }], ''), ['Phone at the top. Why: ring without scrolling.'], ownerOpts());
+  const p = html.indexOf('id="evidence"'), w = html.indexOf('id="changes"'), h = html.indexOf('id="help"');
+  assert.ok(p > -1 && w > -1 && h > -1);
+  assert.ok(p < w && w < h, 'problems, then what changed, then how this helps');
+});
+
+test('visible page: no colour codes, no font lines and no word counts in What changed', function () {
+  const brand = extractBrand([{ text: '.a{color:#0a3d62}.b{background:#0a3d62}.e{color:#e55039}' }], '<link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">');
+  const html = renderRich(content(), brand, ['Phone at the top. Why: ring without scrolling.'], ownerOpts());
+  const sec = html.slice(html.indexOf('id="changes"'), html.indexOf('</section>', html.indexOf('id="changes"')));
+  assert.ok(!/#[0-9a-f]{6}/i.test(sec), 'hex code in What changed');
+  assert.ok(!/<dt>(Colours|Fonts)<\/dt>/.test(sec));
+  assert.ok(!/class="sw"|class="hx"/.test(sec));
+  assert.ok(!/\bwords\b/i.test(sec));
+  assert.ok(sec.includes('<dt>Logo</dt>') && sec.includes('<dt>Photos</dt>') && sec.includes('<dt>Services</dt>'));
+});
+
+test('a phone or email that is not shown gets no row and no "none found"', function () {
+  const html = renderRich(content({ email: null, phone: null }), null, ['One. Why: two.'], ownerOpts());
+  const sec = html.slice(html.indexOf('id="changes"'), html.indexOf('</section>', html.indexOf('id="changes"')));
+  assert.ok(!sec.includes('<dt>Email</dt>') && !sec.includes('<dt>Phone</dt>'));
+  assert.ok(!/none found|not found/i.test(sec));
+  const withBoth = renderRich(content(), null, ['One. Why: two.'], ownerOpts());
+  assert.ok(withBoth.includes('<dt>Email</dt><dd>a@acme.co.uk</dd>'));
+  assert.ok(withBoth.includes('<dt>Phone</dt>'));
+});
+
+test('no photo and no logo are described without claiming anything was missing from their site', function () {
+  const html = renderRich(content({ heroPhoto: null, photos: [], logo: '' }), null, ['One. Why: two.'], ownerOpts());
+  const sec = html.slice(html.indexOf('id="changes"'), html.indexOf('</section>', html.indexOf('id="changes"')));
+  assert.ok(sec.includes('No photo shown') && sec.includes('The name is shown as text'));
+  assert.ok(!/none found/i.test(sec));
+});
+
+test('services numbering: every number is there, in order, however many services or odd titles', function () {
+  const mk = function (titles) { return titles.map(function (t) { return { title: t, text: 'x', detail: '' }; }); };
+  const numbers = function (html) { return (html.match(/<article class="row reveal"><span class="n">(\d\d)<\/span>/g) || []).map(function (m) { return m.match(/(\d\d)<\/span>/)[1]; }); };
+  assert.deepStrictEqual(numbers(renderRich(content({ services: mk(['A', 'B', 'C', 'D', 'E', 'F']) }), null)), ['01', '02', '03', '04', '05', '06']);
+  // an empty or blank title is dropped and the rest close up, so 02 cannot go missing
+  assert.deepStrictEqual(numbers(renderRich(content({ services: mk(['A', '', '  ', 'B', null, 'C']) }), null)), ['01', '02', '03']);
+  // a number the site put in front of its own title is dropped, so ours is the only one
+  const html = renderRich(content({ services: mk(['01 Roofing', '02. Joinery', '3 axis milling', '24 hour callout']) }), null);
+  assert.deepStrictEqual(numbers(html), ['01', '02', '03', '04']);
+  assert.ok(html.includes('<h3>Roofing</h3>') && html.includes('<h3>Joinery</h3>'));
+  assert.ok(html.includes('<h3>3 axis milling</h3>') && html.includes('<h3>24 hour callout</h3>'));
+  assert.ok(renderRich(content({ services: mk(['A', '', 'B']) }), null, ['x. Why: y.'], ownerOpts()).includes('<dt>Services</dt><dd>2 taken'));
+});
+
+test('every page has the Prototype line at the top and the reply bar at the end, with or without options', function () {
+  [renderRich(content(), null), renderRich(content(), null, null, {}), renderRich(content(), null, null, ownerOpts()), renderRich(content({ phone: null, photos: [], heroPhoto: null }), null, [])].forEach(function (html, i) {
+    assert.ok(html.indexOf('<div class="banner" role="note">Prototype by Rhys Hume') > -1, 'banner ' + i);
+    assert.ok(html.indexOf('Prototype by Rhys Hume') < html.indexOf('<header class="nav">'), 'banner is above the nav ' + i);
+    const bar = html.indexOf('id="from-rhys"');
+    assert.ok(bar > html.indexOf('id="contact"') && bar < html.indexOf('<footer>'), 'reply bar after the page, before the footer ' + i);
+    assert.ok(html.includes('Reply by email'));
+  });
+});
+
+test('the reply bar only ever links to https or mailto', function () {
+  const html = renderRich(content(), null, null, { cta: { mail: 'javascript:alert(1)', book: 'http://x.test/' } });
+  assert.ok(!html.includes('javascript:'));
+  assert.ok(html.includes('id="from-rhys"'));
+});
+
+test('drawings claim: the quote form has the file field the page talks about, or the page says nothing about attachments', function () {
+  const L = { name: 'Name', email: 'Email', phone: 'Phone', need: 'Need', files: 'Drawings or photos (optional)' };
+  const withFiles = renderRich(content({ labels: L }), null, null, ownerOpts());
+  assert.ok(withFiles.includes('<input type="file" multiple>'));
+  assert.ok(withFiles.includes('"files":"Drawings or photos (optional)"'));
+  assert.ok(withFiles.includes('lets a visitor attach drawings or photos'));
+  assert.ok(withFiles.includes('nothing attached is kept'));
+  assert.ok(withFiles.includes("d.files?h('label'"));
+  const none = renderRich(content(), null, null, ownerOpts());
+  assert.ok(!none.includes('type="file"'));
+  assert.ok(none.includes('A quote form asks only what you need to price the job.'));
+  assert.ok(!/takes drawings and photos in one go/.test(none + withFiles));
+  const photosOnly = renderRich(content({ labels: Object.assign({}, L, { files: 'Photos of the job (optional)' }) }), null, null, ownerOpts());
+  assert.ok(photosOnly.includes('lets a visitor attach photos and'));
 });
