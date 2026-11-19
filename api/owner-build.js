@@ -1,7 +1,8 @@
 'use strict';
 
 /*
-  POST /api/owner-build   (JSON: { key, website, competitor? })
+  POST /api/owner-build   (JSON: { key, website, competitor?, niche? })
+  niche is optional: none, or one of the keys of NICHES in tools/preview.js (engineering, trades, hospitality, childcare, weddings).
   Rhys only. Builds one concept for one prospect website with the same engine as the public /upgrade button,
   but with no Turnstile and no Sheet limits, saves it under a private random link, and returns that link.
 
@@ -59,12 +60,15 @@ module.exports = async function handler(req, res) {
   const comp = body.competitor ? upgrade.cleanWebsite(body.competitor) : null;
   if (body.competitor && !comp) return json(res, 400, { ok: false, error: 'bad_competitor' });
   const competitorUrl = comp ? comp.url : undefined;
+  const nicheRaw = String(body.niche === undefined || body.niche === null ? '' : body.niche).trim().toLowerCase();
+  const niche = nicheRaw === '' || nicheRaw === 'none' ? undefined : nicheRaw;
+  if (niche && !Object.prototype.hasOwnProperty.call(preview.NICHES, niche)) return json(res, 400, { ok: false, error: 'bad_niche' });
   const deadline = Date.now() + BUDGET_MS;
   const slug = 'own-' + crypto.randomBytes(5).toString('hex');
   const outRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'owner-'));
   try {
     const result = await preview.run({
-      url: site.url, competitor: competitorUrl, slug: slug, apiKey: process.env.ANTHROPIC_API_KEY, model: process.env.ANTHROPIC_MODEL || undefined,
+      url: site.url, competitor: competitorUrl, niche: niche, slug: slug, apiKey: process.env.ANTHROPIC_API_KEY, model: process.env.ANTHROPIC_MODEL || undefined,
       fetchImpl: live.makeFetch(deadline), outRoot: outRoot, measure: false
     });
     const cta = { mail: 'mailto:' + REPLY_EMAIL + '?subject=' + encodeURIComponent('Re: the concept for ' + site.domain), book: process.env.OWNER_BOOK_URL || '' };
@@ -73,7 +77,7 @@ module.exports = async function handler(req, res) {
     await blob.put(id, html);
     console.log('owner-build: saved a concept for ' + site.domain);
     return json(res, 200, {
-      ok: true, host: site.host, link: BASE + '/c/' + id, problems: result.evidence ? result.evidence.problems.length : 0, compared: !!(result.evidence && result.evidence.compare),
+      ok: true, host: site.host, niche: niche || 'none', link: BASE + '/c/' + id, problems: result.evidence ? result.evidence.problems.length : 0, compared: !!(result.evidence && result.evidence.compare),
       warnings: (result.warnings || []).filter(function (w) { return !/screenshot|competitor/i.test(w); })
     });
   } catch (e) {

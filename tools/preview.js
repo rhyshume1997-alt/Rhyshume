@@ -3,7 +3,7 @@
 
 // Preview generator.
 //
-//   node tools/preview.js <prospect-url> <firm-slug> [competitor-url] [--name "Firm Name"] [--niche engineering] [--no-browser]
+//   node tools/preview.js <prospect-url> <firm-slug> [competitor-url] [--name "Firm Name"] [--niche engineering|trades|hospitality|childcare|weddings] [--no-browser]
 //
 // Fetches the prospect's home page plus up to 3 linked pages (services, about, contact),
 // asks the Claude API to write the new home page copy from that text only, checks the copy
@@ -437,7 +437,57 @@ const NICHES = {
     '- Closing ask: the page ends with a direct ask to send what they need built. You do not write it. The page adds it.',
     '- The page itself adds the phone and email bar, the Get a quote buttons (header and after each section) and the closing ask block. Do not write copy for them.',
     '- Never name or describe any customer, client, partner, brand or accreditation body of the firm. No third party names or logos on a cold preview. Describe the work, never who it was done for.'
+  ].join('\n'),
+  trades: [
+    '',
+    'Niche: local trades and building firms (for example joiners, builders, electricians, plumbers, roofers, heating engineers). Use these moves. Each one is used only if the site text gives the facts for it. If it does not, leave that part out (empty string or empty list).',
+    '- Hero line: say the trade and the town or area, using only what the site says. If the site names no area, say only the trade.',
+    '- Service cards: the jobs the site says the firm does, one short line each, in the site\'s own words (for example new builds, extensions, rewiring, boiler work). No filler lines and no jobs the site does not list.',
+    '- Area: the towns or counties the site says the firm covers. Never widen it.',
+    '- Closing ask: the page ends with a direct ask to get in touch about a job. You do not write it. The page adds it.',
+    '- The page itself adds the phone and email bar, the Get a quote buttons (header and after each section) and the closing ask block. Do not write copy for them.',
+    '- Never name or describe any customer, client, supplier, brand or accreditation body of the firm, and never write a registration or membership claim (for example a trade body or a scheme). No third party names or logos on a cold preview. Describe the work, never who it was done for.',
+    '- No promises of price, speed, availability or results, and no call-out times, free quotes or guarantees, even if the site makes them. The only place a site-stated reply time may go is the "replyTime" key.'
+  ].join('\n'),
+  hospitality: [
+    '',
+    'Niche: local food and drink places (for example delis, cafes, restaurants, takeaways, pubs, bakeries). Use these moves. Each one is used only if the site text gives the facts for it. If it does not, leave that part out (empty string or empty list).',
+    '- Hero line: say what kind of place it is and where, using only what the site says (for example a deli in a named town). If the site gives no town, say only what kind of place it is.',
+    '- Service cards: what the site says the place offers (for example eating in, takeaway, catering, a named kind of food), one short line each. Name a dish, product or price only if the site names it, and copy it exactly. Never invent a menu, a special or an ingredient claim such as fresh, homemade or local unless the site uses that word about that item.',
+    '- Opening hours and address: write them only if the site states them, copied exactly. If the site does not state them, leave them out. The page adds the phone and email itself.',
+    '- Closing ask: the page ends with a direct ask to get in touch. You do not write it. The page adds it.',
+    '- Never write a review, a rating, a star score, an award, a food hygiene rating or a quote from a customer, and never name or describe any customer, supplier, brand or accreditation body. No third party names or logos on a cold preview.',
+    '- Never promise a booking, a table, a delivery time, a stock level or availability. Allergen and dietary claims only if the site states them, copied exactly.'
+  ].join('\n'),
+  childcare: [
+    '',
+    'Niche: childcare and early years (for example nurseries, childminders, pre-schools, after-school clubs). Use these moves. Each one is used only if the site text gives the facts for it. If it does not, leave that part out (empty string or empty list).',
+    '- Hero line: say what kind of setting it is and where, using only what the site says. If the site gives no town, say only what kind of setting it is.',
+    '- Service cards: what the site says the setting offers (for example age groups, session types, activities), one short line each, in the site\'s own words. Copy any age range, session time or number of places exactly as the site gives it. Never invent one.',
+    '- Care and safety: write nothing about registration, inspection results, grades, qualifications, staff ratios, safeguarding or safety unless the site states it, and then copy it exactly. Never name a regulator or an inspection body.',
+    '- Never write a fee, a price, a funding offer or a free place unless the site states it, copied exactly.',
+    '- Closing ask: the page ends with a direct ask to get in touch. You do not write it. The page adds it.',
+    '- Never name or describe any child, parent, family, staff member or other person, and never write a review, testimonial or quote. No third party names or logos on a cold preview.',
+    '- No promises about a place, a start date, availability or outcomes for a child.'
+  ].join('\n'),
+  weddings: [
+    '',
+    'Niche: wedding businesses (for example venues, photographers, florists, planners, caterers, celebrants). Use these moves. Each one is used only if the site text gives the facts for it. If it does not, leave that part out (empty string or empty list).',
+    '- Hero line: say what the business does for a wedding and where, using only what the site says. If the site gives no area, say only what it does.',
+    '- Service cards: the services or packages the site lists, one short line each, in the site\'s own words. Copy any guest number, package name or price exactly as the site gives it, and only if the site states it. Never invent a package, a price or a capacity.',
+    '- Area: the places the site says the business works or the venue sits in. Never widen it.',
+    '- Closing ask: the page ends with a direct ask to enquire about a date. You do not write it. The page adds it.',
+    '- Never write a review, a testimonial, a quote or an award. Never name or describe any couple, guest, venue, supplier, brand or publication that the firm has worked with. No third party names or logos on a cold preview. Describe the work, never who it was done for.',
+    '- Never promise that a date is free or that a day will be perfect, and make no promise of availability, price or results.'
   ].join('\n')
+};
+
+// The words on the form and buttons are labels, not facts about the firm. The default set suits a firm that quotes for a job.
+const NICHE_LABELS = {
+  trades: { quoteButton: 'Get a quote', quoteHeading: 'Get a quote', quoteIntro: 'Tell us about the job. Attach photos if you have them.', need: 'About the job', files: 'Photos of the job (optional)' },
+  hospitality: { quoteButton: 'Get in touch', quoteHeading: 'Get in touch', quoteIntro: 'Send us a message.', need: 'Your message', files: 'Photos (optional)' },
+  childcare: { quoteButton: 'Get in touch', quoteHeading: 'Get in touch', quoteIntro: 'Send us a message about your child and what you are looking for.', need: 'Your message', files: 'Files (optional)' },
+  weddings: { quoteButton: 'Enquire', quoteHeading: 'Enquire', quoteIntro: 'Tell us about your day.', need: 'About your day', files: 'Photos (optional)' }
 };
 
 function buildSystem(niche) {
@@ -619,7 +669,8 @@ async function writeCopy(facts, pageTexts, competitor, opts) {
 // ---------------------------------------------------------------- content, page and notes
 
 // All the words on the page live here, so notes.md can show every line.
-function buildContent(facts, ai, slug) {
+function buildContent(facts, ai, slug, niche) {
+  const nl = niche && Object.prototype.hasOwnProperty.call(NICHE_LABELS, niche) ? NICHE_LABELS[niche] : null;
   const phone = facts.phones[0] || null;
   const email = facts.emails[0] || null;
   const photos = facts.photos.map(function (p) { return { src: p.src, alt: p.alt || 'Photo from the ' + facts.name + ' website' }; });
@@ -633,7 +684,8 @@ function buildContent(facts, ai, slug) {
     logo: facts.logo,
     phone: phone,
     email: email,
-    quoteButton: 'Get a quote',
+    niche: nl ? niche : '',
+    quoteButton: nl ? nl.quoteButton : 'Get a quote',
     callBar: phone ? 'Call ' + phone.display : '',
     headline: ai.headline,
     intro: ai.intro,
@@ -646,11 +698,11 @@ function buildContent(facts, ai, slug) {
     placeholder: /workshop/i.test(facts.text) ? 'Placeholder: your workshop photo here' : 'Placeholder: your photo here',
     aboutHeading: ai.about ? 'About' : '',
     about: ai.about,
-    quoteHeading: drawingSite ? 'Send us your drawing' : 'Get a quote',
-    quoteIntro: 'Tell us what you need. Attach your drawings or photos.',
+    quoteHeading: nl ? nl.quoteHeading : (drawingSite ? 'Send us your drawing' : 'Get a quote'),
+    quoteIntro: nl ? nl.quoteIntro : 'Tell us what you need. Attach your drawings or photos.',
     fileTypesLine: ai.fileTypes ? 'Files we take: ' + ai.fileTypes + '.' : '',
     replyLine: ai.replyTime ? 'Reply time: ' + ai.replyTime + '.' : '',
-    labels: { name: 'Name', email: 'Email', phone: 'Phone (optional)', need: 'What do you need?', files: 'Drawings or photos (optional)' },
+    labels: { name: 'Name', email: 'Email', phone: 'Phone (optional)', need: nl ? nl.need : 'What do you need?', files: nl ? nl.files : 'Drawings or photos (optional)' },
     send: 'Send',
     demoNote: 'Demo only. Nothing is sent from this form.',
     demoStatus: 'Demo only. Nothing was sent.',
@@ -1044,6 +1096,7 @@ async function run(opts) {
       host: bareHost(home.url),
       checkedOn: new Date().toISOString().slice(0, 10),
       problems: ev.topProblems(theirs, 6),
+      seo: ev.searchFacts(pages),
       compare: null, compHost: null
     };
     if (competitor && competitor.html) {
@@ -1057,7 +1110,7 @@ async function run(opts) {
 
   log('Writing copy with Claude');
   const written = await writeCopy(facts, pageTexts, competitor, { fetchImpl: fetchImpl, apiKey: opts.apiKey, model: opts.model || DEFAULT_MODEL, system: buildSystem(opts.niche) });
-  const content = buildContent(facts, written.ai, slug);
+  const content = buildContent(facts, written.ai, slug, opts.niche);
 
   const outRoot = opts.outRoot || path.join(ROOT, 'preview');
   const dir = path.join(outRoot, slug);
@@ -1102,7 +1155,7 @@ async function main(argv) {
   const noBrowser = args.indexOf('--no-browser');
   if (noBrowser !== -1) args.splice(noBrowser, 1);
   if (args.length < 2 || args.length > 3) {
-    console.error('Usage: node tools/preview.js <prospect-url> <firm-slug> [competitor-url] [--name "Firm Name"] [--niche engineering]');
+    console.error('Usage: node tools/preview.js <prospect-url> <firm-slug> [competitor-url] [--name "Firm Name"] [--niche engineering|trades|hospitality|childcare|weddings]');
     process.exit(1);
   }
   try {
@@ -1121,7 +1174,7 @@ async function main(argv) {
 }
 
 module.exports = {
-  NICHES, buildSystem, SYSTEM, BANNER, BANNED, esc, plain, htmlToText, pickLinks, extractFacts, checkCopy, normaliseAi,
+  NICHES, NICHE_LABELS, buildSystem, SYSTEM, BANNER, BANNED, esc, plain, htmlToText, pickLinks, extractFacts, checkCopy, normaliseAi,
   buildContent, copyLines, renderPage, renderNotes, buildPoints, assertPublicUrl, assertSlug, run,
   pickLogo, collectImages, cssUrls, bestSrcset, unwrapImageUrl, pickStylesheets, buildChangeNotes, buildTable, speedNote
 };

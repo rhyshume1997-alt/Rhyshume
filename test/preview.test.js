@@ -514,3 +514,92 @@ test('a reply that is not valid JSON gets one retry instead of failing the build
 test('two invalid JSON replies in a row still fail, with the parse error', async function () {
   await assert.rejects(generate(['not json at all {', '{"also": broken']), /JSON|json/);
 });
+
+// ---------------------------------------------------------------- local business niches
+
+const NEW_NICHES = ['trades', 'hospitality', 'childcare', 'weddings'];
+
+test('niche: the list is engineering plus trades, hospitality, childcare and weddings', function () {
+  assert.deepStrictEqual(Object.keys(gen.NICHES).sort(), ['childcare', 'engineering', 'hospitality', 'trades', 'weddings']);
+});
+
+test('niche: each new block sits after the unchanged base rules, in the same style as engineering', function () {
+  NEW_NICHES.forEach(function (n) {
+    const sys = gen.buildSystem(n);
+    assert.ok(sys.startsWith(gen.SYSTEM), n + ': base rules first and unchanged');
+    assert.match(sys, /\nNiche: /, n);
+    assert.match(sys, /Each one is used only if the site text gives the facts for it\. If it does not, leave that part out/, n);
+    assert.match(sys, /- Hero line: /, n);
+    assert.match(sys, /- Service cards: /, n);
+    assert.match(sys, /- Closing ask: .*You do not write it\. The page adds it\./, n);
+    assert.match(sys, /No third party names or logos on a cold preview/, n);
+    assert.ok(!/—/.test(sys), n + ': no em dash');
+  });
+});
+
+test('niche: every new block bans customers, reviews and promises in its own words', function () {
+  const need = {
+    trades: [/Never name or describe any customer, client, supplier, brand or accreditation body/, /never write a registration or membership claim/, /No promises of price, speed, availability or results/],
+    hospitality: [/Never write a review, a rating, a star score, an award, a food hygiene rating or a quote from a customer/, /never name or describe any customer, supplier, brand or accreditation body/, /Never promise a booking, a table, a delivery time/, /Never invent a menu/],
+    childcare: [/Never name or describe any child, parent, family, staff member or other person/, /never write a review, testimonial or quote/, /No promises about a place, a start date, availability or outcomes/, /write nothing about registration, inspection results/, /Never write a fee, a price, a funding offer or a free place unless the site states it/],
+    weddings: [/Never write a review, a testimonial, a quote or an award/, /Never name or describe any couple, guest, venue, supplier, brand or publication/, /Never promise that a date is free/, /Never invent a package, a price or a capacity/]
+  };
+  NEW_NICHES.forEach(function (n) {
+    const sys = gen.buildSystem(n);
+    need[n].forEach(function (re) { assert.match(sys, re, n + ' is missing ' + re); });
+  });
+});
+
+test('niche: no block uses a word the copy checker bans, so the model is never told to write one', function () {
+  NEW_NICHES.forEach(function (n) {
+    const block = gen.NICHES[n];
+    // Words in the block that sit inside a "never write" instruction are the ones the checker bans, so strip those clauses first.
+    const body = block.split('\n').filter(function (l) { return !/^- (Never|No promises)|never/i.test(l); }).join('\n');
+    assert.ok(!gen.BANNED.test(body), n + ': ' + (body.match(gen.BANNED) || [''])[0]);
+  });
+});
+
+test('niche: form words are set for each new niche and are not engineering words', function () {
+  assert.deepStrictEqual(Object.keys(gen.NICHE_LABELS).sort(), NEW_NICHES.slice().sort());
+  const facts = { name: 'Test Firm', host: 'test.example', logo: '', phones: [], emails: [], photos: [], text: 'we work from drawings' };
+  const ai = { headline: 'A', intro: 'B', area: '', about: '', proof: [], fileTypes: '', replyTime: '', services: [{ title: 'C', text: '', detail: '' }], comparison: '' };
+  const none = gen.buildContent(facts, ai, 't');
+  assert.strictEqual(none.quoteHeading, 'Send us your drawing');
+  assert.strictEqual(none.niche, '');
+  NEW_NICHES.forEach(function (n) {
+    const c = gen.buildContent(facts, ai, 't', n);
+    assert.strictEqual(c.niche, n);
+    [c.quoteButton, c.quoteHeading, c.quoteIntro].concat(Object.values(c.labels)).forEach(function (t) {
+      assert.ok(!/drawing/i.test(t), n + ' says drawing: ' + t);
+      assert.ok(!gen.BANNED.test(t) && !/—/.test(t), n + ' bad word in: ' + t);
+    });
+  });
+  assert.strictEqual(gen.buildContent(facts, ai, 't', 'hospitality').quoteButton, 'Get in touch');
+  assert.strictEqual(gen.buildContent(facts, ai, 't', 'weddings').quoteButton, 'Enquire');
+  assert.strictEqual(gen.buildContent(facts, ai, 't', 'trades').quoteButton, 'Get a quote');
+  assert.strictEqual(gen.buildContent(facts, ai, 't', 'engineering').quoteHeading, 'Send us your drawing');
+});
+
+test('niche: each new niche is what the API call sends, and shapes the page labels', async function () {
+  for (const n of NEW_NICHES) {
+    const r = await generate(GOOD, { niche: n });
+    assert.strictEqual(r.net.calls.api[0].system, gen.buildSystem(n), n);
+    assert.strictEqual(r.content.niche, n);
+    assert.strictEqual(r.content.quoteButton, gen.NICHE_LABELS[n].quoteButton);
+  }
+});
+
+test('niche: the build records what the page says about itself to a search engine', async function () {
+  const r = await generate(GOOD);
+  const seo = r.evidence.seo;
+  assert.strictEqual(seo.title, 'Welcome | Hartley Metalwork');
+  assert.strictEqual(seo.description, '');
+  assert.strictEqual(seo.phone, true);
+  assert.strictEqual(seo.mobile, false);
+  assert.strictEqual(seo.address, false);
+  assert.ok(seo.pagesRead >= 1);
+});
+
+test('niche: the command line help names every niche', function () {
+  assert.match(read('tools/preview.js'), /\[--niche engineering\|trades\|hospitality\|childcare\|weddings\]/);
+});
