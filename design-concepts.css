@@ -1,0 +1,90 @@
+/* Design concepts page. Uses home.css for the masthead, buttons and footer. Flat, hard edged, no gradients, shadows or blur.
+   Each exhibit wears its own concept's colours. Motion is transform and opacity only and is off for reduced motion. */
+.dcp { --bar: 3.5rem; }
+.dc-hero { padding-block: clamp(2.5rem, 7vw, 5rem) clamp(1.5rem, 4vw, 2.5rem); }
+.dc-hero-grid { display: grid; gap: 2.2rem 4rem; align-items: end; }
+@media (min-width: 62rem) { .dc-hero-grid { grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); } }
+.dc-hero h1 { font-size: clamp(2.2rem, 5vw, 3.9rem); font-weight: 700; line-height: 1.04; letter-spacing: -0.026em; margin: 1rem 0 1.3rem; max-width: 18ch; }
+.dc-notice { border: 2px solid var(--ink); background: var(--paper-2); padding: 1rem 1.2rem 1.1rem; }
+.dc-notice h2 { margin-bottom: 0.5rem; }
+.dc-notice p + p { margin-top: 0.7rem; }
+.dc-notice p { font-size: 0.97rem; color: var(--ink-2); }
+.dc-notice b { color: var(--ink); }
+
+.dc-tools { padding-block: 1rem 0.6rem; border-top: 1px solid var(--rule); }
+.dc-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.7rem; }
+.chip { font: 500 0.95rem/1.2 var(--sans); background: var(--paper); color: var(--ink); border: 1px solid var(--ink); border-radius: 2px; padding: 0.7rem 1rem; min-block-size: 2.75rem; cursor: pointer; transition: transform 120ms var(--ease-out); }
+.chip:active { transform: scale(0.98); }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.dc-count { margin-top: 0.7rem; font-size: 0.92rem; color: var(--ink-3); }
+
+.dc-layout { display: grid; gap: 1.5rem 3rem; padding-block: 1.5rem 3rem; }
+@media (min-width: 62rem) { .dc-layout { grid-template-columns: 11.5rem minmax(0, 1fr); } }
+.dc-index { display: none; }
+@media (min-width: 62rem) {
+  .dc-index { display: block; position: sticky; top: 1rem; align-self: start; }
+  .dc-index ol { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--rule); }
+  .dc-index a { display: flex; gap: 0.6rem; align-items: baseline; padding: 0.55rem 0.8rem; text-decoration: none; color: var(--ink-2); font: 500 0.9rem/1.25 var(--sans); border-left: 3px solid transparent; margin-left: -1px; }
+  .dc-index a span { font: 400 0.72rem var(--mono); color: var(--ink-3); }
+  .dc-index a[aria-current="true"] { color: var(--ink); border-left-color: var(--ink); background: var(--paper-2); font-weight: 600; }
+}
+.dc-list { display: grid; gap: clamp(2rem, 5vw, 3.5rem); min-width: 0; }
+
+/* an exhibit */
+.ex { --mute: color-mix(in srgb, var(--fg) 78%, var(--bg)); background: var(--bg); color: var(--fg); display: grid; gap: 1.2rem 2rem; padding: clamp(1.1rem, 3vw, 2rem); border: 1px solid color-mix(in srgb, var(--fg) 30%, var(--bg)); scroll-margin-top: 1rem; }
+.ex[hidden] { display: none; }
+.ex .label { color: var(--mute); }
+.ex h2 { color: var(--fg); font-size: clamp(1.7rem, 3.4vw, 2.6rem); font-weight: 700; letter-spacing: -0.022em; line-height: 1.05; }
+.ex h3.label { margin: 0 0 0.45rem; }
+.ex-head { display: flex; gap: 1rem; align-items: flex-start; grid-area: head; }
+.ex-n { font: 700 clamp(2.4rem, 6vw, 4.4rem)/0.9 var(--head); letter-spacing: -0.04em; color: var(--ac); }
+.ex-film { grid-area: film; position: relative; margin: 0; max-inline-size: 46rem; background: color-mix(in srgb, var(--fg) 14%, var(--bg)); }
+.ex-film video { display: block; inline-size: 100%; block-size: auto; aspect-ratio: 736 / 400; object-fit: cover; }
+.ex-film figcaption { font: 400 0.7rem/1.3 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--mute); padding-top: 0.45rem; }
+.ex-play { position: absolute; inset: auto auto 2rem 0.7rem; min-block-size: 2.75rem; min-inline-size: 4.4rem; padding: 0.5rem 0.9rem; border: 2px solid var(--fg); background: var(--bg); color: var(--fg); font: 600 0.9rem/1 var(--sans); border-radius: 2px; cursor: pointer; transition: transform 120ms var(--ease-out); }
+.ex-play:active { transform: scale(0.97); }
+.ex-play:focus-visible, .ex a:focus-visible, .ex button:focus-visible { outline: 3px solid var(--ac); outline-offset: 3px; }
+.ex-phone { grid-area: phone; inline-size: 7.2rem; block-size: auto; border: 3px solid var(--fg); background: var(--fg); justify-self: start; align-self: start; }
+.ex-copy { grid-area: copy; display: grid; gap: 0.85rem; align-content: start; }
+.ex-pitch { font: 600 clamp(1.15rem, 2vw, 1.4rem)/1.3 var(--head); letter-spacing: -0.012em; }
+.ex-copy p { color: var(--fg); max-width: 40rem; }
+.ex-cols { display: grid; gap: 1rem 2rem; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); margin-top: 0.3rem; }
+.ex-demo { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.35rem; }
+.ex-demo li { padding-left: 1.1rem; position: relative; font-size: 0.97rem; }
+.ex-demo li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 0.5rem; height: 2px; background: var(--ac); }
+.ex-sw { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem 0.8rem; }
+.ex-sw li { display: flex; align-items: center; gap: 0.4rem; }
+.sw { display: block; inline-size: 1.4rem; block-size: 1.4rem; border: 1px solid color-mix(in srgb, var(--fg) 55%, var(--bg)); }
+.hex { font: 400 0.72rem var(--mono); color: var(--mute); }
+.ex-fonts { font-size: 0.92rem; color: var(--mute); margin-top: 0.5rem; }
+.ex-demo-link { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; }
+.ex a.demo-link { display: inline-flex; align-items: center; min-block-size: 2.75rem; padding: 0.55rem 1rem; border: 2px solid var(--fg); color: var(--fg); background: transparent; font-weight: 600; text-decoration: none; border-radius: 2px; transition: transform 120ms var(--ease-out); }
+.ex a.demo-link[hidden] { display: none; }
+.demo-note { font-size: 0.9rem; color: var(--mute); }
+.demo-ready .demo-note { display: none; }
+.ex-notice { font: 400 0.72rem/1.4 var(--mono); letter-spacing: 0.05em; text-transform: uppercase; color: var(--mute) !important; border-top: 1px solid color-mix(in srgb, var(--fg) 30%, var(--bg)); padding-top: 0.7rem; }
+
+/* four different compositions */
+.ex { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "film" "phone" "copy"; }
+@media (min-width: 52rem) {
+  .ex-a { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); grid-template-areas: "head head" "film copy" "phone copy"; }
+  .ex-b { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-areas: "head head" "copy film" "copy phone"; }
+  .ex-b .ex-phone { justify-self: end; }
+  .ex-c { grid-template-columns: minmax(0, 1fr); grid-template-areas: "head" "film" "copy"; }
+  .ex-c .ex-film { max-inline-size: 100%; }
+  .ex-c .ex-phone { position: absolute; z-index: 2; inset: auto 1.6rem 1.6rem auto; }
+  .ex-c { position: relative; }
+  .ex-c .ex-film video { max-block-size: 26rem; }
+  .ex-c .ex-copy { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0.85rem 2.5rem; }
+  .ex-c .ex-pitch, .ex-c .ex-cols, .ex-c .ex-demo-link, .ex-c .ex-notice { grid-column: 1 / -1; }
+  .ex-d { grid-template-columns: minmax(0, 6fr) auto minmax(0, 5fr); grid-template-areas: "head head head" "film phone copy"; align-items: start; }
+  .ex-d .ex-phone { inline-size: 6.4rem; }
+}
+.ex-c .ex-film { max-inline-size: 100%; }
+
+/* reveal: only when the script is running and motion is allowed */
+@media (prefers-reduced-motion: no-preference) {
+  html.rv-on .ex { opacity: 0; transform: translateY(18px); }
+  html.rv-on .ex.in { opacity: 1; transform: none; transition: opacity 600ms var(--ease-out), transform 600ms var(--ease-out); }
+}
+.dcp .callbar + * { margin: 0; }

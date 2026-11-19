@@ -16,6 +16,22 @@
     items.forEach(function (el) { io.observe(el); });
   }
 
+
+  /* ---- the building example: pick how a visitor gets in touch and the page changes to match ---- */
+  var build = document.getElementById('build');
+  if (build) {
+    build.setAttribute('data-mode', 'call');
+    var says = { call: 'The example site shows a phone call button.', quote: 'The example site shows a quote request form.', book: 'The example site shows a booking choice.' };
+    var live = document.getElementById('build-live');
+    [].slice.call(build.querySelectorAll('.bc button')).forEach(function (b) {
+      b.addEventListener('click', function () {
+        build.setAttribute('data-mode', b.getAttribute('data-mode'));
+        [].slice.call(build.querySelectorAll('.bc button')).forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+        if (live) live.textContent = says[b.getAttribute('data-mode')];
+      });
+    });
+  }
+
   /* ---- before and after ---- */
   var ba = document.getElementById('ba');
   var input = ba && ba.querySelector('input[type="range"]');

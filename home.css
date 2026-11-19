@@ -286,3 +286,69 @@ html:not(.js) .ba input { display: none; }
   .steps li:nth-child(2) { min-height: 15rem; }
   .steps li:nth-child(3) { min-height: 19rem; }
 }
+
+/* =====================================================================
+   Flagship pass: the building example in the hero, the routes, the concepts strip.
+   Same rules as the rest of this file: flat, paper and navy, motion is transform and opacity only.
+   ===================================================================== */
+.build { margin: 0; max-width: 30rem; }
+@media (min-width: 62rem) { .build { margin-top: 2.2rem; } }
+.bw { --t-bg: #17212d; --t-fg: #f1f1ec; --t-ac: #f1b400; border: 2px solid var(--ink); background: var(--t-bg); color: var(--t-fg); }
+.build[data-mode="quote"] .bw { --t-bg: #f2eee6; --t-fg: #1d1c19; --t-ac: #c4442b; }
+.build[data-mode="book"] .bw { --t-bg: #1a1a1d; --t-fg: #ece6d8; --t-ac: #c9a05a; }
+.bw-bar { display: flex; align-items: center; gap: 0.35rem; padding: 0.45rem 0.6rem; border-bottom: 2px solid var(--ink); background: var(--paper); color: var(--ink); }
+.bw-bar i { width: 0.55rem; height: 0.55rem; border: 1.5px solid var(--ink); display: block; }
+.bw-bar span { margin-left: 0.5rem; font: 400 0.68rem var(--mono); color: var(--ink-3); letter-spacing: 0.04em; }
+.bw-body { padding: 0.8rem; display: grid; gap: 0.6rem; grid-template-columns: 1.15fr 1fr; grid-template-areas: "nav nav" "title img" "text img" "act act"; }
+.bw-nav { grid-area: nav; display: flex; gap: 0.5rem; justify-content: flex-end; border-bottom: 1px solid var(--t-fg); padding-bottom: 0.45rem; }
+.bw-nav span { display: block; width: 2rem; height: 0.4rem; background: var(--t-fg); }
+.bw-img { grid-area: img; border: 2px solid var(--t-ac); align-self: stretch; position: relative; overflow: hidden; min-block-size: 5.5rem; }
+.bw-img .pic { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 400ms var(--ease-out); }
+.build[data-mode="call"] .pic-call, .build[data-mode="quote"] .pic-quote, .build[data-mode="book"] .pic-book { opacity: 1; }
+.bw-title { grid-area: title; display: grid; gap: 0.35rem; align-content: end; }
+.bw-title i { display: block; height: 0.8rem; background: var(--t-fg); }
+.bw-title i:nth-child(2) { width: 62%; }
+.bw-text { grid-area: text; display: grid; gap: 0.3rem; }
+.bw-text i { display: block; height: 0.4rem; background: var(--t-fg); opacity: 0.7; }
+.bw-text i:nth-child(2) { width: 85%; } .bw-text i:nth-child(3) { width: 55%; }
+.bw-act { grid-area: act; min-block-size: 4.6rem; display: grid; align-items: center; }
+.act { display: none; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+.build[data-mode="call"] .act-call, .build[data-mode="quote"] .act-quote, .build[data-mode="book"] .act-book { display: flex; }
+.pill { display: inline-block; background: var(--t-ac); color: var(--t-bg); font: 600 0.78rem/1 var(--sans); padding: 0.6rem 0.9rem; border-radius: 2px; }
+.fld { display: block; flex: 1 1 5rem; height: 1.7rem; border: 1px solid var(--t-fg); }
+.slots { display: grid; grid-template-columns: repeat(3, 1.6rem); gap: 0.3rem; }
+.slots i { display: block; height: 1.4rem; border: 1px solid var(--t-fg); }
+.slots i:nth-child(2), .slots i:nth-child(5) { background: var(--t-ac); border-color: var(--t-ac); }
+.bc { display: flex; flex-wrap: wrap; margin-top: 0.8rem; }
+.bc button { font: 500 0.95rem/1.2 var(--sans); background: var(--paper); color: var(--ink); border: 1px solid var(--ink); margin-left: -1px; padding: 0.7rem 1rem; min-block-size: 2.75rem; cursor: pointer; border-radius: 0; flex: 1 1 auto; transition: transform 120ms var(--ease-out); }
+.bc button:first-child { margin-left: 0; }
+.bc button:active { transform: scale(0.98); }
+.bc button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.build figcaption { font-size: 0.92rem; color: var(--ink-2); margin-top: 0.7rem; line-height: 1.45; }
+.build figcaption b { color: var(--ink); }
+/* the example assembles once: blocks arrive in turn. Default (no script, reduced motion) is the finished example. */
+@media (prefers-reduced-motion: no-preference) {
+  html.js .build .b { animation: assemble 700ms var(--ease-out) calc(300ms + var(--i, 0) * 130ms) both; }
+  html.js .build .bw-bar { animation: fade 500ms var(--ease-out) 200ms both; }
+}
+@keyframes assemble { from { opacity: 0; transform: translate(var(--x, 0), var(--y, 20px)) rotate(var(--r, 0deg)); } }
+
+.routes { padding-block: clamp(1rem, 3vw, 2rem) clamp(2.5rem, 6vw, 4.5rem); border-top: 1px solid var(--rule); }
+.routes-grid { display: grid; gap: 2.2rem 4rem; padding-top: 2rem; }
+@media (min-width: 62rem) { .routes-grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: start; } .routes .tile { margin-top: 0; max-width: none; } }
+.route h2 { font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; margin: 0.5rem 0 0.9rem; max-width: 22ch; }
+.route p { max-width: 34rem; color: var(--ink-2); }
+.route p + p { margin-top: 0.8rem; }
+
+.concepts { padding-block: clamp(2.5rem, 6vw, 4.5rem); background: var(--paper-2); border-block: 1px solid var(--rule); }
+.cc-strip { list-style: none; margin: 2rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem 1rem; }
+@media (min-width: 48rem) { .cc-strip { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.6rem 1.2rem; } .cc-strip li:nth-child(4n+2) { margin-top: 1.6rem; } .cc-strip li:nth-child(4n+3) { margin-top: 0.6rem; } .cc-strip li:nth-child(4n) { margin-top: 2.4rem; } }
+.cc-strip a { display: grid; gap: 0.15rem; text-decoration: none; color: var(--ink); }
+.cc-strip img { width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border: 1px solid var(--rule); margin-bottom: 0.5rem; transition: transform 240ms var(--ease-out); }
+@media (hover: hover) and (pointer: fine) { .cc-strip a:hover img { transform: translateY(-4px); } }
+.cc-n { font: 400 0.72rem var(--mono); color: var(--ink-3); letter-spacing: 0.08em; }
+.cc-strip b { font: 700 1.05rem/1.2 var(--head); letter-spacing: -0.01em; }
+.cc-strip a > span:last-child { font-size: 0.9rem; color: var(--ink-3); }
+.cc-note { margin-top: 1.6rem; font: 400 0.72rem/1.4 var(--mono); letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-3); }
+.kind { padding-block: 2.2rem 0; }
+.kind .label { border-top: 2px solid var(--ink); padding-top: 0.8rem; color: var(--ink-2); }
