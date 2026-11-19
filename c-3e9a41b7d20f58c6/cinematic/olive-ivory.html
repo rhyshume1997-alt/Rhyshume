@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Olive &amp; Ivory cinematic proof of concept | Rhys Hume</title>
+<meta name="description" content="Proof of concept for a wedding photographer: an animated opening scene, an interactive contact sheet and a day told in moments. Concept only, not a live site.">
+<link rel="preload" href="../fonts/greatvibes-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../fonts/ibm-plex-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="cinematic.css">
+<style>
+body { --bg: #f6f0e7; --fg: #2c2a25; --acc: #5b6f55; --acc-ink: #fbf8f0; --ivory2: #ece4d5; --ph: #e4dccb; --rule: color-mix(in srgb, var(--fg) 22%, transparent); }
+.script { font-family: "Great Vibes", "Segoe Script", cursive; font-weight: 400; }
+.serif { font-family: "Newsreader", Georgia, serif; }
+
+/* masthead */
+.top { padding-block: 0.9rem; }
+.top-in { display: flex; align-items: center; gap: 0.6rem 1.4rem; flex-wrap: nowrap; }
+@media (max-width: 30rem) { .brand { font-size: 1.7rem; } .top nav { gap: 0.2rem 1rem; } }
+.brand { margin-inline-end: auto; text-decoration: none; font-size: 2rem; line-height: 1; color: var(--acc); padding-block: 0.3rem; }
+.top nav { display: flex; gap: 0.2rem 1.6rem; flex-wrap: wrap; }
+.top nav a { text-decoration: none; padding-block: 0.6rem; font-weight: 500; }
+.top .btn { display: none; }
+@media (min-width: 52rem) { .top .btn { display: inline-flex; } }
+
+/* 1. opening scene */
+.open { min-block-size: calc(100svh - 7.5rem); padding-block: clamp(0.5rem, 2vw, 1.5rem) clamp(2rem, 5vw, 4rem); }
+.open-in { display: grid; gap: 1.4rem 4rem; align-items: center; }
+@media (min-width: 56rem) { .open-in { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); } }
+.open-type .mono { color: color-mix(in srgb, var(--fg) 70%, transparent); }
+.names { font-size: clamp(3.4rem, 7.4vw, 6.6rem); line-height: 0.95; color: var(--acc); margin: 0.5rem 0 0.2rem -0.04em; padding-inline-end: 0.2em; }
+.line { font: 300 italic clamp(1.9rem, 4.2vw, 3.4rem)/1.08 "Newsreader", Georgia, serif; letter-spacing: -0.015em; max-inline-size: 14ch; }
+.sub { margin-block-start: 1.2rem; max-inline-size: 28rem; }
+.cta { margin-block-start: 1.8rem; display: flex; flex-wrap: wrap; gap: 0.8rem 1.4rem; align-items: center; }
+.stage { position: relative; justify-self: center; inline-size: min(100%, 31rem); }
+.plate-hero { aspect-ratio: 349 / 544; inline-size: 100%; max-block-size: calc(100svh - 12rem); margin-inline: auto; }
+.plate-small { position: absolute; inline-size: 38%; aspect-ratio: 358 / 544; inset: auto auto -9% -17%; z-index: 2; outline: 6px solid var(--bg); }
+.stage .cap { position: absolute; inset: auto 0 -2.2rem auto; text-align: end; color: color-mix(in srgb, var(--fg) 82%, transparent); }
+.scroll { margin-block-start: 2.2rem; display: inline-flex; gap: 0.8rem; align-items: center; }
+.scroll i { display: block; inline-size: 3rem; block-size: 1px; background: currentColor; transform-origin: left center; }
+@media (prefers-reduced-motion: no-preference) { .scroll i { animation: cue 2.4s var(--ease) infinite; } }
+@keyframes cue { 0% { transform: scaleX(0); } 60% { transform: scaleX(1); opacity: 1; } 100% { transform: scaleX(1); opacity: 0; } }
+@media (max-width: 55.99rem) {
+  .open { padding-block-start: 0; }
+  .open-in { gap: 1.2rem; }
+  .stage { order: -1; inline-size: 100%; margin-block-end: 3.4rem; }
+  .plate-hero { aspect-ratio: 4 / 5; max-block-size: 62svh; }
+  .plate-small { inline-size: 30%; inset: auto auto -7% 3%; }
+  .names { font-size: clamp(3.4rem, 17vw, 5rem); margin-block-start: 1.4rem; }
+  .stage .cap { display: none; }
+}
+
+/* 2. the proof sheet */
+.sheet { background: var(--ivory2); padding-block: clamp(3rem, 8vw, 6.5rem); }
+.sheet-head { max-inline-size: 40rem; }
+.sheet h2, .day h2, .rsvp h2 { font: 300 clamp(2rem, 4.6vw, 3.6rem)/1.06 "Newsreader", Georgia, serif; letter-spacing: -0.02em; margin-block-start: 0.5rem; }
+.sheet-head p:last-child { margin-block-start: 0.9rem; }
+.ruleg { inline-size: 4.5rem; block-size: 2px; background: var(--acc); margin-block-end: 1rem; transform-origin: left center; }
+.frames { margin-block-start: 2.4rem; display: grid; gap: 1.6rem 1.2rem; grid-template-columns: 1fr 1fr; align-items: start; }
+@media (min-width: 52rem) { .frames { grid-template-columns: 5fr 4fr 5fr 4fr; gap: 1.2rem; align-items: end; } .frames li:nth-child(2) { margin-block-end: 3.2rem; } .frames li:nth-child(4) { margin-block-end: 1.4rem; } }
+@media (max-width: 51.99rem) { .frames li:nth-child(even) { margin-block-start: 2.2rem; } }
+.frame { position: relative; display: block; inline-size: 100%; padding: 0; border: 0; background: var(--ph); aspect-ratio: 349 / 544; overflow: hidden; }
+.frame img { inline-size: 100%; block-size: 100%; object-fit: cover; transition: transform 500ms var(--ease); }
+@media (hover: hover) and (pointer: fine) { .frame:hover img { transform: scale(1.04); } }
+.frame .no { position: absolute; inset: 0 auto auto 0; z-index: 2; color: var(--bg); background: var(--fg); padding: 0.25rem 0.55rem; }
+.ring { position: absolute; inset: 7%; border: 3px solid var(--acc); border-radius: 50%; opacity: 0; transform: scale(1.18); transition: opacity 280ms var(--ease), transform 380ms var(--ease); pointer-events: none; z-index: 3; }
+.frame.kept .ring { opacity: 1; transform: none; }
+.frames .c { margin-block-start: 0.55rem; font-size: 0.95rem; display: flex; justify-content: space-between; gap: 0.6rem; }
+.kept-bar { margin-block-start: 2.6rem; display: flex; flex-wrap: wrap; gap: 0.6rem 1.4rem; align-items: center; min-block-size: 3rem; }
+.kept-bar ul { display: flex; gap: 0.5rem; }
+.kept-bar li { font: 400 0.8rem "IBM Plex Mono", monospace; padding: 0.35rem 0.6rem; border: 1px solid var(--acc); color: var(--acc); }
+/* develop: prints come up as the sheet scrolls in */
+@media (prefers-reduced-motion: no-preference) {
+  html.rv-on .frame { opacity: 0; transform: scale(1.05); }
+  html.rv-on .frames.in .frame { opacity: 1; transform: none; transition: opacity 900ms var(--ease) calc(var(--k, 0) * 140ms), transform 1100ms var(--ease) calc(var(--k, 0) * 140ms); }
+}
+
+/* print dialog */
+dialog#print { padding: 0.75rem; border: 0; margin: 0; background: transparent; color: var(--fg); inline-size: 100vw; block-size: 100dvh; max-inline-size: none; max-block-size: none; overflow: visible; }
+dialog#print[open] { display: grid; place-items: center; }
+dialog#print::backdrop { background: rgba(28, 26, 22, 0.72); }
+.pr { display: grid; background: var(--bg); inline-size: min(64rem, 100%); max-block-size: calc(100dvh - 1.5rem); overflow: auto; }
+@media (min-width: 48rem) { .pr { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); } }
+.pr figure { background: var(--ph); aspect-ratio: 349 / 544; max-block-size: calc(100svh - 1.5rem); inline-size: 100%; justify-self: center; }
+@media (max-width: 47.99rem) { .pr figure { aspect-ratio: 4 / 5; max-block-size: 52svh; } }
+.pr figure img { inline-size: 100%; block-size: 100%; object-fit: cover; transform-origin: center; }
+.pr-side { padding: clamp(1.2rem, 3vw, 2.4rem); display: flex; flex-direction: column; gap: 0.7rem; justify-content: flex-end; }
+.pr-side h3 { font: 300 clamp(1.8rem, 3.4vw, 2.6rem)/1.08 "Newsreader", Georgia, serif; }
+.pr-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-block-start: 0.8rem; }
+.pr-actions button { min-block-size: 2.9rem; padding: 0.5rem 1rem; border: 1px solid var(--fg); background: transparent; font-weight: 500; }
+.pr-actions button.keep { background: var(--acc); border-color: var(--acc); color: var(--acc-ink); }
+.pr-actions button.keep[aria-pressed="true"] { background: transparent; color: var(--acc); }
+@media (prefers-reduced-motion: no-preference) { dialog#print { opacity: 0; transition: opacity 260ms var(--ease); } dialog#print.in { opacity: 1; } }
+
+/* 3. follow the day */
+.day { padding-block: clamp(3rem, 8vw, 6rem) 0; }
+.day-head { max-inline-size: 38rem; }
+.moments li { padding-block: 2.4rem; border-block-start: 1px solid var(--rule); }
+.moments .clock { font: 300 clamp(3.6rem, 12vw, 8.5rem)/0.95 "Newsreader", Georgia, serif; letter-spacing: -0.03em; color: var(--acc); }
+.moments h3 { font: 400 italic clamp(1.6rem, 3vw, 2.3rem)/1.1 "Newsreader", Georgia, serif; margin-block: 0.6rem 0.6rem; }
+.moments p { max-inline-size: 26rem; }
+.moments figure { margin-block-start: 1.2rem; max-inline-size: 22rem; }
+.moments figure img { inline-size: 100%; aspect-ratio: 349 / 544; object-fit: cover; background: var(--ph); }
+.seq-on .moments figure.inl { display: none; }
+.seq-on .day-grid { display: grid; gap: 0 4rem; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); align-items: start; }
+.seq-on .moments { grid-column: 2; grid-row: 1; }
+.seq-on .moments li { min-block-size: 78svh; display: flex; flex-direction: column; justify-content: center; border-block-start: 0; padding-block: 2rem; }
+.seq-on .moments .clock { color: color-mix(in srgb, var(--fg) 66%, var(--bg)); transition: color 500ms var(--ease); }
+.seq-on .moments li.on .clock { color: var(--acc); }
+.seq-on .day-plate { grid-column: 1; grid-row: 1; position: sticky; inset-block-start: 4.5rem; block-size: calc(100svh - 6rem); max-block-size: 44rem; align-self: start; display: grid; place-items: center; }
+.seq-on .thread { position: absolute; inset-block: 0; inset-inline-start: -2rem; inline-size: 2px; background: var(--rule); }
+.thread i { position: absolute; inset: 0; background: var(--acc); transform: scaleY(var(--tp, 0.25)); transform-origin: top; transition: transform 700ms var(--ease); }
+.day-plate .stack { position: relative; block-size: 100%; aspect-ratio: 349 / 544; max-inline-size: 100%; }
+.day-plate .stack picture, .day-plate .stack img { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; }
+.day-plate .stack picture { opacity: 0; transform: scale(1.05); transition: opacity 700ms var(--ease), transform 1100ms var(--ease); }
+.day-plate .stack picture.on { opacity: 1; transform: none; }
+.day-plate .lab { position: absolute; inset: auto auto -1.9rem 0; color: color-mix(in srgb, var(--fg) 82%, transparent); }
+.day-plate { display: none; }
+.seq-on .day-plate { display: grid; }
+.day-grid { position: relative; }
+@media (max-width: 55.99rem) {
+  .seq-on .day-grid { grid-template-columns: 1fr; }
+  .seq-on .moments { grid-column: 1; grid-row: 2; }
+  .seq-on .day-plate { grid-column: 1; grid-row: 1; inset-block-start: 0.4rem; block-size: 40svh; z-index: 5; background: var(--bg); padding-block-end: 0.6rem; border-block-end: 1px solid var(--rule); }
+  .day-plate .stack { aspect-ratio: auto; inline-size: 100%; }
+  .seq-on .moments li { min-block-size: 62svh; }
+  .seq-on .thread { display: none; }
+  .day-plate .lab { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .seq-on .moments .clock { transition: none; } .day-plate .stack picture { transition: none; } .thread i { transition: none; } }
+
+/* 4. the reply card, an enquiry in the language of stationery */
+.rsvp { margin-block-start: clamp(3rem, 8vw, 6rem); background: var(--ivory2); padding-block: clamp(3rem, 8vw, 6rem); }
+.rsvp-in { display: grid; gap: 2rem 4rem; }
+@media (min-width: 56rem) { .rsvp-in { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); align-items: start; } }
+.rsvp .lead { margin-block-start: 1rem; max-inline-size: 26rem; }
+.card { position: relative; background: var(--bg); padding: clamp(1.4rem, 3vw, 2.4rem); border: 1px solid var(--rule); outline: 1px solid var(--rule); outline-offset: -0.7rem; min-block-size: 25rem; }
+.card header { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; color: var(--acc); }
+.card .qt { font: 300 italic 1.9rem/1.1 "Newsreader", Georgia, serif; margin-block: 1rem 1.2rem; }
+.card fieldset { border: 0; padding: 0; margin: 0; display: none; gap: 1rem; }
+.card fieldset.on { display: grid; }
+.card legend { padding: 0; }
+.card .nav { display: flex; gap: 0.6rem; margin-block-start: 1.4rem; flex-wrap: wrap; }
+.card .nav button { min-block-size: 3rem; padding: 0.6rem 1.3rem; border: 1px solid var(--fg); background: transparent; font-weight: 600; }
+.card .nav button.go { background: var(--acc); border-color: var(--acc); color: var(--acc-ink); }
+.card .nav [hidden] { display: none; }
+.chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.chips span { font: 400 0.8rem "IBM Plex Mono", monospace; padding: 0.4rem 0.7rem; border: 1px solid var(--acc); color: var(--acc); }
+.done { display: none; margin-block-start: 1.6rem; }
+.card.sent .steps, .card.sent .nav { display: none; }
+.card.sent .done { display: block; }
+.done h3 { font: 300 italic 1.9rem/1.1 "Newsreader", Georgia, serif; margin-block: 0.8rem; }
+.done dl { display: grid; grid-template-columns: auto 1fr; gap: 0.4rem 1rem; margin: 1rem 0; font-size: 0.95rem; }
+.done dt { font: 400 0.72rem "IBM Plex Mono", monospace; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.7; padding-block-start: 0.2rem; }
+.done dd { margin: 0; }
+.stamp { display: inline-block; font: 400 0.95rem "IBM Plex Mono", monospace; letter-spacing: 0.14em; text-transform: uppercase; color: var(--acc); border: 2px solid var(--acc); padding: 0.5rem 0.9rem; transform: rotate(-3deg); }
+@media (prefers-reduced-motion: no-preference) { .card.sent .stamp { animation: stamp 520ms var(--ease) both; } }
+@keyframes stamp { from { opacity: 0; transform: rotate(-3deg) scale(1.5); } }
+.js-only { display: none; }
+.js .js-only { display: block; }
+.js .nojs { display: none; }
+
+/* sticky enquiry bar on phones */
+.callbar { display: none; }
+@media (max-width: 47.99rem) {
+  .callbar { position: fixed; inset: auto 0 0 0; z-index: 60; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 0.6rem; background: var(--fg); color: var(--bg); padding: 0.4rem 0.8rem calc(0.4rem + env(safe-area-inset-bottom, 0px)); }
+  .callbar .mono { font-size: 0.7rem; }
+  .callbar a { display: inline-flex; align-items: center; min-block-size: 2.9rem; padding: 0 1.1rem; background: var(--acc); color: var(--acc-ink); text-decoration: none; font-weight: 600; }
+  body { padding-block-end: 3.9rem; }
+}
+</style>
+<script>document.documentElement.classList.add("js")</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<div class="banner">Concept by Rhys Hume, not a live site. Sample business. The photographs are generated concept images, not photographs of a real business, customers or work. <a href="./">All proofs</a></div>
+
+<header class="top"><div class="wrap top-in">
+  <a class="brand script" href="#open" aria-label="Olive &amp; Ivory, back to the top">Olive &amp; Ivory</a>
+  <nav aria-label="Main"><a href="#sheet">The sheet</a><a href="#day">The day</a><a href="#enquire">Reply</a></nav>
+  <a class="btn" href="#enquire">Check my date</a>
+</div></header>
+
+<main id="main">
+<section class="open" id="open" aria-labelledby="h1"><div class="wrap open-in">
+  <div class="open-type">
+    <p class="mono fade">Wedding photography, Scotland</p>
+    <h1 id="h1" class="names script"><span class="write">Olive &amp; Ivory</span><span class="vh">, wedding photography in Scotland</span></h1>
+    <p class="line rise" style="--d:1100ms">A day, as it was.</p>
+    <p class="sub rise" style="--d:1250ms">Documentary wedding photography in natural light. The moments you would never think to ask for.</p>
+    <div class="cta rise" style="--d:1400ms"><a class="btn" href="#enquire">Check my date</a><a class="tlink" href="#sheet">See the proof sheet</a></div>
+    <p class="scroll mono fade" style="--d:1800ms"><i aria-hidden="true"></i>Scroll</p>
+  </div>
+  <div class="stage rise" style="--d:200ms; --y:26px">
+    <figure class="plate plate-hero" id="hero-plate" data-mode="cloth">
+      <picture><source srcset="img/oi-03-dress-window@2x.webp" type="image/webp"><img src="img/oi-03-dress-window.jpg" width="698" height="1088" alt="A wedding dress on a hanger in a tall window, daylight coming through old curtains. A generated concept image." fetchpriority="high"></picture>
+    </figure>
+    <figure class="plate plate-small" aria-hidden="true">
+      <picture><source srcset="img/oi-01-couple-walking.webp" type="image/webp"><img src="img/oi-01-couple-walking.jpg" width="358" height="544" alt="" loading="lazy"></picture>
+    </figure>
+    <p class="cap mono">Frame 01 of the day. Generated concept image.</p>
+  </div>
+</div></section>
+
+<section class="sheet" id="sheet" aria-labelledby="sheet-h"><div class="wrap">
+  <div class="sheet-head rv">
+    <div class="ruleg" aria-hidden="true"></div>
+    <p class="mono">Proof sheet</p>
+    <h2 id="sheet-h">The day, as a contact sheet.</h2>
+    <p>Choose a frame to see it larger. Keep the moments you love, and they come with you to the reply card. This proof shows four frames; a full sheet holds the day from first light to the last dance.</p>
+  </div>
+  <ol class="frames" id="frames">
+    <li><button class="frame" type="button" data-i="0" aria-haspopup="dialog" aria-label="Open frame 01, getting ready"><span class="no mono">01</span><picture><source srcset="img/oi-03-dress-window@2x.webp" type="image/webp"><img src="img/oi-03-dress-window.jpg" width="698" height="1088" alt="A wedding dress hanging in a tall window." loading="lazy"></picture><span class="ring" aria-hidden="true"></span></button><p class="c"><span>Getting ready</span><span class="mono">08:40</span></p></li>
+    <li><button class="frame" type="button" data-i="1" aria-haspopup="dialog" aria-label="Open frame 02, the details"><span class="no mono">02</span><picture><source srcset="img/oi-02-flowers@2x.webp" type="image/webp"><img src="img/oi-02-flowers.jpg" width="790" height="1088" alt="A bouquet of white roses on a stone sill." loading="lazy"></picture><span class="ring" aria-hidden="true"></span></button><p class="c"><span>The details</span><span class="mono">11:20</span></p></li>
+    <li><button class="frame" type="button" data-i="2" aria-haspopup="dialog" aria-label="Open frame 03, the vows"><span class="no mono">03</span><picture><source srcset="img/oi-04-rings-vows@2x.webp" type="image/webp"><img src="img/oi-04-rings-vows.jpg" width="664" height="1088" alt="Two hands joined during the vows, a book open behind." loading="lazy"></picture><span class="ring" aria-hidden="true"></span></button><p class="c"><span>The vows</span><span class="mono">14:00</span></p></li>
+    <li><button class="frame" type="button" data-i="3" aria-haspopup="dialog" aria-label="Open frame 04, golden hour"><span class="no mono">04</span><picture><source srcset="img/oi-01-couple-walking@2x.webp" type="image/webp"><img src="img/oi-01-couple-walking.jpg" width="716" height="1088" alt="A couple walking hand in hand through long grass towards a castle, low evening sun." loading="lazy"></picture><span class="ring" aria-hidden="true"></span></button><p class="c"><span>Golden hour</span><span class="mono">18:30</span></p></li>
+  </ol>
+  <div class="kept-bar" id="kept" aria-live="polite"><span class="mono">Moments you kept</span><ul id="kept-list"></ul><span class="hint" id="kept-none">None yet. Open a frame and choose Keep this moment.</span></div>
+</div></section>
+
+<dialog id="print" aria-labelledby="pr-t" aria-describedby="pr-c">
+  <div class="pr">
+    <figure id="pr-fig"><picture id="pr-pic"><img id="pr-img" src="" alt="" width="698" height="1088"></picture></figure>
+    <div class="pr-side">
+      <p class="mono" id="pr-no"></p>
+      <h3 id="pr-t"></h3>
+      <p id="pr-c"></p>
+      <div class="pr-actions"><button type="button" class="keep" id="pr-keep" aria-pressed="false">Keep this moment</button><button type="button" id="pr-prev">Previous</button><button type="button" id="pr-next">Next</button><button type="button" id="pr-close">Close</button></div>
+      <p class="hint">Arrow keys move between frames. Escape closes.</p>
+    </div>
+  </div>
+</dialog>
+
+<section class="day" id="day" aria-labelledby="day-h"><div class="wrap">
+  <div class="day-head rv"><div class="ruleg" aria-hidden="true"></div><p class="mono">Follow the day</p><h2 id="day-h">One day, in moments.</h2><p class="mono" style="margin-block-start:.8rem;opacity:.7">An example day, not a promise of times</p></div>
+  <div class="day-grid" id="day-grid" style="margin-block-start:2rem">
+    <div class="day-plate" aria-hidden="false"><div class="stack" id="stack"></div><span class="lab mono" id="stack-lab"></span></div>
+    <div class="thread" aria-hidden="true"><i></i></div>
+    <ol class="moments" id="moments">
+      <li data-i="0"><p class="clock">08:40</p><h3>Getting ready</h3><p>The room before everyone arrives. A dress by the window, and a few minutes that belong only to you.</p><figure class="inl"><picture><source srcset="img/oi-03-dress-window@2x.webp" type="image/webp"><img src="img/oi-03-dress-window.jpg" width="698" height="1088" alt="A wedding dress hanging in a tall window." loading="lazy"></picture></figure></li>
+      <li data-i="1"><p class="clock">11:20</p><h3>The details</h3><p>Flowers, rings, stationery. The small things you spent months choosing, photographed once and properly.</p><figure class="inl"><picture><source srcset="img/oi-02-flowers@2x.webp" type="image/webp"><img src="img/oi-02-flowers.jpg" width="790" height="1088" alt="A bouquet of white roses on a stone sill." loading="lazy"></picture></figure></li>
+      <li data-i="2"><p class="clock">14:00</p><h3>The vows</h3><p>Seen from where the guests sit and from where you stand. Hands, faces, the pause before the words.</p><figure class="inl"><picture><source srcset="img/oi-04-rings-vows@2x.webp" type="image/webp"><img src="img/oi-04-rings-vows.jpg" width="664" height="1088" alt="Two hands joined during the vows." loading="lazy"></picture></figure></li>
+      <li data-i="3"><p class="clock">18:30</p><h3>Golden hour</h3><p>Ten minutes away from everyone, with the light low and nothing to organise.</p><figure class="inl"><picture><source srcset="img/oi-01-couple-walking@2x.webp" type="image/webp"><img src="img/oi-01-couple-walking.jpg" width="716" height="1088" alt="A couple walking through long grass towards a castle at sunset." loading="lazy"></picture></figure></li>
+    </ol>
+  </div>
+</div></section>
+
+<section class="rsvp" id="enquire" aria-labelledby="rsvp-h"><div class="wrap rsvp-in">
+  <div class="rv"><div class="ruleg" aria-hidden="true"></div><p class="mono">Reply</p><h2 id="rsvp-h">Will you tell me your date?</h2><p class="lead">Four short questions. The moments you kept come with you. This is a demonstration: nothing is sent, saved or stored.</p></div>
+  <div>
+    <noscript><p class="note">The demonstration reply card needs JavaScript. Nothing would be sent either way.</p></noscript>
+    <div class="js-only">
+    <form class="card" id="rsvp" action="#" novalidate onsubmit="return false">
+      <header class="mono"><span>RSVP</span><span id="stepno" aria-live="polite">Step 1 of 4</span></header>
+      <div class="steps">
+        <fieldset class="on" data-s="1"><legend class="qt">When is the day?</legend><label>Date, or a month if you are not sure<input type="text" id="f-date" autocomplete="off" placeholder="For example, June next year"></label></fieldset>
+        <fieldset data-s="2"><legend class="qt">Where will it be?</legend><label>Venue or town<input type="text" id="f-where" autocomplete="off"></label><label>Region<select id="f-region"><option>Not sure yet</option><option>Highlands and Islands</option><option>Central Belt</option><option>Borders</option><option>South West</option><option>North East</option></select></label></fieldset>
+        <fieldset data-s="3"><legend class="qt">What matters most?</legend><div><p class="mono" style="margin-block-end:.5rem">Moments you kept</p><div class="chips" id="chips"></div></div><label>Anything else you want captured?<textarea id="f-more"></textarea></label></fieldset>
+        <fieldset data-s="4"><legend class="qt">Who am I writing back to?</legend><label>Your names<input type="text" id="f-name" autocomplete="off"></label><label>Email<input type="email" id="f-mail" autocomplete="off"></label><p class="hint">Please do not enter real details. This demonstration does not send or keep anything.</p></fieldset>
+      </div>
+      <div class="nav"><button type="button" id="back" hidden>Back</button><button type="button" class="go" id="nextstep">Next</button><button type="submit" class="go" id="send" hidden>Send my reply</button></div>
+      <div class="done" id="done" role="status" tabindex="-1"><span class="stamp">Demo, nothing sent</span><h3>Thank you. This is how it would look.</h3><dl id="summary"></dl><button type="button" id="again" class="btn ghost">Start again</button></div>
+    </form>
+    </div>
+  </div>
+</div></section>
+</main>
+
+<footer class="foot"><div class="wrap">
+  <p class="mono">Concept by Rhys Hume, not a live site.</p>
+  <p>Olive &amp; Ivory is a fictional business. The photographs are generated concept images and are not photographs of a real business, customers or completed client work. The reply card is a demonstration: it sends, stores and books nothing. Times are an example day.</p>
+  <p><a href="salt-ember.html">See the Salt &amp; Ember proof</a> · <a href="./">All proofs</a></p>
+</div></footer>
+
+<div class="callbar" aria-label="Enquire"><span class="mono">Concept, nothing is sent</span><a href="#enquire">Check my date</a></div>
+
+<script src="scene.js"></script>
+<script src="olive.js"></script>
+</body>
+</html>
