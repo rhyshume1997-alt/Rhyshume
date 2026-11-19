@@ -2,7 +2,7 @@
 
 /*
   POST /api/contact
-  Takes the contact form (/contact), the local business form (/local-business) and the council digital grants form (/council-digital-grants),
+  Takes the contact form (/contact, a three step free preview request), the local business form (/local-business) and the council digital grants form (/council-digital-grants),
   sent as application/x-www-form-urlencoded, and emails the enquiry to Rhys with Resend.
 
   Environment variables (set in Vercel, Project Settings, Environment Variables):
@@ -55,6 +55,19 @@ const FORMS = {
       ['phone', 'Phone', 30, false],
       ['service', 'What do you need?', 60, true],
       ['message', 'Message', 5000, true, 'multi']
+    ]
+  },
+  preview: {
+    page: '/contact',
+    subject: 'New free preview request from rhyshume.co.uk',
+    fields: [
+      ['name', 'Name', 100, true],
+      ['company', 'Business name', 120, true],
+      ['trade', 'What they do', 60, true],
+      ['website', 'Current website', 200, false],
+      ['email', 'Email', 200, true],
+      ['phone', 'Phone', 30, false],
+      ['message', 'Anything I should know', 5000, false, 'multi']
     ]
   },
   grants: {
@@ -315,8 +328,8 @@ module.exports = async function handler(req, res) {
   const verdict = contactWords.classifyEnquiry(antispam, {
     name: d.name,
     company: d.company,
-    message: d.message || d.what_you_want_built,
-    service: d.service || d.council_area
+    message: d.message || d.what_you_want_built || '',
+    service: d.service || d.council_area || d.trade
   }, { threshold: QUARANTINE_THRESHOLD });
   if (verdict.quarantine) {
     // antispam.quarantineTarget reads QUOTE_QUARANTINE_TO, so this site's clearer name is passed in under that key.

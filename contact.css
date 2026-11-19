@@ -1,0 +1,56 @@
+/* /contact: the free preview stair. Loads after home.css. Motion is transform and opacity only. */
+.c-hero { padding-block: clamp(2.5rem, 7vw, 5rem) clamp(1.5rem, 3vw, 2.2rem); }
+.c-hero h1 { font-size: clamp(2.1rem, 5.6vw, 3.9rem); font-weight: 700; letter-spacing: -0.025em; line-height: 1.04; max-width: 17ch; margin-top: 0.9rem; }
+.c-hero .sub { margin-top: 1.1rem; max-width: 34rem; color: var(--ink-2); font-size: 1.1875rem; }
+
+.stair-sec { padding-block: 1rem clamp(3.5rem, 8vw, 6rem); }
+.stair-grid { display: grid; gap: clamp(2rem, 5vw, 4rem); align-items: start; }
+@media (min-width: 60rem) { .stair-grid { grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); } }
+
+.stair { border-top: 1px solid var(--rule); padding-top: 1.4rem; max-width: 36rem; }
+.progress { height: 3px; background: var(--accent-soft); margin-bottom: 1.6rem; overflow: hidden; }
+.progress .bar { display: block; height: 100%; background: var(--ink); transform-origin: left; transform: scaleX(0.3333); transition: transform 320ms var(--ease-out); }
+.js .stair .step { animation: step-in 260ms var(--ease-out) both; }
+@keyframes step-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .js .stair .step { animation: none; } .progress .bar { transition: none; } }
+.step { border: 0; padding: 0; margin: 0 0 2.4rem; min-inline-size: 0; }
+.step[hidden] { display: none; }
+.step legend { padding: 0; display: block; margin-bottom: 1.1rem; }
+.step .q { display: block; margin-top: 0.4rem; font: 700 clamp(1.5rem, 3.6vw, 2.1rem)/1.12 var(--head); letter-spacing: -0.02em; color: var(--ink); }
+
+.picks { display: grid; gap: 0.6rem; }
+.pick { display: block; cursor: pointer; }
+.pick input { position: absolute; opacity: 0; inline-size: 1px; block-size: 1px; }
+.pick span { display: block; padding: 0.95rem 1.1rem; border: 1px solid var(--rule); border-radius: 2px; background: #fff; font: 500 1.0625rem/1.3 var(--sans); color: var(--ink); transition: transform 120ms var(--ease-out); }
+.pick input:checked + span { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.pick input:focus-visible + span { outline: 2px solid var(--accent-ink); outline-offset: 3px; }
+@media (hover: hover) and (pointer: fine) { .pick:hover span { border-color: var(--ink); transform: translateX(3px); } }
+.pick:active span { transform: scale(0.99); }
+
+.field { margin-bottom: 1.1rem; }
+.field label { display: block; margin-bottom: 0.35rem; font: 500 0.9375rem/1.3 var(--sans); color: var(--ink-2); }
+.opt { color: var(--ink-3); font-weight: 400; }
+.field input, .field textarea { inline-size: 100%; padding: 0.8rem 0.9rem; border: 1px solid var(--rule); border-radius: 2px; background: #fff; font: 400 1.0625rem/1.4 var(--sans); color: var(--ink); }
+.field input:focus, .field textarea:focus { outline: 2px solid var(--accent-ink); outline-offset: 1px; border-color: var(--accent-ink); }
+.hp { position: absolute; inset-inline-start: -9999px; inline-size: 1px; block-size: 1px; overflow: hidden; }
+.nav { display: flex; flex-wrap: wrap; align-items: center; gap: 0.8rem 1.4rem; margin-top: 0.4rem; }
+.back { background: none; border: 0; padding: 0.5rem 0; font: 500 1rem/1.2 var(--sans); color: var(--accent-ink); text-decoration: underline; text-underline-offset: 0.2em; cursor: pointer; }
+.btn { border: 0; cursor: pointer; }
+.fine { margin-top: 1.1rem; font-size: 0.9375rem; color: var(--ink-3); max-width: 30rem; }
+.check { margin-block: 0.4rem 1.2rem; }
+.check-ok { margin-top: 0.5rem; font: 400 0.8125rem/1.3 var(--mono); color: #1f6b3a; }
+.check-msg { margin-top: 0.5rem; font-size: 0.9375rem; color: #9b2c2c; }
+
+.form-state { display: none; max-width: 36rem; padding: 1.2rem 1.3rem; margin-bottom: 1.6rem; border-left: 3px solid var(--ink); background: var(--accent-soft); }
+.form-state:target { display: block; }
+.form-state.is-error { border-left-color: #9b2c2c; background: #f3e4e4; }
+.form-state h2 { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.015em; margin-block: 0.5rem; }
+.form-state:target ~ .stair { display: none; }
+
+.next { border-top: 1px solid var(--ink); padding-top: 1rem; }
+.next ol { list-style: none; margin: 1rem 0 0; padding: 0; }
+.next li { display: grid; grid-template-columns: 2.6rem minmax(0, 1fr); gap: 0.8rem; padding-block: 1rem; border-top: 1px solid var(--rule); }
+.next li:first-child { border-top: 0; }
+.next .n { font: 400 0.8125rem/1.8 var(--mono); color: var(--accent-ink); }
+.next li p { color: var(--ink-2); }
+.next .alt { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--rule); color: var(--ink-2); font-size: 0.9375rem; }
