@@ -179,3 +179,11 @@ test('home page: a scroll-firmed statement and an honest list, using only facts 
   assert.ok(/@keyframes firm \{ from \{ opacity: 0\.18; \} \}/.test(css));
   assert.ok(/@supports \(animation-timeline: view\(\)\)/.test(css));
 });
+
+test('home page: trades band, slider unveil and progress line move only transform, and respect reduced motion', function () {
+  assert.ok(home.includes('class="marq"') && home.includes('Joiners') && home.includes('Electricians'));
+  assert.ok(/@keyframes drift \{ to \{ transform: translateX\(-50%\); \} \}/.test(css));
+  assert.ok(/@keyframes progress \{ to \{ transform: scaleX\(1\); \} \}/.test(css));
+  assert.ok(/prefers-reduced-motion: no-preference\) \{\s*\.marq-track/.test(css));
+  assert.ok(/prefers-reduced-motion: no-preference\) \{\s*html\.rv-on \.ba \.ba-stage::after/.test(css));
+});
