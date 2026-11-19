@@ -45,18 +45,19 @@ const MEET_FEATURES = [
   ['catalogue', 'Product catalogue', 'tag', 'A list of what you sell, without taking payment on the site'],
   ['shop', 'Online shop', 'buy', 'Customers can pay for products on your website'],
   ['customer', 'Customer area', 'person', 'A private place where customers can log in and see their own things'],
-  ['otherfeat', 'Other features', 'other', 'Something else you have in mind']
+  ['otherfeat', 'Other business functionality', 'other', 'Anything else the website should do for the business']
 ];
-const MEET_PREFS = [['colours', 'Colours'], ['fonts', 'Fonts and typography'], ['photos', 'Photographs'], ['layouts', 'Layouts'], ['anims', 'Animations'], ['mood', 'General atmosphere']];
+const MEET_PREFS = [['colours', 'Colours'], ['fonts', 'Fonts and typography'], ['photos', 'Photographs'], ['layouts', 'Page composition'], ['anims', 'Animations'], ['mood', 'General atmosphere']];
 const MEET_ASSETS = [
   ['logo', 'A logo', 'Your name or symbol, ready to use'],
   ['photos', 'Photographs', 'Pictures of your work, your premises, your team or your products'],
   ['videos', 'Videos', 'Short clips of your work or business'],
-  ['colfont', 'Brand colours and fonts', 'Colours and lettering you already use']
+  ['colfont', 'Existing branding', 'Colours, fonts or a style guide you already use'],
+  ['content', 'Website content', 'Words, prices lists, descriptions or other information for the pages']
 ];
 const MEET_CONCEPTS = __MEET_CONCEPTS__;
 const MEET_DEMO_BASE = '../c-3e9a41b7d20f58c6/cinematic/';
-const MEET_ONLINE_BASE = 'https://rhyshume-git-claude-cinematic-poc-rhsys-projects.vercel.app/c-3e9a41b7d20f58c6/cinematic/';
+const MEET_ONLINE_BASE = 'https://www.rhyshume.co.uk/website-concepts/';
 const MEET_RT = { files: {}, flash: '' };
 
 /* ---------- state ---------- */
@@ -70,7 +71,7 @@ function meetBlank() {
     inspo: [{ url: '', note: '' }, { url: '', note: '' }],
     feel: ['', '', ''], feelSt: '',
     pref: {},         /* overall words per category */
-    have: { logo: { v: '', who: '', note: '' }, photos: { v: '', who: '', note: '' }, videos: { v: '', who: '', note: '' }, colfont: { v: '', who: '', note: '' } },
+    have: { logo: { v: '', who: '', note: '' }, photos: { v: '', who: '', note: '' }, videos: { v: '', who: '', note: '' }, colfont: { v: '', who: '', note: '' }, content: { v: '', who: '', note: '' } },
     files: [], keepThumbs: true, newMedia: { v: '', note: '' },
     feat: {}, otherFeat: '', supply: {},
     review: { v: '', fix: '' },
@@ -97,6 +98,8 @@ const MEET_Q = [
   { id: 'logo', st: 3, q: 'Have you already got a logo?', help: 'Ask to see it. Is it in a file they can send, or only on a van or a letterhead?' },
   { id: 'photos', st: 3, q: 'Have you already got photographs?', help: 'Are they good enough, and who owns them? Do not use photos you cannot trace.' },
   { id: 'videos', st: 3, q: 'Have you already got videos?', help: 'Short clips only matter if they are good quality. Ask what is on them.' },
+  { id: 'colfont', st: 3, q: 'Have you already got branding, such as colours and fonts?', help: 'Ask for anything printed: letterhead, van, signage. Note the colours if they know them.' },
+  { id: 'content', st: 3, q: 'Have you already got the words and information for the website?', help: 'Services list, about text, opening times, prices. Who will write what they do not have?' },
   { id: 'feat', st: 4, q: 'What does your website need to have?', help: 'Everything ticked here is a request. None of it is in a quote until we agree it.' },
   { id: 'systems', st: 4, q: 'Is there any system you already use that should connect to the website?', help: 'For example a diary, accounts, a till or an email service. Ask who runs it.' },
   { id: 'understood', st: 5, q: 'Have I understood what you would like your website to look like and do?', help: 'Pause. Let them correct you. Fix the answers before you save.' }
@@ -109,7 +112,7 @@ function mAnswered(id) {
     case 'main': return !!m.main || mst('main') === 'unsure';
     case 'looks': return Object.keys(m.concepts).some(k => (m.concepts[k] || {}).v) || m.inspo.some(x => mclean(x.url)) || mst('looks') === 'unsure';
     case 'feel': return m.feel.some(x => mclean(x)) || m.feelSt === 'unsure';
-    case 'logo': case 'photos': case 'videos': return !!m.have[id].v;
+    case 'logo': case 'photos': case 'videos': case 'colfont': case 'content': return !!m.have[id].v;
     case 'feat': return Object.keys(m.feat).some(k => m.feat[k]) || mst('feat') === 'unsure';
     case 'understood': return !!m.review.v;
     default: return !!mt(id) || mst(id) === 'unsure';
@@ -119,7 +122,7 @@ function mUnsure(id) {
   const m = M();
   if (id === 'hasSite') return m.hasSite.v === 'unsure';
   if (id === 'feel') return m.feelSt === 'unsure';
-  if (['logo', 'photos', 'videos'].includes(id)) return m.have[id].v === 'unsure';
+  if (['logo', 'photos', 'videos', 'colfont', 'content'].includes(id)) return m.have[id].v === 'unsure';
   return mst(id) === 'unsure';
 }
 const mQState = id => mUnsure(id) ? 'unsure' : (mAnswered(id) ? 'answered' : 'open');
@@ -139,7 +142,7 @@ const mState = id => { const s = mQState(id); return `<span class="mstate s-${s}
 LIVE.mq = el => { const s = mQState(el.q); const c = document.querySelector('[data-live="mq"][data-q="' + el.q + '"]'); if (c) c.className = 'mstate s-' + s; return s === 'answered' ? 'Answered' : s === 'unsure' ? 'Not sure yet' : 'Not answered yet'; };
 LIVE.mprog = () => { const p = mProgress(); return `<span class="mpbar" aria-hidden="true"><i style="width:${p.pct}%"></i></span><span>${p.d} of ${p.t} questions answered</span>`; };
 const mnotes = i => `<div class="rhys mynotes"><b>My notes (never in the client copy)</b><textarea data-k="meet.notes.s${i}" rows="2" placeholder="Anything to remember or follow up">${esc((M().notes['s' + i]) || '')}</textarea></div>`;
-const mdemo = c => `<a class="mdemo" href="${MEET_DEMO_BASE}${c.slug}.html" target="_blank" rel="noopener">Open the working demo</a>`;
+const mdemo = c => `<div class="mdemos"><a class="mdemo" href="${MEET_DEMO_BASE}${c.slug}.html" target="_blank" rel="noopener">Open the working demo <small>(on this computer, works offline)</small></a><a class="mdemo2" href="${MEET_ONLINE_BASE}${c.slug}" target="_blank" rel="noopener">Online copy <small>(needs the internet)</small></a></div>`;
 
 /* ---------- the workbook screen: start, resume, saved clients ---------- */
 function meetBanner() {
@@ -173,6 +176,7 @@ function vMeeting() {
     <button class="btn" data-act="mimport">Import a discovery record (JSON)</button>
     <button class="btn" data-act="open">Open a saved project file</button>
    </div>
+   <div class="note warn2"><b>How this is protected, honestly.</b> Nothing leaves this computer. The meeting answers, saved clients and backup files are <b>not encrypted</b> and have <b>no password</b>: anyone who can use this computer, this browser or the backup files can read them. Presentation mode only hides things on screen, it is not security. Keep the computer locked and keep backup files somewhere private. The workbook's own email sign-in link protects only clients saved online, and "Work offline" does not need it.</div>
    <p class="hint">The full backup holds everything in this workbook, including your private notes and any quote work, so keep it to yourself. The client copy leaves out your notes and all commercial working. Neither stores passwords. Do not put real client records in the website repository.</p></section>
   <section class="sec"><h2><span class="n">4.0</span>After the meeting</h2><div class="mexp"><button class="btn" data-act="mprintclient">Print or save the client summary</button><button class="btn" data-act="mprintinternal">Print the internal record</button><button class="btn" data-act="mdlclient">Download the client summary (HTML)</button><button class="btn" data-act="msync">Update the rest of the workbook from this meeting</button></div>
    <p class="hint">This does not skip any stage. A discovery record is not a scope, a quote or a contract. Next: Questions to ask, Sites they like, What is in, then the quote.</p></section>`;
@@ -247,8 +251,11 @@ function mpref(slug, k, cur) { return `<div class="mpr"><span>${esc(k[1])}</span
 function mcard(c) {
   const m = M(); const cc = m.concepts[c.slug] || {}; const v = cc.v || '';
   const sw = c.palette.map(x => `<i style="background:${x}" title="${x}"></i>`).join('');
-  const detail = v ? `<div class="mdetail"><h3 class="mq3">What do you like or dislike about this one?</h3>
-     <label class="mf"><span class="mfl">Their words</span><textarea data-k="meet.concepts.${c.slug}.why" rows="3" placeholder="What they said about it">${esc(cc.why || '')}</textarea></label>
+  const detail = v ? `<div class="mdetail"><h3 class="mq3">What do you like about this?</h3>
+     <label class="mf"><span class="mfl">Their words</span><textarea data-k="meet.concepts.${c.slug}.why" rows="2" placeholder="What they like, in their words">${esc(cc.why || '')}</textarea></label>
+     <h3 class="mq3">What would you change?</h3>
+     <label class="mf"><span class="mfl">Their words</span><textarea data-k="meet.concepts.${c.slug}.change" rows="2" placeholder="What they would change or avoid">${esc(cc.change || '')}</textarea></label>
+     <h3 class="mq3">Which parts?</h3>
      <div class="mprefs" role="group" aria-label="Likes and dislikes for ${esc(c.name)}">${MEET_PREFS.map(k => mpref(c.slug, k, (cc.pref || {})[k[0]] || '')).join('')}</div></div>` : '';
   return `<article class="mcon ${v ? 'v-' + v : ''}"><div class="mshots"><img class="mdesk" src="${c.d}" width="720" height="450" alt="Desktop preview of the ${esc(c.name)} concept website" loading="lazy"><div class="mphone"><img src="${c.m}" alt="Phone preview of the ${esc(c.name)} concept website" loading="lazy"></div></div>
    <div class="mcb"><p class="mkind">${esc(c.kind)}, a made-up business</p><h3 class="mcn">${esc(c.name)}</h3><p>${esc(c.blurb)}</p><p class="mshow"><b>Shows:</b> ${esc(c.shows)}</p>
@@ -276,14 +283,12 @@ function stLook() {
 /* Stage 4 */
 function stAssets() {
   const m = M();
-  const rows = MEET_ASSETS.slice(0, 3).map(a => { const x = m.have[a[0]]; const qid = a[0]; return `<section class="mq"><div class="mqh"><h2 class="mql">${esc((MEET_Q.find(q => q.id === qid) || { q: 'Have you already got ' + a[1].toLowerCase() + '?' }).q)}</h2>${mState(qid)}</div>${mHelp(qid)}<p class="hint">${esc(a[2])}</p>${mseg('meet.have.' + a[0] + '.v', [['yes', 'Yes'], ['some', 'Some'], ['no', 'No'], ['unsure', 'Not sure']], x.v, 'mbig2')}
+  const rows = MEET_ASSETS.map(a => { const x = m.have[a[0]]; const qid = a[0]; return `<section class="mq"><div class="mqh"><h2 class="mql">${esc((MEET_Q.find(q => q.id === qid) || { q: a[1] }).q)}</h2>${mState(qid)}</div>${mHelp(qid)}<p class="hint">${esc(a[2])}</p>${mseg('meet.have.' + a[0] + '.v', [['yes', 'Yes'], ['some', 'Some'], ['no', 'No'], ['unsure', 'Not sure']], x.v, 'mbig2')}
     ${x.v === 'yes' || x.v === 'some' ? mta('meet.have.' + a[0] + '.note', { label: 'What exists, and what is missing', rows: 2 }) : ''}
     ${x.v && x.v !== 'unsure' ? `<label class="mf"><span class="mfl">Who will provide it?</span><select data-k="meet.have.${a[0]}.who" ${''}><option value="">Not decided</option><option value="client" ${x.who === 'client' ? 'selected' : ''}>The client will provide it</option><option value="rhys" ${x.who === 'rhys' ? 'selected' : ''}>Rhys will arrange it</option><option value="new" ${x.who === 'new' ? 'selected' : ''}>It needs to be made new</option></select></label>` : ''}</section>`; }).join('');
-  const cf = m.have.colfont;
   const files = m.files.map(f => { const rt = MEET_RT.files[f.id]; const src = rt ? rt.url : (f.thumb || ''); return `<li class="mfile">${src ? `<img src="${src}" alt="Preview of ${esc(f.name)}">` : '<span class="mnoimg">No preview</span>'}<div><b>${esc(f.name)}</b><span class="src">${esc(f.kind)}, ${Math.round(f.size / 1024)} KB, ${rt ? 'preview is temporary' : (f.thumb ? 'small preview saved' : 'name only saved')}</span></div><button type="button" class="btn sm2" data-act="mfilerm" data-id="${f.id}">Remove</button></li>`; }).join('');
   return `<p class="mlede">Let's see what you already have, so we know what is missing and who will provide it.</p>
   ${rows}
-  <section class="mq"><div class="mqh"><h2 class="mql">Brand colours and fonts</h2></div><p class="hint">${esc(MEET_ASSETS[3][2])}</p>${mseg('meet.have.colfont.v', [['yes', 'Yes'], ['some', 'Some'], ['no', 'No'], ['unsure', 'Not sure']], cf.v, 'mbig2')}${cf.v === 'yes' || cf.v === 'some' ? mta('meet.have.colfont.note', { label: 'What they use', rows: 2 }) : ''}</section>
   <section class="mq"><div class="mqh"><h2 class="mql">Pictures and files you can show me now</h2></div>
    <div class="mnote2"><b>What gets saved.</b> Files you choose here are only previewed on this computer for now. The saved project keeps each file's name and size. ${m.keepThumbs ? 'It also keeps a <b>small preview picture</b> (about 300 pixels wide) of images.' : 'No preview pictures are kept.'} <b>The original files are not stored in the saved project</b>, so ask the client to send them and keep them yourself.</div>
    <label class="chk"><input type="checkbox" data-k="meet.keepThumbs" ${m.keepThumbs ? 'checked' : ''} data-full="1"><span>Keep a small preview picture of images in the saved project</span></label>
@@ -319,7 +324,7 @@ const mLabel = (arr, k) => (arr.find(a => a[0] === k) || [k, k])[1];
 const mRole = v => ({ client: 'The client', rhys: 'Rhys', both: 'Both together', new: 'Needs to be made new' }[v] || '');
 const mAssetWord = v => ({ yes: 'Yes', some: 'Some', no: 'No', unsure: 'Not sure' }[v] || '');
 function meetModel() {
-  const m = M(); const o = { conf: [], prop: [], open: [] };
+  const m = M(); const o = { conf: [], prop: [], open: [], req: [], scope: [] };
   const add = (list, group, label, value, extra) => list.push(Object.assign({ group, label, value }, extra || {}));
   const ask = (id, group, label, text) => { const s = mQState(id); if (s === 'answered' && text) add(o.conf, group, label, text); else if (s === 'unsure') add(o.open, group, label, 'The client is not sure yet'); else add(o.open, group, label, 'Not asked or not answered yet'); };
   ask('does', 'Business', 'What the business does', mt('does')); ask('customers', 'Audience', 'Who the customers are', mt('customers'));
@@ -328,8 +333,8 @@ function meetModel() {
   if (picks.length) add(o.conf, 'Objective', 'What visitors should do', picks.join(', ')); else add(o.open, 'Objective', 'What visitors should do', mst('actions') === 'unsure' ? 'The client is not sure yet' : 'Not answered yet');
   if (m.main) add(o.conf, 'Objective', 'Matters most', mLabel(MEET_ACTIONS, m.main)); else if (picks.length > 1) add(o.open, 'Objective', 'Matters most', 'Not chosen yet');
   const liked = MEET_CONCEPTS.filter(c => (m.concepts[c.slug] || {}).v === 'love' || (m.concepts[c.slug] || {}).v === 'parts'), noped = MEET_CONCEPTS.filter(c => (m.concepts[c.slug] || {}).v === 'no');
-  liked.forEach(c => { const cc = m.concepts[c.slug]; add(o.conf, 'Style', (cc.v === 'love' ? 'Loved: ' : 'Likes parts of: ') + c.name, mclean(cc.why) || 'No reason recorded', { concept: c.slug }); });
-  noped.forEach(c => { const cc = m.concepts[c.slug]; add(o.conf, 'Style', 'Not for them: ' + c.name, mclean(cc.why) || 'No reason recorded', { concept: c.slug }); });
+  liked.forEach(c => { const cc = m.concepts[c.slug]; add(o.conf, 'Style', (cc.v === 'love' ? 'Loved: ' : 'Likes parts of: ') + c.name, (mclean(cc.why) || 'No reason recorded') + (mclean(cc.change) ? '. Would change: ' + mclean(cc.change) : ''), { concept: c.slug }); });
+  noped.forEach(c => { const cc = m.concepts[c.slug]; add(o.conf, 'Style', 'Not for them: ' + c.name, (mclean(cc.change) || mclean(cc.why)) || 'No reason recorded', { concept: c.slug }); });
   MEET_PREFS.forEach(k => { const t = mTally(k[0]); const w = mclean(m.pref[k[0]]); if (t.lk.length || t.dk.length || w) add(o.conf, 'Style', k[1], [t.lk.length ? 'Liked in ' + t.lk.join(', ') : '', t.dk.length ? 'Not for them in ' + t.dk.join(', ') : '', w ? 'Their words: ' + w : ''].filter(Boolean).join('. ')); });
   m.inspo.filter(x => mclean(x.url)).forEach(x => add(o.conf, 'Style', 'Website they like', mclean(x.url) + (mclean(x.note) ? ' (' + mclean(x.note) + ')' : '')));
   const feel = m.feel.map(mclean).filter(Boolean); if (feel.length) add(o.conf, 'Style', 'Three words for the feel', feel.join(', ')); else add(o.open, 'Style', 'Three words for the feel', m.feelSt === 'unsure' ? 'The client is not sure yet' : 'Not answered yet');
@@ -337,7 +342,7 @@ function meetModel() {
   MEET_ASSETS.forEach(a => { const x = m.have[a[0]]; if (x.v === 'yes' || x.v === 'some') add(o.conf, 'Assets', a[1], mAssetWord(x.v) + (mclean(x.note) ? '. ' + mclean(x.note) : '') + (x.who ? '. Provided by: ' + mRole(x.who) : '')); else if (x.v === 'no') add(o.conf, 'Assets', a[1], 'None' + (x.who ? '. ' + mRole(x.who) : '')); else add(o.open, 'Assets', a[1], x.v === 'unsure' ? 'The client is not sure' : 'Not asked yet'); });
   if (m.newMedia.v === 'yes' || m.newMedia.v === 'maybe') add(o.conf, 'Assets', 'New photography or film', (m.newMedia.v === 'yes' ? 'Requested' : 'Maybe') + (mclean(m.newMedia.note) ? '. ' + mclean(m.newMedia.note) : ''));
   m.files.forEach(f => add(o.conf, 'Assets', 'File shown in the meeting', f.name + ' (' + Math.round(f.size / 1024) + ' KB). The original is not stored in this record'));
-  const feats = MEET_FEATURES.filter(a => m.feat[a[0]]); feats.forEach(a => add(o.conf, 'Features', a[0] === 'otherfeat' && mclean(m.otherFeat) ? 'Other: ' + mclean(m.otherFeat) : a[1], 'Requested. ' + (a[0] === 'otherfeat' ? '' : a[3] + '. ') + 'Not in any quote yet'));
+  const feats = MEET_FEATURES.filter(a => m.feat[a[0]]); feats.forEach(a => add(o.req, 'Features', a[0] === 'otherfeat' && mclean(m.otherFeat) ? 'Other: ' + mclean(m.otherFeat) : a[1], 'Requested. ' + (a[0] === 'otherfeat' ? '' : a[3] + '. ') + 'Not in any quote yet'));
   if (!feats.length) add(o.open, 'Features', 'Pages and features', mst('feat') === 'unsure' ? 'The client is not sure yet' : 'Not answered yet');
   ask('systems', 'Dependencies', 'Systems to connect', mt('systems'));
   mPages().forEach(p => { const v = m.supply[p[0]]; if (v) add(o.conf, 'Dependencies', 'Words and photos for ' + p[1], mRole(v)); else add(o.open, 'Dependencies', 'Who supplies the words and photos for ' + p[1], 'Not decided'); });
@@ -352,6 +357,8 @@ function meetModel() {
   const stand = [['deadline', 'Deadline, and why that date'], ['budget', "Budget range, the client's own number"], ['updates', 'Who will update the site after launch'], ['success', 'What success looks like in 12 months']];
   stand.forEach(s => { if (!((S.disc.a || {})[s[0]] || '').trim()) add(o.open, 'Not yet discussed', s[1], 'Ask in the Questions to ask screen'); });
   add(o.open, 'Not yet discussed', 'Domain name, hosting and email', 'Not covered in this meeting');
+  o.scope.push({ group: 'Scope', label: 'Which pages and features are included', value: 'Not agreed. Everything requested above still has to be scoped' }, { group: 'Scope', label: 'Price', value: 'Not agreed. Nothing here is priced' }, { group: 'Scope', label: 'Dates and timing', value: 'Not agreed' }, { group: 'Scope', label: 'Who does what', value: 'To be written down as responsibilities, after this meeting' }, { group: 'Scope', label: 'Contract and written acceptance', value: 'Not started. These follow the quote and come before any work starts' });
+  o.next = ['Check this summary with the client and correct anything', 'Rhys turns the answers into a scope and responsibilities', 'A quote and statement of requirements follow for the client to review', 'Nothing starts until the quote has been agreed and accepted in writing'];
   return o;
 }
 function mGroup(list) { const g = {}; list.forEach(x => { (g[x.group] = g[x.group] || []).push(x); }); return g; }
@@ -364,7 +371,7 @@ function stReview() {
   const concepts = MEET_CONCEPTS.filter(c => (m.concepts[c.slug] || {}).v && (m.concepts[c.slug] || {}).v !== 'no');
   const thumbs = concepts.length ? `<div class="mthumbs">${concepts.map(c => `<figure><img src="${c.d}" alt="${esc(c.name)} concept" width="180" height="113"><figcaption>${esc(c.name)} (${m.concepts[c.slug].v === 'love' ? 'loved' : 'some parts'})</figcaption></figure>`).join('')}</div>` : '';
   return `<p class="mlede">Here is everything I heard. Read it together. Change anything that is not right.</p>
-  <div class="mrvgrid">${pick('Business', 0)}${pick('Audience', 0)}${pick('Objective', 1)}<section class="mrv"><div class="mrvh"><h2>Design ideas</h2><button type="button" class="btn sm2" data-act="mgo" data-i="2">Change</button></div>${thumbs}${(g.Style || []).length ? '<ul>' + g.Style.map(x => `<li><b>${esc(x.label)}</b><span>${esc(x.value)}</span></li>`).join('') + '</ul>' : '<p class="hint">Nothing recorded yet</p>'}</section>${pick('Assets', 3)}${pick('Features', 4)}${pick('Dependencies', 4)}</div>
+  <div class="mrvgrid">${pick('Business', 0)}${pick('Audience', 0)}${pick('Objective', 1)}<section class="mrv"><div class="mrvh"><h2>Design ideas</h2><button type="button" class="btn sm2" data-act="mgo" data-i="2">Change</button></div>${thumbs}${(g.Style || []).length ? '<ul>' + g.Style.map(x => `<li><b>${esc(x.label)}</b><span>${esc(x.value)}</span></li>`).join('') + '</ul>' : '<p class="hint">Nothing recorded yet</p>'}</section>${pick('Assets', 3)}${card('Requested functionality (requests only)', 4, o.req)}${pick('Dependencies', 4)}${card('Commercial scope still to be agreed', 5, o.scope)}<section class="mrv"><div class="mrvh"><h2>Next steps (proposed)</h2></div><ol>${o.next.map(x => `<li>${esc(x)}</li>`).join('')}</ol></section></div>
   <section class="mrv wide"><div class="mrvh"><h2>Still to find out</h2></div>${op.length ? '<ul>' + op.map(x => `<li><b>${esc(x.group)}: ${esc(x.label)}</b><span>${esc(x.value)}</span></li>`).join('') + '</ul>' : '<p>Nothing outstanding.</p>'}</section>
   ${qcard('understood', `${mseg('meet.review.v', [['yes', 'Yes, that is right'], ['partly', 'Mostly, a few changes'], ['no', 'No, let us go back']], m.review.v, 'mbig2')}${m.review.v === 'partly' || m.review.v === 'no' ? mta('meet.review.fix', { label: 'What should change?', rows: 3, ph: 'In their words' }) : ''}`, false)}
   <div class="mnote2"><b>What saving does.</b> It saves a <b>discovery record</b>: what the client said, and what is still open. It is not a quote, a scope, a contract or a final design. No price, date or promise is added.</div>
@@ -385,7 +392,7 @@ function meetSync() {
   if (S.client.business === '' && mclean(m.contact)) { /* nothing to guess */ }
   if (mt('customers') && msyncSet('disc.a.customers', mt('customers'))) n++;
   const goalsOwn = [mt('does') ? 'The business: ' + mt('does') : '', grp('Objective')].filter(Boolean).join('\n'); if (goalsOwn && msyncSet('disc.a.goalsOwn', goalsOwn)) n++;
-  const sumFeat = o.conf.filter(x => x.group === 'Features').map(x => x.label).join(', '); if (sumFeat && msyncSet('disc.a.musts', 'Requested in the client meeting (not yet agreed or priced): ' + sumFeat)) n++;
+  const sumFeat = o.req.map(x => x.label).join(', '); if (sumFeat && msyncSet('disc.a.musts', 'Requested in the client meeting (not yet agreed or priced): ' + sumFeat)) n++;
   const contentTxt = [grp('Assets')].filter(Boolean).join('\n'); if (contentTxt && msyncSet('disc.a.content', contentTxt)) n++;
   if (mt('systems') && msyncSet('disc.a.today', 'Systems they use now: ' + mt('systems'))) n++;
   const goalMap = { book: 'bookings', buy: 'sales', work: 'credibility', other: 'other' }; let rank = 1;
@@ -416,26 +423,29 @@ function meetClientHtml() {
   const thumbs = liked.length ? '<div>' + liked.map(c => `<figure class="c"><img src="${c.d}" alt="${esc(c.name)} concept"><figcaption>${esc(c.name)}, a made-up design example</figcaption></figure>`).join('') + '</div>' : '';
   const sec = (t, arr) => arr && arr.length ? `<h2>${t}</h2>${mUl(arr)}` : '';
   return `<main><p class="src">Website ideas summary${m.test ? ' (practice)' : ''}</p><h1>${esc(name)}</h1><p class="src">From our meeting${m.started ? ' on ' + esc(fmtDate(m.started.slice(0, 10))) : ''}. Prepared by ${esc(SETTINGS.preparedBy || 'Rhys Hume')}.</p>
-  <div class="box"><b>This is a summary of your ideas.</b> It is not a quote, a contract or a final design. No prices, dates or promises have been agreed. Nothing is agreed until it is written down and you have accepted it.</div>
+  <div class="box"><b>This is a summary of your ideas.</b> It is not a quote, a contract or a final design, and it is not formal scope. No prices, dates or promises have been agreed. Nothing is agreed until it is written down and you have accepted it.</div>
   ${sec('Your business', g.Business)}${sec('Who your customers are', g.Audience)}${sec('What your website should do', g.Objective)}
-  <h2>What you like</h2>${thumbs}${mUl(g.Style || [])}${sec('Photos and branding', g.Assets)}${sec('What you would like it to have', g.Features)}${sec('Who provides what', g.Dependencies)}
+  <h2>What you like, and what you would change</h2>${thumbs}${mUl(g.Style || [])}${sec('Photos and branding you have', g.Assets)}${sec('What you would like it to have (these are requests)', o.req)}${sec('Who provides what', g.Dependencies)}
   <h2>Still to find out</h2>${o.open.length ? '<ul>' + o.open.map(x => `<li>${esc(x.label)}: ${esc(x.value)}</li>`).join('') + '</ul>' : '<p>Nothing outstanding.</p>'}
-  <h2>What happens next</h2><p>Rhys will use this to put together a plan for you to look at. You can correct anything above. Nothing begins until we have agreed the plan and the price, and you have said yes in writing.</p>
-  <p class="src">The example websites you looked at are made-up designs by Rhys Hume, not real businesses. The pictures and films in them are generated examples.</p></main>`;
+  <h2>Still to be agreed together</h2><ul>${o.scope.map(x => `<li>${esc(x.label)}: ${esc(x.value)}</li>`).join('')}</ul>
+  <h2>What happens next</h2><ol>${o.next.map(x => `<li>${esc(x)}</li>`).join('')}</ol>
+  <p class="src">Please tell Rhys if anything above is wrong. The example websites you looked at are made-up designs by Rhys Hume, not real businesses. The pictures and films in them are generated examples.</p></main>`;
 }
 function meetInternalHtml() {
   const m = M(), o = meetModel(); const g = mGroup(o.conf); const name = S.client.business || 'Client';
-  const sec = (t, arr) => arr && arr.length ? `<h2>${t}</h2>${mUl(arr)}` : '';
+  const sec = (t, arr) => arr && arr.length ? `<h3>${t}</h3>${mUl(arr)}` : '';
   const notes = MEET_STAGES.map((s, i) => (m.notes['s' + i] || '').trim() ? `<li><b>${esc(s.n)}:</b> ${esc(m.notes['s' + i])}</li>` : '').join('');
   const wf = ['Discovery (this meeting, done)', 'Scope', 'Responsibilities', 'Quote', 'Statement of requirements', 'Contract', 'Written acceptance', 'Deposit', 'Build brief', 'Development', 'Testing', 'Client review', 'Handover', 'Care plan'];
-  return `<main><p class="src">INTERNAL MEETING RECORD. Not for the client.${m.test ? ' PRACTICE RUN.' : ''}</p><h1>${esc(name)}: discovery record</h1><p class="src">Status: ${esc(m.status)}. Started ${esc(m.started ? fmtDate(m.started.slice(0, 10)) : 'n/a')}. ${mProgress().d} of ${mProgress().t} questions answered.</p>
+  return `<main><p class="src">INTERNAL MEETING RECORD. Not for the client. Contains private notes.${m.test ? ' PRACTICE RUN.' : ''}</p><h1>${esc(name)}: design discovery record</h1><p class="src">Status: ${esc(m.status)}. Started ${esc(m.started ? fmtDate(m.started.slice(0, 10)) : 'n/a')}. ${mProgress().d} of ${mProgress().t} questions answered.</p>
   <div class="box"><b>Draft design brief, from the recorded answers only.</b> Nothing below is approved. No prices, dates or scope have been agreed.</div>
-  <h2>CONFIRMED CLIENT REQUIREMENTS</h2><p class="src">Said or picked by the client.</p>${sec('Business summary', g.Business)}${sec('Audience', g.Audience)}${sec('Primary website objective', g.Objective)}${sec('Desired visual style and preferred examples', g.Style)}${sec('Photography and brand assets', g.Assets)}${sec('Requested functionality (requests only, not in a quote)', g.Features)}${sec('Dependencies', g.Dependencies)}
-  <h2>CREATIVE PROPOSALS</h2><p class="src">Mine, based on the answers. Not agreed with the client.</p>${mUl(o.prop)}
-  <h2>NOT YET CONFIRMED</h2>${o.open.length ? '<ul>' + o.open.map(x => `<li><b>${esc(x.group)}: ${esc(x.label)}:</b> ${esc(x.value)}</li>`).join('') + '</ul>' : '<p>Nothing outstanding.</p>'}
-  <h2>Marked Not Yet Checked</h2><ul><li>Any grant eligibility or funding</li><li>Legal, contract and regulatory requirements for this business</li><li>The basis of the Tolra linked website discount, which must be confirmed before quoting. No discount is applied</li><li>Whether any concept imagery may be used (it is generated and fictional)</li></ul>
+  <h2>CONFIRMED CLIENT INFORMATION</h2><p class="src">Said or picked by the client.</p>${sec('Business', g.Business)}${sec('Audience', g.Audience)}${sec('What the website should achieve', g.Objective)}${sec('Style, examples, likes and dislikes', g.Style)}${sec('Existing assets', g.Assets)}${sec('Dependencies and who supplies what', g.Dependencies)}
+  <h2>CREATIVE IDEAS AND PROPOSALS</h2><p class="src">Mine, based on the answers. Not agreed with the client.</p>${mUl(o.prop)}
+  <h2>MISSING OR UNVERIFIED DETAILS</h2>${o.open.length ? '<ul>' + o.open.map(x => `<li><b>${esc(x.group)}: ${esc(x.label)}:</b> ${esc(x.value)}</li>`).join('') + '</ul>' : '<p>Nothing outstanding.</p>'}
+  <h3>Not Yet Checked</h3><ul><li>Any grant eligibility or funding</li><li>Legal, contract and regulatory requirements for this business</li><li>The basis of the Tolra linked website discount, which must be confirmed before quoting. No discount is applied</li><li>Whether any concept imagery may be used (it is generated and fictional)</li></ul>
+  <h2>REQUESTED FUNCTIONALITY</h2><p class="src">Requests only. None of it is in a quote.</p>${mUl(o.req)}
+  <h2>COMMERCIAL SCOPE STILL TO BE AGREED</h2>${mUl(o.scope)}<p class="src">Prices come only from the workbook price book. Quotes say Not VAT registered and carry no VAT line. No discount is applied automatically.</p>
   <h2>My notes</h2>${notes ? '<ul>' + notes + '</ul>' : '<p class="src">None.</p>'}${(m.notes.general || '').trim() ? '<p>' + esc(m.notes.general) + '</p>' : ''}
-  <h2>Where this sits in the process</h2><p>${wf.map((s, i) => `${i + 1}. ${esc(s)}`).join(' &rarr; ')}</p><p class="src">The meeting does not skip any step. Prices come only from the workbook price book. Quotes say Not VAT registered and carry no VAT line. No discount is applied automatically.</p></main>`;
+  <h2>Where this sits in the process</h2><p>${wf.map((s, i) => `${i + 1}. ${esc(s)}`).join(' &rarr; ')}</p><p class="src">The meeting does not skip any step.</p></main>`;
 }
 function meetPrint(html) {
   let a = document.getElementById('printArea'); if (!a) { a = document.createElement('div'); a.id = 'printArea'; document.body.appendChild(a); }
@@ -448,8 +458,8 @@ const mSafeName = () => (S.client.business || 'client').replace(/[^\w ]/g, '').t
 function meetRecord(kind) {
   const m = JSON.parse(JSON.stringify(M())); const o = meetModel();
   m.open = false; delete m.synced;
-  const rec = { app: 'rdh-discovery-record', v: 1, kind, exportedAt: mnow(), client: { business: S.client.business || '' }, practice: !!m.test, status: m.status, progress: mProgress(), meeting: m, brief: { confirmedClientRequirements: o.conf, creativeProposals: o.prop, notYetConfirmed: o.open }, note: 'A discovery record only. Not a quote, scope, contract or final design. No prices, dates or scope are agreed in it.' };
-  if (kind === 'client') { delete m.notes; delete rec.brief.creativeProposals; m.notes = {}; delete rec.meeting.contact; rec.note += ' Client copy: private notes and commercial working are left out.'; }
+  const rec = { app: 'rdh-discovery-record', v: 1, kind, exportedAt: mnow(), client: { business: S.client.business || '' }, practice: !!m.test, status: m.status, progress: mProgress(), meeting: m, brief: { confirmedClientInformation: o.conf, creativeIdeasAndProposals: o.prop, missingOrUnverified: o.open, requestedFunctionality: o.req, commercialScopeToBeAgreed: o.scope, nextSteps: o.next }, note: 'A discovery record only. Not a quote, scope, contract or final design. No prices, dates or scope are agreed in it.' };
+  if (kind === 'client') { delete m.notes; delete rec.brief.creativeIdeasAndProposals; m.notes = {}; delete rec.meeting.contact; rec.note += ' Client copy: private notes and commercial working are left out.'; }
   rec.files = (m.files || []).map(f => ({ name: f.name, size: f.size, kind: f.kind, thumbSaved: !!f.thumb }));
   return rec;
 }
@@ -492,12 +502,12 @@ Object.assign(ACTS2, {
   mpresent: () => { const m = M(); m.present = !m.present; save(); render(); },
   mset: (t, d) => { const cur = get(d.p); set(d.p, cur === d.v ? '' : d.v); M().updated = mnow(); save(); render(); },
   munsure: (t, d) => { const id = d.q, m = M(); const on = mUnsure(id);
-    if (id === 'hasSite') m.hasSite.v = on ? '' : 'unsure'; else if (id === 'feel') m.feelSt = on ? '' : 'unsure'; else if (['logo', 'photos', 'videos'].includes(id)) m.have[id].v = on ? '' : 'unsure';
+    if (id === 'hasSite') m.hasSite.v = on ? '' : 'unsure'; else if (id === 'feel') m.feelSt = on ? '' : 'unsure'; else if (['logo', 'photos', 'videos', 'colfont', 'content'].includes(id)) m.have[id].v = on ? '' : 'unsure';
     else { m.a[id] = m.a[id] || { t: '', st: '' }; m.a[id].st = on ? '' : 'unsure'; }
     save(); render(); },
   mpick: (t, d) => { const m = M(); m.picks[d.k2] = !m.picks[d.k2]; if (!m.picks[d.k2] && m.main === d.k2) m.main = ''; const on = MEET_ACTIONS.filter(a => m.picks[a[0]]); if (on.length === 1) m.main = on[0][0]; if (m.a.actions) m.a.actions.st = ''; save(); render(); },
   mmain: (t, d) => { const m = M(); m.main = m.main === d.k2 ? '' : d.k2; save(); render(); },
-  mverd: (t, d) => { const m = M(); const c = m.concepts[d.slug] = m.concepts[d.slug] || { v: '', why: '', pref: {} }; c.v = c.v === d.v ? '' : d.v; if (m.a.looks) m.a.looks.st = ''; save(); render(); const el = document.querySelector('[data-k="meet.concepts.' + d.slug + '.why"]'); if (el && c.v) el.focus({ preventScroll: true }); },
+  mverd: (t, d) => { const m = M(); const c = m.concepts[d.slug] = m.concepts[d.slug] || { v: '', why: '', change: '', pref: {} }; c.v = c.v === d.v ? '' : d.v; if (m.a.looks) m.a.looks.st = ''; save(); render(); const el = document.querySelector('[data-k="meet.concepts.' + d.slug + '.why"]'); if (el && c.v) el.focus({ preventScroll: true }); },
   mcp: (t, d) => { const m = M(); const c = m.concepts[d.slug] = m.concepts[d.slug] || { v: '', why: '', pref: {} }; c.pref = c.pref || {}; c.pref[d.k2] = c.pref[d.k2] === d.v ? '' : d.v; save(); render(); const b = document.querySelector('[data-act="mcp"][data-slug="' + d.slug + '"][data-k2="' + d.k2 + '"][data-v="' + d.v + '"]'); if (b) b.focus({ preventScroll: true }); },
   minspadd: () => { M().inspo.push({ url: '', note: '' }); save(); render(); },
   minsprm: (t, d) => { M().inspo.splice(Number(d.i), 1); save(); render(); },

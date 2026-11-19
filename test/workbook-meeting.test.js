@@ -47,6 +47,8 @@ test('workbook meeting: no prices, dates or approvals are set by the meeting cod
   assert.ok(/Requested, not in a quote yet/.test(code) && /not yet agreed or priced/.test(code), 'requests are labelled as not in a quote');
   assert.ok(/Not VAT registered/.test(code) && /Tolra linked website discount/.test(code) && /Not Yet Checked/.test(code), 'standing checks are listed');
   assert.ok(/private notes and commercial working are left out/.test(code), 'client export excludes private material');
+  assert.ok(/not encrypted/.test(code) && /no password/.test(code) && /not security/.test(code), 'says honestly that local data is not protected');
+  ['CONFIRMED CLIENT INFORMATION', 'CREATIVE IDEAS AND PROPOSALS', 'MISSING OR UNVERIFIED DETAILS', 'REQUESTED FUNCTIONALITY', 'COMMERCIAL SCOPE STILL TO BE AGREED'].forEach(function (h) { assert.ok(code.includes(h), h); });
 });
 
 test('workbook meeting: the offline pack builder and guide exist, and concept fallbacks match their data files', function () {

@@ -86,3 +86,9 @@
 #printArea{display:none}
 @media print{body.mprinting #app{display:none!important}body.mprinting #printArea{display:block!important}}
 @media (max-width:760px){.mnav ol{grid-template-columns:repeat(3,1fr)}.mdot span{display:none}.mdot{min-height:44px}.mm{padding:18px 16px 150px}.mh,.mf2{padding-left:14px;padding-right:14px}.minsp,.mfeel{grid-template-columns:1fr}.mhr .btn{flex:1}.mf2 .mflash{display:none}.mf2 .btn{flex:1}}
+
+.note.warn2{border-left-color:#8f6a00;background:#fbf1d6}
+.mdemos{display:flex;gap:8px;flex-wrap:wrap}.mdemos small{font-weight:400;color:var(--ink2)}
+.mdemo2{display:inline-block;font:500 15px 'IBM Plex Sans',sans-serif;border:2px solid var(--ink2);padding:9px 14px;text-decoration:none;background:var(--paper);min-height:44px;color:var(--ink)}
+.mdemo2 small{font-weight:400;color:var(--ink2)}
+.mrv ol{margin:0;padding-left:20px}.mrv ol li{border:0;padding:4px 0}

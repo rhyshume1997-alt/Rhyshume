@@ -26,6 +26,16 @@ If they do not know, tap **I'm not sure yet**. Nothing is made up for them.
 - **Update the rest of the workbook** passes answers to Questions to ask, Sites they like, Look and feel, What is in and the open questions list. It never overwrites what you typed yourself.
 - The meeting is discovery only. Scope, responsibilities, quote, statement of requirements, contract, written acceptance and deposit still follow. No price, date or discount is set by this tool.
 
+## If the internet or a preview is not available
+Everything in the meeting works with no internet. The eight design demos open from the pack folder ("on this computer"). If one does not open, the screenshots on the card still show the design. The "Online copy" link needs the internet and is public, so the client never needs a login.
+
+## How safe is it?
+- Nothing is sent anywhere. Answers stay in this browser and in the backup files you save.
+- They are **not encrypted and have no password**. Anyone who can use the computer, the browser or the backup files can read them. Keep the laptop locked and keep backups somewhere private.
+- Presentation mode only hides things on screen. It is not security.
+- The hosted workbook's email sign-in link protects clients saved online. "Work offline" does not use it.
+- Never type passwords or account logins into the workbook.
+
 ## Things to remember
 - Not VAT registered goes on quotes, with no VAT line. No discount is applied automatically. The Tolra linked website discount needs its basis confirmed first.
 - The concept photos and films are generated and fictional. Never present them as the client's work.
