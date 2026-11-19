@@ -72,8 +72,10 @@ test('every public page with the main menu links to the new page', function () {
   });
 });
 
-test('the home page has the small link and the grants page links back', function () {
-  assert.ok(read('index.html').includes('I also build websites for local businesses</a>'));
+test('the home page links to the engineering page and the grants page, and the grants page links back', function () {
+  const home = read('index.html');
+  assert.ok(home.includes('href="/engineering"'));
+  assert.ok(home.includes('href="/council-digital-grants"'));
   assert.ok(read('council-digital-grants/index.html').includes('href="/local-business"'));
 });
 
@@ -146,8 +148,8 @@ test('go-live fixes: no Marpet screenshot or coming soon note, button goes to th
   });
 });
 
-test('home page prices match the local business page and do not say Google search is included', function () {
-  const h = read('index.html');
+test('the engineering page keeps the old home page prices and does not say Google search is included', function () {
+  const h = read('engineering.html');
   assert.ok(h.includes('Quote-ready site <span class="status">from £1,500 one-off'));
   assert.ok(h.includes('Care plan <span class="status">from £35 a month'));
   assert.ok(!/2,200|£60 a month/.test(h));

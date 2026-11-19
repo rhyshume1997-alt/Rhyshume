@@ -2,9 +2,9 @@
 
 Static site for Rhys Hume, Glasgow, hosted on Vercel at https://www.rhyshume.co.uk. HTML and CSS, no framework. One small script, `nav.js`, opens and closes the menu on phones; without it the nav stays visible.
 
-Pages: `index.html`, `websites.html`, `automation.html`, `tolra.html`, `csv.html`, `about.html`, `contact.html`, `privacy.html`, `404.html`, `work/jnr-engineering.html`, `council-digital-grants/index.html`, `insights/index.html` and one article. Shared styles are in `styles.css`. `vercel.json` turns on clean URLs, so `/websites` serves `websites.html`.
+Pages: `index.html` (the home page, with its own `home.css` and `home.js`), `engineering.html`, `websites.html`, `automation.html`, `tolra.html`, `csv.html`, `about.html`, `contact.html`, `privacy.html`, `404.html`, `work/jnr-engineering.html`, `council-digital-grants/index.html`, `insights/index.html` and one article. Shared styles are in `styles.css`. `vercel.json` turns on clean URLs, so `/websites` serves `websites.html`.
 
-Fonts are self-hosted in `fonts/` (Newsreader, IBM Plex Sans, IBM Plex Mono, latin subsets from Google Fonts, SIL Open Font License), so pages make no requests to Google Fonts.
+Fonts are self-hosted in `fonts/` (Archivo, Newsreader, IBM Plex Sans, IBM Plex Mono, latin subsets, SIL Open Font License), so pages make no requests to Google Fonts.
 
 SEO files: `sitemap.xml`, `robots.txt`, `llms.txt`.
 
