@@ -162,6 +162,32 @@ function checkSite(pages, extra, now) {
   return out;
 }
 
+// What a searcher would see for this site, read only from the pages that were fetched. No ranking, no visitor numbers.
+// pages: [{ url, html }], the home page first. Title, description and the phone check are the home page's;
+// the address check looks at every page read, and says how many.
+function searchFacts(pages) {
+  const home = pages[0];
+  const html = home.html || '';
+  const tm = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+  const title = tm ? strip(tm[1].replace(/&amp;/g, '&')) : '';
+  const desc = metaTag(html, 'description') || '';
+  const t = text(html);
+  const phone = /href=["']tel:/i.test(html) || /(?:\+44\s?\(?0?\)?\s?|\b0)(?:\d[\s-]?){9,10}\b/.test(t);
+  const POSTCODE = /\b[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}\b/;
+  const address = pages.some(function (p) {
+    const h = p.html || '';
+    return POSTCODE.test(text(h)) || /<address\b/i.test(h) || /"streetAddress"/i.test(h) || /itemprop=["']streetAddress/i.test(h);
+  });
+  return {
+    title: clip(title, 120),
+    description: clip(desc, 200),
+    phone: phone,
+    address: address,
+    mobile: /<meta\b[^>]*name=["']viewport["']/i.test(html),
+    pagesRead: pages.length
+  };
+}
+
 // The findings worth showing, worst first, at most max.
 function topProblems(checks, max) {
   return checks.filter(function (c) { return !c.pass; })
@@ -177,4 +203,4 @@ function compare(theirs, comp) {
     .map(function (c) { return { label: c.label, theirs: c.pass, comp: byId[c.id].pass }; });
 }
 
-module.exports = { checkSite, topProblems, compare, text };
+module.exports = { checkSite, searchFacts, topProblems, compare, text };

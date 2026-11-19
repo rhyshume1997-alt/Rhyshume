@@ -8,8 +8,9 @@ main{max-width:760px;margin:0 auto;padding:40px 22px 80px}
 h1{font:700 28px/1.2 Archivo,system-ui,sans-serif;margin:0 0 6px}
 p.s{margin:0 0 26px;color:#5a6070}
 label{display:block;font:500 13px/1 "IBM Plex Mono",monospace;margin:20px 0 8px}
-input,textarea{width:100%;box-sizing:border-box;font:16px/1.4 "IBM Plex Mono",monospace;padding:11px;border:1px solid #b9bcc4;background:#fbfaf7;color:#1d2330;border-radius:2px}
+input,textarea,select{width:100%;box-sizing:border-box;font:16px/1.4 "IBM Plex Mono",monospace;padding:11px;border:1px solid #b9bcc4;background:#fbfaf7;color:#1d2330;border-radius:2px}
 textarea{min-height:150px}
+select{appearance:auto}
 button{margin-top:18px;font:600 16px/1 "IBM Plex Sans",sans-serif;padding:14px 22px;border:0;background:#1d2330;color:#f4f2ee;cursor:pointer;border-radius:2px}
 button:disabled{opacity:.5;cursor:default}
 ul{list-style:none;padding:0;margin:30px 0 0}
@@ -21,17 +22,19 @@ li.err .st{color:#9a3412}
 li button{margin:0;padding:8px 12px;font-size:14px;width:max-content}
 </style></head><body><main>
 <h1>Build concepts</h1>
-<p class="s">One address per line. To compare against a competitor, add their address after it, separated by a space or a comma. Each one is built from their live site and saved under a private link you can paste into an email.</p>
+<p class="s">One address per line. To compare against a competitor, add their address after it, separated by a space or a comma. To set the type of business for one line, add its name at the end (engineering, trades, hospitality, childcare, weddings). A name on a line wins over the dropdown. Each one is built from their live site and saved under a private link you can paste into an email.</p>
 <label for="k">Your key</label><input id="k" type="password" autocomplete="off">
-<label for="a">Websites</label><textarea id="a" placeholder="example-plumbing.co.uk  their-competitor.co.uk"></textarea>
+<label for="n">Type of business (used when a line does not name one)</label><select id="n"><option value="">Not set</option><option value="engineering">Engineering</option><option value="trades">Trades</option><option value="hospitality">Hospitality</option><option value="childcare">Childcare</option><option value="weddings">Weddings</option></select>
+<label for="a">Websites</label><textarea id="a" placeholder="example-plumbing.co.uk  their-competitor.co.uk  trades"></textarea>
 <button id="go" type="button">Build</button>
 <ul id="out"></ul>
 <script>
 (function(){
+var NICHES=['engineering','trades','hospitality','childcare','weddings'];
 var go=document.getElementById('go'),out=document.getElementById('out');
 function row(site){var li=document.createElement('li');var b=document.createElement('b');b.textContent=site;var s=document.createElement('span');s.className='st';s.textContent='Building, about a minute';li.appendChild(b);li.appendChild(s);out.appendChild(li);return {li:li,st:s};}
 function done(r,d){
-  if(!d||!d.ok){r.li.className='err';r.st.textContent=d&&d.error==='key'?'Wrong key':'Could not build this one'+(d&&d.note?': '+d.note:'');return;}
+  if(!d||!d.ok){r.li.className='err';r.st.textContent=d&&d.error==='key'?'Wrong key':d&&d.error==='bad_niche'?'Unknown type of business':'Could not build this one'+(d&&d.note?': '+d.note:'');return;}
   r.st.textContent=d.problems+' problems found'+(d.compared?', compared with the competitor':'')+'';var a=document.createElement('a');a.href=d.link;a.target='_blank';a.rel='noopener';a.textContent=d.link;r.li.appendChild(a);
   var c=document.createElement('button');c.type='button';c.textContent='Copy link';c.onclick=function(){navigator.clipboard.writeText(d.link);c.textContent='Copied';};r.li.appendChild(c);
 }
@@ -41,8 +44,10 @@ go.onclick=async function(){
   if(!key||!sites.length)return;
   go.disabled=true;out.textContent='';
   for(var i=0;i<sites.length;i++){
-    var parts=sites[i].split(/[\s,|]+/).filter(Boolean);var r=row(parts[0]+(parts[1]?'  vs  '+parts[1]:''));
-    try{var res=await fetch('/api/owner-build',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:key,website:parts[0],competitor:parts[1]||''})});done(r,await res.json().catch(function(){return null;}));}
+    var raw=sites[i].split(/[\s,|]+/).filter(Boolean),niche=document.getElementById('n').value,parts=[];
+    raw.forEach(function(t){if(/^[a-z]+$/i.test(t)&&NICHES.indexOf(t.toLowerCase())!==-1)niche=t.toLowerCase();else parts.push(t);});
+    var r=row(parts[0]+(parts[1]?'  vs  '+parts[1]:'')+(niche?'  ['+niche+']':''));
+    try{var res=await fetch('/api/owner-build',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:key,website:parts[0],competitor:parts[1]||'',niche:niche})});done(r,await res.json().catch(function(){return null;}));}
     catch(e){done(r,null);}
   }
   go.disabled=false;
