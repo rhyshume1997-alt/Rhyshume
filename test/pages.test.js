@@ -170,3 +170,22 @@ test('grants page keeps the three set up costs and the softer wording together',
   assert.ok(g.includes('How it pays out depends on the scheme'));
   assert.ok(g.includes('href="/local-business"'));
 });
+
+// ---------------------------------------------------------------- the skills we installed
+
+test('skills-lock.json lists every installed skill, with a source and a hash, and keeps the earlier two', function () {
+  const lock = JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '..', 'skills-lock.json'), 'utf8'));
+  const dirs = require('fs').readdirSync(require('path').join(__dirname, '..', '.claude', 'skills'), { withFileTypes: true }).filter(function (d) { return d.isDirectory(); }).map(function (d) { return d.name; });
+  assert.deepStrictEqual(Object.keys(lock.skills).sort(), dirs.sort());
+  ['animate', 'choreograph', 'mobile-native', 'break-ui', 'review-animations'].forEach(function (n) {
+    assert.strictEqual(lock.skills[n].source, 'emilkowalski/skills');
+    assert.strictEqual(lock.skills[n].sourceType, 'github');
+    assert.strictEqual(lock.skills[n].skillPath, 'skills/' + n + '/SKILL.md');
+  });
+  assert.strictEqual(lock.skills['chrome-extensions'].source, 'GoogleChrome/modern-web-guidance');
+  assert.strictEqual(lock.skills['modern-web-guidance'].computedHash, '9e69ce00dc314b64f6664031b70295ea46c7de93ac682c624808df6e48e08b66');
+  Object.keys(lock.skills).forEach(function (n) {
+    assert.match(lock.skills[n].computedHash, /^[0-9a-f]{64}$/, n);
+    assert.ok(require('fs').existsSync(require('path').join(__dirname, '..', '.claude', 'skills', n, 'SKILL.md')), n + ' has a SKILL.md');
+  });
+});

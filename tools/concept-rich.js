@@ -290,7 +290,7 @@ hr.addEventListener('pointerleave',function(){cancelAnimationFrame(raf);fl.class
       function on(k){return function(e){var n=Object.assign({},v);n[k]=e.target.value;set(n);};}
       function field(k,label,type){return h('label',{key:k},label,type==='area'?h('textarea',{value:v[k],onChange:on(k),required:k==='need'}):h('input',{type:type||'text',value:v[k],onChange:on(k),required:k==='name'||k==='email'}));}
       return h('form',{className:'qf',onSubmit:function(e){e.preventDefault();setSent(true);}},
-        field('name',d.name),field('email',d.email,'email'),field('phone',d.phone,'tel'),field('need',d.need,'area'),
+        field('name',d.name),field('email',d.email,'email'),field('phone',d.phone,'tel'),field('need',d.need,'area'),d.files?h('label',{key:'files'},d.files,h('input',{type:'file',multiple:true})):null,
         h('button',{className:'btn pri',type:'submit',disabled:sent},h('span',{className:'fl'},h('i',null,h('b',null,d.send),h('b',{'aria-hidden':'true'},d.send)))),
         sent?h('div',{className:'ok',role:'status'},d.status):h('div',{className:'fine'},d.note));
     }
@@ -319,23 +319,29 @@ function floorSvg(id, cls) {
 function changesSection(c, b, fonts, points) {
   const list = (Array.isArray(points) ? points : []).map(function (p) { return String(p || ''); }).filter(Boolean).slice(0, 5);
   if (!list.length) return '';
-  const sw = function (hex) { return '<span class="sw" style="background:' + hex + '"></span><span class="hx">' + esc(hex) + '</span>'; };
-  const own = fonts.display || fonts.body;
+  // Only what is shown on this page. Colour codes, fonts and word counts stay in notes.md. A phone or email that is not
+  // shown gets no row at all: it may be hidden on their site, so the page never says it was not found.
   const nPhotos = (c.heroPhoto ? 1 : 0) + (c.photos || []).length;
   const read = [
-    ['Colours', b.found ? sw(b.primary) + sw(b.accent) : 'None found on the site, house colours used'],
-    ['Fonts', own ? esc(fonts.display || own) + (fonts.body && fonts.body !== fonts.display ? ', ' + esc(fonts.body) : '') : 'None of their own found, house fonts used'],
-    ['Logo', c.logo ? 'Found and used' : 'None found, the name is shown as text'],
-    ['Photos', nPhotos ? nPhotos + ' from their site' : 'None found, a marked space is shown'],
-    ['Phone', c.phone ? esc(c.phone.display) : 'None found'],
-    ['Email', c.email ? esc(c.email) : 'None found'],
-    ['Services', (c.services || []).length + ' taken from their pages']
-  ].map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + r[1] + '</dd></div>'; }).join('');
+    ['Logo', c.logo ? 'Found and used' : 'The name is shown as text'],
+    ['Photos', nPhotos ? nPhotos + ' from their site' : 'No photo shown'],
+    c.phone ? ['Phone', esc(c.phone.display)] : null,
+    c.email ? ['Email', esc(c.email)] : null,
+    ['Services', serviceList(c).length + ' taken from their pages']
+  ].filter(Boolean).map(function (r) { return '<div><dt>' + r[0] + '</dt><dd>' + r[1] + '</dd></div>'; }).join('');
   const items = list.map(function (p, i) {
     const cut = p.split(' Why: ');
     return '<li class="reveal"><span class="n">' + String(i + 1).padStart(2, '0') + '</span><div><p>' + esc(cut[0]) + '</p>' + (cut[1] ? '<p class="why">' + esc(cut[1].charAt(0).toUpperCase() + cut[1].slice(1)) + '</p>' : '') + '</div></li>';
   }).join('');
   return '<section class="chg" id="changes"><div class="wrap split"><div class="head reveal"><span class="eyebrow">Built from ' + esc(c.host || c.name) + '</span><h2>What changed</h2><dl class="read">' + read + '</dl></div><ol>' + items + '</ol></div></section>';
+}
+
+// The services that have a title, in order. Numbers on the page come from this list, so they cannot skip. A number the
+// site itself put in front of a title ("02 Roofing") is dropped, so it never sits beside ours.
+function serviceList(c) {
+  return (c.services || []).filter(function (x) { return x && String(x.title || '').trim(); }).map(function (x) {
+    return Object.assign({}, x, { title: String(x.title).replace(/^\s*0\d\s*[.):\-]?\s+(?=\D)/, '').trim() || String(x.title).trim() });
+  });
 }
 
 function niceDate(iso) {
@@ -398,8 +404,8 @@ function helpSection(c) {
     'A short message form asks only what you need to reply.',
     'It lets people get in touch out of hours, from a phone, without hunting for an email address. In this prototype the form posts nowhere. In a live version it would go straight to your inbox.']
     : ['Buyers with a drawing or photo have to ring or email and wait',
-    'A quote form takes drawings and photos in one go and asks only what you need to price the job.',
-    'It saves the back and forth and lets you quote from something you can see. In this prototype the form posts nowhere. In a live version it would go straight to your inbox.']);
+    c.labels && c.labels.files ? 'A quote form lets a visitor attach ' + (/drawing/i.test(c.labels.files) ? 'drawings or photos' : 'photos') + ' and asks only what you need to price the job.' : 'A quote form asks only what you need to price the job.',
+    'It saves the back and forth and lets you quote from what the visitor sends. In this prototype the form posts nowhere and nothing attached is kept. In a live version it would go straight to your inbox.']);
   rows.push(['Old or thin pages make a visitor wonder if you are still trading',
     'One light, current page with no leftover placeholder text, out of date years or dead links. Everything on it comes from your own site.',
     'A buyer decides in seconds whether you are open and sorted. A site that looks tended supports your price and your reputation before you speak to them.']);
@@ -411,8 +417,11 @@ function helpSection(c) {
     body + '<p class="note">Nothing here is live and nothing has been published for you. No customer names or private details were added.</p></div></section>';
 }
 
+// Every concept carries the Prototype line at the top and the reply bar at the end. With no cta given, the default is a reply by email.
+const DEFAULT_CTA = { mail: 'mailto:rhys@rhyshume.co.uk?subject=' + encodeURIComponent('Re: the concept'), book: '' };
+
 function fromRhys(o) {
-  if (!o || !o.cta) return '';
+  o = { cta: (o && o.cta) || DEFAULT_CTA };
   const link = function (href, label) { return /^(https:|mailto:)/.test(href || '') ? '<a href="' + esc(href) + '">' + esc(label) + '</a>' : ''; };
   return '<section class="fromrhys" id="from-rhys"><div class="wrap"><p>Like it? Reply to my email or book 20 minutes, and we change it to your spec.</p>' +
     link(o.cta.mail, 'Reply by email') + link(o.cta.book, 'Book 20 minutes') + '</div></section>';
@@ -445,7 +454,7 @@ function renderRich(c, brandIn, points, opts) {
       }).join('') + '</div>';
   const proofItems = (c.proof || []).map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('');
   const proof = proofItems ? '<div class="proof" aria-label="' + esc(c.name) + '"><div class="wrap"><ul>' + proofItems + '</ul></div></div>' : '';
-  const services = (c.services || []).map(function (s, i) {
+  const services = serviceList(c).map(function (s, i) {
     return '<article class="row reveal"><span class="n">' + String(i + 1).padStart(2, '0') + '</span><h3>' + esc(s.title) + '</h3>' +
       '<div class="t2">' + (s.text ? '<p>' + esc(s.text) + '</p>' : '') + (s.detail ? '<p class="det">' + esc(s.detail) + '</p>' : '') + '</div></article>';
   }).join('');
@@ -453,10 +462,11 @@ function renderRich(c, brandIn, points, opts) {
     return '<div class="' + (i === 0 ? 'wipe' : 'reveal') + '"><img src="' + url(p.src) + '" alt="' + esc(p.alt) + '" loading="lazy" referrerpolicy="no-referrer"></div>';
   }).join('');
   const L = c.labels || {};
-  const qf = { name: L.name, email: L.email, phone: L.phone, need: L.need, send: c.send, status: c.demoStatus, note: c.demoNote };
+  const qf = { name: L.name, email: L.email, phone: L.phone, need: L.need, files: L.files || '', send: c.send, status: c.demoStatus, note: c.demoNote };
   const fallbackForm = '<form class="qf" onsubmit="event.preventDefault();this.querySelector(\'.fine\').textContent=\'' + esc(c.demoStatus).replace(/'/g, '') + '\'">' +
     '<label>' + esc(L.name) + '<input required></label><label>' + esc(L.email) + '<input type="email" required></label>' +
     '<label>' + esc(L.phone) + '<input type="tel"></label><label>' + esc(L.need) + '<textarea required></textarea></label>' +
+    (L.files ? '<label>' + esc(L.files) + '<input type="file" multiple></label>' : '') +
     '<button class="btn pri" type="submit">' + flip(c.send) + '</button><div class="fine">' + esc(c.demoNote) + '</div></form>';
   const about = c.about ? '<section class="about" id="about"><div class="wrap split"><div class="head reveal"><span class="eyebrow">' + esc(c.aboutHeading) + '</span><h2>' + esc(c.name) + '</h2></div><p class="lead reveal d1">' + esc(c.about) + '</p></div></section>' : '';
   const contactLinks = (c.phone ? '<a class="big" href="tel:' + esc(c.phone.href) + '">' + esc(c.phone.display) + '</a>' : '') +
@@ -466,7 +476,7 @@ function renderRich(c, brandIn, points, opts) {
     '<title>Concept: ' + esc(c.name) + '</title><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="' + b.primary + '">' +
     '<script>document.documentElement.classList.add("js")</script>' + fontLinks + '<style>' + css(b, fonts) + '</style></head>\n' +
     '<body id="top" class="' + (c.phone ? 'has-call' : '') + '">' +
-    '<div class="banner" role="note">' + esc(opts.cta ? 'Prototype by Rhys Hume, built from your current site. Not live, and every part can be changed to your spec.' : c.banner) + '</div>' +
+    '<div class="banner" role="note">' + esc('Prototype by Rhys Hume, built from your current site. Not live, and every part can be changed to your spec.') + '</div>' +
     '<header class="nav"><div class="wrap">' + brand +
     '<nav aria-label="Main"><a href="#services">' + esc(c.servicesHeading) + '</a>' + (c.about ? '<a href="#about">' + esc(c.aboutHeading) + '</a>' : '') +
     '<a href="#quote">' + esc(c.quoteHeading) + '</a><a href="#contact">' + esc(c.contactHeading) + '</a></nav>' + phone +
@@ -476,7 +486,7 @@ function renderRich(c, brandIn, points, opts) {
     '<div><span class="eyebrow rise r1">' + esc(c.name) + '</span><h1 class="rise r2' + (String(c.headline || '').length > 58 ? ' long' : '') + '">' + esc(c.headline) + '</h1>' +
     '<p class="intro rise r3">' + esc(c.intro) + '</p>' + (c.area ? '<p class="area rise r3">' + esc(c.area) + '</p>' : '') +
     '<div class="ctas rise r4"><a class="btn pri" href="#quote">' + flip(c.quoteButton) + '</a>' + (c.phone ? '<a class="tlink" href="tel:' + esc(c.phone.href) + '">' + esc(c.phone.display) + '</a>' : '') + '</div></div>' +
-    hero + '</div></section>' + proof + changesSection(c, b, fonts, points) + (opts.cta ? evidenceSection(opts.evidence) + seoSection(opts.evidence) + helpSection(c) : '') +
+    hero + '</div></section>' + proof + (opts.cta ? evidenceSection(opts.evidence) + seoSection(opts.evidence) : '') + changesSection(c, b, fonts, points) + (opts.cta ? helpSection(c) : '') +
     '<section id="services"><div class="wrap"><div class="split"><div class="head reveal"><span class="eyebrow">' + esc(c.name) + '</span><h2>' + esc(c.servicesHeading) + '</h2></div>' +
     '<div class="rows">' + services + '</div></div>' + (photos ? '<div class="photos">' + photos + '</div>' : '') + '</div></section>' +
     about +
