@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Barber shop website concept | Rhys Hume</title>
+<meta name="description" content="A concept page for a barber shop: huge dark type, a services list that slides on hover and a booking request that sends nothing.">
+<link rel="stylesheet" href="kit.css">
+<style>
+
+body { --r: 2px; }
+.top { padding-block: 1rem; }
+.top-in { display: flex; align-items: center; gap: 0.8rem 2rem; flex-wrap: wrap; }
+.brand { margin-inline-end: auto; text-decoration: none; }
+.top nav { display: flex; gap: 0.4rem 1.6rem; flex-wrap: wrap; font-weight: 500; font-size: 0.97rem; }
+.top nav a { text-decoration: none; padding-block: 0.5rem; }
+.top .btn { display: none; }
+@media (min-width: 48rem) { .top .btn { display: inline-flex; } }
+section { padding-block: clamp(3rem, 8vw, 6rem); }
+
+body { --bg:#1a1a1d; --fg:#ece6d8; --acc:#c9a05a; --acc-ink:#1a1a1d; --ph:#2a2a2e; --field:#232327; --display:"Archivo", "Helvetica Neue", Arial, sans-serif; --text:"IBM Plex Sans", system-ui, sans-serif; --r:0; }
+.brand { font: 800 1.2rem/1 var(--display); letter-spacing: 0.12em; text-transform: uppercase; }
+.top { border-bottom: 1px solid color-mix(in srgb, var(--fg) 20%, transparent); }
+.hero { padding-block: clamp(2.5rem, 7vw, 5rem) clamp(2.5rem, 6vw, 4rem); }
+.hero h1 { font: 900 clamp(3.4rem, 13vw, 11rem)/0.86 var(--display); letter-spacing: -0.05em; text-transform: uppercase; }
+.hero h1 em { font-style: normal; color: var(--acc); }
+.hero-g { display: grid; gap: 2rem 3rem; align-items: end; }
+@media (min-width: 56rem) { .hero-g { grid-template-columns: 9fr 3fr; } }
+.hero .sub { max-width: 22rem; }
+.hero .cta { margin-top: 1.4rem; display: flex; flex-wrap: wrap; gap: 0.8rem 1.4rem; align-items: center; }
+.cuts h2, .book h2 { font: 900 clamp(2rem, 5vw, 3.6rem)/1 var(--display); letter-spacing: -0.03em; text-transform: uppercase; }
+.cuts ul { list-style: none; margin: 2rem 0 0; padding: 0; border-top: 1px solid color-mix(in srgb, var(--fg) 30%, transparent); }
+.cuts li { display: grid; grid-template-columns: 3rem 1fr; gap: 0.3rem 1rem; padding-block: 1.4rem; border-bottom: 1px solid color-mix(in srgb, var(--fg) 30%, transparent); transition: transform 260ms var(--ease), color 200ms var(--ease); }
+@media (min-width: 48rem) { .cuts li { grid-template-columns: 4rem 1fr 1fr; align-items: baseline; } }
+@media (hover: hover) and (pointer: fine) { .cuts li:hover { transform: translateX(0.9rem); color: var(--acc); } }
+.cuts b { font: 900 clamp(1.8rem, 4.6vw, 3.4rem)/1 var(--display); letter-spacing: -0.03em; text-transform: uppercase; }
+.cuts p { color: var(--fg); opacity: 0.85; max-width: 28rem; }
+.shop-g { display: grid; gap: 1rem; margin-top: 2.4rem; }
+@media (min-width: 48rem) { .shop-g { grid-template-columns: 7fr 5fr; align-items: end; } .shop-g > :last-child { margin-bottom: 3rem; } }
+.book { background: #232327; }
+.book-in { display: grid; gap: 2rem 4rem; }
+@media (min-width: 56rem) { .book-in { grid-template-columns: 5fr 6fr; align-items: start; } }
+.demo-form select, .demo-form input { color-scheme: dark; }
+
+</style>
+<script>document.documentElement.classList.add("js")</script>
+<script src="kit.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<div class="banner">Concept by Rhys Hume, not a live site. Sample business, sample words, photo stand-ins. <a href="./">All concepts</a></div>
+<header class="top "><div class="wrap top-in"><a class="brand" href="#main">Oak &amp; Razor</a><nav aria-label="Main"><a href="#cuts">Cuts</a><a href="#enquire">Book</a></nav><a class="btn magnet" href="#enquire">Book a chair</a></div></header>
+<main id="main">
+
+<section class="hero"><div class="wrap hero-g">
+  <div><h1 class="split" aria-label="Cut. Shave. Sorted.">Cut. Shave. <em>Sorted.</em></h1></div>
+  <div class="rise" style="--d:600ms"><p class="sub">A barber shop for people who want it done right and want to get on with their day.</p><div class="cta"><a class="btn magnet" href="#enquire">Book a chair</a></div></div>
+</div></section>
+
+<section class="cuts" id="cuts"><div class="wrap">
+  <div class="ruleg" style="inline-size:4.5rem;block-size:2px;background:var(--acc);margin-bottom:1rem"></div>
+  <h2>What we do</h2>
+  <ul>
+    <li class="rv"><span class="mono">01</span><b>Haircuts</b><p>Clippers, scissors, tidy edges.</p></li>
+    <li class="rv" style="--d:70ms"><span class="mono">02</span><b>Beard trims</b><p>Shaped to your face and kept neat.</p></li>
+    <li class="rv" style="--d:140ms"><span class="mono">03</span><b>Hot towel shave</b><p>The slow one. Worth it.</p></li>
+    <li class="rv" style="--d:210ms"><span class="mono">04</span><b>Kids cuts</b><p>Patient, quick and tidy.</p></li>
+  </ul>
+  <div class="shop-g"><div class="ph " style="--ar:16 / 10;" role="img" aria-label="Photo stand-in: The chair and mirror, warm light, tools laid out on the shelf"><div class="ph-cap"><b>Your photo here</b><span>The chair and mirror, warm light, tools laid out on the shelf</span></div></div><div class="ph " style="--ar:4 / 5;" role="img" aria-label="Photo stand-in: Close detail: a clean fade, the hands of the barber"><div class="ph-cap"><b>Your photo here</b><span>Close detail: a clean fade, the hands of the barber</span></div></div></div>
+</div></section>
+
+<section class="book" id="enquire"><div class="wrap book-in">
+  <div><div class="ruleg" style="inline-size:4.5rem;block-size:2px;background:var(--acc);margin-bottom:1rem"></div><h2>Book a chair</h2><p style="margin-top:1rem;max-width:28rem">Pick a day and what you want. We will confirm by message.</p></div>
+  <div><form class="demo-form" id="enquire-form" novalidate><label>Your name<input type="text" autocomplete="off"></label><label>Phone number<input type="tel" autocomplete="off"></label><label>What do you want?<select><option>Haircut</option><option>Beard trim</option><option>Hot towel shave</option><option>Cut and beard</option><option>Kids cut</option></select></label><label>Day<input type="date" autocomplete="off"></label><label>Anything else?<textarea rows="3"></textarea></label><button class="btn" type="submit">Request a chair</button><p class="demo-note">Demo only. Nothing is sent.</p><div class="demo-card" role="status"><b>Demo, nothing was sent. In a live site this would arrive in your inbox as a tidy enquiry.</b></div></form></div>
+</div></section>
+
+</main>
+<footer class="foot"><div class="wrap">Concept page. Nothing on it is real and nothing you type is sent anywhere.</div></footer>
+<div class="callbar" aria-label="Call or enquire"><a href="tel:+441414960123">Call 0141 496 0123</a><a href="#enquire">Book a chair</a></div>
+</body>
+</html>

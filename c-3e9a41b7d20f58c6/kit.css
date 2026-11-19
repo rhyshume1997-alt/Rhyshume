@@ -1,0 +1,118 @@
+/* Concept kit: shared by the sample industry pages. Each page sets its own colours and fonts on body.
+   Motion is transform and opacity only, and off for reduced motion. Nothing here posts anywhere. */
+@font-face { font-family: "Archivo"; font-weight: 100 900; font-display: swap; src: url("fonts/archivo-latin.woff2") format("woff2"); }
+@font-face { font-family: "IBM Plex Sans"; font-weight: 400; font-display: swap; src: url("fonts/ibm-plex-sans-latin.woff2") format("woff2"); }
+@font-face { font-family: "IBM Plex Sans"; font-weight: 400; font-style: italic; font-display: swap; src: url("fonts/ibm-plex-sans-italic-latin.woff2") format("woff2"); }
+@font-face { font-family: "IBM Plex Mono"; font-weight: 400; font-display: swap; src: url("fonts/ibm-plex-mono-400-latin.woff2") format("woff2"); }
+@font-face { font-family: "Newsreader"; font-weight: 200 800; font-display: swap; src: url("fonts/newsreader-latin.woff2") format("woff2"); }
+@font-face { font-family: "Great Vibes"; font-weight: 400; font-display: block; src: url("fonts/greatvibes-latin.woff2") format("woff2"); }
+
+:root { --ease: cubic-bezier(0.23, 1, 0.32, 1); --gut: clamp(1.1rem, 5vw, 4.5rem); }
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; scroll-padding-bottom: 5rem; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 400 1.0625rem/1.6 var(--text, "IBM Plex Sans", system-ui, sans-serif); -webkit-font-smoothing: antialiased; overflow-x: clip; }
+img, svg { max-width: 100%; display: block; }
+a { color: inherit; }
+a, button { touch-action: manipulation; }
+h1, h2, h3, p { margin: 0; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; }
+.wrap { width: min(74rem, 100% - 2 * var(--gut)); margin-inline: auto; }
+.mono { font: 400 0.75rem/1.3 "IBM Plex Mono", ui-monospace, Menlo, monospace; letter-spacing: 0.09em; text-transform: uppercase; }
+.vh { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.skip { position: absolute; inset-inline-start: 0.5rem; inset-block-start: -4rem; background: var(--fg); color: var(--bg); padding: 0.6rem 1rem; z-index: 100; }
+.skip:focus { inset-block-start: 0.5rem; }
+:focus-visible { outline: 3px solid var(--acc); outline-offset: 3px; }
+
+/* the banner every concept carries */
+.banner { background: var(--fg); color: var(--bg); font: 400 0.72rem/1.4 "IBM Plex Mono", monospace; letter-spacing: 0.04em; text-align: center; padding: 0.55rem var(--gut); }
+.banner a { text-underline-offset: 3px; }
+
+/* buttons */
+.btn { display: inline-flex; align-items: center; gap: 0.6rem; min-block-size: 3rem; padding: 0.8rem 1.4rem; background: var(--acc); color: var(--acc-ink, var(--bg)); font: 600 1rem/1.2 var(--text, "IBM Plex Sans", sans-serif); text-decoration: none; border: 0; border-radius: var(--r, 2px); cursor: pointer; transform: translate(var(--mx, 0px), var(--my, 0px)); transition: transform 140ms var(--ease); user-select: none; -webkit-user-select: none; }
+.btn:active { transform: translate(var(--mx, 0px), var(--my, 0px)) scale(0.98); }
+@media (hover: hover) and (pointer: fine) { .btn:hover { transform: translate(var(--mx, 0px), calc(var(--my, 0px) - 2px)); } .btn:active { transform: translate(var(--mx, 0px), var(--my, 0px)) scale(0.98); } }
+.btn.line { background: transparent; color: var(--fg); box-shadow: inset 0 0 0 2px currentColor; }
+.tlink { font-weight: 600; text-underline-offset: 5px; }
+
+/* photo stand-in: one clean block that says what the photo should show */
+.ph { position: relative; aspect-ratio: var(--ar, 4 / 3); background: var(--ph, color-mix(in srgb, var(--acc) 16%, var(--bg))); outline: 1px solid color-mix(in srgb, var(--fg) 22%, transparent); outline-offset: -1px; overflow: hidden; }
+.ph::before, .ph::after { content: ""; position: absolute; inline-size: 1.1rem; block-size: 1.1rem; border: 0 solid color-mix(in srgb, var(--fg) 45%, transparent); }
+.ph::before { inset: 0.7rem auto auto 0.7rem; border-width: 1px 0 0 1px; }
+.ph::after { inset: auto 0.7rem 0.7rem auto; border-width: 0 1px 1px 0; }
+.ph-cap { position: absolute; inset: auto 1rem 1rem 1rem; display: grid; gap: 0.2rem; }
+.ph-cap b { font: 400 0.7rem/1.3 "IBM Plex Mono", monospace; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.7; }
+.ph-cap span { font-size: 0.9rem; line-height: 1.35; max-inline-size: 28ch; }
+
+/* fake form: shows a card, sends nothing */
+.demo-form { display: grid; gap: 0.9rem; }
+.demo-form label { display: grid; gap: 0.3rem; font-size: 0.9rem; }
+.demo-form input, .demo-form select, .demo-form textarea { font: 400 1rem/1.4 var(--text, "IBM Plex Sans", sans-serif); padding: 0.75rem 0.8rem; background: var(--field, var(--bg)); color: var(--fg); border: 1px solid color-mix(in srgb, var(--fg) 40%, transparent); border-radius: var(--r, 2px); min-block-size: 3rem; }
+.demo-note { font-size: 0.85rem; opacity: 0.75; }
+.demo-card { display: none; padding: 1.2rem 1.3rem; border: 2px solid var(--acc); }
+.demo-card.on { display: block; }
+
+/* phone call bar */
+.callbar { display: none; }
+@media (max-width: 47.99rem) {
+  .callbar { position: fixed; inset: auto 0 0 0; z-index: 50; display: grid; grid-template-columns: 1fr 1fr; background: var(--fg); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  .callbar a { display: flex; align-items: center; justify-content: center; min-block-size: 3.4rem; font: 600 0.98rem/1.2 var(--text, sans-serif); text-decoration: none; color: var(--bg); }
+  .callbar a + a { background: var(--acc); color: var(--acc-ink, var(--bg)); }
+  body { padding-bottom: 3.4rem; }
+}
+.foot { padding-block: 2.2rem 2.6rem; font-size: 0.9rem; opacity: 0.85; border-top: 1px solid color-mix(in srgb, var(--fg) 22%, transparent); }
+
+/* ---------- effects ---------- */
+/* words rise from a mask */
+.split .w { display: inline-block; overflow: hidden; vertical-align: top; padding: 0.06em 0.09em 0.18em 0.02em; margin: -0.06em -0.09em -0.18em -0.02em; }
+.split .w > span { display: inline-block; }
+/* trades or menu band, drifting */
+.marq { overflow: hidden; border-block: 1px solid color-mix(in srgb, var(--fg) 25%, transparent); }
+.marq-track { list-style: none; margin: 0; padding: 0.85rem 0; display: flex; flex-wrap: wrap; gap: 0.4rem 2.2rem; }
+.marq-track li { white-space: nowrap; }
+.marq-track li::after { content: "/"; margin-inline-start: 2.2rem; color: var(--acc); }
+.marq-dup { display: none; }
+/* stacking panels */
+.stack { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+@media (min-width: 48rem) and (min-height: 36rem) {
+  .stack { gap: 0; }
+  .stack > li { position: sticky; margin-bottom: 1.4rem; }
+  .stack > li:nth-child(1) { top: 1rem; } .stack > li:nth-child(2) { top: 5rem; } .stack > li:nth-child(3) { top: 9rem; } .stack > li:nth-child(4) { top: 13rem; }
+}
+/* statement that firms up as it scrolls */
+.scrub span { display: inline; }
+/* image that follows the pointer over a list */
+.follow { position: fixed; inset: 0 auto auto 0; inline-size: 15rem; z-index: 40; pointer-events: none; opacity: 0; transform: translate3d(var(--fx, 0px), var(--fy, 0px), 0) scale(0.9) rotate(var(--fr, 0deg)); transition: opacity 180ms var(--ease), transform 90ms linear; }
+.follow.on { opacity: 1; transform: translate3d(var(--fx, 0px), var(--fy, 0px), 0) scale(1) rotate(var(--fr, 0deg)); }
+/* shapes that pop along the pointer */
+.trail-dot { position: fixed; inset: 0 auto auto 0; z-index: 30; pointer-events: none; inline-size: var(--s, 3rem); block-size: var(--s, 3rem); }
+.trail-dot > svg { inline-size: 100%; block-size: 100%; }
+@media (prefers-reduced-motion: no-preference) {
+  .rise { animation: rise 700ms var(--ease) var(--d, 0ms) both; }
+  .fade { animation: fade 600ms var(--ease) var(--d, 0ms) both; }
+  .split .w > span { animation: word 820ms var(--ease) calc(120ms + var(--i, 0) * 55ms) both; }
+  html.rv-on .rv { opacity: 0; transform: translateY(var(--y, 14px)); }
+  html.rv-on .rv.in { opacity: 1; transform: none; transition: opacity 600ms var(--ease) var(--d, 0ms), transform 600ms var(--ease) var(--d, 0ms); }
+  html.rv-on .ruleg { transform: scaleX(0); transform-origin: left center; }
+  html.rv-on .ruleg.in { transform: none; transition: transform 900ms var(--ease) 150ms; }
+  .marq-track { flex-wrap: nowrap; inline-size: max-content; gap: 0; animation: drift 52s linear infinite; }
+  .marq-track li { padding-inline-end: 2.2rem; } .marq-track li::after { margin-inline-start: 2.2rem; }
+  .marq-dup { display: block; }
+  .trail-dot { animation: pop 1100ms var(--ease) forwards; }
+}
+@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) { .marq:hover .marq-track { animation-play-state: paused; } }
+@supports (animation-timeline: view()) { @media (prefers-reduced-motion: no-preference) {
+  .scrub span { animation: firm linear both; animation-timeline: view(); animation-range: entry calc(8% + var(--i, 0) * 2.6%) entry calc(38% + var(--i, 0) * 2.6%); }
+} }
+@supports (animation-timeline: scroll()) { @media (prefers-reduced-motion: no-preference) {
+  body::before { content: ""; position: fixed; inset: 0 0 auto 0; block-size: 3px; background: var(--acc); transform: scaleX(0); transform-origin: left center; animation: progress linear both; animation-timeline: scroll(root); z-index: 90; pointer-events: none; }
+} }
+@keyframes rise { from { opacity: 0; transform: translateY(var(--y, 14px)); } }
+@keyframes fade { from { opacity: 0; } }
+@keyframes word { from { transform: translateY(112%); } }
+@keyframes drift { to { transform: translateX(-50%); } }
+@keyframes firm { from { opacity: 0.18; } }
+@keyframes progress { to { transform: scaleX(1); } }
+@keyframes pop { 0% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0.4) rotate(var(--tr)); } 25% { opacity: 1; } 100% { opacity: 0; transform: translate(var(--tx), calc(var(--ty) + 2.2rem)) scale(1) rotate(var(--tr2)); } }
+@keyframes write { to { transform: scaleX(0); } }
+.write { position: relative; display: inline-block; }
+@media (prefers-reduced-motion: no-preference) { .write::after { content: ""; position: absolute; inset: 0 -0.2em 0 0; background: var(--bg); transform-origin: right center; animation: write 1700ms var(--ease) 400ms both; } }

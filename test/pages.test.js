@@ -11,7 +11,7 @@ const path = require('node:path');
 const ROOT = path.join(__dirname, '..');
 const read = function (p) { return fs.readFileSync(path.join(ROOT, p), 'utf8'); };
 
-const HIDDEN = ['w-82503121e7fdf54e', 'c-09b37e50c043baaa'];
+const HIDDEN = ['w-82503121e7fdf54e', 'c-09b37e50c043baaa', 'c-3e9a41b7d20f58c6'];
 const PAGE = 'local-business.html';
 const BANNED = /\b(whole|lands|quiet|quietly|proper)\b/i;
 
