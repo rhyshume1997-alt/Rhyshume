@@ -1,6 +1,6 @@
 # Rhys Hume
 
-> Rhys Hume is a systems consultant based in Glasgow. He builds the website, the quoting and the job management of engineering and manufacturing firms (fabrication, machining and manufacturing businesses), and validates computerised systems for regulated manufacturers. He comes from a computer system validation background.
+> Rhys Hume is a web designer and systems consultant based in Glasgow. He builds websites for Glasgow trades and local businesses and sets up their Google profiles, builds the website, the quoting and the job management of engineering and manufacturing firms (fabrication, machining and manufacturing businesses), and validates computerised systems for regulated manufacturers. He comes from a computer system validation background.
 
 ## The idea
 
@@ -8,6 +8,7 @@ Systems that win work and run the job: a site that's easy to find and takes the 
 
 ## Services
 
+- [Websites for engineering firms](https://www.rhyshume.co.uk/engineering): the website, quoting automation and job management for fabrication and machining firms, with Tolra in pilot with a Glasgow shop
 - [Websites](https://www.rhyshume.co.uk/websites): mobile-friendly websites with quote request forms and local search set-up, the front of the system
 - [Websites and digital for local business](https://www.rhyshume.co.uk/local-business): websites, care plans, filming, Google search set up, online listings and structured data, automation and AI set up, and domain and email set up for small local businesses in Glasgow and Central Scotland, with from prices and a tailored quote
 - [Automation](https://www.rhyshume.co.uk/automation): quote intake, documents, follow-ups and CRM updates around the tools a firm already uses, delivered as a short pilot on one process, with optional monthly care afterwards
