@@ -187,6 +187,22 @@ function pickLinks(baseUrl, html) {
   return out.slice(0, 3);
 }
 
+// Cloudflare "email protection" hides an address in the page source as hex (data-cfemail, or a /cdn-cgi/l/email-protection#hex
+// link). A browser decodes it with the first byte as the key. The address is the one the site shows its visitors.
+function decodeCfEmail(hex) {
+  if (!/^[0-9a-f]{6,}$/i.test(hex) || hex.length % 2) return '';
+  const key = parseInt(hex.slice(0, 2), 16);
+  let out = '';
+  for (let i = 2; i < hex.length; i += 2) out += String.fromCharCode(parseInt(hex.slice(i, i + 2), 16) ^ key);
+  return /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/.test(out) ? out : '';
+}
+function protectedEmails(html) {
+  const out = [];
+  (String(html).match(/data-cfemail=["']([0-9a-f]+)["']/gi) || []).forEach(function (a) { out.push(decodeCfEmail(a.replace(/^[^=]+=["']|["']$/g, ''))); });
+  (String(html).match(/email-protection#([0-9a-f]+)/gi) || []).forEach(function (a) { out.push(decodeCfEmail(a.replace(/^.*#/, ''))); });
+  return out.filter(Boolean);
+}
+
 // ---------------------------------------------------------------- facts (found in code, never by the AI)
 
 // ---------------------------------------------------------------- logo and photos
@@ -232,6 +248,17 @@ function pickStylesheets(baseUrl, html) {
   return out.slice(0, 3);
 }
 
+// Where the header, nav, footer and sidebar are, so an image in one of them is known not to be page content.
+function chromeRanges(html) {
+  const ranges = [];
+  ['header', 'nav', 'footer', 'aside'].forEach(function (t) {
+    const re = new RegExp('<' + t + '\\b[\\s\\S]*?<\\/' + t + '>', 'gi');
+    let m;
+    while ((m = re.exec(html))) ranges.push([m.index, m.index + m[0].length]);
+  });
+  return ranges;
+}
+
 // The caption of the figure an image sits in, if it has one. Used only to judge what the photo shows.
 function captionAfter(html, tag) {
   const i = html.indexOf(tag);
@@ -248,13 +275,24 @@ function imageCandidates(page, cssTexts) {
   const html = page.html;
   const out = [];
   const add = function (url, alt, via) { if (url && !/^data:/i.test(url)) out.push({ url: absUrl(page.url, url), alt: alt || '', via: via, tag: '' }); };
-  (html.match(/<img\b[^>]*>/gi) || []).forEach(function (tag) {
+  const chrome = chromeRanges(html);
+  const imgRe = /<img\b[^>]*>/gi;
+  let im; let order = 0;
+  while ((im = imgRe.exec(html))) {
+    const tag = im[0];
     const src = attr(tag, 'src') || attr(tag, 'data-src') || attr(tag, 'data-lazy-src') || bestSrcset(attr(tag, 'srcset') || attr(tag, 'data-srcset'));
     const hint = attr(tag, 'class') + ' ' + attr(tag, 'id');
     const w = Number(attr(tag, 'width')); const h = Number(attr(tag, 'height'));
-    if (!src || (w && w < 120) || (h && h < 80)) return;
-    out.push({ url: absUrl(page.url, src), alt: attr(tag, 'alt'), via: 'img', hint: hint, caption: captionAfter(html, tag) });
-  });
+    if (!src || (w && w < 120) || (h && h < 80)) continue;
+    // the text right beside this image only: stop at the neighbouring image, so its words are not read as ours
+    let before = html.slice(Math.max(0, im.index - 250), im.index); const bi = before.lastIndexOf('<img'); if (bi !== -1) before = before.slice(bi + 4);
+    let after = html.slice(im.index + tag.length, im.index + tag.length + 250); const ai = after.indexOf('<img'); if (ai !== -1) after = after.slice(0, ai);
+    const near = plain(before.replace(/<[^>]*>/g, ' ') + ' ' + after.replace(/<[^>]*>/g, ' '));
+    out.push({
+      url: absUrl(page.url, src), alt: attr(tag, 'alt'), via: 'img', hint: hint, caption: captionAfter(html, tag),
+      zone: chrome.some(function (r) { return im.index >= r[0] && im.index < r[1]; }) ? 'chrome' : 'content', order: order++, near: near
+    });
+  }
   (html.match(/<source\b[^>]*>/gi) || []).forEach(function (tag) { add(bestSrcset(attr(tag, 'srcset')), '', 'picture'); });
   (html.match(/\sstyle=("[^"]*"|'[^']*')/gi) || []).forEach(function (st) { cssUrls(st).forEach(function (u) { add(u, '', 'inline background'); }); });
   (html.match(/\sdata-(?:bg|background|background-image|bgset)=("[^"]*"|'[^']*')/gi) || []).forEach(function (a) {
@@ -266,26 +304,83 @@ function imageCandidates(page, cssTexts) {
   return out;
 }
 
-// A photo is used only when there is positive evidence it is the firm's own: its own work, vehicle, premises or team, or
-// its name, said by the alt text, the file name, the caption, the class, or a work, gallery or team page it sits on.
-// Anything that reads as stock, as a person at a laptop, or as food (for a firm that is not in food) is out, and so is
-// anything with no evidence either way. A wrong photo does more harm than no photo, so unknown means no.
-const OWN_WORDS = /\b(our|we|team|staff|crew|van|vans|vehicle|vehicles|fleet|workshop|premises|shopfront|yard|project|projects|installation|installations|installed|completed|finished|recent|before|after|job|jobs|work|works|built|fitted|fitting|engineers?|electricians?|joiners?|builders?|plumbers?|roofers?|owner|director|founder)\b/i;
+// A photo is kept when it plausibly shows their own work or trade, and dropped when it is an obvious misfit. Three checks, in order:
+//  1. Misfit words in the alt text, file name, caption, class or the text right beside it: stock and people photos, food (unless the
+//     firm is in food), scenery and pets, screenshots, badges and awards. Out.
+//  2. Evidence it is theirs or their trade: own work, van, premises, team, the firm name, a work or team page, or trade words. Kept, strongest.
+//  3. No words either way (alt "Picture", a number for a file name): decided by position. In the page's main content and not a png or
+//     gif graphic: kept. In the header, nav, footer or a sidebar, or a graphic: out.
+// Everything out is listed in notes.md with the reason, so nothing is lost silently.
+const OWN_WORDS = /\b(our|we|team|staff|crew|van|vans|vehicle|vehicles|fleet|workshop|premises|shopfront|yard|site|sites|project|projects|installation|installations|installed|completed|finished|recent|before|after|job|jobs|work|works|built|fitted|fitting|engineers?|electricians?|joiners?|builders?|plumbers?|roofers?|owner|director|founder)\b/i;
 const OWN_PAGE = /\/(gallery|galleries|our-work|work|projects?|portfolio|about|about-us|team|case-stud[a-z]*|previous-work|recent-work)(\/|$|\.|-)/i;
+const TRADE_WORDS = /\b(electrical|electric|electrician|socket|sockets|cable|cables|wiring|rewire|rewiring|fuse|fuseboard|consumer|lighting|smoke|alarm|tester|charger|ev|solar|timber|joinery|joiner|carpentry|frame|framing|roof|roofing|joist|joists|brick|bricks|brickwork|block|plaster|plastering|plumbing|plumber|pipe|pipes|boiler|heating|kitchen|bathroom|extension|loft|conversion|scaffold|scaffolding|building|construction|renovation|refurbishment|door|doors|window|windows|stair|stairs|decking|fencing|flooring|floor|machine|machining|welding|weld|fabrication|steel|cnc|tools?|workbench|sawmill|plant|digger|tipper)\b/i;
 const STOCKISH = /\b(stock|shutterstock|istock|getty|unsplash|pexels|pixabay|depositphotos|freepik|handshake|laptop|smiling|smile|smiles|businessman|businesswoman|man|woman|men|women|people|person|customer|customers|client|clients|happy|family|couple|child|children|kids|city|skyline|skyscraper|abstract|background|backdrop|bg|wallpaper|globe|world|map|chart|graph|lightbulb|concept|keyboard|meeting|testimonial|review|award|icon|illustration|vector|cartoon)\b/i;
 const FOODISH = /\b(restaurant|restaurants|dining|diner|food|meal|meals|dish|dishes|menu|coffee|cafe|cocktail|cocktails|wine|beer|chef|pizza|burger|cake|lunch|dinner|breakfast|cutlery|tableware|tables?|chairs?|bar|pub)\b/i;
+const OFFTOPIC = /\b(sunset|sunrise|beach|sea|mountain|mountains|forest|flower|flowers|garden|dog|cat|puppy|kitten|baby|wedding|football|stadium|holiday|travel|landscape|sky|clouds|screenshot|badge|accreditation|accredited|certificate|certified|member|membership|approved|trustpilot|checkatrade|facebook|twitter|instagram)\b/i;
 
 function words(s) { return String(s || '').replace(/([a-z])([A-Z])/g, '$1 $2').replace(/[-_.%+\/]+/g, ' ').replace(/\d+/g, ' '); }
 
 function photoVerdict(c, route, pagePath, firmWords, niche) {
-  const text = words(c.alt) + ' ' + words(route.split('/').pop()) + ' ' + words(c.hint) + ' ' + words(c.caption);
-  if (STOCKISH.test(text)) return { ok: false, why: 'reads as a stock or people photo (' + text.match(STOCKISH)[0] + ')' };
-  if (niche !== 'hospitality' && FOODISH.test(text)) return { ok: false, why: 'looks like food or hospitality, not this trade (' + text.match(FOODISH)[0] + ')' };
-  const nameHit = firmWords.find(function (w) { return text.toLowerCase().indexOf(w) !== -1; });
-  if (nameHit) return { ok: true, why: 'carries the firm name (' + nameHit + ')' };
-  if (OWN_WORDS.test(text)) return { ok: true, why: 'says it shows their own work, vehicle or team (' + text.match(OWN_WORDS)[0] + ')' };
-  if (OWN_PAGE.test(pagePath) && c.via === 'img') return { ok: true, why: 'sits on their ' + pagePath.replace(/^\/|\/$/g, '') + ' page' };
-  return { ok: false, why: 'nothing says it is their own work, logo, van or team' };
+  const own = words(c.alt) + ' ' + words(route.split('/').pop()) + ' ' + words(c.hint) + ' ' + words(c.caption);
+  const text = own + ' ' + words(c.near);
+  let m;
+  if ((m = own.match(STOCKISH))) return { ok: false, why: 'reads as a stock or people photo (' + m[0] + ')' };
+  if (niche !== 'hospitality' && (m = own.match(FOODISH))) return { ok: false, why: 'looks like food or hospitality, not this trade (' + m[0] + ')' };
+  if ((m = own.match(OFFTOPIC))) return { ok: false, why: 'looks unrelated to the trade (' + m[0] + ')' };
+  const nameHit = firmWords.find(function (w) { return own.toLowerCase().indexOf(w) !== -1; });
+  if (nameHit) return { ok: true, level: 2, why: 'carries the firm name (' + nameHit + ')' };
+  if ((m = own.match(OWN_WORDS))) return { ok: true, level: 2, why: 'says it shows their own work, vehicle, site or team (' + m[0] + ')' };
+  // the words beside the image count only when the image has said nothing of its own about being their work
+  if (niche !== 'hospitality' && (m = words(c.near).match(FOODISH))) return { ok: false, why: 'the text beside it is about food or hospitality, not this trade (' + m[0] + ')' };
+  if (OWN_PAGE.test(pagePath) && c.via === 'img') return { ok: true, level: 1, why: 'sits on their ' + pagePath.replace(/^\/|\/$/g, '') + ' page' };
+  // a trade word alone is enough for a photo, but not for a png or gif, which is usually clip art or a product graphic
+  if ((m = own.match(TRADE_WORDS)) && !/\.(png|gif|svg)(\?|#|$)/i.test(route)) return { ok: true, level: 1, why: 'shows their trade (' + m[0] + ')' };
+  // no words either way: position decides
+  if (c.via !== 'img') return { ok: false, why: 'a background or share image with nothing to say what it shows' };
+  if (c.zone === 'chrome') return { ok: false, why: 'sits in the header, footer or a sidebar, not the page content' };
+  if (/\.(png|gif|svg)(\?|#|$)/i.test(route)) return { ok: false, why: 'a png or gif with nothing to say it is a photo, so treated as a graphic' };
+  return { ok: true, level: 0, why: 'in the main content with no sign it is unrelated (kept on position' + (c.order < 3 ? ', one of the first images on the page' : '') + ')' };
+}
+
+// Width and height from the first bytes of a png, gif, jpeg or webp, or null when they cannot be read.
+function imageSize(b) {
+  if (!b || b.length < 24) return null;
+  if (b[0] === 0x89 && b[1] === 0x50) return { w: b.readUInt32BE(16), h: b.readUInt32BE(20) };
+  if (b[0] === 0x47 && b[1] === 0x49) return { w: b.readUInt16LE(6), h: b.readUInt16LE(8) };
+  if (b[0] === 0x52 && b[1] === 0x49 && b.length >= 30 && b.toString('ascii', 8, 12) === 'WEBP') {
+    const k = b.toString('ascii', 12, 16);
+    if (k === 'VP8 ') return { w: b.readUInt16LE(26) & 0x3fff, h: b.readUInt16LE(28) & 0x3fff };
+    if (k === 'VP8X') return { w: 1 + b.readUIntLE(24, 3), h: 1 + b.readUIntLE(27, 3) };
+    return null;
+  }
+  if (b[0] === 0xff && b[1] === 0xd8) {
+    let i = 2;
+    while (i + 9 < b.length) {
+      if (b[i] !== 0xff) { i++; continue; }
+      const m = b[i + 1];
+      if (m >= 0xc0 && m <= 0xcf && m !== 0xc4 && m !== 0xc8 && m !== 0xcc) return { h: b.readUInt16BE(i + 5), w: b.readUInt16BE(i + 7) };
+      i += 2 + b.readUInt16BE(i + 2);
+    }
+  }
+  return null;
+}
+
+// Photos too small to be a hero picture (icons, badges, product thumbnails) are dropped, using the real pixel size read from the
+// start of each file. If a file cannot be fetched or read, the photo is kept: the size check never removes a photo it cannot measure.
+const MIN_PHOTO = { w: 240, h: 150 };
+async function dropTinyPhotos(facts, fetchImpl) {
+  const kept = [];
+  for (const ph of facts.photos) {
+    let size = null;
+    try {
+      const res = await fetchImpl(ph.src, { headers: { range: 'bytes=0-98303' }, signal: AbortSignal.timeout(8000) });
+      if (res && res.ok && typeof res.arrayBuffer === 'function') size = imageSize(Buffer.from(await res.arrayBuffer()).subarray(0, 98304));
+    } catch (e) { /* unmeasured, keep */ }
+    if (size && (size.w < MIN_PHOTO.w || size.h < MIN_PHOTO.h)) {
+      facts.withheldPhotos.push({ src: ph.src, alt: ph.alt, why: 'only ' + size.w + ' by ' + size.h + ' pixels, too small for a photo (an icon, badge or product thumbnail)' });
+    } else kept.push(ph);
+  }
+  facts.photos = kept;
 }
 
 function firmWordsOf(name) {
@@ -309,7 +404,7 @@ function collectImages(pages, homeUrl, cssTexts, name, niche) {
       try { pagePath = new URL(p.url).pathname; } catch (e) { /* keep / */ }
       const v = photoVerdict(c, route, pagePath, firmWords, niche);
       if (!v.ok) { withheld.push({ src: u, alt: plain(c.alt), why: v.why }); return; }
-      photos.push({ src: u, alt: plain(c.alt), via: c.via, why: v.why });
+      photos.push({ src: u, alt: plain(c.alt), via: c.via, why: v.why, level: v.level || 0 });
     });
   });
   // images that look like a main picture first, share images last
@@ -319,7 +414,7 @@ function collectImages(pages, homeUrl, cssTexts, name, niche) {
     if (/hero|banner|header|cover/i.test(route)) return 0;
     return /workshop|shop|machin|team|home/i.test(route) ? 1 : 2;
   };
-  photos.sort(function (a, b) { return rank(a) - rank(b); });
+  photos.sort(function (a, b) { return (b.level || 0) - (a.level || 0) || rank(a) - rank(b); });
   return { photos: photos, skipped: skipped, withheld: withheld };
 }
 
@@ -424,6 +519,10 @@ function extractFacts(pages, nameOverride, cssTexts, opts) {
     (p.html.match(/href=["']mailto:[^"'?]+/gi) || []).forEach(function (h) { addEmail(decodeURIComponent(h.replace(/^href=["']mailto:/i, ''))); });
   });
   (text.match(EMAIL_RE) || []).forEach(addEmail);
+  pages.forEach(function (p) { protectedEmails(p.html).forEach(addEmail); });
+  // an enquiries address before an accounts one, the order found otherwise
+  const FINANCE = /^(accounts?|finance|billing|invoices?|payroll|hr|careers|jobs|recruitment)@/;
+  emails.sort(function (a, b) { return (FINANCE.test(a) ? 1 : 0) - (FINANCE.test(b) ? 1 : 0); });
 
   // logo and photos (only from the prospect's own site)
   const logoPick = pickLogo(pages, home.url);
@@ -1163,6 +1262,7 @@ async function run(opts) {
   } catch (e) { log('Evidence skipped: ' + e.message); }
 
   const facts = extractFacts(pages, opts.name, cssTexts, { niche: opts.niche });
+  await dropTinyPhotos(facts, fetchImpl);
   const pageTexts = pages.map(function (p) { return { url: p.url, text: htmlToText(p.html) }; });
 
   log('Writing copy with Claude');
@@ -1234,7 +1334,7 @@ async function main(argv) {
 module.exports = {
   NICHES, NICHE_LABELS, buildSystem, SYSTEM, BANNER, BANNED, esc, plain, htmlToText, pickLinks, extractFacts, checkCopy, normaliseAi,
   buildContent, copyLines, renderPage, renderNotes, buildPoints, assertPublicUrl, assertSlug, run,
-  pickLogo, collectImages, photoVerdict, firmWordsOf, cssUrls, bestSrcset, unwrapImageUrl, pickStylesheets, buildChangeNotes, buildDetail, buildTable, speedNote
+  pickLogo, collectImages, photoVerdict, firmWordsOf, imageSize, dropTinyPhotos, decodeCfEmail, protectedEmails, cssUrls, bestSrcset, unwrapImageUrl, pickStylesheets, buildChangeNotes, buildDetail, buildTable, speedNote
 };
 
 if (require.main === module) main(process.argv);

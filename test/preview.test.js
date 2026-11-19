@@ -112,7 +112,7 @@ test('only their own photos are used, and the others are reported', async functi
 
 test('it reads the home page and up to 3 linked pages, from their own site only', async function () {
   const r = await generate(GOOD);
-  assert.deepStrictEqual(r.net.calls.pages.filter(function (u) { return !/sitemap\.xml$/.test(u); }), [SITE + '/', SITE + '/services', SITE + '/about-us', SITE + '/contact']);
+  assert.deepStrictEqual(r.net.calls.pages.filter(function (u) { return !/sitemap\.xml$/.test(u) && !/\.(jpe?g|png|webp)$/.test(u); }), [SITE + '/', SITE + '/services', SITE + '/about-us', SITE + '/contact']);
   assert.ok(r.net.calls.pages.every(function (u) { return u.indexOf(SITE) === 0; }), 'a request left their site');
 });
 
@@ -603,54 +603,78 @@ test('niche: the command line help names every niche', function () {
   assert.match(read('tools/preview.js'), /\[--niche engineering\|trades\|hospitality\|childcare\|weddings\]/);
 });
 
-// ---------------------------------------------------------------- photos must be clearly theirs
+// ---------------------------------------------------------------- photos: keep their own work and trade, drop obvious misfits
 
 const FW = gen.firmWordsOf('Stirling Electrical Ltd');
-const verdict = function (c, route, pagePath, niche) { return gen.photoVerdict(Object.assign({ alt: '', hint: '', caption: '', via: 'img' }, c), route, pagePath || '/', FW, niche); };
+const verdict = function (c, route, pagePath, niche) { return gen.photoVerdict(Object.assign({ alt: '', hint: '', caption: '', near: '', via: 'img', zone: 'content', order: 5 }, c), route, pagePath || '/', FW, niche); };
 
-test('photo rule: a restaurant table photo is never used for an electrician, whatever page it is on', function () {
-  assert.strictEqual(verdict({ alt: 'Restaurant table set for dinner' }, '/uploads/table.jpg').ok, false);
-  assert.strictEqual(verdict({ alt: '' }, '/uploads/restaurant-table.jpg', '/our-work').ok, false);
-  assert.strictEqual(verdict({ alt: 'Our work' }, '/uploads/dining-room.jpg', '/gallery').ok, false);
-  assert.match(verdict({ alt: 'Restaurant table' }, '/a.jpg').why, /food or hospitality/);
-});
-
-test('photo rule: a photo with nothing saying it is theirs is not used', function () {
-  const v = verdict({ alt: '' }, '/uploads/1/2/img_4021.jpg', '/');
-  assert.strictEqual(v.ok, false);
-  assert.match(v.why, /nothing says it is their own/);
-  assert.strictEqual(verdict({ alt: 'Sunset over a field' }, '/uploads/field.jpg').ok, false);
-  assert.strictEqual(verdict({ alt: 'Light bulb' }, '/uploads/bulb.jpg').ok, false);
-});
-
-test('photo rule: stock and people photos are out even when they say "our"', function () {
-  ['Our smiling customers', 'Happy family', 'Businessman shaking hands', 'Team meeting at a laptop', 'People talking'].forEach(function (alt) {
-    assert.strictEqual(verdict({ alt: alt }, '/x.jpg').ok, false, alt);
-  });
-  assert.strictEqual(verdict({}, '/uploads/shutterstock_12345.jpg').ok, false);
-  assert.strictEqual(verdict({}, '/uploads/stock-photo.jpg').ok, false);
-});
-
-test('photo rule: their own work, van, team, premises or name is used, with the reason recorded', function () {
+test('photo rule: obvious misfits are dropped, whatever page they are on', function () {
   [
-    [{ alt: 'Our van outside a job' }, '/a.jpg', /own work, vehicle or team/],
-    [{ alt: 'Consumer unit installation completed' }, '/b.jpg', /own work/],
-    [{ alt: '' }, '/uploads/company-van-1.jpg', /own work/],
-    [{ alt: '' }, '/uploads/stirling-electrical-vehicle.jpg', /firm name/],
-    [{ alt: '', caption: 'The crew on site' }, '/c.jpg', /own work/],
-    [{ alt: '', hint: 'team-photo' }, '/d.jpg', /own work/]
+    [{ alt: 'Restaurant table set for dinner' }, '/uploads/table.jpg', '/'],
+    [{ alt: '' }, '/uploads/restaurant-table.jpg', '/our-work'],
+    [{ alt: 'Our work' }, '/uploads/dining-room.jpg', '/gallery'],
+    [{ alt: 'Happy customers' }, '/uploads/a.jpg', '/'],
+    [{ alt: 'Businessman shaking hands' }, '/uploads/b.jpg', '/'],
+    [{ alt: '' }, '/uploads/shutterstock_12345.jpg', '/'],
+    [{ alt: 'Sunset over a beach' }, '/uploads/c.jpg', '/'],
+    [{ alt: 'Screenshot' }, '/uploads/screenshot-2022.png', '/'],
+    [{ alt: 'NSI approved badge' }, '/uploads/nsi.jpg', '/']
+  ].forEach(function (t) { assert.strictEqual(verdict(t[0], t[1], t[2]).ok, false, JSON.stringify(t[0]) + t[1]); });
+  assert.match(verdict({ alt: 'Restaurant table' }, '/a.jpg').why, /food or hospitality/);
+  assert.match(verdict({ alt: 'Sunset' }, '/a.jpg').why, /unrelated to the trade/);
+  assert.match(verdict({ alt: 'Happy family' }, '/a.jpg').why, /stock or people/);
+});
+
+test('photo rule: text right beside the image about food drops a photo with a generic alt', function () {
+  assert.strictEqual(verdict({ alt: 'Picture', near: 'Join us for lunch in our restaurant' }, '/uploads/6704066.jpeg').ok, false);
+  // but an image that says it is their own work stays
+  assert.strictEqual(verdict({ alt: 'Our van', near: 'Join us for lunch in our restaurant' }, '/uploads/6704066.jpeg').ok, true);
+  assert.strictEqual(verdict({ alt: 'Picture', near: 'Join us for lunch in our restaurant' }, '/uploads/6704066.jpeg', '/', 'hospitality').ok, true);
+});
+
+test('photo rule: a generic alt text and a number for a file name is kept when it sits in the main content', function () {
+  const v = verdict({ alt: 'Picture' }, '/uploads/1/2/1368098438.jpg', '/', undefined);
+  assert.strictEqual(v.ok, true);
+  assert.strictEqual(v.level, 0);
+  assert.match(v.why, /main content with no sign it is unrelated \(kept on position\)/);
+  assert.match(verdict({ alt: 'Picture' }, '/uploads/x.jpg').why, /kept on position$|kept on position\)/);
+  assert.match(verdict({ alt: 'Picture', order: 1 }, '/uploads/x.jpg').why, /one of the first images on the page/);
+});
+
+test('photo rule: position drops what is in the header, nav, footer or a sidebar, and graphics with nothing to say they are photos', function () {
+  const chrome = verdict({ alt: 'Picture', zone: 'chrome' }, '/uploads/x.jpg');
+  assert.strictEqual(chrome.ok, false);
+  assert.match(chrome.why, /header, footer or a sidebar/);
+  const png = verdict({ alt: 'Picture' }, '/uploads/x.png');
+  assert.strictEqual(png.ok, false);
+  assert.match(png.why, /png or gif/);
+  const bg = verdict({ alt: '', via: 'css background' }, '/uploads/hero.jpg');
+  assert.strictEqual(bg.ok, false);
+  assert.match(bg.why, /background or share image/);
+});
+
+test('photo rule: their own work, van, site, team, premises or name is kept with the reason, ahead of a generic one', function () {
+  [
+    [{ alt: 'Our van outside a job' }, '/a.jpg', /own work, vehicle, site or team/, 2],
+    [{ alt: 'Consumer unit installation completed' }, '/b.jpg', /own work/, 2],
+    [{ alt: '' }, '/uploads/company-van-1.jpg', /own work/, 2],
+    [{ alt: '' }, '/uploads/stirling-electrical-vehicle.jpg', /firm name/, 2],
+    [{ alt: '', caption: 'The crew on site' }, '/c.jpg', /own work/, 2],
+    [{ alt: '', hint: 'team-photo' }, '/d.jpg', /own work/, 2],
+    [{ alt: 'Picture' }, '/uploads/new-consumer-unit.jpg', /shows their trade/, 1],
+    [{ alt: 'Picture' }, '/uploads/timber-frame-house.jpg', /shows their trade/, 1]
   ].forEach(function (t) {
     const v = verdict(t[0], t[1]);
     assert.strictEqual(v.ok, true, JSON.stringify(t[0]) + t[1]);
     assert.match(v.why, t[2]);
+    assert.strictEqual(v.level, t[3]);
   });
+  assert.strictEqual(verdict({ alt: 'Picture' }, '/uploads/x.png', '/gallery').level, 1);
 });
 
-test('photo rule: an image with no description on their gallery or our-work page counts, but not on the home page', function () {
-  assert.strictEqual(verdict({}, '/uploads/p7.jpg', '/gallery.html').ok, true);
-  assert.strictEqual(verdict({}, '/uploads/p7.jpg', '/our-work').ok, true);
-  assert.strictEqual(verdict({}, '/uploads/p7.jpg', '/').ok, false);
-  assert.strictEqual(verdict({ via: 'css background' }, '/uploads/p7.jpg', '/gallery.html').ok, false);
+test('photo rule: a trade word alone does not make a png or gif a photo', function () {
+  assert.strictEqual(verdict({ alt: 'Picture' }, '/uploads/socket.png').ok, false);
+  assert.strictEqual(verdict({ alt: 'Our van' }, '/uploads/van.png').ok, true);
 });
 
 test('photo rule: a food business may use food photos, any other niche may not', function () {
@@ -659,19 +683,55 @@ test('photo rule: a food business may use food photos, any other niche may not',
   assert.strictEqual(verdict({ alt: 'Our dining room' }, '/room.jpg').ok, false);
 });
 
-test('photo rule: collectImages keeps the good ones, withholds the rest and says why', function () {
+test('photo rule: collectImages reads position and nearby text from the page, keeps good ones first, withholds the rest', function () {
   const home = 'https://stirling.test/';
-  const html = '<img src="/u/van.jpg" alt="Our van" width="800" height="600"><img src="/u/restaurant-table.jpg" alt="" width="800" height="600">' +
-    '<img src="/u/img_1.jpg" alt="" width="800" height="600"><img src="/u/crew.jpg" alt="The crew on site" width="800" height="600">';
+  const html = '<header><img src="/u/banner-top.jpg" alt="Picture" width="800" height="300"></header>' +
+    '<img src="/u/van.jpg" alt="Our van" width="800" height="600"><p>Our work</p><img src="/u/1368.jpg" alt="Picture" width="800" height="600">' +
+    '<img src="/u/diagram.png" alt="Picture" width="800" height="600"><img src="/u/6704.jpg" alt="Picture" width="800" height="600"><p>Eat with us in the restaurant at lunch</p>' +
+    '<footer><img src="/u/foot.jpg" alt="Picture" width="800" height="600"></footer>';
   const out = gen.collectImages([{ url: home, html: html }], home, [], 'Stirling Electrical Ltd', undefined);
-  assert.deepStrictEqual(out.photos.map(function (p) { return p.src.split('/').pop(); }).sort(), ['crew.jpg', 'van.jpg']);
-  assert.deepStrictEqual(out.withheld.map(function (p) { return p.src.split('/').pop(); }).sort(), ['img_1.jpg', 'restaurant-table.jpg']);
-  out.withheld.forEach(function (w) { assert.ok(w.why.length > 10); });
+  assert.deepStrictEqual(out.photos.map(function (p) { return p.src.split('/').pop(); }), ['van.jpg', '1368.jpg']);
+  const why = {}; out.withheld.forEach(function (w) { why[w.src.split('/').pop()] = w.why; });
+  assert.match(why['banner-top.jpg'], /header, footer or a sidebar/);
+  assert.match(why['6704.jpg'], /text beside it is about food or hospitality/);
+  assert.match(why['diagram.png'], /png or gif/);
+  assert.ok(why['foot.jpg'], 'the footer image is withheld, for whichever reason comes first');
 });
 
-test('photo rule: with no photo that passes, the hero is the marked space and the notes list what was withheld', async function () {
+test('photo size: the real pixel size is read from png, gif, jpeg and webp headers', function () {
+  const png = Buffer.alloc(32); Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]).copy(png); png.writeUInt32BE(640, 16); png.writeUInt32BE(480, 20);
+  assert.deepStrictEqual(gen.imageSize(png), { w: 640, h: 480 });
+  const gif = Buffer.alloc(32); gif.write('GIF89a'); gif.writeUInt16LE(100, 6); gif.writeUInt16LE(50, 8);
+  assert.deepStrictEqual(gen.imageSize(gif), { w: 100, h: 50 });
+  const jpg = Buffer.alloc(40); jpg[0] = 0xff; jpg[1] = 0xd8; jpg[2] = 0xff; jpg[3] = 0xe0; jpg.writeUInt16BE(4, 4); jpg[8] = 0xff; jpg[9] = 0xc0; jpg.writeUInt16BE(11, 10); jpg[12] = 8; jpg.writeUInt16BE(600, 13); jpg.writeUInt16BE(900, 15);
+  assert.deepStrictEqual(gen.imageSize(jpg), { w: 900, h: 600 });
+  const webp = Buffer.alloc(32); webp.write('RIFF'); webp.write('WEBP', 8); webp.write('VP8 ', 12); webp.writeUInt16LE(320, 26); webp.writeUInt16LE(200, 28);
+  assert.deepStrictEqual(gen.imageSize(webp), { w: 320, h: 200 });
+  assert.strictEqual(gen.imageSize(Buffer.from('<html>not an image at all, just text</html>')), null);
+  assert.strictEqual(gen.imageSize(null), null);
+});
+
+test('photo size: tiny images (icons, badges, thumbnails) are withheld with the pixel size, unreadable ones are kept', async function () {
+  const mk = function (w, h) { const b = Buffer.alloc(32); Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]).copy(b); b.writeUInt32BE(w, 16); b.writeUInt32BE(h, 20); return b; };
+  const sizes = { 'https://x.test/big.png': mk(900, 600), 'https://x.test/icon.png': mk(160, 109), 'https://x.test/edge.png': mk(240, 150), 'https://x.test/thin.png': mk(900, 42) };
+  const fetchImpl = async function (u) {
+    if (u.endsWith('/broken.png')) throw new Error('down');
+    if (u.endsWith('/text.png')) return { ok: true, arrayBuffer: async function () { return Buffer.from('<html>no</html>'); } };
+    if (u.endsWith('/nobody.png')) return { ok: true };
+    const b = sizes[u]; return { ok: true, arrayBuffer: async function () { return b.buffer.slice(b.byteOffset, b.byteOffset + b.length); } };
+  };
+  const facts = { photos: ['big', 'icon', 'edge', 'thin', 'broken', 'text', 'nobody'].map(function (n) { return { src: 'https://x.test/' + n + '.png', alt: n }; }), withheldPhotos: [] };
+  await gen.dropTinyPhotos(facts, fetchImpl);
+  assert.deepStrictEqual(facts.photos.map(function (p) { return p.alt; }), ['big', 'edge', 'broken', 'text', 'nobody']);
+  assert.deepStrictEqual(facts.withheldPhotos.map(function (w) { return w.alt; }), ['icon', 'thin']);
+  assert.match(facts.withheldPhotos[0].why, /only 160 by 109 pixels, too small for a photo/);
+});
+
+test('photo rule: with only misfits, the hero is the marked space and the notes list every withheld photo with its reason', async function () {
   const saved = PAGES[SITE + '/'];
   PAGES[SITE + '/'] = saved.replace(/<img src="\/img\/shop\.jpg"[^>]*>/, '<img src="/img/restaurant-table.jpg" alt="Restaurant table" width="800" height="600">');
+  const everyPage = Object.assign({}, PAGES);
+  Object.keys(PAGES).forEach(function (k) { if (k !== SITE + '/') PAGES[k] = PAGES[k].replace(/<img[^>]*>/g, ''); });
   try {
     const r = await generate(GOOD);
     assert.strictEqual(r.content.heroPhoto, null);
@@ -679,7 +739,7 @@ test('photo rule: with no photo that passes, the hero is the marked space and th
     assert.match(r.html, /Placeholder: your (workshop )?photo here/);
     assert.match(r.notes, /Photo not used: .*restaurant-table\.jpg \(alt text: Restaurant table\)\. looks like food/);
     assert.match(r.notes, /Add it by hand if it is theirs/);
-  } finally { PAGES[SITE + '/'] = saved; }
+  } finally { Object.keys(everyPage).forEach(function (k) { PAGES[k] = everyPage[k]; }); PAGES[SITE + '/'] = saved; }
 });
 
 // ---------------------------------------------------------------- detail kept out of the page
@@ -709,4 +769,58 @@ test('the notes never say an email or phone was simply not found, only that none
     assert.match(r.notes, /- Email: none found in the text read, it may be hidden or in an image, so the page shows none/);
     assert.ok(!/- Email: none found\n/.test(r.notes));
   } finally { Object.keys(saved).forEach(function (k) { PAGES[k] = saved[k]; }); }
+});
+
+// ---------------------------------------------------------------- email from the contact page, including hidden ones
+
+test('email: a Cloudflare protected address is decoded the way a browser does', function () {
+  assert.strictEqual(gen.decodeCfEmail('9af3f4fcf5daf0f1f7b4f9f5b4eff1'), 'info@jkm.co.uk');
+  assert.strictEqual(gen.decodeCfEmail('0c6d6f6f637962787f4c666761226f63227967'), 'accounts@jkm.co.uk');
+  assert.strictEqual(gen.decodeCfEmail('117f7e6531707f31747c70787d'), '', 'decodes to something that is not an address');
+  assert.strictEqual(gen.decodeCfEmail('zz'), '');
+  assert.strictEqual(gen.decodeCfEmail('abc'), '');
+  const html = '<a class="__cf_email__" data-cfemail="9af3f4fcf5daf0f1f7b4f9f5b4eff1">[email&#160;protected]</a>' +
+    '<a href="/cdn-cgi/l/email-protection#0c6d6f6f637962787f4c666761226f63227967">x</a><a href="/cdn-cgi/l/email-protection#117f7e6531707f31747c70787d">y</a>';
+  assert.deepStrictEqual(gen.protectedEmails(html), ['info@jkm.co.uk', 'accounts@jkm.co.uk']);
+});
+
+function withContactPage(contactHtml, homeExtra) {
+  const saved = Object.assign({}, PAGES);
+  Object.keys(PAGES).forEach(function (k) { PAGES[k] = PAGES[k].replace(/<a href="mailto:[^>]*>[^<]*<\/a>/g, '').replace(/office@hartley-metalwork\.test/g, ''); });
+  PAGES[SITE + '/contact'] = '<html><body><h1>Contact</h1>' + contactHtml + '</body></html>';
+  return function restore() { Object.keys(PAGES).forEach(function (k) { delete PAGES[k]; }); Object.keys(saved).forEach(function (k) { PAGES[k] = saved[k]; }); };
+}
+
+test('email: found on the contact page when it is not on the home page, and shown on the concept', async function () {
+  const restore = withContactPage('<p>Write to <a href="mailto:hello@hartley-metalwork.test">hello@hartley-metalwork.test</a></p>');
+  try {
+    const r = await generate(GOOD);
+    assert.strictEqual(r.content.email, 'hello@hartley-metalwork.test');
+    const html = require('../tools/concept-rich').renderRich(r.content, r.brand, r.points, { cta: { mail: 'mailto:rhys@rhyshume.co.uk' }, evidence: r.evidence });
+    assert.ok(html.includes('href="mailto:hello@hartley-metalwork.test"'));
+    assert.ok(html.includes('<dt>Email</dt><dd>hello@hartley-metalwork.test</dd>'));
+  } finally { restore(); }
+});
+
+test('email: a hidden (Cloudflare) address on the contact page is read, enquiries before accounts', async function () {
+  const restore = withContactPage('<p>Accounts <a href="/cdn-cgi/l/email-protection#0c6d6f6f637962787f4c666761226f63227967">[email protected]</a></p><p>Jobs <a class="__cf_email__" data-cfemail="9af3f4fcf5daf0f1f7b4f9f5b4eff1">[email protected]</a></p>');
+  try {
+    const r = await generate(GOOD);
+    assert.strictEqual(r.content.email, 'info@jkm.co.uk');
+    assert.match(r.notes, /- Email: info@jkm\.co\.uk/);
+  } finally { restore(); }
+});
+
+test('email: with nothing readable anywhere the page shows none and the notes say it may be hidden', async function () {
+  const restore = withContactPage('<p>Use the form below.</p><form><textarea></textarea></form>');
+  try {
+    const r = await generate(GOOD);
+    assert.strictEqual(r.content.email, null);
+    assert.match(r.notes, /may be hidden or in an image, so the page shows none/);
+  } finally { restore(); }
+});
+
+test('email: the contact page is one of the pages read', function () {
+  const home = SITE + '/';
+  assert.ok(gen.pickLinks(home, PAGES[home]).includes(SITE + '/contact'));
 });
