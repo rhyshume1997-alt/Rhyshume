@@ -54,3 +54,13 @@
 .next .n { font: 400 0.8125rem/1.8 var(--mono); color: var(--accent-ink); }
 .next li p { color: var(--ink-2); }
 .next .alt { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--rule); color: var(--ink-2); font-size: 0.9375rem; }
+
+/* What happens next, as stairs: each step sits further along and darker. */
+.next ol { margin-top: 1.2rem; }
+.next li, .next li:first-child { display: block; border: 0; border-left: 8px solid var(--ink); background: var(--paper-2); padding: 1rem 1.1rem 1.1rem; }
+.next li + li { margin-top: 0.5rem; }
+.next li:nth-child(2) { margin-left: 1.25rem; background: var(--accent-soft); }
+.next li:nth-child(3) { margin-left: 2.5rem; background: var(--ink); border-left-color: var(--accent); }
+.next li:nth-child(3) p { color: var(--paper); }
+.next li:nth-child(3) .n { color: #9db8e0; }
+.next .n { display: block; margin-bottom: 0.3rem; }
