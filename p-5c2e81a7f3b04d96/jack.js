@@ -10,8 +10,7 @@
 
   /* ---------- opening: the signature sequence lives in signature.js ---------- */
   var root = document.documentElement;
-  var scene = $('#scene');
-  if (window.Sig && window.gsap && scene) Sig.opening(scene); else root.classList.remove('sig-wait');
+  if (window.Sig && window.gsap && $('#stage')) Sig.opening(); else root.classList.remove('sig-wait');
   var rp = $('#replay'); if (rp) rp.addEventListener('click', function () { if (window.Sig && Sig.replay) Sig.replay(); });
 
   /* scroll reveals */
@@ -59,9 +58,15 @@
     P.filter(function (p) { return p.cat === cat; }).forEach(function (p) {
       var li = el('li', 'pw'), b = el('button', 'card'); b.type = 'button'; b.setAttribute('aria-pressed', cur_ && cur_.id === p.id ? 'true' : 'false'); b.dataset.id = p.id; b.setAttribute('aria-describedby', 'info-' + p.id);
       b.appendChild(el('span', 'demo mono', 'Demo'));
-      var art = el('span', 'art'); art.appendChild(bottle(p.col, p.cat === 'wine'));
+      var art = el('span', 'art'), wine = p.cat === 'wine', reel = null;
+      if (wine) { art.appendChild(bottle(p.col, true)); }
+      else {
+        /* beer and cider: a photographic bottle slot, and a window onto the pour footage that opens on hover, focus or tap */
+        var im = el('img', 'prod'); im.src = 'media/bottle-amber-sm.webp'; im.alt = ''; im.width = 75; im.height = 240; im.loading = 'lazy'; art.appendChild(im);
+        reel = el('span', 'reel'); var st = el('img', 'still'); st.src = 'media/pour-poster-end.webp'; st.alt = ''; st.width = 736; st.height = 400; st.loading = 'lazy'; reel.appendChild(st); art.appendChild(reel);
+      }
       var gs = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); gs.setAttribute('class', 'gl'); gs.setAttribute('viewBox', '0 0 60 80'); gs.setAttribute('aria-hidden', 'true'); gs.setAttribute('focusable', 'false');
-      art.appendChild(gs); b.appendChild(art);
+      if (!wine) art.appendChild(gs); b.appendChild(art);
       b.appendChild(el('b', null, p.name)); b.appendChild(el('span', 'st', p.sub)); b.appendChild(el('span', 'pr mono', '[price to be confirmed]'));
       li.appendChild(b);
       /* information panel: always in the page, shown on hover, focus or tap. Flavour values are sample data, not verified. */
@@ -71,8 +76,11 @@
       info.appendChild(el('p', 'mono', 'Flavour, sample data, not verified'));
       var ul = el('ul', 'mini'); p.f.forEach(function (v, i) { ul.appendChild(el('li', null, AX[i] + ' ' + v + '/5')); }); info.appendChild(ul);
       info.appendChild(el('p', null, 'Allergens: [to be verified]'));
+      if (wine) info.appendChild(el('p', 'mono', 'Pour footage: not supplied yet'));
       li.appendChild(info);
-      if (HAS) li._glass = Sig.cardGlass(gs, { colour: p.liq, foam: !!p.foam, foamColour: '#fffaf0' });
+      if (reel) li._reel = reel;
+      if (wine) li._none = true;
+      if (HAS && !wine) li._glass = Sig.cardGlass(gs, { colour: p.liq, foam: !!p.foam, foamColour: '#fffaf0' });
       grid.appendChild(li);
     });
   }
@@ -85,7 +93,7 @@
     cur_ = p; $$('.card', grid).forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.id === p.id ? 'true' : 'false'); });
     $('#d-cat').textContent = CATNAME[p.cat] + ' · demonstration product';
     $('#d-name').textContent = p.name; $('#d-sub').textContent = p.sub;
-    var art = $('#d-art'); art.textContent = ''; var s = bottle(p.col, p.cat === 'wine'); while (s.firstChild) art.appendChild(s.firstChild);
+    var art = $('#d-art'), ph = $('#d-photo'); art.textContent = ''; if (p.cat === 'wine') { var s = bottle(p.col, true); while (s.firstChild) art.appendChild(s.firstChild); art.removeAttribute('hidden'); ph.hidden = true; } else { art.setAttribute('hidden', ''); ph.hidden = false; }
     var fl = $('#d-flav'); fl.textContent = '';
     p.f.forEach(function (v, i) {
       var li = el('li'), n = el('span', null, AX[i]), bar = el('span', 'bar'), fill = el('i'); fill.style.setProperty('--v', 0); bar.appendChild(fill);

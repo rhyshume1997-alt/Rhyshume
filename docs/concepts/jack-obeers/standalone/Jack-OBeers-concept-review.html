@@ -83,17 +83,26 @@ h2 i, h1 i { font-family: var(--serif); font-style: italic; font-weight: 400; le
 .cta { display: flex; flex-wrap: wrap; align-items: center; gap: 0.8rem 1.6rem; }
 .tmp { opacity: 0.75; }
 
-.window { position: relative; --aw: min(calc(100vw - 2 * var(--gut)), 24rem); inline-size: var(--aw); margin: 1.2rem auto 0.4rem 0; }
-.arch { position: relative; padding: 0.65rem; background: var(--green); border-radius: calc(var(--aw) / 2) calc(var(--aw) / 2) 1.7rem 1.7rem; }
-.scene { inline-size: 100%; block-size: auto; border-radius: calc(var(--aw) / 2 - 0.65rem) calc(var(--aw) / 2 - 0.65rem) 1.1rem 1.1rem; background: var(--cream); }
-.arch .tag { position: absolute; inset: auto 1.3rem 1.3rem auto; background: var(--ink); color: var(--cream); padding: 0.28rem 0.65rem; border-radius: 999px; font-size: 0.62rem; z-index: 2; }
+.window { position: relative; inline-size: min(100%, 46rem); margin: 0.6rem auto 0.4rem; }
+.frame { position: relative; padding: 0.55rem; background: var(--green); border-radius: 1.9rem; }
+.stage { position: relative; aspect-ratio: 736 / 400; border-radius: 1.4rem; overflow: hidden; background: #2a1d16; isolation: isolate; }
+.stage-inner { position: absolute; inset: 0; }
+.stage .still, .stage .film { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; }
+.sig-wait .stage .film { opacity: 0; }
+.js .stage .film { opacity: 0; }
+.plaque { position: absolute; z-index: 2; inset-inline-start: 4%; inset-block-end: 5%; inline-size: 27%; }
+.plaque-card { position: relative; z-index: 1; background: var(--paper); border-radius: 0.9rem; padding: 0.4rem 0.45rem 0.3rem; }
+.plaque-card img { inline-size: 100%; block-size: auto; }
+.plaque-shadow { position: absolute; z-index: 0; inset-inline: -4%; inset-block-end: -5%; block-size: 14%; border-radius: 50%; background: #1c120c; opacity: 0.4; filter: blur(7px); }
+.sig-wait .plaque { opacity: 0; }
+.stage .tag { position: absolute; inset: auto 0.7rem 0.6rem auto; background: var(--ink); color: var(--cream); padding: 0.28rem 0.65rem; border-radius: 999px; font-size: 0.62rem; z-index: 2; }
 .sill { block-size: 0.9rem; margin: 0.45rem -0.9rem 0; background: var(--ink); border-radius: 0.5rem; }
 .replay { margin-block-start: 1rem; display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.55rem 1rem; min-block-size: 2.75rem; background: transparent; border: 2px solid var(--ink); border-radius: 999px; font-weight: 600; font-size: 0.92rem; }
 .js .replay { display: inline-flex; }
 @media (min-width: 56rem) {
-  .open-in { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: clamp(1.5rem, 4vw, 4rem); align-items: center; }
+  .open-in { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); column-gap: clamp(1.5rem, 4vw, 4rem); align-items: center; }
   .wm { font-size: clamp(5rem, 9.6vw, 9rem); }
-  .window { --aw: clamp(22rem, 31vw, 29rem); margin: 0; }
+  .window { margin: 0; justify-self: end; }
 }
 
 /* scene artwork (flat colour) */
@@ -289,9 +298,9 @@ input[type="date"] { inline-size: 100%; min-block-size: 3rem; padding: 0.5rem 0.
 
 /* ===== Rev 2: signature interaction ===== */
 .sig-wait .reveal { opacity: 0; }
-.sig-wait #sig-stage { visibility: hidden; }
+
 .mobile-first { }
-@media (max-width: 55.99rem) { .window { order: -1; margin-inline: auto; } }
+@media (max-width: 55.99rem) { .window { order: -1; } }
 /* components (flat colour; the bottle is brown glass) */
 .sig-body, .sig-neck { fill: #5a2e14; }
 .sig-cap { fill: var(--red); }
@@ -323,9 +332,38 @@ input[type="date"] { inline-size: 100%; min-block-size: 3rem; padding: 0.5rem 0.
 .tog { min-block-size: 2.75rem; padding: 0.4rem 1rem; border-radius: 999px; border: 2px solid var(--ink); background: transparent; font-weight: 600; font-size: 0.92rem; }
 .tog[aria-pressed="true"] { background: var(--ink); color: var(--cream); }
 /* the cursor bottle gets a thin cream edge so brown glass stays visible on brown and cream alike */
-.sig-follow .sig-body, .sig-follow .sig-neck { stroke: var(--cream); stroke-width: 1.4; paint-order: stroke; }
-.sig-follow .sig-cap { stroke: var(--cream); stroke-width: 1; }
+
 .card[aria-pressed="true"] .sig-outline { stroke: var(--cream); }
+
+/* ===== Rev 3: photographic treatment ===== */
+.sig-follow .sig-photo { filter: drop-shadow(0 0 0.7px #f8efdc) drop-shadow(0 0 0.7px #f8efdc); }
+/* product cards: a bottle photograph slot and a window onto the pour footage */
+.card .art { position: relative; display: block; block-size: 8rem; margin-block-end: 0.5rem; }
+.card .art img.prod { position: absolute; inset-block: 0; inset-inline-start: 50%; translate: -50% 0; block-size: 100%; inline-size: auto; }
+.card .art > svg:first-child { position: absolute; inset-block: 0; inset-inline-start: 50%; translate: -50% 0; }
+.card .art .reel { position: absolute; inset: 0; border-radius: 1rem; overflow: hidden; clip-path: inset(0% 0% 0% 100%); background: #2a1d16; pointer-events: none; }
+.card .art .reel .still, .card .art .reel .reel-video { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; object-position: 0% 50%; }
+.film-off .reel { display: none; }
+html:not(.film-off) .card svg.gl { display: none; }
+.film-off .card .art img.prod { inset-inline-start: 22%; }
+.film-off .card svg.gl { position: absolute; inset-inline-end: 6%; inset-block-end: 0; }
+.card .ph { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 0.6rem; border: 2px dashed currentColor; border-radius: 1rem; font-size: 0.62rem; opacity: 0.8; }
+@media (prefers-reduced-motion: reduce) { .card .art .reel { transition: none; } }
+.live-tag { position: absolute; inset: auto 0.45rem 0.4rem auto; font-size: 0.55rem; background: var(--ink); color: var(--cream); padding: 0.05rem 0.4rem; border-radius: 999px; z-index: 3; }
+.card .demo { z-index: 3; }
+/* lab page */
+.lab .swatches { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+.lab .sw { display: grid; place-items: center; padding: 0.8rem 1.2rem; border-radius: 1rem; }
+.lab .sw-cream { background: var(--cream); border: 2px solid var(--ink); } .lab .sw-brown { background: var(--green); } .lab .sw-ink { background: var(--ink); }
+.lab .lab-bottles .box svg { margin-block-end: 0.6rem; background: var(--cream); border-radius: 1rem; padding: 0.8rem 1.2rem; }
+.lab .lab-video { margin: 0.4rem 0 0; max-inline-size: 60rem; } .lab .lab-video video { inline-size: 100%; block-size: auto; border-radius: 1rem; background: #2a1d16; }
+.lab .lab-video figcaption { margin-block-start: 0.5rem; }
+.lab code { font-family: "IBM Plex Mono", monospace; font-size: 0.9em; }
+.d-art[hidden] { display: none; } img.d-art { inline-size: 4.2rem; block-size: auto; }
+/* fixed row height: opening a product's window must never move the page */
+.grid { grid-auto-rows: 19.5rem; }
+.pw { block-size: 19.5rem; }
+.card { block-size: 100%; }
 </style>
 </head>
 <body>
@@ -372,6 +410,9 @@ input[type="date"] { inline-size: 100%; min-block-size: 3rem; padding: 0.5rem 0.
 <div class="box"><h3>Customised Shopify theme</h3><ul class="l"><li>Keeps checkout, accounts, orders, tax, shipping and stock in one place the client may already use</li><li>Most of this design (layout, type, colour, flavour pages, deli cards, the opening animation) can be built in a theme with product metafields for flavour, pairing and allergen data</li><li>Click and collect and shipping are standard Shopify features, subject to plan and apps</li><li>Limits: the lying-to-standing opening and the cursor are front-end work inside theme code, fine but needs care for speed; rental and membership logic usually need apps</li></ul></div>
 <div class="box"><h3>Separate front end on Shopify&rsquo;s APIs</h3><ul class="l"><li>More freedom for animation and bespoke flows</li><li>More to build, host and maintain; checkout and account behaviour need extra care; the client depends on a developer for changes</li><li>Worth it only if the theme cannot deliver something the client truly needs</li></ul></div></div>
 <p class="lead" style="margin-block-start:1rem"><b>Leaning (to confirm):</b> start with a customised theme. Dependencies: Shopify plan and store status (the workbook says no website, yet lists Shopify, so what exists is unconfirmed), access arranged safely, DNA till integration options, and the client&rsquo;s alcohol compliance answers. No Shopify account was connected, and no data, orders or credentials were touched.</p>
+
+<h2 id="media">Imagery and media in Rev 3</h2>
+<ul class="l"><li>The bottle photograph and pour footage are AI-generated references, not client photography. Any branding or text inside the originals is invented and is not used.</li><li>The footage is a short, low-resolution clip, and the bottle cut-out stands in for every beer and cider. Real product photography and a purpose-made film are needed (see the asset specification in the project documents).</li><li>Commercial-use terms for the generated media have not been checked.</li><li>See the <a href="Jack-OBeers-concept-lab.html">prototype lab</a> for the drawn and photographic versions side by side.</li></ul>
 
 <h2 id="risk">Known technical and compliance risks</h2>
 <ul class="l"><li>Alcohol: licensing conditions, age verification, delivery restrictions, permitted payment and sale processes, advertising standards, privacy and accounts all need checking with the client and their advisers. Nothing here claims any set-up satisfies Scottish licensing.</li><li>Marketing: the audience includes young families, but alcohol promotion must not target or appeal to children. The visuals avoid child-focused imagery.</li><li>Product information: allergens and ABV must come from verified sources</li><li>Illustrations stand in for photography; real imagery changes the feel and the page weight</li><li>Heavy animation and video must stay fast on phones; reduced motion is respected</li><li>Till and Shopify stock sync is an unknown</li><li>Dubai font licence unchecked</li><li>The preview lives in the Rhys Hume repository under an unguessable, noindex address. It is private by obscurity only, not password protected.</li></ul>

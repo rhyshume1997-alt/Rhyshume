@@ -1,0 +1,52 @@
+PASS opening: nav and both shop actions visible while it plays
+PASS opening: "Explore the shop" works at 0.4 s (not blocked)
+PASS opening: real pour footage is playing  [{"paused":false,"t":1.5078,"op":1}]
+PASS opening: timeline 2 to 3 s  [2.80s]
+PASS opening: logo plaque stood up, text visible
+PASS opening: footage ends and holds its last frame
+PASS opening: any key skips the plaque rise to its end
+PASS opening: bottle in the footage is cropped by the frame edge (no floating bottle): footage covers the stage, no separate bottle layer
+PASS components: photographic Bottle (cut-out image) and Stream, Glass, Liquid exposed
+PASS cursor: photographic bottle visible in the drinks section
+PASS cursor: offset from pointer, pointer not covered
+PASS cursor: no cursor:none, pointer-events none, hits go through
+PASS cursor: movement lags the pointer and leans while travelling, then settles to its resting angle  [{"travel":{"x":134.2676,"rot":-6.9501},"rest":{"x":234.2031,"rot":-12}}]
+PASS hover: information visible within 0.3 s
+PASS hover: window opens and the pour footage plays inside the card  [{"h":"inset(0%)","hv":{"paused":false,"t":1.2868,"inCard":true}}]
+PASS hover: cursor bottle hands off (hidden) while the footage plays
+PASS leave: window closes, footage paused and removed, information hides  [{"open":false,"on":false,"clip":"inset(0% 0% 0% 100%)","info":0}]
+PASS leave: cursor bottle returns
+PASS wine: information shows, no pour footage (none supplied)
+PASS cider: footage plays
+PASS category change: clean, no errors
+PASS keyboard: focusing a card opens its information and plays the footage  [{"paused":false,"t":1.0987,"inCard":true}]
+PASS keyboard: Enter selects it and moves focus to the details
+PASS keyboard: moving to the next card moves the window with focus
+PASS toggle: pouring animation can be turned off
+PASS toggle off: information and still frame show, nothing plays  [{"paused":true,"t":0.5503,"inCard":true}]
+PASS scroll while a window is open: closes cleanly, no errors
+PERF page {"lcp":60,"cls":0.0007624099459340707,"lt":[],"src":["57:0.001:NAV,btn top-btn,tlink"]} idle rAF {"avg":"60.0","p95":"16.8","max":"16.8"}
+PERF bytes {"index.html":"18 KB","http://site.test/website-concepts/fonts/archivo-latin.woff2":"34 KB","jack.css":"29 KB","jack-logo.png":"72 KB","media/pour-poster.webp":"36 KB","media/bottle-amber-sm.webp":"9 KB","http://site.test/website-concepts/fonts/newsreader-latin.woff2":"129 KB","media/pour.webm":"371 KB","jack.js":"16 KB","vendor/gsap.min.js":"72 KB","http://site.test/website-concepts/fonts/ibm-plex-mono-400-latin.woff2":"14 KB","http://site.test/website-concepts/fonts/ibm-plex-sans-latin.woff2":"45 KB","signature.js":"21 KB","media/pour-poster-end.webp":"44 KB"} total 908 KB
+PASS network: no external requests, nothing sent, no storage
+PASS page errors: none
+PERF during pour+cursor {"frames":182,"avgFps":"60.0","p95ms":"16.7","maxms":"16.8"}
+PASS reduced motion: no playback, still frame and standing plaque, text visible at once
+PASS reduced motion: nothing animating
+PASS reduced motion: cursor bottle not shown
+PASS reduced motion: information shows and the still frame appears, no footage plays
+PASS reduced motion: no errors
+PASS no JS: still frame and standing plaque show, headline visible
+PASS fallback (?pour=svg): footage off, drawn pour kept
+PASS fallback: drawn glass fills when hovered, information shows
+PASS fallback: no errors
+PASS mobile: opening stage above the fold and playing
+PASS mobile: custom cursor not visible
+PASS mobile tap: information visible and the pour footage plays in the card  [{"paused":false,"t":1.1088,"inCard":true}]
+PASS mobile tap: cursor layer never shown
+PASS mobile tap: product details updated too, no sideways scroll
+PASS mobile: no errors
+PASS axe concept (default): no violations (WCAG 2.2 AA + best practice)  [51 rules passed]
+PASS axe concept (card open, footage playing): no violations (WCAG 2.2 AA + best practice)  [51 rules passed]
+PASS axe design review: no violations (WCAG 2.2 AA + best practice)  [36 rules passed]
+PASS axe prototype lab: no violations (WCAG 2.2 AA + best practice)  [39 rules passed]
+0 failing of 48

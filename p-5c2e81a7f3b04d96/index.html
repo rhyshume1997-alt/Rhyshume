@@ -15,7 +15,7 @@
 </head>
 <body>
 <a class="skip" href="#main">Skip to the content</a>
-<aside class="banner" aria-label="Concept notice"><b>Initial design concept by Rhys Hume. Not a live shop.</b> Rev 2. Private preview for discussion. Products, prices and photographs are demonstration material. Nothing is bought, booked or sent. <a href="review.html">Design review</a></aside>
+<aside class="banner" aria-label="Concept notice"><b>Initial design concept by Rhys Hume. Not a live shop.</b> Rev 3. Private preview for discussion. Products, prices and imagery are demonstration material, and the pictures and footage are AI-generated references, not client photography. Nothing is bought, booked or sent. <a href="review.html">Design review</a></aside>
 
 <header class="top"><div class="wrap top-in">
   <img class="logo" src="jack-logo.png" width="46" height="46" alt="">
@@ -26,7 +26,7 @@
 
 <main id="main">
 
-<!-- 1. opening: the logo lies on the counter, rises, and a bottle pours a glass. Static markup below is the finished state, used with no JavaScript or reduced motion. -->
+<!-- 1. opening: real (AI-generated reference) pour footage as the plate, the client's logo on a plaque layer that lies on the counter and stands up -->
 <section class="open" id="top" aria-labelledby="h1">
   <div class="wrap open-in">
     <div class="open-type">
@@ -38,21 +38,15 @@
     </div>
 
     <div class="window">
-      <div class="arch">
-        <svg id="scene" class="scene" viewBox="0 0 400 440" role="img" aria-label="Illustration: the Jack O'Beers logo stands on a shop counter beside a glass of beer and a brown bottle.">
-          <rect class="s-bg" width="400" height="440"/>
-          <circle class="s-sun" cx="310" cy="84" r="36"/>
-          <path class="s-bunt" d="M24 120 Q200 188 376 120"/>
-          <g class="s-flags"><path d="M84 138 h18 l-9 20z M154 152 h18 l-9 20z M226 152 h18 l-9 20z M296 138 h18 l-9 20z"/></g>
-          <rect class="s-shelf" x="0" y="372" width="400" height="14" rx="7"/>
-          <rect class="s-board" x="0" y="386" width="400" height="54"/>
-          <g id="sig-stage" data-logo="jack-logo.png">
-            <image href="jack-logo.png" x="16" y="207" width="156" height="165" preserveAspectRatio="xMidYMax meet"/>
-            <g transform="translate(214 225.7) scale(1.9)"><path class="sig-beer-s" d="M13 16H47L45 74Q44 77 41 77H19Q16 77 15 74Z"/><path class="sig-foam-s" d="M11 12H49L48 22H12Z"/><path class="sig-outline" d="M8 10L15 74Q16 77 19 77H41Q44 77 45 74L52 10"/></g>
-            <g transform="translate(352 288.7) scale(1.6) translate(-17 -28)"><path class="sig-body" d="M4 72Q4 77 9 77H25Q30 77 30 72V44Q30 32 21 26H13Q4 32 4 44Z"/><rect class="sig-neck" x="13" y="7" width="8" height="21" rx="2"/><rect class="sig-cap" x="11.5" y="3.5" width="11" height="5" rx="2.5"/><rect class="sig-label-bg" x="7" y="47" width="20" height="22" rx="10"/><circle class="sig-label-dot" cx="17" cy="58" r="4"/></g>
-          </g>
-        </svg>
-        <p class="tag mono">Illustration, not photography or footage</p>
+      <div class="frame">
+        <div class="stage" id="stage" role="img" aria-label="A bottle of beer being poured into a glass on a deli counter, with the Jack O'Beers and Deli logo on a sign standing on the counter. AI-generated reference footage.">
+          <div class="stage-inner" id="stage-inner">
+            <img class="still" src="media/pour-poster.webp" width="736" height="400" alt="" fetchpriority="high">
+            <video id="hero-film" class="film" muted playsinline preload="auto" aria-hidden="true" tabindex="-1"><source src="media/pour.webm" type="video/webm"><source src="media/pour.mp4" type="video/mp4"></video>
+          </div>
+          <div class="plaque" id="plaque"><div class="plaque-card"><img src="jack-logo.png" width="244" height="258" alt="Jack O'Beers and Deli logo"></div><span class="plaque-shadow" id="plaque-shadow" aria-hidden="true"></span></div>
+          <p class="tag mono">AI-generated reference footage, not client photography</p>
+        </div>
       </div>
       <div class="sill" aria-hidden="true"></div>
       <button class="replay js-only" type="button" id="replay"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M4 12a8 8 0 1 0 3-6.2M4 4v5h5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Replay the opening</button>
@@ -100,7 +94,7 @@
     <article class="detail js-only" id="detail" aria-labelledby="d-name" tabindex="-1" aria-live="polite">
       <p class="mono d-cat" id="d-cat">Pick a product</p>
       <div class="d-top">
-        <svg class="d-art" id="d-art" viewBox="0 0 120 200" aria-hidden="true" focusable="false"></svg>
+        <svg class="d-art" id="d-art" viewBox="0 0 120 200" aria-hidden="true" focusable="false"></svg><img class="d-art" id="d-photo" src="media/bottle-amber-sm.webp" width="75" height="240" alt="" hidden>
         <div>
           <h3 id="d-name">Choose a product</h3>
           <p class="d-sub" id="d-sub">Select any card to see its page.</p>

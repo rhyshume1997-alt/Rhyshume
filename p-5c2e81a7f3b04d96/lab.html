@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="referrer" content="no-referrer">
+<title>Prototype lab: drawn versus photographic (Rev 3) | Rhys Hume</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="jack.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the content</a>
+<aside class="banner"><b>Initial design concept by Rhys Hume. Not a live shop.</b> The bottle photograph and pour footage are AI-generated references, not client photography. Any text in the originals is invented and not used.</aside>
+<header class="top"><div class="wrap top-in"><a class="brand" href="index.html">Jack <span>O&rsquo;</span>Beers</a><nav aria-label="Main"><a href="index.html">Back to the concept</a></nav><a class="btn top-btn" href="index.html">View the concept</a></div></header>
+<main id="main" class="rev lab"><div class="wrap">
+<p class="mono">Prototype lab, Rev 3</p>
+<h1>Drawn against photographic</h1>
+<p class="lead">The Rev 2 bottle and pour were drawn in SVG. Rev 3 swaps them for a real-looking bottle and real-looking footage. Same page, same interaction, same moment, side by side.</p>
+
+<h2>1. The bottle</h2>
+<div class="cols lab-bottles">
+  <div class="box"><h3>Rev 2: drawn</h3>
+    <svg viewBox="0 0 34 79" width="102" height="237" role="img" aria-label="The Rev 2 drawn bottle: flat brown shapes with a round label" focusable="false"><path class="sig-body" d="M4 72Q4 77 9 77H25Q30 77 30 72V44Q30 32 21 26H13Q4 32 4 44Z"/><rect class="sig-neck" x="13" y="7" width="8" height="21" rx="2"/><rect class="sig-cap" x="11.5" y="3.5" width="11" height="5" rx="2.5"/><rect class="sig-label-bg" x="7" y="47" width="20" height="22" rx="10"/><circle class="sig-label-dot" cx="17" cy="58" r="4"/></svg></div>
+  <div class="box"><h3>Rev 3: photographic cut-out</h3>
+    <div class="swatches"><span class="sw sw-cream"><img src="media/bottle-amber.webp" width="294" height="720" alt="Amber glass beer bottle with condensation, cut out from a white background" style="block-size:237px;inline-size:auto"></span><span class="sw sw-brown"><img src="media/bottle-amber.webp" width="294" height="720" alt="" style="block-size:237px;inline-size:auto"></span><span class="sw sw-ink"><img src="media/bottle-amber.webp" width="294" height="720" alt="" style="block-size:237px;inline-size:auto"></span></div>
+    <p class="mono">Same cut-out on cream, brown and dark. Edges are soft where the glass picks up the background.</p></div>
+</div>
+
+<h2>2. The pour, as it plays on hover</h2>
+<p class="lead">Scripted identically. Left is Rev 2, right is Rev 3. Press play.</p>
+<figure class="lab-video"><video id="v-hover" controls muted playsinline preload="metadata" width="1800" height="470" poster="media/compare-pour-mid.webp"><source src="media/compare-hover.mp4" type="video/mp4"></video><figcaption class="mono">Recorded from both builds in the same browser. Rev 3 footage is an AI-generated reference clip.</figcaption></figure>
+
+<h2>3. The opening</h2>
+<figure class="lab-video"><video id="v-open" controls muted playsinline preload="metadata" width="1920" height="450"><source src="media/compare-opening.mp4" type="video/mp4"></video><figcaption class="mono">Left: drawn scene. Right: footage plate with the logo plaque lying on the counter, then standing.</figcaption></figure>
+
+<h2>What is real, what is temporary</h2>
+<ul class="l">
+<li><b>Bottle:</b> a photograph cut from a white background. The same bottle is used for every product slot, so it stands in for product photography. Not the client&rsquo;s product.</li>
+<li><b>Pour:</b> one 5-second, 736 x 400 clip. It looks convincing at card size and at hero size but is soft if enlarged beyond that. The glass is already part-filled when it starts, so the level does not rise from empty.</li>
+<li><b>The bottle never floats:</b> in the footage it comes in from beyond the frame edge, and the card windows are cropped so that edge stays cut off. The cursor bottle fades out as the footage takes over.</li>
+<li><b>Wine:</b> no footage exists, so wine cards show information only.</li>
+<li><b>Fallback:</b> add <code>?pour=svg</code> to the address to see the drawn Rev 2 pour, which is also used if the footage cannot play.</li>
+<li><b>Still needed:</b> a purpose-made pour film, specified in the asset specification in the project documents.</li>
+</ul>
+</div></main>
+<footer class="foot"><div class="wrap"><p><b>Initial design concept by Rhys Hume. Not a live shop.</b></p></div></footer>
+</body>
+</html>
