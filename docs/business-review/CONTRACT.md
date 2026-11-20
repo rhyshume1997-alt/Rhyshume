@@ -102,9 +102,11 @@ Behaviour: validates, rate limits, probes the home page once (title, h1, JSON-LD
     "competition_scope_note": "Regional: businesses serving the Glasgow area. You can change this to national or local below.",
     "assumptions": ["Comparison businesses will be chosen from a supported source where one is available."] },
   "access_token": "q3Zk1m0uQ2r1Gx3d7Hh5mY2uJ4sV9bTf8LwEoPaNcXg",
-  "report_url": "/business-review/report#t=q3Zk1m0uQ2r1Gx3d7Hh5mY2uJ4sV9bTf8LwEoPaNcXg" }
+  "report_url": "/business-review/report#t=q3Zk1m0uQ2r1Gx3d7Hh5mY2uJ4sV9bTf8LwEoPaNcXg&id=6c9b8e2a-6a77-4c0a-9a41-1d2f7b0d3f10" }
 ```
 Errors: `validation_failed`, `url_not_allowed`, `unresolvable`, `turnstile_failed|unavailable`, `rate_limited`, `daily_limit`, `unsupported_media_type`.
+
+> **CONTRACT AMENDMENT (package A, 20 Nov 2026, requested by builder B via coordinator):** `report_url` and the emailed report link now carry the review id as well as the token, both in the URL fragment: `#t=<token>&id=<review id>`. Every route needs the id, so a link opened in a fresh browser can load the report. The fragment is still never sent to the server. `contract_version` stays 1.0 because the change is additive for clients that already read `access_token` and `review.id`.
 
 ### 3.3 POST /:id/confirm
 Bearer. Body (all optional except `confirmed`):
