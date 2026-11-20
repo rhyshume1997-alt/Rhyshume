@@ -100,33 +100,58 @@
   function pivotFor(W, tipLen, theta) { var t = R(theta, 0, -tipLen); return { x: W.x - t.x, y: W.y - t.y }; }
 
   /* ---------------- 1. the opening ---------------- */
-  var O = {};
+  var O = {}, UNLIT = '#4b2c1f', HOT = '#f0b653';
+  /* the headline is split into letters so it can light from the pour side. The text stays readable: the heading carries an aria-label and the letters are hidden from assistive tech. */
+  function splitHeading() {
+    var h = $('#h1'); if (!h || h.getAttribute('data-split')) return [];
+    h.setAttribute('data-split', '1'); var out = [];
+    function wrap(node) {
+      var frag = document.createDocumentFragment();
+      var txt = node.textContent.trim();   /* edge spaces are dropped so no empty line can wrap */
+      txt.split('').forEach(function (ch) { var s = document.createElement('span'); s.className = 'c'; s.setAttribute('aria-hidden', 'true'); s.textContent = ch; frag.appendChild(s); out.push(s); });
+      node.parentNode.replaceChild(frag, node);
+    }
+    [].slice.call(h.childNodes).forEach(function (n) {
+      if (n.nodeType === 3) wrap(n);
+      else if (n.nodeType === 1) { n.setAttribute('aria-hidden', 'true'); [].slice.call(n.childNodes).forEach(function (c) { if (c.nodeType === 3) wrap(c); }); }
+    });
+    return out;
+  }
   function openingFinal() {
-    gsap.set(O.plaque, { rotationX: 0, y: 0, opacity: 1, clearProps: 'transform' });
-    if (O.shadow) gsap.set(O.shadow, { opacity: 0.4, scaleX: 1, clearProps: 'transform' });
+    gsap.set(O.sign, { rotationX: 0, opacity: 1, clearProps: 'transform' });
+    gsap.set(O.face, { clearProps: 'filter' });
+    if (O.shadow) gsap.set(O.shadow, { clearProps: 'opacity,transform' });
+    O.letters.forEach(function (l) { l.style.color = ''; l.style.transform = ''; });
   }
   function openingTL() {
     var tl = gsap.timeline({ paused: true });
-    /* the plaque lies flat on the counter, then stands up. A perspective tilt, one small settle, no bounce. */
-    tl.fromTo(O.plaque, { rotationX: 84, transformPerspective: 900, transformOrigin: '50% 100%', opacity: 1 },
-      { rotationX: 0, duration: 1.15, ease: 'power3.out' }, 0.25);
-    if (O.shadow) tl.fromTo(O.shadow, { opacity: 0.15, scaleX: 1.25 }, { opacity: 0.4, scaleX: 1, duration: 1.15, ease: 'power3.out' }, 0.25);
+    /* the enamel sign lies flat on the counter, then stands up while the room lights it: a perspective tilt, one settle, no bounce */
+    tl.fromTo(O.sign, { rotationX: 84, transformPerspective: 900, transformOrigin: '50% 100%', opacity: 1 }, { rotationX: 0, duration: 1.2, ease: 'power3.out' }, 0.3);
+    tl.fromTo(O.face, { filter: 'sepia(0.14) brightness(0.42)' }, { filter: 'sepia(0.14) brightness(0.97)', duration: 1.5, ease: 'power2.out' }, 0.4);
+    if (O.shadow) tl.fromTo(O.shadow, { opacity: 0.2, scaleX: 1.3 }, { opacity: 0.55, scaleX: 1, duration: 1.2, ease: 'power3.out' }, 0.3);
     /* a slow camera push over the plate */
-    tl.fromTo(O.inner, { scale: 1.06, transformOrigin: "60% 55%" }, { scale: 1, duration: 2.8, ease: "power1.out" }, 0);
-    /* the page content arrives while the pour is still running */
-    tl.fromTo('.reveal', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, clearProps: 'opacity,transform' }, 1.2);
+    tl.fromTo(O.inner, { scale: 1.07, transformOrigin: '62% 58%' }, { scale: 1, duration: 2.8, ease: 'power1.out' }, 0);
+    /* the headline lights letter by letter from the side nearest the pour, unlit to hot amber to its final colour */
+    if (O.letters.length) {
+      var st = { each: 0.028, from: 'end' };
+      tl.fromTo(O.letters, { color: UNLIT, y: '0.05em' }, { color: HOT, y: 0, duration: 0.3, ease: 'power2.out', stagger: st }, 0.35);
+      tl.to(O.letters, { color: function (i, el) { return el.getAttribute('data-lit'); }, duration: 0.7, ease: 'power1.out', stagger: st, clearProps: 'color' }, 0.62);
+    }
+    tl.fromTo('.reveal', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, clearProps: 'opacity,transform' }, 1.15);
     return tl;
   }
   Sig.opening = function () {
-    O.stage = $('#stage'); O.film = $('#hero-film'); O.plaque = $('#plaque'); O.shadow = $('#plaque-shadow'); O.inner = $('#stage-inner');
-    if (!O.stage || !O.plaque) { root.classList.remove('sig-wait'); return; }
+    O.stage = $('#stage'); O.film = $('#hero-film'); O.sign = $('#plaque'); O.shadow = $('#plaque-shadow'); O.face = $('#sign-face'); O.inner = $('#stage-inner');
+    if (!O.stage || !O.sign) { root.classList.remove('sig-wait'); return; }
+    O.letters = splitHeading();
+    O.letters.forEach(function (l) { l.setAttribute('data-lit', getComputedStyle(l).color); });
     openingFinal();
     var playable = Sig.motion && Sig.film && O.film;
-    if (!playable) { var st = $('#stage .still'); if (st) st.src = 'media/pour-poster-end.webp'; root.classList.remove('sig-wait'); Sig.ready = true; return; }
+    if (!playable) { var st0 = $('#stage .still'); if (st0) st0.src = 'media/pour-poster-end.webp'; root.classList.remove('sig-wait'); Sig.ready = true; return; }
     var tl = Sig.openingTL = openingTL();
     tl.progress(0);
     root.classList.remove('sig-wait');
-    /* the still frame is the same first frame as the footage, so starting playback is invisible */
+    /* the still frame is the first frame of the footage, so starting playback is invisible */
     var started = false;
     O.film.addEventListener('playing', function () { if (!started) { started = true; gsap.set(O.film, { opacity: 1 }); } }, { once: true });
     O.film.addEventListener('error', function () { gsap.set(O.film, { opacity: 0 }); }, { once: true });
@@ -147,8 +172,38 @@
     Sig.openingTL.restart();
   };
 
+  /* ---------------- 1b. the scroll carries the dark stage into the warm shelves; masked reveals ---------------- */
+  Sig.scroll = function () {
+    if (!Sig.motion || !window.ScrollTrigger) { root.classList.remove('carry'); return; }
+    gsap.registerPlugin(ScrollTrigger);
+    var wide = window.matchMedia('(min-width: 56rem)').matches;
+    if (!wide) root.classList.remove('carry');
+    if (wide && $('#top') && $('#plate-wrap')) {
+      root.classList.add('carry');
+      var hdr = parseFloat(getComputedStyle(root).getPropertyValue('--hdr')) * 16 || 66;
+      var tl = gsap.timeline({ defaults: { ease: 'none' }, scrollTrigger: { trigger: '#top', start: 'top top+=' + Math.round(hdr), end: 'bottom bottom', scrub: 0.6 } });
+      /* the type lifts away, the plate comes closer, the room dims, and the counter lip below rises over it */
+      tl.to('#type', { opacity: 0, y: -64, duration: 0.5 }, 0);
+      tl.to('#plate-wrap', { scale: 1.12, duration: 1 }, 0);
+      tl.to('.stamp', { opacity: 0, y: -30, duration: 0.35 }, 0);
+      tl.to('.scroll-cue', { opacity: 0, duration: 0.12 }, 0);
+      tl.to('#dim', { opacity: 0.9, duration: 0.7 }, 0.3);
+    }
+    /* masked headline reveals and gentle rises, once each */
+    $$('.sech').forEach(function (h) {
+      var wrap = document.createElement('span'), inn = document.createElement('span'); wrap.className = 'mk'; inn.className = 'mk-in';
+      while (h.firstChild) inn.appendChild(h.firstChild); wrap.appendChild(inn); h.appendChild(wrap);
+      gsap.from(inn, { yPercent: 108, duration: 0.95, ease: 'power3.out', scrollTrigger: { trigger: h, start: 'top 88%', once: true } });
+    });
+    $$('.sec-lede, .doors, .counter, .dials, .svc-panels').forEach(function (e) {
+      gsap.from(e, { opacity: 0, y: 18, duration: 0.8, ease: 'power2.out', scrollTrigger: { trigger: e, start: 'top 90%', once: true }, clearProps: 'opacity,transform' });
+    });
+    window.addEventListener('load', function () { ScrollTrigger.refresh(); });
+  };
+  function $$(sel) { return [].slice.call(document.querySelectorAll(sel)); }
+
   /* ---------------- 2. the cursor bottle and the card pours ---------------- */
-  var D = { active: null, hold: false, mode: '', follow: null, pose: null, bottle: null, qx: null, qy: null, qr: null, px: 0, py: 0, vx: 0, shown: false, film: false, base: -12, idle: 0 };
+  var D = { ctl: false, active: null, hold: false, mode: '', follow: null, pose: null, bottle: null, qx: null, qy: null, qr: null, px: 0, py: 0, vx: 0, shown: false, film: false, base: -12, idle: 0 };
   var POUR_THETA = 100, BASE = -12;
   var shared = null;   /* one footage element, moved into whichever card is open, so it is fetched and decoded once */
 
@@ -265,7 +320,7 @@
       D.film = false;
       if (Sig.motion && D.follow) {
         gsap.to(D.pose, { rotation: BASE, duration: 0.5, ease: 'power2.out', svgOrigin: '0 0', onComplete: mkQ });
-        if (follows() && D.shown !== false) fade(1, 0.4, 0.1);
+        if (follows() && D.shown !== false && !D.ctl) fade(1, 0.4, 0.1);
         else if (D.mode === 'touch') D.shown = false;
       }
     }
@@ -284,8 +339,11 @@
       var lastType = 'mouse';
       var cardOf = function (t) { var li = t && t.closest ? t.closest('.pw') : null; return li && grid.contains(li) ? li : null; };
       window.addEventListener('pointerdown', function (e) { lastType = e.pointerType || 'mouse'; }, { passive: true, capture: true });
-      section.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse' && follows() && Sig.motion) { D.px = e.clientX; D.py = e.clientY; if (!D.hold) gsap.set(D.follow, { x: e.clientX + 26, y: e.clientY + 30 }); if (!D.film) showLayer(true); else D.shown = true; } });
-      section.addEventListener('pointerleave', function (e) { if (e.pointerType === 'mouse') { if (D.active) leave(D.active); if (!D.hold) showLayer(false); else D.pendingHide = true; } });
+      section.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse' && follows() && Sig.motion) { D.px = e.clientX; D.py = e.clientY; if (!D.hold) gsap.set(D.follow, { x: e.clientX + 26, y: e.clientY + 30 }); if (D.ctl) D.shown = true; else if (!D.film) showLayer(true); else D.shown = true; } });
+      var CTL = '#detail, .tabs, .tog-row, .doors, .age, button:not(.card), a, input, select, label';
+      /* the bottle never sits over shopping controls: it fades out over them and returns when the pointer leaves */
+      section.addEventListener('pointerover', function (e) { if (e.pointerType !== 'mouse' || !follows() || !Sig.motion) return; var c = e.target.closest && e.target.closest(CTL), on = !!c; if (on !== D.ctl) { D.ctl = on; if (D.shown && !D.film && !D.hold) fade(on ? 0 : 1, 0.18); } });
+      section.addEventListener('pointerleave', function (e) { D.ctl = false; if (e.pointerType === 'mouse') { if (D.active) leave(D.active); if (!D.hold) showLayer(false); else D.pendingHide = true; } });
       section.addEventListener('pointermove', function (e) {
         if (e.pointerType !== 'mouse' || !follows() || !Sig.motion) return;
         var dx = e.clientX - D.px; D.px = e.clientX; D.py = e.clientY;

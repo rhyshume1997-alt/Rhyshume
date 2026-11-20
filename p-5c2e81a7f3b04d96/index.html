@@ -11,69 +11,56 @@
 <link rel="preload" href="/website-concepts/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/website-concepts/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="jack.css">
-<script>(function(d){d.classList.add("js");if(!matchMedia("(prefers-reduced-motion: reduce)").matches){d.classList.add("sig-wait");setTimeout(function(){d.classList.remove("sig-wait")},2500)}})(document.documentElement)</script>
+<script>(function(d){d.classList.add("js");if(!matchMedia("(prefers-reduced-motion: reduce)").matches){d.classList.add("sig-wait");if(matchMedia("(min-width: 56rem)").matches)d.classList.add("carry");setTimeout(function(){d.classList.remove("sig-wait")},2500)}})(document.documentElement)</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to the content</a>
-<aside class="banner" aria-label="Concept notice"><b>Initial design concept by Rhys Hume. Not a live shop.</b> Rev 3. Private preview for discussion. Products, prices and imagery are demonstration material, and the pictures and footage are AI-generated references, not client photography. Nothing is bought, booked or sent. <a href="review.html">Design review</a></aside>
+<aside class="banner" aria-label="Concept notice"><b>Initial design concept by Rhys Hume. Not a live shop.</b> Rev 4. Private preview for discussion. Products, prices and imagery are demonstration material, and the pictures and footage are AI-generated references, not client photography. Nothing is bought, booked or sent. <a href="review.html">Design review</a></aside>
 
 <header class="top"><div class="wrap top-in">
   <img class="logo" src="jack-logo.png" width="46" height="46" alt="">
   <a class="brand" href="#top" aria-label="Jack O'Beers, back to the top">Jack <span>O&rsquo;</span>Beers</a>
-  <nav aria-label="Main"><a href="#shop">Shop</a><a href="#find">Find by flavour</a><a href="#deli">Deli</a><a href="#services">Services</a><a href="review.html">Design review</a></nav>
+  <nav aria-label="Main"><a href="#shop">The shelves</a><a href="#find">By flavour</a><a href="#deli">Deli</a><a href="#services">Services</a><a href="review.html">Design review</a></nav>
   <a class="btn top-btn" href="#shop">Explore the shop</a>
 </div></header>
 
 <main id="main">
 
-<!-- 1. opening: real (AI-generated reference) pour footage as the plate, the client's logo on a plaque layer that lies on the counter and stands up -->
-<section class="open" id="top" aria-labelledby="h1">
-  <div class="wrap open-in">
-    <div class="open-type">
-      <p class="mono kicker reveal">British beers, ciders, wines and food</p>
-      <h1 id="h1" class="reveal">Something good <i>on the shelves</i></h1>
-      <p class="lede reveal">A shop for British beer, cider and wine, with a deli counter to match. Find a bottle, see how it tastes and what to eat with it. <span class="mono inl">Proposed wording</span></p>
-      <div class="cta"><a class="btn" href="#shop">Explore the shop</a><a class="tlink" href="#deli">Discover the deli</a></div>
-      <p class="mono tmp reveal">Logo as supplied (small copy, a vector file is needed).</p>
-    </div>
-
-    <div class="window">
-      <div class="frame">
-        <div class="stage" id="stage" role="img" aria-label="A bottle of beer being poured into a glass on a deli counter, with the Jack O'Beers and Deli logo on a sign standing on the counter. AI-generated reference footage.">
-          <div class="stage-inner" id="stage-inner">
-            <img class="still" src="media/pour-poster.webp" width="736" height="400" alt="" fetchpriority="high">
-            <video id="hero-film" class="film" muted playsinline preload="auto" aria-hidden="true" tabindex="-1"><source src="media/pour.webm" type="video/webm"><source src="media/pour.mp4" type="video/mp4"></video>
-          </div>
-          <div class="plaque" id="plaque"><div class="plaque-card"><img src="jack-logo.png" width="244" height="258" alt="Jack O'Beers and Deli logo"></div><span class="plaque-shadow" id="plaque-shadow" aria-hidden="true"></span></div>
-          <p class="tag mono">AI-generated reference footage, not client photography</p>
+<!-- 1. opening: a dark stage. Real (AI-generated reference) pour footage, the client's logo on a lit enamel sign that lies on the counter and stands up, the headline lighting letter by letter. The scroll carries the stage into the warm shop. -->
+<section class="scene" id="top" aria-labelledby="h1">
+  <div class="stage" id="stage">
+    <div class="plate-wrap" id="plate-wrap" role="img" aria-label="A bottle of beer pouring into a glass on a deli counter in warm low light, with the Jack O'Beers and Deli logo on a small framed sign standing on the counter. AI-generated reference footage.">
+      <div class="plate" id="plate">
+        <div class="stage-inner" id="stage-inner">
+          <img class="still" src="media/pour-poster.webp" width="736" height="400" alt="" fetchpriority="high">
+          <video id="hero-film" class="film" muted playsinline preload="auto" aria-hidden="true" tabindex="-1"><source src="media/pour.webm" type="video/webm"><source src="media/pour.mp4" type="video/mp4"></video>
+          <span class="grain" aria-hidden="true"></span>
         </div>
       </div>
-      <div class="sill" aria-hidden="true"></div>
-      <button class="replay js-only" type="button" id="replay"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M4 12a8 8 0 1 0 3-6.2M4 4v5h5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Replay the opening</button>
+      <div class="sign" id="plaque">
+        <div class="sign-frame"><div class="sign-face" id="sign-face"><img src="jack-logo.png" width="244" height="258" alt="Jack O'Beers and Deli logo"><span class="sign-gloss" aria-hidden="true"></span><span class="sign-grain" aria-hidden="true"></span></div></div>
+        <span class="sign-shadow" id="plaque-shadow" aria-hidden="true"></span>
+      </div>
+      <p class="tag mono">AI-generated reference footage, not client photography</p>
     </div>
+    <div class="wrap type" id="type">
+      <p class="mono kicker reveal">British beers, ciders, wines and a deli counter</p>
+      <h1 id="h1" class="name" aria-label="Something good on the shelves">Something good <i>on the shelves</i></h1>
+      <p class="lede reveal">A neighbourhood shop for British drinks and good food to go with them. Pull up a stool, find a bottle, see how it tastes. <span class="mono inl">Proposed wording</span></p>
+      <div class="cta"><a class="btn" href="#shop">Explore the shop</a><a class="tlink" href="#deli">Discover the deli</a><button class="replay js-only" type="button" id="replay"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M4 12a8 8 0 1 0 3-6.2M4 4v5h5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Replay the opening</button></div>
+      <p class="mono tmp reveal">Logo as supplied (small copy, a vector file is needed). Colours provisional.</p>
+    </div>
+    <svg class="stamp" viewBox="0 0 160 160" aria-hidden="true" focusable="false"><defs><path id="ring" d="M80 80 m-58 0 a58 58 0 1 1 116 0 a58 58 0 1 1 -116 0"/></defs><circle class="st-o" cx="80" cy="80" r="76"/><circle class="st-i" cx="80" cy="80" r="46"/><g class="st-spin"><text><textPath href="#ring" textLength="354" lengthAdjust="spacing">BEER &#183; CIDER &#183; WINE &#183; DELI &#183; GOOD COMPANY &#183;</textPath></text></g><path class="st-g" d="M64 100h32M70 100l-3-30h26l-3 30M68 78h24"/></svg>
+    <div class="dim" id="dim" aria-hidden="true"></div>
+    <p class="scroll-cue mono" aria-hidden="true"><i></i>Scroll</p>
   </div>
 </section>
 
-<!-- 2. the shop intro -->
-<section class="intro" id="intro" aria-labelledby="intro-h"><div class="wrap intro-in">
-  <h2 id="intro-h" class="rv">The best of British, <i>on one counter.</i></h2>
-  <div class="intro-text">
-    <p class="rv" style="--d:100ms">Beers, ciders and wines from Britain, and British food to go with them. Pick a bottle, see how it tastes, and find something to eat beside it.</p>
-    <p class="mono rv" style="--d:180ms">Proposed wording, based on the workbook note &ldquo;best of british beers, ciders, and wines, british food&rdquo;</p>
-  </div>
-  <ul class="cats">
-    <li class="rv c-red"><a href="#shop" data-pick="beer"><span class="mono">01</span><b>Beer</b><span class="d">Browse the beers</span></a></li>
-    <li class="rv c-green" style="--d:70ms"><a href="#shop" data-pick="cider"><span class="mono">02</span><b>Cider</b><span class="d">Browse the ciders</span></a></li>
-    <li class="rv c-paper" style="--d:140ms"><a href="#shop" data-pick="wine"><span class="mono">03</span><b>Wine</b><span class="d">Browse the wines</span></a></li>
-    <li class="rv c-ink" style="--d:210ms"><a href="#deli"><span class="mono">04</span><b>Deli</b><span class="d">Discover the deli</span></a></li>
-  </ul>
-</div></section>
-
 <!-- 3. product browsing demonstration -->
-<section class="shopsec" id="shop" aria-labelledby="shop-h"><div class="wrap">
+<section class="shopsec" id="shop" aria-labelledby="shop-h"><div class="lip" aria-hidden="true"></div><div class="wrap">
   <div class="sec-head">
-    <p class="mono">The shop, demonstration</p>
-    <h2 id="shop-h">Two clicks to <i>a bottle</i></h2>
+    <p class="mono num">01 &mdash; The shelves, demonstration</p>
+    <h2 id="shop-h" class="sech">Two clicks to <i>a bottle</i></h2>
     <p class="sec-lede">Choose a category, then a product, and the details are on the page: flavour profile, what to eat with it, allergens and how to get it. <span class="js-only inl">Try it.</span></p>
     <p class="demo-flag mono">Demonstration data. These are not real products, stock, prices or ingredient details.</p>
     <p class="tog-row js-only"><button class="tog" type="button" id="pour-toggle" aria-pressed="true">Pouring animation: on</button> <span class="mono">Decorative only. Product information shows with or without it.</span></p>
@@ -83,9 +70,9 @@
   <div class="shop-grid">
     <div>
       <div class="tabs js-only" role="tablist" aria-label="Product categories" id="cat-tabs">
-        <button class="tab" role="tab" id="ct-beer" aria-selected="true" aria-controls="grid-panel" data-cat="beer" type="button">Beer</button>
-        <button class="tab" role="tab" id="ct-cider" aria-selected="false" aria-controls="grid-panel" data-cat="cider" tabindex="-1" type="button">Cider</button>
-        <button class="tab" role="tab" id="ct-wine" aria-selected="false" aria-controls="grid-panel" data-cat="wine" tabindex="-1" type="button">Wine</button>
+        <button class="tab" role="tab" id="ct-beer" aria-selected="true" aria-controls="grid-panel" data-cat="beer" type="button"><span class="n">01</span>Beer</button>
+        <button class="tab" role="tab" id="ct-cider" aria-selected="false" aria-controls="grid-panel" data-cat="cider" tabindex="-1" type="button"><span class="n">02</span>Cider</button>
+        <button class="tab" role="tab" id="ct-wine" aria-selected="false" aria-controls="grid-panel" data-cat="wine" tabindex="-1" type="button"><span class="n">03</span>Wine</button>
       </div>
       <div id="grid-panel" role="tabpanel" aria-labelledby="ct-beer" tabindex="-1"><ul class="grid" id="grid"></ul></div>
       <p class="nojs-only nojs-note">With JavaScript on, the shop demonstration lets you pick a category and a product. Nothing is sold.</p>
@@ -120,8 +107,8 @@
 <!-- 4. flavour finder -->
 <section class="findsec" id="find" aria-labelledby="find-h"><div class="wrap find-in">
   <div class="find-text">
-    <p class="mono">Flavour profile interaction</p>
-    <h2 id="find-h">How do you <i>like it?</i></h2>
+    <p class="mono num">02 &mdash; Flavour profile interaction</p>
+    <h2 id="find-h" class="sech">How do you <i>like it?</i></h2>
     <p class="sec-lede">Move the three dials and the demonstration drinks re-order to suit. A real version would use the shop&rsquo;s own tasting notes.</p>
     <p class="demo-flag mono">Demonstration scoring on sample data. Not a recommendation engine.</p>
   </div>
@@ -138,8 +125,8 @@
 <!-- 5. deli -->
 <section class="deli" id="deli" aria-labelledby="deli-h"><div class="wrap deli-in">
   <div>
-    <p class="mono">The deli</p>
-    <h2 id="deli-h">Something to <i>eat with it</i></h2>
+    <p class="mono num">03 &mdash; The deli</p>
+    <h2 id="deli-h" class="sech">Something to <i>eat with it</i></h2>
     <p class="sec-lede">British food, set out like a deli counter: easy to scan, with pairings that point back to the drinks. Proposed categories are below, to be replaced with what the shop actually stocks.</p>
     <p class="demo-flag mono">Proposed categories, not confirmed stock.</p>
   </div>
@@ -150,8 +137,8 @@
 <!-- 6. services -->
 <section class="svc" id="services" aria-labelledby="svc-h"><div class="wrap">
   <div class="sec-head">
-    <p class="mono">Other requested services</p>
-    <h2 id="svc-h">How the rest <i>could fit</i></h2>
+    <p class="mono num">04 &mdash; Beyond the counter</p>
+    <h2 id="svc-h" class="sech">How the rest <i>could fit</i></h2>
     <p class="sec-lede">These came up in the workbook. They are ideas to discuss, not agreed features, and each needs scoping before anything is quoted.</p>
   </div>
   <div class="svc-tabs js-only" role="tablist" aria-label="Services" id="svc-tabs">
@@ -219,7 +206,7 @@
 
 <!-- 7. discuss -->
 <section class="talk" id="talk" aria-labelledby="talk-h"><div class="wrap talk-in">
-  <h2 id="talk-h">Let&rsquo;s <i>talk it through</i></h2>
+  <h2 id="talk-h" class="sech"><span class="mono num">05 &mdash; Next</span>Let&rsquo;s <i>talk it through</i></h2>
   <div>
     <p class="sec-lede">This is a first look to react to, not an agreed project. Liking the design is not an agreement on scope or terms. The review page lists what is missing and what needs deciding before anything is quoted.</p>
     <div class="cta"><a class="btn" href="review.html">Open the design review</a><a class="tlink" href="#top">Back to the top</a></div>
@@ -230,12 +217,13 @@
 
 <footer class="foot"><div class="wrap">
   <p class="foot-brand">Jack <span>O&rsquo;</span>Beers</p>
-  <p><b>Initial design concept by Rhys Hume. Not a live shop.</b> The logo is the client&rsquo;s supplied file at low resolution. Colours are approximate, taken from it. Dubai shows only where installed. All products, prices and descriptions are demonstration material. Nothing on this page is bought, booked, sent or stored.</p>
+  <p><b>Initial design concept by Rhys Hume. Not a live shop.</b> The logo is the client&rsquo;s supplied file at low resolution. Colours are provisional until the logo colours are confirmed. Dubai shows only where installed. All products, prices and descriptions are demonstration material. Nothing on this page is bought, booked, sent or stored.</p>
 </div></footer>
 
 <nav class="callbar" aria-label="Quick links"><a href="#shop">Shop</a><a href="#deli">Deli</a><a href="#services">Services</a><a href="review.html" class="cb-main">Review</a></nav>
 
 <script src="vendor/gsap.min.js"></script>
+<script src="vendor/ScrollTrigger.min.js"></script>
 <script src="signature.js"></script>
 <script src="jack.js"></script>
 </body>

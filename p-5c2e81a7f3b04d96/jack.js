@@ -10,15 +10,8 @@
 
   /* ---------- opening: the signature sequence lives in signature.js ---------- */
   var root = document.documentElement;
-  if (window.Sig && window.gsap && $('#stage')) Sig.opening(); else root.classList.remove('sig-wait');
+  if (window.Sig && window.gsap && $('#stage')) { Sig.opening(); if (Sig.scroll) Sig.scroll(); } else { root.classList.remove('sig-wait'); root.classList.remove('carry'); }
   var rp = $('#replay'); if (rp) rp.addEventListener('click', function () { if (window.Sig && Sig.replay) Sig.replay(); });
-
-  /* scroll reveals */
-  if ('IntersectionObserver' in window && !calm) {
-    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); }, { threshold: 0.15 });
-    $$('.rv').forEach(function (n) { io.observe(n); });
-    root.classList.add('rv-on');
-  }
 
   /* ---------- demonstration data: NOT real products ---------- */
   var AX = ['Sweet', 'Bitter or tart', 'Fruity', 'Body'];
@@ -67,7 +60,10 @@
       }
       var gs = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); gs.setAttribute('class', 'gl'); gs.setAttribute('viewBox', '0 0 60 80'); gs.setAttribute('aria-hidden', 'true'); gs.setAttribute('focusable', 'false');
       if (!wine) art.appendChild(gs); b.appendChild(art);
-      b.appendChild(el('b', null, p.name)); b.appendChild(el('span', 'st', p.sub)); b.appendChild(el('span', 'pr mono', '[price to be confirmed]'));
+      b.appendChild(el('b', 'nm', p.name)); b.appendChild(el('span', 'st', p.sub));
+      var fl = el('span', 'fl'); fl.setAttribute('aria-hidden', 'true');
+      p.f.forEach(function (v, i) { var r = el('span'); r.appendChild(el('span', null, AX[i])); var bar = el('i'); bar.style.setProperty('--v', v); r.appendChild(bar); fl.appendChild(r); });
+      b.appendChild(fl); b.appendChild(el('span', 'pr mono', '[price to be confirmed]'));
       li.appendChild(b);
       /* information panel: always in the page, shown on hover, focus or tap. Flavour values are sample data, not verified. */
       var info = el('div', 'info'); info.id = 'info-' + p.id;
@@ -138,7 +134,7 @@
       .sort(function (a, b) { return b.m - a.m; }).slice(0, 3);
     ranked.textContent = '';
     list.forEach(function (x) {
-      var li = el('li'); li.appendChild(bottle(x.p.col, x.p.cat === 'wine'));
+      var li = el('li'); if (x.p.cat === 'wine') li.appendChild(bottle(x.p.col, true)); else { var pi = el('img'); pi.src = 'media/bottle-amber-sm.webp'; pi.alt = ''; pi.width = 24; pi.height = 76; li.appendChild(pi); }
       var mid = el('div'); mid.appendChild(el('b', null, x.p.name)); mid.appendChild(el('p', 't', CATNAME[x.p.cat] + ' · sample entry')); li.appendChild(mid);
       li.appendChild(el('span', 'm', x.m + '%')); ranked.appendChild(li);
     });
