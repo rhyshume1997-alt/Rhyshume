@@ -1,0 +1,132 @@
+{
+ "cornerShelfWordmark": {
+  "before": {
+   "found": true,
+   "topPx": 812,
+   "heightPx": 248,
+   "visiblePx": 88,
+   "visibleFraction": 0.35
+  },
+  "after": {
+   "found": true,
+   "topPx": 719,
+   "heightPx": 248,
+   "visiblePx": 181,
+   "visibleFraction": 0.73
+  }
+ },
+ "littleKettleSampleCopy": [
+  {
+   "text": "Sample copy for a concept",
+   "fontSize": "11.2px",
+   "effectiveOpacity": 0,
+   "fg": "rgb(58, 36, 24)",
+   "bg": "rgb(251,243,228)",
+   "contrast": 1
+  }
+ ],
+ "oakRazorHover": {
+  "rowTopsBefore": [
+   161,
+   477,
+   575,
+   673,
+   771,
+   870
+  ],
+  "rowTopsHover": [
+   161,
+   477,
+   575,
+   673,
+   771,
+   870
+  ],
+  "rowDeltasPx": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ]
+ },
+ "callbar_bright-circuit": {
+  "before": [
+   {
+    "tag": "A",
+    "text": "Emergency call",
+    "contrast": 1,
+    "barDisplay": "grid"
+   },
+   {
+    "tag": "A",
+    "text": "Enquire",
+    "contrast": 1,
+    "barDisplay": "grid"
+   }
+  ],
+  "after": [
+   {
+    "tag": "A",
+    "text": "Emergency call",
+    "contrast": 8.72,
+    "barDisplay": "grid"
+   },
+   {
+    "tag": "A",
+    "text": "Enquire",
+    "contrast": 8.72,
+    "barDisplay": "grid"
+   }
+  ]
+ },
+ "callbar_sunny-hours": {
+  "before": [
+   {
+    "tag": "A",
+    "text": "Plan a week",
+    "contrast": 1,
+    "barDisplay": "grid"
+   },
+   {
+    "tag": "A",
+    "text": "Ask about plac",
+    "contrast": 1,
+    "barDisplay": "grid"
+   }
+  ],
+  "after": [
+   {
+    "tag": "A",
+    "text": "Plan a week",
+    "contrast": 9.28,
+    "barDisplay": "grid"
+   },
+   {
+    "tag": "A",
+    "text": "Ask about plac",
+    "contrast": 9.28,
+    "barDisplay": "grid"
+   }
+  ]
+ },
+ "callbar_corner-shelf": {
+  "before": [
+   {
+    "tag": "BUTTON",
+    "text": "Open basket",
+    "contrast": 1,
+    "barDisplay": "grid"
+   }
+  ],
+  "after": [
+   {
+    "tag": "BUTTON",
+    "text": "Open basket",
+    "contrast": 1,
+    "barDisplay": "grid"
+   }
+  ]
+ }
+}

@@ -1,0 +1,368 @@
+{
+ "olive-ivory": {
+  "d": {
+   "overflow": 0,
+   "h1": 1,
+   "cls": 0,
+   "lcp": 168,
+   "height": 6235,
+   "videos": [
+    {
+     "paused": true,
+     "src": "oi-hero-window-16x9.webm",
+     "w": 736,
+     "h": 400
+    },
+    {
+     "paused": true,
+     "src": "",
+     "w": 0,
+     "h": 0
+    }
+   ],
+   "imgsNoAlt": 0,
+   "tinyText": 64,
+   "shots": 6,
+   "errors": [
+    "Failed to load resource: the server responded with a status of 404 (File not found)"
+   ],
+   "failed": [],
+   "transferKB": 1120
+  },
+  "m": {
+   "overflow": 0,
+   "h1": 1,
+   "cls": 0,
+   "lcp": 7264,
+   "height": 6711,
+   "videos": [
+    {
+     "paused": true,
+     "src": "oi-hero-window-16x9.webm",
+     "w": 736,
+     "h": 400
+    },
+    {
+     "paused": true,
+     "src": "",
+     "w": 0,
+     "h": 0
+    }
+   ],
+   "imgsNoAlt": 0,
+   "tinyText": 63,
+   "shots": 6,
+   "errors": [],
+   "failed": [],
+   "transferKB": 1120
+  }
+ },
+ "bright-circuit": {
+  "d": {
+   "overflow": 0,
+   "h1": 1,
+   "cls": 0,
+   "lcp": 5328,
+   "height": 3784,
+   "videos": [
+    {
+     "paused": true,
+     "src": "bright-circuit-16x9.webm",
+     "w": 736,
+     "h": 400
+    }
+   ],
+   "imgsNoAlt": 0,
+   "tinyText": 45,
+   "shots": 5,
+   "errors": [],
+   "failed": [],
+   "transferKB": 723
+  },
+  "m": {
+   "overflow": 0,
+   "h1": 1,
+   "cls": 0,
+   "lcp": 6144,
+   "height": 5882,
+   "videos": [
+    {
+     "paused": true,
+     "src": "bright-circuit-16x9.webm",
+     "w": 736,
+     "h": 400
+    }
+   ],
+   "imgsNoAlt": 0,
+   "tinyText": 43,
+   "shots": 6,
+   "errors": [],
+   "failed": [],
+   "transferKB": 723
+  }
+ },
+ "salt-ember": {
+  "d": {
+   "overflow": 0,
+   "h1": 1,
+   "cls": 0,
+   "lcp": 108,
+   "height": 2959,
+   "videos": [
+    {
+     "paused": true,
+     "src": "se-hero-fire-16x9.webm",
+     "w": 736,
+     "h": 400
+    }
+   ],
+   "imgsNoAlt": 0,
+   "tinyText": 11,
+   "shots": 4,
+   "errors": [],
+   "failed": [],
+   "transferKB": 1217
+  },
+  "m": {
+   "overflow": 0,
+   "h1": 1,
+   "cls": 0,
+   "lcp": 108,
+   "height": 3070,
+   "videos": [
+    {
+     "paused": true,
+     "src": "se-hero-fire-16x9.webm",
+     "w": 736,
+     "h": 400
+    }
+   ],
+   "imgsNoAlt": 0,
+   "tinyText": 11,
+   "shots": 4,
+   "errors": [],
+   "failed": [],
+   "transferKB": 1217
+  }
+ },
+ "sunny-hours": {
+  "d": {
+   "overflow": 0,
+   "h1": 1,
+   "cls": 0,
+   "lcp": 124,
+   "height": 5977,
+   "videos": [
+    {
+     "paused": true,
+     "src": "sunny-hours-16x9.webm",
+     "w": 736,
+     "h": 400
+    }
+   ],
+   "imgsNoAlt": 0,
+   "tinyText": 29,
+   "shots": 6,
+   "errors": [],
+   "failed": [],
+   "transferKB": 713
+  },
+  "m": {
+   "overflow": 0,
+   "h1": 1,
+   "cls": 0,
+   "lcp": 108,
+   "height": 8958,
+   "videos": [
+    {
+     "paused": true,
+     "src": "sunny-hours-16x9.webm",
+     "w": 736,
+     "h": 400
+    }
+   ],
+   "imgsNoAlt": 0,
+   "tinyText": 42,
+   "shots": 6,
+   "errors": [],
+   "failed": [],
+   "transferKB": 700
+  }
+ },
+ "clear-ground": {
+  "d": {
+   "overflow": 0,
+   "h1": 1,
+   "cls": 0,
+   "lcp": 7244,
+   "height": 6171,
+   "videos": [
+    {
+     "paused": true,
+     "src": "clear-ground-16x9.webm",
+     "w": 736,
+     "h": 400
+    }
+   ],
+   "imgsNoAlt": 0,
+   "tinyText": 14,
+   "shots": 6,
+   "errors": [],
+   "failed": [],
+   "transferKB": 866
+  },
+  "m": {
+   "overflow": 0,
+   "h1": 1,
+   "cls": 0.014,
+   "lcp": 796,
+   "height": 5926,
+   "videos": [
+    {
+     "paused": true,
+     "src": "clear-ground-16x9.webm",
+     "w": 736,
+     "h": 400
+    }
+   ],
+   "imgsNoAlt": 0,
+   "tinyText": 14,
+   "shots": 6,
+   "errors": [],
+   "failed": [],
+   "transferKB": 866
+  }
+ },
+ "little-kettle": {
+  "d": {
+   "overflow": 0,
+   "h1": 1,
+   "cls": 0,
+   "lcp": 4324,
+   "height": 4561,
+   "videos": [
+    {
+     "paused": true,
+     "src": "little-kettle-16x9.webm",
+     "w": 736,
+     "h": 400
+    }
+   ],
+   "imgsNoAlt": 0,
+   "tinyText": 46,
+   "shots": 6,
+   "errors": [],
+   "failed": [],
+   "transferKB": 613
+  },
+  "m": {
+   "overflow": 0,
+   "h1": 1,
+   "cls": 0,
+   "lcp": 4272,
+   "height": 6616,
+   "videos": [
+    {
+     "paused": true,
+     "src": "little-kettle-16x9.webm",
+     "w": 736,
+     "h": 400
+    }
+   ],
+   "imgsNoAlt": 0,
+   "tinyText": 46,
+   "shots": 6,
+   "errors": [],
+   "failed": [],
+   "transferKB": 613
+  }
+ },
+ "corner-shelf": {
+  "d": {
+   "overflow": 0,
+   "h1": 1,
+   "cls": 0,
+   "lcp": 116,
+   "height": 6685,
+   "videos": [
+    {
+     "paused": true,
+     "src": "corner-shelf-16x9.webm",
+     "w": 736,
+     "h": 400
+    }
+   ],
+   "imgsNoAlt": 0,
+   "tinyText": 34,
+   "shots": 6,
+   "errors": [],
+   "failed": [],
+   "transferKB": 819
+  },
+  "m": {
+   "overflow": 0,
+   "h1": 1,
+   "cls": 0,
+   "lcp": 108,
+   "height": 6428,
+   "videos": [
+    {
+     "paused": true,
+     "src": "corner-shelf-16x9.webm",
+     "w": 736,
+     "h": 400
+    }
+   ],
+   "imgsNoAlt": 0,
+   "tinyText": 29,
+   "shots": 6,
+   "errors": [],
+   "failed": [],
+   "transferKB": 819
+  }
+ },
+ "oak-razor": {
+  "d": {
+   "overflow": 0,
+   "h1": 1,
+   "cls": 0,
+   "lcp": 148,
+   "height": 5664,
+   "videos": [
+    {
+     "paused": true,
+     "src": "oak-razor-16x9.webm",
+     "w": 736,
+     "h": 400
+    }
+   ],
+   "imgsNoAlt": 0,
+   "tinyText": 22,
+   "shots": 6,
+   "errors": [],
+   "failed": [],
+   "transferKB": 858
+  },
+  "m": {
+   "overflow": 0,
+   "h1": 1,
+   "cls": 0,
+   "lcp": 144,
+   "height": 5013,
+   "videos": [
+    {
+     "paused": true,
+     "src": "oak-razor-16x9.webm",
+     "w": 736,
+     "h": 400
+    }
+   ],
+   "imgsNoAlt": 0,
+   "tinyText": 21,
+   "shots": 6,
+   "errors": [],
+   "failed": [],
+   "transferKB": 858
+  }
+ }
+}
