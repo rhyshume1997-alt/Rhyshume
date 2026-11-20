@@ -136,10 +136,11 @@ function interpretationOf(v, probe) {
     const home = probe && probe.home;
     const ld = home && home.ok && home.page.jsonld;
     website = {
-      input: v.website.input, url: v.website.url, reachable: !!(home && home.ok),
-      title: home && home.ok ? (home.page.title || null) : null,
-      detected_business_name: ld && ld.names && ld.names[0] ? ld.names[0] : (home && home.ok && home.page.headings.find(function (h) { return h.level === 1; }) ? (home.page.headings.find(function (h) { return h.level === 1; }).text || null) : null)
+      input: v.website.input, url: v.website.url, reachable: !!(home && home.ok && home.status < 400),
+      title: home && home.ok && home.status < 400 ? (home.page.title || null) : null,
+      detected_business_name: !(home && home.ok && home.status < 400) ? null : ld && ld.names && ld.names[0] ? ld.names[0] : (home && home.ok && home.page.headings.find(function (h) { return h.level === 1; }) ? (home.page.headings.find(function (h) { return h.level === 1; }).text || null) : null)
     };
+    if (home && home.ok && home.status >= 400) { website.problem = 'http_error'; assumptions.push('The website answered with an error page just now. The analysis will record what it could not check.'); }
     if (home && !home.ok) {
       website.problem = home.code;
       assumptions.push(home.code === 'blocked_by_robots' || home.code === 'robots_unavailable' ? 'The website asks automated tools not to read it, so the website checks will be recorded as not tested.' : 'The website could not be read just now. The analysis will record what it could not check.');

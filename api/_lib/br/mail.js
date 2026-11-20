@@ -41,13 +41,14 @@ async function sendReport(deps, o) {
   const link = cfg.siteOrigin + '/business-review/report#t=' + o.token + '&id=' + o.reviewId;
   const greet = o.name ? 'Hello ' + oneLine(o.name, 60) + ',' : 'Hello,';
   const lines = summaryLines(o.report);
+  const expiry = o.report && o.report.expires_at ? ' on ' + require('./metrics').fmtDate(o.report.expires_at) : ' after a set period';
   const text = [greet, '', 'You asked for a copy of your free business review (' + o.ref + '). It was an automated review of public information, so please read the notes and limits in the report.', '',
     lines.length ? 'Key points:' : '', lines.map(function (l) { return '- ' + l; }).join('\n'), lines.length ? '' : '', 'Open your report: ' + link, '',
-    'The link works for a limited time and is private to you. Anyone with the link can read the report, so please do not forward it.', '',
+    'The link is private to you and stops working' + expiry + '. Anyone with the link can read the report, so please do not forward it.', '',
     'You are getting this one email because you asked for it. It is not a marketing message and you have not been added to any list.', '', 'Rhys Hume', 'rhyshume.co.uk'].filter(function (x, i, a) { return !(x === '' && a[i - 1] === ''); }).join('\n');
   const html = '<p>' + esc(greet) + '</p><p>You asked for a copy of your free business review (' + esc(o.ref) + '). It was an automated review of public information, so please read the notes and limits in the report.</p>' +
     (lines.length ? '<p>Key points:</p><ul>' + lines.map(function (l) { return '<li>' + esc(l) + '</li>'; }).join('') + '</ul>' : '') +
-    '<p><a href="' + esc(link) + '">Open your report</a></p><p>The link works for a limited time and is private to you. Anyone with the link can read the report, so please do not forward it.</p>' +
+    '<p><a href="' + esc(link) + '">Open your report</a></p><p>The link is private to you and stops working' + esc(expiry) + '. Anyone with the link can read the report, so please do not forward it.</p>' +
     '<p>You are getting this one email because you asked for it. It is not a marketing message and you have not been added to any list.</p><p>Rhys Hume<br>rhyshume.co.uk</p>';
   return resend(deps, { from: cfg.email.from, to: [o.to], subject: oneLine('Your business review ' + o.ref, 120), text: text, html: html }, o.idempotencyKey);
 }

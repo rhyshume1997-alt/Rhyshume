@@ -120,7 +120,8 @@ function build(input) {
 
   // ---- key findings
   const kf = [];
-  rows.forEach(function (r) {
+  const ordered = rows.slice().sort(function (x, y) { return (METRICS[x.metric_key].group === 'speed' ? 0 : 1) - (METRICS[y.metric_key].group === 'speed' ? 0 : 1) || (x.metric_key === 'psi.mobile.lcp_ms' ? -1 : y.metric_key === 'psi.mobile.lcp_ms' ? 1 : 0); });
+  ordered.forEach(function (r) {
     if (kf.length >= 4 || !r.business || !isMeasured({ evidence_state: r.business.evidence_state, value: 1 })) return;
     selected.forEach(function (c) {
       if (kf.length >= 4) return;
@@ -130,8 +131,9 @@ function build(input) {
       const rel = compare(def, b, ce);
       if (!rel || rel === 'similar') return;
       let text;
-      if (r.metric_key === 'psi.mobile.lcp_ms') text = c.name + (rel === 'better' ? ' loaded its home page faster' : ' loaded its home page slower') + ' in the mobile test recorded on ' + fmtDate(ce.observed_at) + ' (' + displayValue(r.metric_key, ce.value) + ' against ' + displayValue(r.metric_key, b.value) + ' for your page).';
-      else text = phrase(def, r.metric_key, c.name, rel).replace(/ in this test\.$/, '') + ' on ' + def.label + ' in the test recorded on ' + fmtDate(ce.observed_at) + ' (' + displayValue(r.metric_key, ce.value) + ' against ' + displayValue(r.metric_key, b.value) + ' for your page).';
+      const when = fmtDate(ce.observed_at);
+      if (r.metric_key === 'psi.mobile.lcp_ms') text = c.name + (rel === 'better' ? ' loaded its home page faster' : ' loaded its home page slower') + ' in the mobile test recorded on ' + when + ' (' + displayValue(r.metric_key, ce.value) + ' against ' + displayValue(r.metric_key, b.value) + ' for your page).';
+      else text = def.label + ': ' + c.name + ' recorded ' + displayValue(r.metric_key, ce.value) + ' against ' + displayValue(r.metric_key, b.value) + ' for your page in the check recorded on ' + when + '.';
       kf.push({ id: '', text: text, evidence_ids: [b.id, ce.id], evidence_state: 'verified_public_observation' });
     });
   });

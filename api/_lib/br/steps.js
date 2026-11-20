@@ -39,8 +39,17 @@ function initialSteps(hasWebsite) {
   });
 }
 
+// Core measurements: if one of these could not be run the review is partial whatever the reason (a missing speed test is a gap
+// even when it is "not configured"). Other steps that are unavailable by design (no search source, AI not run) do not make it partial.
+const CORE_STEPS = ['site_fetch', 'site_analysis', 'psi_business', 'psi_competitors'];
 function completenessOf(steps) {
-  const bad = steps.filter(function (s) { return s.key !== 'report_build' && (s.state === 'failed' || (s.state === 'unavailable' && BY_DESIGN_REASONS.indexOf(s.reason) === -1) || (s.state === 'skipped' && BY_DESIGN_REASONS.indexOf(s.reason) === -1)); });
+  const bad = steps.filter(function (s) {
+    if (s.key === 'report_build') return false;
+    if (s.state === 'failed') return true;
+    if (s.state === 'unavailable') return CORE_STEPS.indexOf(s.key) !== -1 || BY_DESIGN_REASONS.indexOf(s.reason) === -1;
+    if (s.state === 'skipped') return BY_DESIGN_REASONS.indexOf(s.reason) === -1;
+    return false;
+  });
   return bad.length ? 'partial' : 'complete';
 }
 function allTerminal(steps) { return steps.every(function (s) { return TERMINAL.indexOf(s.state) !== -1; }); }
@@ -98,6 +107,7 @@ const handlers = {
       const code = (snap.home && snap.home.code) || 'site_unreachable';
       return { state: 'failed', reason: code, message: reasonMessage(code) };
     }
+    if (snap.home.status >= 400) return { state: 'failed', reason: 'http_error', message: reasonMessage('http_error') };
     return { state: 'done', message: 'Read ' + (1 + snap.pages.filter(function (p) { return !p.failed; }).length) + (snap.pages.length ? ' pages.' : ' page.') };
   },
   async site_analysis(deps, review) {
@@ -251,10 +261,16 @@ async function buildAndStoreReport(deps, review, opts) {
   const content = reportMod.build(input);
   const hash = reportMod.contentHash(content);
   if (last && last.content_hash === hash && !opts.force) return { created: false, version: last.version, row: last };
-  const row = await store.insert('br_report_versions', {
-    review_id: review.id, version: content.version, created_by: content.created_by, reason: content.reason, generator_version: content.generator_version,
-    status: 'published', content: content, content_hash: hash, evidence_ids: evRows.map(function (e) { return e.id; })
-  });
+  let row;
+  try {
+    row = await store.insert('br_report_versions', {
+      review_id: review.id, version: content.version, created_by: content.created_by, reason: content.reason, generator_version: content.generator_version,
+      status: 'published', content: content, content_hash: hash, evidence_ids: evRows.map(function (e) { return e.id; })
+    });
+  } catch (e) {
+    if (e && e.code === 'conflict') { const cur = (await store.select('br_report_versions', { review_id: review.id }, { order: ['version.desc'], limit: 1 }))[0]; return { created: false, version: cur.version, row: cur }; }
+    throw e;
+  }
   if (last) await store.update('br_report_versions', { id: last.id }, { status: 'superseded' });
   return { created: true, version: content.version, row: row };
 }

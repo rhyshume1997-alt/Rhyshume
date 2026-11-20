@@ -148,3 +148,18 @@ async function world(opts) {
 }
 
 module.exports.world = world;
+
+// Build API shaped evidence rows for pure tests (recommendations, report).
+function evRows(list, reviewId) {
+  const { buildRow, toApiEvidence } = require('../api/_lib/br/evidence');
+  let n = 0;
+  return list.map(function (e) {
+    n++;
+    const d = Object.assign({ state: 'verified_public_observation', observed_at: '2026-11-20T10:16:52Z', source: { kind: 'own_fetch', name: 'Public pages fetched directly', url: 'https://harbour.example/' }, method: { summary: 't', settings: {} }, inputs: {} }, e);
+    const row = buildRow(reviewId || '6c9b8e2a-6a77-4c0a-9a41-1d2f7b0d3f10', d);
+    row.id = '00000000-0000-4000-8000-' + String(n).padStart(12, '0');
+    row.created_at = '2026-11-20T10:16:52.' + String(n).padStart(3, '0') + 'Z';
+    return toApiEvidence(row);
+  });
+}
+module.exports.evRows = evRows;

@@ -19,7 +19,8 @@ async function upsertProspect(deps, review, d) {
     follow_up_consent: existing && existing.follow_up_consent ? true : !!d.consent.follow_up_contact,
     marketing_consent: !!d.consent.marketing, consent_text_version: CONSENT_TEXT_VERSION, consent_at: nowIso
   };
-  if (d.services && d.services.length) fields.requested_services = d.services;
+  const svc = d.services || d.service_interest;
+  if (svc && svc.length) fields.requested_services = svc;
   let prospect;
   if (existing) prospect = (await store.update('br_prospects', { review_id: review.id }, fields))[0];
   else prospect = await store.insert('br_prospects', Object.assign({ review_id: review.id, status: 'new' }, fields));

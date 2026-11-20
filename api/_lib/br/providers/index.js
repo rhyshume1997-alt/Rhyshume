@@ -4,7 +4,7 @@ Business review: provider registry and the single gate for every external call (
 Inputs : store, config, provider id, operation, request, review id, idempotency key, cache ttl, worst case cost.
 Outputs: { ok:true, data, cached, replay, call_id, cost_pence } or { ok:false, state, code, call_id? }.
 Order  : 1 state (flag, key, cap)  2 same idempotency key already logged -> reuse, never repeat a call that may have been billed
-         3 cache by request hash  4 atomic budget spend (br_budget_spend)  5 log 'started'  6 run once with a timeout  7 log result.
+         3 cache by request hash  4 claim the key (log 'started')  5 atomic budget spend (br_budget_spend)  6 run once with a timeout  7 log result.
 Rules  : nothing is called when a provider is disabled, unconfigured or over budget; no retries; a provider failure is returned as a
          failure and the caller records an unavailable evidence row; secrets never reach the log rows or return values.
 Must not change: this order, the no retry rule, off by default.
@@ -102,25 +102,24 @@ async function callProvider(deps, call) {
     }
   }
 
-  // 4 budget (atomic, in the database)
-  const b = budgetFor(cfg, id, call.worstCasePence);
-  if (b) {
-    let allowed = false;
-    try { allowed = await store.rpc('br_budget_spend', { p_provider: id, p_pence: b.amount, p_daily_cap_pence: b.cap }); } catch (e) { allowed = false; }
-    if (allowed !== true) {
-      let callId = null;
-      try { const r = await store.insert('br_provider_calls', { review_id: call.reviewId || null, provider: id, operation: call.operation, idempotency_key: call.idempotencyKey, request_hash: requestHash, status: 'skipped_budget', error_code: 'budget_exhausted', finished_at: now().toISOString(), duration_ms: 0 }); callId = r.id; } catch (e) { /* ignore */ }
-      return { ok: false, state: 'budget_exhausted', code: 'budget_exhausted', call_id: callId };
-    }
-  }
-
-  // 5 log started (a unique key means a racing duplicate loses here and spends nothing more)
+  // 4 claim the idempotency key first (a unique key means a racing duplicate loses here and spends nothing)
   let row;
   try {
     row = await store.insert('br_provider_calls', { review_id: call.reviewId || null, provider: id, operation: call.operation, idempotency_key: call.idempotencyKey, request_hash: requestHash, status: 'started', started_at: now().toISOString() });
   } catch (e) {
     if (e && e.code === 'conflict') return { ok: false, state: 'degraded', code: 'in_progress' };
     throw e;
+  }
+
+  // 5 budget (atomic, in the database); a refusal closes the claimed row and nothing is called
+  const b = budgetFor(cfg, id, call.worstCasePence);
+  if (b) {
+    let allowed = false;
+    try { allowed = await store.rpc('br_budget_spend', { p_provider: id, p_pence: b.amount, p_daily_cap_pence: b.cap }); } catch (e) { allowed = false; }
+    if (allowed !== true) {
+      await store.update('br_provider_calls', { id: row.id }, { status: 'skipped_budget', error_code: 'budget_exhausted', finished_at: now().toISOString(), duration_ms: 0 });
+      return { ok: false, state: 'budget_exhausted', code: 'budget_exhausted', call_id: row.id };
+    }
   }
 
   // 6 run exactly once

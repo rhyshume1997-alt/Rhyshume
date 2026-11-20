@@ -56,7 +56,7 @@ function buildRow(reviewId, draft) {
     value: value,
     observed_at: iso(draft.observed_at),
     source: { kind: draft.source.kind, name: draft.source.name, url: draft.source.url || null, provider_call_id: draft.source.provider_call_id || null },
-    method: draft.method || {},
+    method: Object.assign({ summary: '', settings: {} }, draft.method || {}),
     inputs: draft.inputs || {},
     limitations: limitations,
     provider_call_id: draft.source.provider_call_id || null,
@@ -81,7 +81,16 @@ async function recordEvidence(store, reviewId, draft) {
     const n = active.reduce(function (mx, r) { const m = /^r(\d+)$/.exec(r.run_key); return Math.max(mx, m ? +m[1] : 1); }, 1);
     if (!draft.run_key || same) row.run_key = 'r' + (n + 1);
   }
-  const saved = await store.insert('br_evidence', row);
+  let saved;
+  try { saved = await store.insert('br_evidence', row); }
+  catch (e) {
+    if (e && e.code === 'conflict') {
+      // a concurrent identical step won the race: reuse its row, never write a duplicate
+      const now = (await store.select('br_evidence', { review_id: reviewId, metric_key: row.metric_key, run_key: row.run_key, superseded_by: { is: null } })).filter(function (r) { return (r.competitor_id || null) === row.competitor_id; })[0];
+      if (now) return { row: now, created: false };
+    }
+    throw e;
+  }
   for (let i = 0; i < active.length; i++) {
     await store.update('br_evidence', { id: active[i].id }, { superseded_by: saved.id });
   }

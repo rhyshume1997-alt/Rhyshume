@@ -48,6 +48,12 @@ function rules(ctx) {
         why: 'If the site is slow, down or unreachable for some visitors they may not be able to use it. We cannot say how often this happens from one attempt.',
         change: 'Check that the site loads reliably, and whether a firewall or security setting blocks automated visitors.', check: ['Repeat the check later in case the problem was temporary.', 'Ask your host whether automated requests are blocked.'], caveats: ['One attempt from one location.'] });
     }
+    if (e && e.value && e.evidence_state === 'verified_public_observation' && e.value.v >= 400) {
+      add({ key: 'home_page_error', title: 'Your home page returned an error when it was read', type: 'technical_issue', sev: 3, conf: 'high', effort: 'medium', svc: 'websites', ev: [e],
+        found: 'The home page answered with HTTP status ' + e.value.v + ' in the check on ' + date(e) + ', so nothing else on the page could be assessed.',
+        why: 'An error page means visitors and search engines may not be able to use the site at that moment. One check cannot show how often it happens.',
+        change: 'Find out why the page returns an error and fix it, then re-run the review.', check: ['Repeat the check later in case the problem was temporary.', 'Ask your host about the error.'], caveats: ['One request from one location.'] });
+    }
     if (e && e.evidence_state === 'not_tested' && e.reason_code === 'blocked_by_robots') {
       add({ key: 'site_blocks_review_bot', title: 'Your website asks automated tools not to read it', type: 'opportunity', sev: 1, conf: 'high', effort: 'low', svc: 'seo', ev: [e],
         found: 'Your robots.txt file asked automated tools, including this review, not to read the home page, so the page was not read on ' + date(e) + '.',

@@ -99,6 +99,14 @@ function analyzeSnapshot(snap, opts) {
   }
 
   const pg = home.page;
+  if (home.status >= 400) {
+    // The server answered, but with an error page. Its status is a real observation; nothing is read from the error page's content.
+    add('https.enabled', 'verified_public_observation', home.scheme === 'https', { inputs: { redirect_chain: home.chain.map(function (c) { return { status: c.status, to: c.to_scheme || c.to }; }) } });
+    add('page.status', 'verified_public_observation', home.status);
+    add('page.response_ms', 'verified_public_observation', home.ms, { limitations: ['Measured from the review server for one request.'] });
+    PAGE_METRICS.filter(function (k) { return ['https.enabled', 'page.status', 'page.response_ms'].indexOf(k) === -1; }).forEach(function (k) { add(k, 'unavailable', null, { reason: 'http_error', inputs: { http_status: home.status } }); });
+    return drafts;
+  }
   add('https.enabled', 'verified_public_observation', home.scheme === 'https', { inputs: { redirect_chain: home.chain.map(function (c) { return { status: c.status, to: c.to_scheme || c.to }; }), https_downgrade: !!home.https_downgrade } });
   if (role === 'business') {
     const hr = snap.http_redirect || { state: 'not_checked' };
