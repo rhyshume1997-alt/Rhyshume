@@ -68,7 +68,7 @@ test('every public page with the main menu links to the new page', function () {
   publicPages.filter(function (f) { return read(f).includes('<nav class="nav"'); }).forEach(function (f) {
     const nav = read(f).match(/<nav class="nav"[\s\S]*?<\/nav>/)[0];
     assert.ok(nav.includes('<a href="/local-business"'), f + ' has no menu link');
-    assert.ok(nav.includes('Websites and digital for local business'), f + ' menu label is wrong');
+    assert.ok(nav.includes('Websites for small businesses'), f + ' menu label is wrong');
   });
 });
 
@@ -144,7 +144,7 @@ test('go-live fixes: no Marpet screenshot or coming soon note, button goes to th
     const h = read(f);
     assert.ok(h.includes('win you clients and save you time, from Glasgow.'), f + ' footer line');
     assert.ok(!h.includes('for engineering and manufacturing firms, from Glasgow'), f + ' old footer line');
-    assert.ok(h.includes('<li><a href="/local-business">Websites and digital for local business</a></li>'), f + ' footer link');
+    assert.ok(h.includes('<li><a href="/local-business">Websites for small businesses</a></li>'), f + ' footer link');
   });
 });
 

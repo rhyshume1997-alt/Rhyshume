@@ -18,10 +18,10 @@ const css = read('home.css');
 const js = read('home.js');
 
 test('home page: the headline, one line under it, the preview button and the smaller chat link', function () {
-  assert.ok(/<h1[^>]*>Websites that get found, and AI, automation and systems that win you clients and save you time<\/h1>/.test(home), 'Rev 2 headline: attractive websites and the systems behind them');
+  assert.ok(/<h1[^>]*>Websites that help you win work\. Systems that help you manage it\.<\/h1>/.test(home), 'headline: websites and the systems behind them');
   assert.ok(!/found on google/i.test(home), 'no found on Google claim beside the no guarantee line');
-  assert.ok(/<a class="btn"[^>]*>Get a free preview of your site</.test(home.match(/<section class="hero"[\s\S]*?<\/section>/)[0]));
-  assert.ok(/<p class="small">[^]*?<a [^>]*>Book a free 20-minute chat/.test(home), 'the 20 minute chat stays as a smaller link');
+  assert.ok(/<a class="btn"[^>]*>Get a free website preview</.test(home.match(/<section class="hero"[\s\S]*?<\/section>/)[0]));
+  assert.ok(/<a class="text-link" href="https:\/\/calendar\.google\.com[^>]*>Discuss a systems project/.test(home.match(/<section class="hero"[\s\S]*?<\/section>/)[0]), 'the 20 minute chat is the secondary link, worded for a systems project');
   assert.ok(!/<a class="btn[^"]*"[^>]*>Book a free 20-minute chat/.test(home), 'the chat is never a main button');
   assert.ok(home.split(BOOKING).length - 1 >= 2, 'booking link stays as the smaller chat link in the hero and at the bottom');
   assert.ok((home.match(/<a class="btn[^"]*" href="\/contact">/g) || []).length >= 3, 'the free preview buttons lead to the three step page');
@@ -86,7 +86,7 @@ test('home page: Tolra says pilot and register interest, with no price and no bu
 test('home page: validation is one of the four things I do, and is linked from the footer too (Rev 2 positioning)', function () {
   assert.ok(/<h3><a href="\/csv">Computer system validation<\/a><\/h3>/.test(home), 'capability row');
   assert.ok(home.split('<footer')[1].includes('href="/csv"'));
-  ['Websites and SEO', 'Business software and workflow systems', 'AI and automation'].forEach(function (c) { assert.ok(home.includes(c), c); });
+  ['Websites and SEO', 'Custom software and business systems', 'AI and automation'].forEach(function (c) { assert.ok(home.includes(c), c); });
 });
 
 test('home page: no tools talk, no ChatGPT listing, no AI automation wording', function () {
