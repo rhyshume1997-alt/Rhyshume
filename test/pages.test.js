@@ -52,7 +52,7 @@ test('the new page is in the sitemap and llms.txt, and the hidden pages are not'
 test('the hidden pages are not linked from any public page, and are still noindex', function () {
   publicPages.forEach(function (f) {
     const html = read(f);
-    HIDDEN.forEach(function (h) { assert.ok(!html.includes(h), h + ' is linked from ' + f); });
+    HIDDEN.forEach(function (h) { assert.ok(!html.split('<a href="/w-82503121e7fdf54e/" rel="nofollow">Client login</a>').join('').includes(h), h + ' is linked from ' + f); });
   });
   HIDDEN.forEach(function (h) {
     assert.match(read(path.join(h, 'index.html')), /<meta name="robots" content="noindex,nofollow,noarchive">/);

@@ -57,3 +57,12 @@ test('the privacy page describes no review tool processing', () => {
   assert.ok(!/Supabase|PageSpeed|review tool|the tool reads|business review/i.test(t));
   assert.ok(t.includes('<p>I’m not currently registered with the ICO.</p>'));
 });
+
+test('release 1: every public footer has the Client login link to the private workbook, marked nofollow', function () {
+  const fs2 = require('node:fs');
+  const pages = ['index', 'about', 'contact', 'engineering', 'automation', 'websites', 'local-business', 'seo-and-ai-visibility', 'automation-demos', 'privacy', 'tolra', 'csv', '404'];
+  pages.forEach(function (p) {
+    const h = fs2.readFileSync(require('node:path').join(__dirname, '..', p === 'automation-demos' ? 'automation-demos/index.html' : p + '.html'), 'utf8');
+    assert.ok(h.includes('<a href="/w-82503121e7fdf54e/" rel="nofollow">Client login</a>'), p + ' footer has the Client login link');
+  });
+});

@@ -37,7 +37,7 @@ test('public demonstrations: all eight exist, are labelled, safe and self contai
     assert.ok(h.includes('Concept by Rhys Hume, not a live site.'), s + ' notice');
     assert.ok(h.includes('<meta name="robots" content="noindex,follow">'), s + ' is noindex so a made-up business is never indexed as real');
     assert.ok(h.includes('<link rel="canonical" href="https://www.rhyshume.co.uk/website-concepts/' + s + '">'), s + ' canonical');
-    HIDDEN.forEach(function (x) { assert.ok(!h.includes(x), s + ' mentions ' + x); });
+    HIDDEN.forEach(function (x) { assert.ok(!h.split('<a href="/w-82503121e7fdf54e/" rel="nofollow">Client login</a>').join('').includes(x), s + ' mentions ' + x); });
     (h.match(/<form[^>]*>/g) || []).forEach(function (tag) { assert.ok(/action="#"/.test(tag) && /onsubmit="return false"/.test(tag), s + ' form not inert: ' + tag); });
     assert.ok(!/href="tel:|href="mailto:|action="http/i.test(h), s + ' has a real phone, mail or form target');
     (h.match(/(?:src|srcset|href)="((?:img|video|fonts|data)\/[^"]+)"/g) || []).forEach(function (m) { const f = m.replace(/^[a-z]+="/, '').replace(/"$/, ''); assert.ok(exists('website-concepts/' + f), s + ' missing ' + f); });
@@ -58,7 +58,7 @@ test('deployment: development copies are not deployed, the workbook and hidden r
   SLUGS.forEach(function (s) { assert.ok(!sm.includes('/website-concepts/' + s), s + ' demonstration is not in the sitemap'); });
   assert.ok(!sm.includes('c-3e9a41b7d20f58c6'), 'hidden route not in the sitemap');
   assert.ok(port.includes('<link rel="canonical" href="https://www.rhyshume.co.uk/website-concepts/">') && !/noindex/.test(port), 'the portfolio itself is indexable');
-  [home, port].concat(['about', 'contact', 'engineering', 'tolra', 'csv', 'automation', 'local-business', 'websites'].map(f => read(f + '.html'))).forEach(function (h) { HIDDEN.forEach(function (x) { assert.ok(!h.includes(x), 'public page links ' + x); }); });
+  [home, port].concat(['about', 'contact', 'engineering', 'tolra', 'csv', 'automation', 'local-business', 'websites'].map(f => read(f + '.html'))).forEach(function (h) { HIDDEN.forEach(function (x) { assert.ok(!h.split('<a href="/w-82503121e7fdf54e/" rel="nofollow">Client login</a>').join('').includes(x), 'public page links ' + x); }); });
   assert.ok(!exists('design-concepts.html') && !exists('design-concepts-private.js'), 'the earlier preview-only files are gone');
 });
 
