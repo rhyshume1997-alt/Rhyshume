@@ -53,6 +53,8 @@ h1, h2, h3 { font-family: "Archivo", "IBM Plex Sans", sans-serif; }
 .l2 .word { color: var(--brick); paint-order: stroke fill; -webkit-text-stroke: 0.045em var(--paper); display: block; }
 .c { display: inline-block; }
 .hero .plate { grid-column: 1 / 10; grid-row: 2; z-index: 2; aspect-ratio: 2 / 1; border: 6px solid var(--ink); background: var(--ink); }
+/* short desktop screens: a 2:1 plate pushed most of the second wordmark line ("Shelf") below the fold; a shallower plate keeps the wordmark readable */
+@media (min-width: 64rem) and (max-height: 60rem) { .hero .plate { aspect-ratio: 5 / 2; } }
 .hero .plate img, .hero .plate video { object-position: 50% 24%; }
 .hero .plate .tag { inset: 0 auto auto 0; background: var(--ink); color: var(--paper); padding: 0.3rem 0.6rem; }
 .hero-side { grid-column: 10 / 13; grid-row: 2; align-self: start; padding-block-start: 0.2rem; }
