@@ -4,7 +4,7 @@ let BASE = process.env.BASE || 'http://localhost:4300';
 let n = 0;
 async function call(method, p, body, o) {
   const op = o || {};
-  const h = Object.assign({ 'X-Forwarded-For': op.ip || '203.0.113.' + (10 + (n % 200)) }, op.headers || {});
+  n++; const h = Object.assign({ 'X-Forwarded-For': op.ip || '198.18.' + (Math.floor(n / 250) % 250) + '.' + (n % 250 + 1) }, op.headers || {});
   if (op.token) h.Authorization = 'Bearer ' + op.token;
   let payload;
   if (body !== undefined) { payload = typeof body === 'string' ? body : JSON.stringify(body); if (!op.noCt) h['Content-Type'] = op.ct || 'application/json'; }

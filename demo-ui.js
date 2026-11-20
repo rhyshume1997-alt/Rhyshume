@@ -142,7 +142,7 @@
           var np = pending(state, e).length;
           var btn = h('button', { type: 'button', class: 'dm-item', 'data-k': 'ent-' + e.id, 'aria-current': e.id === selected ? 'true' : null, onclick: function () { selected = e.id; render(); restoreFocus('ent-' + e.id); } }, [
             h('span', { class: 'dm-item-top' }, [h('strong', { text: e.id }), badge(e)]),
-            h('span', { class: 'dm-item-title', text: (e.fields.customer || e.title) + (e.fields.customer ? ' – ' + e.title : '') }),
+            h('span', { class: 'dm-item-title', text: (e.fields.customer || e.title) + (e.fields.customer ? ': ' + e.title : '') }),
             meta(e) ? h('span', { class: 'dm-item-meta', text: meta(e) }) : null,
             np ? h('span', { class: 'dm-flagtag', text: plural(np, 'draft', 'drafts') + ' needs approval' }) : null,
             e.flags.overdue || e.flags.phone ? h('span', { class: 'dm-flagtag dm-flagtag-warn', text: e.flags.overdue ? 'Overdue' : 'Call suggested' }) : null
