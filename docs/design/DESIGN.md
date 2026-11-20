@@ -76,7 +76,7 @@ Palettes and fonts below come from the Creative Director workbook seeds and the 
 
 The standard must not depend on a conversation, and it must not flatten every site into one look. It is split into two layers:
 
-- **Shared (portable):** the process, the evidence rules, the quality gates and the reference library. These live in `.claude/skills/website-design-system/` (with `templates/audit-checklist.md` and `templates/project-design-md.md`), `.claude/CLAUDE.md` and `docs/design/references.md`.
+- **Shared (portable):** the process, the evidence rules, the quality gates and the reference library. The skill folder `.claude/skills/website-design-system/` carries all of it: `references/research-process.md`, `references/fable-critique.md`, `references/accessibility-checks.md`, a portable copy of the reference library (`references/reference-library.md`, kept in step with `docs/design/references.md` by `scripts/check-references-sync.sh`), and the two templates. `.claude/CLAUDE.md` holds the always-on rules.
 - **Per project (never shared):** the identity (palette, typefaces, shape language, tone, signature interaction), recorded only in that project's own `DESIGN.md`.
 
 How to reuse it:
@@ -119,6 +119,8 @@ The skill stops and asks if a project's `DESIGN.md` or references are missing. I
 | Salt & Ember ampersand ends cream, CSS says ember | **Confirmed** as an inconsistency, **not a defect**: the animated end state is cream (computed). Owner's call |
 
 ## 8. Prioritised fixes (for approval; nothing implemented)
+
+**Implementation status:** F1 to F6 are implemented on a separate branch (draft pull request https://github.com/rhyshume1997-alt/Rhyshume/pull/32, not merged); their verification is in `audit-2026-11-20/implementation-verification.md`. **F7 (the Salt & Ember asset crop) and every Priority 2 and Priority 3 item are not implemented.** The measurements below are the "before" state.
 
 Rules for every fix: preserve the approved identity and signature interaction; smallest change first; work on a new branch from `claude/cinematic-poc`; after each fix re-run `node --test` and the shared browser checker and take before and after screenshots at 390 and 1440; nothing merged or deployed without approval. Images referred to are in `audit-2026-11-20/`.
 
