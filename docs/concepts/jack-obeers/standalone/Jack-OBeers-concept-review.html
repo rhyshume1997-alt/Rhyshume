@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow,noarchive">
 <meta name="referrer" content="no-referrer">
-<title>Design review: Jack O'Beers concept (Rev 1) | Rhys Hume</title>
+<title>Design review: Jack O'Beers concept (Rev 2) | Rhys Hume</title>
 <link rel="icon" href="data:,">
 <style>/* Jack O'Beers concept, Rev 1. Flat colour only: no gradients, glass or shadows.
    PALETTE: brown, gold and cream sampled by eye and pixel from the supplied logo (approximate, exact brand values still to be confirmed). Green is kept only as a small secondary accent.
@@ -76,12 +76,6 @@ h2 i, h1 i { font-family: var(--serif); font-style: italic; font-weight: 400; le
 .open-in { display: flex; flex-direction: column; gap: 1.2rem; }
 .open-type { display: flex; flex-direction: column; gap: 1.1rem; align-items: flex-start; min-inline-size: 0; }
 .kicker { color: var(--green); }
-.herologo { position: relative; inline-size: clamp(9.5rem, 40vw, 15rem); aspect-ratio: 1; transform-origin: 50% 100%; }
-.herologo img { inline-size: 100%; block-size: 100%; object-fit: contain; }
-.wm { display: flex; flex-wrap: wrap; gap: 0 0.28em; font: 800 clamp(3.4rem, 13vw, 8.4rem)/0.95 var(--disp); letter-spacing: -0.04em; color: var(--red-d); padding-block-start: 0.1em; }
-.wm .w { display: inline-flex; }
-.wm i { display: inline-block; font-style: normal; transform-origin: 100% 100%; }
-.wm i.a { color: var(--green); }
 .open h1 { font: 800 clamp(1.9rem, 5.4vw, 3.7rem)/1.02 var(--disp); letter-spacing: -0.035em; max-inline-size: 15ch; }
 .open h1 i { color: var(--green); }
 .lede { font-size: 1.15rem; max-inline-size: 28rem; }
@@ -107,40 +101,14 @@ h2 i, h1 i { font-family: var(--serif); font-style: italic; font-weight: 400; le
 .s-bunt { fill: none; stroke: var(--ink); stroke-width: 2; }
 .s-flags path { fill: var(--red); } .s-flags path:nth-child(even) { fill: var(--brown); }
 .s-shelf { fill: var(--brown); } .s-board { fill: var(--ink); }
-.beer { fill: var(--amber); } .beer-d { fill: var(--amber-d); } .foam circle, .foam rect { fill: var(--paper); }
-.bubbles circle { fill: var(--paper); opacity: 0.8; }
-.glass-line { fill: none; stroke: var(--ink); stroke-width: 4; stroke-linejoin: round; stroke-linecap: round; }
-.glass-hi { fill: none; stroke: var(--paper); stroke-width: 4; stroke-linecap: round; opacity: 0.7; }
-.stream { stroke: var(--amber); stroke-width: 6; stroke-linecap: round; fill: none; opacity: 0; transform-origin: 258px 238px; transform: scaleY(0); }
-.b-body { fill: var(--brown); } .b-cap { fill: var(--red); } .b-label { fill: var(--cream); } .b-dot { fill: var(--red); } .b-hi { fill: none; stroke: #9a5a33; stroke-width: 4; stroke-linecap: round; }
-.bottle { transform-origin: 110px 300px; }
 
 @media (prefers-reduced-motion: no-preference) {
   .rise { animation: rise 800ms var(--ease) var(--d, 0ms) both; }
   html.rv-on .rv { opacity: 0; transform: translateY(18px); }
   html.rv-on .rv.in { opacity: 1; transform: none; transition: opacity 700ms var(--ease) var(--d, 0ms), transform 700ms var(--ease) var(--d, 0ms); }
-  .bubbles circle { animation: bub 3.4s linear infinite; } .bubbles circle:nth-child(2) { animation-delay: 0.9s; } .bubbles circle:nth-child(3) { animation-delay: 1.7s; } .bubbles circle:nth-child(4) { animation-delay: 2.4s; }
-  /* the opening: letters lie down, stand up one by one, then the bottle tips and the glass fills. The .play class is set by script and removed to replay. */
-  .play .herologo { animation: getup 1100ms var(--spring) 350ms both; }
-  .play .arch { animation: archin 1000ms var(--ease) 150ms both; transform-origin: 50% 100%; }
-  .play .bottle { animation: pour 5200ms var(--ease) 2300ms both; }
-  .play .stream { animation: stream 5200ms linear 2300ms both; }
-  .play .liquid { animation: fill 5200ms var(--ease) 2300ms both; }
 }
 @keyframes rise { from { opacity: 0; transform: translateY(16px); } }
-@keyframes getup { 0% { transform: translate(-50%, -50%) rotate(90deg); } 70% { transform: translate(0%, 0%) rotate(-5deg); } 100% { transform: translate(0%, 0%) rotate(0deg); } }
 @keyframes archin { from { transform: translateY(24px) scale(0.97); opacity: 0; } }
-@keyframes bub { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 0.8; } 100% { transform: translateY(-80px); opacity: 0; } }
-/* bottle: lift, tip over the glass, hold while pouring, return */
-@keyframes pour {
-  0% { transform: none; }
-  12% { transform: translate(14px, -46px); }
-  30% { transform: translate(69px, -90px) rotate(105deg); }
-  74% { transform: translate(69px, -90px) rotate(108deg); }
-  100% { transform: none; }
-}
-@keyframes stream { 0%, 29% { opacity: 0; transform: scaleY(0); } 32% { opacity: 1; transform: scaleY(0.1); } 40% { opacity: 1; transform: scaleY(1); } 70% { opacity: 1; transform: scaleY(1); } 76%, 100% { opacity: 0; transform: scaleY(1); } }
-@keyframes fill { 0%, 31% { transform: translateY(150px); } 72%, 100% { transform: none; } }
 
 /* 2. intro */
 .intro { background: var(--green); color: var(--cream); padding-block: clamp(3rem, 7vw, 6rem); }
@@ -300,9 +268,6 @@ input[type="date"] { inline-size: 100%; min-block-size: 3rem; padding: 0.5rem 0.
   .callbar :focus-visible { outline-color: var(--cream); }
   body { padding-block-end: 4rem; }
 }
-.cursor { position: fixed; inset: 0 auto auto 0; z-index: 90; pointer-events: none; opacity: 0; transition: opacity 200ms; will-change: transform; }
-.cursor.on { opacity: 1; }
-.cursor path { fill: var(--brown); stroke: var(--ink); stroke-width: 1.5; stroke-linejoin: round; }
 
 /* design review page */
 .rev { padding-block: clamp(2rem, 5vw, 4rem) 5rem; }
@@ -321,6 +286,46 @@ input[type="date"] { inline-size: 100%; min-block-size: 3rem; padding: 0.5rem 0.
 @media (min-width: 52rem) { .rev .cols { grid-template-columns: 1fr 1fr; } }
 .rev .box { padding: 1rem 1.2rem; background: var(--paper); border-radius: 1.2rem; border: 2px solid var(--ink); }
 .rev .box h3 { font: 800 1.1rem var(--disp); margin-block-end: 0.4rem; }
+
+/* ===== Rev 2: signature interaction ===== */
+.sig-wait .reveal { opacity: 0; }
+.sig-wait #sig-stage { visibility: hidden; }
+.mobile-first { }
+@media (max-width: 55.99rem) { .window { order: -1; margin-inline: auto; } }
+/* components (flat colour; the bottle is brown glass) */
+.sig-body, .sig-neck { fill: #5a2e14; }
+.sig-cap { fill: var(--red); }
+.sig-label-bg { fill: var(--cream); }
+.sig-label-dot { fill: var(--red); }
+.sig-shine { fill: none; stroke: #8a5430; stroke-width: 2.2; stroke-linecap: round; }
+.sig-stream { stroke: var(--amber); stroke-width: 2.4; stroke-linecap: round; fill: none; }
+.sig-beer { fill: var(--amber); }
+.sig-foam circle, .sig-foam rect { fill: var(--paper); }
+.sig-outline { fill: none; stroke: var(--ink); stroke-width: 2.2; stroke-linejoin: round; stroke-linecap: round; }
+.sig-hi { fill: none; stroke: var(--paper); stroke-width: 2.2; stroke-linecap: round; opacity: 0.7; }
+.sig-beer-s { fill: var(--amber); } .sig-foam-s { fill: var(--paper); }
+.sig-follow { position: fixed; inset: 0 auto auto 0; inline-size: 2px; block-size: 2px; z-index: 90; pointer-events: none; will-change: transform; }
+.sig-follow svg { pointer-events: none; inline-size: 2px; block-size: 2px; max-inline-size: none; overflow: visible; }
+/* product cards: bottle art and glass, with an information panel */
+.pw { position: relative; }
+.card { min-block-size: 19.5rem; }
+.card .art { display: flex; align-items: flex-end; justify-content: space-between; gap: 0.5rem; margin-block-end: 0.4rem; }
+.card .art > svg:first-child { margin: 0; block-size: 7.6rem; }
+.card svg.gl { inline-size: 3.4rem; block-size: 4.5rem; overflow: visible; margin: 0; }
+.info { position: absolute; inset: auto 0 0 0; z-index: 2; padding: 0.7rem 0.8rem 0.8rem; background: var(--green); color: var(--paper); border-radius: 0 0 1.3rem 1.3rem; font-size: 0.78rem; line-height: 1.35; display: grid; gap: 0.25rem; opacity: 0; transform: translateY(8px); pointer-events: none; transition: opacity 220ms var(--ease), transform 220ms var(--ease); }
+.info b { font: 800 0.95rem/1.1 var(--disp); }
+.info .mono { font-size: 0.62rem; color: var(--amber); }
+.info .mini { display: flex; flex-wrap: wrap; gap: 0.15rem 0.6rem; }
+.pw.on .info, .pw:focus-within .info { opacity: 1; transform: none; }
+@media (hover: hover) and (pointer: fine) { .pw:hover .info { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .info { transition: none; transform: none; } }
+.tog-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; margin-block-start: 0.9rem; }
+.tog { min-block-size: 2.75rem; padding: 0.4rem 1rem; border-radius: 999px; border: 2px solid var(--ink); background: transparent; font-weight: 600; font-size: 0.92rem; }
+.tog[aria-pressed="true"] { background: var(--ink); color: var(--cream); }
+/* the cursor bottle gets a thin cream edge so brown glass stays visible on brown and cream alike */
+.sig-follow .sig-body, .sig-follow .sig-neck { stroke: var(--cream); stroke-width: 1.4; paint-order: stroke; }
+.sig-follow .sig-cap { stroke: var(--cream); stroke-width: 1; }
+.card[aria-pressed="true"] .sig-outline { stroke: var(--cream); }
 </style>
 </head>
 <body>
@@ -328,7 +333,7 @@ input[type="date"] { inline-size: 100%; min-block-size: 3rem; padding: 0.5rem 0.
 <aside class="banner"><b>Initial design concept by Rhys Hume. Not a live shop.</b> Review notes for discussion. No price, scope or date is agreed or implied.</aside>
 <header class="top"><div class="wrap top-in"><a class="brand" href="Jack-OBeers-concept.html">Jack <span>O&rsquo;</span>Beers</a><nav aria-label="Main"><a href="Jack-OBeers-concept.html">Back to the concept</a></nav><a class="btn top-btn" href="Jack-OBeers-concept.html">View the concept</a></div></header>
 <main id="main" class="rev"><div class="wrap">
-<p class="mono">Design review, Rev 1</p>
+<p class="mono">Design review, Rev 2</p>
 <h1>What is in this concept, and what is not</h1>
 <p class="lead">A plain list of where each idea came from, what is temporary, and what has to be decided before a quote and formal specification. <b>Approving how it looks is not approving scope, price or timing.</b></p>
 <nav class="toc" aria-label="On this page"><a href="#wb">From the workbook</a><a href="#rhys">Proposed by Rhys</a><a href="#temp">Temporary</a><a href="#miss">Missing</a><a href="#agree">To agree</a><a href="#decide">Decisions before a quote</a><a href="#shopify">Shopify</a><a href="#risk">Risks</a><a href="#map">Site structure</a></nav>

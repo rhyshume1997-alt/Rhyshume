@@ -8,12 +8,11 @@
   var NS = 'http://www.w3.org/2000/svg';
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
 
-  /* ---------- opening ---------- */
+  /* ---------- opening: the signature sequence lives in signature.js ---------- */
   var root = document.documentElement;
-  $$('#wm i').forEach(function (i, n) { i.style.setProperty('--n', n); });
-  function play() { root.classList.remove('play'); void root.offsetWidth; if (!calm) root.classList.add('play'); }
-  play();
-  var rp = $('#replay'); if (rp) rp.addEventListener('click', play);
+  var scene = $('#scene');
+  if (window.Sig && window.gsap && scene) Sig.opening(scene); else root.classList.remove('sig-wait');
+  var rp = $('#replay'); if (rp) rp.addEventListener('click', function () { if (window.Sig && Sig.replay) Sig.replay(); });
 
   /* scroll reveals */
   if ('IntersectionObserver' in window && !calm) {
@@ -22,28 +21,19 @@
     root.classList.add('rv-on');
   }
 
-  /* cursor bottle: a small brown bottle that trails the pointer. Mouse only, and the real cursor stays visible. */
-  var cur = $('#cursor');
-  if (cur && !calm && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-    var tx = 0, ty = 0, cx = 0, cy = 0, raf = 0;
-    var tick = function () { cx += (tx - cx) * 0.22; cy += (ty - cy) * 0.22; cur.style.transform = 'translate(' + (cx + 14) + 'px,' + (cy + 14) + 'px) rotate(' + ((tx - cx) * 1.2) + 'deg)'; raf = (Math.abs(tx - cx) + Math.abs(ty - cy) > 0.3) ? requestAnimationFrame(tick) : 0; };
-    window.addEventListener('pointermove', function (e) { if (e.pointerType !== 'mouse') return; tx = e.clientX; ty = e.clientY; cur.classList.add('on'); if (!raf) raf = requestAnimationFrame(tick); }, { passive: true });
-    document.addEventListener('pointerleave', function () { cur.classList.remove('on'); });
-  }
-
   /* ---------- demonstration data: NOT real products ---------- */
   var AX = ['Sweet', 'Bitter or tart', 'Fruity', 'Body'];
   var P = [
-    { id: 'b1', cat: 'beer', name: 'Demo Amber Ale', sub: 'Amber ale, sample entry', f: [2, 3, 2, 3], pair: ['Demo cheddar', 'Demo pork pie'], col: '#7a3f1c' },
-    { id: 'b2', cat: 'beer', name: 'Demo Dark Stout', sub: 'Stout, sample entry', f: [2, 4, 1, 5], pair: ['Demo smoked cheese', 'Demo chocolate'], col: '#3b2417' },
-    { id: 'b3', cat: 'beer', name: 'Demo Pale Lager', sub: 'Lager, sample entry', f: [1, 2, 1, 1], pair: ['Demo oatcakes', 'Demo cheddar'], col: '#8a5a22' },
-    { id: 'b4', cat: 'beer', name: 'Demo Fruit Beer', sub: 'Fruit beer, sample entry', f: [4, 1, 5, 2], pair: ['Demo soft cheese', 'Demo shortbread'], col: '#8f3a2a' },
-    { id: 'c1', cat: 'cider', name: 'Demo Dry Cider', sub: 'Dry cider, sample entry', f: [1, 4, 2, 2], pair: ['Demo pork pie', 'Demo chutney'], col: '#a9812a' },
-    { id: 'c2', cat: 'cider', name: 'Demo Medium Cider', sub: 'Medium cider, sample entry', f: [3, 2, 3, 2], pair: ['Demo cheddar', 'Demo oatcakes'], col: '#b5902f' },
-    { id: 'c3', cat: 'cider', name: 'Demo Berry Cider', sub: 'Fruit cider, sample entry', f: [4, 1, 5, 2], pair: ['Demo shortbread', 'Demo soft cheese'], col: '#8c3358' },
-    { id: 'w1', cat: 'wine', name: 'Demo Red', sub: 'Red wine, sample entry', f: [1, 3, 3, 4], pair: ['Demo cured meat', 'Demo hard cheese'], col: '#4b1f2a' },
-    { id: 'w2', cat: 'wine', name: 'Demo White', sub: 'White wine, sample entry', f: [2, 4, 4, 2], pair: ['Demo soft cheese', 'Demo oatcakes'], col: '#8a8c3a' },
-    { id: 'w3', cat: 'wine', name: 'Demo Rosé', sub: 'Rosé wine, sample entry', f: [3, 2, 4, 2], pair: ['Demo cured meat', 'Demo chutney'], col: '#c06a74' }
+    { id: 'b1', liq: '#d08a22', foam: 1, cat: 'beer', name: 'Demo Amber Ale', sub: 'Amber ale, sample entry', f: [2, 3, 2, 3], pair: ['Demo cheddar', 'Demo pork pie'], col: '#7a3f1c' },
+    { id: 'b2', liq: '#3a1c0e', foam: 1, cat: 'beer', name: 'Demo Dark Stout', sub: 'Stout, sample entry', f: [2, 4, 1, 5], pair: ['Demo smoked cheese', 'Demo chocolate'], col: '#3b2417' },
+    { id: 'b3', liq: '#e8b83a', foam: 1, cat: 'beer', name: 'Demo Pale Lager', sub: 'Lager, sample entry', f: [1, 2, 1, 1], pair: ['Demo oatcakes', 'Demo cheddar'], col: '#8a5a22' },
+    { id: 'b4', liq: '#b8452e', foam: 1, cat: 'beer', name: 'Demo Fruit Beer', sub: 'Fruit beer, sample entry', f: [4, 1, 5, 2], pair: ['Demo soft cheese', 'Demo shortbread'], col: '#8f3a2a' },
+    { id: 'c1', liq: '#d9b84a', foam: 1, cat: 'cider', name: 'Demo Dry Cider', sub: 'Dry cider, sample entry', f: [1, 4, 2, 2], pair: ['Demo pork pie', 'Demo chutney'], col: '#a9812a' },
+    { id: 'c2', liq: '#e0b040', foam: 1, cat: 'cider', name: 'Demo Medium Cider', sub: 'Medium cider, sample entry', f: [3, 2, 3, 2], pair: ['Demo cheddar', 'Demo oatcakes'], col: '#b5902f' },
+    { id: 'c3', liq: '#a83c63', foam: 1, cat: 'cider', name: 'Demo Berry Cider', sub: 'Fruit cider, sample entry', f: [4, 1, 5, 2], pair: ['Demo shortbread', 'Demo soft cheese'], col: '#8c3358' },
+    { id: 'w1', liq: '#6b1d33', foam: 0, cat: 'wine', name: 'Demo Red', sub: 'Red wine, sample entry', f: [1, 3, 3, 4], pair: ['Demo cured meat', 'Demo hard cheese'], col: '#4b1f2a' },
+    { id: 'w2', liq: '#d7d27a', foam: 0, cat: 'wine', name: 'Demo White', sub: 'White wine, sample entry', f: [2, 4, 4, 2], pair: ['Demo soft cheese', 'Demo oatcakes'], col: '#8a8c3a' },
+    { id: 'w3', liq: '#e08a94', foam: 0, cat: 'wine', name: 'Demo Rosé', sub: 'Rosé wine, sample entry', f: [3, 2, 4, 2], pair: ['Demo cured meat', 'Demo chutney'], col: '#c06a74' }
   ];
   var CATNAME = { beer: 'Beer', cider: 'Cider', wine: 'Wine' };
 
@@ -61,14 +51,29 @@
 
   /* ---------- shop: category -> product -> detail ---------- */
   var grid = $('#grid'), detail = $('#detail'), tabs = $('#cat-tabs'), cat = 'beer', cur_ = null, basket = 0;
+  var HAS = !!(window.Sig && window.gsap);
   function renderGrid() {
     if (!grid) return;
-    grid.textContent = ''; grid.setAttribute('aria-labelledby', 'ct-' + cat);
+    if (HAS && Sig.drinks) Sig.drinks.reset();
+    grid.textContent = ''; $('#grid-panel').setAttribute('aria-labelledby', 'ct-' + cat);
     P.filter(function (p) { return p.cat === cat; }).forEach(function (p) {
-      var li = el('li'), b = el('button', 'card'); b.type = 'button'; b.setAttribute('aria-pressed', cur_ && cur_.id === p.id ? 'true' : 'false'); b.dataset.id = p.id;
-      b.appendChild(el('span', 'demo mono', 'Demo')); b.appendChild(bottle(p.col, p.cat === 'wine'));
+      var li = el('li', 'pw'), b = el('button', 'card'); b.type = 'button'; b.setAttribute('aria-pressed', cur_ && cur_.id === p.id ? 'true' : 'false'); b.dataset.id = p.id; b.setAttribute('aria-describedby', 'info-' + p.id);
+      b.appendChild(el('span', 'demo mono', 'Demo'));
+      var art = el('span', 'art'); art.appendChild(bottle(p.col, p.cat === 'wine'));
+      var gs = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); gs.setAttribute('class', 'gl'); gs.setAttribute('viewBox', '0 0 60 80'); gs.setAttribute('aria-hidden', 'true'); gs.setAttribute('focusable', 'false');
+      art.appendChild(gs); b.appendChild(art);
       b.appendChild(el('b', null, p.name)); b.appendChild(el('span', 'st', p.sub)); b.appendChild(el('span', 'pr mono', '[price to be confirmed]'));
-      li.appendChild(b); grid.appendChild(li);
+      li.appendChild(b);
+      /* information panel: always in the page, shown on hover, focus or tap. Flavour values are sample data, not verified. */
+      var info = el('div', 'info'); info.id = 'info-' + p.id;
+      info.appendChild(el('b', null, p.name));
+      info.appendChild(el('p', null, 'Description: [to be supplied by the shop]'));
+      info.appendChild(el('p', 'mono', 'Flavour, sample data, not verified'));
+      var ul = el('ul', 'mini'); p.f.forEach(function (v, i) { ul.appendChild(el('li', null, AX[i] + ' ' + v + '/5')); }); info.appendChild(ul);
+      info.appendChild(el('p', null, 'Allergens: [to be verified]'));
+      li.appendChild(info);
+      if (HAS) li._glass = Sig.cardGlass(gs, { colour: p.liq, foam: !!p.foam, foamColour: '#fffaf0' });
+      grid.appendChild(li);
     });
   }
   function setCat(c, focusTab) {
@@ -99,7 +104,7 @@
       var j = e.key === 'ArrowRight' ? (i + 1) % ts.length : e.key === 'ArrowLeft' ? (i + ts.length - 1) % ts.length : e.key === 'Home' ? 0 : e.key === 'End' ? ts.length - 1 : -1;
       if (j >= 0) { e.preventDefault(); setCat(ts[j].dataset.cat, true); }
     });
-    grid.addEventListener('click', function (e) { var b = e.target.closest('.card'); if (!b) return; showDetail(P.filter(function (p) { return p.id === b.dataset.id; })[0], true); });
+    grid.addEventListener('click', function (e) { var b = e.target.closest('.card'); if (!b) return; showDetail(P.filter(function (p) { return p.id === b.dataset.id; })[0], e.detail === 0); });
     $$('[data-pick]').forEach(function (a) { a.addEventListener('click', function () { setCat(a.dataset.pick); }); });
     $('#add').addEventListener('click', function () {
       if (!cur_) { $('#d-note').textContent = 'Pick a product first. Demonstration only.'; return; }
@@ -107,6 +112,13 @@
       $('#d-note').textContent = 'Demo only: ' + cur_.name + ' (' + how + ') counted on this page. Nothing is added to a real basket, nothing is charged, and nothing is stored.';
     });
     setCat('beer'); showDetail(P[0], false);
+    if (HAS && Sig.drinks) Sig.drinks.init($('#shop'), grid);
+    var tg = $('#pour-toggle');
+    if (tg) {
+      var setTog = function (on) { tg.setAttribute('aria-pressed', on); tg.textContent = 'Pouring animation: ' + (on ? 'on' : 'off'); if (HAS) Sig.drinks.setMotion(on); };
+      setTog(!calm);
+      tg.addEventListener('click', function () { setTog(tg.getAttribute('aria-pressed') !== 'true'); });
+    }
   }
 
   /* ---------- flavour finder ---------- */

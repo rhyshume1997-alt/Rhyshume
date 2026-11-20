@@ -11,11 +11,11 @@
 <link rel="preload" href="/website-concepts/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/website-concepts/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="jack.css">
-<script>document.documentElement.classList.add("js")</script>
+<script>(function(d){d.classList.add("js");if(!matchMedia("(prefers-reduced-motion: reduce)").matches){d.classList.add("sig-wait");setTimeout(function(){d.classList.remove("sig-wait")},2500)}})(document.documentElement)</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to the content</a>
-<aside class="banner" aria-label="Concept notice"><b>Initial design concept by Rhys Hume. Not a live shop.</b> Rev 1. Private preview for discussion. Products, prices and photographs are demonstration material. Nothing is bought, booked or sent. <a href="review.html">Design review</a></aside>
+<aside class="banner" aria-label="Concept notice"><b>Initial design concept by Rhys Hume. Not a live shop.</b> Rev 2. Private preview for discussion. Products, prices and photographs are demonstration material. Nothing is bought, booked or sent. <a href="review.html">Design review</a></aside>
 
 <header class="top"><div class="wrap top-in">
   <img class="logo" src="jack-logo.png" width="46" height="46" alt="">
@@ -26,49 +26,30 @@
 
 <main id="main">
 
-<!-- 1. opening -->
+<!-- 1. opening: the logo lies on the counter, rises, and a bottle pours a glass. Static markup below is the finished state, used with no JavaScript or reduced motion. -->
 <section class="open" id="top" aria-labelledby="h1">
   <div class="wrap open-in">
     <div class="open-type">
-      <p class="mono kicker rise" style="--d:100ms">British beers, ciders, wines and food</p>
-      <div class="herologo" id="herologo"><img src="jack-logo.png" width="355" height="355" alt="Jack O'Beers &amp; Deli logo: a smiling cartoon bull with a barrel on its back" fetchpriority="high"></div>
-      <h1 id="h1" class="rise" style="--d:1500ms">Something good <i>on the shelves</i></h1>
-      <p class="lede rise" style="--d:1700ms">A shop for British beer, cider and wine, with a deli counter to match. Find a bottle, see how it tastes and what to eat with it. <span class="mono inl">Proposed wording</span></p>
-      <div class="cta rise" style="--d:1850ms"><a class="btn" href="#shop">Explore the shop</a><a class="tlink" href="#deli">Discover the deli</a></div>
-      <p class="mono tmp rise" style="--d:2000ms">Logo as supplied (small copy, a high-resolution file is needed).</p>
+      <p class="mono kicker reveal">British beers, ciders, wines and food</p>
+      <h1 id="h1" class="reveal">Something good <i>on the shelves</i></h1>
+      <p class="lede reveal">A shop for British beer, cider and wine, with a deli counter to match. Find a bottle, see how it tastes and what to eat with it. <span class="mono inl">Proposed wording</span></p>
+      <div class="cta"><a class="btn" href="#shop">Explore the shop</a><a class="tlink" href="#deli">Discover the deli</a></div>
+      <p class="mono tmp reveal">Logo as supplied (small copy, a vector file is needed).</p>
     </div>
 
     <div class="window">
       <div class="arch">
-        <svg id="scene" class="scene" viewBox="0 0 400 480" role="img" aria-label="Illustration: a brown bottle tips over a glass on a shelf and the glass fills with amber beer.">
-          <defs>
-            <clipPath id="glassclip"><path d="M220 250 L236 394 Q238 400 244 400 H296 Q302 400 304 394 L320 250 Z"/></clipPath>
-          </defs>
-          <rect class="s-bg" width="400" height="480"/>
-          <circle class="s-sun" cx="310" cy="100" r="40"/>
-          <path class="s-bunt" d="M30 150 Q200 210 370 150"/>
-          <g class="s-flags"><path d="M89 168 h18 l-9 20z M157 178 h18 l-9 20z M225 178 h18 l-9 20z M293 168 h18 l-9 20z"/></g>
-          <rect class="s-shelf" x="0" y="400" width="400" height="14" rx="7"/>
-          <rect class="s-board" x="0" y="414" width="400" height="66"/>
-          <!-- glass -->
-          <g class="glass">
-            <g clip-path="url(#glassclip)">
-              <g class="liquid"><rect class="beer" x="200" y="270" width="140" height="140"/><rect class="beer-d" x="200" y="270" width="140" height="10"/>
-                <g class="foam"><circle cx="226" cy="268" r="14"/><circle cx="246" cy="262" r="15"/><circle cx="268" cy="260" r="16"/><circle cx="290" cy="262" r="15"/><circle cx="312" cy="268" r="14"/><rect x="214" y="268" width="112" height="14"/></g>
-              </g>
-              <g class="bubbles"><circle cx="252" cy="380" r="2.2"/><circle cx="276" cy="360" r="1.8"/><circle cx="262" cy="340" r="2"/><circle cx="288" cy="372" r="1.6"/></g>
-            </g>
-            <path class="glass-line" d="M220 250 L236 394 Q238 400 244 400 H296 Q302 400 304 394 L320 250"/>
-            <path class="glass-hi" d="M230 262 L242 380"/>
-          </g>
-          <path class="stream" d="M258 238 V394"/>
-          <!-- bottle -->
-          <g class="bottle">
-            <path class="b-body" d="M80 392 Q80 400 88 400 H132 Q140 400 140 392 V322 Q140 296 122 284 V230 H128 V216 H92 V230 H98 V284 Q80 296 80 322 Z"/>
-            <rect class="b-cap" x="91" y="210" width="38" height="9" rx="4.5"/>
-            <circle class="b-label" cx="110" cy="352" r="22"/>
-            <circle class="b-dot" cx="110" cy="352" r="8"/>
-            <path class="b-hi" d="M90 330 V386"/>
+        <svg id="scene" class="scene" viewBox="0 0 400 440" role="img" aria-label="Illustration: the Jack O'Beers logo stands on a shop counter beside a glass of beer and a brown bottle.">
+          <rect class="s-bg" width="400" height="440"/>
+          <circle class="s-sun" cx="310" cy="84" r="36"/>
+          <path class="s-bunt" d="M24 120 Q200 188 376 120"/>
+          <g class="s-flags"><path d="M84 138 h18 l-9 20z M154 152 h18 l-9 20z M226 152 h18 l-9 20z M296 138 h18 l-9 20z"/></g>
+          <rect class="s-shelf" x="0" y="372" width="400" height="14" rx="7"/>
+          <rect class="s-board" x="0" y="386" width="400" height="54"/>
+          <g id="sig-stage" data-logo="jack-logo.png">
+            <image href="jack-logo.png" x="16" y="207" width="156" height="165" preserveAspectRatio="xMidYMax meet"/>
+            <g transform="translate(214 225.7) scale(1.9)"><path class="sig-beer-s" d="M13 16H47L45 74Q44 77 41 77H19Q16 77 15 74Z"/><path class="sig-foam-s" d="M11 12H49L48 22H12Z"/><path class="sig-outline" d="M8 10L15 74Q16 77 19 77H41Q44 77 45 74L52 10"/></g>
+            <g transform="translate(352 288.7) scale(1.6) translate(-17 -28)"><path class="sig-body" d="M4 72Q4 77 9 77H25Q30 77 30 72V44Q30 32 21 26H13Q4 32 4 44Z"/><rect class="sig-neck" x="13" y="7" width="8" height="21" rx="2"/><rect class="sig-cap" x="11.5" y="3.5" width="11" height="5" rx="2.5"/><rect class="sig-label-bg" x="7" y="47" width="20" height="22" rx="10"/><circle class="sig-label-dot" cx="17" cy="58" r="4"/></g>
           </g>
         </svg>
         <p class="tag mono">Illustration, not photography or footage</p>
@@ -101,17 +82,18 @@
     <h2 id="shop-h">Two clicks to <i>a bottle</i></h2>
     <p class="sec-lede">Choose a category, then a product, and the details are on the page: flavour profile, what to eat with it, allergens and how to get it. <span class="js-only inl">Try it.</span></p>
     <p class="demo-flag mono">Demonstration data. These are not real products, stock, prices or ingredient details.</p>
+    <p class="tog-row js-only"><button class="tog" type="button" id="pour-toggle" aria-pressed="true">Pouring animation: on</button> <span class="mono">Decorative only. Product information shows with or without it.</span></p>
   </div>
   <p class="age"><b>18+</b> Alcohol is sold to adults only. How age is checked online is a compliance decision still to be agreed. This page asks nothing and checks nothing.</p>
 
   <div class="shop-grid">
     <div>
       <div class="tabs js-only" role="tablist" aria-label="Product categories" id="cat-tabs">
-        <button class="tab" role="tab" id="ct-beer" aria-selected="true" aria-controls="grid" data-cat="beer" type="button">Beer</button>
-        <button class="tab" role="tab" id="ct-cider" aria-selected="false" aria-controls="grid" data-cat="cider" tabindex="-1" type="button">Cider</button>
-        <button class="tab" role="tab" id="ct-wine" aria-selected="false" aria-controls="grid" data-cat="wine" tabindex="-1" type="button">Wine</button>
+        <button class="tab" role="tab" id="ct-beer" aria-selected="true" aria-controls="grid-panel" data-cat="beer" type="button">Beer</button>
+        <button class="tab" role="tab" id="ct-cider" aria-selected="false" aria-controls="grid-panel" data-cat="cider" tabindex="-1" type="button">Cider</button>
+        <button class="tab" role="tab" id="ct-wine" aria-selected="false" aria-controls="grid-panel" data-cat="wine" tabindex="-1" type="button">Wine</button>
       </div>
-      <ul class="grid" id="grid" role="tabpanel" aria-labelledby="ct-beer"></ul>
+      <div id="grid-panel" role="tabpanel" aria-labelledby="ct-beer" tabindex="-1"><ul class="grid" id="grid"></ul></div>
       <p class="nojs-only nojs-note">With JavaScript on, the shop demonstration lets you pick a category and a product. Nothing is sold.</p>
     </div>
 
@@ -259,7 +241,8 @@
 
 <nav class="callbar" aria-label="Quick links"><a href="#shop">Shop</a><a href="#deli">Deli</a><a href="#services">Services</a><a href="review.html" class="cb-main">Review</a></nav>
 
-<div class="cursor" id="cursor" aria-hidden="true"><svg viewBox="0 0 24 44" width="22" height="40"><path d="M5 40 Q5 42 7 42 H17 Q19 42 19 40 V25 Q19 20 15 18 V8 H17 V5 H7 V8 H9 V18 Q5 20 5 25Z"/></svg></div>
+<script src="vendor/gsap.min.js"></script>
+<script src="signature.js"></script>
 <script src="jack.js"></script>
 </body>
 </html>

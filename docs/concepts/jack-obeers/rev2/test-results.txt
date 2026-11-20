@@ -1,0 +1,58 @@
+PASS opening: header action and shop CTA visible and enabled while it plays
+PASS opening: clicking "Explore the shop" at 0.4s navigates to #shop (not blocked)
+PASS opening: duration 2 to 3 s  [2.85s]
+PASS opening: ends in static final state (glass full, bottle standing, logo upright)
+PASS opening: text content visible after
+PASS opening: any key skips to the end
+PASS components: Bottle with separate body, neck, label
+PASS components: Stream, Glass, Liquid exposed and glass liquid uses clipPath
+PASS cursor: visible inside drinks section on desktop
+PASS cursor: offset from pointer (does not cover it)
+PASS cursor: native pointer left alone (no cursor:none anywhere)
+PASS cursor: pointer-events none
+PASS cursor: elements under the bottle receive hits (it does not intercept)  [SECTION.shopsec]
+PASS hover: product information visible immediately
+PASS hover: glass filled with liquid  [0]
+PASS hover: foam developed
+PASS hover: stream stopped after the short pour
+PASS hover: bottle tilted towards the glass
+PASS leave: glass drains and information hides  [66]
+PASS leave: bottle returns to follow pose
+PASS click: selecting a product opens its detail with cursor active
+PASS category change: no leftover state, no errors
+PASS cursor: hidden outside the drinks section
+   focus b2 on:1
+PASS keyboard: Tab reaches a product card  [card]
+   ev focusin:b1: focusout:b1: focusin:b2: pointerover:b1:mouse pointerout:b1:mouse pointerover:b1:mouse
+   y 0
+PASS keyboard: focus shows information and fills the glass (same as hover)
+PASS keyboard: Enter selects the product and moves focus to its details
+PASS keyboard: moving on resets the previous glass
+PASS toggle: animation can be turned off
+PASS toggle off: info shows and glass state is instant, cursor hidden
+PASS scroll during pour: no errors
+PERF page {"lcp":88,"cls":0.0007624099459340707,"lt":[]} idle rAF {"avg":"60.0","p95":"16.7","max":"16.8"}
+PASS network: no external requests
+PASS network: no non-GET requests (nothing sent)
+PASS page errors: none
+PASS storage: no cookies, localStorage or sessionStorage
+PERF during pour+cursor {"frames":158,"avgFps":"60.0","p95ms":"16.7","maxms":"16.8"}
+PASS reduced motion: opening not run, final state shown immediately
+PASS reduced motion: nothing animating
+PASS reduced motion: cursor bottle not shown
+PASS reduced motion: toggle starts off
+PASS reduced motion: information still shows on hover, glass shown full without animation
+PASS reduced motion: no errors
+PASS no JS: hero scene shows its static finished state
+PASS mobile: opening scene is above the fold
+PASS mobile: no custom cursor visible before any tap
+PASS mobile tap: information visible straight away
+PASS mobile tap: glass filled after the pour
+PASS mobile tap: bottle leaves again and cursor layer hides
+PASS mobile tap: product detail updated too
+PASS mobile: no sideways scroll
+PASS mobile: no errors
+PASS axe concept (default): no violations (WCAG 2.2 AA + best practice)  [52 rules passed]
+PASS axe concept (card focused + info open): no violations (WCAG 2.2 AA + best practice)  [52 rules passed]
+PASS axe design review: no violations (WCAG 2.2 AA + best practice)  [35 rules passed]
+0 failing of 52
