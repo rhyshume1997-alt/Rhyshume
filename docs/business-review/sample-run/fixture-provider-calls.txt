@@ -1,0 +1,5 @@
+FIXTURE DATA
+own_fetch:crawl:ok
+pagespeed:run_pagespeed:ok
+own_fetch:crawl:ok
+pagespeed:run_pagespeed:ok

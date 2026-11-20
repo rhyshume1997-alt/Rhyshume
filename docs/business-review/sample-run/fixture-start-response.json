@@ -1,0 +1,39 @@
+{
+  "fixture": true,
+  "fixture_note": "FIXTURE DATA. Fictional businesses served from local test servers; the PageSpeed API was replaced by a stub that returns fixed numbers, so every speed figure in this run is made up for the demonstration. Nothing in this run is a real measurement of a real business.",
+  "response": {
+    "ok": true,
+    "contract_version": "1.0",
+    "idempotent_replay": false,
+    "review": {
+      "id": "75b6e8b3-ee9c-499b-bcd1-6856b911af52",
+      "ref": "BR-XWZMG7WU",
+      "status": "awaiting_confirmation",
+      "completeness": "pending",
+      "assessment_level": "standard",
+      "created_at": "2026-11-20T10:00:00Z",
+      "expires_at": "2026-12-20T10:00:00Z"
+    },
+    "interpretation": {
+      "business_name": "Harbour Precision Ltd",
+      "website": {
+        "input": "http://harbourprecision.test:41349/",
+        "url": "http://harbourprecision.test:41349/",
+        "reachable": true,
+        "title": "Harbour Precision | CNC machining in Glasgow",
+        "detected_business_name": "Harbour Precision"
+      },
+      "location": {
+        "text": "Glasgow",
+        "kind": "regional"
+      },
+      "category": "CNC machining",
+      "competition_scope_note": "Regional: businesses serving the Glasgow area. You can change this to national or local below.",
+      "assumptions": [
+        "Comparison businesses will be chosen from a supported source where one is available."
+      ]
+    },
+    "access_token": "<redacted in sample>",
+    "report_url": "<redacted in sample>"
+  }
+}

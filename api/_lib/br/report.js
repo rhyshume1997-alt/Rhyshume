@@ -54,6 +54,7 @@ function compare(def, b, c) {
   const scale = def.unit === 'score' && def.better === 'higher' ? 5 : 0;
   if (scale) { if (Math.abs(cv - bv) < scale) return 'similar'; return cv > bv ? 'better' : 'worse'; }
   const rel = Math.abs(cv - bv) / Math.max(Math.abs(bv), 1e-9);
+  if (def.unit === 'ms' && Math.abs(cv - bv) < 100) return 'similar';
   if (rel < 0.1 || (def.unit === 'score' && Math.abs(cv - bv) < 0.02)) return 'similar';
   if (def.better === 'lower') return cv < bv ? 'better' : 'worse';
   return cv > bv ? 'better' : 'worse';

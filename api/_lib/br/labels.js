@@ -56,6 +56,7 @@ const REASON_MESSAGES = {
   no_json_ld: 'No structured data was found to test.',
   not_collected: 'This was not collected for comparison sites.',
   http_not_reachable: 'The plain http address did not respond.',
+  not_applicable: 'Not applicable: the home page is not served over HTTPS.',
   http_error: 'The website returned an error page for the home page.',
   not_present: 'This item is not present on the page.',
   step_not_finished: 'The review stopped before this check finished.'

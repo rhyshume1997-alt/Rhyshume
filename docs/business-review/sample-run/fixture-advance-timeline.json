@@ -1,0 +1,33 @@
+{
+  "fixture": true,
+  "fixture_note": "FIXTURE DATA. Fictional businesses served from local test servers; the PageSpeed API was replaced by a stub that returns fixed numbers, so every speed figure in this run is made up for the demonstration. Nothing in this run is a real measurement of a real business.",
+  "calls": [
+    {
+      "call": 1,
+      "ran": [
+        "site_fetch",
+        "site_analysis",
+        "psi_business",
+        "competitor_discovery",
+        "competitor_fetch",
+        "psi_competitors",
+        "local_search",
+        "automation_map",
+        "report_build"
+      ],
+      "status": "ready",
+      "steps": [
+        "site_fetch:done",
+        "site_analysis:done",
+        "psi_business:done",
+        "competitor_discovery:unavailable",
+        "competitor_fetch:done",
+        "psi_competitors:done",
+        "local_search:unavailable",
+        "ai_visibility:unavailable",
+        "automation_map:done",
+        "report_build:done"
+      ]
+    }
+  ]
+}

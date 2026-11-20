@@ -1,0 +1,30 @@
+LIVE: LIVE MEASUREMENT of https://www.rhyshume.co.uk/ (a public site owned by the commissioner), run once on 2026-11-20T08:08:44.441Z with the declared user agent, robots.txt honoured, at most 25 requests. This sandbox blocks direct DNS, so the fetches went through the sandbox proxy via a small adapter; the production SSRF-pinned fetcher was not used for this run. PageSpeed Insights did NOT run: no PSI_API_KEY exists here and the shared anonymous pool is never used by design.
+26 evidence rows.
+
+subject | metric | state | value | observed_at | source | reason or limitation
+business | robots.present | verified_public_observation | Yes (raw true) | 2026-11-20T08:08:45Z | Public pages fetched directly https://www.rhyshume.co.uk/ | 
+business | robots.blocks_crawl | verified_public_observation | No (raw false) | 2026-11-20T08:08:45Z | Public pages fetched directly https://www.rhyshume.co.uk/ | Applies to the review bot and to the general rules; other bots may be treated differently.
+business | https.enabled | verified_public_observation | Yes (raw true) | 2026-11-20T08:08:45Z | Public pages fetched directly https://www.rhyshume.co.uk/ | 
+business | https.http_redirects_to_https | not_tested | - | 2026-11-20T08:08:46Z | Public pages fetched directly https://www.rhyshume.co.uk/ | http_not_reachable
+business | page.status | verified_public_observation | 200 (raw 200) | 2026-11-20T08:08:45Z | Public pages fetched directly https://www.rhyshume.co.uk/ | Based on the home page only.
+business | page.response_ms | verified_public_observation | 101 ms (raw 101) | 2026-11-20T08:08:45Z | Public pages fetched directly https://www.rhyshume.co.uk/ | One request from one location; varies with network conditions.
+business | sitemap.present | verified_public_observation | Yes (raw true) | 2026-11-20T08:08:47Z | Public pages fetched directly https://www.rhyshume.co.uk/sitemap.xml | 
+business | sitemap.url_count | verified_public_observation | 15 (raw 15) | 2026-11-20T08:08:47Z | Public pages fetched directly https://www.rhyshume.co.uk/sitemap.xml | Counted from the first sitemap file read; sitemap indexes are not followed.
+business | page.title.present | verified_public_observation | Yes (raw true) | 2026-11-20T08:08:45Z | Public pages fetched directly https://www.rhyshume.co.uk/ | Based on the home page only.
+business | page.title.length | verified_public_observation | 67 characters (raw 67) | 2026-11-20T08:08:45Z | Public pages fetched directly https://www.rhyshume.co.uk/ | Based on the home page only.
+business | page.meta_description.present | verified_public_observation | Yes (raw true) | 2026-11-20T08:08:45Z | Public pages fetched directly https://www.rhyshume.co.uk/ | Based on the home page only.
+business | page.meta_description.length | verified_public_observation | 131 characters (raw 131) | 2026-11-20T08:08:45Z | Public pages fetched directly https://www.rhyshume.co.uk/ | Based on the home page only.
+business | page.h1.count | verified_public_observation | 1 (raw 1) | 2026-11-20T08:08:45Z | Public pages fetched directly https://www.rhyshume.co.uk/ | Based on the home page only.
+business | page.heading_order.valid | verified_public_observation | Yes (raw true) | 2026-11-20T08:08:45Z | Public pages fetched directly https://www.rhyshume.co.uk/ | Based on the home page only.
+business | page.canonical.present | verified_public_observation | Yes (raw true) | 2026-11-20T08:08:45Z | Public pages fetched directly https://www.rhyshume.co.uk/ | Based on the home page only.
+business | page.canonical.self | verified_public_observation | Yes (raw true) | 2026-11-20T08:08:45Z | Public pages fetched directly https://www.rhyshume.co.uk/ | Based on the home page only.
+business | page.viewport.present | verified_public_observation | Yes (raw true) | 2026-11-20T08:08:45Z | Public pages fetched directly https://www.rhyshume.co.uk/ | Based on the home page only.
+business | structured_data.present | verified_public_observation | Yes (raw true) | 2026-11-20T08:08:45Z | Public pages fetched directly https://www.rhyshume.co.uk/ | Based on the home page only.
+business | structured_data.types | verified_public_observation | ["Person","ProfessionalService"] | 2026-11-20T08:08:45Z | Public pages fetched directly https://www.rhyshume.co.uk/ | Based on the home page only.
+business | structured_data.json_ld_parses | verified_public_observation | Yes (raw true) | 2026-11-20T08:08:45Z | Public pages fetched directly https://www.rhyshume.co.uk/ | Syntax check only; eligibility for rich results was not tested.
+business | nav.internal_links.count | verified_public_observation | 22 (raw 22) | 2026-11-20T08:08:45Z | Public pages fetched directly https://www.rhyshume.co.uk/ | Based on the home page only.
+business | links.checked.count | verified_public_observation | 15 (raw 15) | 2026-11-20T08:09:12Z | Public pages fetched directly https://www.rhyshume.co.uk/ | A controlled sample, not every link on the site.
+business | links.broken.count | verified_public_observation | 0 (raw 0) | 2026-11-20T08:09:12Z | Public pages fetched directly https://www.rhyshume.co.uk/ | Only the sampled links were tested; a link that fails once may work later.
+business | content.service_pages.estimate | reasonable_inference | 0 (raw 0) | 2026-11-20T08:08:45Z | Public pages fetched directly https://www.rhyshume.co.uk/ | This is an inference from link text and page addresses; it cannot judge quality or completeness.
+business | contact.route.present | verified_public_observation | Yes (raw true) | 2026-11-20T08:08:45Z | Public pages fetched directly https://www.rhyshume.co.uk/ | Detected from page code; whether messages actually arrive was not tested.
+business | contact.route.kinds | verified_public_observation | ["email_link","phone_link","contact_page_link","form"] | 2026-11-20T08:08:45Z | Public pages fetched directly https://www.rhyshume.co.uk/ | Detected from page code; whether messages actually arrive was not tested.

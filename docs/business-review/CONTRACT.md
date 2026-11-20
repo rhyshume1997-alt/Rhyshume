@@ -202,6 +202,7 @@ Auth: `Authorization: Bearer <Supabase access token of the owner>`. Server calls
 | POST `/admin/reviews/:id/ai-visibility/run` | `{ tools: ["ai_anthropic"], runs: 3, question_ids?: [...], dry_run: true }` | `dry_run: true` returns `{ plan: { questions: n, runs: n, tools: n, calls: n, estimate_pence: {low, high}, within_caps: bool, cap_reasons: [] } }` and spends nothing; `dry_run: false` executes (up to the per call time budget per request; returns progress and `remaining_calls`, call repeatedly) |
 | POST `/admin/reviews/:id/token` | `{ action: "extend"\|"revoke", days? }` | 200 `{ expires_at }` |
 | POST `/admin/reviews/:id/link-workbook` | `{ workbook_id }` | 200; sets `br_prospects.workbook_id`, `status: draft_project` (called by the workbook module after it creates the draft client) |
+| POST `/admin/reviews/:id/advance` | | **Additive (package A):** runs the pending steps for a re-queued review for up to about 40 s and returns `{ review_status, ran }`. Competitor changes already run it once inline; the workbook may call it again until `review_status` is `ready`. |
 | POST `/admin/sweep` | | cron entry: finishes stale reviews, runs `br_purge_expired`, returns counts; accepts the Vercel cron `Authorization: Bearer ${CRON_SECRET}` or the owner token |
 
 ## 5. Evidence record

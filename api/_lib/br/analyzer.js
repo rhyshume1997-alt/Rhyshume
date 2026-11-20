@@ -113,7 +113,7 @@ function analyzeSnapshot(snap, opts) {
     if (hr.state === 'redirects') add('https.http_redirects_to_https', 'verified_public_observation', true, { observed_at: hr.observed_at, inputs: { http_status: hr.status } });
     else if (hr.state === 'no_redirect') add('https.http_redirects_to_https', 'verified_public_observation', false, { observed_at: hr.observed_at, inputs: { http_status: hr.status } });
     else if (hr.state === 'unreachable') add('https.http_redirects_to_https', 'not_tested', null, { reason: 'http_not_reachable', observed_at: hr.observed_at });
-    else add('https.http_redirects_to_https', 'not_tested', null, { reason: 'step_not_finished' });
+    else add('https.http_redirects_to_https', 'not_tested', null, { reason: home.scheme === 'https' ? 'step_not_finished' : 'not_applicable' });
   }
   add('page.status', 'verified_public_observation', home.status);
   add('page.response_ms', 'verified_public_observation', home.ms, { limitations: ['Measured from the review server for one request.'] });

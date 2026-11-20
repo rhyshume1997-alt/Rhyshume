@@ -1,0 +1,1598 @@
+{
+  "live": true,
+  "note": "LIVE MEASUREMENT of https://www.rhyshume.co.uk/ (a public site owned by the commissioner), run once on 2026-11-20T08:08:44.441Z with the declared user agent, robots.txt honoured, at most 25 requests. This sandbox blocks direct DNS, so the fetches went through the sandbox proxy via a small adapter; the production SSRF-pinned fetcher was not used for this run. PageSpeed Insights did NOT run: no PSI_API_KEY exists here and the shared anonymous pool is never used by design.",
+  "snapshot": {
+    "version": 1,
+    "role": "business",
+    "started_at": "2026-11-20T08:08:44.442Z",
+    "finished_at": "2026-11-20T08:09:12.735Z",
+    "start_url": "https://www.rhyshume.co.uk/",
+    "user_agent": "RhysHumeReviewBot/1.0 (+https://www.rhyshume.co.uk/business-review/bot)",
+    "limits": {
+      "max_requests": 25,
+      "max_pages": 7,
+      "max_link_checks": 15,
+      "total_ms": 40000,
+      "min_interval_ms": 1000
+    },
+    "requests": 25,
+    "truncated": [],
+    "robots": {
+      "kind": "present",
+      "status": 200,
+      "reason": null,
+      "sitemaps": [
+        "https://www.rhyshume.co.uk/sitemap.xml"
+      ],
+      "observed_at": "2026-11-20T08:08:45.052Z",
+      "ms": 608,
+      "blocks_home": false
+    },
+    "home": {
+      "ok": true,
+      "requested_url": "https://www.rhyshume.co.uk/",
+      "final_url": "https://www.rhyshume.co.uk/",
+      "status": 200,
+      "ms": 101,
+      "observed_at": "2026-11-20T08:08:45.546Z",
+      "chain": [],
+      "scheme": "https",
+      "https_downgrade": false,
+      "page": {
+        "url": "https://www.rhyshume.co.uk/",
+        "status": 200,
+        "ms": 101,
+        "observed_at": "2026-11-20T08:08:45.546Z",
+        "content_type": "text/html",
+        "bytes": 37693,
+        "title": "Websites, SEO, AI and automation for Glasgow businesses | Rhys Hume",
+        "title_count": 1,
+        "meta_description": "Websites set up for local search, plus AI tools, automations and systems that win you clients and save you time. Glasgow developer.",
+        "headings": [
+          {
+            "level": 1,
+            "text": "Websites that get found, and AI, automation and systems that win you clients and save you time"
+          },
+          {
+            "level": 2,
+            "text": "What I do"
+          },
+          {
+            "level": 3,
+            "text": "Websites and SEO"
+          },
+          {
+            "level": 3,
+            "text": "Business software and workflow systems"
+          },
+          {
+            "level": 3,
+            "text": "AI and automation"
+          },
+          {
+            "level": 3,
+            "text": "Computer system validation"
+          },
+          {
+            "level": 2,
+            "text": "A website that fits how your customers get in touch"
+          },
+          {
+            "level": 2,
+            "text": "Websites for engineering firms"
+          },
+          {
+            "level": 2,
+            "text": "Four websites that don't exist, built to show what yours could do"
+          },
+          {
+            "level": 3,
+            "text": "Sunny Hours Club"
+          },
+          {
+            "level": 4,
+            "text": "Try it: plan a week"
+          },
+          {
+            "level": 3,
+            "text": "Little Kettle Café"
+          },
+          {
+            "level": 4,
+            "text": "Try it: today's board"
+          },
+          {
+            "level": 3,
+            "text": "Bright Circuit Electrical"
+          },
+          {
+            "level": 4,
+            "text": "Try it: flip a breaker"
+          },
+          {
+            "level": 3,
+            "text": "The Corner Shelf"
+          },
+          {
+            "level": 4,
+            "text": "Try it: the shelf"
+          },
+          {
+            "level": 2,
+            "text": "Every concept opens as a working demonstration"
+          },
+          {
+            "level": 2,
+            "text": "Marpet Fabrications, Glasgow"
+          },
+          {
+            "level": 2,
+            "text": "Three things I do, and what they cost"
+          },
+          {
+            "level": 3,
+            "text": "Website"
+          },
+          {
+            "level": 3,
+            "text": "Google profile and SEO"
+          },
+          {
+            "level": 3,
+            "text": "Automatic replies and review requests"
+          },
+          {
+            "level": 2,
+            "text": "The concepts show what is possible. Here is what each price covers"
+          },
+          {
+            "level": 3,
+            "text": "Quote-ready website"
+          },
+          {
+            "level": 3,
+            "text": "Website with quote workflow"
+          },
+          {
+            "level": 3,
+            "text": "Care plan"
+          },
+          {
+            "level": 2,
+            "text": "Chat, preview, launch"
+          },
+          {
+            "level": 3,
+            "text": "Chat"
+          },
+          {
+            "level": 3,
+            "text": "Preview"
+          },
+          {
+            "level": 3,
+            "text": "Launch"
+          },
+          {
+            "level": 2,
+            "text": "Want a free preview of your site?"
+          },
+          {
+            "level": 2,
+            "text": "Contents"
+          },
+          {
+            "level": 2,
+            "text": "Contact"
+          }
+        ],
+        "h1_count": 1,
+        "canonical": "https://www.rhyshume.co.uk/",
+        "canonical_count": 1,
+        "viewport": "width=device-width, initial-scale=1, viewport-fit=cover",
+        "lang": "en-GB",
+        "jsonld": {
+          "blocks": 1,
+          "parsed": 1,
+          "failed": 0,
+          "types": [
+            "Person",
+            "ProfessionalService"
+          ],
+          "names": [
+            "Rhys Hume"
+          ]
+        },
+        "internal_links": [
+          {
+            "url": "https://www.rhyshume.co.uk/",
+            "text": "Rhys Hume",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/website-concepts/",
+            "text": "Website concepts",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/engineering",
+            "text": "Engineering firms",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/about",
+            "text": "About",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/contact",
+            "text": "Contact",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/local-business",
+            "text": "Websites and SEO",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/automation",
+            "text": "AI and automation",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/csv",
+            "text": "Computer system validation",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/website-concepts/sunny-hours",
+            "text": "Explore this concept",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/website-concepts/little-kettle",
+            "text": "Explore this concept",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/website-concepts/bright-circuit",
+            "text": "Explore this concept",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/website-concepts/corner-shelf",
+            "text": "Explore this concept",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/website-concepts/olive-ivory",
+            "text": "01Olive & IvoryWedding photographer",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/website-concepts/salt-ember",
+            "text": "03Salt & EmberRestaurant",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/website-concepts/clear-ground",
+            "text": "05Clear Ground CoachingCoach",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/website-concepts/oak-razor",
+            "text": "08Oak & RazorBarber",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/work/jnr-engineering",
+            "text": "Read the JNR Engineering case study",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/council-digital-grants",
+            "text": "See the grants I quote for",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/websites",
+            "text": "Websites",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/tolra",
+            "text": "Tolra",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/insights",
+            "text": "Insights",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/privacy",
+            "text": "Privacy",
+            "nav": false
+          }
+        ],
+        "internal_link_count": 22,
+        "nav_link_count": 4,
+        "forms": [],
+        "mailto": true,
+        "tel": true,
+        "text_length": 9524,
+        "img_count": 14,
+        "noindex": false
+      }
+    },
+    "http_redirect": {
+      "state": "unreachable",
+      "code": "site_unreachable",
+      "observed_at": "2026-11-20T08:08:46.551Z"
+    },
+    "sitemap": {
+      "state": "present",
+      "url": "https://www.rhyshume.co.uk/sitemap.xml",
+      "status": 200,
+      "url_count": 15,
+      "kind": "urlset",
+      "observed_at": "2026-11-20T08:08:47.698Z",
+      "listed_in_robots": true
+    },
+    "pages": [
+      {
+        "url": "https://www.rhyshume.co.uk/contact",
+        "status": 200,
+        "ms": 64,
+        "observed_at": "2026-11-20T08:08:48.762Z",
+        "content_type": "text/html",
+        "bytes": 10575,
+        "title": "Get a free preview of your website | Rhys Hume",
+        "title_count": 1,
+        "meta_description": "Three short steps to a free preview of your website. Tell me what you do, who you are and where to send it. Free, no obligation.",
+        "headings": [
+          {
+            "level": 1,
+            "text": "Want to see what your website could look like?"
+          },
+          {
+            "level": 2,
+            "text": "Thank you, that has reached me"
+          },
+          {
+            "level": 2,
+            "text": "What happens next"
+          },
+          {
+            "level": 2,
+            "text": "Contents"
+          },
+          {
+            "level": 2,
+            "text": "Contact"
+          }
+        ],
+        "h1_count": 1,
+        "canonical": "https://www.rhyshume.co.uk/contact",
+        "canonical_count": 1,
+        "viewport": "width=device-width, initial-scale=1, viewport-fit=cover",
+        "lang": "en-GB",
+        "jsonld": {
+          "blocks": 0,
+          "parsed": 0,
+          "failed": 0,
+          "types": [],
+          "names": []
+        },
+        "internal_links": [
+          {
+            "url": "https://www.rhyshume.co.uk/",
+            "text": "Rhys Hume",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/website-concepts/",
+            "text": "Website concepts",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/engineering",
+            "text": "Engineering firms",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/about",
+            "text": "About",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/contact",
+            "text": "Contact",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/privacy",
+            "text": "privacy page",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/websites",
+            "text": "Websites",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/local-business",
+            "text": "Websites and digital for local business",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/automation",
+            "text": "Automation",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/tolra",
+            "text": "Tolra",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/csv",
+            "text": "Computer system validation",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/work/jnr-engineering",
+            "text": "JNR Engineering case study",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/council-digital-grants",
+            "text": "Council digital grants",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/insights",
+            "text": "Insights",
+            "nav": false
+          }
+        ],
+        "internal_link_count": 14,
+        "nav_link_count": 4,
+        "forms": [
+          {
+            "action": "/api/contact",
+            "method": "post",
+            "inputs": [
+              {
+                "tag": "input",
+                "type": "hidden",
+                "name": "form"
+              },
+              {
+                "tag": "input",
+                "type": "radio",
+                "name": "trade"
+              },
+              {
+                "tag": "input",
+                "type": "radio",
+                "name": "trade"
+              },
+              {
+                "tag": "input",
+                "type": "radio",
+                "name": "trade"
+              },
+              {
+                "tag": "input",
+                "type": "radio",
+                "name": "trade"
+              },
+              {
+                "tag": "input",
+                "type": "radio",
+                "name": "trade"
+              },
+              {
+                "tag": "input",
+                "type": "text",
+                "name": "company"
+              },
+              {
+                "tag": "input",
+                "type": "text",
+                "name": "website"
+              },
+              {
+                "tag": "input",
+                "type": "text",
+                "name": "name"
+              },
+              {
+                "tag": "input",
+                "type": "email",
+                "name": "email"
+              },
+              {
+                "tag": "input",
+                "type": "tel",
+                "name": "phone"
+              },
+              {
+                "tag": "textarea",
+                "type": "textarea",
+                "name": "message"
+              },
+              {
+                "tag": "input",
+                "type": "text",
+                "name": "company_website"
+              }
+            ]
+          }
+        ],
+        "mailto": true,
+        "tel": true,
+        "text_length": 1962,
+        "img_count": 0,
+        "noindex": false
+      },
+      {
+        "url": "https://www.rhyshume.co.uk/council-digital-grants",
+        "status": 200,
+        "ms": 168,
+        "observed_at": "2026-11-20T08:08:49.930Z",
+        "content_type": "text/html",
+        "bytes": 16799,
+        "title": "Council digital grants near Glasgow: a project quote for your application | Rhys Hume",
+        "title_count": 1,
+        "meta_description": "A detailed project quote to support a council digital grant application for a website or automation project, for small firms in East Dunbartonshire and North Lanarkshire.",
+        "headings": [
+          {
+            "level": 1,
+            "text": "Council digital grants near Glasgow: a project quote for your application"
+          },
+          {
+            "level": 2,
+            "text": "1.0 Grants I quote for"
+          },
+          {
+            "level": 3,
+            "text": "1.1East Dunbartonshire Digital Support Grant (opens in a new tab)"
+          },
+          {
+            "level": 3,
+            "text": "1.2North Lanarkshire Business Growth Fund (opens in a new tab)"
+          },
+          {
+            "level": 2,
+            "text": "2.0 How it works with a grant"
+          },
+          {
+            "level": 3,
+            "text": "You apply with my quote"
+          },
+          {
+            "level": 3,
+            "text": "You wait for approval"
+          },
+          {
+            "level": 3,
+            "text": "I build it"
+          },
+          {
+            "level": 3,
+            "text": "How it pays out depends on the scheme"
+          },
+          {
+            "level": 2,
+            "text": "3.0 What you get"
+          },
+          {
+            "level": 2,
+            "text": "4.0 Set up costs that may be eligible"
+          },
+          {
+            "level": 2,
+            "text": "5.0 Small print"
+          },
+          {
+            "level": 2,
+            "text": "6.0 Tell me what you want built"
+          },
+          {
+            "level": 2,
+            "text": "7.0 Book a chat about your grant project"
+          },
+          {
+            "level": 2,
+            "text": "Want a free preview of your site?"
+          },
+          {
+            "level": 2,
+            "text": "Contents"
+          },
+          {
+            "level": 2,
+            "text": "Contact"
+          }
+        ],
+        "h1_count": 1,
+        "canonical": "https://www.rhyshume.co.uk/council-digital-grants",
+        "canonical_count": 1,
+        "viewport": "width=device-width, initial-scale=1",
+        "lang": "en-GB",
+        "jsonld": {
+          "blocks": 1,
+          "parsed": 1,
+          "failed": 0,
+          "types": [
+            "Person",
+            "ProfessionalService",
+            "BreadcrumbList"
+          ],
+          "names": [
+            "Rhys Hume"
+          ]
+        },
+        "internal_links": [
+          {
+            "url": "https://www.rhyshume.co.uk/",
+            "text": "Rhys Hume",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/websites",
+            "text": "Websites",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/website-concepts/",
+            "text": "Website concepts",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/local-business",
+            "text": "Websites and digital for local business",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/automation",
+            "text": "Automation",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/tolra",
+            "text": "Tolra",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/csv",
+            "text": "Validation",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/about",
+            "text": "About",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/contact",
+            "text": "Contact",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/privacy",
+            "text": "privacy page",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/work/jnr-engineering",
+            "text": "JNR Engineering case study",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/council-digital-grants",
+            "text": "Council digital grants",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/insights",
+            "text": "Insights",
+            "nav": false
+          }
+        ],
+        "internal_link_count": 13,
+        "nav_link_count": 8,
+        "forms": [
+          {
+            "action": "/api/contact",
+            "method": "post",
+            "inputs": [
+              {
+                "tag": "input",
+                "type": "hidden",
+                "name": "form"
+              },
+              {
+                "tag": "input",
+                "type": "text",
+                "name": "name"
+              },
+              {
+                "tag": "input",
+                "type": "text",
+                "name": "company"
+              },
+              {
+                "tag": "input",
+                "type": "email",
+                "name": "email"
+              },
+              {
+                "tag": "input",
+                "type": "tel",
+                "name": "phone"
+              },
+              {
+                "tag": "select",
+                "type": "select",
+                "name": "council_area"
+              },
+              {
+                "tag": "textarea",
+                "type": "textarea",
+                "name": "what_you_want_built"
+              },
+              {
+                "tag": "input",
+                "type": "text",
+                "name": "company_website"
+              }
+            ]
+          }
+        ],
+        "mailto": true,
+        "tel": true,
+        "text_length": 4198,
+        "img_count": 0,
+        "noindex": false
+      },
+      {
+        "url": "https://www.rhyshume.co.uk/about",
+        "status": 200,
+        "ms": 82,
+        "observed_at": "2026-11-20T08:08:51.013Z",
+        "content_type": "text/html",
+        "bytes": 12560,
+        "title": "About Rhys Hume | Websites, AI and systems, Glasgow",
+        "title_count": 1,
+        "meta_description": "Rhys Hume builds websites, AI tools, automations and systems for businesses in Glasgow, from a computer system validation background.",
+        "headings": [
+          {
+            "level": 1,
+            "text": "About Rhys Hume"
+          },
+          {
+            "level": 2,
+            "text": "1.0 Profile"
+          },
+          {
+            "level": 2,
+            "text": "2.0 How I work"
+          },
+          {
+            "level": 2,
+            "text": "3.0 Revision history"
+          },
+          {
+            "level": 2,
+            "text": "4.0 Across the system"
+          },
+          {
+            "level": 2,
+            "text": "5.0 Work"
+          },
+          {
+            "level": 2,
+            "text": "6.0 Discuss your systems"
+          },
+          {
+            "level": 2,
+            "text": "Want a free preview of your site?"
+          },
+          {
+            "level": 2,
+            "text": "Contents"
+          },
+          {
+            "level": 2,
+            "text": "Contact"
+          }
+        ],
+        "h1_count": 1,
+        "canonical": "https://www.rhyshume.co.uk/about",
+        "canonical_count": 1,
+        "viewport": "width=device-width, initial-scale=1",
+        "lang": "en-GB",
+        "jsonld": {
+          "blocks": 1,
+          "parsed": 1,
+          "failed": 0,
+          "types": [
+            "Person",
+            "ProfessionalService",
+            "BreadcrumbList"
+          ],
+          "names": [
+            "Rhys Hume"
+          ]
+        },
+        "internal_links": [
+          {
+            "url": "https://www.rhyshume.co.uk/",
+            "text": "Rhys Hume",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/websites",
+            "text": "Websites",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/website-concepts/",
+            "text": "Website concepts",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/local-business",
+            "text": "Websites and digital for local business",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/automation",
+            "text": "Automation",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/tolra",
+            "text": "Tolra",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/csv",
+            "text": "Validation",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/about",
+            "text": "About",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/contact",
+            "text": "Contact",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/work/jnr-engineering",
+            "text": "Read the case study: JNR Engineering",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/council-digital-grants",
+            "text": "Council digital grants",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/insights",
+            "text": "Insights",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/privacy",
+            "text": "Privacy",
+            "nav": false
+          }
+        ],
+        "internal_link_count": 13,
+        "nav_link_count": 8,
+        "forms": [],
+        "mailto": true,
+        "tel": true,
+        "text_length": 3324,
+        "img_count": 1,
+        "noindex": false
+      },
+      {
+        "url": "https://www.rhyshume.co.uk/website-concepts/",
+        "status": 200,
+        "ms": 48,
+        "observed_at": "2026-11-20T08:08:52.062Z",
+        "content_type": "text/html",
+        "bytes": 26736,
+        "title": "Website concepts: eight working demonstrations | Rhys Hume",
+        "title_count": 1,
+        "meta_description": "Eight made-up websites you can open and use, built to show how I design for small businesses: booking, galleries, menus, planners and a basket. Concepts, not client work.",
+        "headings": [
+          {
+            "level": 1,
+            "text": "Eight websites you can open and use, none of them real"
+          },
+          {
+            "level": 2,
+            "text": "Read this first"
+          },
+          {
+            "level": 2,
+            "text": "Olive & Ivory"
+          },
+          {
+            "level": 3,
+            "text": "What it demonstrates"
+          },
+          {
+            "level": 3,
+            "text": "Colours and type"
+          },
+          {
+            "level": 2,
+            "text": "Bright Circuit Electrical"
+          },
+          {
+            "level": 3,
+            "text": "What it demonstrates"
+          },
+          {
+            "level": 3,
+            "text": "Colours and type"
+          },
+          {
+            "level": 2,
+            "text": "Salt & Ember"
+          },
+          {
+            "level": 3,
+            "text": "What it demonstrates"
+          },
+          {
+            "level": 3,
+            "text": "Colours and type"
+          },
+          {
+            "level": 2,
+            "text": "Sunny Hours Club"
+          },
+          {
+            "level": 3,
+            "text": "What it demonstrates"
+          },
+          {
+            "level": 3,
+            "text": "Colours and type"
+          },
+          {
+            "level": 2,
+            "text": "Clear Ground Coaching"
+          },
+          {
+            "level": 3,
+            "text": "What it demonstrates"
+          },
+          {
+            "level": 3,
+            "text": "Colours and type"
+          },
+          {
+            "level": 2,
+            "text": "Little Kettle Café"
+          },
+          {
+            "level": 3,
+            "text": "What it demonstrates"
+          },
+          {
+            "level": 3,
+            "text": "Colours and type"
+          },
+          {
+            "level": 2,
+            "text": "The Corner Shelf"
+          },
+          {
+            "level": 3,
+            "text": "What it demonstrates"
+          },
+          {
+            "level": 3,
+            "text": "Colours and type"
+          },
+          {
+            "level": 2,
+            "text": "Oak & Razor"
+          },
+          {
+            "level": 3,
+            "text": "What it demonstrates"
+          },
+          {
+            "level": 3,
+            "text": "Colours and type"
+          },
+          {
+            "level": 2,
+            "text": "Want something like this for your business?"
+          },
+          {
+            "level": 2,
+            "text": "Contents"
+          },
+          {
+            "level": 2,
+            "text": "Contact"
+          }
+        ],
+        "h1_count": 1,
+        "canonical": "https://www.rhyshume.co.uk/website-concepts/",
+        "canonical_count": 1,
+        "viewport": "width=device-width, initial-scale=1, viewport-fit=cover",
+        "lang": "en-GB",
+        "jsonld": {
+          "blocks": 0,
+          "parsed": 0,
+          "failed": 0,
+          "types": [],
+          "names": []
+        },
+        "internal_links": [
+          {
+            "url": "https://www.rhyshume.co.uk/",
+            "text": "Rhys Hume",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/website-concepts/",
+            "text": "Website concepts",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/engineering",
+            "text": "Engineering firms",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/about",
+            "text": "About",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/contact",
+            "text": "Contact",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/work/jnr-engineering",
+            "text": "JNR Engineering case study",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/website-concepts/olive-ivory",
+            "text": "Explore this concept",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/website-concepts/bright-circuit",
+            "text": "Explore this concept",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/website-concepts/salt-ember",
+            "text": "Explore this concept",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/website-concepts/sunny-hours",
+            "text": "Explore this concept",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/website-concepts/clear-ground",
+            "text": "Explore this concept",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/website-concepts/little-kettle",
+            "text": "Explore this concept",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/website-concepts/corner-shelf",
+            "text": "Explore this concept",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/website-concepts/oak-razor",
+            "text": "Explore this concept",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/websites",
+            "text": "Websites",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/local-business",
+            "text": "Websites and digital for local business",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/automation",
+            "text": "Automation",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/tolra",
+            "text": "Tolra",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/csv",
+            "text": "Computer system validation",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/privacy",
+            "text": "Privacy",
+            "nav": false
+          }
+        ],
+        "internal_link_count": 20,
+        "nav_link_count": 4,
+        "forms": [],
+        "mailto": true,
+        "tel": true,
+        "text_length": 6780,
+        "img_count": 8,
+        "noindex": false
+      },
+      {
+        "url": "https://www.rhyshume.co.uk/engineering",
+        "status": 200,
+        "ms": 52,
+        "observed_at": "2026-11-20T08:08:53.114Z",
+        "content_type": "text/html",
+        "bytes": 14987,
+        "title": "Websites and job systems for engineering firms, Glasgow | Rhys Hume",
+        "title_count": 1,
+        "meta_description": "I build websites, quoting and job management for engineering and fabrication firms in Glasgow, from the first enquiry to the invoice.",
+        "headings": [
+          {
+            "level": 1,
+            "text": "Work gets lost in the gaps between the enquiry, the quote and the invoice."
+          },
+          {
+            "level": 2,
+            "text": "Engineering and fabrication shops"
+          },
+          {
+            "level": 2,
+            "text": "1.0 Scope"
+          },
+          {
+            "level": 3,
+            "text": "1.1Engineering and fabrication shops"
+          },
+          {
+            "level": 3,
+            "text": "1.2Websites and systems, from prices"
+          },
+          {
+            "level": 3,
+            "text": "1.3Tolra"
+          },
+          {
+            "level": 2,
+            "text": "2.0 How the system works"
+          },
+          {
+            "level": 3,
+            "text": "Enquiry"
+          },
+          {
+            "level": 3,
+            "text": "Quote"
+          },
+          {
+            "level": 3,
+            "text": "Job"
+          },
+          {
+            "level": 3,
+            "text": "Invoice"
+          },
+          {
+            "level": 2,
+            "text": "3.0 Work"
+          },
+          {
+            "level": 2,
+            "text": "4.0 How I work"
+          },
+          {
+            "level": 3,
+            "text": "Free 20-minute chat"
+          },
+          {
+            "level": 3,
+            "text": "Systems review"
+          },
+          {
+            "level": 3,
+            "text": "Written proposal"
+          },
+          {
+            "level": 3,
+            "text": "Build, test, handover"
+          },
+          {
+            "level": 2,
+            "text": "5.0 Who you’d work with"
+          },
+          {
+            "level": 2,
+            "text": "6.0 Council digital grants"
+          },
+          {
+            "level": 2,
+            "text": "7.0 Review how your work flows today"
+          },
+          {
+            "level": 2,
+            "text": "Want a free preview of your site?"
+          },
+          {
+            "level": 2,
+            "text": "Contents"
+          },
+          {
+            "level": 2,
+            "text": "Contact"
+          }
+        ],
+        "h1_count": 1,
+        "canonical": "https://www.rhyshume.co.uk/engineering",
+        "canonical_count": 1,
+        "viewport": "width=device-width, initial-scale=1",
+        "lang": "en-GB",
+        "jsonld": {
+          "blocks": 0,
+          "parsed": 0,
+          "failed": 0,
+          "types": [],
+          "names": []
+        },
+        "internal_links": [
+          {
+            "url": "https://www.rhyshume.co.uk/",
+            "text": "Rhys Hume",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/websites",
+            "text": "Websites",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/website-concepts/",
+            "text": "Website concepts",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/local-business",
+            "text": "Websites and digital for local business",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/automation",
+            "text": "Automation",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/tolra",
+            "text": "Tolra",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/about",
+            "text": "About",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/contact",
+            "text": "Contact",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/work/jnr-engineering",
+            "text": "Read the JNR Engineering case study",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/council-digital-grants",
+            "text": "See the grants I quote for",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/engineering",
+            "text": "Websites for engineering firms",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/csv",
+            "text": "Computer system validation",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/insights",
+            "text": "Insights",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/privacy",
+            "text": "Privacy",
+            "nav": false
+          }
+        ],
+        "internal_link_count": 14,
+        "nav_link_count": 7,
+        "forms": [],
+        "mailto": true,
+        "tel": true,
+        "text_length": 5652,
+        "img_count": 2,
+        "noindex": false
+      },
+      {
+        "url": "https://www.rhyshume.co.uk/work/jnr-engineering",
+        "status": 200,
+        "ms": 112,
+        "observed_at": "2026-11-20T08:08:54.228Z",
+        "content_type": "text/html",
+        "bytes": 10501,
+        "title": "JNR Engineering website and the systems behind it | Rhys Hume",
+        "title_count": 1,
+        "meta_description": "Case study: the website and the systems behind it built for JNR Engineering, a machining and fabrication firm in Hamilton.",
+        "headings": [
+          {
+            "level": 1,
+            "text": "Case study: JNR Engineering, a website and the systems behind it"
+          },
+          {
+            "level": 2,
+            "text": "1.0 The site"
+          },
+          {
+            "level": 2,
+            "text": "2.0 The brief"
+          },
+          {
+            "level": 2,
+            "text": "3.0 What I built"
+          },
+          {
+            "level": 2,
+            "text": "4.0 Want something like this for your firm?"
+          },
+          {
+            "level": 2,
+            "text": "Want a free preview of your site?"
+          },
+          {
+            "level": 2,
+            "text": "Contents"
+          },
+          {
+            "level": 2,
+            "text": "Contact"
+          }
+        ],
+        "h1_count": 1,
+        "canonical": "https://www.rhyshume.co.uk/work/jnr-engineering",
+        "canonical_count": 1,
+        "viewport": "width=device-width, initial-scale=1",
+        "lang": "en-GB",
+        "jsonld": {
+          "blocks": 1,
+          "parsed": 1,
+          "failed": 0,
+          "types": [
+            "Person",
+            "ProfessionalService",
+            "BreadcrumbList"
+          ],
+          "names": [
+            "Rhys Hume"
+          ]
+        },
+        "internal_links": [
+          {
+            "url": "https://www.rhyshume.co.uk/",
+            "text": "Rhys Hume",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/websites",
+            "text": "Websites",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/website-concepts/",
+            "text": "Website concepts",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/local-business",
+            "text": "Websites and digital for local business",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/automation",
+            "text": "Automation",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/tolra",
+            "text": "Tolra",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/csv",
+            "text": "Validation",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/about",
+            "text": "About",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/contact",
+            "text": "Contact",
+            "nav": true
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/insights/what-to-put-on-an-engineering-firms-website",
+            "text": "What to put on an engineering firm’s website",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/work/jnr-engineering",
+            "text": "JNR Engineering case study",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/council-digital-grants",
+            "text": "Council digital grants",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/insights",
+            "text": "Insights",
+            "nav": false
+          },
+          {
+            "url": "https://www.rhyshume.co.uk/privacy",
+            "text": "Privacy",
+            "nav": false
+          }
+        ],
+        "internal_link_count": 14,
+        "nav_link_count": 8,
+        "forms": [],
+        "mailto": true,
+        "tel": true,
+        "text_length": 1849,
+        "img_count": 1,
+        "noindex": false
+      }
+    ],
+    "links": {
+      "candidates": 16,
+      "checked": [
+        {
+          "url": "https://www.rhyshume.co.uk/local-business",
+          "status": 200,
+          "broken": false,
+          "code": null
+        },
+        {
+          "url": "https://www.rhyshume.co.uk/automation",
+          "status": 200,
+          "broken": false,
+          "code": null
+        },
+        {
+          "url": "https://www.rhyshume.co.uk/csv",
+          "status": 200,
+          "broken": false,
+          "code": null
+        },
+        {
+          "url": "https://www.rhyshume.co.uk/website-concepts/sunny-hours",
+          "status": 200,
+          "broken": false,
+          "code": null
+        },
+        {
+          "url": "https://www.rhyshume.co.uk/website-concepts/little-kettle",
+          "status": 200,
+          "broken": false,
+          "code": null
+        },
+        {
+          "url": "https://www.rhyshume.co.uk/website-concepts/bright-circuit",
+          "status": 200,
+          "broken": false,
+          "code": null
+        },
+        {
+          "url": "https://www.rhyshume.co.uk/website-concepts/corner-shelf",
+          "status": 200,
+          "broken": false,
+          "code": null
+        },
+        {
+          "url": "https://www.rhyshume.co.uk/website-concepts/olive-ivory",
+          "status": 200,
+          "broken": false,
+          "code": null
+        },
+        {
+          "url": "https://www.rhyshume.co.uk/website-concepts/salt-ember",
+          "status": 200,
+          "broken": false,
+          "code": null
+        },
+        {
+          "url": "https://www.rhyshume.co.uk/website-concepts/clear-ground",
+          "status": 200,
+          "broken": false,
+          "code": null
+        },
+        {
+          "url": "https://www.rhyshume.co.uk/website-concepts/oak-razor",
+          "status": 200,
+          "broken": false,
+          "code": null
+        },
+        {
+          "url": "https://www.rhyshume.co.uk/websites",
+          "status": 200,
+          "broken": false,
+          "code": null
+        },
+        {
+          "url": "https://www.rhyshume.co.uk/tolra",
+          "status": 200,
+          "broken": false,
+          "code": null
+        },
+        {
+          "url": "https://www.rhyshume.co.uk/insights",
+          "status": 200,
+          "broken": false,
+          "code": null
+        },
+        {
+          "url": "https://www.rhyshume.co.uk/privacy",
+          "status": 200,
+          "broken": false,
+          "code": null
+        }
+      ],
+      "broken": 0,
+      "skipped_robots": 0,
+      "observed_at": "2026-11-20T08:09:12.735Z"
+    }
+  }
+}
