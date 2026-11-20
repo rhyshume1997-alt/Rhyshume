@@ -1,0 +1,40 @@
+{
+  "fixture": true,
+  "fixture_note": "FIXTURE DATA: fictional business, demonstration data. Never served by production routes.",
+  "ok": true,
+  "contract_version": "1.0",
+  "review": {
+    "id": "6c9b8e2a-6a77-4c0a-9a41-1d2f7b0d3f10",
+    "ref": "BR-7K2M9QX4",
+    "status": "ready",
+    "completeness": "partial",
+    "assessment_level": "standard",
+    "created_at": "2026-11-20T10:15:02Z",
+    "expires_at": "2026-12-20T10:15:02Z",
+    "confirmed_at": "2026-11-20T10:16:10Z",
+    "completed_at": "2026-11-20T10:19:30Z",
+    "business_name": "Harbour Precision Ltd",
+    "website_url": "https://harbourprecision.example/",
+    "location": {
+      "text": "Glasgow",
+      "kind": "regional"
+    },
+    "category": "CNC machining",
+    "goals": [
+      "more_enquiries"
+    ]
+  },
+  "prospect": {
+    "status": "new",
+    "follow_up_consent": true,
+    "marketing_consent": false,
+    "requested_services": [
+      "automation",
+      "seo"
+    ],
+    "workbook_id": null
+  },
+  "ai_visibility_state": "awaiting_supported_test",
+  "provider_failures": 1,
+  "incomplete": true
+}

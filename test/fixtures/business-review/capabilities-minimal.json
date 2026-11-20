@@ -1,0 +1,33 @@
+{
+  "fixture": true,
+  "fixture_note": "FIXTURE DATA: fictional business, demonstration data. Never served by production routes.",
+  "ok": true,
+  "contract_version": "1.0",
+  "capabilities": {
+    "site_analysis": {
+      "state": "available"
+    },
+    "pagespeed": {
+      "state": "available"
+    },
+    "competitor_discovery": {
+      "state": "not_configured",
+      "note": "No supported business search source is switched on. You can name one competitor yourself."
+    },
+    "ai_visibility": {
+      "state": "disabled",
+      "note": "Awaiting a supported test."
+    },
+    "email_delivery": {
+      "state": "available"
+    },
+    "pdf": {
+      "state": "disabled",
+      "note": "Use the print view."
+    }
+  },
+  "limits": {
+    "max_competitors": 3,
+    "token_days": 30
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "fixture": true,
+  "fixture_note": "FIXTURE DATA: fictional business, demonstration data. Never served by production routes.",
+  "ok": false,
+  "contract_version": "1.0",
+  "error": {
+    "code": "validation_failed",
+    "message": "Please check the highlighted fields.",
+    "field": "business_name",
+    "fields": {
+      "business_name": "Enter your business name (up to 160 characters).",
+      "category": "Choose or enter what your business does."
+    }
+  }
+}

@@ -1,0 +1,136 @@
+{
+  "fixture": true,
+  "fixture_note": "FIXTURE DATA: fictional business, demonstration data. Never served by production routes.",
+  "ok": true,
+  "contract_version": "1.0",
+  "report": {
+    "report_id": "1a2b3c4d-5e6f-4a7b-8c9d-0e1f2a3b4c5d",
+    "review_ref": "BR-4HN8PD2W",
+    "version": 1,
+    "status": "published",
+    "created_by": "system",
+    "reason": "initial",
+    "generated_at": "2026-11-20T10:19:30Z",
+    "generator_version": "br-gen-1.0.0",
+    "completeness": "partial",
+    "expires_at": "2026-12-20T10:15:02Z",
+    "business": {
+      "name": "Mairi Ross Electrical",
+      "website": null,
+      "location": {
+        "text": "Paisley",
+        "kind": "local"
+      },
+      "category": "Electrician",
+      "goals": [
+        "more_enquiries",
+        "google_visibility"
+      ],
+      "assessment_level": "reduced",
+      "review_date": "2026-11-20"
+    },
+    "methodology": {
+      "summary": "No website was given, so no public pages were read. This is a reduced review built from what you told us.",
+      "sources": [
+        {
+          "id": "src-cust",
+          "name": "Information supplied by you",
+          "kind": "customer_supplied",
+          "collected_at": "2026-11-20T09:02:11Z"
+        }
+      ],
+      "test_settings": {},
+      "disclaimer": "Lighthouse scores are lab test results, not Google ranking scores."
+    },
+    "local_search": {
+      "state": "not_tested",
+      "reason_code": "no_supported_source",
+      "note": "Google Maps ranking, profile and reviews were not measured because no supported data source is connected.",
+      "rows": []
+    },
+    "ai_visibility": {
+      "state": "awaiting_supported_test",
+      "note": "Awaiting a supported test.",
+      "questions": [],
+      "summary": []
+    },
+    "automation": {
+      "opportunities": []
+    },
+    "next_steps": [
+      {
+        "label": "Discuss my results",
+        "href": "/contact?from=business-review",
+        "service_key": "none"
+      }
+    ],
+    "disclaimers": [
+      "This is an automated review of public information on the date shown. It does not promise rankings, enquiries or returns.",
+      "Nothing here is a quote. Any work is scoped and priced separately.",
+      "Lighthouse scores are not Google ranking scores. AI tool answers vary between runs."
+    ],
+    "changes_from_previous": [
+      {
+        "version": 1,
+        "summary": "Initial report."
+      }
+    ],
+    "competitors": {
+      "state": "none_available",
+      "selection_note": "No supported business search source is switched on and no competitor was named, so no comparison is shown.",
+      "items": [],
+      "limitations": []
+    },
+    "key_findings": [
+      {
+        "id": "kf1",
+        "text": "No website address was supplied, so the website checks were not run.",
+        "evidence_ids": [
+          "2d4f6a8c-0e1b-4d3c-8a5b-7c9e1f3a5b7d"
+        ],
+        "evidence_state": "not_tested"
+      }
+    ],
+    "comparison": {
+      "rows": []
+    },
+    "technical": {
+      "groups": []
+    },
+    "recommendations": [],
+    "evidence_index": [
+      {
+        "id": "2d4f6a8c-0e1b-4d3c-8a5b-7c9e1f3a5b7d",
+        "review_id": "6c9b8e2a-6a77-4c0a-9a41-1d2f7b0d3f10",
+        "subject": {
+          "kind": "business"
+        },
+        "category": "technical",
+        "metric_key": "page.status",
+        "label": "Home page status",
+        "evidence_state": "not_tested",
+        "reason_code": "no_website",
+        "value": null,
+        "observed_at": "2026-11-20T09:02:11Z",
+        "source": {
+          "kind": "customer_supplied",
+          "name": "Information supplied by you",
+          "url": null,
+          "provider_call_id": null
+        },
+        "method": {
+          "summary": "No website supplied",
+          "settings": {}
+        },
+        "inputs": {},
+        "what_it_means": "Website checks need a website address.",
+        "limitations": [
+          "Not tested."
+        ],
+        "run_key": "main",
+        "superseded_by": null,
+        "created_at": "2026-11-20T09:02:11Z"
+      }
+    ]
+  }
+}

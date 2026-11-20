@@ -1,0 +1,12 @@
+{
+  "fixture": true,
+  "fixture_note": "FIXTURE DATA: fictional business, demonstration data. Never served by production routes.",
+  "ok": false,
+  "contract_version": "1.0",
+  "error": {
+    "code": "url_not_allowed",
+    "message": "That website address cannot be checked. Use the public address of your business website, without a port or login details.",
+    "field": "website",
+    "reason": "private_address"
+  }
+}

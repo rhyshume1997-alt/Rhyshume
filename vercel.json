@@ -99,6 +99,23 @@
           "value": "strict-origin-when-cross-origin"
         }
       ]
+    },
+    {
+      "source": "/business-review/report",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow, noarchive"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "no-referrer"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
     }
   ],
   "functions": {
@@ -109,9 +126,23 @@
     "api/owner-build.js": {
       "maxDuration": 120,
       "includeFiles": "{styles.css,preview/preview.css}"
+    },
+    "api/business-review.js": {
+      "maxDuration": 60
+    },
+    "api/business-review-admin.js": {
+      "maxDuration": 60
     }
   },
   "rewrites": [
+    {
+      "source": "/api/business-review/admin/:path*",
+      "destination": "/api/business-review-admin?route=:path*"
+    },
+    {
+      "source": "/api/business-review/:path*",
+      "destination": "/api/business-review?route=:path*"
+    },
     {
       "source": "/c/:id",
       "destination": "/api/c?id=:id"
