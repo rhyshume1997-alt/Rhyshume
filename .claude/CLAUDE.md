@@ -32,6 +32,16 @@ Read `DESIGN.md` and `references.md` before any design work. The `website-design
 - Never claim research that was not done. The Grok report is X-only: no Reddit research exists.
 - "Tobi" is an unresolved reference. Do not guess who is meant.
 
+## Verify before proposing (always)
+
+- Treat every reviewer, tool or model claim as a hypothesis. Re-measure it in a real browser (computed styles, bounding boxes, contrast from real colour values, source lines) before it becomes a fix. Record claims that did not reproduce so they are not repeated.
+- Every proposed fix states: the affected file, the actual cause, the change, before and after evidence, and the regression risk. Confirmed functional, responsive and accessibility defects come before cosmetic improvements.
+- Headless, software-rendered timings (LCP and similar) are a signal, not evidence. Measure before scrolling and on a real or throttled profile.
+
+## One identity per project
+
+The process and quality gates are shared. Identity is not. Never carry a palette, typeface, layout or signature interaction from one project into another, and never make a project resemble its siblings. Each project's identity lives only in its own `DESIGN.md` (template: `.claude/skills/website-design-system/templates/project-design-md.md`).
+
 ## Motion standards (Emil Kowalski, MIT, installed in `.claude/skills/`)
 
 Ease-out for entering UI, never ease-in. UI transitions under about 300ms. Press feedback `scale(0.97)`. Never animate from `scale(0)`. Hover effects behind `(hover: hover) and (pointer: fine)`. Subtle or no bounce (a light spring only for direct manipulation). Animate `transform` and `opacity`. Reduced motion means fewer and gentler animations, not none. Use the installed skills (`animate`, `choreograph`, `gestures`, `mobile-native`, `break-ui`) and run `/review-animations` before finishing motion changes.

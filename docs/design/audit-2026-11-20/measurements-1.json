@@ -1,0 +1,253 @@
+{
+ "focusRing": {
+  "olive-ivory": {
+   "banner": {
+    "before": 2.63,
+    "after": 12.65
+   },
+   "callbar": {
+    "before": 2.63,
+    "after": 13.51
+   }
+  },
+  "bright-circuit": {
+   "banner": {
+    "before": 1,
+    "after": 14.35
+   },
+   "callbar": {
+    "before": 1,
+    "after": 1
+   }
+  },
+  "salt-ember": {
+   "banner": {
+    "before": 2.75,
+    "after": 14.53
+   },
+   "callbar": {
+    "before": 2.75,
+    "after": 14.53
+   }
+  },
+  "sunny-hours": {
+   "banner": {
+    "before": 1,
+    "after": 13.35
+   },
+   "callbar": {
+    "before": 1,
+    "after": 1
+   }
+  },
+  "clear-ground": {
+   "banner": {
+    "before": 1.98,
+    "after": 12.17
+   },
+   "callbar": {
+    "before": 1.98,
+    "after": 12.17
+   }
+  },
+  "little-kettle": {
+   "banner": {
+    "before": 1,
+    "after": 13.17
+   },
+   "callbar": {
+    "before": 1,
+    "after": 13.17
+   }
+  },
+  "corner-shelf": {
+   "banner": {
+    "before": 1,
+    "after": 14.73
+   },
+   "callbar": {
+    "before": null,
+    "after": null
+   }
+  },
+  "oak-razor": {
+   "banner": {
+    "before": 1,
+    "after": 7.16
+   },
+   "callbar": {
+    "before": 1.95,
+    "after": 13.95
+   }
+  }
+ },
+ "oakRazor": {
+  "bkDisplayBefore": "block",
+  "bkDisplayAfter": "grid",
+  "hoverShift": {
+   "listHeightBefore": 808,
+   "listHeightHover": 808,
+   "shiftPx": 0
+  }
+ },
+ "brightCircuit": {
+  "boardWidthPx": 671,
+  "before": {
+   "midWordBreaks": [
+    "certificates"
+   ]
+  },
+  "after": {
+   "midWordBreaks": []
+  },
+  "visibleEmergencyButtonsAt390FirstView": 2
+ },
+ "sunnyHours": {
+  "mobileSticky": {
+   "before": {
+    "pinned": [
+     {
+      "cls": "top",
+      "top": 0,
+      "h": 75
+     },
+     {
+      "cls": "hold",
+      "top": 773,
+      "h": 58
+     },
+     {
+      "cls": "callbar",
+      "top": 785,
+      "h": 59
+     }
+    ],
+    "pinnedPxOf844": 192
+   },
+   "after": {
+    "pinned": [
+     {
+      "cls": "hold",
+      "top": 773,
+      "h": 58
+     },
+     {
+      "cls": "callbar",
+      "top": 785,
+      "h": 59
+     }
+    ],
+    "pinnedPxOf844": 117
+   }
+  },
+  "dayHeadings1440": [
+   {
+    "text": "Monday",
+    "overflows": false,
+    "iconOverlapPx": 0
+   },
+   {
+    "text": "Tuesday",
+    "overflows": false,
+    "iconOverlapPx": 0
+   },
+   {
+    "text": "Wednesday",
+    "overflows": true,
+    "iconOverlapPx": 0
+   },
+   {
+    "text": "Thursday",
+    "overflows": true,
+    "iconOverlapPx": 0
+   },
+   {
+    "text": "Friday",
+    "overflows": false,
+    "iconOverlapPx": 0
+   }
+  ]
+ },
+ "saltEmber": {
+  "amp": {
+   "ampComputedColour": "oklab(0.932105 0.00496238 0.0251282)",
+   "nameColour": "rgb(242, 231, 214)",
+   "accVar": ""
+  },
+  "eyebrowToStatement": {
+   "eyebrowText": "Reserve",
+   "gapPx": 0,
+   "stateLineHeight": "89.6px"
+  },
+  "dateInput": {
+   "colorScheme": "normal",
+   "bg": "rgb(42, 29, 22)"
+  },
+  "panelImages": [
+   {
+    "src": "se-02-plated-food.jpg",
+    "natural": "339x537"
+   },
+   {
+    "src": "se-01-fire-grill.jpg",
+    "natural": "367x537"
+   },
+   {
+    "src": "se-03-wine-pour.jpg",
+    "natural": "323x537"
+   },
+   {
+    "src": "se-04-dessert.jpg",
+    "natural": "407x537"
+   }
+  ]
+ },
+ "clearGround": {
+  "anchorJump": {
+   "ch2": {
+    "inViewport": 5,
+    "invisible": 0
+   },
+   "ch4": {
+    "inViewport": 5,
+    "invisible": 0
+   }
+  },
+  "mobilePinned": {
+   "pinnedPxOf844": 163,
+   "pinned": [
+    "top:59",
+    "index:45",
+    "callbar:59"
+   ]
+  }
+ },
+ "littleKettle": {
+  "chairNatural": "300x300",
+  "chairRenderedCssPx": "296x296",
+  "flipTransition": "0.72s cubic-bezier(0.23, 1, 0.32, 1)",
+  "sampleCopyContrast": 1
+ },
+ "oliveIvory": {
+  "mobile390": {
+   "worstOverlapOfTextBlock": 0.58,
+   "atScrollY": 270
+  },
+  "desktop1440": {
+   "worstOverlapOfTextBlock": 0.5,
+   "atScrollY": 510
+  }
+ },
+ "cornerShelf": {
+  "before": {
+   "wordHeightPx": 248,
+   "visiblePx": 248,
+   "visibleFraction": 1
+  },
+  "after": {
+   "wordHeightPx": 248,
+   "visiblePx": 248,
+   "visibleFraction": 1
+  }
+ }
+}

@@ -74,67 +74,170 @@ Palettes and fonts below come from the Creative Director workbook seeds and the 
 
 ## 6. Reuse across projects
 
-The standard must not depend on a conversation. It lives in:
+The standard must not depend on a conversation, and it must not flatten every site into one look. It is split into two layers:
 
-1. **This repository:** `docs/design/` (content), `.claude/CLAUDE.md` (always-loaded rules), `.claude/skills/website-design-system/` (the process as a skill). All are committed, so any new session here has them.
-2. **Another repository:** copy the three docs and the skill folder, or install the skill from a shared source. This repo already records installed skills in `skills-lock.json`; a shared skill repository would be recorded the same way. The skill tells Claude to stop and ask if the docs are missing instead of improvising.
-3. **The owner's machine, every project:** a user-level `~/.claude/CLAUDE.md` containing a short pointer ("for website design work, follow the website-design-system skill and its docs") and the skill placed in `~/.claude/skills/`.
-4. **Cloud sessions:** an environment setup script could fetch the skill each time a container starts. That changes the environment, so it needs the owner's approval.
+- **Shared (portable):** the process, the evidence rules, the quality gates and the reference library. These live in `.claude/skills/website-design-system/` (with `templates/audit-checklist.md` and `templates/project-design-md.md`), `.claude/CLAUDE.md` and `docs/design/references.md`.
+- **Per project (never shared):** the identity (palette, typefaces, shape language, tone, signature interaction), recorded only in that project's own `DESIGN.md`.
+
+How to reuse it:
+
+1. **This repository:** everything above is committed, so any new session here loads it.
+2. **Another repository or client project (including Build AI Here):** copy the skill folder into the project's `.claude/skills/`, add a one-line pointer in that project's `CLAUDE.md`, and create or keep that project's own `DESIGN.md`. Build AI Here already has its own `DESIGN.md` (the hybrid direction), which would remain the authority on its identity. Nothing from this repository's concepts carries over.
+3. **The owner's machine, every project:** put the skill in `~/.claude/skills/` and keep a short pointer in `~/.claude/CLAUDE.md`.
+4. **Cloud sessions:** an environment setup script could fetch the skill when a container starts. That changes the environment and needs the owner's approval.
+
+The skill stops and asks if a project's `DESIGN.md` or references are missing. It does not invent them or borrow another project's.
 
 ## 7. Audit record (2026-11-20)
 
 **Baseline:** `rhyshume1997-alt/rhyshume`, branch `claude/cinematic-poc`, commit `eae94be`. The repository's static concept tests pass (45 of 45).
 
-**Evidence:** 92 screenshots of the eight concepts (desktop 1440x900 and mobile 390x844, successive viewport-height positions), measured overflow, layout shift, console errors and payload, and a video-playback probe. Four Fable reviewers critiqued two concepts each from the screenshots and source, proposing only. Their key claims were spot-checked against the source before inclusion (Oak & Razor specificity bug, Bright Circuit word break and ungated hovers, Olive & Ivory hero delays, Clear Ground fade-ups, Salt & Ember menu-image edge pixels).
-
-**Measured:** no horizontal overflow at 390 or 1440 on any concept; one h1 on each; videos play (muted, looping) on all eight; no console errors apart from one 404 on Olive & Ivory that did not reproduce.
-
-**Correction to earlier numbers.** The LCP figures from the first capture (4 to 7 seconds on Olive & Ivory, Bright Circuit, Clear Ground and Little Kettle) were read after scripted scrolling and in software-rendered headless Chromium, so they are probably artefacts (the last LCP entry can be an element that painted later). They are not evidence of a performance problem. Re-measure before scrolling, log the LCP element, and use a real device or throttled profile before acting on them.
+**Method:** 92 screenshots of the eight concepts (1440x900 and 390x844, successive viewport-height positions); four Fable reviewers critiqued two concepts each from the screenshots and source (proposals only); every claim that drives a fix was then **re-measured in a real browser** against a local copy, with the proposed CSS injected at run time for the "after". No repository file was edited. Evidence is in `audit-2026-11-20/` (comparison images and the raw measurement JSON).
 
 **Not judged from evidence:** video and kinetic motion (screenshots are still frames), widths other than 390 and 1440, light-table, reply-card, basket, booking and enquiry states beyond the first screens, real touch behaviour, screen readers, Safari and Firefox.
 
-## 8. Prioritised improvement plan (for approval; nothing implemented)
+### Verification ledger
 
-Rules for every item: preserve the approved identity and signature interaction; change CSS or a constant before markup; test with the existing checks and take before and after screenshots; do not make the concepts converge. Items marked **defect** are bugs or accessibility failures, not taste.
+| Claim | Result |
+| --- | --- |
+| Oak & Razor booking grid never applies | **Confirmed** (computed `display: block`, grid after the fix) |
+| Focus ring invisible on banners and call bars | **Confirmed**, measured on all eight (table in F2) |
+| Bright Circuit board splits "certificates" mid-word at 1440 | **Confirmed** (board 671px wide) |
+| Sunny Hours mobile pinned chrome covers content | **Confirmed** (192px of 844 pinned) |
+| Sunny Hours "Wednesday" and "Thursday" overflow at 1440 | **Confirmed** (`scrollWidth > clientWidth`) |
+| Corner Shelf hides most of "Shelf" at 1440x900 | **Confirmed** (35% visible) |
+| Salt & Ember: eyebrow touches statement; date icon dark on dark; pale edge on menu photos | **Confirmed** |
+| Olive & Ivory flying print crosses sheet text | **Confirmed**, transient: up to 58% of a text block on mobile, 50% on desktop |
+| Olive & Ivory hero lines delayed 2600 to 3200ms | **Confirmed** from source |
+| Little Kettle chair image is a 300px source shown at about 296px | **Confirmed** |
+| Little Kettle flip is 720ms | **Confirmed** (ease-out curve, not ease-in) |
+| Clear Ground chapters can show empty after an anchor jump | **Not reproduced**: 0 of 5 elements invisible on `#ch2` and `#ch4` after 600ms |
+| Oak & Razor rows shift under the pointer on hover | **Not reproduced**: 0px on all six rows |
+| Little Kettle "sample copy" text is 3.6:1 | **Not supported**: that element measures 13.17:1 on cream. The real issue is size (11.2px) |
+| Three Emergency buttons visible on Bright Circuit mobile | **Partly**: two in the first view |
+| Earlier LCP values of 4 to 7 seconds | **Artefacts** of scripted scrolling in software-rendered Chromium. Not evidence of a problem |
+| Salt & Ember ampersand ends cream, CSS says ember | **Confirmed** as an inconsistency, **not a defect**: the animated end state is cream (computed). Owner's call |
 
-### Priority 1: defects, low identity risk
+## 8. Prioritised fixes (for approval; nothing implemented)
 
-| # | Concept | Change | Evidence | Method |
-| --- | --- | --- | --- | --- |
-| 1 | Oak & Razor | Restore the booking layout (rail and panel side by side) | `.js .js-only { display: block }` (specificity 0,2,0) overrides `.bk { display: grid }`, so the grid never applies at desktop widths; rail sits alone and slides over the summary slip. Rendered before and after | One rule: `.js .bk.js-only { display: grid; }` |
-| 2 | Shared (`cinematic.css`) | Visible focus ring on dark bands | The banner and call bars are ink or accent and the ring uses the same colour, so it vanishes (Corner Shelf, Oak & Razor, Little Kettle, Clear Ground, Sunny Hours, and Salt & Ember's cream surfaces at 2.75:1) | One shared rule, for example `.banner a:focus-visible, .callbar a:focus-visible { outline-color: currentColor }`, then re-check each page. For Salt & Ember this is defect-only and visually imperceptible |
-| 3 | Bright Circuit | Services board without a broken word | At 1440 the three-way board is about 670px wide and "TESTING AND CERTIFICATES" splits mid-word via `overflow-wrap: anywhere`; the open cover becomes a tall thin column. Rendered before and after | Two columns unless genuinely wide; `overflow-wrap: normal` on `.nm` |
-| 4 | Sunny Hours Club | Stop the mobile sticky stack covering content | Header, status bar and call bar are all pinned and cover the intro and the first tile names while choosing. Rendered before and after | Under 48rem make `.top` non-sticky and `.hold { top: 0.6rem }` |
-| 5 | Sunny Hours Club | Day headings that do not collide; readable slot labels | "Wednesday" runs under its shape at 1440; slot labels about 10.9px | Container-query font size on `.day h3`; floor labels at 0.72rem |
-| 6 | Bright Circuit, Corner Shelf, Sunny Hours | Gate hover behind `(hover: hover) and (pointer: fine)`; add `:active` press feedback (0.97) | Ungated hover rules stick on touch; no press states on several controls | Wrap hover rules; add `:active` rules |
-| 7 | Salt & Ember (defects only) | Menu-photo hairline; invisible date icon; eyebrow touching the statement | Edge pixel columns of the menu JPEGs average about RGB 215,209,206 against dark photos (verified); date input has no `color-scheme` (verified); `.state` has no top margin (verified) | Crop 2px or `inset: -2px` on `.panel-plate img`; `color-scheme: dark` on the form controls; `margin-block-start` on `.state`. Nothing else changes |
+Rules for every fix: preserve the approved identity and signature interaction; smallest change first; work on a new branch from `claude/cinematic-poc`; after each fix re-run `node --test` and the shared browser checker and take before and after screenshots at 390 and 1440; nothing merged or deployed without approval. Images referred to are in `audit-2026-11-20/`.
 
-### Priority 2: design quality, evidence-backed
+### Priority 1: confirmed functional, responsive and accessibility defects
 
-| # | Concept | Change | Why it helps |
-| --- | --- | --- | --- |
-| 8 | Olive & Ivory | Stop the flying print crossing the proof-sheet text on mobile (keep the flight from 56rem up); bring the hero copy and button in by about 600ms (currently inline delays of 2600 to 3200ms) while the name keeps writing | Instructions become readable on phones; the primary button is usable about 3 seconds sooner. The pen-stroke name is untouched |
-| 9 | Corner Shelf | Make "Shelf" legible in short desktop first views (shallower plate under `min-width: 64rem` and `max-height: 60rem`); shorten the filter choreography from about 1.4s to about 0.5s with an ease-out exit | The wordmark is the identity and reads at once; rapid browsing stops feeling queued. Rendered before and after |
-| 10 | Little Kettle | Replace the out-of-focus chair roundel (source about 300px); flip at about 450 to 500ms with press feedback and an ease-out tab exit; legibility floor for mono and placeholder text | Removes the one moment that looks broken; the eighth flip feels as good as the first |
-| 11 | Clear Ground | Give phones the line's drawings back (waypoints at about 0.75 scale in the free space); make the line the only scroll-driven motion (remove fade-ups from chapter text, drop the header progress bar); retire the green italic word from the five chapter headings (keep the h1 "begin") | Phones get the concept; fixes the empty-chapter failure on anchor jumps; widens the gap from Little Kettle |
-| 12 | Oak & Razor | Hover previews by transform and opacity only, with shorter repeated transitions; replace the outline headings with the concept's own thin-to-heavy weight contrast | Rows stop shifting under the pointer; keeps Oak & Razor distinct from Corner Shelf's outline-and-solid device |
-| 13 | Bright Circuit | Mobile: one persistent Emergency control (drop the header duplicate, add section anchors); raise the smallest disclosure text; reword "Live view" to "Inspection view" | One clear emergency action; legible honesty text; safer wording over generated footage |
+**F1. Oak & Razor: booking layout collapses on desktop**
+- **File:** `oak-razor.css` (line 174, `.bk`); the overriding rule is `cinematic.css` line 69.
+- **Cause:** `.js .js-only { display: block }` (specificity 0,2,0) beats `.bk { display: grid }` (0,1,0) on `<div class="js-only bk" id="bk">`, so the intended rail-and-panel grid never applies once JavaScript runs. The sticky rail slides over the summary slip.
+- **Change:** add `.js .bk.js-only { display: grid; }` in `oak-razor.css` (not the shared file).
+- **Evidence:** computed `display` is `block` before, `grid` after. Image `oak-razor-booking-compare.png`.
+- **Regression risk:** low. Re-test the six-step journey at 390, 768, 1024 and 1440; the existing `.bk { grid-template-columns: 1fr }` rule at line 231 keeps phones single-column.
+
+**F2. All concepts: keyboard focus ring invisible on the banner and call bar**
+- **Files:** `cinematic.css` (shared, lines 19 and 27 to 28), plus `bright-circuit.css`, `sunny-hours.css`, `corner-shelf.css`.
+- **Cause:** the ring uses `--ring` (usually the ink colour) and the banner and call bar are painted in that same colour.
+- **Change:** shared rule `.banner a:focus-visible, .callbar a:focus-visible { outline-color: currentColor; }`, plus per-concept overrides where that is not enough: Bright Circuit call bar ring in its yellow, Sunny Hours call bar ring in its sun yellow, Corner Shelf `.callbar button:focus-visible` in its paper colour.
+- **Evidence (ring contrast against the band, before to after):**
+
+| Concept | Banner (1440) | Call bar (390) |
+| --- | --- | --- |
+| Olive & Ivory | 2.63 to 12.65 | 2.63 to 13.51 |
+| Bright Circuit | 1.00 to 14.35 | 1.00 to 8.72 (per-concept ring) |
+| Salt & Ember | 2.75 to 14.53 | 2.75 to 14.53 |
+| Sunny Hours | 1.00 to 13.35 | 1.00 to 9.28 (per-concept ring) |
+| Clear Ground | 1.98 to 12.17 | 1.98 to 12.17 |
+| Little Kettle | 1.00 to 13.17 | 1.00 to 13.17 |
+| Corner Shelf | 1.00 to 14.73 | 1.00 to 14.73 (per-concept ring) |
+| Oak & Razor | 1.00 to 7.16 | 1.95 to 13.95 |
+
+  Images `salt-ember-and-focus-ring-compare.png` (Oak & Razor banner, Sunny Hours call bar).
+- **Regression risk:** low; visible only on keyboard focus. The one-line shared rule alone is **not** enough for the Bright Circuit, Sunny Hours and Corner Shelf call bars (measured), hence the overrides. **Salt & Ember is protected:** if the shared file is touched, confirm it is visually unchanged apart from the ring; the alternative is to scope the Salt & Ember fix inside `ember.css`.
+
+**F3. Bright Circuit: services board breaks a word at 1440**
+- **File:** `bright-circuit.css` (lines 145 `.ways`, 162 breakpoint, 252 `.nm`).
+- **Cause:** at 1440px the board is only 671px wide but still uses three columns, and `.nm { overflow-wrap: anywhere }` breaks "CERTIFICATES" mid-word. The open cover also becomes a tall thin column.
+- **Change:** keep two columns until the board is genuinely wide (raise the three-column breakpoint or use a container query); `overflow-wrap: normal` on `.nm`.
+- **Evidence:** mid-word breaks measured: `["certificates"]` before, none after. Image `bright-circuit-board-compare.png`.
+- **Regression risk:** medium-low. The board gets taller and the scroll-drawn bus line is built from measured section positions, so re-run the page checker and look at the bus alignment.
+
+**F4. Sunny Hours: mobile pinned chrome covers content**
+- **File:** `sunny-hours.css` (line 29 `.top`, lines 160 and 247 `.hold`).
+- **Cause:** header (75px), planner status bar (58px) and call bar (59px) are all pinned, covering 192px of an 844px screen, including the intro and the first tile names while choosing a tile.
+- **Change:** under 48rem make `.top` non-sticky and set `.hold { top: 0.6rem }`.
+- **Evidence:** pinned pixels measured 192 before, 117 after. Image `sunny-hours-mobile-chrome-compare.png`.
+- **Regression risk:** low. The sticker header stops following on phones. Re-test tap-then-tap placement and that the status bar stays visible.
+
+**F5. Sunny Hours: day headings overflow at 1440**
+- **File:** `sunny-hours.css` (around lines 190 to 191 and 389).
+- **Cause:** heading size `clamp(1.1rem, 1.6vw, 1.5rem)` next to a fixed 2rem icon.
+- **Change:** container-query font size on the day heading; raise slot labels (about 10.9px) to at least 0.72rem.
+- **Evidence:** "Wednesday" and "Thursday" overflow (`scrollWidth > clientWidth`) at 1440; the other three do not.
+- **Regression risk:** low.
+
+**F6. Corner Shelf: most of "Shelf" cut off at 1440x900**
+- **File:** `corner-shelf.css` (line 55, `.hero .plate`).
+- **Cause:** a 2:1 footage plate pushes the second wordmark line below the fold on short desktop screens.
+- **Change:** under `(min-width: 64rem) and (max-height: 60rem)` use `aspect-ratio: 5 / 2`.
+- **Evidence:** "Shelf" visible 35% before, 73% after. Image `corner-shelf-first-view-compare.png`.
+- **Regression risk:** low. Check the footage crop (`object-position: 50% 24%`) and that 1920x1080 is unchanged.
+
+**F7. Salt & Ember (protected): three demonstrable defects, nothing else**
+- **(a) Pale edge on menu photographs.** Files: `img/se-01-fire-grill.jpg` (right edge), `se-02-plated-food.jpg`, `se-03-wine-pour.jpg`, `se-04-dessert.jpg` (left edge). Cause: each source JPEG carries a one-pixel light column (edge columns average about RGB 215,209,206 / 173,170,169 / 242,228,218 / 216,209,205 against dark photographs; verified from pixels and in the render). Change: crop 2px from the offending edge of each of the four images. **A CSS-only `inset: -2px` was tested and did not remove it.** Evidence: image `salt-ember-and-focus-ring-compare.png` (zoomed edge, before and after with cropped copies served at render time only). Risk: about a 0.5% crop, no layout change. These are approved assets, so replacing them needs your approval.
+- **(b) "Reserve" eyebrow touches the statement.** File: `ember.css` line 112 (`.state`, `line-height: 1`, no top margin). Measured gap 0px. Change: `margin-block-start: 0.6rem`. Evidence: same image. Risk: none.
+- **(c) Date icon dark on dark.** File: `cinematic.css` line 63 (form controls) and the booking slip in `ember.css`. Measured `color-scheme: normal`. Change: `color-scheme: dark` on `.slip input, .slip select`. Evidence: same image. Risk: check the native select popup looks right.
+- **Not touched:** fire effects, ignition, pinned hand-off, type treatment, menu transitions, identity. The ring fix is F2.
+
+### Priority 2: design quality (evidence-backed, lower urgency)
+
+**D1. Olive & Ivory: print crosses sheet text; late hero copy**
+- Files: `olive.js` (scroll-linked flight in `apply()`/`measure()`), `olive.css`, `olive-ivory.html` lines 38 to 41. Cause: the flight path runs through the proof-sheet header at rest positions on a single column; hero lines carry inline delays of 2600, 2800, 3000 and 3200ms.
+- Change: below 56rem keep the print in the hero and develop frame 01 with the others; from 56rem up keep the flight but finish before the sheet header reaches mid-viewport; bring tagline, sub and button in by about 600ms while the pen-stroke name keeps writing.
+- Evidence: overlap sweep, worst 58% of a text block at 390 (scrollY 270) and 50% at 1440 (scrollY 510); `evidence/olive-ivory-m-1.jpg` shows it. No after render (needs a JavaScript change).
+- Risk: **medium**, because it touches the signature docking. Run the existing interaction suites (t5, t8, dock) and keep desktop docking.
+
+**D2. Little Kettle: soft chair image; board feel; small text**
+- Files: `img/little-kettle-frame-chair.{jpg,webp}`, `little-kettle.html`, `little-kettle.css` (line 136 `.face`, line 163 `.tile:active .face`).
+- Cause: a 300x300 source is shown at about 296 CSS px, so it is 1:1 at best and soft on high-density screens; the flip is 720ms for an action repeated up to eight times and press only shortens the duration.
+- Change: replace with a 600px or larger in-focus source, or a flat SVG chair in the page's drawing language; flip about 450 to 500ms with press scale 0.97; mono and placeholder text floor 0.75rem.
+- Evidence: dimensions measured; flip duration measured (`0.72s cubic-bezier(0.23, 1, 0.32, 1)`). No after render is possible until a replacement asset exists.
+- Risk: low.
+
+**D3. Clear Ground: phone loses the drawings; formulaic accent word; progress devices**
+- Files: `clear-ground.css` (phone block; line 133 radio dot), `clear-ground.js` (waypoint scale 0.4), `clear-ground.html`.
+- Cause (source and screenshots): phone CSS hides labels, contours and the boulder, drawings are scaled to 0.4, and three bars (header 59px, chapter strip 45px, call bar 59px, 163px in all) are pinned; every chapter heading ends in a green italic word.
+- Change: one waypoint per chapter at about 0.75 scale in the free space beside the numeral; remove the header progress bar; plain roman chapter headings (keep the h1 "begin" and the italic quotes); start the radio dot from about `scale(0.5)` with opacity.
+- Evidence: pinned height measured; `evidence/clear-ground-m-1.jpg` to `m-5.jpg`. The reviewer's "chapters empty after an anchor jump" claim was **not reproduced**, so fade-ups are a design choice, not a defect.
+- Risk: low to medium; check at 320px that the line never crosses text.
+
+**D4. Bright Circuit mobile: duplicate emergency control; ungated hover; small disclosures**
+- File: `bright-circuit.css` (hover rules at lines 22, 24, 154, 160, 208; no `@media (hover: hover)` anywhere in the file).
+- Change: drop the header Emergency button under 48rem (the call bar keeps it) and add section anchors; wrap hover rules in `(hover: hover) and (pointer: fine)`; add `:active` press feedback; raise the smallest disclosure text; reword "Live view" to "Inspection view" over generated footage.
+- Evidence: two Emergency buttons visible in the 390px first view (measured); hover rules ungated (grep). Risk: low.
+
+**D5. Corner Shelf: filter choreography; ungated index hover**
+- File: `corner-shelf.js` (lines 187 to 201), `corner-shelf.css` (lines 102 to 108).
+- Cause (source arithmetic, not measured in a browser): about 1.4 to 1.5 seconds end to end, with an ease-in exit; `.idx-row:hover` is ungated.
+- Change: exit about 160ms ease-out, total stagger capped near 120ms, slide about 320ms, enter about 280ms; gate hover and keep the focus styles.
+- Evidence: source only. Risk: low; the FLIP tidying stays.
+
+**D6. Oak & Razor: differentiation and purity**
+- Files: `oak-razor.css` (hover padding, transitions 500 to 700ms; outline headings in the band and footer).
+- Change: hover preview by transform and opacity only; shorter repeated transitions; replace the outline headings with the concept's own thin-to-heavy weight contrast so it stays distinct from Corner Shelf.
+- Evidence: **row layout shift was not reproduced** (0px), so this is a performance and distinctness improvement, not a bug. Risk: low.
 
 ### Priority 3: optional or owner's call
 
-- Salt & Ember: ampersand end state (animated end state is cream; static CSS says ember). Owner's call whether orange was intended.
-- Olive & Ivory: show frames 10 to 12 as labelled unexposed cells; set the dialog focus ring to ivory.
-- Sunny Hours: replace the three hero fact cards with a four-part day strip (pick-up and snack, first activity, second activity, home time) using existing copy.
-- Looping footage and the Little Kettle stamp spin have no pause control (WCAG 2.2.2). Owner decision on a minimal pause control, since it adds visible UI.
-- Fix Little Kettle's shop drawing (roof kettle reads as a bowler hat; stray scallop hook).
-- Re-measure LCP properly and replace low-resolution footage and photographs (the review already lists these as asset replacements).
+- Salt & Ember ampersand: the animated end state is cream while the static CSS says ember.
+- Olive & Ivory: frames 10 to 12 as labelled unexposed cells; dialog focus ring in ivory.
+- Sunny Hours: replace the three hero fact cards with a four-part day strip.
+- A minimal pause control for looping footage and the Little Kettle stamp spin (WCAG 2.2.2). Owner decision, since it adds visible UI.
+- Little Kettle shop drawing (roof kettle reads as a bowler hat, stray scallop hook).
+- Re-measure LCP properly; replace low-resolution footage and photographs (already listed in the Rev 6 asset register).
 
 ### Preserved without change
 
-All eight signature interactions and identities as listed in section 5. Salt & Ember's fire, ignition, pinned hand-off, type treatment, menu behaviour and identity are untouched by this plan.
+All eight signature interactions and identities as listed in section 5. Salt & Ember's fire, ignition, pinned hand-off, type treatment, menu transitions and identity are untouched.
 
-## 9. Open items and how this plan will be implemented
+## 9. Open items
 
-- Approval required before any implementation. Implementation will be a new branch from `claude/cinematic-poc`, in small commits per concept, re-running `node --test` and the shared browser checker and capturing before and after screenshots at 390 and 1440. Nothing is merged or deployed without approval, and the concepts remain hidden and noindex.
+- Approval is required before any implementation. Implementation would be a new branch from `claude/cinematic-poc`, small commits per fix, with the existing checks re-run. The concepts stay hidden and noindex; nothing is merged or deployed without approval.
 - The Grok report's links are unverified (see `grokResearch.md`); no Reddit research exists.
 - "Tobi" remains unidentified.
