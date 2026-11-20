@@ -71,6 +71,7 @@ async function crawlSite(opts) {
   const fetcher = opts.fetcher;
   const now = opts.now || function () { return new Date(); };
   const sleep = opts.sleep || sleepDefault;
+  const reqTimeout = opts.requestTimeoutMs || 8000;
   const minInterval = opts.minIntervalMs == null ? 1000 : opts.minIntervalMs;
   const started = Date.now();
   const deadline = Math.min(opts.deadline || Infinity, started + L.totalMs);
@@ -106,7 +107,7 @@ async function crawlSite(opts) {
     await pace(p.hostname, 0);
     snap.requests++;
     const t0 = Date.now();
-    const st = await robots.fetchRobots(fetcher, p.origin, Object.assign({ deadline: deadline, timeoutMs: 8000 }, ropts));
+    const st = await robots.fetchRobots(fetcher, p.origin, Object.assign({ deadline: deadline, timeoutMs: reqTimeout }, ropts));
     st.observed_at = stamp();
     st.ms = Date.now() - t0;
     robotsByOrigin[p.origin] = st;
@@ -129,7 +130,7 @@ async function crawlSite(opts) {
       snap.requests++;
       const t0 = Date.now();
       const res = await fetcher.request(p.url, {
-        followRedirects: false, maxBytes: o.maxBytes || 1572864, timeoutMs: 8000, deadline: deadline, userAgent: BOT_UA,
+        followRedirects: false, maxBytes: o.maxBytes || 1572864, timeoutMs: reqTimeout, deadline: deadline, userAgent: BOT_UA,
         allowedTypes: o.types === undefined ? HTML_TYPES : o.types, method: o.method || 'GET'
       });
       const ms = Date.now() - t0;
@@ -178,7 +179,7 @@ async function crawlSite(opts) {
   if (L.checkHttp && finalP.ok && finalP.protocol === 'https:' && (await budgetOk()) && robots.isAllowed(finalRobots, '/')) {
     await pace(finalP.hostname, robots.crawlDelayMs(finalRobots));
     snap.requests++;
-    const r = await fetcher.request((opts.httpCheckOrigin || ('http://' + finalP.hostname)) + '/', { method: 'HEAD', followRedirects: false, timeoutMs: 6000, deadline: deadline, userAgent: BOT_UA });
+    const r = await fetcher.request((opts.httpCheckOrigin || ('http://' + finalP.hostname)) + '/', { method: 'HEAD', followRedirects: false, timeoutMs: Math.min(6000, reqTimeout), deadline: deadline, userAgent: BOT_UA });
     lastAt[finalP.hostname] = Date.now();
     if (!r.ok) snap.http_redirect = { state: 'unreachable', code: r.code, observed_at: stamp() };
     else {

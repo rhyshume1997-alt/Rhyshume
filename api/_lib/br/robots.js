@@ -39,7 +39,7 @@ function parseRobots(text) {
     if (!cur) continue;
     if (key === 'allow' || key === 'disallow') {
       if (val === '' && key === 'disallow') continue; // empty Disallow allows everything
-      cur.rules.push({ allow: key === 'allow', pattern: val });
+      if (cur.rules.length < MAX_RULES) cur.rules.push({ allow: key === 'allow', pattern: val });
     } else if (key === 'crawl-delay') {
       const n = parseFloat(val);
       if (Number.isFinite(n) && n >= 0) cur.crawlDelay = n;
@@ -48,15 +48,23 @@ function parseRobots(text) {
   return { groups: groups, sitemaps: sitemaps };
 }
 
-function patternToRegex(p) {
-  let out = '^';
-  for (let i = 0; i < p.length; i++) {
-    const ch = p[i];
-    if (ch === '*') out += '.*';
-    else if (ch === '$' && i === p.length - 1) out += '$';
-    else out += ch.replace(/[.+?^${}()|[\]\\]/g, '\\$&');
+// Linear style glob matcher (no regular expressions, so hostile patterns cannot cause catastrophic backtracking).
+// '*' matches any run of characters, a trailing '$' anchors the end, otherwise the pattern matches a prefix of the path.
+const MAX_PATTERN = 200, MAX_PATH = 2048, MAX_RULES = 1000;
+function globMatch(pattern, path) {
+  let pat = pattern, anchored = false;
+  if (pat.length && pat.charAt(pat.length - 1) === '$') { anchored = true; pat = pat.slice(0, -1); }
+  const p = path.slice(0, MAX_PATH);
+  let pi = 0, si = 0, star = -1, mark = 0;
+  while (si < p.length) {
+    if (pi < pat.length && pat.charAt(pi) === '*') { star = pi++; mark = si; }
+    else if (pi < pat.length && pat.charAt(pi) === p.charAt(si)) { pi++; si++; }
+    else if (pi === pat.length && !anchored) return true;
+    else if (star !== -1) { pi = star + 1; si = ++mark; }
+    else return false;
   }
-  return new RegExp(out);
+  while (pi < pat.length && pat.charAt(pi) === '*') pi++;
+  return pi === pat.length;
 }
 
 function pickGroup(parsed, agentToken) {
@@ -86,9 +94,8 @@ function isAllowed(state, path) {
   if (p.charAt(0) !== '/') p = '/' + p;
   let bestLen = -1, allow = true;
   group.rules.forEach(function (r) {
-    let re;
-    try { re = patternToRegex(r.pattern); } catch (e) { return; }
-    if (re.test(p)) {
+    if (r.pattern.length > MAX_PATTERN) return;
+    if (globMatch(r.pattern, p)) {
       const len = r.pattern.length;
       if (len > bestLen || (len === bestLen && r.allow)) { bestLen = len; allow = r.allow; }
     }
@@ -127,4 +134,4 @@ async function fetchRobots(fetcher, origin, opts) {
   return { kind: 'present', parsed: parsed, agentToken: o.agentToken, sitemaps: parsed.sitemaps, status: res.status, finalUrl: res.finalUrl };
 }
 
-module.exports = { parseRobots, isAllowed, crawlDelayMs, fetchRobots, MAX_ROBOTS_BYTES, MAX_CRAWL_DELAY_S };
+module.exports = { globMatch, parseRobots, isAllowed, crawlDelayMs, fetchRobots, MAX_ROBOTS_BYTES, MAX_CRAWL_DELAY_S };

@@ -146,7 +146,7 @@ function maskEmail(e) { const i = e.indexOf('@'); return e.slice(0, 1) + '***' +
 
 function consentObj(raw) {
   const o = ownObj(raw) || {};
-  return { report_delivery: get(o, 'report_delivery') === true, follow_up_contact: get(o, 'follow_up_contact') === true, marketing: get(o, 'marketing') === true };
+  return { report_delivery: get(o, 'report_delivery') !== false, follow_up_contact: get(o, 'follow_up_contact') === true, marketing: get(o, 'marketing') === true };
 }
 
 function validateRequestReport(body) {
@@ -156,7 +156,8 @@ function validateRequestReport(body) {
   const name = str(body, 'name', 0, 120, 'your name', fields);
   const consent = consentObj(get(body, 'consent'));
   if (Object.keys(fields).length) return { ok: false, fields: fields };
-  if (!consent.report_delivery) return { ok: false, consentRequired: true, fields: { consent: 'Please tick the box to say we may email you the report.' } };
+  // Essential report delivery needs no tick box: asking for the email is the request. Only an explicit false is refused.
+  if (!consent.report_delivery) return { ok: false, consentRequired: true, fields: { consent: 'We need your agreement to email the report to this address.' } };
   return { ok: true, value: { email: email.toLowerCase(), name: name, consent: consent } };
 }
 

@@ -106,6 +106,8 @@ Behaviour: validates, rate limits, probes the home page once (title, h1, JSON-LD
 ```
 Errors: `validation_failed`, `url_not_allowed`, `unresolvable`, `turnstile_failed|unavailable`, `rate_limited`, `daily_limit`, `unsupported_media_type`.
 
+> **CONTRACT AMENDMENT 2 (package A, 20 Nov 2026, requested by the coordinator for Rhys):** section 3.9 `consent.report_delivery` is no longer required (see 3.9). Fixtures and validators updated.
+
 > **CONTRACT AMENDMENT (package A, 20 Nov 2026, requested by builder B via coordinator):** `report_url` and the emailed report link now carry the review id as well as the token, both in the URL fragment: `#t=<token>&id=<review id>`. Every route needs the id, so a link opened in a fresh browser can load the report. The fragment is still never sent to the server. `contract_version` stays 1.0 because the change is additive for clients that already read `access_token` and `review.id`.
 
 ### 3.3 POST /:id/confirm
@@ -159,7 +161,7 @@ Bearer. Turnstile action `business-review-mail`. Body:
   "consent": { "report_delivery": true, "follow_up_contact": false, "marketing": false },
   "turnstile_token": "<token>" }
 ```
-`consent.report_delivery` must be `true` (400 `consent_required`). `follow_up_contact` and `marketing` default false and are separate. Email validated (regex plus length 200, no CR/LF). 202:
+`consent` is optional. `consent.report_delivery` is optional and defaults to `true` when a report email is explicitly requested (asking for the email is the request, so no tick box is needed); only an explicit `false` is refused (400 `consent_required`). `follow_up_contact` and `marketing` are separate optional fields that default to `false`; nothing promotional is ever sent, and `marketing: true` only records a preference. Email validated (regex plus length 200, no CR/LF). 202:
 ```json
 { "ok": true, "contract_version": "1.0", "delivery": { "id": "d3b2...", "status": "queued", "to_masked": "o***@harbourprecision.example" }, "idempotent_replay": false }
 ```

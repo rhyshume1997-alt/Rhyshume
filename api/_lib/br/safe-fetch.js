@@ -219,23 +219,24 @@ function createSafeFetcher(factoryOpts) {
         }
         const ct = String(hdr['content-type'] || '').split(';')[0].trim().toLowerCase();
         if (o.allowedTypes && status >= 200 && status < 300 && o.allowedTypes.indexOf(ct) === -1) {
+          done({ ok: false, code: 'bad_content_type' });
           res.destroy();
-          return done({ ok: false, code: 'bad_content_type' });
+          return;
         }
         const maxBytes = o.maxBytes || 1572864;
         const declared = parseInt(hdr['content-length'] || '0', 10);
-        if (declared > maxBytes) { res.destroy(); return done({ ok: false, code: 'too_large' }); }
+        if (declared > maxBytes) { done({ ok: false, code: 'too_large' }); res.destroy(); return; }
         const enc = String(hdr['content-encoding'] || 'identity').toLowerCase().trim();
         let stream = res;
         if (enc === 'gzip' || enc === 'x-gzip') stream = res.pipe(zlib.createGunzip());
         else if (enc === 'deflate') stream = res.pipe(zlib.createInflate());
-        else if (enc !== 'identity' && enc !== '') { res.destroy(); return done({ ok: false, code: 'bad_content_type' }); }
+        else if (enc !== 'identity' && enc !== '') { done({ ok: false, code: 'bad_content_type' }); res.destroy(); return; }
         const chunks = [];
         let size = 0, rawSize = 0;
-        res.on('data', function (d) { rawSize += d.length; if (rawSize > maxBytes) { res.destroy(); done({ ok: false, code: 'too_large' }); } });
+        res.on('data', function (d) { rawSize += d.length; if (rawSize > maxBytes) { done({ ok: false, code: 'too_large' }); res.destroy(); } });
         stream.on('data', function (d) {
           size += d.length;
-          if (size > maxBytes) { res.destroy(); stream.destroy(); return done({ ok: false, code: 'too_large' }); }
+          if (size > maxBytes) { done({ ok: false, code: 'too_large' }); res.destroy(); stream.destroy(); return; }
           chunks.push(d);
         });
         stream.on('end', function () {

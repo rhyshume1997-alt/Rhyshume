@@ -25,7 +25,7 @@ const HOSTILE = [
   ['http://' + 'a'.repeat(301), 'too_long'], ['example', 'not_a_website'], ['http://-bad-.com', 'not_a_website'], ['http://example.com\nHost: evil', 'not_a_website'],
   ['http://999.999.999.999', 'private_address']
 ];
-const CRLF = 'http://example.com/%0d%0aX-Injected: 1';
+const CRLF = 'http://example.com/%0d%0aX-Injected:%201';
 
 test('ssrf matrix: every hostile address is refused with the right reason', function () {
   HOSTILE.forEach(function (c) {

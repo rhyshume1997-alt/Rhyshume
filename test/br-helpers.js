@@ -123,3 +123,28 @@ function makeApp(o) {
 }
 
 module.exports = { startServer, siteHandler, testFetcher, fakeReq, fakeRes, invoke, makeApp, fakeExternal, BASE_ENV, FIXED_NOW };
+
+// ---- scenario world for API tests: fixture sites, fetcher, app (all local)
+async function world(opts) {
+  const o = opts || {};
+  const sitesMod = require('./br-sites');
+  const servers = {};
+  const defs = o.sites || { biz: 'good', rival: 'good', poor: 'poor' };
+  const holders = {};
+  const names = Object.keys(defs);
+  for (const n of names) {
+    holders[n] = {};
+    servers[n] = await startServer(function (req, res) { return siteHandler(holders[n])(req, res); });
+  }
+  names.forEach(function (n) { holders[n] = (defs[n] === 'poor' ? sitesMod.poor() : sitesMod.good(n + '.test:' + servers[n].port)); Object.assign(holders[n], {}); });
+  // handlers read holders[n] lazily through the closure above; rebind
+  names.forEach(function (n) { const routes = holders[n]; servers[n].server.removeAllListeners('request'); servers[n].server.on('request', function (req, res) { servers[n].hits.push({ url: req.url, method: req.method, headers: req.headers }); siteHandler(routes)(req, res); }); });
+  const map = {};
+  names.forEach(function (n) { map[n + '.test'] = '127.0.0.1'; });
+  Object.assign(map, o.extraHosts || {});
+  const fetcher = testFetcher(map, names.map(function (n) { return servers[n].port; }));
+  const url = function (n, path) { return 'http://' + n + '.test:' + servers[n].port + (path || '/'); };
+  return { servers: servers, routes: holders, fetcher: fetcher, url: url, close: async function () { for (const n of names) await servers[n].close(); } };
+}
+
+module.exports.world = world;
