@@ -422,3 +422,6 @@ html:not(.js) .ba input { display: none; }
   .wordmark { margin-right: auto; }
 }
 .tile p + p { margin-top: 0.7rem; }
+
+/* business review additions: the footer Contents list is long, so it runs in two columns when there is room */
+@media (min-width: 48rem) { .colophon .ctrl > div:nth-child(2) ul { columns: 2; column-gap: 2rem; } .colophon .ctrl > div:nth-child(2) li { break-inside: avoid; } }

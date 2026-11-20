@@ -42,14 +42,13 @@ function priceLines() {
 }
 const lines = function (p) { return read(p).split('\n').filter(Boolean); };
 
-test('prices: every money, deposit and VAT line from before is still there, except the one deliberate removal', function () {
+test('prices: every money, deposit and VAT line from before is still there, none removed', function () {
   const before = lines('docs/business-review/PRICE-SNAPSHOT-before.txt');
   const now = priceLines();
-  // Deliberate: the automation page no longer prints a price (new automation work is quoted, DECISIONS and SPEC-GAPS 1).
   const removed = before.filter(function (l) { return now.indexOf(l) === -1; });
-  removed.forEach(function (l) { assert.ok(/^automation\.html :: /.test(l) && /Automation and AI set up is from £200/.test(l), 'a price line was lost: ' + l); });
-  assert.ok(removed.length >= 1, 'the automation page price line should have been removed on purpose');
-  assert.ok(now.filter(function (l) { return /^local-business\.html :: .*Automation and AI set up from £200/.test(l); }).length === 1, 'the small business page keeps Automation and AI set up from £200');
+  assert.deepStrictEqual(removed, [], 'a published price, deposit or VAT line was lost or reworded');
+  assert.strictEqual(now.filter(function (l) { return /^local-business\.html :: .*Automation and AI set up from £200/.test(l); }).length, 1, 'the small business page keeps Automation and AI set up from £200');
+  assert.strictEqual(now.filter(function (l) { return /^automation\.html :: .*Automation and AI set up is from £200/.test(l); }).length >= 1, true, 'the automation page keeps its existing from £200 line (visible FAQ and JSON-LD)');
 });
 
 test('prices: the after snapshot is current, and the only added lines repeat existing values', function () {
@@ -70,11 +69,12 @@ test('prices: only approved amounts appear, no 297 package, no new prices for SE
     (read(f).match(/£\s?[\d,]+/g) || []).forEach(function (m) { assert.ok(approved.indexOf(m.replace(/[\s,]+$/, '').replace(/\s/g, '')) !== -1, f + ' has an unapproved amount ' + m); });
     assert.ok(!/297/.test(visible(read(f))), f + ' mentions 297');
   });
-  ['seo-and-ai-visibility.html', 'automation.html'].forEach(function (f) { assert.ok(!/£/.test(read(f)), f + ' must carry no price'); });
+  assert.ok(!/£/.test(read('seo-and-ai-visibility.html')), 'the SEO page must carry no price');
+  assert.strictEqual((read('automation.html').match(/£\d[\d,]*/g) || []).join(','), '£200,£200', 'the automation page carries only its existing from £200 line (FAQ and JSON-LD)');
   const seo = visible(read('seo-and-ai-visibility.html'));
   assert.ok(!/\b\d+\s*(hours|hrs)\b|per month|\ba month\b/i.test(seo), 'no hours or package prices on the SEO page');
   assert.ok(/Request a quote/.test(seo) && /Discuss your requirements/.test(seo));
-  assert.ok(/Discuss your requirements/.test(visible(read('automation.html'))));
+  assert.ok(/Discuss your requirements/.test(visible(read('automation.html'))), 'new automation work uses Discuss your requirements');
   assert.ok(!/free website[^.]{0,60}(subscription|monthly plan)/i.test(visible(read('index.html') + read('websites.html') + read('local-business.html'))), 'free website with a subscription');
   const lb = read('local-business.html');
   ['from £1,500', 'from £3,800', 'from £35 a month', 'from £200', 'from £150', 'from £120', 'from £60', '50% deposit'].forEach(function (p) { assert.ok(lb.includes(p), p + ' missing from the small business page'); });
@@ -119,7 +119,7 @@ test('home page: the brief headline, supporting copy, both calls to action and t
   const order = ['id="problems"', 'id="compare"', 'id="websites"', 'id="systems"', 'id="engineering"', 'id="genuine-work"', 'id="demos"', 'id="steps"', 'aria-labelledby="last-h"'].map(function (k) { return h.indexOf(k); });
   order.forEach(function (i, n) { assert.ok(i > 0, 'section ' + n + ' missing'); if (n) assert.ok(i > order[n - 1], 'section ' + n + ' is out of order'); });
   assert.ok(h.indexOf('id="ft-sunny-hours"') > h.indexOf('class="result"'), 'real work before the made-up concepts');
-  assert.ok(/not the cheapest option/.test(h));
+  assert.ok(/The scope is agreed in writing before anything is built\./.test(h));
 });
 
 test('engineering page: the brief headline and explanation, capabilities as designed in, demonstrated versus potential', function () {
@@ -160,6 +160,14 @@ test('copy rules on the pages and files rewritten for the business review', func
     assert.ok(!/ - /.test(t), f + ' has a spaced hyphen');
     assert.ok(!BAN.test(t), f + ' has a banned word: ' + (t.match(BAN) || [])[0]);
     assert.ok(!/rhyshume1997@gmail\.com/.test(raw.replace(/api\/contact/g, '')), f + ' shows the personal address');
+  });
+});
+
+test('no negative pricing language in public pages, JSON-LD, meta or llms.txt', function () {
+  const BAD = /\bcheap(er|est)?\b|not competing on price|\bunlimited\b|small monthly fee|not the cheapest/i;
+  PAGES.concat(['llms.txt']).forEach(function (f) {
+    const raw = read(f);
+    assert.ok(!BAD.test(raw), f + ' has negative pricing language: ' + (raw.match(BAD) || [])[0]);
   });
 });
 
@@ -212,15 +220,15 @@ test('links: every internal link on the pages resolves to a file or a route owne
   if (waiting.length) t.diagnostic('routes owned by other packages, not on this branch yet: ' + waiting.join(', '));
 });
 
-test('privacy notice: review tool sections, providers named, three separate choices, no compliance claims, nothing unconfirmed asserted', function () {
+test('privacy notice: review tool described only as far as it is certain, no unconfirmed claims', function () {
   const h = read('privacy.html'), t = visible(h).replace(/\s+/g, ' ');
   ['Supabase', 'Vercel', 'Google PageSpeed Insights', 'Resend', 'Cloudflare Turnstile'].forEach(function (p) { assert.ok(t.includes(p), p); });
-  ['Email me the report.', 'I would like Rhys to contact me about these results.', 'Marketing.'].forEach(function (p) { assert.ok(t.includes(p), p); });
-  assert.ok(/none is ticked for you/.test(t) && /Nothing promotional is sent automatically/.test(t));
+  assert.ok(t.includes('the report is sent to the address you give for that purpose'), 'report goes to the address given');
+  assert.ok(t.includes('I would like Rhys to contact me about these results.') && t.includes('Marketing.') && /Neither is ticked for you/.test(t));
+  assert.ok(!/Email me the report\.|consent to (delivery|receive the report)|report_delivery/i.test(t), 'no extra consent for essential report delivery');
   assert.ok(!/GDPR|PECR|compliant|compliance/i.test(t), 'a legal compliance claim');
-  assert.ok(/still being finalised/.test(t), 'retention and lawful basis for the review are marked as not final');
-  assert.ok(!/(90|60|7|14) days|\b2 years|\b6 months/.test(t), 'a retention period that has not been approved');
-  assert.ok(t.includes('I’m not currently registered with the ICO.'), 'existing statement left as it was, flagged in PRIVACY-TODO.md');
+  assert.ok(!/hash|scrambled|\b\d+ days\b|expire|stops working|delete a review|automatically deleted|retention period/i.test(t), 'an unverified retention, expiry, deletion or IP claim');
+  assert.ok(t.includes('I’m not currently registered with the ICO.'), 'existing ICO sentence is exactly as before');
   assert.ok(exists('docs/business-review/PRIVACY-TODO.md'));
   assert.ok(t.includes('upgrade my site form'), 'upgrade wording kept (upgrade.test.js)');
 });
@@ -239,7 +247,6 @@ test('automation page: potential workflows labelled as potential, demonstrations
   assert.ok(/potential workflows, not existing implementations at your business/.test(t));
   ['Quotation follow up', 'Enquiry management', 'Job updates', 'Document approval'].forEach(function (w) { assert.ok(t.includes(w), w); });
   assert.ok(h.includes('href="/automation-demos"'));
-  assert.ok(!/£/.test(h) && !/from £200/.test(t));
   assert.ok(/I'm not VAT registered|I’m not VAT registered/.test(h), 'VAT line kept');
 });
 

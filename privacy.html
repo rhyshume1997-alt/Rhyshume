@@ -138,20 +138,20 @@
 <h2><span class="no">4.0</span>Booking a chat</h2>
 <p>The “book a chat” button opens a Google Calendar appointment page. Anything you enter there is handled by Google and shared with me so we can have the chat.</p>
 <h2><span class="no">5.0</span>The free business review: what you type and what I look at</h2>
-<ul class="ticks"><li>You type your business name, your town or area, the kind of business and what you want help with. You can add your website address, name one competitor, and describe one task your business spends too much time on.</li><li>You do not have to give an email address to see your results.</li><li>If you give a website address, the tool reads your public web pages and runs public tests on them, such as Google PageSpeed Insights. It records what it found, when, and how it was measured. It keeps to a small number of pages, follows the site’s robots.txt rules, and says so when a site blocks it.</li><li>Where a business search service is switched on, it may look up similar businesses and their public website addresses and record where each came from. If none is available, the review says so and uses a competitor you name.</li><li>AI search tests are not part of the automatic review at present. That section is marked as awaiting a supported test.</li><li>A security check (Cloudflare Turnstile) runs before the review starts, and Cloudflare sees your IP address. To limit abuse, I count requests using a scrambled (hashed) form of your IP address, not the address itself.</li></ul>
+<ul class="ticks"><li>You type your business name, your town or area, the kind of business and what you want help with. You can add your website address, name one competitor, and describe one task your business spends too much time on.</li><li>You do not have to give an email address to see your results.</li><li>If you give a website address, the tool reads your public web pages and runs public tests on them, such as Google PageSpeed Insights, and records what it found and when.</li><li>A security check (Cloudflare Turnstile) runs before the review starts.</li></ul>
 <h2><span class="no">6.0</span>The free business review: who handles the data</h2>
-<ul class="ticks"><li>Supabase hosts the database that stores review records, results and any contact details you choose to give.</li><li>Vercel hosts this website and runs the review’s server code. Its logs can include technical details of a request.</li><li>Google PageSpeed Insights receives the web address being tested.</li><li>Resend sends an emailed report if you ask for one.</li><li>Cloudflare Turnstile runs the security check.</li></ul>
-<p>If I switch on a business search service or an AI search tool, I will name it here first.</p>
-<h2><span class="no">7.0</span>Report links, emailed copies and your choices</h2>
-<ul class="ticks"><li>Your results have a private link that only you are given. It stops working after a set period (30 days by default), and I can switch it off sooner. The link is not listed anywhere, and search engines are told not to index it. Please keep it private.</li><li>You can delete a review from its results page. That removes the contact details attached to it and cancels the review.</li><li>Reports can name other businesses and describe measured facts about their public websites, with dates. Those businesses are not contacted.</li></ul>
-<p>There are three separate choices, and none is ticked for you.</p>
-<ul class="ticks"><li><strong>Email me the report.</strong> You type an address and press the button. I use that address only to send that email.</li><li><strong>I would like Rhys to contact me about these results.</strong> Only if you tick this do I treat the review as an enquiry and get in touch.</li><li><strong>Marketing.</strong> A separate box, off by default. Nothing promotional is sent automatically, and I do not send reports to anyone except the address you give.</li></ul>
+<ul class="ticks"><li>Supabase hosts the database that stores review records and any contact details you choose to give.</li><li>Vercel hosts this website and runs the review’s server code.</li><li>Google PageSpeed Insights receives the web address being tested.</li><li>Resend sends an emailed report if you ask for one.</li><li>Cloudflare Turnstile runs the security check.</li></ul>
+<p>If I add another service to the review, I will name it here.</p>
+<h2><span class="no">7.0</span>Reports, emailed copies and your choices</h2>
+<ul class="ticks"><li>Your results have a private link that only you are given. Please keep it private.</li><li>If you ask for an emailed copy, the report is sent to the address you give for that purpose.</li><li>Reports can name other businesses and describe measured facts about their public websites, with dates.</li></ul>
+<p>Two further choices are separate from the report and are optional. Neither is ticked for you.</p>
+<ul class="ticks"><li><strong>I would like Rhys to contact me about these results.</strong> Only if you tick this do I treat the review as an enquiry and get in touch.</li><li><strong>Marketing.</strong> A separate box, off by default.</li></ul>
 <h2><span class="no">8.0</span>Fonts</h2>
 <p>The fonts are served from this website, so loading a page doesn’t send anything to Google Fonts.</p>
 <h2><span class="no">9.0</span>What I use it for</h2>
 <p>I use what you send to reply to your enquiry and to set up the chat or the work you ask about. For the free business review, I use it to run the review, show your results and, only if you ask, email the report or follow up.</p>
 <h2><span class="no">10.0</span>How long I keep it</h2>
-<p>I keep enquiries for 12 months, then delete them. How long I keep free business review data, and my lawful basis for it, are still being finalised. I will state both here.</p>
+<p>I keep enquiries for 12 months, then delete them. I will add how long I keep free business review data here.</p>
 <h2><span class="no">11.0</span>Why I’m allowed to use it</h2>
 <p>My lawful basis is legitimate interests: replying to your enquiry, or building and sending the concept you asked for. I only email you about website options after that if you ticked the box, and you can say stop at any time.</p>
 <h2><span class="no">12.0</span>ICO registration</h2>
@@ -199,9 +199,9 @@
     </div>
   </div>
 </footer>
-<div class="callbar" aria-label="Call or book">
+<nav class="callbar" aria-label="Call or book">
   <a class="call" href="tel:+447908041480">Call 07908 041480</a>
   <a class="book" href="/contact">Free preview</a>
-</div>
+</nav>
 </body>
 </html>

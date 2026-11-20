@@ -25,13 +25,14 @@ local-business.html :: I’m not VAT registered, so no VAT is added.
 local-business.html :: 3.3 50% deposit You pay a 50% deposit to start.
 local-business.html :: 6.6 Do you charge VAT?
 local-business.html :: I’m not VAT registered, so no VAT is charged.
+automation.html :: "text": "Automation and AI set up is from £200.
 automation.html :: I'm not VAT registered, so no VAT is added."
+automation.html :: Automation and AI set up is from £200.
 automation.html :: I’m not VAT registered, so no VAT is added.
 engineering.html :: Item You get How it helps Quote-ready site from £1,500 one-off A fast site on your own domain with a quote form that takes drawings.
 engineering.html :: Site plus quote workflow from £3,800 one-off Everything above, plus quotes drafted from your template and follow-ups scheduled for you.
 engineering.html :: Care plan from £35 a month Hosting, fixes and small edits.
 seo-and-ai-visibility.html :: "name": "Do I need a monthly plan?",
-seo-and-ai-visibility.html :: This is not a pretend subscription.
 seo-and-ai-visibility.html :: 7.3 Do I need a monthly plan?
 council-digital-grants/index.html :: Covers Up to 100% of costs, max £2,500 (VAT not covered)
 council-digital-grants/index.html :: Covers 50% up to £20,000
