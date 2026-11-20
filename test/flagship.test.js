@@ -72,20 +72,21 @@ test('home page: four featured concepts, editorial and interactive, with the two
     const m = home.match(new RegExp('<article class="ft ft-[a-z]+ rv" id="ft-' + s + '"[\\s\\S]*?</article>')); assert.ok(m, s + ' featured');
     assert.ok(m[0].includes('href="/website-concepts/' + s + '">Explore this concept<'), s + ' explore');
     assert.ok(m[0].includes('href="/contact">Want something like this for your business?<'), s + ' enquiry');
-    assert.ok(m[0].includes('Concept by Rhys Hume, not a live site.'), s + ' notice');
+    assert.ok(/<p class="ft-note">A fictional /.test(m[0]), s + ' says it is fictional');
     assert.ok(/class="ft-demo"/.test(m[0]) && /<video class="mv"/.test(m[0]) && /class="mv-btn"/.test(m[0]), s + ' demo and footage');
     assert.ok(/data-webm="\/website-concepts\/video\//.test(m[0]), s + ' uses the shared footage');
   });
   assert.equal((home.match(/<article class="ft /g) || []).length, 4);
   const order = FEATURED.map(s => home.indexOf('id="ft-' + s + '"')); assert.deepEqual(order.slice().sort((a, b) => a - b), order, 'order: Sunny Hours, Little Kettle, Bright Circuit, The Corner Shelf');
-  assert.ok(home.indexOf('class="featured"') < home.indexOf('class="kind"') && home.indexOf('class="kind"') < home.indexOf('class="proof"'), 'fictional concepts come before, and are separated from, real work');
-  assert.ok(/Real work and work in progress/.test(home) && /Four websites that don&rsquo;t exist/.test(home));
+  assert.ok(home.indexOf('class="proof"') < home.indexOf('Made-up concepts and demonstrations, not clients') && home.indexOf('Made-up concepts and demonstrations, not clients') < home.indexOf('class="featured"'), 'real work comes first, and a labelled divider separates it from the made-up concepts (business review: real versus fictional)');
+  assert.ok(/Real work and work in progress/.test(home) && /Four made-up websites/.test(home) && home.slice(home.indexOf('class="featured"'), home.indexOf('id="ft-sunny-hours"')).includes('Concept by Rhys Hume, not live sites.'), 'the featured section carries the notice once');
   assert.equal((home.match(/<ol class="cc-strip">[\s\S]*?<\/ol>/)[0].match(/<li/g) || []).length, 8, 'all eight in the strip');
 });
 
 test('home page: positioning, prices, scope clarity and contact routes', function () {
-  assert.ok(/Websites that get found, and AI, automation and systems that win you clients and save you time/.test(home));
-  ['Websites and SEO', 'Business software and workflow systems', 'AI and automation', 'Computer system validation'].forEach(function (c) { assert.ok(home.includes(c), c); });
+  assert.ok(/Make your business easier to find\. And easier to run\./.test(home));
+  ['Customers can&rsquo;t find you', 'Your website doesn&rsquo;t bring in enquiries', 'Admin eats the week', 'Work is spread across disconnected systems'].forEach(function (c) { assert.ok(home.includes(c), c); });
+  assert.ok(home.includes('href="/csv"'), 'validation still linked');
   assert.ok(home.includes('From £1,500 one-off') && home.includes('From £3,800 one-off') && home.includes('From £35 a month'), 'live starting prices kept');
   assert.ok(!/£2,200|£60 a month/.test(home), 'prices are not changed without approval');
   assert.ok(/Not in these starting prices/.test(home) && /film openings, custom interactions/.test(home), 'advanced work is not implied to be included');
@@ -95,7 +96,7 @@ test('home page: positioning, prices, scope clarity and contact routes', functio
   assert.ok(/After: new build, launching soon/.test(home), 'Marpet stays labelled launching soon');
   assert.ok(!/—/.test(home + read('featured.js') + read('featured.css')), 'em dash');
   assert.ok(!BANNED.test(text(home)), 'banned word');
-  const t = text(home); assert.ok(!/AI automation|chatgpt|ai visibility|ai listing/i.test(t));
+  const t = text(home); assert.ok(!/AI automation|chatgpt|ai listing/i.test(t));
 });
 
 test('featured scripts and styles: flat, safe, reduced motion respected', function () {

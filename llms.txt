@@ -1,23 +1,26 @@
 # Rhys Hume
 
-> Rhys Hume is a web designer and systems consultant based in Glasgow. He builds websites for Glasgow trades and local businesses and sets up their Google profiles, builds the website, the quoting and the job management of engineering and manufacturing firms (fabrication, machining and manufacturing businesses), and validates computerised systems for regulated manufacturers. He comes from a computer system validation background.
+> Rhys Hume is a developer based in Glasgow. He builds websites, improves search visibility, and creates custom business systems and automations for engineering firms and small businesses, and validates computerised systems for regulated manufacturers. Engineering and fabrication firms are his specialist market, and he also works with other small businesses. Customers deal with him directly. He comes from a computer system validation background.
 
 ## The idea
 
-Websites, AI, automation and systems that win you clients and save you time: a site that's easy to find and takes the quote request, automation that drafts quotes for a person to approve and chases them, job management in Tolra, and computer system validation for regulated manufacturers underneath.
+Websites that help a business win work, and systems and automations that help it manage the work: a site that is easy to find and takes the quote request, automation that drafts quotes for a person to approve and chases them, job management in Tolra (in pilot), and computer system validation for regulated manufacturers underneath. AI is used where it helps and a person approves anything that goes out.
 
 ## Services
 
-- [Websites for engineering firms](https://www.rhyshume.co.uk/engineering): the website, quoting automation and job management for fabrication and machining firms, with Tolra in pilot with a Glasgow shop
-- [Websites](https://www.rhyshume.co.uk/websites): mobile-friendly websites with quote request forms and local search set-up, the front of the system
-- [Websites and digital for local business](https://www.rhyshume.co.uk/local-business): websites, care plans, filming, Google search set up, online listings and structured data, automation and AI set up, and domain and email set up for small local businesses in Glasgow and Central Scotland, with from prices and a tailored quote
-- [Automation](https://www.rhyshume.co.uk/automation): quote intake, documents, follow-ups and CRM updates around the tools a firm already uses, delivered as a short pilot on one process, with optional monthly care afterwards
+- [Request a business review](https://www.rhyshume.co.uk/local-business#enquiry): a visitor tells Rhys about their business through the enquiry form (choosing "Not sure yet" and mentioning a business review) and he looks at how the business is found online and how it works, with practical suggestions. It is done by Rhys, not by an automated tool, and it does not promise rankings
+- [SEO and AI visibility](https://www.rhyshume.co.uk/seo-and-ai-visibility): technical SEO, local search and AI search visibility work, split into an initial assessment, initial implementation, optional ongoing management and additional specialist work. Quoted for each business. No guaranteed rankings or AI recommendations, and AI search results vary
+- [Engineering systems](https://www.rhyshume.co.uk/engineering): websites, quote workflows and business systems for engineering firms, built around how work moves through the company, with testing, access control, documentation and change records in mind. Capabilities such as audit trails and approvals are things that can be designed into an agreed solution, not claims about existing software. Tolra is in pilot with a Glasgow shop. The business is not ISO certified
+- [Websites](https://www.rhyshume.co.uk/websites): mobile-friendly websites with clear ways to enquire and quote request forms, set up for local search, for engineering and manufacturing firms. A free website preview is available at https://www.rhyshume.co.uk/contact: a first look at what a site could look like, not a finished website
+- [Websites for small businesses](https://www.rhyshume.co.uk/local-business): websites, care plans, filming, Google search set up, online listings and structured data, automation and AI set up, and domain and email set up for small businesses in Glasgow and Central Scotland, with from prices and a written quote. Includes the website from £1,500, the website with quote workflow from £3,800, and care plans from £35 a month
+- [Automation](https://www.rhyshume.co.uk/automation): automation and custom software for admin problems such as enquiries that need preparing for quotes, the same details typed into different systems, and job information spread across spreadsheets, delivered around the tools a business already uses as a short pilot on one process, with optional monthly care afterwards. It explains when plain automation, AI or a custom system fits best
+- [Automation demonstrations](https://www.rhyshume.co.uk/automation-demos): interactive demonstrations of a quote follow up, an enquiry to job workflow and a document approval, using made up data for a fictional business. Nothing is sent, saved or connected
 - [Tolra](https://www.rhyshume.co.uk/tolra): job management for small CNC and fabrication shops, in pilot
 - [Computer system validation](https://www.rhyshume.co.uk/csv): validation plans, risk assessments, IQ/OQ/PQ protocols, traceability, data migration, validation reports and periodic review for regulated manufacturers. "I work to GAMP® 5 Second Edition, EU Annex 11 and 21 CFR Part 11 principles"
 
 ## Work and more
 
-- [JNR Engineering case study](https://www.rhyshume.co.uk/work/jnr-engineering): the website and the systems behind it for a machining and fabrication firm in Hamilton
+- [JNR Engineering case study](https://www.rhyshume.co.uk/work/jnr-engineering): the website and the systems behind it for a machining and fabrication firm in Hamilton (a family firm), with no measured results claimed
 - [Council digital grants](https://www.rhyshume.co.uk/council-digital-grants): a detailed project quote to support a council digital grant application in East Dunbartonshire or North Lanarkshire
 - [Insights](https://www.rhyshume.co.uk/insights): practical notes for engineering firms, starting with [what to put on an engineering firm's website to win more RFQs](https://www.rhyshume.co.uk/insights/what-to-put-on-an-engineering-firms-website)
 - [About](https://www.rhyshume.co.uk/about)

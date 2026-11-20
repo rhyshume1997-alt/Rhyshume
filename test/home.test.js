@@ -18,13 +18,17 @@ const css = read('home.css');
 const js = read('home.js');
 
 test('home page: the headline, one line under it, the preview button and the smaller chat link', function () {
-  assert.ok(/<h1[^>]*>Websites that get found, and AI, automation and systems that win you clients and save you time<\/h1>/.test(home), 'Rev 2 headline: attractive websites and the systems behind them');
+  assert.ok(/<h1[^>]*>Make your business easier to find\. And easier to run\.<\/h1>/.test(home), 'headline: business review brief');
   assert.ok(!/found on google/i.test(home), 'no found on Google claim beside the no guarantee line');
-  assert.ok(/<a class="btn"[^>]*>Get a free preview of your site</.test(home.match(/<section class="hero"[\s\S]*?<\/section>/)[0]));
-  assert.ok(/<p class="small">[^]*?<a [^>]*>Book a free 20-minute chat/.test(home), 'the 20 minute chat stays as a smaller link');
+  const heroHtml = home.match(/<section class="hero"[\s\S]*?<\/section>/)[0];
+  assert.ok(/<a class="btn" href="\/local-business#enquiry">Request a business review</.test(heroHtml), 'primary call to action is the business review request, which uses the existing enquiry form');
+  assert.ok(/Choose &lsquo;Not sure yet&rsquo; and mention a business review in your message/.test(heroHtml), 'the hero explains how to ask for a review');
+  assert.ok(!/business-review|See how your business compares/.test(home), 'no link to or copy about an automated review tool');
+  assert.ok(/<a class="btn btn-alt" href="\/contact">Get a free website preview</.test(heroHtml), 'secondary call to action is the free preview');
+  assert.ok(/<a href="https:\/\/calendar\.google\.com[^>]*>book a free 20-minute chat/.test(heroHtml), 'the 20 minute chat stays as a small link');
   assert.ok(!/<a class="btn[^"]*"[^>]*>Book a free 20-minute chat/.test(home), 'the chat is never a main button');
   assert.ok(home.split(BOOKING).length - 1 >= 2, 'booking link stays as the smaller chat link in the hero and at the bottom');
-  assert.ok((home.match(/<a class="btn[^"]*" href="\/contact">/g) || []).length >= 3, 'the free preview buttons lead to the three step page');
+  assert.ok((home.match(/<a class="btn[^"]*" href="\/contact">/g) || []).length >= 2, 'the free preview buttons lead to the three step page');
   assert.ok(home.includes('href="tel:+447908041480"'));
   assert.ok(/<title>[^<]{10,70}<\/title>/.test(home));
   const d = home.match(/<meta name="description" content="([^"]+)"/);
@@ -33,7 +37,7 @@ test('home page: the headline, one line under it, the preview button and the sma
 });
 
 test('home page: the JNR Engineering line sits straight after the Marpet slider', function () {
-  assert.ok(/<\/section>\s*<section class="result"[\s\S]*?\/work\/jnr-engineering[\s\S]*?<\/section>\s*<section class="services"/.test(home.slice(home.indexOf('<section class="proof"'))));
+  assert.ok(/<\/section>\s*<section class="result"[\s\S]*?\/work\/jnr-engineering[\s\S]*?<\/section>\s*<section class="kind"/.test(home.slice(home.indexOf('<section class="proof"'))));
 });
 
 test('home page: the before and after slider is a native range input and says what the after side is', function () {
@@ -70,28 +74,30 @@ test('home page: the prices match the local business page', function () {
 });
 
 test('home page: three steps, the JNR result line and the engineering tile', function () {
-  ['<h3>Chat</h3>', '<h3>Preview</h3>', '<h3>Launch</h3>'].forEach(function (h) { assert.ok(home.includes(h), h); });
+  ['<h3>Start</h3>', '<h3>Agree</h3>', '<h3>Build and test</h3>', '<h3>Hand over</h3>'].forEach(function (h) { assert.ok(home.includes(h), h); });
   assert.ok(home.includes('href="/work/jnr-engineering"'));
-  assert.ok(/<a href="\/engineering">Websites for engineering firms<\/a>/.test(home));
+  assert.ok(/href="\/engineering">See the engineering page<\/a>/.test(home));
 });
 
 test('home page: Tolra says pilot and register interest, with no price and no buy button', function () {
   assert.ok(home.includes('Tolra is in pilot with a Glasgow shop.'));
   assert.ok(home.includes('Register interest'));
   const t = text(home);
-  const around = t.slice(Math.max(0, t.indexOf('Tolra') - 200), t.indexOf('Tolra') + 400);
+  const at = t.indexOf('Tolra is in pilot with a Glasgow shop');
+  assert.ok(at > 0, 'the engineering tile names Tolra');
+  const around = t.slice(Math.max(0, at - 200), at + 400);
   assert.ok(!/£|buy|subscribe|per month|a month/i.test(around), 'price or buy wording near Tolra');
 });
 
 test('home page: validation is one of the four things I do, and is linked from the footer too (Rev 2 positioning)', function () {
-  assert.ok(/<h3><a href="\/csv">Computer system validation<\/a><\/h3>/.test(home), 'capability row');
+  assert.ok(home.includes('regulated medical device settings'), 'validation background is stated on the home page');
   assert.ok(home.split('<footer')[1].includes('href="/csv"'));
-  ['Websites and SEO', 'Business software and workflow systems', 'AI and automation'].forEach(function (c) { assert.ok(home.includes(c), c); });
+  ['Customers can&rsquo;t find you', 'Admin eats the week'].forEach(function (c) { assert.ok(home.includes(c), c); });
 });
 
 test('home page: no tools talk, no ChatGPT listing, no AI automation wording', function () {
   const t = text(home);
-  assert.ok(!/AI automation|chatgpt|ai visibility|ai listing/i.test(t), 'banned selling words');
+  assert.ok(!/AI automation|chatgpt|ai listing/i.test(t), 'banned selling words');
   assert.ok(!/Resend|Turnstile|Vercel|Supabase|Make\.com|Zapier/i.test(t), 'a tool is named');
 });
 
@@ -143,7 +149,7 @@ test('engineering page: carries the old pitch, with Tolra in pilot, no validatio
   const e = read('engineering.html');
   assert.ok(e.includes('<link rel="canonical" href="https://www.rhyshume.co.uk/engineering">'));
   assert.ok(!/noindex/i.test(e));
-  assert.ok(e.includes('Work gets lost in the gaps between the enquiry, the quote and the invoice.'));
+  assert.ok(e.includes('<h1>Business systems built with control, traceability and the people using them in mind</h1>'), 'business review brief headline');
   assert.ok(e.includes('in pilot with a Glasgow shop'));
   assert.ok(e.includes('Register interest'));
   assert.ok(e.includes(BOOKING));
