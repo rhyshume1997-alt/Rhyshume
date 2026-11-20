@@ -2,7 +2,7 @@
 
 Status: **proposed, for owner approval** (2026-11-20). Nothing in this file changes an approved design. It records how designs are made, reviewed and improved in this repository, and how that knowledge is reused without relying on any conversation's memory.
 
-Related: `references.md` (sources and verification status), `grokResearch.md` (the Grok report), `../concepts/` (existing concept documentation), `.claude/CLAUDE.md` and `.claude/skills/website-design-system/` (how Claude Code applies this).
+Related: the shared reference library and research records (in the skill, `.claude/skills/website-design-system/references/`), `references.md` (this repository's additions only), `../concepts/` (existing concept documentation), `.claude/CLAUDE.md` and `.claude/skills/website-design-system/` (how Claude Code applies this).
 
 ## 1. Principles
 
@@ -15,7 +15,7 @@ These extend the owner's existing "Website Creative Director" rules:
 - Authentic imagery for live claims. Generated imagery is labelled. No fabricated reviews, staff, customers, awards or results.
 - Nothing works only on hover. Comfortable touch targets. Fonts are licensed and self-hosted.
 
-Added from the Grok research (reported, see `grokResearch.md`): one focal point per screen; real copy, never placeholders such as "Feature 1"; buttons say what happens; design every state (empty, loading, error, hover, focus); text contrast at least 4.5:1; touch targets at least 44px; tokens before screens.
+Added from the Grok research (X-supplied, reported, see the skill's `references/research-records/grok-x-design-research-2026-11-20.md`): one focal point per screen; real copy, never placeholders such as "Feature 1"; buttons say what happens; design every state (empty, loading, error, hover, focus); text contrast at least 4.5:1; touch targets at least 44px; tokens before screens.
 
 **Defaults, not laws.** The numeric defaults from the report (4px spacing, five type sizes, at most three colours, one accent used rarely) suit product UI. The eight concepts are deliberately art-directed, so a concept may deviate when it records why (Sunny Hours Club uses five colours on purpose).
 
@@ -76,8 +76,8 @@ Palettes and fonts below come from the Creative Director workbook seeds and the 
 
 The standard must not depend on a conversation, and it must not flatten every site into one look. It is split into two layers:
 
-- **Shared (portable):** the process, the evidence rules, the quality gates and the reference library. The skill folder `.claude/skills/website-design-system/` carries all of it: `references/research-process.md`, `references/fable-critique.md`, `references/accessibility-checks.md`, a portable copy of the reference library (`references/reference-library.md`, kept in step with `docs/design/references.md` by `scripts/check-references-sync.sh`), and the two templates. `.claude/CLAUDE.md` holds the always-on rules.
-- **Per project (never shared):** the identity (palette, typefaces, shape language, tone, signature interaction), recorded only in that project's own `DESIGN.md`.
+- **Shared (portable), single source:** the `website-design-system` skill. Its `references/` folder holds the reference library (Refero Styles as a major source, and the others), the research process, the Fable critique methodology, the accessibility checks and dated research records; its `templates/` hold the project `DESIGN.md`, the project reference-additions file and the audit checklist. There is one library and no copies, so nothing needs synchronising. `VERSION.md` records the validated version.
+- **Per project (never shared):** the identity (palette, typefaces, shape language, tone, signature interaction) in that project's own `DESIGN.md`, and in `docs/design/references.md` only the references specific to that project.
 
 How to reuse it:
 
@@ -241,5 +241,5 @@ All eight signature interactions and identities as listed in section 5. Salt & E
 ## 9. Open items
 
 - Approval is required before any implementation. Implementation would be a new branch from `claude/cinematic-poc`, small commits per fix, with the existing checks re-run. The concepts stay hidden and noindex; nothing is merged or deployed without approval.
-- The Grok report's links are unverified (see `grokResearch.md`); no Reddit research exists.
+- The Grok research is X-supplied and its links are unverified (see the skill's `references/research-records/`); no Reddit research exists.
 - "Tobi" remains unidentified.

@@ -4,32 +4,28 @@ This repository is the rhyshume.co.uk site (static HTML and CSS on Vercel) and a
 
 Production site and approved designs are not changed without explicit approval. Do not merge, deploy or alter DNS. Do not purchase assets, templates or subscriptions. Do not import third-party code or assets without checking the licence first.
 
-Design system and process live in `docs/design/` (excluded from the Vercel deployment by `.vercelignore`):
+Design system and process:
 
-- `docs/design/DESIGN.md`: process, rules, motion standards, the eight concepts and what must be preserved.
-- `docs/design/references.md`: the reference library, with exactly what was verified and what was only reported.
-- `docs/design/grokResearch.md`: the owner's Grok research record. Everything in it is "reported, not verified" unless `references.md` says otherwise.
+- **Shared, single source:** the `website-design-system` skill in `.claude/skills/`. Its `references/` folder holds the reference library (Refero Styles as a major source, Emil Kowalski, Rive, 21st.dev, MotionSites, Scrolltide, 60fps.design, Landdding, Land Book, SceneAI, Scroll Shaders, Footer Design, and the X-supplied Grok research; "Tobi" pending), the research process, the Fable critique method and the accessibility checks. Do not copy the library into the project.
+- **This repository only:** `docs/design/DESIGN.md` (identity rules, the eight concepts and what must be preserved) and `docs/design/references.md` (project-specific additions only). `docs/design/` is excluded from the Vercel deployment by `.vercelignore`.
 
-Read `DESIGN.md` and `references.md` before any design work. The `website-design-system` skill in `.claude/skills/` applies the same process.
+Read `docs/design/DESIGN.md` before any design work here, and load the `website-design-system` skill for the process and the library.
 
 ## Design research workflow (always)
 
-1. **Ask first.** Up to three questions that would change the design: who it is for, the one job of the page, how it should feel.
-2. **Audit existing work before changing it.** Capture desktop (1440px) and mobile (390px) screenshots and look at them. List the five biggest problems, worst first, each with a fix. Run the de-slop check for AI-default patterns, and record a reason before removing anything.
-3. **Study references.** Identify at least three relevant examples from `references.md`, record their URLs, say which principles are worth adapting and why they suit this concept.
-4. **Show three directions** (safe, bold, unexpected) that differ in layout and idea, not only colour. Recommend one. Wait for the owner's pick before building.
-5. **Build the chosen direction** as an original design. Choose the simplest technique (CSS first, then Motion, then Rive or another tool) and justify it.
-6. **Check before showing.** Screenshots at 390px and 1440px, a keyboard-only pass, reduced motion, performance, and the one-second test (is the main thing obvious?). Fix overlaps, clipping and drift.
-7. **Take feedback narrowly.** Change only what was named. If a note would make the design worse, say so once, then do it. Show before and after.
-8. **Hand off** a short spec and the three things to improve with more time. Record decisions and sources in `DESIGN.md`.
+For a new website or redesign, follow the skill's eight steps: (1) inspect the client's existing identity and website if there is one; (2) research relevant examples, including Refero Styles, and record them; (3) identify three genuinely different creative directions; (4) present visual concepts for approval and wait; (5) create the project-specific `DESIGN.md`; (6) build original components; (7) test responsive layouts, keyboard, motion and accessibility; (8) capture and inspect real screenshots before delivery.
+
+For an existing concept or site: ask first; audit from 1440px and 390px screenshots (five biggest problems, worst first, each with a fix); run the de-slop check and record a reason before removing anything; study at least three references from the shared library and record their URLs; show three directions (safe, bold, unexpected) that differ in layout and idea and wait for the owner's pick; build as original work (CSS first); check before showing (keyboard, reduced motion, performance, the one-second test); take feedback narrowly; hand off a short spec. Record decisions and sources in `DESIGN.md`.
+
+Refero is research, not a template: never copy a complete Refero system, its HTML examples or its substitute fonts; its records are generated interpretations with unknown reuse terms.
 
 ## Rules that never bend
 
 - Preserve each concept's approved identity and signature interaction. Do not make the concepts look alike. Do not replace a distinctive design because a reference looks fashionable.
 - **Salt & Ember** (fire interactions, typography treatment, menu behaviour, visual identity) is kept intact unless testing shows a genuine, evidenced defect.
 - No invented testimonials, reviews, staff, awards, prices, opening hours, credentials or results. Placeholders are labelled. Generated imagery is labelled as generated concept material.
-- References are inspiration, not templates. Do not copy. Never call a reference "inspected" unless it was. Record access limits and licence restrictions.
-- Never claim research that was not done. The Grok report is X-only: no Reddit research exists.
+- References are inspiration, not templates. Do not copy. Never call a reference "inspected" unless it was. Record access limits and licence restrictions. Every client website must remain visually distinctive.
+- Never claim research that was not done. The Grok research is X-supplied (record: the skill's `references/research-records/`): no Reddit research exists.
 - "Tobi" is an unresolved reference. Do not guess who is meant.
 
 ## Verify before proposing (always)

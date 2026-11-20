@@ -62,3 +62,10 @@ At least three relevant references per major page or component. For each: the UR
 ## 6. Record
 
 Write decisions, sources and evidence into the project's own `DESIGN.md`. Keep the reference library and the research record as separate dated files so claims stay traceable.
+
+## 7. Where things live
+
+- The shared reference library, research guides and dated research records are in this skill (`reference-library.md`, `refero-research.md`, `research-records/`). They are the single source; projects do not copy them.
+- A project records only its own additions in `docs/design/references.md` (template: `templates/project-references.md`) and its identity and decisions in its own `DESIGN.md`.
+- Refero Styles is a major structured source: use `refero-research.md` for the method, measured patterns and warnings.
+- Third-party research reports are stored as dated records in `research-records/`, labelled by who compiled them and by what was and was not verified.

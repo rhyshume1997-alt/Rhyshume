@@ -1,10 +1,24 @@
-<!-- PORTABLE COPY. Canonical file in a project: docs/design/references.md. When both exist, docs/design/references.md wins; re-copy after editing it. scripts/check-references-sync.sh fails if they differ. -->
-<!-- begin copy -->
 # Design reference library
 
 The permanent reference collection for website design work in this repository, for Claude Code and Fable alike. References are **inspiration, never templates**. Do not copy a layout, component, prompt, asset or code from any source, and do not assume anything here is licensed for commercial reuse. Check licence, dependency security and compatibility before importing anything. Never buy a template, subscription, component pack or plan without the owner's approval.
 
-Related files: `DESIGN.md` (the design system and process), `grokResearch.md` (the 20 November 2026 Grok report), `../concepts/` (the existing concept documentation, which this does not replace).
+**This is the shared, canonical reference library.** A project keeps only its own additions in `docs/design/references.md` (template: `../templates/project-references.md`) and its identity in its own `DESIGN.md`. Nothing is copied between them, so nothing needs synchronising. Detailed guides: `refero-research.md`, `research-process.md`, `fable-critique.md`, `accessibility-checks.md`. Research records: `research-records/`.
+
+## Major sources at a glance
+
+| Source | Mainly useful for | Status | Section |
+| --- | --- | --- | --- |
+| **Refero Styles** https://styles.refero.design/ | **Major research source** for typography and font pairings, colour roles and contrast, spacing and layout, component structure and hierarchy, interaction states and consistency, and brand identity and creative direction | **Verified: read** (54 full DESIGN.md records, four collection pages, the font-pairings and UI-quality-checklist guides) and **viewed** (one record). Full method, measured patterns and the record index are in `refero-research.md`. Records are **generated interpretations, not official brand guides**; reuse terms are **unknown** (no terms page found) and font licences must be checked. Study it as structured inspiration; never copy a whole system or accept its substitute fonts (Inter is the listed substitute in 36 of the 54 records). Index of examples: https://styles.refero.design/ai-agents/design-md-examples. |
+| Emil Kowalski, skills | interaction feedback, motion timing, accessibility of motion | Verified: read | 1 |
+| Rive | interactive illustration and workflow graphics | Verified: viewed and read | 1 |
+| Tobi | unresolved | Pending, not attributed | 1 |
+| 21st.dev | component and pattern study | Verified: viewed and read (terms) | 3 |
+| MotionSites, Scrolltide, SceneAI | visual composition and creative direction | Verified: read | 4 |
+| Landdding | category composition | Verified: read | 4 |
+| Land Book | landing-page gallery | Not inspected (blocked) | 4 |
+| 60fps.design, Scroll Shaders | microinteraction and effects | Verified: viewed and read | 5 |
+| Footer Design | footer layout and structure | Verified: viewed and read | 6 |
+| Grok's X design research | design process, de-slop audit, prompts | **X-supplied, not verified; no Reddit research** | 7 and `research-records/` |
 
 ## Verification labels
 
@@ -26,7 +40,7 @@ Inspection dates are 2026-11-20 unless stated. Attribution is kept as published 
 | **Rive** https://rive.app (pricing https://rive.app/pricing) | Interactive illustration, state-driven graphics, workflow demonstrations | **Verified: viewed** (home) and **read** (home, pricing, and the MIT licence of the `rive-react` runtime at https://raw.githubusercontent.com/rive-app/rive-react/main/LICENSE). Docs not read. **Cost note:** the free plan's exports "play a Rive splash screen"; removing it needs a paid plan. Owner approval is required before any paid use. An internal guide exists as the artifact "Rive for Web Design". |
 | **Tobi** | Unresolved | **Pending.** The exact designer or site has not been identified. No examples are attributed. Do not guess. |
 
-## 2. Typography, colour and design-system structure
+## 2. Typography, colour, spacing, components and design-system structure (major source: Refero Styles)
 
 | Reference | Use | Status and notes |
 | --- | --- | --- |
@@ -42,7 +56,7 @@ Inspection dates are 2026-11-20 unless stated. Attribution is kept as published 
 
 | Reference | Use | Status and notes |
 | --- | --- | --- |
-| **MotionSites** https://www.motionsites.ai/ | How motion-led sites are briefed | **Verified: read** (small, mostly script-rendered). A library of "ready-to-use prompts" for AI-generated landing pages, with paid tiers. Terms not read. Individual prompts (see `grokResearch.md`, item 3) were **not inspected**. |
+| **MotionSites** https://www.motionsites.ai/ | How motion-led sites are briefed | **Verified: read** (small, mostly script-rendered). A library of "ready-to-use prompts" for AI-generated landing pages, with paid tiers. Terms not read. Individual prompts (see `research-records/grok-x-design-research-2026-11-20.md`, item 3) were **not inspected**. |
 | **Scrolltide** https://www.scrolltide.co/ | Scroll-driven composition, template taxonomy | **Verified: viewed** and **read**. A catalogue of scroll-driven website templates and prompts (React, Next.js, Tailwind, Framer Motion, GSAP, Three.js, Lenis, shaders). Advertises a $299 lifetime plan. Terms not read. **Do not buy.** |
 | **SceneAI** https://sceneai.art/ | Hero and background composition | **Verified: read** (home and licence page, updated 28 April 2026). A paid library of prompts and assets. Its licence requires an active subscription or lifetime plan for commercial use. **Do not buy.** |
 | **Landdding** https://landdding.com/ | Category-specific landing-page composition | **Verified: read.** A curated gallery across about 40 categories (including SaaS, Technology, Magazine, Education, Corporate, Fashion & Beauty, Food & Drinks). Individual entries were not opened. |
@@ -61,32 +75,24 @@ Inspection dates are 2026-11-20 unless stated. Attribution is kept as published 
 | --- | --- | --- |
 | **Footer Design** https://www.footer.design/ | Footer layout, navigation structure, type | **Verified: viewed** and **read.** A gallery filterable by style: Typographic, Small Type, Illustrative, Grid, Flat, Animated, Cards, Bright, Dark, Large Type, Bold. The Lantern entry https://www.footer.design/sites/lantern shows small uppercase column headings over a very large full-width wordmark. Terms not read. |
 
-## 7. Methodology and prompts (Grok-supplied)
+## 7. X-supplied design research (Grok)
 
-All **Grok-supplied**, none opened by Claude. Full record, attributions and caveats are in `grokResearch.md`.
+All **X-supplied via Grok**, none opened by Claude. Full record, attributions and caveats are in `research-records/grok-x-design-research-2026-11-20.md`.
 
 | Item | Creator as reported | Link | Use |
 | --- | --- | --- | --- |
-| Senior designer prompt for Fable 5.2 | @choopyplug1 | https://x.com/choopyplug1/status/2121685007215292656 | Process: questions, audit, three directions, build, check, hand-off. Prompt text is in the Grok report and is reproduced in `grokResearch.md`. |
+| Senior designer prompt for Fable 5.2 | @choopyplug1 | https://x.com/choopyplug1/status/2121685007215292656 | Process: questions, audit, three directions, build, check, hand-off. Prompt text is in the Grok report and is reproduced in `research-records/grok-x-design-research-2026-11-20.md`. |
 | De-slop prompt | @reshax0 | https://x.com/reshax0/status/2121959214176505861 | Screenshot-based audit for generic AI styling |
 | MotionSites prompts (virtual store, protein bars, fox couture) | @viktoroddy | https://motionsites.ai/?prompt=virtual-store, https://motionsites.ai/?prompt=protein-bars, https://motionsites.ai/?prompt=fox-couture | Creative direction only. Contents not supplied. |
 | Iridescent Voice Orb | @RegesCoreAi | https://animatedwebs.com/templates/iridescent-voice-orb | Counter-example (orb pattern). Licence unknown. |
 | Landing page as a game | @kodavid | https://x.com/kodavid/status/2122054450994892883 | Interaction idea only. Depends on a third-party MCP that is not adopted. |
 | UI designed in Paper | @edo_lunardi | https://x.com/edo_lunardi/status/2121576083707310142 | Visual reference. Not inspected. |
 
-**Research gap:** the Grok report states Reddit could not be read, so **no Reddit research has been done**.
-
-## 8. Internal guides already in the owner's workspace
-
-These are the owner's own Claude artifacts and are recorded so they are not duplicated:
-
-- "Emil's Skills, Explained": plain-English guide to the installed skills, including which need a slash command.
-- "Rive for Web Design": live Rive examples and the integration steps.
-- "Website Creative Director" (and its workbook): discovery, creative directions, design rules and review checklist. Its default rules (flat colour, no decorative gradients or glass blur, tinted rather than pure black and white, purposeful motion, one signature interaction per page, genuine imagery for live claims) are adopted in `DESIGN.md`.
+**Research gap:** the Grok report states Reddit could not be read, so **no Reddit research has been done**. This record is X-supplied research only.
 
 ## How to use a reference
 
-1. Identify at least three relevant references for the page or component and record their URLs in `DESIGN.md`.
+1. Identify at least three relevant references for the page or component, including Refero records where relevant, and record their URLs in the project's `DESIGN.md`.
 2. State which principle is being adapted and why it suits the concept.
 3. Produce an original design. Record what was deliberately not copied.
 4. Check licences before importing anything. Prefer building from principles.

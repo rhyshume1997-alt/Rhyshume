@@ -1,6 +1,8 @@
-# Grok design research, 20 November 2026
+# Grok design research (X-supplied), 20 November 2026
 
-A record of the owner's Grok report "Design finds, Fri 20 Nov 2026" (attached to the Claude Code session as a 91-line Markdown file), with what is verified and what is not. It feeds `references.md` and `DESIGN.md`.
+A shared research record of the owner's Grok report "Design finds, Fri 20 Nov 2026" (attached to the Claude Code session as a 91-line Markdown file), with what is verified and what is not. It feeds the shared reference library (`../reference-library.md`) and each project's own `DESIGN.md`.
+
+**Type of research: X-supplied, compiled by Grok. It is not Reddit research** (the report says Reddit could not be read) **and it is not verified by Claude.**
 
 ## Provenance and verification status
 
@@ -89,7 +91,7 @@ The 3 things you would improve with more time.
 
 **[Claude] How this is applied**
 
-- It becomes the project's design process (see `DESIGN.md`, "Process"): questions, audit, three directions, build, check, feedback, hand-off.
+- It becomes the project's design process (see the skill's `SKILL.md`, "Process"): questions, audit, three directions, build, check, feedback, hand-off.
 - Several numeric rules (4px spacing, five type sizes, three colours, one accent) are **defaults for product UI**. The eight concept sites are deliberately art-directed, so a concept may deviate when it records why. Example: Sunny Hours Club uses five colours on purpose. Deviation must be written down, not accidental.
 - "150 to 250ms, ease-out" agrees with Emil Kowalski's published ranges (verified in `references.md`), which also allow longer for modals and drawers.
 - "Change only what I named" and "show before and after side by side" are adopted as the feedback rule for existing, approved designs.
