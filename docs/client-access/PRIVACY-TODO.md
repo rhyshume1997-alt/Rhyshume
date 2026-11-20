@@ -1,0 +1,12 @@
+# Privacy decisions for Rhys (client access)
+
+No public page was edited. These need your decision before client logins go live. I am not a lawyer; wording below is a suggestion to check.
+
+1. **What is stored for a client login.** Login email address; the account record (when made, status, when the temporary password ends, when they last changed their password); the answers and pictures they choose to add (same as the private link today); Supabase Auth also keeps a hashed password, sign in times and, for security, IP addresses in its own logs; an audit log of what you did to the login (who, what, when, no password). The client page and the emails already say this in plain words. Check the wording against what Supabase Auth really keeps.
+2. **Retention of client accounts.** How long does a login live after a project ends? Suggested: switch off at project end, delete the login after a set period (for example 12 months), keep the quote acceptance records for as long as you need them for business and tax. The audit log has no purge path on purpose (append only); decide whether it needs one.
+3. **Lawful basis wording.** A client login is needed to provide the service they asked for (contract or steps before a contract), not marketing. Suggest saying so in one line on the privacy page, and that you will not use the login address for marketing without separate consent.
+4. **Does `privacy.html` need an addition?** Probably one short paragraph: client logins exist, what is stored, who processes it (Supabase for the login and database, Resend for the emails, Cloudflare Turnstile on the password change step), where to ask for deletion. I did not edit it.
+5. **Processors.** Supabase, Resend, Cloudflare (Turnstile). Check each is already listed on the privacy page, and their data location terms.
+6. **Cloudflare Turnstile on the client page** sets no cookie in this build as far as I know (not verified in a real browser). Check, because the page currently says it sets no cookies.
+7. **Emailed temporary passwords** (the option you can tick): you may want to decide never to offer it. The panel warns and logs the choice.
+8. **Footer link.** The public footer's "Client login" links to your own workbook sign in at `/w-82503121e7fdf54e/`, which clients cannot use. Once logins are live, decide whether clients should have a public link to `/client/`. I did not link it from the public site (a hidden address is obscurity, not security, but it keeps the page out of search and casual discovery).

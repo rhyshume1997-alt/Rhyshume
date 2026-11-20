@@ -70,5 +70,9 @@ PASS rate counter: third hit in the window is refused
 PASS browser roles cannot call the rate counter
 PASS service role can create and update accounts (server path)
 PASS after the whole run the existing objects are still byte-identical to the live copy
+PASS WITHOUT the optional hardening a client token carrying the owner email would satisfy the owner policy (why the server refuses that email and why the file exists)
+PASS WITH the optional hardening that token reads nothing
+PASS WITH the optional hardening the real owner still reads everything
+PASS WITH the optional hardening the owner can still create a link
 
-72 passed, 0 failed
+76 passed, 0 failed

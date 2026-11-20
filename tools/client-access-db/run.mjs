@@ -1,5 +1,5 @@
 // ISOLATED DATABASE TEST for the client access migration, on a local PGlite copy of the live schema. Nothing here touches Supabase.
-// Usage: PGLITE=<path to @electric-sql/pglite/dist/index.js> node tools/client-access-db/test.mjs
+// Usage: PGLITE=<path to @electric-sql/pglite/dist/index.js> node tools/client-access-db/run.mjs
 // Fictional data only (Maple Street Bakery). Prints PASS/FAIL per check and exits 1 on any failure.
 import fs from 'fs'; import path from 'path'; import { fileURLToPath, pathToFileURL } from 'url';
 const { PGlite } = await import(pathToFileURL(process.env.PGLITE || '').href);
@@ -155,4 +155,12 @@ r = await as('service_role', null, `select public.client_rate_hit('t',2,60) a, p
 ok('browser roles cannot call the rate counter', !(await as('authenticated', claims('A'), `select public.client_rate_hit('t',2,60)`)).ok);
 ok('service role can create and update accounts (server path)', (await as('service_role', null, `update public.client_accounts set must_change_password=true, temp_expires_at=now()+interval '7 days' where auth_user_id='${U.A}'`)).n === 1);
 const s4 = await snap(); ok('after the whole run the existing objects are still byte-identical to the live copy', s0 === s4);
+// ---- optional hardening (separate file, not the migration): a client-role token that somehow carried the owner's email
+const FORGED_OWNER = JSON.stringify({ sub: U.A, role: 'authenticated', email: OWNER, iat: now(), app_metadata: { role: 'client', must_change_password: false } });
+r = await as('authenticated', FORGED_OWNER, `select count(*)::int c from public.client_workbooks`);
+ok('WITHOUT the optional hardening a client token carrying the owner email would satisfy the owner policy (why the server refuses that email and why the file exists)', r.ok && r.rows[0].c === 2);
+await db.exec(fs.readFileSync(path.join(ROOT, 'docs/client-access/optional-hardening.sql'), 'utf8').split('\n').filter(l => !l.startsWith('--')).join('\n'));
+r = await as('authenticated', FORGED_OWNER, `select count(*)::int c from public.client_workbooks`); ok('WITH the optional hardening that token reads nothing', r.ok && r.rows[0].c === 0);
+r = await as('authenticated', GO, `select count(*)::int c from public.client_workbooks`); ok('WITH the optional hardening the real owner still reads everything', r.ok && r.rows[0].c === 2);
+r = await as('authenticated', GO, `select public.portal_create('${WA}') t`); ok('WITH the optional hardening the owner can still create a link', r.ok);
 console.log(`\n${passes} passed, ${fails} failed`); process.exit(fails ? 1 : 0);

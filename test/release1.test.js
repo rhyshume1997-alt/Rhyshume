@@ -45,7 +45,7 @@ test('review copy promises no timeframe, report, PDF, AI testing, competitor ana
 });
 
 test('the Business Review backend is not part of this release', () => {
-  for (const p of ['business-review', 'supabase', 'api/_lib/br', 'api/business-review.js', 'api/business-review-admin.js', 'tools/br-fullstack', 'tools/br-ui-browser', 'tools/workbook-reviews', 'br-form.js', 'br-render.js', 'br-report.js', 'br-automation.js', 'br.css']) {
+  for (const p of ['business-review', 'supabase/migrations/20261120120000_business_review.sql', 'supabase/rollback/20261120120000_business_review_rollback.sql', 'api/_lib/br', 'api/business-review.js', 'api/business-review-admin.js', 'tools/br-fullstack', 'tools/br-ui-browser', 'tools/workbook-reviews', 'br-form.js', 'br-render.js', 'br-report.js', 'br-automation.js', 'br.css']) {
     assert.ok(!fs.existsSync(path.join(ROOT, p)), p + ' must not exist in Release 1');
   }
   const v = read('vercel.json');
