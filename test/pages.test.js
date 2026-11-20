@@ -64,11 +64,11 @@ test('the hidden pages are not linked from any public page, and are still noinde
   });
 });
 
-test('every public page with the main menu links to the new page', function () {
+test('every public page with the main menu links to the new pages (business review: the small business page moved to the footer)', function () {
   publicPages.filter(function (f) { return read(f).includes('<nav class="nav"'); }).forEach(function (f) {
     const nav = read(f).match(/<nav class="nav"[\s\S]*?<\/nav>/)[0];
-    assert.ok(nav.includes('<a href="/local-business"'), f + ' has no menu link');
-    assert.ok(nav.includes('Websites for small businesses'), f + ' menu label is wrong');
+    assert.ok(nav.includes('<a href="/seo-and-ai-visibility"') && nav.includes('<a href="/websites"'), f + ' menu links are missing');
+    assert.ok(read(f).split('<footer')[1].includes('<li><a href="/local-business">Websites for small businesses</a></li>'), f + ' footer link to the small business page');
   });
 });
 
@@ -94,7 +94,7 @@ test('the new page has all the sections, the seven from prices and no tier names
   assert.ok(!/\b(good|better|best)\b/i.test(visibleText(html).replace(/Good(?= morning)/g, '')), 'tier names found');
   assert.ok(html.includes('No one can guarantee rankings in Google or AI tools. What I can do is make sure your information is complete, accurate and easy to find, which is the part you control.'));
   assert.ok(!/AI tools, I make sure/.test(html), 'comma splice is back');
-  assert.ok(!/AI visibility/i.test(html));
+  assert.ok(!/AI visibility/i.test(html.replace(/<a href="\/seo-and-ai-visibility">[^<]*<\/a>/g, '').replace(/<(nav|footer)[\s\S]*?<\/\1>/g, '')), 'AI visibility selling copy (links to the SEO page are allowed)');
 });
 
 test('the new page uses the existing form and the Turnstile box', function () {
@@ -142,7 +142,7 @@ test('go-live fixes: no Marpet screenshot or coming soon note, button goes to th
   assert.ok(html.includes('You pay a 50% deposit to start. If you’re applying for a grant, nothing is paid until your grant is approved. The timing is set out in your quote.'));
   publicPages.filter(function (f) { return read(f).includes('about-line'); }).forEach(function (f) {
     const h = read(f);
-    assert.ok(h.includes('win you clients and save you time, from Glasgow.'), f + ' footer line');
+    assert.ok(h.includes('Websites, SEO and AI visibility, automation and business systems, from Glasgow.'), f + ' footer line');
     assert.ok(!h.includes('for engineering and manufacturing firms, from Glasgow'), f + ' old footer line');
     assert.ok(h.includes('<li><a href="/local-business">Websites for small businesses</a></li>'), f + ' footer link');
   });

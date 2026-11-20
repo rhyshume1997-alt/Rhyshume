@@ -1,0 +1,34 @@
+index.html :: From £1,500 one-off
+index.html :: Care plan from £35 a month, so you have one person to ring when something needs changing.
+index.html :: From £150
+index.html :: Online listings set up so search and AI tools can read them are from £120.
+index.html :: From £200
+index.html :: I’m not VAT registered, so no VAT is added.
+index.html :: From £1,500 one-off Quote-ready website A fast, mobile-friendly site on your own domain, designed around how your customers get in touch, with a quote form that takes drawings.
+index.html :: From £3,800 one-off Website with quote workflow Everything above, plus quotes drafted from your template and follow-ups scheduled for you.
+index.html :: From £35 a month Care plan Hosting, fixes and small edits, so you have one person to ring if something breaks.
+local-business.html :: "name": "Do you charge VAT?",
+local-business.html :: "text": "I'm not VAT registered, so no VAT is charged."
+local-business.html :: VAT: I’m not VAT registered, so no VAT is charged.
+local-business.html :: 2.1 Websites from £1,500 A mobile-friendly website built around how your customers get in touch.
+local-business.html :: 2.2 Website with quote workflow from £3,800 Everything in the website above, plus quotes drafted from your template and follow-ups scheduled for you.
+local-business.html :: 2.3 Care plans from £35 a month Ongoing care for your website, so you have one person to ring when something needs changing.
+local-business.html :: 2.4 Filming from £200 Video filmed for your business, to use on your website and social media.
+local-business.html :: 2.5 Google search set up from £150 Your Google Business Profile is the listing with your phone number, opening hours and reviews that shows when people search for you.
+local-business.html :: 2.6 Online listings and structured data from £120 I make sure your business information is consistent and clear for search engines and AI tools like ChatGPT.
+local-business.html :: 2.7 Automation and AI set up from £200 I set up automation and AI tools around the apps you already use, such as an instant reply to a new enquiry, a reminder before a booking or a request for a Google review.
+local-business.html :: 2.8 Domain and email set up from £60 I set up your domain and your business email, with the domain registered in your own name.
+local-business.html :: I’m not VAT registered, so no VAT is added.
+local-business.html :: 3.3 50% deposit You pay a 50% deposit to start.
+local-business.html :: 6.6 Do you charge VAT?
+local-business.html :: I’m not VAT registered, so no VAT is charged.
+automation.html :: "text": "Automation and AI set up is from £200.
+automation.html :: I'm not VAT registered, so no VAT is added."
+automation.html :: Automation and AI set up is from £200.
+automation.html :: I’m not VAT registered, so no VAT is added.
+engineering.html :: Item You get How it helps Quote-ready site from £1,500 one-off A fast site on your own domain with a quote form that takes drawings.
+engineering.html :: Site plus quote workflow from £3,800 one-off Everything above, plus quotes drafted from your template and follow-ups scheduled for you.
+engineering.html :: Care plan from £35 a month Hosting, fixes and small edits.
+council-digital-grants/index.html :: Covers Up to 100% of costs, max £2,500 (VAT not covered)
+council-digital-grants/index.html :: Covers 50% up to £20,000
+llms.txt :: Includes the website from £1,500, the website with quote workflow from £3,800, and care plans from £35 a month

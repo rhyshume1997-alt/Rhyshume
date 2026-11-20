@@ -78,14 +78,15 @@ test('home page: four featured concepts, editorial and interactive, with the two
   });
   assert.equal((home.match(/<article class="ft /g) || []).length, 4);
   const order = FEATURED.map(s => home.indexOf('id="ft-' + s + '"')); assert.deepEqual(order.slice().sort((a, b) => a - b), order, 'order: Sunny Hours, Little Kettle, Bright Circuit, The Corner Shelf');
-  assert.ok(home.indexOf('class="featured"') < home.indexOf('class="kind"') && home.indexOf('class="kind"') < home.indexOf('class="proof"'), 'fictional concepts come before, and are separated from, real work');
+  assert.ok(home.indexOf('class="proof"') < home.indexOf('Made-up concepts and demonstrations, not clients') && home.indexOf('Made-up concepts and demonstrations, not clients') < home.indexOf('class="featured"'), 'real work comes first, and a labelled divider separates it from the made-up concepts (business review: real versus fictional)');
   assert.ok(/Real work and work in progress/.test(home) && /Four made-up websites/.test(home) && home.slice(home.indexOf('class="featured"'), home.indexOf('id="ft-sunny-hours"')).includes('Concept by Rhys Hume, not live sites.'), 'the featured section carries the notice once');
   assert.equal((home.match(/<ol class="cc-strip">[\s\S]*?<\/ol>/)[0].match(/<li/g) || []).length, 8, 'all eight in the strip');
 });
 
 test('home page: positioning, prices, scope clarity and contact routes', function () {
-  assert.ok(/Websites that help you win work\. Systems that help you manage it\./.test(home));
-  ['Websites and SEO', 'Custom software and business systems', 'AI and automation', 'Computer system validation'].forEach(function (c) { assert.ok(home.includes(c), c); });
+  assert.ok(/Make your business easier to find\. And easier to run\./.test(home));
+  ['Customers can&rsquo;t find you', 'Your website doesn&rsquo;t bring in enquiries', 'Admin eats the week', 'Work is spread across disconnected systems'].forEach(function (c) { assert.ok(home.includes(c), c); });
+  assert.ok(home.includes('href="/csv"'), 'validation still linked');
   assert.ok(home.includes('From £1,500 one-off') && home.includes('From £3,800 one-off') && home.includes('From £35 a month'), 'live starting prices kept');
   assert.ok(!/£2,200|£60 a month/.test(home), 'prices are not changed without approval');
   assert.ok(/Not in these starting prices/.test(home) && /film openings, custom interactions/.test(home), 'advanced work is not implied to be included');
@@ -95,7 +96,7 @@ test('home page: positioning, prices, scope clarity and contact routes', functio
   assert.ok(/After: new build, launching soon/.test(home), 'Marpet stays labelled launching soon');
   assert.ok(!/—/.test(home + read('featured.js') + read('featured.css')), 'em dash');
   assert.ok(!BANNED.test(text(home)), 'banned word');
-  const t = text(home); assert.ok(!/AI automation|chatgpt|ai visibility|ai listing/i.test(t));
+  const t = text(home); assert.ok(!/AI automation|chatgpt|ai listing/i.test(t));
 });
 
 test('featured scripts and styles: flat, safe, reduced motion respected', function () {
