@@ -1071,3 +1071,15 @@ h1 { line-height: 1.05; letter-spacing: -0.025em; }
   .nav { flex-wrap: nowrap; gap: 0.25rem 1.1rem; font-size: 0.9rem; }
   .masthead .btn { white-space: nowrap; flex: none; }
 }
+
+/* Section and step numbers are not shown, so the pages read as plain pages rather than specifications.
+   Markup, ids and anchors are unchanged. Inputs: none. Do not use to hide real content. */
+.no, .ref { display: none !important; }
+.procedure li { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 64rem) {
+  .clause { grid-template-columns: minmax(0, 42rem) minmax(13rem, 1fr); }
+  .clause > h2 { grid-column: 1; display: block; }
+  .clause-body { grid-column: 1; }
+  .clause > .margin { grid-column: 2; }
+  .clause-wide { grid-column: 1 / -1; }
+}
