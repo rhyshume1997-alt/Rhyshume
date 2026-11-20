@@ -153,7 +153,7 @@ async function handleStart(deps, req, res) {
   const body = await readJsonBody(req);
   const idem = header(req, 'idempotency-key');
   if (!V.validateIdempotencyKey(idem)) throw err('validation_failed', { field: 'Idempotency-Key', fields: { 'Idempotency-Key': 'A unique key is required.' } });
-  const val = V.validateStart(body);
+  const val = V.validateStart(body, deps.fetcher.parseUrl);
   if (!val.ok) {
     const keys = Object.keys(val.fields);
     if (val.urlReason && keys.length === 1 && keys[0] === 'website') throw err('url_not_allowed', { field: 'website', reason: val.urlReason });
@@ -218,7 +218,7 @@ async function handleStart(deps, req, res) {
     }
   }
   if (!row) throw err('internal');
-  return sendOk(res, { idempotent_replay: false, review: reviewHead(row), interpretation: interp, access_token: token, report_url: '/business-review/report#t=' + token }, 201);
+  return sendOk(res, { idempotent_replay: false, review: reviewHead(row), interpretation: interp, access_token: token, report_url: '/business-review/report#t=' + token + '&id=' + row.id }, 201);
 }
 
 function reviewHead(r) {
@@ -233,7 +233,7 @@ async function resolvedSite(deps, w) {
 
 async function handleConfirm(deps, req, res, review) {
   const body = await readJsonBody(req);
-  const val = V.validateConfirm(body);
+  const val = V.validateConfirm(body, deps.fetcher.parseUrl);
   if (!val.ok) throw err('validation_failed', { field: Object.keys(val.fields)[0], fields: val.fields });
   const v = val.value;
   const replayHash = sha256Hex(stable({ confirmed: true, edits: body.edits || null, n: body.competitor_nomination || null, t: body.automation_task || null }));
@@ -313,7 +313,7 @@ async function handleReport(deps, req, res, review) {
 // ---------------------------------------------------------------- nominate competitor
 async function handleCompetitor(deps, req, res, review) {
   const body = await readJsonBody(req);
-  const val = V.validateNominationBody(body);
+  const val = V.validateNominationBody(body, deps.fetcher.parseUrl);
   if (!val.ok) throw err('validation_failed', { field: Object.keys(val.fields)[0], fields: val.fields });
   if (review.status !== 'ready') throw err('wrong_state');
   const n = val.value;
@@ -384,7 +384,7 @@ async function handleRequestReport(deps, req, res, review, token) {
     await store.update('br_reviews', { id: review.id }, { inputs: Object.assign({}, cur.inputs, { sealed_links: sealed }) });
     return sendOk(res, { delivery: { id: delivery.id, status: 'held_for_approval', to_masked: V.maskEmail(d.email) }, idempotent_replay: false }, 202);
   }
-  const sent = await mail.sendReport(deps, { to: d.email, name: d.name, ref: review.ref, token: token, report: version.content, idempotencyKey: 'br-report-' + delivery.id });
+  const sent = await mail.sendReport(deps, { to: d.email, name: d.name, ref: review.ref, reviewId: review.id, token: token, report: version.content, idempotencyKey: 'br-report-' + delivery.id });
   if (!sent.ok) {
     await store.update('br_deliveries', { id: delivery.id }, { status: 'failed', error_code: sent.code, attempts: 1 });
     throw err('delivery_failed', { delivery_id: delivery.id });

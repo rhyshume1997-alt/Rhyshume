@@ -38,10 +38,10 @@ function str(body, key, min, max, label, fields, o) {
 function ownObj(v) { return v && typeof v === 'object' && !Array.isArray(v) ? v : null; }
 function get(o, k) { return o && Object.prototype.hasOwnProperty.call(o, k) ? o[k] : undefined; }
 
-function validateWebsite(raw, fields, key) {
+function validateWebsite(raw, fields, key, parse) {
   if (raw === undefined || raw === null || raw === '') return null;
   if (typeof raw !== 'string') { fields[key] = 'Enter the website address as text.'; return null; }
-  const p = parseUrl(raw);
+  const p = (parse || parseUrl)(raw);
   if (!p.ok) { fields[key] = 'That website address cannot be checked.'; return { rejected: p.reason }; }
   return { input: raw.trim(), url: p.url, host: p.hostname, origin: p.origin };
 }
@@ -68,30 +68,30 @@ function validateGoals(raw, fields) {
   return out;
 }
 
-function validateStart(body) {
+function validateStart(body, parse) {
   const fields = {};
   const business_name = str(body, 'business_name', 1, 160, 'your business name', fields);
   const category = str(body, 'category', 1, 120, 'what your business does', fields);
   const location = validateLocation(get(body, 'location'), fields);
   const goals = validateGoals(get(body, 'goals'), fields);
-  const w = validateWebsite(get(body, 'website'), fields, 'website');
+  const w = validateWebsite(get(body, 'website'), fields, 'website', parse);
   if (Object.keys(fields).length) return { ok: false, fields: fields, urlReason: w && w.rejected ? w.rejected : null };
   return { ok: true, value: { business_name: business_name, category: category, location: location, goals: goals, website: w } };
 }
 
-function validateNomination(raw, fields, key) {
+function validateNomination(raw, fields, key, parse) {
   const o = ownObj(raw);
   if (!o) { fields[key] = 'Enter the competitor name and website.'; return null; }
   const name = str({ n: get(o, 'name') }, 'n', 1, 160, 'the competitor name', {});
   if (!name) { fields[key] = 'Enter the competitor name (up to 160 characters).'; return null; }
   const rawSite = get(o, 'website');
   if (rawSite === undefined || rawSite === null || rawSite === '') { fields[key] = 'Enter the competitor website.'; return null; }
-  const w = validateWebsite(rawSite, fields, key);
+  const w = validateWebsite(rawSite, fields, key, parse);
   if (!w || w.rejected) return null;
   return { name: name, website: w };
 }
 
-function validateConfirm(body) {
+function validateConfirm(body, parse) {
   const fields = {};
   if (get(body, 'confirmed') !== true) return { ok: false, fields: { confirmed: 'Please confirm the details to continue.' } };
   const v = { edits: null, nomination: null, automation_task: null };
@@ -107,14 +107,14 @@ function validateConfirm(body) {
       if (get(e, 'website') !== undefined) {
         const raw = get(e, 'website');
         if (raw === null || raw === '') v.edits.website = null;
-        else { const f2 = {}; const w = validateWebsite(raw, f2, 'website'); if (!w || w.rejected) fields['edits.website'] = 'That website address cannot be checked.'; else v.edits.website = w; }
+        else { const f2 = {}; const w = validateWebsite(raw, f2, 'website', parse); if (!w || w.rejected) fields['edits.website'] = 'That website address cannot be checked.'; else v.edits.website = w; }
       }
     }
   }
   const nom = get(body, 'competitor_nomination');
   if (nom !== undefined && nom !== null) {
     const f2 = {};
-    const n = validateNomination(nom, f2, 'competitor_nomination');
+    const n = validateNomination(nom, f2, 'competitor_nomination', parse);
     if (!n) fields.competitor_nomination = f2.competitor_nomination || 'Check the competitor details.'; else v.nomination = n;
   }
   const task = get(body, 'automation_task');
@@ -126,9 +126,9 @@ function validateConfirm(body) {
   return { ok: true, value: v };
 }
 
-function validateNominationBody(body) {
+function validateNominationBody(body, parse) {
   const fields = {};
-  const n = validateNomination({ name: get(body, 'name'), website: get(body, 'website') }, fields, 'website');
+  const n = validateNomination({ name: get(body, 'name'), website: get(body, 'website') }, fields, 'website', parse);
   if (!n || Object.keys(fields).length) return { ok: false, fields: Object.keys(fields).length ? fields : { website: 'Enter the competitor name and website.' } };
   return { ok: true, value: n };
 }

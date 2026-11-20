@@ -9,7 +9,7 @@ Rules  : http and https only; no credentials; ports 80 and 443 only; no IP liter
          DNS resolved first, EVERY address must be public, the validated address is then PINNED for the socket
          (a second DNS answer can never change where the connection goes); every redirect hop is validated again
          (scheme, port, name, resolution, pinning); size, time, redirect and decompression limits.
-Must not change: the strict default policy. The factory options (lookup, allowAddress, allowedPorts) exist only so tests can
+Must not change: the strict default policy. The factory options (lookup, allowAddress, allowedPorts, tls) exist only so tests can
          point the fetcher at a local server; production code never passes them. Never echo resolved addresses to a visitor.
 */
 const dns = require('node:dns');
@@ -170,6 +170,7 @@ function createSafeFetcher(factoryOpts) {
   const allowAddress = f.allowAddress || function (ip) { return classifyIp(ip).allowed; };
   const allowedPorts = f.allowedPorts || DEFAULT_ALLOWED_PORTS;
   const dnsTimeoutMs = f.dnsTimeoutMs || 5000;
+  const tlsOptions = f.tls || {};
 
   async function resolveHost(host) {
     let list;
@@ -199,7 +200,7 @@ function createSafeFetcher(factoryOpts) {
         'Accept-Encoding': 'gzip',
         'Connection': 'close'
       }, o.headers || {});
-      const reqOpts = {
+      const reqOpts = Object.assign({}, p.protocol === 'https:' ? tlsOptions : {}, {
         host: p.hostname, port: p.port, method: o.method || 'GET', path: p.path, headers: headers, agent: false,
         servername: p.protocol === 'https:' ? p.hostname : undefined,
         lookup: function (hostname, options, cb) {
@@ -207,7 +208,7 @@ function createSafeFetcher(factoryOpts) {
           if (options && options.all) cb(null, [{ address: pinned.address, family: pinned.family }]);
           else cb(null, pinned.address, pinned.family);
         }
-      };
+      });
       req = mod.request(reqOpts, function (res) {
         const status = res.statusCode;
         const hdr = {};

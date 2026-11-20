@@ -38,7 +38,7 @@ function summaryLines(report) {
 async function sendReport(deps, o) {
   const cfg = deps.cfg;
   if (!canSendReports(cfg)) return { ok: false, code: 'not_configured' };
-  const link = cfg.siteOrigin + '/business-review/report#t=' + o.token;
+  const link = cfg.siteOrigin + '/business-review/report#t=' + o.token + '&id=' + o.reviewId;
   const greet = o.name ? 'Hello ' + oneLine(o.name, 60) + ',' : 'Hello,';
   const lines = summaryLines(o.report);
   const text = [greet, '', 'You asked for a copy of your free business review (' + o.ref + '). It was an automated review of public information, so please read the notes and limits in the report.', '',

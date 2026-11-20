@@ -178,7 +178,7 @@ async function crawlSite(opts) {
   if (L.checkHttp && finalP.ok && finalP.protocol === 'https:' && (await budgetOk()) && robots.isAllowed(finalRobots, '/')) {
     await pace(finalP.hostname, robots.crawlDelayMs(finalRobots));
     snap.requests++;
-    const r = await fetcher.request('http://' + finalP.hostname + '/', { method: 'HEAD', followRedirects: false, timeoutMs: 6000, deadline: deadline, userAgent: BOT_UA });
+    const r = await fetcher.request((opts.httpCheckOrigin || ('http://' + finalP.hostname)) + '/', { method: 'HEAD', followRedirects: false, timeoutMs: 6000, deadline: deadline, userAgent: BOT_UA });
     lastAt[finalP.hostname] = Date.now();
     if (!r.ok) snap.http_redirect = { state: 'unreachable', code: r.code, observed_at: stamp() };
     else {

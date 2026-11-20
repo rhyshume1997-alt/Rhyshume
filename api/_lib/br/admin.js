@@ -151,7 +151,7 @@ async function competitorsAction(deps, req, res, id, actor) {
   const reason = typeof body.reason === 'string' ? V.clean(body.reason, 200) : null;
   const addRow = async function (name, website) {
     const f = {};
-    const nom = V.validateNominationBody({ name: name, website: website });
+    const nom = V.validateNominationBody({ name: name, website: website }, deps.fetcher.parseUrl);
     if (!nom.ok) throw err('validation_failed', { field: Object.keys(nom.fields)[0], fields: nom.fields });
     const chk = await deps.fetcher.resolveHost(nom.value.website.host);
     if (!chk.ok) throw err(chk.code === 'url_not_allowed' ? 'url_not_allowed' : 'unresolvable', chk.code === 'url_not_allowed' ? { reason: 'private_address' } : {});
@@ -254,7 +254,7 @@ async function sendHeld(deps, res, id, deliveryId, actor) {
   const token = sealed ? unseal(sealed, deps.cfg.salt) : null;
   if (!token) throw err('wrong_state');
   const prospect = (await deps.store.select('br_prospects', { review_id: id }, { limit: 1 }))[0];
-  const sent = await mail.sendReport(deps, { to: d.to_email, name: prospect && prospect.contact_name || '', ref: r.ref, token: token, report: ver.content, idempotencyKey: 'br-report-' + d.id });
+  const sent = await mail.sendReport(deps, { to: d.to_email, name: prospect && prospect.contact_name || '', ref: r.ref, reviewId: r.id, token: token, report: ver.content, idempotencyKey: 'br-report-' + d.id });
   if (!sent.ok) { await deps.store.update('br_deliveries', { id: d.id }, { status: 'failed', error_code: sent.code, attempts: d.attempts + 1 }); throw err('delivery_failed'); }
   const upd = (await deps.store.update('br_deliveries', { id: d.id }, { status: 'sent', resend_id: sent.id || null, sent_at: nowOf(deps).toISOString(), attempts: d.attempts + 1 }))[0];
   const links = Object.assign({}, r.inputs.sealed_links); delete links[deliveryId];
