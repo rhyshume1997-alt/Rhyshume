@@ -375,3 +375,50 @@ html:not(.js) .ba input { display: none; }
 .scope-list p:not(.price) { font-size: 0.98rem; color: var(--ink-2); }
 .scope .fine { margin-top: 1.8rem; max-width: 46rem; }
 .result .also { margin-top: 0.9rem; font-size: 0.97rem; color: var(--ink-2); }
+
+/* business review additions: home page sections added for the new structure.
+   Same rules as the rest of this file: flat, paper and navy, transform and opacity only. */
+.compare .btn { margin-top: 0.4rem; }
+.work-intro { padding-block: clamp(2rem, 5vw, 3.5rem) 0; border-top: 1px solid var(--rule); }
+.work-intro .lede { margin-top: 0.9rem; max-width: 34rem; color: var(--ink-2); }
+.demos { padding-block: clamp(2rem, 5vw, 3.5rem); }
+.demos .lede, .systems .lede { margin-top: 0.9rem; max-width: 34rem; color: var(--ink-2); }
+.systems { border-top: 1px solid var(--rule); }
+.last-cta { display: flex; flex-wrap: wrap; gap: 0.8rem 1rem; margin-top: 1.7rem; }
+.last .last-cta .btn { margin-top: 0; }
+
+/* four steps: the stairs get one more tread */
+.steps-4 li:nth-child(3) { background: var(--accent-soft); color: var(--ink); border-left-color: var(--ink); }
+.steps-4 li:nth-child(3) h3 { color: var(--ink); }
+.steps-4 li:nth-child(3) p { color: var(--ink-2); }
+.steps-4 li:nth-child(3) .n { color: var(--accent-ink); }
+.steps-4 li:nth-child(4) { background: var(--ink); color: var(--paper); border-left-color: var(--accent); margin-left: 4.5rem; }
+.steps-4 li:nth-child(4) h3 { color: var(--paper); }
+.steps-4 li:nth-child(4) p { color: #cdd5e4; }
+.steps-4 li:nth-child(4) .n { color: #9db8e0; }
+@media (max-width: 47.99rem) { .steps-4 li:nth-child(4) { margin-left: 3rem; } .steps-4 li:nth-child(3) { margin-left: 3rem; } .steps-4 li:nth-child(2) { margin-left: 1.5rem; } }
+@media (min-width: 48rem) {
+  .steps.steps-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .steps-4 li:nth-child(n) { margin: 0; border-left: 0; border-top: 8px solid var(--ink); }
+  .steps-4 li:nth-child(4) { border-top-color: var(--accent); }
+  .steps-4 li:nth-child(1) { min-height: 10rem; }
+  .steps-4 li:nth-child(2) { min-height: 13rem; }
+  .steps-4 li:nth-child(3) { min-height: 16rem; }
+  .steps-4 li:nth-child(4) { min-height: 19rem; }
+}
+.btn-alt { background: var(--paper); color: var(--ink); outline: 2px solid var(--ink); outline-offset: -2px; }
+
+/* business review additions: eight menu links need a little more room */
+.wordmark, .masthead .btn { white-space: nowrap; }
+@media (min-width: 75rem) {
+  .site-nav { gap: 0 1.15rem; }
+  .site-nav a { font-size: 0.9rem; }
+  .masthead .wrap { gap: 0.6rem 1.3rem; }
+  .masthead .btn { padding-inline: 1rem; }
+}
+@media (min-width: 62rem) and (max-width: 74.99rem) {
+  .masthead .wrap { flex-wrap: wrap; }
+  .site-nav { order: 3; flex-basis: 100%; margin-left: 0; padding-top: 0.5rem; gap: 0.2rem 1.3rem; }
+  .wordmark { margin-right: auto; }
+}
+.tile p + p { margin-top: 0.7rem; }

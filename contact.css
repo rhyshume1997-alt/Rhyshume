@@ -64,3 +64,14 @@
 .next li:nth-child(3) p { color: var(--paper); }
 .next li:nth-child(3) .n { color: #9db8e0; }
 .next .n { display: block; margin-bottom: 0.3rem; }
+
+/* business review additions: routes by need on the contact page */
+.c-routes { padding-block: 0 clamp(1.5rem, 3vw, 2.2rem); }
+.c-route-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; border-top: 1px solid var(--ink); }
+.c-route-list li { padding: 1.1rem 0 1.2rem; border-bottom: 1px solid var(--rule); }
+.c-route-list h2 { font: 700 1.25rem/1.25 var(--head); letter-spacing: -0.01em; }
+.c-route-list p { margin: 0.35rem 0 0.7rem; color: var(--ink-2); max-width: 34rem; }
+@media (min-width: 48rem) { .c-route-list { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 2.5rem; } }
+#preview { scroll-margin-top: 1rem; }
+#preview-h { margin-bottom: 0.6rem; }
+.preview-lead { max-width: 34rem; color: var(--ink-2); margin-bottom: 1.4rem; }
