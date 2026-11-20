@@ -74,6 +74,7 @@ function loadConfig(env) {
   };
 }
 
-function storageConfigured(cfg) { return !!(cfg.supabaseUrl && cfg.serviceKey && /^https:\/\//.test(cfg.supabaseUrl)); }
+// BR_SALT must be a real secret (at least 24 characters): it salts the visitor and email hashes and keys the sealed links. Unset or short = not configured (fail closed).
+function storageConfigured(cfg) { return !!(cfg.supabaseUrl && cfg.serviceKey && cfg.salt && cfg.salt.length >= 24 && /^https:\/\//.test(cfg.supabaseUrl)); }
 
 module.exports = { loadConfig, storageConfigured, flag, explicitOff, CONTRACT_VERSION, GENERATOR_VERSION, BOT_UA, BOT_TOKEN };

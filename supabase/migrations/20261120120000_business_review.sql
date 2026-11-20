@@ -267,7 +267,8 @@ begin
      or new.evidence_state is distinct from old.evidence_state or new.value is distinct from old.value
      or new.observed_at is distinct from old.observed_at or new.source is distinct from old.source
      or new.method is distinct from old.method or new.inputs is distinct from old.inputs
-     or new.run_key is distinct from old.run_key or new.category is distinct from old.category then
+     or new.run_key is distinct from old.run_key or new.category is distinct from old.category
+     or new.reason_code is distinct from old.reason_code or new.limitations is distinct from old.limitations or new.created_at is distinct from old.created_at then
     raise exception 'evidence cannot be changed, add a new measurement';
   end if;
   return new;
@@ -297,9 +298,11 @@ begin
     if pg_trigger_depth() > 1 then return old; end if;
     raise exception 'ai runs cannot be deleted';
   end if;
-  if old.status = 'ok' and (new.answer_text is distinct from old.answer_text or new.citations is distinct from old.citations
+  if old.status = 'ok' and (new.status is distinct from old.status or new.answer_text is distinct from old.answer_text or new.citations is distinct from old.citations
      or new.question_text is distinct from old.question_text or new.model_reported is distinct from old.model_reported
-     or new.ran_at is distinct from old.ran_at) then
+     or new.ran_at is distinct from old.ran_at or new.review_id is distinct from old.review_id or new.provider is distinct from old.provider
+     or new.tool is distinct from old.tool or new.run_index is distinct from old.run_index or new.business_named is distinct from old.business_named
+     or new.competitors_named is distinct from old.competitors_named) then
     raise exception 'a completed ai run cannot be changed';
   end if;
   return new;
@@ -365,14 +368,43 @@ begin
   return jsonb_build_object('expired', a, 'addresses_cleared', b, 'reviews_deleted', c);
 end $$;
 
+-- The live project gives service_role NO table privileges on public.leads (only functions are granted). The engine therefore touches
+-- leads through these two functions instead of widening the ACL of an existing table. They only write rows whose message starts with a
+-- review reference '[BR-', and never touch a lead the owner has marked handled.
+create or replace function public.br_lead_put(p_lead_id uuid, p_name text, p_business text, p_email text, p_phone text, p_message text) returns uuid
+language plpgsql security definer set search_path = '' as $$
+declare got uuid;
+begin
+  if p_message is null or p_message !~ '^\[BR-[2-9A-HJ-NP-Z]{8}\]' then raise exception 'bad lead'; end if;
+  if p_lead_id is not null then
+    update public.leads set name = p_name, business = p_business, email = p_email, phone = p_phone, message = p_message
+     where id = p_lead_id and handled = false and message like '[BR-%' returning id into got;
+    return coalesce(got, p_lead_id);
+  end if;
+  insert into public.leads (name, business, email, phone, message, picks, consent) values (p_name, p_business, p_email, p_phone, p_message, '{}'::jsonb, true) returning id into got;
+  return got;
+end $$;
+create or replace function public.br_lead_drop(p_lead_id uuid) returns boolean
+language plpgsql security definer set search_path = '' as $$
+declare n int;
+begin
+  delete from public.leads where id = p_lead_id and handled = false and message like '[BR-%';
+  get diagnostics n = row_count;
+  return n > 0;
+end $$;
+
 revoke all on function public.br_rate_hit(text,int,int)        from public, anon, authenticated;
 revoke all on function public.br_budget_spend(text,numeric,numeric) from public, anon, authenticated;
 revoke all on function public.br_review_lease(uuid,text,int)   from public, anon, authenticated;
 revoke all on function public.br_purge_expired()               from public, anon, authenticated;
+revoke all on function public.br_lead_put(uuid,text,text,text,text,text) from public, anon, authenticated;
+revoke all on function public.br_lead_drop(uuid)               from public, anon, authenticated;
 grant execute on function public.br_rate_hit(text,int,int)        to service_role;
 grant execute on function public.br_budget_spend(text,numeric,numeric) to service_role;
 grant execute on function public.br_review_lease(uuid,text,int)   to service_role;
 grant execute on function public.br_purge_expired()               to service_role;
+grant execute on function public.br_lead_put(uuid,text,text,text,text,text) to service_role;
+grant execute on function public.br_lead_drop(uuid)               to service_role;
 
 -- ---------------------------------------------------------------------------------------------- row level security
 -- The live project's rls_auto_enable event trigger also switches RLS on for new tables; it is repeated here so this file stands alone.
@@ -407,13 +439,19 @@ create policy "owner read"   on public.br_prospects for select to authenticated 
 create policy "owner update" on public.br_prospects for update to authenticated
   using (((select auth.jwt() ->> 'email') = 'rhyshume1997@gmail.com')) with check (((select auth.jwt() ->> 'email') = 'rhyshume1997@gmail.com'));
 
--- Belt and braces: no table privileges for the public roles beyond what the policies above grant.
+-- Table privileges. The live project's default privileges give anon, authenticated AND service_role only truncate/references/trigger/maintain
+-- on new tables (see pg_default_acl), so nothing works until the privileges below are granted explicitly (same approach as client_quotes).
+-- Everything is stripped first, then exactly what is needed is granted back.
 revoke all on public.br_reviews, public.br_provider_calls, public.br_competitors, public.br_evidence, public.br_ai_runs,
   public.br_report_versions, public.br_automation_opportunities, public.br_prospects, public.br_deliveries,
-  public.br_rate_limits, public.br_budget, public.br_admin_log from anon;
-revoke all on public.br_rate_limits, public.br_budget from authenticated;
-revoke insert, delete, truncate on public.br_reviews, public.br_provider_calls, public.br_competitors, public.br_evidence,
-  public.br_ai_runs, public.br_report_versions, public.br_automation_opportunities, public.br_prospects, public.br_deliveries,
-  public.br_admin_log from authenticated;
-revoke update on public.br_reviews, public.br_provider_calls, public.br_competitors, public.br_evidence, public.br_ai_runs,
-  public.br_report_versions, public.br_automation_opportunities, public.br_deliveries, public.br_admin_log from authenticated;
+  public.br_rate_limits, public.br_budget, public.br_admin_log from anon, authenticated, service_role;
+-- Server functions (service_role). No truncate, ever. delete only where the engine or a purge needs it: br_reviews (cascades to the
+-- children, which the append only triggers allow at depth > 1), competitors, and the working tables.
+grant select, insert, update on public.br_reviews, public.br_provider_calls, public.br_competitors, public.br_evidence, public.br_ai_runs,
+  public.br_report_versions, public.br_automation_opportunities, public.br_prospects, public.br_deliveries, public.br_rate_limits, public.br_budget to service_role;
+grant select, insert on public.br_admin_log to service_role;
+grant delete on public.br_reviews, public.br_competitors, public.br_provider_calls, public.br_rate_limits to service_role;
+-- Owner (signed in workbook): read the review tables, update the prospect record. RLS policies above decide who the owner is.
+grant select on public.br_reviews, public.br_provider_calls, public.br_competitors, public.br_evidence, public.br_ai_runs,
+  public.br_report_versions, public.br_automation_opportunities, public.br_prospects, public.br_deliveries, public.br_admin_log to authenticated;
+grant update on public.br_prospects to authenticated;

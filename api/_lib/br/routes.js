@@ -369,6 +369,11 @@ async function handleRequestReport(deps, req, res, review, token) {
   await turnstile(deps, req, body, 'business-review-mail');
   const rl = await hit(store, 'mail:review:' + review.id, 3, 86400);
   if (!rl.allowed) throw err('rate_limited', { retry_after_s: rl.retry_after_s || 3600 });
+  // Anti email bombing: per recipient address (across all reviews) and per visitor, so nobody can use the site to flood a third party's inbox.
+  const rlTo = await hit(store, 'mail:to:' + emailHash.slice(0, 32), 3, 86400);
+  if (!rlTo.allowed) throw err('rate_limited', { retry_after_s: rlTo.retry_after_s || 3600 });
+  const rlIp = await hit(store, 'mail:ip:' + visitorHash(deps.cfg.salt, clientIp(req)).slice(0, 32), 6, 86400);
+  if (!rlIp.allowed) throw err('rate_limited', { retry_after_s: rlIp.retry_after_s || 3600 });
   const hold = !!review.hold_for_approval && !version.approved_at;
   let delivery;
   try {
@@ -413,11 +418,11 @@ async function handleDiscussion(deps, req, res, review) {
   return sendOk(res, { reference: review.ref, discussion: { requested: true } }, 201);
 }
 
+// Visitor delete is a real delete: contact details are cleared first (and an unhandled lead removed), then the review row is deleted, which cascades to
+// evidence, provider call snapshots, AI runs, report versions and deliveries (the append only triggers allow cascades). A repeat call finds nothing (404).
 async function handleDelete(deps, req, res, review) {
-  if (review.status !== 'cancelled') {
-    await prospects.clearContact(deps, review);
-    await deps.store.update('br_reviews', { id: review.id }, { status: 'cancelled', token_revoked: true, lease_until: null, lease_owner: null });
-  }
+  await prospects.clearContact(deps, review);
+  await deps.store.delete('br_reviews', { id: review.id });
   return sendOk(res, {});
 }
 

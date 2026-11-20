@@ -358,9 +358,9 @@ test('token access: expiry gives 410 only to the holder of the right token; revo
     await s.app.store.update('br_reviews', { id: id }, { token_revoked: false });
     const del = await invoke(s.app.pub, { method: 'DELETE', url: '/api/business-review/' + id, token: tok });
     assert.strictEqual(del.status, 200);
-    assert.strictEqual((await invoke(s.app.pub, { method: 'DELETE', url: '/api/business-review/' + id, token: tok })).status, 200, 'delete is idempotent');
+    assert.strictEqual((await invoke(s.app.pub, { method: 'DELETE', url: '/api/business-review/' + id, token: tok })).status, 404, 'a repeat delete finds nothing');
     assert.strictEqual((await get(s.app, id, { token: tok })).status, 404);
-    assert.strictEqual((await s.app.store.select('br_reviews', { id: id }))[0].status, 'cancelled');
+    assert.strictEqual((await s.app.store.select('br_reviews', { id: id })).length, 0, 'the review row is really gone');
   } finally { await s.close(); }
 });
 

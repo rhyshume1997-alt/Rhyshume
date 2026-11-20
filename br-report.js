@@ -401,7 +401,7 @@
         del.disabled = true;
         call('DELETE', '/' + encodeURIComponent(ctx.id), { token: ctx.token, timeoutMs: 30000 }).then(function (res) {
           del.disabled = false;
-          if (res.ok) { clearSession(); if (ctx.onDeleted) ctx.onDeleted('deleted'); }
+          if (res.ok || (res.error && res.error.code === 'not_found')) { clearSession(); if (ctx.onDeleted) ctx.onDeleted('deleted'); }
           else { armed = false; del.textContent = 'Delete this review and my details'; note.textContent = R.errorText(res.error); }
         });
       });

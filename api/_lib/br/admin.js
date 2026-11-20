@@ -19,6 +19,7 @@ const steps = require('./steps');
 const providers = require('./providers/index');
 const aiv = require('./ai-visibility');
 const mail = require('./mail');
+const prospects = require('./prospects');
 const V = require('./validate');
 const { generateQuestions } = require('./questions');
 const { StoreError } = require('./db');
@@ -295,6 +296,16 @@ async function aiRun(deps, req, res, id, actor) {
   return sendOk(res, { progress: out, remaining_calls: out.remaining_calls });
 }
 
+// Owner delete of any review (for example a test record): contact details cleared, then the row and everything under it deleted. The admin log
+// row survives with its review link set to null. A lead the owner has marked handled is kept (it is the owner's own record).
+async function deleteReview(deps, res, id, actor) {
+  const r = await loadReview(deps, id);
+  await prospects.clearContact(deps, r);
+  await log(deps, actor, 'delete_review', id, { ref: r.ref });
+  await deps.store.delete('br_reviews', { id: id });
+  return sendOk(res, { deleted: true });
+}
+
 async function tokenAction(deps, req, res, id, actor) {
   const body = await readJsonBody(req);
   const r = await loadReview(deps, id);
@@ -356,6 +367,7 @@ function createAdminHandler(deps) {
       if (a === 'reviews') {
         if (parts.length === 1 && method === 'GET') return await listReviews(deps, req, res);
         if (parts.length === 2 && method === 'GET') return await reviewDetail(deps, res, id);
+        if (parts.length === 2 && method === 'DELETE') return await deleteReview(deps, res, id, actor);
         if (parts.length === 3 && method === 'POST') {
           if (c === 'competitors') return await competitorsAction(deps, req, res, id, actor);
           if (c === 'regenerate') return await regenerate(deps, req, res, id, actor);

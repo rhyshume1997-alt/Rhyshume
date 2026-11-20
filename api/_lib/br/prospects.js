@@ -25,14 +25,10 @@ async function upsertProspect(deps, review, d) {
   if (existing) prospect = (await store.update('br_prospects', { review_id: review.id }, fields))[0];
   else prospect = await store.insert('br_prospects', Object.assign({ review_id: review.id, status: 'new' }, fields));
   if (d.consent.follow_up_contact) {
-    const leadRow = { name: d.name || '', business: review.business_name, email: d.email, phone: d.phone || '', message: '[' + review.ref + '] ' + (d.message || 'Business review follow up request.'), picks: {}, consent: true };
-    if (prospect.lead_id) {
-      const lead = (await store.select('leads', { id: prospect.lead_id }, { limit: 1 }))[0];
-      if (lead && !lead.handled) await store.update('leads', { id: lead.id }, leadRow);
-    } else {
-      const lead = await store.insert('leads', leadRow);
-      prospect = (await store.update('br_prospects', { review_id: review.id }, { lead_id: lead.id }))[0];
-    }
+    // The live project gives the server no direct table access to leads: br_lead_put only writes rows whose message starts with the review reference
+    // and never edits a handled lead (see the migration).
+    const leadId = await store.rpc('br_lead_put', { p_lead_id: prospect.lead_id || null, p_name: d.name || '', p_business: review.business_name, p_email: d.email, p_phone: d.phone || '', p_message: '[' + review.ref + '] ' + (d.message || 'Business review follow up request.') });
+    if (!prospect.lead_id && leadId) prospect = (await store.update('br_prospects', { review_id: review.id }, { lead_id: leadId }))[0];
   }
   return prospect;
 }
@@ -42,10 +38,7 @@ async function clearContact(deps, review) {
   await store.update('br_deliveries', { review_id: review.id }, { to_email: null }).catch(function () { return []; });
   const p = (await store.select('br_prospects', { review_id: review.id }, { limit: 1 }))[0];
   if (p) {
-    if (p.lead_id) {
-      const lead = (await store.select('leads', { id: p.lead_id }, { limit: 1 }))[0];
-      if (lead && !lead.handled) await store.delete('leads', { id: lead.id });
-    }
+    if (p.lead_id) await store.rpc('br_lead_drop', { p_lead_id: p.lead_id });
     await store.update('br_prospects', { review_id: review.id }, { contact_name: null, email: null, phone: null, message: null, follow_up_consent: false, marketing_consent: false, lead_id: null });
   }
 }

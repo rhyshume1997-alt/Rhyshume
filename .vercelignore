@@ -10,3 +10,5 @@ tools/workbook-meeting
 tools/workbook-reviews
 tools/br-fullstack
 tools/br-ui-browser
+supabase
+.env.example

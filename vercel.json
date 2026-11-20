@@ -134,6 +134,12 @@
       "maxDuration": 60
     }
   },
+  "crons": [
+    {
+      "path": "/api/business-review-admin?route=sweep",
+      "schedule": "17 3 * * *"
+    }
+  ],
   "rewrites": [
     {
       "source": "/api/business-review/admin/:path*",

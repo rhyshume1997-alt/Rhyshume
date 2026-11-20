@@ -15,3 +15,11 @@ It only references `public.leads` and `public.client_workbooks` (foreign keys); 
 5. To undo: run the rollback file. It deletes all review data. Export first.
 
 Retention is only applied when `br_purge_expired()` runs (daily sweep or manual). Until the sweep is scheduled nothing is deleted automatically.
+
+## Security review additions (integration review, 20 Nov 2026)
+
+- The live project's default privileges (read from `pg_default_acl`) give `anon`, `authenticated` and `service_role` only truncate/references/trigger/maintain on new tables. The migration now grants exactly what is needed (service_role: select/insert/update, delete on four tables, no truncate; authenticated: select on the review tables, select+update on `br_prospects`).
+- `leads` is not readable or writable by `service_role` on the live project, so the engine uses `br_lead_put` and `br_lead_drop` (SECURITY DEFINER, service_role only, only rows whose message starts with a review reference, never a handled lead).
+- `br_ai_lock` now also refuses a status change away from `ok`; `br_evidence_lock` also locks `reason_code`, `limitations`, `created_at`.
+- Tested on a local PGlite copy using the live default ACLs: apply, role matrix (anon, other signed in user, owner, owner with upper case email, service_role), triggers, rollback with data, re-apply, failed run leaves nothing behind.
+- Deleting a review (customer route or owner `DELETE /admin/reviews/:id`) deletes the row and cascades through the append only tables (cascades run at trigger depth 2, which the locks allow). A direct delete of evidence, reports or AI runs stays refused.

@@ -18,7 +18,7 @@ class StoreError extends Error {
   constructor(code, detail) { super(code); this.code = code; this.detail = detail || null; }
 }
 
-const TABLES = ['br_reviews', 'br_provider_calls', 'br_competitors', 'br_evidence', 'br_ai_runs', 'br_report_versions', 'br_automation_opportunities', 'br_prospects', 'br_deliveries', 'br_rate_limits', 'br_budget', 'br_admin_log', 'leads'];
+const TABLES = ['br_reviews', 'br_provider_calls', 'br_competitors', 'br_evidence', 'br_ai_runs', 'br_report_versions', 'br_automation_opportunities', 'br_prospects', 'br_deliveries', 'br_rate_limits', 'br_budget', 'br_admin_log', 'leads'];  // 'leads' stays here for the memory store only; the Supabase store refuses it (no table access, use rpc)
 
 // ---------------------------------------------------------------- Supabase (PostgREST)
 function encodeValue(v) { return encodeURIComponent(String(v)); }
@@ -82,7 +82,7 @@ function createSupabaseStore(opts) {
     if (o && o.offset) parts.push('offset=' + (parseInt(o.offset, 10) || 0));
     return table + (parts.length ? '?' + parts.join('&') : '');
   }
-  function checkTable(t) { if (TABLES.indexOf(t) === -1) throw new StoreError('store_error', 'bad table'); }
+  function checkTable(t) { if (t === 'leads' || TABLES.indexOf(t) === -1) throw new StoreError('store_error', 'bad table'); }
   return {
     kind: 'supabase',
     async insert(table, row) { checkTable(table); const r = await call('POST', table, row, { Prefer: 'return=representation' }); return Array.isArray(r) ? r[0] : r; },
@@ -314,6 +314,22 @@ function createMemoryStore(options) {
         if (r.status === 'queued') r.status = 'running';
         r.updated_at = iso();
         return true;
+      }
+      if (name === 'br_lead_put') {
+        if (!/^\[BR-[2-9A-HJ-NP-Z]{8}\]/.test(args.p_message || '')) throw new StoreError('store_error', 'bad lead');
+        if (args.p_lead_id) {
+          const l = data.leads.find(function (x) { return x.id === args.p_lead_id; });
+          if (l && !l.handled && /^\[BR-/.test(l.message || '')) Object.assign(l, { name: args.p_name, business: args.p_business, email: args.p_email, phone: args.p_phone, message: args.p_message });
+          return args.p_lead_id;
+        }
+        const row = applyDefaults('leads', { name: args.p_name, business: args.p_business, email: args.p_email, phone: args.p_phone, message: args.p_message, picks: {}, consent: true });
+        data.leads.push(row);
+        return row.id;
+      }
+      if (name === 'br_lead_drop') {
+        const before = data.leads.length;
+        data.leads = data.leads.filter(function (x) { return !(x.id === args.p_lead_id && !x.handled && /^\[BR-/.test(x.message || '')); });
+        return data.leads.length < before;
       }
       if (name === 'br_purge_expired') {
         let a = 0, b = 0, c = 0;

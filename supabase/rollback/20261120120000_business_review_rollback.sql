@@ -2,6 +2,8 @@
 -- by the review). It does not touch leads or client_workbooks rows, only the foreign keys that point at them from br_* tables.
 -- Export anything wanted first (reports are regenerable from br_evidence only while these tables exist).
 drop function if exists public.br_purge_expired();
+drop function if exists public.br_lead_put(uuid,text,text,text,text,text);
+drop function if exists public.br_lead_drop(uuid);
 drop function if exists public.br_review_lease(uuid,text,int);
 drop function if exists public.br_budget_spend(text,numeric,numeric);
 drop function if exists public.br_rate_hit(text,int,int);
