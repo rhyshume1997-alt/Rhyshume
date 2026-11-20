@@ -8,6 +8,9 @@ skills-lock.json
 c-3e9a41b7d20f58c6/cinematic
 tools/workbook-meeting
 tools/workbook-client-link
+tools/workbook-client-access
+tools/client-access-page
+tools/client-access-db
 # development tooling and automation that the live site does not need (tools/preview.js, concept-rich.js, brand.js, evidence.js and preview-measure.js stay: api/owner-build.js and api/upgrade-live.js require them)
 .github
 tools/build-portfolio.py
