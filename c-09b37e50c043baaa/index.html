@@ -292,7 +292,7 @@ input:focus,textarea:focus,select:focus,button:focus{outline:3px solid #7aa2f7;o
     if (d === 'addcol') { P.A.brand.colours.push({ id: uid(), role: 'primary', hex: '#0b2a5b' }); $('#cols').innerHTML = vColours(); touch(); }
     else if (d === 'rmcol') { P.A.brand.colours = P.A.brand.colours.filter(function (c) { return c.id !== t.dataset.id; }); $('#cols').innerHTML = vColours(); touch(); }
     else if (d === 'rmasset') { P.A.brand.assets = P.A.brand.assets.filter(function (c) { return c.id !== t.dataset.id; }); $('#assets').innerHTML = vAssets(); touch(); }
-    else if (d === 'send') save(true);
+    else if (d === 'send') { var rq0 = P.A.discovery._req; if (rq0 && Object.keys(rq0.picks).length) { rq0.requested = true; rq0.at = new Date().toISOString(); touch(); } save(true); }
     else if (d === 'sendreq') { var rq = P.A.discovery._req; if (!Object.keys(rq.picks).length) { $('#reqmsg').textContent = 'Tick at least one thing first'; return; } rq.requested = true; rq.at = new Date().toISOString(); touch(); save(true); }
   });
   window.addEventListener('beforeunload', function (e) { if (!P.ro && (P.dirty || P.saving) && !P.dead) { e.preventDefault(); e.returnValue = ''; } });

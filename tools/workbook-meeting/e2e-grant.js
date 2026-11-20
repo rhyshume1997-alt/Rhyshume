@@ -33,7 +33,8 @@ const PRIV = 'PRIVATE-NOTE-GRANT-ALPHA margin forty percent';
   await pg.click('.meetstart'); await pg.waitForTimeout(250);
   ok('the meeting hub offers a clear choice of Website project or Grant', (await pg.locator('#gkind .gcard').count()) === 2 && /Website project/.test(await pg.textContent('#gkind')) && /East Dunbartonshire Digital Support Grant/.test(await pg.textContent('#gkind')));
   await shot('01-hub-choice');
-  ok('the Grant group has a Grant meeting screen in the sidebar', await pg.evaluate(() => visible().some(s => s.id === 'gmeeting')));
+  ok('a new client is not a funding application by default, so the Grant screens are hidden', await pg.evaluate(() => !S.client.modes.funding && !visible().some(s => s.id === 'gmeeting')));
+  ok('the Grant group has a Grant meeting screen in the sidebar once the client is a funding application', await pg.evaluate(() => { S.client.modes.funding = true; S.client.packId = GM_PACK_ID; ensurePackState(); const v = visible().some(s => s.id === 'gmeeting'); S.client.modes.funding = false; return v; }));
   await pg.click('#gkind [data-act=gnew]'); await pg.waitForTimeout(500);
   let s = await st();
   ok('starting a grant meeting sets funding mode and the East Dunbartonshire pack', s.client.modes.funding === true && s.client.packId === 'edc-lgf-digital' && s.client.business === promptText);
@@ -199,10 +200,12 @@ const PRIV = 'PRIVATE-NOTE-GRANT-ALPHA margin forty percent';
   await pg.click('[data-act=gexit]'); await pg.waitForTimeout(150);
   await pg.evaluate(() => { localStorage.clear(); }); await pg.reload(); await pg.waitForTimeout(900);
   ok('a fresh workbook has no client', (await st()).client.business === '' && !(await st()).gmeet.started);
+  await pg.evaluate(() => { S.client.modes.funding = true; S.client.packId = GM_PACK_ID; ensurePackState(); render(); }); /* a new client is no longer a funding application by default, so mark it as one first, as starting a grant meeting does */
   await gotoScreen('gmeeting'); const [fcx] = await Promise.all([pg.waitForEvent('filechooser'), pg.click('[data-act=gimport]')]); await fcx.setFiles(fi); await pg.waitForTimeout(400);
   s = await st();
   ok('internal JSON import restores answers, costs, statement and notes', s.client.business === promptText && s.elig.area === 'yes' && s.crit.impact.a.now.includes('diary') && s.quote2.lines.length >= 1 && s.quote.lines.length >= 1 && s.gmeet.notes.price === PRIV && /PRIVATE-HAND-EDIT-MARK/.test(s.drafts['gmimpact:statement'].text) && s.client.modes.funding && s.client.packId === 'edc-lgf-digital');
   await pg.evaluate(() => { localStorage.clear(); }); await pg.reload(); await pg.waitForTimeout(900);
+  await pg.evaluate(() => { S.client.modes.funding = true; S.client.packId = GM_PACK_ID; ensurePackState(); render(); }); /* as above: mark the new client as a funding application first */
   await gotoScreen('gmeeting'); const [fcy] = await Promise.all([pg.waitForEvent('filechooser'), pg.click('[data-act=gimport]')]); await fcy.setFiles(fc); await pg.waitForTimeout(400);
   s = await st(); ok('client JSON import restores answers but no private notes', s.elig.area === 'yes' && !JSON.stringify(s).includes('PRIVATE-NOTE-GRANT-ALPHA') && s.client.business === promptText);
   // ---- the website meeting still starts from the same hub
