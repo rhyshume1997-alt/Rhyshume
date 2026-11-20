@@ -280,6 +280,8 @@ h1, h2, h3 { font-family: "Archivo", "IBM Plex Sans", sans-serif; }
 @media (max-width: 47.99rem) {
   .callbar button { min-block-size: 2.9rem; padding: 0 1.1rem; background: var(--paper); color: var(--ink); border: 0; font: 600 1rem/1 "IBM Plex Sans", sans-serif; }
   .callbar { background: var(--ink); }
+  /* the basket button is ink text on a paper button on an ink bar: ring in paper so it shows against the bar */
+  .callbar button:focus-visible { outline-color: var(--paper); }
   #inspector { inline-size: 100vw; max-block-size: 100dvh; border-width: 0; margin: 0; inset: 0; block-size: 100dvh; }
   .in-info { padding-inline-end: 1.2rem; }
   .in-stage { block-size: min(46dvh, 20rem); }

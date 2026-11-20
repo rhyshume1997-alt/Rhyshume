@@ -159,6 +159,8 @@ h1, h2, h3 { font-family: "Archivo", sans-serif; text-transform: uppercase; }
 .mini { min-block-size: 2.75rem; padding: 0 1rem; background: transparent; color: var(--paper); border: 2px solid var(--paper); font: 600 0.8rem/1 "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: 0.08em; }
 .mini:hover { background: var(--paper); color: var(--ink); }
 .js .board-foot { display: flex; }
+/* call-bar link text is ink on an ink bar: ring in the signal yellow instead (cinematic.css rule is not enough here) */
+.callbar a:focus-visible { outline-color: var(--yel); }
 @media (max-width: 79.99rem) { .ways { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 63.99rem) { .svc-grid { grid-template-columns: minmax(0, 1fr); } .detail { max-inline-size: 22rem; } }
 @media (max-width: 36rem) { .ways { grid-template-columns: 1fr; } .board, .dboard { box-shadow: 5px 5px 0 var(--yel); } }
