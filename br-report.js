@@ -135,9 +135,11 @@
 
       '<form class="br-inline-form" id="br-mail-form" hidden novalidate>' +
       '<fieldset><legend>Email me a copy of this report</legend>' +
-      '<div class="field"><label for="br-mail-email">Email address</label><input id="br-mail-email" name="email" type="email" autocomplete="email" maxlength="200" required aria-describedby="br-mail-email-hint"><p class="br-hint" id="br-mail-email-hint">Used only to send this one email. Nothing else is sent to it.</p></div>' +
+      '<div class="field"><label for="br-mail-email">Email address</label><input id="br-mail-email" name="email" type="email" autocomplete="email" maxlength="200" required aria-describedby="br-mail-email-hint"><p class="br-hint" id="br-mail-email-hint">Used only to send you this report link. Nothing else is sent to it.</p></div>' +
       '<div class="field"><label for="br-mail-name">Your name <span class="opt">(optional)</span></label><input id="br-mail-name" name="name" type="text" autocomplete="name" maxlength="120"></div>' +
-      consentBox('br-mail-consent', 'report_delivery', 'Please email a copy of this report to the address above.', true) +
+      '<fieldset class="br-sub"><legend>Optional extras, separate from the report <span class="opt">(none needed)</span></legend>' +
+      consentBox('br-mail-follow', 'follow_up_contact', 'I would also like Rhys to contact me about these results.', false) +
+      consentBox('br-mail-marketing', 'marketing', 'I would also like occasional news and offers by email.', false) + '</fieldset>' +
       '<div class="check br-turnstile" id="br-mail-ts"></div>' +
       '<p class="br-live-msg" id="br-mail-msg" role="status"></p>' +
       '<button class="btn" type="submit">Email me a copy</button></fieldset></form>' +
@@ -163,9 +165,10 @@
       '</section>';
   }
 
-  // The body of POST /:id/request-report. report_delivery is the only consent the visitor ticked in that form.
+  // The body of POST /:id/request-report. Asking for the email is itself the request, so report_delivery is sent as true
+  // without a checkbox (CONTRACT 3.9 still requires the field). Follow up and marketing are false unless the visitor ticked them.
   function mailBody(v, turnstileToken) {
-    var o = { email: String(v.email || '').trim(), consent: { report_delivery: !!v.report_delivery, follow_up_contact: false, marketing: false }, turnstile_token: turnstileToken };
+    var o = { email: String(v.email || '').trim(), consent: { report_delivery: true, follow_up_contact: !!v.follow_up_contact, marketing: !!v.marketing }, turnstile_token: turnstileToken };
     if (v.name && String(v.name).trim()) o.name = String(v.name).trim();
     return o;
   }

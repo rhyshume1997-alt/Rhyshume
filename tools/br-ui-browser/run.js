@@ -103,16 +103,13 @@ const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth > 
     // request flows
     check('email and discussion forms hidden at first', !(await p.isVisible('#br-mail-form')) && !(await p.isVisible('#br-talk-form')));
     await p.click('#br-mail-open');
-    check('consent unticked by default', (await p.locator('#br-mail-form input[type=checkbox]:checked').count()) === 0);
+    check('email form: no delivery checkbox, optional extras unticked', (await p.locator('#br-mail-form input[name=report_delivery]').count()) === 0 && (await p.locator('#br-mail-form input[type=checkbox]:checked').count()) === 0);
     await p.fill('#br-mail-email', 'owner@harbourprecision.example');
-    await p.click('#br-mail-form button[type=submit]');
-    check('cannot send without ticking the delivery box', (await mlog()).filter((x) => /request-report/.test(x.path)).length === 0);
-    await p.check('#br-mail-consent');
     await p.waitForTimeout(200);
     await p.click('#br-mail-form button[type=submit]');
     await p.waitForFunction(() => /checks each report|sent|on its way/i.test(document.getElementById('br-mail-msg').textContent), null, { timeout: 8000 });
     const rr = (await mlog()).find((x) => /request-report/.test(x.path));
-    check('mail body: delivery consent only, follow up and marketing false', rr && rr.body.consent.report_delivery === true && rr.body.consent.follow_up_contact === false && rr.body.consent.marketing === false && rr.body.turnstile_token === 'TEST-TOKEN-business-review-mail');
+    check('mail body: delivery implied, follow up and marketing false unless ticked', rr && rr.body.consent.report_delivery === true && rr.body.consent.follow_up_contact === false && rr.body.consent.marketing === false && rr.body.turnstile_token === 'TEST-TOKEN-business-review-mail');
     await p.click('#br-talk-open');
     check('discussion form: follow up and marketing unticked', (await p.locator('#br-talk-form input[type=checkbox]:checked').count()) === 0);
     await p.fill('#br-talk-name', 'Alex'); await p.fill('#br-talk-email', 'owner@harbourprecision.example');

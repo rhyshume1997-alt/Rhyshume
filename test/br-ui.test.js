@@ -252,17 +252,18 @@ test('steps render exactly what the API returned, with plain reasons', () => {
 
 // ------------------------------------------------------------ consent defaults and request bodies
 
-test('consent: no box is ticked by default, report delivery is separate from follow up and marketing', () => {
+test('consent: no box is ticked, report delivery has no checkbox, follow up and marketing are optional and separate', () => {
   const h = API.actionsHtml({ printHref: '/business-review/report#t=x' });
   assert.ok(!/\schecked[\s>=]/.test(h));
-  const boxes = h.match(/<input type="checkbox"[^>]*>/g);
-  ['report_delivery', 'follow_up_contact', 'marketing'].forEach((n) => assert.ok(boxes.some((b) => b.includes('name="' + n + '"')), n));
-  assert.ok(/name="report_delivery" required/.test(h) && /name="follow_up_contact" required/.test(h));
-  assert.ok(!/name="marketing"[^>]*required/.test(h));
+  assert.ok(!/name="report_delivery"/.test(h), 'no delivery checkbox');
+  assert.ok(!/<input type="checkbox"[^>]*required/.test(h.slice(0, h.indexOf('id="br-talk-form"'))), 'nothing required in the email form');
   const mail = h.slice(h.indexOf('id="br-mail-form"'), h.indexOf('id="br-talk-form"'));
-  assert.ok(!/follow_up_contact|name="marketing"/.test(mail), 'the email form carries only the delivery consent');
-  const b = API.mailBody({ email: ' a@b.example ', report_delivery: true, name: '' }, 'T');
-  assert.deepStrictEqual(b, { email: 'a@b.example', consent: { report_delivery: true, follow_up_contact: false, marketing: false }, turnstile_token: 'T' });
+  assert.ok(/name="follow_up_contact"/.test(mail) && /name="marketing"/.test(mail));
+  assert.ok(/used only to send you this report link/i.test(mail));
+  const talk = h.slice(h.indexOf('id="br-talk-form"'));
+  assert.ok(/name="follow_up_contact" required/.test(talk) && !/name="marketing"[^>]*required/.test(talk));
+  assert.deepStrictEqual(API.mailBody({ email: ' a@b.example ', name: '' }, 'T'), { email: 'a@b.example', consent: { report_delivery: true, follow_up_contact: false, marketing: false }, turnstile_token: 'T' });
+  assert.deepStrictEqual(API.mailBody({ email: 'a@b.example', follow_up_contact: true, marketing: false }, 'T').consent, { report_delivery: true, follow_up_contact: true, marketing: false });
   const t = API.talkBody({ name: 'A', email: 'a@b.example', follow_up_contact: true, marketing: false, service_interest: ['seo'] }, 'T');
   assert.deepStrictEqual(t.consent, { follow_up_contact: true, marketing: false });
 });

@@ -26,3 +26,9 @@ Files B owns: `business-review/{index,report,bot}.html`, `br.css`, `br-form.js`,
 - Report page is noindex (meta) and the token stays in the fragment; the entry page and the crawler page are indexable.
 - Email copy uses one consent (`report_delivery`). Follow up and marketing are only offered in the separate "Discuss my results" form, both unticked; the request-report body always sends them as false.
 - No countdowns, no prices, no savings figures. The automation card always carries the "not an existing implementation" and "no development" statements.
+
+## Update 20 Nov 2026 (consent change requested by Rhys)
+- "Email me a copy" no longer has a delivery checkbox. The visitor types an address and presses send; helper text says it is used only to send the report link.
+- **A, please drop the requirement:** CONTRACT 3.9 still says `consent.report_delivery` must be `true`. The UI sends `report_delivery: true` as implied by the explicit request, with no checkbox. When A removes the requirement the field can be ignored.
+- The email form carries two optional, unticked, never required extras (`follow_up_contact`, `marketing`), sent as false unless ticked. "Discuss my results" keeps follow up as its required box (that form is the follow up request) and marketing optional.
+- The UI already reads `#t=<token>&id=<id>` from the amended `report_url` and builds its own links the same way. Merged `claude/br-a-engine` into this branch.
