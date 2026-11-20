@@ -3562,6 +3562,7 @@ function vPortal() {
   return (typeof qaBar === 'function' ? qaBar() : '') + sec('1.0', 'What the client sees', '<p class="hint">This page is optional. Use it when you want the client to pick what they need before I build the quote, or skip it and work from a chat. Plain English questions only. No prices, notes or other clients ever reach the client page. They never upload bank statements, only tick the evidence list</p>' + secs + '<p class="hint">If the client already has the page open, they may need to refresh to see a changed list</p>')
     + sec('1.5', 'Starting prices on their page', '<p class="row"><button class="btn' + (PS().showPrices ? ' pri' : '') + '" data-act="psp">Show starting prices: ' + (PS().showPrices ? 'On' : 'Off') + '</button><button class="btn" data-act="psync" ' + (pOnline() && !PT.busy ? '' : 'disabled') + '>Update what the client sees</button></p><p class="hint">Off by default. Your price book never goes to the client page. When this is On, a From price goes to their page only for lines you have set a price on, never for a line with no price. Switching it Off removes the prices from their page data the next time you press Update, or make a new link</p>')
     + sec('2.0', 'The link', tokBox + '<p class="row"><button class="btn pri" data-act="pcreate" ' + (PT.busy ? 'disabled' : '') + '>' + (p ? 'Make a new link' : 'Create link') + '</button><button class="btn" data-act="poff" ' + (p && p.active ? '' : 'disabled') + '>Switch off link</button><button class="btn" data-act="prefresh">Refresh status</button></p><p class="hint">Making a new link switches the old one off straight away. Whoever has the old link will see it stop working</p>' + (PT.busy ? '<p class="hint">' + esc(PT.busy) + '</p>' : '') + (PT.err ? note(esc(PT.err), 'stop', 'Problem:') : '') + (PT.msg ? '<p class="hint">' + esc(PT.msg) + '</p>' : ''))
+    + (typeof clmPanel === 'function' ? clmPanel() : '')
     + sec('3.0', 'Status', '<table class="tbl"><tr><th>Link</th><td>' + st + '</td></tr><tr><th>Made</th><td>' + (p ? pDate(p.created_at) : 'not yet') + '</td></tr><tr><th>Last opened</th><td>' + (p ? pDate(p.last_opened_at) : 'not yet') + '</td></tr><tr><th>Sent to you</th><td>' + (p && p.submitted_at ? pDate(p.submitted_at) : 'not yet') + '</td></tr><tr><th>Answers last saved</th><td>' + (PT.row ? pDate(PT.row.updated_at) : 'not yet') + '</td></tr></table><p class="row"><button class="btn" data-go="bringin">Bring in client answers</button><button class="btn" data-act="pview">View as client</button></p>')
     + vVideosAdmin();
 }
@@ -3622,6 +3623,65 @@ function vBringin() {
   return sec('1.0', 'Client answers', '<p class="hint">Their answers saved ' + pDate(PT.row.updated_at) + (PT.portal && PT.portal.submitted_at ? ', sent to you ' + pDate(PT.portal.submitted_at) : ', not sent yet') + '. Nothing changes in your fields until you accept it</p><p class="row"><button class="btn" data-act="prefresh">Refresh</button>' + (empties ? '<button class="btn pri" data-act="pall">Fill ' + empties + ' empty field' + (empties === 1 ? '' : 's') + ' only</button>' : '') + '</p>' + (reqOn ? note('The client sent a quote request. Accept their ticks as a draft below, or one at a time. Nothing goes to them as a quote until you approve it and send it yourself. Anything marked Not sure stays an enquiry with open questions', '', 'Quote request:') + '<p class="row"><button class="btn pri" data-act="preq">Accept all their ticks as a draft quote</button></p>' : '') + (hid ? '<p class="hint">' + hid + ' kept as mine, they show again if the client changes them</p>' : '') + (list.length ? '' : '<p>Nothing new to bring in</p>'))
     + groups.map((g, i) => sec(String(i + 2) + '.0', esc(g), list.filter(it => it.group === g).map(row).join(''))).join('');
 }
+
+/* CLIENT LINK EMAIL: "Email the link" on the Client link screen of the hosted workbook.
+   Inputs : the private link the workbook is showing right now (PT.token, shown once, never stored), the client's email from the Client screen
+            (S.client.email), the owner session (clToken). Outputs: one POST to /api/client-link-email (same site, owner token), which sends a
+            plain email through Resend. Nothing is stored in the workbook data, local storage or the database by this module.
+   Must not change: it never reads or writes S beyond S.client.email and S.client.business, never saves the link, never sends without a confirm.
+   Added to the workbook by tools/workbook-client-link/build.py. Independent of every other module and of any migration. */
+const CLM = { ask: false, busy: false, msg: '', err: '', st: null, loading: false, to: '' };
+const clmOk = e => /^[^\s@,;<>]{1,64}@[^\s@,;<>]+\.[^\s@,;<>]{2,}$/.test(e) && e.length <= 254;
+async function clmCall(body) {
+  const tok = await clToken();
+  const r = await fetch('/api/client-link-email', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok }, body: JSON.stringify(body) });
+  let j = null; try { j = await r.json(); } catch (e) { j = null; }
+  return { status: r.status, j: j || {} };
+}
+async function clmStatus() {
+  if (CLM.loading) return; CLM.loading = true;
+  try { const r = await clmCall({ action: 'status' }); CLM.st = r.status === 200 && r.j.ok ? { mail: !!r.j.mail } : { err: true }; }
+  catch (e) { CLM.st = { err: true }; }
+  CLM.loading = false; if (S.screen === 'portal') render();
+}
+const clmWhy = (status, j) => status === 429 ? 'Too many sends just now. Wait ' + (j.retry_after_s > 90 ? 'a few minutes' : 'a minute') + ' and try again'
+  : j.code === 'mail_not_configured' ? 'Email is not switched on on the server yet'
+  : j.code === 'bad_link' ? 'The link does not look right for sending. Make a new link on the live site and try again'
+  : j.code === 'bad_email' ? 'The email address does not look right. Fix it on the Client screen'
+  : (status === 401 || status === 403) ? 'You are not signed in as the owner. Sign in again'
+  : status === 503 ? 'Email sending is not set up on the server yet'
+  : 'The email did not go. Nothing was sent, so you can try again or copy the link and send it yourself';
+function clmPanel() {
+  if (!pOnline()) return '';
+  if (!CLM.st && !CLM.loading) clmStatus();
+  const to = String((S.client && S.client.email) || '').trim(), st = CLM.st;
+  let body = '<p class="hint">Sends the client one plain email with their private link, from you. It is not marketing. The link is not saved by this tool, so you can only send it while it is showing above. If you have left this page, make a new link</p>';
+  if (CLM.msg) body += '<div class="note" role="status"><b>Done:</b>' + esc(CLM.msg) + '</div>';
+  if (CLM.err) body += note(esc(CLM.err), 'stop', 'Not sent:');
+  if (!st) body += '<p class="hint">Checking whether email is switched on</p>';
+  else if (st.err) body += note('Could not check the email set up. You can still copy the link and send it yourself', 'stop', 'Not available:');
+  else if (!st.mail) body += note('Email sending is not switched on yet. The site needs a mail key before it can send. Copy the link above and send it yourself', 'stop', 'Not set up:');
+  else if (!PT.token) body += '<p class="hint">Make the link first, then it can be sent from here</p>';
+  else if (!clmOk(to)) body += '<p class="hint">There is no valid email address for this client. Add one on the Client screen first</p><p class="row"><button class="btn" data-go="setup">Go to the Client screen</button></p>';
+  else if (CLM.ask) body += '<div class="note"><b>Send now?</b>Email the private link to <b>' + esc(to) + '</b>. Check the address is right, the link opens their page<p class="row" style="margin:8px 0 0"><button class="btn pri" data-act="clmyes" ' + (CLM.busy ? 'disabled' : '') + '>' + (CLM.busy ? 'Sending' : 'Yes, send it') + '</button><button class="btn" data-act="clmno" ' + (CLM.busy ? 'disabled' : '') + '>Cancel</button></p></div>';
+  else body += '<p>To: <b>' + esc(to) + '</b></p><p class="row"><button class="btn pri" data-act="clmask">' + (CLM.msg ? 'Send it again' : 'Send link by email') + '</button></p>';
+  return sec('2.5', 'Email the link', body);
+}
+Object.assign(ACTS2, {
+  clmask: () => { CLM.err = ''; CLM.msg = ''; CLM.ask = true; render(); },
+  clmno: () => { CLM.ask = false; render(); },
+  clmyes: async () => {
+    if (CLM.busy) return; const to = String((S.client && S.client.email) || '').trim();
+    if (!PT.token || !clmOk(to)) { CLM.ask = false; render(); return; }
+    CLM.busy = true; CLM.err = ''; render();
+    try {
+      const r = await clmCall({ action: 'send', to, link: pLink(), business: String((S.client && S.client.business) || '').trim() });
+      if (r.status === 200 && r.j.ok) { CLM.msg = 'Sent to ' + to + ' at ' + new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) + '. If they do not see it, ask them to check junk'; CLM.err = ''; }
+      else CLM.err = clmWhy(r.status, r.j);
+    } catch (e) { CLM.err = 'No connection. Nothing was sent'; }
+    CLM.busy = false; CLM.ask = false; render();
+  }
+});
 
 /* ---- view as client ---- */
 function pCloseView() { const o = document.getElementById('pview'); if (o) o.remove(); window.removeEventListener('message', pViewMsg); PT.view = false; }
