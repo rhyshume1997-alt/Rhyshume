@@ -21,7 +21,7 @@ test('home page: the headline, one line under it, the preview button and the sma
   assert.ok(/<h1[^>]*>Make your business easier to find\. And easier to run\.<\/h1>/.test(home), 'headline: business review brief');
   assert.ok(!/found on google/i.test(home), 'no found on Google claim beside the no guarantee line');
   const heroHtml = home.match(/<section class="hero"[\s\S]*?<\/section>/)[0];
-  assert.ok(/<a class="btn" href="\/local-business#enquiry">Request a business review</.test(heroHtml), 'primary call to action is the business review request, which uses the existing enquiry form');
+  assert.ok(/<a class="btn" href="\/local-business#enquiry">Request a free business review</.test(heroHtml), 'primary call to action is the business review request, which uses the existing enquiry form');
   assert.ok(/Choose &lsquo;Not sure yet&rsquo; and mention a business review in your message/.test(heroHtml), 'the hero explains how to ask for a review');
   assert.ok(!/business-review|See how your business compares/.test(home), 'no link to or copy about an automated review tool');
   assert.ok(/<a class="btn btn-alt" href="\/contact">Get a free website preview</.test(heroHtml), 'secondary call to action is the free preview');

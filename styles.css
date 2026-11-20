@@ -1086,7 +1086,7 @@ h1 { line-height: 1.05; letter-spacing: -0.025em; }
 
 /* site additions: eight menu links, so the single row starts at a wider screen.
    Inputs: none. Outputs: the menu wraps under the wordmark between 62rem and 75rem. Does not change the phone menu. */
-@media (min-width: 62rem) and (max-width: 79.99rem) {
+@media (min-width: 62rem) {
   .masthead .sheet { flex-wrap: wrap; }
   .nav { order: 3; width: 100%; flex-wrap: wrap; border-top: 1px solid var(--rule); padding-top: 0.35rem; }
 }

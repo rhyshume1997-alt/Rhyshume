@@ -4,7 +4,7 @@ def film(slug, alt, name):
     k = K[slug]
     return f'''<figure class="ft-film"><video class="mv" muted loop playsinline preload="none" width="736" height="400" poster="/images/concepts/{slug}-poster.webp" data-webm="/website-concepts/video/{k}.webm" data-mp4="/website-concepts/video/{k}.mp4" aria-label="Moving preview of the {name} concept. {alt}"></video><button class="mv-btn" type="button" aria-pressed="false" aria-label="Play the moving preview of {name}"><span aria-hidden="true">Play</span></button><figcaption>Generated concept footage</figcaption></figure>'''
 def actions(slug, note):
-    return f'''<p class="ft-actions"><a class="ft-btn" href="/website-concepts/{slug}">Explore this concept</a><a class="ft-ask" href="/contact">Want something like this for your business?</a></p><p class="ft-note">Concept by Rhys Hume, not a live site. {note}</p>'''
+    return f'''<p class="ft-actions"><a class="ft-btn" href="/website-concepts/{slug}">Explore this concept</a><a class="ft-ask" href="/contact">Want something like this for your business?</a></p><p class="ft-note">{note}</p>'''
 def head(n, kind, name, hid):
     return f'<header class="ft-head"><span class="ft-n" aria-hidden="true">{n}</span><div><p class="ft-kind">{kind}, a made-up business</p><h3 id="{hid}">{name}</h3></div></header>'
 days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']; full = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
@@ -62,8 +62,8 @@ html = f'''<section class="featured" id="work" aria-labelledby="ft-h">
   <div class="wrap">
     <div class="sec-head rv">
       <p class="label">Selected concepts, made up</p>
-      <h2 class="title" id="ft-h">Four websites that don&rsquo;t exist, built to show what yours could do</h2>
-      <p class="lede">Each is a working concept. Try the planner, the board, the switches and the shelf below. They are fictional businesses, not clients, and none of them is a live site. <a class="text-link" href="/website-concepts/">Open all eight</a></p>
+      <h2 class="title" id="ft-h">Four made-up websites, so you can see what yours could do</h2>
+      <p class="lede">Try the planner, the board, the switches and the shelf. Concept by Rhys Hume, not live sites. They are fictional businesses, not clients, and the footage and pictures are generated concept material. <a class="text-link" href="/website-concepts/">Open all eight</a></p>
     </div>
   </div>
 {sun}
@@ -80,7 +80,7 @@ html = f'''<section class="featured" id="work" aria-labelledby="ft-h">
       <p class="lede">Open any of them and use it. Nothing is sent, booked, bought or saved, and none of them is a real business.</p>
     </div>
     <ol class="cc-strip">{strip}</ol>
-    <p class="cc-note rv">Concept by Rhys Hume, not a live site. Fictional businesses. The films and pictures are generated concept material.</p>
+    <p class="cc-note rv">All eight are fictional. The films and pictures are generated concept material.</p>
   </div>
 </section>
 

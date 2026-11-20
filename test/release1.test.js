@@ -16,15 +16,15 @@ const L = '/local-business#enquiry';
 test('nothing links to or advertises an automated business review', () => {
   for (const f of pages.concat(['llms.txt', 'sitemap.xml'])) {
     const t = read(f);
-    assert.ok(!/business-review|Business Opportunity|See how your business compares|Free business review|free business review/.test(t), f);
+    assert.ok(!/business-review|Business Opportunity|See how your business compares/.test(t), f);
   }
 });
 
 test('the header button and the footer link send visitors to the existing enquiry form', () => {
   for (const f of pages) {
     const t = read(f);
-    assert.ok(t.includes('<a class="btn" href="' + L + '">Request a business review</a>'), f + ' header button');
-    assert.ok(t.includes('<li><a href="' + L + '">Request a business review</a></li>'), f + ' footer link');
+    assert.ok(t.includes('<a class="btn" href="' + L + '">Request a free business review</a>'), f + ' header button');
+    assert.ok(t.includes('<li><a href="' + L + '">Request a free business review</a></li>'), f + ' footer link');
   }
 });
 
@@ -34,7 +34,7 @@ test('the enquiry form that the review button reaches is the existing one, with 
   assert.ok(h.includes('<form class="form" action="/api/contact" method="POST">') && h.includes('<input type="hidden" name="form" value="local">'));
   assert.ok(h.includes('<option>Not sure yet</option>'));
   assert.ok(h.includes('data-sitekey="0x4AAAAAAF7ONWeir1MBB-v7" data-action="contact"'));
-  assert.ok(h.includes('Thank you. Your message has reached me, and I’ll reply by email or phone.'));
+  assert.ok(h.includes('Thank you. Your message has reached me. If you asked for a free business review, I will look at your website and how your business works, and reply by email or phone.'));
 });
 
 test('review copy promises no timeframe, report, PDF, AI testing, competitor analysis or scores', () => {
@@ -53,7 +53,7 @@ test('the Business Review backend is not part of this release', () => {
 });
 
 test('the privacy page describes no review tool processing', () => {
-  const t = read('privacy.html').replace(/Request a business review/g, '');
+  const t = read('privacy.html').replace(/Request a free business review/g, '');
   assert.ok(!/Supabase|PageSpeed|review tool|the tool reads|business review/i.test(t));
   assert.ok(t.includes('<p>I’m not currently registered with the ICO.</p>'));
 });

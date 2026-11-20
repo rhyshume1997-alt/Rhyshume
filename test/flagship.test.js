@@ -19,13 +19,13 @@ test('public portfolio: eight exhibits, each labelled as a concept, each linking
   assert.equal((port.match(/<article class="ex /g) || []).length, 8);
   SLUGS.forEach(function (s) {
     const m = port.match(new RegExp('<article class="ex[^"]*" id="' + s + '"[\\s\\S]*?</article>')); assert.ok(m, s);
-    assert.ok(m[0].includes('Concept by Rhys Hume, not a live site.'), s + ' notice');
+    assert.ok(m[0].includes('a made-up business') && m[0].includes('Generated concept footage'), s + ' is labelled as made up with generated footage beside it');
     assert.ok(m[0].includes('href="/website-concepts/' + s + '">Explore this concept<'), s + ' explore link');
     assert.ok(m[0].includes('href="/contact">Want something like this for your business?<'), s + ' enquiry link uses the existing contact process');
     assert.ok(/<video[^>]*muted[^>]*loop[^>]*playsinline[^>]*preload="none"/.test(m[0]), s + ' video');
     assert.ok(/<img class="ex-phone"[^>]*alt="[^"]{10,}/.test(m[0]), s + ' phone alt');
   });
-  assert.ok(/None of these are real businesses or past clients/.test(port), 'separated from real work');
+  assert.ok(port.includes('Concept by Rhys Hume, not a live site.') && /fictional demonstrations, not client projects or real businesses/.test(port), 'one page level notice, separated from real work');
   assert.ok(/not part of the starting prices/.test(port), 'does not imply the advanced features are in the starting price');
 });
 
