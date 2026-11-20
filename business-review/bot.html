@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Review crawler information | Rhys Hume</title>
+<meta name="description" content="How the free business review reads a website: what it requests, how it identifies itself, how it respects robots.txt and how to stop it.">
+<meta name="theme-color" content="#f4f4f0">
+<link rel="canonical" href="https://www.rhyshume.co.uk/business-review/bot">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Rhys Hume">
+<meta property="og:locale" content="en_GB">
+<meta property="og:url" content="https://www.rhyshume.co.uk/business-review/bot">
+<meta property="og:title" content="Review crawler information | Rhys Hume">
+<meta property="og:description" content="How the free business review reads a website: what it requests, how it identifies itself, how it respects robots.txt and how to stop it.">
+<meta property="og:image" content="https://www.rhyshume.co.uk/images/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Rhys Hume, Glasgow">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Review crawler information | Rhys Hume">
+<meta name="twitter:description" content="How the free business review reads a website: what it requests, how it identifies itself, how it respects robots.txt and how to stop it.">
+<meta name="twitter:image" content="https://www.rhyshume.co.uk/images/og-image.png">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/ibm-plex-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<script>document.documentElement.classList.add("js")</script>
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/br.css">
+<script src="/nav.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="masthead">
+  <div class="sheet">
+    <a class="wordmark" href="/" aria-label="Rhys Hume, home">Rhys Hume</a>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="nav" id="site-nav" aria-label="Main">
+      <a href="/websites">Websites</a>
+      <a href="/website-concepts/">Website concepts</a>
+      <a href="/local-business">Websites for small businesses</a>
+      <a href="/automation">Automation</a>
+      <a href="/tolra">Tolra</a>
+      <a href="/csv">Validation</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+    </nav>
+    <a class="btn" href="/contact">Get a free preview</a>
+  </div>
+</header>
+
+<main id="main">
+<div class="sheet">
+<header class="titleblock">
+  <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="/">Home</a></li><li><a href="/business-review">Free business review</a></li><li aria-current="page">Crawler information</li></ol></nav>
+  <div class="tb-main">
+    <h1>How the review reads a website</h1>
+    <p class="standfirst">If you run a website and saw RhysHumeReviewBot in your logs, this page explains what it is and how to stop it.</p>
+  </div>
+</header>
+
+<section class="clause" aria-labelledby="bot-what">
+  <h2 id="bot-what">What it is</h2>
+  <div class="clause-body">
+    <p>RhysHumeReviewBot is the tool behind the free <a href="/business-review">business opportunity review</a>. It runs only when someone types a website address into that form. It never browses on its own and it does not build a list of sites.</p>
+  </div>
+</section>
+
+<section class="clause" aria-labelledby="bot-does">
+  <h2 id="bot-does">What it does</h2>
+  <div class="clause-body">
+    <ul class="ticks">
+      <li>It identifies itself as <code>RhysHumeReviewBot/1.0</code> in the User-Agent header.</li>
+      <li>It reads <code>robots.txt</code> first and honours it. If a page is disallowed it is not read, and the review records that as not checked.</li>
+      <li>It reads a small number of public pages from the address entered, up to 25 requests in total for one review, one after another.</li>
+      <li>It reads only public pages over http or https. It does not log in, submit forms or run scripts on your site.</li>
+      <li>It looks at things such as the page title, headings, whether the site uses HTTPS, whether a sitemap exists and whether contact details are easy to find.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="clause" aria-labelledby="bot-stop">
+  <h2 id="bot-stop">How to stop it</h2>
+  <div class="clause-body">
+    <p>Add this to your <code>robots.txt</code> and the review will not read your site:</p>
+    <pre class="br-code">User-agent: RhysHumeReviewBot
+Disallow: /</pre>
+    <p>Problems or questions: <a href="mailto:rhys@rhyshume.co.uk">rhys@rhyshume.co.uk</a>. Please include the address of your site and the time you saw the request. A fixed list of server addresses is not published.</p>
+  </div>
+</section>
+</div>
+</main>
+
+<footer class="colophon">
+  <div class="sheet">
+    <div class="ctrl">
+      <div>
+        <a class="wordmark" href="/" aria-label="Rhys Hume, home">Rhys Hume</a>
+        <p class="about-line">Websites, AI, automation and systems that win you clients and save you time, from Glasgow.</p>
+      </div>
+      <div>
+        <h2>Contents</h2>
+        <ul><li><a href="/websites">Websites</a></li><li><a href="/local-business">Websites for small businesses</a></li><li><a href="/automation">Automation</a></li><li><a href="/tolra">Tolra</a></li><li><a href="/csv">Computer system validation</a></li><li><a href="/work/jnr-engineering">JNR Engineering case study</a></li><li><a href="/council-digital-grants">Council digital grants</a></li><li><a href="/insights">Insights</a></li><li><a href="/about">About</a></li></ul>
+      </div>
+      <div>
+        <h2>Contact</h2>
+        <ul>
+          <li><a href="tel:+447908041480">07908 041480</a></li>
+          <li><a href="mailto:rhys@rhyshume.co.uk">rhys@rhyshume.co.uk</a></li>
+          <li><a href="https://www.linkedin.com/in/rhys-hume-701284171" target="_blank" rel="noopener">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+          <li>Glasgow</li>
+        </ul>
+      </div>
+    </div>
+    <div class="endline">
+      <span>&copy; 2026 Rhys Hume, Glasgow &middot; <a href="/privacy">Privacy</a></span>
+    </div>
+  </div>
+</footer>
+<div class="callbar" role="navigation" aria-label="Call or book">
+  <a class="call" href="tel:+447908041480">Call 07908 041480</a>
+  <a class="book" href="/contact">Free preview</a>
+</div>
+</body>
+</html>
