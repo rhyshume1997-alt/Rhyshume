@@ -31,7 +31,7 @@ Nothing is duplicated, so nothing needs synchronising. Research records (for exa
 
 1. **Inspect the client's existing identity and website, if there is one.** Record what was read or viewed (URL, date), the palette, typefaces, imagery and tone, and what the client clearly values. Refero widens the options; it never replaces the client. If there is no existing identity, say so.
 2. **Research relevant examples, including Refero Styles.** Follow `references/refero-research.md`: choose three to six records that differ in mood, theme and density, read their Components and Do's and Don'ts (not just colours), extract *roles*, and compare them against this client's job. Add other library sources where they fit (motion, composition, footers, components). Label each source as inspected only if it was.
-3. **Identify three genuinely different creative directions** (safe, bold, unexpected). They must differ in layout and idea, not only colour. Each gets a name, one sentence, a rough wireframe, its colour and type roles, its signature interaction, and what makes it different from the siblings and from the trend.
+3. **Identify three genuinely different creative directions** (safe, bold, unexpected). They must differ in layout and idea, not only colour. Each gets a name, one sentence, a rough wireframe, its colour and type roles, its signature interaction, and what makes it different from the siblings and from the trend. **Sibling check:** compare each direction's display face and palette with the other projects' `DESIGN.md` files where they are available (a project lists them in its `DESIGN.md` section 10 or in `docs/design/sibling-projects.md`), and do not reuse a sibling's display face or palette unless this client already uses it. Models tend to reach for the same few faces; choose for the client.
 4. **Present visual concepts for approval.** Show rendered concepts at 1440px and 390px (static mock-ups are enough), recommend one, and wait for the owner's pick. Do not build yet.
 5. **Create the project-specific `DESIGN.md`** from the template, recording the approved identity, rules, and a provenance table: for each decision, *taken from* (record URL), *changed*, or *not used*.
 6. **Build original components** from the approved direction, with the simplest technique (CSS first). Never copy a reference.
@@ -81,4 +81,4 @@ Use a Fable reviewer for visual critique from screenshots and source (propose on
 | `templates/project-design-md.md` | step 5, or a project has no `DESIGN.md` |
 | `templates/project-references.md` | recording a project's own reference additions |
 | `templates/audit-checklist.md` | auditing an existing page |
-| `VERSION.md` | recording or verifying which validated version of this skill a project uses |
+| `VERSION.md` and `scripts/verify-version.sh` | recording which validated version of this skill a project uses, and confirming a copy still matches it |

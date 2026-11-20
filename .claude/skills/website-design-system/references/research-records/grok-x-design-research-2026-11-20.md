@@ -92,7 +92,7 @@ The 3 things you would improve with more time.
 **[Claude] How this is applied**
 
 - It becomes the project's design process (see the skill's `SKILL.md`, "Process"): questions, audit, three directions, build, check, feedback, hand-off.
-- Several numeric rules (4px spacing, five type sizes, three colours, one accent) are **defaults for product UI**. The eight concept sites are deliberately art-directed, so a concept may deviate when it records why. Example: Sunny Hours Club uses five colours on purpose. Deviation must be written down, not accidental.
+- Several numeric rules (4px spacing, five type sizes, three colours, one accent) are **defaults for product UI**. A deliberately art-directed site may deviate when its own `DESIGN.md` records why (for example a site with a deliberate five-colour palette). Deviation must be written down, not accidental.
 - "150 to 250ms, ease-out" agrees with Emil Kowalski's published ranges (verified in `references.md`), which also allow longer for modals and drawers.
 - "Change only what I named" and "show before and after side by side" are adopted as the feedback rule for existing, approved designs.
 

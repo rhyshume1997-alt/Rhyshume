@@ -46,4 +46,4 @@ Also record: what you deliberately did differently from the dominant look in the
 Dated entries: decision, evidence (screenshots, measurements), who approved.
 
 ## 10. How this differs from sibling projects
-One line per sibling project and one line on how it differs from the references' dominant look. If it converges on either, record it and widen the difference.
+List each sibling project with its display face and palette, and one line on how this project differs from each. Add one line on how it differs from the references' dominant look. If it converges on either (including by sharing a display face or palette that the client does not already use), record it and widen the difference.

@@ -1,6 +1,6 @@
 # Research process
 
-How design references and third-party research are gathered, verified, recorded and used. This is the process actually followed on the Rev 6 concepts and Build AI Here, written so it can be repeated on any project.
+How design references and third-party research are gathered, verified, recorded and used. This is the process actually followed on recent projects, written so it can be repeated on any project.
 
 ## 1. Gather
 

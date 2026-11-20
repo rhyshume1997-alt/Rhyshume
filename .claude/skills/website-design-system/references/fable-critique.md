@@ -68,7 +68,7 @@ Reviewers read screenshots and source but did not run the pages. Treat each clai
 2. Mark it Confirmed, Not reproduced, Unverified or Artefact.
 3. Keep a ledger so refuted claims are not repeated.
 
-On the Rev 6 concepts this caught claims that did not hold: "rows shift under the pointer" (measured 0px), "chapters empty after an anchor jump" (0 of 5 invisible), "3.6:1 text" (13.17:1), and "one shared rule fixes the focus ring" (it did not fix three call bars). It also caught that a proposed CSS fix for a pale image edge did not work, so the fix became an asset crop.
+On a recent eight-concept audit this caught claims that did not hold: "rows shift under the pointer" (measured 0px), "chapters empty after an anchor jump" (0 of 5 invisible), "3.6:1 text" (13.17:1), and "one shared rule fixes the focus ring" (it did not fix three call bars). It also caught that a proposed CSS fix for a pale image edge did not work, so the fix became an asset crop.
 
 ## 4. Before and after
 
