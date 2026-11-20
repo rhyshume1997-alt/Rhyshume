@@ -86,7 +86,7 @@ How to reuse it:
 3. **The owner's machine, every project:** put the skill in `~/.claude/skills/` and keep a short pointer in `~/.claude/CLAUDE.md`.
 4. **Cloud sessions:** an environment setup script could fetch the skill when a container starts. That changes the environment and needs the owner's approval.
 
-The skill stops and asks if a project's `DESIGN.md` or references are missing. It does not invent them or borrow another project's.
+The skill stops and asks if a project's `DESIGN.md` or references are missing. It does not invent them or borrow another project's. Validation in fresh sessions is recorded in `audit-2026-11-20/skill-validation.md`; the proposal for sharing it with Build AI Here and future projects (not actioned) is `skill-sharing-proposal.md`.
 
 ## 7. Audit record (2026-11-20)
 
