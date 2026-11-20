@@ -185,7 +185,7 @@ function createHarness(opts) {
     if (req.method === 'OPTIONS') { res.writeHead(204, { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*', 'access-control-allow-methods': '*' }); return res.end(); }
     // owner only row level security: anything but the owner's session sees nothing
     const auth = String(req.headers.authorization || '');
-    if (auth !== 'Bearer MOCK-OWNER-TOKEN') return j(401, { code: '42501', message: 'harness: not the owner session' });
+    if (auth !== 'Bearer owner-session') return j(401, { code: '42501', message: 'harness: not the owner session' });
     const table = urlObj.pathname.replace(/^\/rest\/v1\//, '');
     const rows = tableRows(table);
     if (!rows) return j(404, { code: 'PGRST205', message: 'Could not find the table ' + table });
