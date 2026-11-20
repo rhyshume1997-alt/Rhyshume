@@ -142,7 +142,8 @@ h1, h2, h3 { font-family: "Archivo", sans-serif; text-transform: uppercase; }
 .detail figcaption { margin-block-start: 0.7rem; color: var(--soft); } .detail figcaption b { color: var(--ink); background: var(--yel); padding: 0.05rem 0.4rem; margin-inline-end: 0.3rem; font-weight: 400; }
 .board, .dboard { padding: clamp(1rem, 2.4vw, 1.8rem); border: 3px solid var(--ink); box-shadow: 8px 8px 0 var(--yel); }
 .board-head { display: flex; justify-content: space-between; gap: 1rem; border-block-end: 2px solid var(--line); padding-block-end: 0.8rem; margin-block-end: 1.2rem; color: var(--yel); }
-.ways { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; align-items: start; }
+/* two columns at every width: the board is capped at about 670px, so three columns (about 190px each) split "certificates" mid-word at every desktop width from 1280 up */
+.ways { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; align-items: start; }
 .way { background: color-mix(in srgb, var(--ink) 86%, var(--paper)); border: 2px solid var(--line); }
 .sw { display: grid; grid-template-columns: auto 1fr; grid-template-areas: "hs num" "hs nm" "hs st"; column-gap: 0.9rem; row-gap: 0.15rem; align-items: center; inline-size: 100%; padding: 0.8rem; background: none; border: 0; color: var(--paper); text-align: start; min-block-size: 5.6rem; }
 .hs { grid-area: hs; position: relative; inline-size: 2.6rem; block-size: 4rem; background: var(--paper); border: 3px solid var(--paper); display: block; }
@@ -159,7 +160,8 @@ h1, h2, h3 { font-family: "Archivo", sans-serif; text-transform: uppercase; }
 .mini { min-block-size: 2.75rem; padding: 0 1rem; background: transparent; color: var(--paper); border: 2px solid var(--paper); font: 600 0.8rem/1 "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: 0.08em; }
 .mini:hover { background: var(--paper); color: var(--ink); }
 .js .board-foot { display: flex; }
-@media (max-width: 79.99rem) { .ways { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* call-bar link text is ink on an ink bar: ring in the signal yellow instead (cinematic.css rule is not enough here) */
+.callbar a:focus-visible { outline-color: var(--yel); }
 @media (max-width: 63.99rem) { .svc-grid { grid-template-columns: minmax(0, 1fr); } .detail { max-inline-size: 22rem; } }
 @media (max-width: 36rem) { .ways { grid-template-columns: 1fr; } .board, .dboard { box-shadow: 5px 5px 0 var(--yel); } }
 
@@ -249,5 +251,5 @@ dialog#em::backdrop { background: color-mix(in srgb, var(--ink) 84%, transparent
 
 .svc-intro h2 { font-size: clamp(1.9rem, 3.8vw, 3.2rem); }
 .rail .pulse { display: none; } .rail .pulse.go { display: inline; }
-.nm { overflow-wrap: anywhere; min-inline-size: 0; font-size: clamp(0.85rem, 1.15vw, 1.02rem); }
+.nm { overflow-wrap: normal; min-inline-size: 0; font-size: clamp(0.85rem, 1.15vw, 1.02rem); }
 @media (max-width: 47.99rem) { .lux { display: none; } .nm { font-size: 1rem; } }

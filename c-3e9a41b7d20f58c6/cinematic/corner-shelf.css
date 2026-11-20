@@ -53,6 +53,8 @@ h1, h2, h3 { font-family: "Archivo", "IBM Plex Sans", sans-serif; }
 .l2 .word { color: var(--brick); paint-order: stroke fill; -webkit-text-stroke: 0.045em var(--paper); display: block; }
 .c { display: inline-block; }
 .hero .plate { grid-column: 1 / 10; grid-row: 2; z-index: 2; aspect-ratio: 2 / 1; border: 6px solid var(--ink); background: var(--ink); }
+/* short desktop screens: a 2:1 plate pushed most of the second wordmark line ("Shelf") below the fold; a shallower plate keeps the wordmark readable */
+@media (min-width: 64rem) and (max-height: 60rem) { .hero .plate { aspect-ratio: 5 / 2; } }
 .hero .plate img, .hero .plate video { object-position: 50% 24%; }
 .hero .plate .tag { inset: 0 auto auto 0; background: var(--ink); color: var(--paper); padding: 0.3rem 0.6rem; }
 .hero-side { grid-column: 10 / 13; grid-row: 2; align-self: start; padding-block-start: 0.2rem; }
@@ -280,6 +282,8 @@ h1, h2, h3 { font-family: "Archivo", "IBM Plex Sans", sans-serif; }
 @media (max-width: 47.99rem) {
   .callbar button { min-block-size: 2.9rem; padding: 0 1.1rem; background: var(--paper); color: var(--ink); border: 0; font: 600 1rem/1 "IBM Plex Sans", sans-serif; }
   .callbar { background: var(--ink); }
+  /* the basket button is ink text on a paper button on an ink bar: ring in paper so it shows against the bar */
+  .callbar button:focus-visible { outline-color: var(--paper); }
   #inspector { inline-size: 100vw; max-block-size: 100dvh; border-width: 0; margin: 0; inset: 0; block-size: 100dvh; }
   .in-info { padding-inline-end: 1.2rem; }
   .in-stage { block-size: min(46dvh, 20rem); }

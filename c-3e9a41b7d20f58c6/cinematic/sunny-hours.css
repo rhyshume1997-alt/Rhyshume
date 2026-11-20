@@ -41,7 +41,8 @@ html:not(.js) .nojs { display: block; }
 .badge { display: inline-grid; place-items: center; min-inline-size: 1.5rem; block-size: 1.5rem; padding: 0 0.3rem; border-radius: 999px; background: var(--sun); color: var(--navy); font: 900 0.9rem/1 var(--disp); }
 @media (max-width: 47.99rem) {
   .st1, .st2, .st3 { display: none; }
-  .top { flex-wrap: nowrap; } .brand { white-space: nowrap; } .st4 { margin-inline-start: auto; }
+  /* phones: the header, the planner status bar and the call bar were all pinned (about 190 of 844px) and covered the text and tile names. Let the header scroll away; the call bar already carries both actions. */
+  .top { flex-wrap: nowrap; position: relative; } .brand { white-space: nowrap; } .st4 { margin-inline-start: auto; }
   .brand { font-size: 1rem; }
   .st { font-size: 1rem; padding-inline: 0.9rem; }
 }
@@ -160,6 +161,8 @@ html:not(.js) .nojs { display: block; }
 .hold { position: sticky; top: 4.9rem; z-index: 50; display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-block-size: 3.6rem; padding: 0.5rem 0.6rem 0.5rem 1.2rem; background: var(--navy); color: var(--cream); border-radius: 999px; font-weight: 600; margin-block-end: 1rem; }
 .hold p { line-height: 1.3; }
 .hold[data-on="1"] { background: var(--red); color: var(--cream); }
+/* call-bar link text is navy on a navy bar: ring in the sun yellow instead */
+.callbar a:focus-visible { outline-color: var(--sun); }
 .hold[data-on="1"] { background: var(--navy); outline: 3px solid var(--cream); outline-offset: -6px; }
 .hold .small-btn { border-color: var(--cream); }
 .pl-grid { display: grid; grid-template-columns: 19rem minmax(0, 1fr); gap: 1.5rem; align-items: start; }
@@ -191,7 +194,7 @@ html:not(.js) .nojs { display: block; }
 .day-h svg { inline-size: 2rem; block-size: 2rem; flex: none; color: var(--dc, var(--red)); }
 .slot { padding: 0.45rem 0.5rem; position: relative; }
 .slot + .slot { border-block-start: 2px solid color-mix(in srgb, var(--navy) 25%, var(--cream)); }
-.sl { display: block; font-size: 0.64rem; margin-block-end: 0.3rem; letter-spacing: 0.06em; }
+.sl { display: block; font-size: 0.72rem; margin-block-end: 0.3rem; letter-spacing: 0.06em; }
 .fixed { background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Cpath d='M0 16 16 0H8L0 8ZM16 16V8L8 16Z' fill='%23ffc830' fill-opacity='.55'/%3E%3C/svg%3E"); }
 .fx { display: block; font-weight: 600; font-size: 0.85rem; line-height: 1.3; }
 .drop { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); place-items: center; inline-size: 100%; min-block-size: 5.2rem; padding: 0; border: 2.5px dashed var(--navy); border-radius: 0.8rem; background: transparent; color: var(--navy); text-align: center; font-weight: 600; font-size: 0.85rem; transition: transform 200ms var(--pop), background-color 120ms; }
@@ -244,7 +247,7 @@ html:not(.js) .nojs { display: block; }
 @media (max-width: 47.99rem) {
   .planner { padding-block: 3.4rem 3.4rem; }
   .plan-head h2 { font-size: clamp(3.2rem, 17vw, 5rem); }
-  .hold { top: 4.7rem; border-radius: 1.2rem; font-size: 0.95rem; }
+  .hold { top: 0.6rem; border-radius: 1.2rem; font-size: 0.95rem; }
   .board { grid-template-columns: minmax(0, 1fr); gap: 0.8rem; }
   .day { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto auto auto auto; grid-template-areas: "h h" "p p" "a b" "c c"; }
   .day > :nth-child(1) { grid-area: h; } .day > :nth-child(2) { grid-area: p; } .day > :nth-child(3) { grid-area: a; } .day > :nth-child(4) { grid-area: b; } .day > :nth-child(5) { grid-area: c; }
@@ -386,5 +389,13 @@ fieldset.step legend .mono { display: block; font-family: "IBM Plex Mono", monos
   .callbar span:empty { display: none; }
 }
 
-@media (min-width: 48rem) and (max-width: 69.99rem) { .day-h svg { display: none; } .day-h h3 { font-size: 1.05rem; } }
+/* Day headings. "Wednesday" is 6.16em wide, but the column leaves only about 100 to 110px for it from 768px up, so the old 1.05rem to 1.5rem sizes overflowed (768, 1120 to 1200, and every width from 1280). Size the heading from its own column, and hide the icon until there is room for both. */
+@media (min-width: 48rem) {
+  .day { container-type: inline-size; }
+  .day-h h3 { font-size: clamp(0.9rem, calc(15.6cqi - 3.7px), 1.5rem); }
+}
+/* 768 to 1119px keeps the original 1.05rem ceiling; only widths that were broken change */
+@media (min-width: 48rem) and (max-width: 69.99rem) { .day-h h3 { font-size: clamp(0.9rem, calc(15.6cqi - 3.7px), 1.05rem); } }
+@media (min-width: 48rem) and (max-width: 79.99rem) { .day-h svg { display: none; } }
+@media (min-width: 80rem) { .day-h h3 { font-size: clamp(0.9rem, calc(15.6cqi - 9.6px), 1.5rem); } }
 @media (min-width: 48rem) and (max-width: 63.99rem) { .sh-stripes, .sh-star { z-index: 0; } .sh-half, .sh-flower { display: none; } }

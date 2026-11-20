@@ -172,6 +172,8 @@ h2[data-kin] { font: 900 clamp(2.4rem, 13vw, 12rem)/0.84 var(--disp); text-trans
 
 /* 4. appointment journey */
 .bk { display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); gap: clamp(1.4rem, 4vw, 3.5rem); align-items: start; }
+/* cinematic.css sets .js .js-only { display: block }, which outranks .bk above (0,2,0 vs 0,1,0) and collapsed the journey to one column on desktop. Restore the intended grid. */
+.js .bk.js-only { display: grid; }
 .rail { display: grid; gap: 0; border-inline-start: 2px solid var(--rule); counter-reset: none; position: sticky; inset-block-start: calc(var(--hdr) + 1rem); }
 .rail li { position: relative; }
 .rail button { display: flex; align-items: center; gap: 0.9rem; inline-size: 100%; min-block-size: 2.9rem; background: transparent; border: 0; padding: 0.4rem 0.4rem 0.4rem 1rem; text-align: start; color: color-mix(in srgb, var(--fg) 80%, var(--bg)); font: 600 0.85rem/1.2 "IBM Plex Mono", monospace; letter-spacing: 0.1em; text-transform: uppercase; }
