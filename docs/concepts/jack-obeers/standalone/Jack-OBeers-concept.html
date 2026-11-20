@@ -825,7 +825,7 @@ input[type="date"] { inline-size: 100%; min-block-size: 3rem; padding: 0.5rem 0.
   function $$(sel) { return [].slice.call(document.querySelectorAll(sel)); }
 
   /* ---------------- 2. the cursor bottle and the card pours ---------------- */
-  var D = { ctl: false, active: null, hold: false, mode: '', follow: null, pose: null, bottle: null, qx: null, qy: null, qr: null, px: 0, py: 0, vx: 0, shown: false, film: false, base: -12, idle: 0 };
+  var D = { off: [26, 30], textHit: false, ctl: false, active: null, hold: false, mode: '', follow: null, pose: null, bottle: null, qx: null, qy: null, qr: null, px: 0, py: 0, vx: 0, shown: false, film: false, base: -12, idle: 0 };
   var POUR_THETA = 100, BASE = -12;
   var shared = null;   /* one footage element, moved into whichever card is open, so it is fetched and decoded once */
 
@@ -848,7 +848,39 @@ input[type="date"] { inline-size: 100%; min-block-size: 3rem; padding: 0.5rem 0.
     D.qr = gsap.quickTo(D.pose, 'rotation', { duration: 0.8, ease: 'power2' });
   }
   function fade(to, dur, delay) { if (D.fadeT) D.fadeT.kill(); D.fadeT = gsap.to(D.follow, { opacity: to, duration: dur, delay: delay || 0 }); }
-  function showLayer(on) { fade(on ? 1 : 0, 0.25); D.shown = on; }
+  /* ---- keeping clear of text and controls ----
+     The bottle may only be seen where its whole footprint is clear of readable text, controls, cards, the detail panel and the fixed header.
+     It first looks for a clear spot beside the pointer (right, left, further out, above). If there is none it fades out, and it fades out the instant
+     it drifts over something, so it can trail the pointer but never covers anything a visitor needs to read or press. */
+  var PROT = '.top, .callbar, #shop .sech, #shop .num, #shop .sec-lede, #shop .demo-flag, #shop .tog-row, #shop .age, #shop .tabs, #shop .pw, #shop #detail, #shop .nojs-note';
+  var CANDS = [[26, 30], [-26, 30], [90, 30], [-90, 30], [170, 30], [-170, 30], [26, -104], [-26, -104], [96, -104], [-96, -104], [270, 30], [-270, 30], [26, 150], [-26, 150], [170, -104], [-170, -104]];
+  var MARGIN = 10;
+  function protRects() { return [].slice.call(document.querySelectorAll(PROT)).map(function (e) { return e.getBoundingClientRect(); }).filter(function (r) { return r.width > 0 && r.height > 0; }); }
+  function footprint(x, y) { return { l: x - 56, r: x + 56, t: y - 40, b: y + 88 }; }    /* generous: the bottle, its lean and its cap */
+  function hits(f, rs, m) { m = m === undefined ? MARGIN : m; for (var i = 0; i < rs.length; i++) { var r = rs[i]; if (f.r > r.left - m && f.l < r.right + m && f.b > r.top - m && f.t < r.bottom + m) return true; } return false; }
+  function pickOffset() {
+    var rs = protRects(), px = D.px, py = D.py;
+    if (!hits(footprint(px + CANDS[0][0], py + CANDS[0][1]), rs)) { D.off = CANDS[0]; return; }
+    if (!hits(footprint(px + D.off[0], py + D.off[1]), rs)) return;
+    for (var i = 1; i < CANDS.length; i++) if (!hits(footprint(px + CANDS[i][0], py + CANDS[i][1]), rs)) { D.off = CANDS[i]; return; }
+  }
+  function wantVisible() { return D.shown && !D.film && (D.hold || (!D.ctl && !D.textHit)); }
+  function sync(delay, dur) { var v = wantVisible(); fade(v ? 1 : 0, dur !== undefined ? dur : (v ? 0.25 : 0.1), v ? (delay || 0) : 0); }
+  /* every frame: look where the bottle is and where it is about to be. A look-ahead starts the fade early; if it is somehow already over something it is cut at once. It returns only after a short clear run, so it does not flicker. */
+  var lx = 0, ly = 0, clearRun = 0;
+  function liveCheck() {
+    if (!D.follow) return;
+    if (!D.shown || D.film || D.hold || !Sig.motion) { if (D.textHit) { D.textHit = false; sync(); } clearRun = 0; return; }
+    var x = gsap.getProperty(D.follow, 'x'), y = gsap.getProperty(D.follow, 'y'), vx = x - lx, vy = y - ly; lx = x; ly = y;
+    var rs = protRects(), q = (D.img = D.img || D.follow.querySelector('image')).getBoundingClientRect();   /* the real, rotated footprint of the photograph */
+    var box = { l: q.left, r: q.right, t: q.top, b: q.bottom };
+    var now = hits(box, rs, 6);
+    var near = now || hits({ l: box.l - 8, r: box.r + 8, t: box.t - 8, b: box.b + 8 }, rs) || hits({ l: box.l + vx * 8 - 8, r: box.r + vx * 8 + 8, t: box.t + vy * 8 - 8, b: box.b + vy * 8 + 8 }, rs);
+    if (now) { clearRun = 0; D.textHit = true; fade(0, 0); return; }
+    if (near) { clearRun = 0; if (!D.textHit) { D.textHit = true; sync(0, 0.08); } return; }
+    if (D.textHit && ++clearRun > 5) { D.textHit = false; clearRun = 0; sync(); }
+  }
+  function showLayer(on) { D.shown = on; sync(); }
   function follows() { return window.matchMedia('(hover: hover) and (pointer: fine)').matches; }
 
   /* ----- fallback pour (Rev 2 drawn glass and stream) ----- */
@@ -864,7 +896,7 @@ input[type="date"] { inline-size: 100%; min-block-size: 3rem; padding: 0.5rem 0.
   function releasePose(done) {
     gsap.to(D.pose, { x: 0, y: 0, rotation: BASE, svgOrigin: '0 0', duration: 0.5, ease: 'power2.inOut', overwrite: true, onComplete: function () {
       D.hold = false; mkQ(); if (done) done();
-      if (D.pendingHide) { D.pendingHide = false; showLayer(false); } else if (D.mode === 'mouse' && D.shown) { D.qx(D.px + 26); D.qy(D.py + 30); }
+      if (D.pendingHide) { D.pendingHide = false; showLayer(false); } else if (D.mode === 'mouse' && D.shown) { pickOffset(); D.qx(D.px + D.off[0]); D.qy(D.py + D.off[1]); }
     } });
   }
   function svgOn(li) { var gl = li._glass; if (gl) { gl.liquid.level(1); gl.stream.hide(); } }
@@ -911,7 +943,7 @@ input[type="date"] { inline-size: 100%; min-block-size: 3rem; padding: 0.5rem 0.
         /* hand-off: the cursor bottle tips towards the window and gives way to the filmed bottle, which enters from the frame edge */
         D.film = true; gsap.killTweensOf(D.pose);
         gsap.to(D.pose, { rotation: 78, duration: 0.3, ease: 'power2.in', svgOrigin: '0 0' });
-        fade(0, 0.3);
+        sync(0, 0.3);
       }
       return;
     }
@@ -942,8 +974,7 @@ input[type="date"] { inline-size: 100%; min-block-size: 3rem; padding: 0.5rem 0.
       D.film = false;
       if (Sig.motion && D.follow) {
         gsap.to(D.pose, { rotation: BASE, duration: 0.5, ease: 'power2.out', svgOrigin: '0 0', onComplete: mkQ });
-        if (follows() && D.shown !== false && !D.ctl) fade(1, 0.4, 0.1);
-        else if (D.mode === 'touch') D.shown = false;
+        if (D.mode === 'touch') D.shown = false; else sync(0.1, 0.4);
       }
     }
     if (!switching && Sig.motion && D.hold) releasePose(D.mode === 'mouse' ? null : function () { showLayer(false); });
@@ -961,18 +992,18 @@ input[type="date"] { inline-size: 100%; min-block-size: 3rem; padding: 0.5rem 0.
       var lastType = 'mouse';
       var cardOf = function (t) { var li = t && t.closest ? t.closest('.pw') : null; return li && grid.contains(li) ? li : null; };
       window.addEventListener('pointerdown', function (e) { lastType = e.pointerType || 'mouse'; }, { passive: true, capture: true });
-      section.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse' && follows() && Sig.motion) { D.px = e.clientX; D.py = e.clientY; if (!D.hold) gsap.set(D.follow, { x: e.clientX + 26, y: e.clientY + 30 }); if (D.ctl) D.shown = true; else if (!D.film) showLayer(true); else D.shown = true; } });
+      section.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse' && follows() && Sig.motion) { D.px = e.clientX; D.py = e.clientY; pickOffset(); if (!D.hold) gsap.set(D.follow, { x: e.clientX + D.off[0], y: e.clientY + D.off[1] }); D.shown = true; lx = D.px + D.off[0]; ly = D.py + D.off[1]; liveCheck(); sync(); } });
       var CTL = '#detail, .tabs, .tog-row, .doors, .age, button:not(.card), a, input, select, label';
       /* the bottle never sits over shopping controls: it fades out over them and returns when the pointer leaves */
-      section.addEventListener('pointerover', function (e) { if (e.pointerType !== 'mouse' || !follows() || !Sig.motion) return; var c = e.target.closest && e.target.closest(CTL), on = !!c; if (on !== D.ctl) { D.ctl = on; if (D.shown && !D.film && !D.hold) fade(on ? 0 : 1, 0.18); } });
-      section.addEventListener('pointerleave', function (e) { D.ctl = false; if (e.pointerType === 'mouse') { if (D.active) leave(D.active); if (!D.hold) showLayer(false); else D.pendingHide = true; } });
+      section.addEventListener('pointerover', function (e) { if (e.pointerType !== 'mouse' || !follows() || !Sig.motion) return; var c = e.target.closest && e.target.closest(CTL), on = !!c; if (on !== D.ctl) { D.ctl = on; if (!D.hold) sync(0, 0.18); } });
+      section.addEventListener('pointerleave', function (e) { D.ctl = false; D.textHit = false; if (e.pointerType === 'mouse') { if (D.active) leave(D.active); if (!D.hold) showLayer(false); else D.pendingHide = true; } });
       section.addEventListener('pointermove', function (e) {
         if (e.pointerType !== 'mouse' || !follows() || !Sig.motion) return;
         var dx = e.clientX - D.px; D.px = e.clientX; D.py = e.clientY;
         D.vx = D.vx * 0.6 + dx * 0.4;
         if (!D.shown) showLayer(true);
         if (D.hold) return;
-        D.qx(e.clientX + 26); D.qy(e.clientY + 30);
+        pickOffset(); D.qx(e.clientX + D.off[0]); D.qy(e.clientY + D.off[1]);
         if (!D.film) {
           D.qr(Math.max(-26, Math.min(16, BASE + D.vx * 1.1)));
           clearTimeout(D.idle); D.idle = setTimeout(function () { if (!D.film && !D.hold) D.qr(BASE); }, 140);
@@ -983,6 +1014,9 @@ input[type="date"] { inline-size: 100%; min-block-size: 3rem; padding: 0.5rem 0.
       grid.addEventListener('focusin', function (e) { var li = cardOf(e.target); if (li && (!e.target.matches || e.target.matches(':focus-visible'))) enter(li, 'key'); });
       grid.addEventListener('focusout', function (e) { var li = cardOf(e.target); if (li && D.active === li && D.mode === 'key' && !li.contains(e.relatedTarget)) leave(li); });
       grid.addEventListener('click', function (e) { var li = cardOf(e.target); if (li && lastType !== 'mouse') enter(li, 'touch'); });
+      gsap.ticker.add(liveCheck);
+      var fraf = 0;
+      window.addEventListener('scroll', function () { if (fraf || !D.shown || D.hold || D.film) return; fraf = requestAnimationFrame(function () { fraf = 0; if (D.shown && !D.hold && !D.film && follows()) { pickOffset(); D.qx(D.px + D.off[0]); D.qy(D.py + D.off[1]); } }); }, { passive: true });
       var sraf = 0;
       window.addEventListener('scroll', function () {
         if (!D.active || sraf) return;

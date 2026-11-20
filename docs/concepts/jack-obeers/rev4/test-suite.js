@@ -38,21 +38,33 @@ await p.evaluate(()=>scrollTo({top:0,behavior:'instant'}));await p.waitForTimeou
 ok('scroll: returns cleanly to the opening',await p.evaluate(()=>+getComputedStyle(document.querySelector('#type')).opacity>0.95&&+getComputedStyle(document.querySelector('#dim')).opacity<0.05));
 ok('scroll: the shop catalogue section is on a light surface (not forced dark)',await p.evaluate(()=>{const m=getComputedStyle(document.querySelector('#shop')).backgroundColor.match(/\d+/g).map(Number);return (0.2126*m[0]+0.7152*m[1]+0.0722*m[2])/255>0.8}));
 ok('components: photographic Bottle (cut-out image) and Stream, Glass, Liquid exposed',await p.evaluate(()=>{const i=document.querySelector('.sig-follow image.sig-photo');return !!i&&/bottle-amber/.test(i.getAttribute('href'))&&!!(Sig.Stream&&Sig.Glass&&Sig.Liquid&&Sig.Bottle)}));
+const C=require('./clear');
+const head=async()=>{await p.evaluate(()=>{document.querySelector('#shop').scrollIntoView({behavior:'instant'});scrollBy({top:90,behavior:'instant'})});await p.waitForTimeout(700);const l=await p.locator('#shop .sec-lede').boundingBox();return {FX:1220,FY:l.y+10}};
+let {FX,FY}=await head();
+await p.mouse.move(300,FY+400);await p.mouse.move(FX,FY,{steps:12});await p.waitForTimeout(1000);
+ok('cursor: photographic bottle visible in a clear part of the drinks section',await curOp(p)>0.9);
+ok('cursor: offset from pointer, pointer not covered',await p.evaluate(({x,y})=>{const r=document.querySelector('.sig-follow image').getBoundingClientRect();return !(x>=r.left-4&&x<=r.right+4&&y>=r.top-4&&y<=r.bottom+4)},{x:FX,y:FY}));
+ok('cursor: no cursor:none, pointer-events none, hits go through',await p.evaluate(()=>{const f=document.querySelector('.sig-follow');const r=f.querySelector('image').getBoundingClientRect();const e=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);return ![...document.styleSheets].some(s=>[...s.cssRules].some(x=>/cursor:\s*none/.test(x.cssText)))&&getComputedStyle(f).pointerEvents==='none'&&!(e&&f.contains(e))}));
+await p.mouse.move(FX-200,FY);await p.waitForTimeout(900);
+await p.mouse.move(FX-60,FY,{steps:6});
+const s1=await p.evaluate(()=>({x:gsap.getProperty(document.querySelector('.sig-follow'),'x'),rot:gsap.getProperty(document.querySelector('.sig-follow .sig-pose'),'rotation')}));
+await p.waitForTimeout(1600);
+const s2=await p.evaluate(()=>({x:gsap.getProperty(document.querySelector('.sig-follow'),'x'),rot:gsap.getProperty(document.querySelector('.sig-follow .sig-pose'),'rotation')}));
+ok('cursor: weighted movement: lags the pointer and leans while travelling, then settles to its resting angle',s1.x<FX-60+26-4&&s1.rot>-12.5&&Math.abs(s2.rot+12)<1.5&&Math.abs(s2.x-(FX-60+26))<3,JSON.stringify({travel:s1,rest:s2}));
+ok('cursor: bottle fades out over shopping controls (category tabs, animation switch) and returns in a clear area',await (async()=>{const t=await p.locator('#ct-beer').boundingBox();await p.mouse.move(t.x+10,t.y+8,{steps:8});await p.waitForTimeout(500);const over=await curOp(p);const g=await p.locator('#pour-toggle').boundingBox();await p.mouse.move(g.x+20,g.y+10,{steps:8});await p.waitForTimeout(500);const over2=await curOp(p);await p.mouse.move(FX,FY,{steps:10});await p.waitForTimeout(1000);const back=await curOp(p);return over<0.05&&over2<0.05&&back>0.9})());
+// ---- clearance: the bottle never overlaps readable text or a control, checked every frame ----
+await p.evaluate(()=>{window.__thr=0.03});await C.run(p);
+for(const top of [90,430]){await p.evaluate(t=>{document.querySelector('#shop').scrollIntoView({behavior:'instant'});scrollBy({top:t,behavior:'instant'})},top);await p.waitForTimeout(600);
+  for(let y=110;y<860;y+=110){await p.mouse.move(20,y,{steps:2});await p.mouse.move(1420,y,{steps:36});await p.mouse.move(1420,y+55,{steps:3});await p.mouse.move(20,y+55,{steps:36});}}
+await p.evaluate(()=>{document.querySelector('#shop').scrollIntoView({behavior:'instant'});scrollBy({top:90,behavior:'instant'})});await p.waitForTimeout(600);
+{const l=await p.locator('#shop .sec-lede').boundingBox();for(const x of [120,300,500,700,900,1100]){await p.mouse.move(x,l.y+10,{steps:10});await p.waitForTimeout(500)}}
+const cv=await C.read(p);
+ok('cursor clearance: over every frame of a full sweep of the section the visible bottle never overlaps a line of text, a control, a card, the detail panel or the header',cv.viol.length===0,JSON.stringify({frames:cv.frames,visibleFrames:cv.visible,violations:cv.viol.slice(0,3)}));
+ok('cursor clearance: the bottle still appears (it is not simply hidden)',cv.visible>150,String(cv.visible));
+await p.evaluate(()=>{window.__thr=9});
 await toShop(p);
 const box=await p.locator('li.pw >> nth=1').boundingBox();
-await p.mouse.move(300,520);await p.mouse.move(box.x-260,box.y+60,{steps:10});await p.waitForTimeout(900);
-ok('cursor: photographic bottle visible in the drinks section',await curOp(p)>0.9);
-ok('cursor: offset from pointer, pointer not covered',await p.evaluate(({x,y})=>{const r=document.querySelector('.sig-follow image').getBoundingClientRect();return !(x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom)&&r.left>x},{x:box.x-260,y:box.y+60}));
-ok('cursor: no cursor:none, pointer-events none, hits go through',await p.evaluate(()=>{const f=document.querySelector('.sig-follow');const r=f.querySelector('image').getBoundingClientRect();const e=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);return ![...document.styleSheets].some(s=>[...s.cssRules].some(x=>/cursor:\s*none/.test(x.cssText)))&&getComputedStyle(f).pointerEvents==='none'&&!(e&&f.contains(e))}));
-ok('cursor: bottle fades out over shopping controls (tabs, detail panel, add to basket) and returns',await (async()=>{const t=await p.locator('#ct-beer').boundingBox();await p.mouse.move(t.x+10,t.y+8,{steps:6});await p.waitForTimeout(450);const over=await curOp(p);const d=await p.locator('#add').boundingBox();await p.mouse.move(d.x+20,d.y+10,{steps:6});await p.waitForTimeout(450);const over2=await curOp(p);await p.mouse.move(box.x-260,box.y-60,{steps:8});await p.waitForTimeout(700);const back=await curOp(p);return over<0.05&&over2<0.05&&back>0.9})());
-// weighted movement: lags behind the pointer, leans against travel, settles
-await p.mouse.move(box.x-260,box.y-60);const lag=[];
-await p.evaluate(()=>{window.__r=[]});
-await p.mouse.move(box.x-110,box.y-60,{steps:6});
-const s1=await p.evaluate(()=>({x:gsap.getProperty(document.querySelector('.sig-follow'),'x'),rot:gsap.getProperty(document.querySelector('.sig-follow .sig-pose'),'rotation')}));
-await p.waitForTimeout(1500);
-const s2=await p.evaluate(()=>({x:gsap.getProperty(document.querySelector('.sig-follow'),'x'),rot:gsap.getProperty(document.querySelector('.sig-follow .sig-pose'),'rotation')}));
-ok('cursor: movement lags the pointer and leans while travelling, then settles to its resting angle',s1.x<box.x-110+26-4&&s1.rot>-12.5&&Math.abs(s2.rot+12)<1.5&&Math.abs(s2.x-(box.x-110+26))<2,JSON.stringify({travel:s1,rest:s2}));
+await p.mouse.move(300,520);
 // hover film
 await p.mouse.move(box.x+box.width/2,box.y+110,{steps:12});await p.waitForTimeout(300);
 ok('hover: information visible within 0.3 s',(await open(p,1)).info>0.5);
@@ -64,7 +76,7 @@ await p.screenshot({path:`${out}/ev-hover.png`,clip:{x:Math.max(box.x-260,0),y:b
 await p.mouse.move(box.x+box.width/2,box.y-80,{steps:6});await p.waitForTimeout(1000);
 const hl=await open(p,1),hv2=await vid(p);
 ok('leave: window closes, footage paused and removed, information hides',!hl.open&&hl.info<0.1&&(!hv2||hv2.paused||!hv2.inCard),JSON.stringify(hl));
-ok('leave: cursor bottle returns',(await curOp(p))>0.9);
+{const h2=await head();await p.mouse.move(300,h2.FY+400);await p.mouse.move(h2.FX,h2.FY,{steps:12});await p.waitForTimeout(1300);ok('leave: cursor bottle returns to its resting pose and is visible again in a clear area',(await curOp(p))>0.9&&Math.abs(await p.evaluate(()=>gsap.getProperty(document.querySelector('.sig-follow .sig-pose'),'rotation'))+12)<4);await toShop(p);}
 // cider and wine
 await p.click('#ct-wine');await p.waitForTimeout(300);const wb=await p.locator('li.pw >> nth=0').boundingBox();await p.mouse.move(wb.x+wb.width/2,wb.y+100,{steps:10});await p.waitForTimeout(500);
 const wi=await open(p,0);ok('wine: information shows, no pour footage (none supplied)',wi.on&&wi.info>0.5&&!(await vid(p))?.inCard&&(await p.evaluate(()=>!document.querySelector('li.pw .reel'))));
