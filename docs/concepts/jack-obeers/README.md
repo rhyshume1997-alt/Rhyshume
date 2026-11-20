@@ -8,10 +8,10 @@ Initial design concept by Rhys Hume. Not a live shop. Not an approved project, a
 
 ## Creative decisions
 1. Took Little Kettle's approach (arch window, flat colour, rounded forms, italic serif accents, tactile demos) and redrew everything. No layout or markup copied.
-2. Placeholder palette: cream, bottle green, red, brown and amber. Chosen from the brief ("cream with green and red"), not sampled from the logo.
-3. Type: Archivo (heavy) with Newsreader italic, both already hosted in the repo under open licences. Dubai was requested but is a Microsoft font with an unchecked web licence, so it is not used. Decision open.
-4. The logo was sent as an image in chat and could not be saved to the repo. A text wordmark is used, labelled temporary. `jack-logo.png` placed in the preview folder appears in the header automatically.
-5. Opening: letters lie down and stand up in sequence (the client's lying-logo idea), then a drawn bottle tips and a glass fills. Illustration, labelled as such. Reduced motion and no-JS show the finished state. "Becomes the next page" is not built.
+2. Palette: brown, gold and cream sampled from the supplied logo (approximate). Green and red from the brief were dropped in favour of the logo.
+3. Type: Dubai requested and supplied, but its web licence is unverified (no licence in the zip; "All rights reserved" in the font data), so no font file is stored or served. Headings use Dubai only where installed, else Archivo. Newsreader italic for accents.
+4. The supplied logo (355 px image, white background removed) is used in the header and hero. A vector file is needed.
+5. Opening: the logo lies down and stands up (the client's idea), then a drawn bottle tips and a glass fills. Illustration, labelled as such. Reduced motion and no-JS show the finished state. "Becomes the next page" is not built.
 6. Brown bottle cursor trails a mouse pointer only. The real cursor stays.
 7. Shop: category, product, detail (flavour bars, pairings, allergens placeholder). Flavour dials re-order sample drinks.
 8. Deli as counter-arch cards. Services as one tabbed section with a small demo each.
