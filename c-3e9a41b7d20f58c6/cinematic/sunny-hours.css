@@ -41,7 +41,8 @@ html:not(.js) .nojs { display: block; }
 .badge { display: inline-grid; place-items: center; min-inline-size: 1.5rem; block-size: 1.5rem; padding: 0 0.3rem; border-radius: 999px; background: var(--sun); color: var(--navy); font: 900 0.9rem/1 var(--disp); }
 @media (max-width: 47.99rem) {
   .st1, .st2, .st3 { display: none; }
-  .top { flex-wrap: nowrap; } .brand { white-space: nowrap; } .st4 { margin-inline-start: auto; }
+  /* phones: the header, the planner status bar and the call bar were all pinned (about 190 of 844px) and covered the text and tile names. Let the header scroll away; the call bar already carries both actions. */
+  .top { flex-wrap: nowrap; position: relative; } .brand { white-space: nowrap; } .st4 { margin-inline-start: auto; }
   .brand { font-size: 1rem; }
   .st { font-size: 1rem; padding-inline: 0.9rem; }
 }
@@ -246,7 +247,7 @@ html:not(.js) .nojs { display: block; }
 @media (max-width: 47.99rem) {
   .planner { padding-block: 3.4rem 3.4rem; }
   .plan-head h2 { font-size: clamp(3.2rem, 17vw, 5rem); }
-  .hold { top: 4.7rem; border-radius: 1.2rem; font-size: 0.95rem; }
+  .hold { top: 0.6rem; border-radius: 1.2rem; font-size: 0.95rem; }
   .board { grid-template-columns: minmax(0, 1fr); gap: 0.8rem; }
   .day { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto auto auto auto; grid-template-areas: "h h" "p p" "a b" "c c"; }
   .day > :nth-child(1) { grid-area: h; } .day > :nth-child(2) { grid-area: p; } .day > :nth-child(3) { grid-area: a; } .day > :nth-child(4) { grid-area: b; } .day > :nth-child(5) { grid-area: c; }
