@@ -4,6 +4,11 @@
   'use strict';
   var SEND_TO = ''; /* put an email address here to prefill the "Email it" button, or leave empty */
   var CONCEPTS = {
+    'long-pour': { name: 'The Long Pour', signature: 'The glass empties as you scroll', extras: [['Pint behind the whole page', 'The pint photos fixed behind every section']] },
+    'wake-jack': { name: 'Wake Jack', signature: 'Wake Jack and he headbutts the page away', extras: [['Sleeping Jack at the top', 'Jack asleep on the counter']] },
+    'the-shelves': { name: 'The Shelves', signature: 'Find your drink with taste dials', extras: [['Shelves and ticket-stub cards', 'Shelf rows, round cards, ticket stubs']] },
+    'keg-to-bottle': { name: 'Keg to Bottle', signature: 'The beer line fills as you scroll', extras: [['The scroll story', 'Keg, tap, bottle, hamper and door down the page']] },
+    'hamper-table': { name: 'The Hamper Table', signature: 'Pack a hamper and write the gift tag', extras: [['Gift-led top of page', 'The hamper on the counter']] },
     'deli-counter': { name: 'The Deli Counter', signature: 'Take a number ticket', extras: [['Menu board and price-tag look', 'Red, green and cream, slab lettering, ticket and tag shapes']] },
     'tap-room': { name: 'The Tap Room', signature: 'Pull the tap handle to pour', extras: [['Tap list (chalkboard) shelf', 'The products shown as a tap list with dials']] },
     'shop-front': { name: 'The Shop Front', signature: 'Illustrated shop door and Open/Closed sign', extras: [['Illustrated shop scene', 'The drawn shop front and shelves']] },
