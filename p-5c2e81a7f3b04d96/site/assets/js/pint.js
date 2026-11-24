@@ -6,7 +6,7 @@
   var box = document.querySelector('.pint'); if (!box) return;
   var meter = document.querySelector('.drain-level i'), gauge = document.querySelector('.drain-level');
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var small = window.matchMedia('(pointer: coarse), (max-width: 700px)').matches;
+  var small = window.matchMedia('(max-width: 900px), (pointer: coarse) and (orientation: portrait)').matches; /* phone and portrait-touch files are cropped to the middle 760 px of the frame */
   var N = 6, frames = [], ready = [], pos = 0, target = 0, raf = 0, base = 'assets/media/beer-';
 
   function fail() { box.hidden = true; box.dataset.state = 'fallback'; if (window.JO_startBeerShader) window.JO_startBeerShader(); }
