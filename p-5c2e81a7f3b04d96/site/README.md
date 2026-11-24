@@ -42,3 +42,8 @@ Source Sans 3 (closest open match to Dubai), Newsreader (headlines), IBM Plex Mo
 - [ ] Server-side member gating; Shopify customer accounts
 - [ ] Test with a real Shopify store (checkout, local pickup, taxes, shipping zones, age-check app)
 - [ ] Performance pass with real photos/video; accessibility re-test; remove `noindex`
+
+## Build AI design rules (buildaihere/website `skills/website-design-director`, buildaihere/agent-skills `design-library`)
+Applied: motion durations and curves (drawer 500ms edge-sheet curve, menus 180ms, press scale .97, ease-out only), hover effects for fine pointers only, 44px minimum touch targets, tabular figures for prices, 65-character reading width, labelled gaps instead of filler, a "what we are not" section, reduced-motion fallbacks, worst-case data stress test (long and unbroken names, missing images/prices, emoji, non-Latin, HTML in titles: no overflow, text escaped).
+Not applied, because the client-approved Rev 4 direction wins: "flat colour, no gradients" (the dark stage uses gradients) and "avoid repeated card grids" (product shelves are a functional grid).
+Their `check-previews.mjs --site` run: all pages pass overflow, console, keyboard-focus checks. It still flags the beers page ("fixed layer covers text"): that is the full-screen draining-glass layer, which sits *behind* the content (z-index -1) and is not covering anything; confirmed in screenshots. Axe was run separately (no violations).

@@ -44,7 +44,7 @@ def header(key):
     return f'''<header class="hdr"><div class="wrap hdr-in">
 <a class="brand" href="index.html" aria-label="Jack O&rsquo;Beers, home"><img src="assets/media/jack-logo.png" alt="" width="46" height="46"><span>Jack <span>O&rsquo;</span>Beers</span></a>
 <nav aria-label="Main"><ul class="tabs" id="tabs">{"".join(items)}</ul></nav>
-<a class="cartbtn" href="cart.html" data-open-cart data-cart-label aria-label="Basket, 0 items"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h12l-1 13H7L6 7zm3-1a3 3 0 016 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>Basket <span class="n" data-cart-count>0</span></a>
+<a class="cartbtn" href="cart.html" data-open-cart data-cart-label aria-label="Basket, 0 items"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h12l-1 13H7L6 7zm3-1a3 3 0 016 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span class="lbl">Basket</span> <span class="n" data-cart-count>0</span></a>
 <button class="menubtn" type="button" id="menubtn" aria-expanded="false" aria-controls="tabs"><span>Menu</span></button>
 </div></header>'''
 
@@ -260,7 +260,7 @@ def members():
 def about():
     body = f'''{head("About Jack O&rsquo;Beers", "A friendly shop for people who like good things to eat and drink.", "About", "Our story")}
 <section class="sec" style="padding-top:0"><div class="wrap grid g2" style="align-items:start"><div class="prose"><p>Jack O&rsquo;Beers is a shop for the best of British beer, cider and wine, with a deli counter that does food to go alongside. Come in for a chat, a recommendation or a gift, or order online and we&rsquo;ll get it to you.</p>
-<p>{tbc("Real story, opening year and team to be written by the shop")}</p><h2>Find us</h2><p>{tbc("Address to be confirmed")}<br>{tbc("Opening hours to be confirmed")}<br>{tbc("Phone and email to be confirmed")}</p>
+<p>{tbc("Real story, opening year and team to be written by the shop")}</p><h2>What we are not</h2><p>{tbc("What the shop does not do, or who it is not for, to be written by the shop")}. For adults only: we do not sell alcohol to anyone under 18.</p><h2>Find us</h2><p>{tbc("Address to be confirmed")}<br>{tbc("Opening hours to be confirmed")}<br>{tbc("Phone and email to be confirmed")}</p>
 <p><a class="btn" href="click-and-collect.html">Click &amp; collect</a> <a class="btn ghost" style="color:var(--ink)" href="shipping.html">Shipping</a></p></div>
 <div class="slot wide rv">Photo slot<br>The shop front or the team. Real photo goes here.</div></div></section>'''
     page("about", "About", "About Jack O'Beers.", body, key="about")
