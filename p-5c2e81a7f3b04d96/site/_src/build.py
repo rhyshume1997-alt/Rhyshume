@@ -90,7 +90,7 @@ def page(slug, title, desc, body, key="", cls="", extra_attrs="", motion=False, 
     scripts += ['assets/js/ui.js', 'assets/js/shop.js']
     scripts += ['assets/js/motion.js']
     if cls == 'drain-page':
-        scripts += ['assets/js/beer.js']
+        scripts += ['assets/js/beer.js', 'assets/js/pint.js']
     sc = "\n".join(f'<script src="{s}" defer></script>' for s in scripts)
     full_title = f"{title} | {TITLE}" if title != TITLE else TITLE
     out = f'''<!doctype html>
@@ -167,7 +167,7 @@ def home():
 <section class="sec alt"><div class="wrap narrow" style="text-align:center"><p class="mono">Never miss a thing</p><h2>Join the newsletter</h2><p class="lede" style="margin:.8rem auto 1.4rem">New arrivals, events and the odd offer. No spam.</p><a class="btn dk" href="newsletter.html">Sign me up</a></div></section>'''
     page("index", TITLE, "The best of British beer, cider and wine, plus a deli counter.", body, key="home", cls="home", motion=True, hero_head=hero)
 
-DRAIN = '''<canvas class="beer" aria-hidden="true"></canvas>
+DRAIN = '''<div class="pint" aria-hidden="true" data-state="loading"></div><canvas class="beer" aria-hidden="true" hidden></canvas>
 <div class="drain-level" aria-hidden="true"><i></i></div>'''
 
 def collection(h, t, lede, drain=False, note=""):
@@ -181,7 +181,7 @@ def collection(h, t, lede, drain=False, note=""):
 <h2 class="vh">Products</h2>
 <ul class="cards" id="cards" style="list-style:none" aria-label="{t}"></ul>
 <p class="note-s foot-note" style="margin-top:1.4rem">Please drink responsibly. 18+ only. Allergen and ABV details will be shown on each product once the shop confirms them.</p>
-{'<p class="drain-note">The beer behind the page is generated in your browser as a stand-in. It will be replaced by real close-up footage of a pint being drunk.</p>' if drain else ''}
+{'<p class="drain-note">Temporary: the pint behind this page is made of AI-generated stand-in images, not shop photography. Real photos of the shop&rsquo;s own pour will replace them.</p>' if drain else ''}
 </div></section>'''
     page(h, t, lede, body, key="shop", dpage="collection", cls=cls, extra_attrs=f'data-collection="{h}"', motion=drain)
 
@@ -287,7 +287,7 @@ def notfound():
 def main():
     home(); shop()
     collection("beers", "Beers", "British beers, from crisp lagers to dark stouts.", drain=True,
-               note='<p class="notice" style="margin-bottom:1.2rem">The whole screen is a pint, and it empties as you scroll. Fill your basket before it is gone.</p>')
+               note='<p class="notice" style="margin-bottom:1.2rem">You are inside the pint, and it empties as you scroll. Fill your basket before it is gone.</p>')
     collection("ciders", "Ciders", "British ciders, dry through to fruity.")
     collection("wines", "Wines", "Wines to go with the deli counter.")
     collection("kegs", "Kegs", "Beer by the keg, for parties and pubs at home.", note=f'<p class="notice" style="margin-bottom:1.2rem">Keg size, deposit and equipment rental are {tbc("to be confirmed with the shop")}. Nothing here is assumed.</p>')

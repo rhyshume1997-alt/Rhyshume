@@ -176,24 +176,30 @@ p { text-wrap: pretty; }
 
 /* the whole screen is a pint (beer.js draws it; no glass) */
 .beer { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; display: block; background: #c77d12; }
+.beer[hidden] { display: none; }
 .beer.beer-still { background: radial-gradient(120% 90% at 50% 8%, #fbd36a 0, #e29a22 35%, #a8560a 70%, #4d1f04 100%); }
-.drain-level { position: fixed; inset-inline-end: 1rem; top: 50%; translate: 0 -50%; z-index: 20; width: .5rem; height: 9rem; border-radius: 99px; background: rgba(29, 15, 10, .55); overflow: hidden; }
-.drain-level i { position: absolute; inset: 0; background: var(--amber-hi); transform-origin: 50% 100%; }
+.pint { position: fixed; inset: 0; z-index: -1; background: #2a1408; overflow: hidden; }
+.pint img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 28%; user-select: none; pointer-events: none; will-change: opacity; }
+.pint[hidden] { display: none; }
+/* level gauge: same scale as the frames (100% full, 0% empty), amber beer with a foam cap */
+.drain-level { position: fixed; inset-inline-end: 1rem; top: 50%; translate: 0 -50%; z-index: 20; width: .9rem; height: 10rem; border-radius: 6px 6px 8px 8px; background: rgba(29, 15, 10, .78); border: 2px solid var(--cream); overflow: hidden; }
+.drain-level i { position: absolute; inset: 0; background: linear-gradient(180deg, var(--cream) 0 7%, var(--amber-hi) 7%, var(--amber) 100%); transform-origin: 50% 100%; }
+.drain-level::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(180deg, transparent 0 calc(20% - 1px), rgba(29, 15, 10, .55) calc(20% - 1px) 20%); }
 .drain-page { background: var(--mahogany); color: var(--paper); isolation: isolate; }
 .drain-page .page-head > * { position: relative; }
-.drain-page .page-head { background: rgba(29, 15, 10, .82); border-radius: 0 0 var(--r) var(--r); padding-inline: clamp(1rem, 3vw, 2rem); margin-inline-start: max(var(--gut), calc((100vw - 76rem) / 2)); width: fit-content; max-width: min(100% - 2 * var(--gut), 46rem); }
+.drain-page .page-head { background: rgba(29, 15, 10, .9); border-radius: 0 0 var(--r) var(--r); padding-inline: clamp(1rem, 3vw, 2rem); margin-inline-start: max(var(--gut), calc((100vw - 76rem) / 2)); width: fit-content; max-width: min(100% - 2 * var(--gut), 46rem); }
 .drain-page .lede { color: #e6d9bd; } .drain-page .mono { color: var(--amber-hi); }
-.drain-page .toolbar { width: fit-content; max-width: 100%; background: rgba(29, 15, 10, .82); border-radius: var(--r); padding: 1rem 1.2rem; margin-block-end: 1.4rem; display: grid; gap: .8rem; color: var(--paper); }
+.drain-page .toolbar { width: fit-content; max-width: 100%; background: rgba(29, 15, 10, .9); border-radius: var(--r); padding: 1rem 1.2rem; margin-block-end: 1.4rem; display: grid; gap: .8rem; color: var(--paper); }
 .drain-page .toolbar .filters { margin: 0; }
 .drain-page .toolbar .note-s { color: #e1d4b3; }
 .drain-page .filters button { border-color: var(--amber); color: var(--paper); } .drain-page .filters button[aria-pressed="true"] { background: var(--amber); color: var(--ink); }
 .drain-page .card { background: rgba(248, 241, 223, .97); }
 .drain-page .card .note-s { color: var(--ink-2); }
-.drain-page .foot-note { display: inline-block; background: rgba(29, 15, 10, .82); color: #f0e2c0; padding: .5rem .8rem; border-radius: 8px; }
-.drain-note { display: inline-block; font: 400 .72rem var(--mono); color: #f0e2c0; background: rgba(29, 15, 10, .82); padding: .4rem .7rem; border-radius: 8px; margin-top: .8rem; }
+.drain-page .foot-note { display: inline-block; background: rgba(29, 15, 10, .9); color: #f0e2c0; padding: .5rem .8rem; border-radius: 8px; }
+.drain-note { display: inline-block; font: 400 .72rem var(--mono); color: #f0e2c0; background: rgba(29, 15, 10, .9); padding: .4rem .7rem; border-radius: 8px; margin-top: .8rem; }
 .drain-page .foot { position: relative; }
-@media (max-width: 40rem) { .drain-level { display: none; } }
-@media print { .beer, .drain-level { display: none; } }
+@media (max-width: 40rem) { .drain-level { inset-inline-end: .4rem; height: 7rem; } }
+@media print { .pint, .beer, .drain-level { display: none; } }
 
 .page-head { padding-block: clamp(2.6rem, 7vw, 5rem) 1.8rem; display: grid; gap: .9rem; }
 .crumbs { font-size: .9rem; display: flex; gap: .5rem; flex-wrap: wrap; }

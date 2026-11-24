@@ -23,16 +23,16 @@
 <button class="menubtn" type="button" id="menubtn" aria-expanded="false" aria-controls="tabs"><span>Menu</span></button>
 </div></header>
 <main id="main" tabindex="-1">
-<canvas class="beer" aria-hidden="true"></canvas>
+<div class="pint" aria-hidden="true" data-state="loading"></div><canvas class="beer" aria-hidden="true" hidden></canvas>
 <div class="drain-level" aria-hidden="true"><i></i></div>
 <div class="wrap page-head"><div class="crumbs"><a href="index.html">Home</a> / <span>Beers</span></div><p class="mono">The shelf</p><h1>Beers</h1><p class="lede">British beers, from crisp lagers to dark stouts.</p></div>
 <section class=""><div class="wrap" style="padding-bottom:5rem">
-<div class="toolbar"><p class="notice" style="margin-bottom:1.2rem">The whole screen is a pint, and it empties as you scroll. Fill your basket before it is gone.</p><div class="filters" id="filters" role="group" aria-label="Filter"></div>
+<div class="toolbar"><p class="notice" style="margin-bottom:1.2rem">You are inside the pint, and it empties as you scroll. Fill your basket before it is gone.</p><div class="filters" id="filters" role="group" aria-label="Filter"></div>
 <p id="cards-status" class="note-s" role="status" aria-live="polite">Loading the shelf&hellip;</p></div>
 <h2 class="vh">Products</h2>
 <ul class="cards" id="cards" style="list-style:none" aria-label="Beers"></ul>
 <p class="note-s foot-note" style="margin-top:1.4rem">Please drink responsibly. 18+ only. Allergen and ABV details will be shown on each product once the shop confirms them.</p>
-<p class="drain-note">The beer behind the page is generated in your browser as a stand-in. It will be replaced by real close-up footage of a pint being drunk.</p>
+<p class="drain-note">Temporary: the pint behind this page is made of AI-generated stand-in images, not shop photography. Real photos of the shop&rsquo;s own pour will replace them.</p>
 </div></section>
 </main>
 <footer class="foot"><div class="wrap">
@@ -73,5 +73,6 @@
 <script src="assets/js/shop.js" defer></script>
 <script src="assets/js/motion.js" defer></script>
 <script src="assets/js/beer.js" defer></script>
+<script src="assets/js/pint.js" defer></script>
 </body>
 </html>

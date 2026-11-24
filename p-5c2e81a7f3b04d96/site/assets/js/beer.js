@@ -1,11 +1,13 @@
-/* Jack O'Beers: the whole screen is a pint of beer, and it empties as you scroll.
+/* FALLBACK background (used on pages without the photo frames, or if they fail to load).
+   Jack O'Beers: the whole screen is a pint of beer, and it empties as you scroll.
    A WebGL fragment shader draws the beer itself (backlit amber, rising bubbles of different sizes, a creamy foam head riding the surface,
    foam lacing left behind as the level falls). No glass is drawn: you are inside the pint. Scroll position sets the level.
    TEMPORARY STAND-IN: generated in the browser. Real macro footage of a pint being drunk, scrubbed by scroll, will look better; see README.
    Reduced motion or no WebGL: a still, full pint (CSS), no scrubbing. */
-(function () {
+window.JO_startBeerShader = function () {
   'use strict';
   var cv = document.querySelector('canvas.beer'); if (!cv) return;
+  cv.hidden = false;
   var meter = document.querySelector('.drain-level i');
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function fallback() { cv.classList.add('beer-still'); }
@@ -113,4 +115,5 @@
   cv.addEventListener('webglcontextlost', function (e) { e.preventDefault(); running = false; fallback(); });
   resize();
   if (!still) requestAnimationFrame(frame);
-})();
+};
+if (!document.querySelector('.pint')) window.JO_startBeerShader(); /* shader is the fallback when the photo frames are used */
