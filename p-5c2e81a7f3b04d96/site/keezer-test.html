@@ -11,20 +11,26 @@
 <link rel="icon" href="assets/media/jack-logo.png">
 <link rel="preload" href="assets/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
+<meta property="og:site_name" content="Jack O’Beers &amp; Deli">
+<meta property="og:title" content="Keezer rental (test) | Jack O’Beers">
+<meta property="og:description" content="Test page for the keezer background.">
+<meta property="og:image" content="assets/media/jack-logo.png">
 <link rel="stylesheet" href="assets/css/site.css">
 </head>
 <body class="drain-page" data-page="kegs" >
 <a class="skip" href="#main">Skip to the content</a>
-<div class="demo-bar" role="region" aria-label="Preview notice">Private design preview. Sample products and prices. <span data-demo-only>Checkout is not connected.</span></div>
+<div class="demo-bar" role="region" aria-label="Preview notice">Preview build &middot; sample products <span data-demo-only>&middot; checkout not connected</span></div>
 <header class="hdr"><div class="wrap hdr-in">
 <a class="brand" href="index.html" aria-label="Jack O&rsquo;Beers, home"><img src="assets/media/jack-logo.png" alt="" width="46" height="46"><span>Jack <span>O&rsquo;</span>Beers</span></a>
 <nav aria-label="Main"><ul class="tabs" id="tabs"><li><button class="tab" type="button" data-mega aria-expanded="false" aria-controls="mega-shop">Shop<svg class="chev" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button><div class="mega" id="mega-shop" hidden><a href="beers.html"><b>Beers</b><small>Crisp lagers to dark stouts, all British</small></a><a href="ciders.html"><b>Ciders</b><small>Dry through to fruity</small></a><a href="wines.html"><b>Wines</b><small>To go with the deli counter</small></a><a href="kegs.html"><b>Kegs</b><small>For parties and pubs at home</small></a><a href="hampers.html"><b>Hampers</b><small>Drinks and deli, ready to give</small></a><a class="all" href="shop.html"><b>See the whole shop</b><small>Every shelf in one place</small></a></div></li><li><a class="tab" href="deli.html">Deli menu</a></li><li><a class="tab" href="click-and-collect.html">Click &amp; collect</a></li><li><a class="tab" href="shipping.html">Shipping</a></li><li><a class="tab" href="about.html">About</a></li><li><a class="tab" href="newsletter.html">Newsletter</a></li><li><a class="tab" href="members.html">Members</a></li></ul></nav>
+<a class="iconbtn" href="search.html" aria-label="Search the shop"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a>
 <a class="cartbtn" href="cart.html" data-open-cart data-cart-label aria-label="Basket, 0 items"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h12l-1 13H7L6 7zm3-1a3 3 0 016 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span class="lbl">Basket</span> <span class="n" data-cart-count>0</span></a>
 <button class="menubtn" type="button" id="menubtn" aria-expanded="false" aria-controls="tabs"><span>Menu</span></button>
 </div></header>
 <main id="main" tabindex="-1">
 <div class="pint" aria-hidden="true" data-state="loading" data-prefix="keezer-" data-dir="fill" data-pos="50% 45%"></div><canvas class="beer" aria-hidden="true" data-dir="fill" hidden></canvas>
 <div class="drain-level" aria-hidden="true"><i></i></div>
+<p class="img-tag">Temporary AI-generated imagery</p>
 <div class="wrap page-head"><div class="crumbs"><a href="index.html">Home</a> / <span>Keezer test</span></div><p class="mono">Test page</p><h1>Keezer rental (test page)</h1><p class="lede">A test of the full-screen keezer background. The glass fills as you scroll.</p></div>
 <section><div class="wrap" style="padding-bottom:5rem">
 <div class="toolbar"><p class="notice"><b>Test page, not a real offer.</b> A keezer is read here as a chest freezer converted to serve kegs through taps. Nothing about the rental is agreed or assumed: every detail below is a placeholder.</p>
@@ -46,7 +52,7 @@
 <button class="btn sm" type="submit">Join the list</button><p data-status role="status"></p></form></div>
 </div>
 <div class="fine"><p><b>Please drink responsibly. You must be 18 or over to buy alcohol.</b> <a href="age-policy.html">Age policy</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="returns.html">Delivery &amp; returns</a></p>
-<p>Private design preview of a proposed site by Rhys Hume. Not live. Products, prices and details are sample data until the shop supplies the real ones.</p></div>
+<p>Preview build by Rhys Hume. Products, prices and some details are placeholders until the shop supplies them.</p></div>
 </div></footer>
 <div class="scrim" id="scrim"></div>
 <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-t" aria-hidden="true">
@@ -56,11 +62,11 @@
 <p class="note-s">Delivery or click &amp; collect, and any tax, are set on the next step.<span data-live-only> You pay securely on Shopify.</span></p>
 <button class="btn" type="button" id="drawer-checkout" data-checkout disabled>Checkout</button>
 <a class="btn ghost" href="cart.html" style="color:var(--ink)">View basket &amp; choose delivery or collection</a></div></aside>
-<dialog id="demo-checkout" aria-labelledby="dc-t"><div class="dlg"><h2 id="dc-t">Checkout is not connected yet</h2>
+<dialog id="demo-checkout" closedby="any" aria-labelledby="dc-t"><div class="dlg"><h2 id="dc-t">Checkout is not connected yet</h2>
 <p>This is a design preview, so nothing is charged. When the shop&rsquo;s Shopify store is connected, this button takes you to Shopify&rsquo;s secure checkout, where you pay with the methods the shop turns on (for example card, Apple Pay, Google Pay or PayPal).</p>
 <p class="note-s">Click &amp; collect orders pay the same way. Whether paying in the shop on collection is allowed is a decision for the shop.</p>
 <div class="row"><button class="btn" type="button" data-close-dialog>Got it</button></div></div></dialog>
-<dialog id="agegate" class="agegate" aria-labelledby="ag-t"><div class="dlg"><p class="mono">Welcome</p><h2 id="ag-t">Are you 18 or over?</h2>
+<dialog id="agegate" class="agegate" closedby="none" aria-labelledby="ag-t"><div class="dlg"><p class="mono">Welcome</p><h2 id="ag-t">Are you 18 or over?</h2>
 <p class="lede">We sell alcohol, so we ask everyone to confirm their age before looking around. We may ask for ID on delivery or collection.</p>
 <div class="row"><button class="btn" type="button" id="age-yes">Yes, I&rsquo;m 18 or over</button><button class="btn ghost" type="button" id="age-no">No</button></div>
 <p class="note-s" style="color:#cbb98f">This is a simple confirmation, not an age check. How age is verified is for the shop to decide.</p></div></dialog>

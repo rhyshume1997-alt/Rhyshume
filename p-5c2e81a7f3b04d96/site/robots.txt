@@ -1,0 +1,3 @@
+# Private preview. Remove this block and add the sitemap line at launch.
+User-agent: *
+Disallow: /

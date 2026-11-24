@@ -80,6 +80,7 @@ def header(key):
     return f'''<header class="hdr"><div class="wrap hdr-in">
 <a class="brand" href="index.html" aria-label="Jack O&rsquo;Beers, home"><img src="assets/media/jack-logo.png" alt="" width="46" height="46"><span>Jack <span>O&rsquo;</span>Beers</span></a>
 <nav aria-label="Main"><ul class="tabs" id="tabs">{"".join(items)}</ul></nav>
+<a class="iconbtn" href="search.html" aria-label="Search the shop"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a>
 <a class="cartbtn" href="cart.html" data-open-cart data-cart-label aria-label="Basket, 0 items"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h12l-1 13H7L6 7zm3-1a3 3 0 016 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span class="lbl">Basket</span> <span class="n" data-cart-count>0</span></a>
 <button class="menubtn" type="button" id="menubtn" aria-expanded="false" aria-controls="tabs"><span>Menu</span></button>
 </div></header>'''
@@ -97,7 +98,7 @@ def footer():
 <button class="btn sm" type="submit">Join the list</button><p data-status role="status"></p></form></div>
 </div>
 <div class="fine"><p><b>Please drink responsibly. You must be 18 or over to buy alcohol.</b> <a href="age-policy.html">Age policy</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="returns.html">Delivery &amp; returns</a></p>
-<p>Private design preview of a proposed site by Rhys Hume. Not live. Products, prices and details are sample data until the shop supplies the real ones.</p></div>
+<p>Preview build by Rhys Hume. Products, prices and some details are placeholders until the shop supplies them.</p></div>
 </div></footer>'''
 
 def drawer():
@@ -109,17 +110,17 @@ def drawer():
 <p class="note-s">Delivery or click &amp; collect, and any tax, are set on the next step.<span data-live-only> You pay securely on Shopify.</span></p>
 <button class="btn" type="button" id="drawer-checkout" data-checkout disabled>Checkout</button>
 <a class="btn ghost" href="cart.html" style="color:var(--ink)">View basket &amp; choose delivery or collection</a></div></aside>
-<dialog id="demo-checkout" aria-labelledby="dc-t"><div class="dlg"><h2 id="dc-t">Checkout is not connected yet</h2>
+<dialog id="demo-checkout" closedby="any" aria-labelledby="dc-t"><div class="dlg"><h2 id="dc-t">Checkout is not connected yet</h2>
 <p>This is a design preview, so nothing is charged. When the shop&rsquo;s Shopify store is connected, this button takes you to Shopify&rsquo;s secure checkout, where you pay with the methods the shop turns on (for example card, Apple Pay, Google Pay or PayPal).</p>
 <p class="note-s">Click &amp; collect orders pay the same way. Whether paying in the shop on collection is allowed is a decision for the shop.</p>
 <div class="row"><button class="btn" type="button" data-close-dialog>Got it</button></div></div></dialog>
-<dialog id="agegate" class="agegate" aria-labelledby="ag-t"><div class="dlg"><p class="mono">Welcome</p><h2 id="ag-t">Are you 18 or over?</h2>
+<dialog id="agegate" class="agegate" closedby="none" aria-labelledby="ag-t"><div class="dlg"><p class="mono">Welcome</p><h2 id="ag-t">Are you 18 or over?</h2>
 <p class="lede">We sell alcohol, so we ask everyone to confirm their age before looking around. We may ask for ID on delivery or collection.</p>
 <div class="row"><button class="btn" type="button" id="age-yes">Yes, I&rsquo;m 18 or over</button><button class="btn ghost" type="button" id="age-no">No</button></div>
 <p class="note-s" style="color:#cbb98f">This is a simple confirmation, not an age check. How age is verified is for the shop to decide.</p></div></dialog>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>'''
 
-def page(slug, title, desc, body, key="", cls="", extra_attrs="", motion=False, dpage=None, hero_head=""):
+def page(slug, title, desc, body, key="", cls="", extra_attrs="", motion=False, dpage=None, hero_head="", head_extra=""):
     scripts = ['assets/js/config.js', 'data/products.js', 'assets/js/store.js']
     if motion:
         scripts += ['assets/js/gsap.min.js', 'assets/js/ScrollTrigger.min.js']
@@ -142,11 +143,15 @@ def page(slug, title, desc, body, key="", cls="", extra_attrs="", motion=False, 
 <link rel="icon" href="assets/media/jack-logo.png">
 <link rel="preload" href="assets/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
+<meta property="og:site_name" content="Jack O\u2019Beers &amp; Deli">
+<meta property="og:title" content="{E(full_title)}">
+<meta property="og:description" content="{E(desc)}">
+<meta property="og:image" content="assets/media/jack-logo.png">
 <link rel="stylesheet" href="assets/css/site.css">
-</head>
+{head_extra}</head>
 <body class="{cls}" data-page="{dpage or key or slug}" {extra_attrs}>
 <a class="skip" href="#main">Skip to the content</a>
-<div class="demo-bar" role="region" aria-label="Preview notice">Private design preview. Sample products and prices. <span data-demo-only>Checkout is not connected.</span></div>
+<div class="demo-bar" role="region" aria-label="Preview notice">Preview build &middot; sample products <span data-demo-only>&middot; checkout not connected</span></div>
 {header(key)}
 {hero_head}<main id="main" tabindex="-1">
 {body}
@@ -170,6 +175,8 @@ def tiles(items, cream=False):
     return '<div class="grid g3">' + "".join(f'<a class="tile{c} rv" href="{h}"><h3>{t}</h3><p>{d}</p><span class="go">Take a look &rarr;</span></a>' for h, t, d in items) + '</div>'
 
 # ---------------- pages ----------------
+STRIP = ''.join(f'<span>{w}</span>' for w in ['Craft beer', 'Ciders', 'Wines', 'Deli', 'Gift hampers', 'Kegs', 'Click &amp; collect'])
+
 def home():
     hero = f'''<section class="hero" aria-labelledby="h1">
 <video muted loop playsinline preload="metadata" poster="assets/media/pour-poster.webp" autoplay aria-hidden="true"><source src="assets/media/pour.webm" type="video/webm"><source src="assets/media/pour.mp4" type="video/mp4"></video>
@@ -180,25 +187,26 @@ def home():
 <p class="lede">Come in, have a look around, and take something good home. Craft beer, ciders and wines, a deli counter, and gift hampers to match.</p><p class="tagline">&ldquo;{E(BUSINESS["tagline"])}&rdquo;</p>
 <div class="btns"><a class="btn" href="shop.html">Explore the shop</a><a class="btn ghost" href="deli.html">Discover the deli</a></div>
 </div>
-<p class="tempnote">Temporary footage: AI-generated reference, not the shop. Real film goes here.</p>
-</section><div class="counter-lip" aria-hidden="true"></div>'''
+<p class="img-tag">Temporary AI-generated footage</p>
+</section><div class="counter-lip" aria-hidden="true"></div>
+<div class="strip" aria-hidden="true"><div class="strip-in">{STRIP}{STRIP}</div></div>'''
     body = f'''
 <section class="sec"><div class="wrap">
-<div class="sec-head"><p class="mono">Browse the shelves</p><h2>Find your way in two clicks</h2><p class="lede">Beers, ciders, wines, kegs and hampers. Pick a shelf and you are looking at the bottles.</p></div>
+<div class="sec-head"><p class="mono">The shelves</p><h2>Shop by shelf</h2></div>
 {tiles([(f"{h}.html", t, d) for h, t, d in COLLECTIONS])}
 </div></section>
 <section class="sec"><div class="wrap">
-<div class="sec-head"><p class="mono">Two ranges, one shop</p><h2>Craft beer and deli, side by side</h2><p class="lede">Equal space for the drinks and the food, and gift hampers that bring the two together.</p></div>
+<div class="sec-head"><p class="mono">Two ranges, one shop</p><h2>Craft beer and deli, side by side</h2></div>
 <div class="grid g3">
 <a class="tile rv" href="beers.html"><h3>Craft beer</h3><p>Beers, ciders and wines for the fridge or the party, and kegs for the big occasions.</p><span class="go">Browse drinks &rarr;</span></a>
 <a class="tile cream rv" href="deli.html"><h3>The deli</h3><p>Pies, cheese, cured meats and sweet things to go with whatever is in your glass.</p><span class="go">See the deli &rarr;</span></a>
 <a class="tile rv" href="hampers.html"><h3>Gift hampers</h3><p>Ready-made hampers of drinks and deli, boxed and ready to give.</p><span class="go">Find a gift &rarr;</span></a>
 </div></div></section>
-<section class="sec alt"><div class="wrap"><div class="sec-head"><p class="mono">On the shelf now</p><h2>A few to start with</h2><p class="lede">Sample products shown here so you can see how it will look. The real range will come from the shop.</p></div>
+<section class="sec alt"><div class="wrap"><div class="sec-head"><p class="mono">On the shelf now</p><h2>Fresh in</h2></div>
 <ul class="cards" id="featured" style="list-style:none" aria-label="Featured products"></ul>
 <p style="margin-top:1.4rem"><a class="btn dk" href="beers.html">See all the beers</a></p></div></section>
 <section class="sec dark"><div class="wrap">
-<div class="sec-head"><p class="mono">However you like to shop</p><h2>Collect it, or we send it</h2><p class="lede">Order online and pick it up from the shop, or have it delivered. Either way you pay once, securely.</p></div>
+<div class="sec-head"><p class="mono">However you like to shop</p><h2>Collect it, or we send it</h2><p class="lede">Order online and pick it up from the shop, or have it delivered.</p></div>
 <div class="grid g3">
 <a class="tile rv" href="click-and-collect.html"><h3>Click &amp; collect</h3><p>Pick a day and a time that suits you. We&rsquo;ll have it ready.</p><span class="go">Choose a time &rarr;</span></a>
 <a class="tile rv" href="shipping.html"><h3>Shipping</h3><p>UK delivery, and international shipping where we can. Age check on delivery.</p><span class="go">How delivery works &rarr;</span></a>
@@ -206,34 +214,38 @@ def home():
 </div></div></section>
 <section class="sec"><div class="wrap grid g2" style="align-items:center">
 <div><p class="mono">The deli counter</p><h2>Discover the deli</h2><p class="lede" style="margin-top:.8rem">Pies, cheese, cured meats and sweet things from around Britain, to go with whatever is in your glass. {tbc("Deli range to be supplied by the shop")}</p><p style="margin-top:1.2rem"><a class="btn" href="deli.html">See the menu</a></p></div>
-<div class="slot wide rv">Photo slot<br>The deli counter. Real photo goes here.</div></div></section>
+<div class="slot wide rv">Photo coming soon</div></div></section>
 <section class="sec dark"><div class="wrap grid g2" style="align-items:center"><div><p class="mono">Gift hampers</p><h2>Something good to give</h2><p class="lede" style="margin-top:.8rem">Beer and deli favourites, boxed up for birthdays, thank-yous and just-because. {tbc("Hamper contents, prices and gift options to be confirmed")}</p><p style="margin-top:1.2rem"><a class="btn" href="hampers.html">See the hampers</a></p></div>
-<div class="slot wide rv">Photo slot<br>A gift hamper. Real photo goes here.</div></div></section>
+<div class="slot wide rv">Photo coming soon</div></div></section>
 <section class="sec"><div class="wrap grid g2" style="align-items:start"><div><p class="mono">Come and see us</p><h2>Find the shop</h2><div class="prose" style="margin-top:1rem">{contact_lines()}</div></div>
 <div><p class="mono">Follow along</p><h2>Social</h2><div class="prose" style="margin-top:1rem">{socials_list()}<p class="note-s">Links go live once the shop confirms its accounts.</p><p><a class="btn dk" href="contact.html">Contact &amp; event enquiries</a></p></div></div></div></section>
 <section class="sec alt"><div class="wrap narrow" style="text-align:center"><p class="mono">Never miss a thing</p><h2>Join the newsletter</h2><p class="lede" style="margin:.8rem auto 1.4rem">New arrivals, events and the odd offer. No spam.</p><a class="btn dk" href="newsletter.html">Sign me up</a></div></section>'''
-    page("index", TITLE, "Craft beer, cider, wine, a deli counter and gift hampers in Milngavie.", body, key="home", cls="home", motion=True, hero_head=hero)
+    ld = json.dumps({"@context": "https://schema.org", "@type": "LocalBusiness", "name": "Jack O\u2019Beers & Deli", "description": BUSINESS["tagline"],
+        "address": {"@type": "PostalAddress", "streetAddress": BUSINESS["address"][0], "addressLocality": BUSINESS["address"][1], "postalCode": BUSINESS["address"][2], "addressCountry": "GB"},
+        "telephone": BUSINESS["phone"], "email": BUSINESS["email"],
+        "openingHoursSpecification": [{"@type": "OpeningHoursSpecification", "dayOfWeek": d, "opens": "11:00", "closes": "19:00"} for d in ["Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "Monday"]]})
+    page("index", TITLE, "Craft beer, cider, wine, a deli counter and gift hampers in Milngavie.", body, key="home", cls="home", motion=True, hero_head=hero, head_extra=f'<script type="application/ld+json">{ld}</script>\n')
 
 def pint_markup(prefix="beer-", direction="drain", pos=""):
     """Full-screen scroll background (assets/js/pint.js). direction: drain (frame 1 full) or fill (frame 1 empty)."""
     p = f' data-pos="{pos}"' if pos else ""
     return (f'<div class="pint" aria-hidden="true" data-state="loading" data-prefix="{prefix}" data-dir="{direction}"{p}></div>'
-            f'<canvas class="beer" aria-hidden="true" data-dir="{direction}" hidden></canvas>\n<div class="drain-level" aria-hidden="true"><i></i></div>')
+            f'<canvas class="beer" aria-hidden="true" data-dir="{direction}" hidden></canvas>\n<div class="drain-level" aria-hidden="true"><i></i></div>\n<p class="img-tag">Temporary AI-generated imagery</p>')
 
 DRAIN = pint_markup()
 
 def collection(h, t, lede, drain=False, note=""):
     cls = "drain-page" if drain else ""
-    flt = '<div class="filters" id="filters" role="group" aria-label="Filter"></div>'
+    sort = ('<div class="sort"><label for="sort">Sort by</label><select id="sort"><option value="featured">Featured</option><option value="price-asc">Price, low to high</option>'
+            '<option value="price-desc">Price, high to low</option><option value="name">Name, A to Z</option></select></div>')
     body = (DRAIN if drain else "") + f'''
 {head(t, lede, t, "The shelf")}
-<section class="{'' if drain else ''}"><div class="wrap" style="padding-bottom:5rem">
-<div class="toolbar">{note}{flt}
-<p id="cards-status" class="note-s" role="status" aria-live="polite">Loading the shelf&hellip;</p></div>
+<section><div class="wrap" style="padding-bottom:5rem">
+<div class="toolbar">{note}<div class="listbar"><div class="filters" id="filters" role="group" aria-label="Filter"></div>{sort}</div>
+<p id="cards-status" class="note-s" role="status" aria-live="polite">Loading&hellip;</p></div>
 <h2 class="vh">Products</h2>
 <ul class="cards" id="cards" style="list-style:none" aria-label="{t}"></ul>
-<p class="note-s foot-note" style="margin-top:1.4rem">Please drink responsibly. 18+ only. Allergen and ABV details will be shown on each product once the shop confirms them.</p>
-{'<p class="drain-note">Temporary: the pint behind this page is made of AI-generated stand-in images, not shop photography. Real photos of the shop&rsquo;s own pour will replace them.</p>' if drain else ''}
+<p class="note-s foot-note" style="margin-top:1.4rem">Please drink responsibly. 18+ only.</p>
 </div></section>'''
     page(h, t, lede, body, key="shop", dpage="collection", cls=cls, extra_attrs=f'data-collection="{h}"', motion=drain)
 
@@ -259,8 +271,16 @@ def shop():
     body = head("The shop", "Everything on the shelves, in one place. Pick a shelf to start.", "Shop", "Explore") + '<section class="sec" style="padding-top:0"><div class="wrap"><h2 class="vh">Shelves</h2>' + tiles([(f"{h}.html", t, d) for h, t, d in COLLECTIONS], cream=True) + '</div></section>'
     page("shop", "Shop", "Beers, ciders, wines, kegs and hampers.", body, key="shop")
 
+def search():
+    body = f'''{head("Search", "Find a drink, a style or something to eat.", "Search")}
+<section><div class="wrap" style="padding-bottom:5rem">
+<form id="search-form" class="form" role="search" style="margin-bottom:1rem"><div class="field"><label for="q-input">Search the shop</label><input id="q-input" name="q" type="search" autocomplete="off" placeholder="Try stout, cider or hamper"></div></form>
+<p id="cards-status" class="note-s" role="status" aria-live="polite"></p>
+<ul class="cards" id="cards" style="list-style:none" aria-label="Search results"></ul></div></section>'''
+    page("search", "Search", "Search Jack O'Beers & Deli.", body, key="search", dpage="search")
+
 def product():
-    body = '<div class="wrap"><div class="pdp" id="pdp" aria-live="polite"><p>Loading&hellip;</p></div></div>'
+    body = '<div class="wrap"><div class="pdp" id="pdp" aria-live="polite"><p>Loading&hellip;</p></div></div><section class="sec alt" id="related-sec" hidden><div class="wrap"><div class="sec-head"><h2>You might also like</h2></div><ul class="cards" id="related" style="list-style:none"></ul></div></section>'
     page("product", "Product", "Product details.", body, key="shop", dpage="product")
 
 def cart():
@@ -302,7 +322,7 @@ def shipping():
 
 def deli():
     rows = [("Cheese", "Cheddar, Stilton, Cheshire and other British cheeses"), ("Pies &amp; savoury", "Pork pies, sausage rolls, scotch eggs"), ("Cured &amp; cold", "Ham, charcuterie, smoked fish"), ("On the side", "Chutneys, pickles, oatcakes, bread"), ("Something sweet", "Shortbread, tablet, tarts and cakes")]
-    cards = "".join(f'<li class="card rv"><div class="slot">Photo slot<br>Real photo goes here</div><div class="card-b"><div class="chips"><span class="chip">Sample</span></div><h3>{t}</h3><p>{d}</p><p>{tbc("Real items and prices to be supplied")}</p></div><div class="card-f"></div></li>' for t, d in rows)
+    cards = "".join(f'<li class="card rv"><div class="slot">Photo coming soon</div><div class="card-b"><div class="chips"><span class="chip">Sample</span></div><h3>{t}</h3><p>{d}</p><p>{tbc("Real items and prices to be supplied")}</p></div><div class="card-f"></div></li>' for t, d in rows)
     body = f'''{head("Deli menu", "Pies, cheese, cured meats and sweet things from around Britain, to go with whatever is in your glass.", "Deli menu", "The deli counter")}
 <section class="sec" style="padding-top:0"><div class="wrap"><p class="notice" style="margin-bottom:1.4rem"><b>Sample categories.</b> The real menu (with items, prices and allergens) will come from the shop. {tbc("Menu PDF or list to be supplied")}</p><h2 class="vh">Deli categories</h2><ul class="cards" style="list-style:none">{cards}</ul>
 <p class="note-s" style="margin-top:1.2rem">Allergen information must be given for every deli item. {tbc("Allergen data to be supplied and verified by the shop")}</p>
@@ -324,7 +344,7 @@ def members():
 <p class="note-s" style="color:#cbb98f">Preview only: in the live site, sign-in and accounts are handled by Shopify. {tbc("Member benefits to be agreed with the shop")}</p></div>
 <div id="area" hidden><div class="grid g3"><div class="buybox"><h3>Member offers</h3><p>{tbc("Offers to be agreed")}</p></div><div class="buybox"><h3>Your orders</h3><p>{tbc("Order history comes from Shopify accounts")}</p></div><div class="buybox"><h3>Your details</h3><p>{tbc("Account details come from Shopify accounts")}</p></div></div><p style="margin-top:1.2rem"><button class="btn ghost" style="color:var(--ink)" type="button" id="signout">Sign out</button></p></div>
 </div></section>
-<dialog id="signin" aria-labelledby="si-t"><form class="dlg" id="signin-form" novalidate><h2 id="si-t">Sign in (preview)</h2><p class="notice"><b>Demonstration only.</b> Enter any email and password to see the members area. No account is created and nothing is stored or sent.</p>
+<dialog id="signin" closedby="any" aria-labelledby="si-t"><form class="dlg" id="signin-form" novalidate><h2 id="si-t">Sign in (preview)</h2><p class="notice"><b>Demonstration only.</b> Enter any email and password to see the members area. No account is created and nothing is stored or sent.</p>
 <div class="field"><label for="si-e">Email</label><input id="si-e" name="email" type="email" autocomplete="email" required></div><div class="field"><label for="si-p">Password</label><input id="si-p" name="password" type="password" autocomplete="current-password" required></div>
 <p data-status role="status"></p><div class="row"><button class="btn" type="submit">Sign in</button><button class="btn ghost" style="color:var(--ink)" type="button" data-close-dialog>Cancel</button></div></form></dialog>'''
     page("members", "Members", "The members' area.", body, key="members")
@@ -333,7 +353,7 @@ def about():
     body = f'''{head("About Jack O&rsquo;Beers", "A friendly shop for people who like good things to eat and drink.", "About", "Our story")}
 <section class="sec" style="padding-top:0"><div class="wrap grid g2" style="align-items:start"><div class="prose"><p>Jack O&rsquo;Beers &amp; Deli is a shop in Milngavie for craft beer, ciders and wines, with a deli counter and gift hampers to go alongside. Come in for a chat, a recommendation or a gift, or order online and we&rsquo;ll get it to you.</p>
 <p>{tbc("Real story, opening year and team to be written by the shop")}</p><h2>What we are not</h2><p>{tbc("What the shop does not do, or who it is not for, to be written by the shop")}. For adults only: we do not sell alcohol to anyone under 18.</p><h2>Find us</h2>{contact_lines()}<h2>Events</h2><p>Planning an event? We take enquiries by email. <a class="link" href="contact.html">Contact &amp; events</a></p><p><a class="btn" href="click-and-collect.html">Click &amp; collect</a> <a class="btn ghost" style="color:var(--ink)" href="shipping.html">Shipping</a></p></div>
-<div class="slot wide rv">Photo slot<br>The shop front or the team. Real photo goes here.</div></div></section>'''
+<div class="slot wide rv">Photo coming soon</div></div></section>'''
     page("about", "About", "About Jack O'Beers.", body, key="about")
 
 def contact():
@@ -366,18 +386,19 @@ def notfound():
 
 def main():
     home(); shop()
-    collection("beers", "Beers", "British beers, from crisp lagers to dark stouts.", drain=True,
-               note='<p class="notice" style="margin-bottom:1.2rem">You are inside the pint, and it empties as you scroll. Fill your basket before it is gone.</p>')
+    collection("beers", "Beers", "Craft beers, from crisp lagers to dark stouts.", drain=True)
     collection("ciders", "Ciders", "British ciders, dry through to fruity.")
     collection("wines", "Wines", "Wines to go with the deli counter.")
-    collection("kegs", "Kegs", "Beer by the keg, for parties and pubs at home.", note=f'<p class="notice" style="margin-bottom:1.2rem">Keg size, deposit and equipment rental are {tbc("to be confirmed with the shop")}. Nothing here is assumed.</p>')
+    collection("kegs", "Kegs", "Beer by the keg, for parties and pubs at home.", note=f'<p class="notice">Keg size, deposit and equipment hire: {tbc("to be confirmed")}.</p>')
     collection("hampers", "Hampers", "Ready-made gift hampers of drinks and deli.",
-               note=f'<p class="notice" style="margin-bottom:1.2rem"><b>Gift hampers.</b> Craft beer and deli favourites, boxed and ready to give. Hamper contents, prices, gift messages and delivery to the recipient are {tbc("to be confirmed with the shop")}. Nothing here is assumed.</p>')
-    keezer_test(); product(); cart(); collect(); shipping(); deli(); newsletter(); members(); about()
+               note=f'<p class="notice">Hamper contents, prices and gift options: {tbc("to be confirmed")}.</p>')
+    keezer_test(); search(); product(); cart(); collect(); shipping(); deli(); newsletter(); members(); about()
     legal("privacy", "Privacy notice", "How we look after your information.", ["Who the data controller is and how to contact them", "What is collected (orders, accounts, newsletter, cookies and analytics) and why", "Who it is shared with (Shopify, payment and delivery providers, email provider)", "Retention, your rights and how to complain"])
     legal("terms", "Terms of sale", "The terms that apply when you buy from us.", ["Who we are, prices, tax and payment", "Orders, acceptance and cancellation", "Age restrictions and alcohol sale conditions", "Liability and governing law"])
     legal("returns", "Delivery & returns", "What happens if something goes wrong.", ["Delivery times, areas and costs", "Damaged or incorrect items and how to tell us", "Cancellations and refunds, including rules for perishable and alcoholic goods", "Click and collect problems"])
     contact(); age_policy(); notfound()
+    with open(os.path.join(ROOT, "robots.txt"), "w") as f:
+        f.write("# Private preview. Remove this block and add the sitemap line at launch.\nUser-agent: *\nDisallow: /\n")
     print("built", len([f for f in os.listdir(ROOT) if f.endswith('.html')]), "pages")
 
 if __name__ == "__main__":

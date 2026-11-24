@@ -21,6 +21,17 @@
   JO.closeDialog = function (id) { var d = document.getElementById(id); if (!d) return; if (d.close) d.close(); else d.removeAttribute('open'); if (lastFocus && lastFocus.focus) lastFocus.focus(); };
   $$('[data-close-dialog]').forEach(function (b) { b.addEventListener('click', function () { var d = b.closest('dialog'); if (d) JO.closeDialog(d.id); }); });
 
+  /* light dismiss: <dialog closedby="any"> is native in Chromium and Firefox; Safari needs this fallback */
+  if (!('closedBy' in HTMLDialogElement.prototype)) {
+    $$('dialog[closedby="any"]').forEach(function (d) {
+      d.addEventListener('click', function (e) {
+        if (e.target !== d) return; var r = d.getBoundingClientRect();
+        var inside = r.top <= e.clientY && e.clientY <= r.top + r.height && r.left <= e.clientX && e.clientX <= r.left + r.width;
+        if (!inside) JO.closeDialog(d.id);
+      });
+    });
+  }
+
   /* navigation */
   var tabs = $('#tabs'), menuBtn = $('#menubtn');
   if (menuBtn && tabs) menuBtn.addEventListener('click', function () { var o = tabs.classList.toggle('is-open'); menuBtn.setAttribute('aria-expanded', o); menuBtn.querySelector('span').textContent = o ? 'Close' : 'Menu'; });
@@ -74,7 +85,7 @@
   JO.fail = function (err) { JO.toast((err && err.message) ? 'Sorry: ' + err.message : 'Something went wrong. Please try again.'); };
   JO.renderDrawer = function (c) {
     var list = $('#cart-lines'); if (!list) return;
-    list.innerHTML = c.lines.length ? c.lines.map(JO.lineHtml).join('') : '<li class="empty">Your basket is empty.<br><a class="link" href="shop.html">Have a look around the shop</a></li>';
+    list.innerHTML = c.lines.length ? c.lines.map(JO.lineHtml).join('') : '<li class="empty"><b>Your basket is empty</b><span>Find something good on the shelves.</span><span class="empty-links"><a class="btn sm" href="beers.html">Beers</a><a class="btn sm ghost" href="hampers.html">Gift hampers</a><a class="btn sm ghost" href="deli.html">Deli</a></span></li>';
     $('#cart-total').textContent = Store.money(c.subtotal);
     $('#drawer-checkout').disabled = !c.lines.length;
   };

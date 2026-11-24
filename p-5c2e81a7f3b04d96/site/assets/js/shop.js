@@ -5,13 +5,14 @@
   var page = document.body.dataset.page;
   var C = window.JO_CONFIG || {};
 
+  var REG = {}, SHELVES = { beers: 'Beers', ciders: 'Ciders', wines: 'Wines', kegs: 'Kegs', hampers: 'Hampers' };
   function variantOf(p) { return p.variants.filter(function (v) { return v.available; })[0] || p.variants[0]; }
   function priceText(p) {
     var v = p.variants, min = Math.min.apply(null, v.map(function (x) { return x.price; }));
     return (v.length > 1 ? 'From ' : '') + Store.money(min);
   }
-  function tbc(t) { return /^\[.*\]$/.test(t || '') ? '<span class="tbc">' + esc(t.slice(1, -1)) + '</span>' : esc(t); }
-  function photo(p, alt) { return p.image ? '<img src="' + esc(p.image.url) + '" alt="' + esc(p.image.alt || alt) + '" loading="lazy" width="640" height="480">' : '<span>Photo slot<br>' + esc(p.demo ? 'Real photo of this product goes here' : 'No image set in Shopify') + '</span>'; }
+  function tbc(t) { t = (t || '').replace(/^\[(ABV|Allergens) /, '['); return /^\[.*\]$/.test(t) ? '<span class="tbc">' + esc(t.slice(1, -1)) + '</span>' : esc(t); }
+  function photo(p, alt) { return p.image ? '<img src="' + esc(p.image.url) + '" alt="' + esc(p.image.alt || alt) + '" loading="lazy" width="640" height="480">' : '<span>Photo coming soon</span>'; }
   function add(p, qty, thenCheckout) {
     var v = variantOf(p);
     if (!v || !v.available) { JO.toast('Sorry, that is sold out.'); return Promise.resolve(); }
@@ -20,39 +21,71 @@
   }
 
   function card(p) {
-    var v = variantOf(p), avail = v && v.available;
+    var v = variantOf(p), avail = v && v.available; REG[p.handle] = p;
     return '<li class="card" data-handle="' + esc(p.handle) + '" data-kind="' + esc(p.kind) + '"><div class="slot">' + photo(p, p.title) + '</div>' +
       '<div class="card-b"><div class="chips">' + (p.demo ? '<span class="chip">Sample</span>' : '') + '<span class="chip k">' + esc(p.productType || p.kind) + '</span></div>' +
       '<h3><a href="product.html?h=' + encodeURIComponent(p.handle) + '">' + esc(p.title) + '</a></h3><p class="desc">' + esc(p.descriptor) + '</p>' + (p.blurb && !/^\[.*\]$/.test(p.blurb) ? '<p class="blurb">' + esc(p.blurb) + '</p>' : '') + (p.pairings && p.pairings.length ? '<p class="blurb"><b>Goes with:</b> ' + p.pairings.map(esc).join(', ') + '</p>' : '') + '</div>' +
-      '<div class="card-f"><div class="price">' + priceText(p) + (p.demo ? '<small>Sample price</small>' : '') + '</div>' +
+      '<div class="card-f"><div class="price">' + priceText(p) + '</div>' +
       '<div class="card-act">' + (avail ? '<button class="btn sm" type="button" data-add="' + esc(p.handle) + '">Add to basket</button><button class="btn sm ghost" type="button" data-buy="' + esc(p.handle) + '">Buy now</button>' : '<span class="tbc">Sold out</span>') + '</div></div></li>';
   }
 
+  /* one handler for every Add to basket / Buy now button on the page (grids, search results, related products) */
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('[data-add]'), b = e.target.closest('[data-buy]');
+    if (a && REG[a.dataset.add]) add(REG[a.dataset.add], 1, false); else if (b && REG[b.dataset.buy]) add(REG[b.dataset.buy], 1, true);
+  });
+  function grid(list, items) { list.innerHTML = items.map(card).join(''); window.dispatchEvent(new Event('jo:layout')); }
+  function minPrice(p) { return Math.min.apply(null, p.variants.map(function (v) { return v.price; })); }
+  var SORTS = {
+    featured: null,
+    'price-asc': function (a, b) { return minPrice(a) - minPrice(b); },
+    'price-desc': function (a, b) { return minPrice(b) - minPrice(a); },
+    name: function (a, b) { return a.title.localeCompare(b.title); }
+  };
+
   /* ---------- collection ---------- */
   function initCollection() {
-    var handle = document.body.dataset.collection, list = $('#cards'), status = $('#cards-status'), byHandle = {};
-    var filters = $('#filters');
+    var handle = document.body.dataset.collection, list = $('#cards'), status = $('#cards-status'), filters = $('#filters'), sortSel = $('#sort');
     Store.collection(handle).then(function (col) {
-      col.products.forEach(function (p) { byHandle[p.handle] = p; });
       if (!col.products.length) { list.innerHTML = ''; status.textContent = 'Nothing here yet. Check back soon.'; return; }
-      status.textContent = '';
-      function show(f) {
-        var items = col.products.filter(function (p) { return !f || f === 'all' || p.productType === f || p.tags.indexOf(f) > -1; });
-        list.innerHTML = items.map(card).join('');
-        status.textContent = items.length + (items.length === 1 ? ' product' : ' products') + ' shown';
-        window.dispatchEvent(new Event('jo:layout'));
+      var f = 'all', sort = 'featured';
+      function show() {
+        var items = col.products.filter(function (p) { return f === 'all' || p.productType === f || p.tags.indexOf(f) > -1; });
+        if (SORTS[sort]) items = items.slice().sort(SORTS[sort]);
+        grid(list, items);
+        status.textContent = items.length + (items.length === 1 ? ' product' : ' products');
       }
       var types = []; col.products.forEach(function (p) { if (p.productType && types.indexOf(p.productType) < 0) types.push(p.productType); });
       if (filters && types.length > 1) {
         filters.innerHTML = '<button type="button" aria-pressed="true" data-f="all">All</button>' + types.map(function (t) { return '<button type="button" aria-pressed="false" data-f="' + esc(t) + '">' + esc(t) + '</button>'; }).join('');
-        filters.addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; $$('button', filters).forEach(function (x) { x.setAttribute('aria-pressed', x === b); }); show(b.dataset.f); });
-      }
-      show('all');
-    }).catch(function () { status.className = 'err'; status.textContent = 'Sorry, we could not load the shop just now. Please refresh, or call the shop.'; });
-    list.addEventListener('click', function (e) {
-      var a = e.target.closest('[data-add]'), b = e.target.closest('[data-buy]');
-      if (a) add(byHandle[a.dataset.add], 1, false); else if (b) add(byHandle[b.dataset.buy], 1, true);
-    });
+        filters.addEventListener('click', function (e) { var bt = e.target.closest('button'); if (!bt) return; $$('button', filters).forEach(function (x) { x.setAttribute('aria-pressed', x === bt); }); f = bt.dataset.f; show(); });
+      } else if (filters) filters.hidden = true;
+      if (sortSel) sortSel.addEventListener('change', function () { sort = sortSel.value; show(); });
+      show();
+    }).catch(function () { status.className = 'err'; status.textContent = 'Sorry, we could not load the shop just now. Please refresh, or call us.'; });
+  }
+
+  /* ---------- search ---------- */
+  function initSearch() {
+    var form = $('#search-form'), input = $('#q-input'), list = $('#cards'), status = $('#cards-status'), all = null;
+    function load() {
+      if (all) return Promise.resolve(all);
+      return Promise.all(Object.keys(SHELVES).map(function (h) { return Store.collection(h).then(function (c) { return c.products.map(function (p) { p.collection = p.collection || h; return p; }); }).catch(function () { return []; }); }))
+        .then(function (r) { all = [].concat.apply([], r); return all; });
+    }
+    function run() {
+      var q = input.value.trim().toLowerCase();
+      history.replaceState(null, '', q ? '?q=' + encodeURIComponent(q) : location.pathname);
+      load().then(function (items) {
+        var words = q.split(/\s+/).filter(Boolean);
+        var hit = !words.length ? [] : items.filter(function (p) { var hay = [p.title, p.descriptor, p.blurb, p.productType, p.tags.join(' '), p.pairings.join(' '), SHELVES[p.collection] || ''].join(' ').toLowerCase(); return words.every(function (w) { return hay.indexOf(w) > -1; }); });
+        grid(list, hit);
+        status.textContent = !words.length ? 'Type a drink, a style or something to eat.' : hit.length ? hit.length + (hit.length === 1 ? ' result' : ' results') + ' for \u201c' + q + '\u201d' : 'Nothing found for \u201c' + q + '\u201d. Try \u201cstout\u201d, \u201ccider\u201d or \u201champer\u201d, or browse the shelves.';
+      });
+    }
+    form.addEventListener('submit', function (e) { e.preventDefault(); run(); });
+    input.addEventListener('input', function () { clearTimeout(run.t); run.t = setTimeout(run, 180); });
+    var q0 = new URLSearchParams(location.search).get('q'); if (q0) input.value = q0; run();
   }
 
   /* ---------- product ---------- */
@@ -73,13 +106,13 @@
       var opts = p.variants.length > 1 ? '<div class="field"><label for="variant">Size</label><select id="variant">' + p.variants.map(function (x, i) { return '<option value="' + i + '"' + (x === v ? ' selected' : '') + (x.available ? '' : ' disabled') + '>' + esc(x.title) + ' (' + Store.money(x.price) + ')</option>'; }).join('') + '</select></div>' : '';
       root.innerHTML =
         '<div><div class="slot">' + photo(p, p.title) + '</div></div><div class="pdp-b" style="display:grid;gap:1.4rem;align-content:start">' +
-        '<div class="crumbs"><a href="shop.html">Shop</a> / <span>' + esc(p.productType || p.kind) + '</span></div>' +
-        (p.demo ? '<p class="notice"><b>Sample product.</b> Name, flavours, pairings and price are demonstration data for the design, not the shop&rsquo;s range.</p>' : '') +
+        '<div class="crumbs"><a href="shop.html">Shop</a> / ' + (SHELVES[p.collection] ? '<a href="' + esc(p.collection) + '.html">' + SHELVES[p.collection] + '</a>' : '<span>' + esc(p.productType || p.kind) + '</span>') + '</div>' +
+        (p.demo ? '<div class="chips"><span class="chip">Sample product</span></div>' : '') +
         '<h1 style="font-size:clamp(2.2rem,5vw,3.6rem)">' + esc(p.title) + '</h1><p class="lede">' + esc(p.descriptor) + '</p>' +
-        '<div class="buybox"><div class="price" id="pprice">' + Store.money(v.price) + (p.demo ? '<small>Sample price</small>' : '') + '</div>' + opts +
+        '<div class="buybox"><div class="price" id="pprice">' + Store.money(v.price) + '</div>' + opts +
         '<div class="row" style="display:flex;gap:.8rem;flex-wrap:wrap;align-items:center"><div class="qty" role="group" aria-label="Quantity"><button type="button" id="q-" aria-label="Fewer">&minus;</button><output id="q" aria-live="polite">1</output><button type="button" id="q+" aria-label="More">+</button></div>' +
         '<button class="btn" type="button" id="p-add">Add to basket</button><button class="btn dk" type="button" id="p-buy">Buy now</button></div>' +
-        '<div class="pay-opts"><span>Choose how you get it at the basket: <b>delivery</b> or <b>click and collect</b>.</span><span data-live-only>You pay securely on Shopify&rsquo;s checkout.</span><span data-demo-only>Demonstration mode: checkout is not connected, nothing is charged.</span></div></div>' +
+        '<div class="pay-opts"><span>Delivery or click &amp; collect, chosen at the basket. Secure checkout by Shopify.</span><span data-demo-only>Preview: checkout is not connected, nothing is charged.</span></div></div>' +
         '<h2 style="font-size:1.6rem">Flavour</h2>' + dials(p.flavour) +
         '<dl class="dl"><div><dt>About</dt><dd>' + tbc(p.blurb && !/^\[.*\]$/.test(p.blurb) ? p.blurb : p.description) + '</dd></div><div><dt>Goes well with</dt><dd>' + (p.pairings.length ? p.pairings.map(esc).join(', ') : '<span class="tbc">to be supplied</span>') + '</dd></div><div><dt>ABV</dt><dd>' + tbc(p.abv || '[ABV to be confirmed]') + '</dd></div><div><dt>Allergens</dt><dd>' + tbc(p.allergens || '[Allergens to be verified]') + '</dd></div></dl>' +
         '<p class="note-s">Please drink responsibly. 18+ only. We check age on delivery and collection.</p></div>';
@@ -91,6 +124,7 @@
       function go(co) { var vv = v; Store.cart.add(vv.id, qty, { title: p.title, variantTitle: vv.title === 'Default' ? '' : vv.title, price: vv.price, image: p.image && p.image.url, handle: p.handle }).then(function () { if (co) JO.checkout(); else { JO.toast(p.title + ' added to your basket'); JO.openCart(); } }).catch(JO.fail); }
       $('#p-add').addEventListener('click', function () { go(false); });
       $('#p-buy').addEventListener('click', function () { go(true); });
+      var rel = $('#related'); if (rel && p.collection) Store.collection(p.collection).then(function (c) { var others = c.products.filter(function (x) { return x.handle !== p.handle; }).slice(0, 4); if (!others.length) return; grid(rel, others); $('#related-sec').hidden = false; }).catch(function () {});
     }).catch(function () { root.innerHTML = '<p class="err">Sorry, we could not load this product. Please refresh.</p>'; });
   }
 
@@ -112,7 +146,7 @@
   function initCart() {
     var list = $('#page-lines'), tot = $('#page-total'), slotBox = $('#slots'), slotWrap = $('#slot-wrap'), msg = $('#cart-msg');
     function render(c) {
-      list.innerHTML = c.lines.length ? c.lines.map(JO.lineHtml).join('') : '<li class="empty">Your basket is empty.<br><a class="link" href="shop.html">Have a look around the shop</a></li>';
+      list.innerHTML = c.lines.length ? c.lines.map(JO.lineHtml).join('') : '<li class="empty"><b>Your basket is empty</b><span>Find something good on the shelves.</span><span class="empty-links"><a class="btn sm" href="beers.html">Beers</a><a class="btn sm ghost" href="hampers.html">Gift hampers</a><a class="btn sm ghost" href="deli.html">Deli</a></span></li>';
       tot.textContent = Store.money(c.subtotal);
       $('#page-checkout').disabled = !c.lines.length;
       var m = (c.attributes || {}).delivery_method || 'ship'; $$('input[name="method"]').forEach(function (r) { r.checked = r.value === m; }); slotWrap.hidden = m !== 'collect';
@@ -148,12 +182,13 @@
   }
 
   if (page === 'collection') initCollection();
+  if (page === 'search') initSearch();
   if (page === 'product') initProduct();
   if (page === 'cart') initCart();
   if (page === 'collect') initCollect();
   if (page === 'members') initMembers();
   /* featured products on the home page */
   if (page === 'home') {
-    var feat = $('#featured'); if (feat) Store.collection('beers').then(function (c) { feat.innerHTML = c.products.slice(0, 4).map(card).join(''); var by = {}; c.products.forEach(function (p) { by[p.handle] = p; }); feat.addEventListener('click', function (e) { var a = e.target.closest('[data-add]'), b = e.target.closest('[data-buy]'); if (a) add(by[a.dataset.add], 1, false); else if (b) add(by[b.dataset.buy], 1, true); }); }).catch(function () {});
+    var feat = $('#featured'); if (feat) Store.collection('beers').then(function (c) { grid(feat, c.products.slice(0, 4)); }).catch(function () {});
   }
 })();
