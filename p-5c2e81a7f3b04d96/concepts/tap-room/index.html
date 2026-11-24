@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#1b2024">
+<title>Jack O'Beers &amp; Deli | The Tap Room (concept)</title>
+<meta name="description" content="Concept for discussion: a tap room style website for Jack O'Beers &amp; Deli, Milngavie.">
+<link rel="preload" href="fonts/barlow-condensed-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/ibm-plex-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="concept.css">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<aside class="concept-label" aria-label="Status">Concept for discussion</aside>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="logo" href="#top" aria-label="Jack O'Beers &amp; Deli, back to top">
+      <img src="../../site/assets/media/jack-logo.png" width="244" height="258" alt="Jack O'Beers &amp; Deli logo: a brown bull with a barrel on its back">
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="bars" aria-hidden="true"></span><span>Menu</span></button>
+    <nav id="site-nav" class="site-nav" aria-label="Main">
+      <ul>
+        <li class="has-sub">
+          <button type="button" class="nav-link sub-toggle" aria-expanded="false" aria-controls="shop-sub">Shop <span class="caret" aria-hidden="true"></span></button>
+          <ul id="shop-sub" class="sub">
+            <li><a href="#taplist"><span class="n" aria-hidden="true">01</span>Beer</a></li>
+            <li><a href="#taplist"><span class="n" aria-hidden="true">02</span>Cider</a></li>
+            <li><a href="#taplist"><span class="n" aria-hidden="true">03</span>Wine</a></li>
+            <li><a href="#ranges"><span class="n" aria-hidden="true">04</span>Kegs</a></li>
+            <li><a href="#ranges"><span class="n" aria-hidden="true">05</span>Hampers</a></li>
+          </ul>
+        </li>
+        <li><a class="nav-link" href="#ranges">Deli</a></li>
+        <li><a class="nav-link" href="#how">Click &amp; collect</a></li>
+        <li><a class="nav-link" href="#how">Shipping</a></li>
+        <li><a class="nav-link" href="#find">About</a></li>
+        <li><a class="nav-link" href="#members">Members</a></li>
+      </ul>
+    </nav>
+    <div class="basket-wrap">
+      <button class="basket-btn" type="button" aria-expanded="false" aria-controls="basket-panel">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 8h16l-1.6 11H5.6zM8 8V6a4 4 0 0 1 8 0v2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        <span>Basket</span><span class="count" id="basket-count">0<span class="sr"> items</span></span>
+      </button>
+      <div id="basket-panel" class="basket-panel" hidden>
+        <p class="bp-title">Basket (demonstration)</p>
+        <ul id="basket-list"><li class="empty">Nothing yet.</li></ul>
+        <p class="bp-note">Concept only: there is no checkout here. The real shop would use Shopify's secure checkout.</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+<section class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">13 Station Road, Milngavie</p>
+      <h1>Fresh from keg to bottle, <span class="amber">no foam, no fuss.</span></h1>
+      <p class="lede">Craft beer, ciders, wines, deli food and gift hampers from one shop. Browse the list, add what you fancy, then collect it or have it sent. Online shopping and delivery are being set up; details to be confirmed.</p>
+      <p class="hero-actions"><a class="btn btn-primary" href="#taplist">Browse the tap list</a><a class="btn btn-ghost" href="#find">Find the shop</a></p>
+      <p class="aside">Yes, the tap handle works (drag it down, or use the button). The pint is a drawing, so no age check is needed. Please drink responsibly. 18+ only.</p>
+    </div>
+
+    <div class="rig-col">
+      <div class="rig" id="rig">
+        <svg class="rig-svg" viewBox="0 0 560 590" role="img" aria-labelledby="rig-title">
+          <title id="rig-title">Line drawing of a beer tap and a pint glass shown in section. The glass fills when the handle is pulled down.</title>
+          <defs>
+            <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="#fff" stroke-opacity=".045"/></pattern>
+            <clipPath id="glass-clip"><path d="M268 328H376L361 505H283Z"/></clipPath>
+            <linearGradient id="shine" x1="0" x2="1"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".18"/></linearGradient>
+          </defs>
+          <rect x="0" y="0" width="560" height="590" fill="url(#grid)"/>
+          <rect x="6.5" y="6.5" width="547" height="577" class="ln dash" rx="2"/>
+
+          <!-- line from keg -->
+          <g class="ln">
+            <path d="M7 238H140M7 258H140"/>
+            <path class="brass dash" d="M14 248H124"/>
+            <path class="brass" d="M118 242L128 248L118 254"/>
+          </g>
+          <text class="anno" x="12" y="224">FROM KEG</text>
+
+          <!-- tap body -->
+          <g class="ln brass">
+            <rect x="140" y="205" width="100" height="70" rx="6" class="fill-body"/>
+            <path d="M148 217H232"/>
+            <rect x="170" y="194" width="40" height="12" rx="2" class="fill-brass"/>
+            <path class="fill-body" d="M240 242H332V272L312 282V258H240Z"/>
+            <path d="M312 258V282"/>
+          </g>
+          <text class="anno" x="140" y="300">02 FAUCET</text>
+          <text class="anno" x="340" y="276">03 SPOUT</text>
+
+          <!-- handle hint -->
+          <g class="hint" id="rig-hint">
+            <text class="anno hi" x="24" y="84">01 HANDLE</text>
+            <text class="anno" x="24" y="104">PULL DOWN</text>
+            <path class="ln brass" d="M50 116V176M42 166L50 176L58 166"/>
+          </g>
+
+          <!-- stream -->
+          <rect id="stream" class="stream" x="320" y="282" width="4" height="223" rx="2"/>
+
+          <!-- glass in section -->
+          <g clip-path="url(#glass-clip)">
+            <rect x="250" y="320" width="150" height="190" class="glass-empty"/>
+            <g id="liquid" class="liquid"><rect x="250" y="340" width="150" height="165" class="beer"/><rect x="250" y="340" width="150" height="165" fill="url(#shine)"/></g>
+            <g id="foam-pos" class="foam-pos"><g id="foam" class="foam"><path d="M250 505V486q12-12 24-2t24 0q12-12 24-1t24 0q12-11 24-1t30 3V505Z"/></g></g>
+          </g>
+          <g class="ln">
+            <path d="M262 336H382L367 516H277Z"/>
+            <path d="M268 340H376L361 505H283Z" stroke-opacity=".5"/>
+            <path d="M277 516H367" stroke-width="2.5"/>
+            <path d="M276 507H368L367 516H277Z" class="fill-base"/>
+            <path d="M276 350L284 470" stroke-opacity=".35"/>
+          </g>
+          <!-- drip tray and bar -->
+          <g class="ln brass"><path d="M236 516H408V528H236Z"/><path d="M250 522H394" stroke-dasharray="6 6" stroke-opacity=".7"/><path d="M200 528H560" stroke-opacity=".6"/></g>
+
+          <!-- section annotations -->
+          <g class="ln" stroke-opacity=".7"><path d="M222 340H236M222 505H236M229 340V505"/><path d="M226 346L229 340L232 346M226 499L229 505L232 499"/></g>
+          <text class="anno small" transform="translate(214 424) rotate(-90)" text-anchor="middle">INSIDE HEIGHT (SKETCH)</text>
+          <g class="anno-right">
+            <g class="ln" stroke-opacity=".7"><path d="M382 336L404 322"/><path class="dash" d="M372 363H404"/><path d="M366 512L404 538"/></g>
+            <text class="anno" x="408" y="326">RIM</text>
+            <text class="anno" x="408" y="367">FILL LINE</text>
+            <text class="anno" x="408" y="545">THICK BASE</text>
+            <text class="anno hi" x="408" y="400">04 GLASS</text>
+            <text class="anno small" x="408" y="416">IN SECTION</text>
+          </g>
+          <text class="anno small" x="22" y="574">FIG. 1  TAP AND PINT.  ILLUSTRATION, NOT TO SCALE.</text>
+        </svg>
+
+        <button class="handle" id="handle" type="button" aria-describedby="handle-help">
+          <span class="sr">Tap handle</span>
+          <svg viewBox="0 0 60 200" aria-hidden="true" preserveAspectRatio="xMidYMax meet">
+            <rect x="24" y="128" width="12" height="64" rx="3" class="h-stem"/>
+            <rect x="12" y="3" width="36" height="130" rx="18" class="h-grip"/>
+            <path d="M21 24V108" stroke="#fff" stroke-opacity=".22" stroke-width="3" stroke-linecap="round"/>
+            <rect x="10" y="44" width="40" height="6" rx="3" class="h-band"/>
+            <rect x="10" y="100" width="40" height="6" rx="3" class="h-band"/>
+            <text transform="translate(35 76) rotate(90)" text-anchor="middle" class="h-text">PULL</text>
+            <circle cx="30" cy="195" r="5" class="h-band"/>
+          </svg>
+        </button>
+
+        <div class="caption" id="caption" aria-hidden="true">
+          <p class="cap-k">Sample pour</p>
+          <p class="cap-n" id="cap-name">Demo Amber Ale</p>
+          <p class="cap-d" id="cap-desc">Amber ale. Malty and rounded, easy to share.</p>
+          <a class="cap-link" id="cap-link" href="#row-demo-amber-ale" tabindex="-1">Find it on the tap list</a>
+        </div>
+      </div>
+      <div class="rig-actions">
+        <button class="btn btn-primary" id="pour-btn" type="button">Pour a pint</button>
+        <p id="handle-help" class="help">Drag the handle down, or focus it and hold Arrow Down or Space. Let go to stop.</p>
+      </div>
+      <p class="sr" id="rig-status" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="ranges" aria-labelledby="ranges-h">
+  <div class="wrap">
+    <header class="sec-head reveal"><p class="sec-no">02 / Ranges</p><h2 id="ranges-h">Three ranges. Equal shelf space.</h2></header>
+    <ul class="ranges">
+      <li class="range reveal" style="--d:0ms">
+        <svg viewBox="0 0 200 140" role="img" aria-label="Line drawing of a keg with a tap">
+          <g class="ln">
+            <rect x="62" y="34" width="76" height="84" rx="10"/><ellipse cx="100" cy="34" rx="38" ry="8"/>
+            <path d="M62 56Q100 66 138 56M62 96Q100 106 138 96" stroke-opacity=".7"/>
+            <circle cx="100" cy="34" r="9" class="brass"/><path class="brass" d="M100 25V12H116"/>
+            <path d="M138 74H160V92" class="brass"/><path d="M154 92H166L160 102Z" class="brass"/>
+            <path d="M40 120H160" stroke-opacity=".6"/>
+          </g>
+          <text class="anno" x="6" y="14">FIG. A</text><text class="anno small" x="6" y="56">KEG</text><text class="anno small" x="118" y="14">LINE</text><text class="anno small" x="130" y="128">TAP</text>
+        </svg>
+        <p class="r-no">01</p>
+        <h3>Craft beer</h3>
+        <p>Craft beer, ciders and wines, with kegs for parties. Keg and keezer rental is possible; details to be confirmed.</p>
+        <p class="r-link"><a href="#taplist">Browse the tap list</a></p>
+      </li>
+      <li class="range reveal" style="--d:70ms">
+        <svg viewBox="0 0 200 140" role="img" aria-label="Line drawing of a wedge of cheese and a jar">
+          <g class="ln">
+            <path d="M30 108H128V70L30 84Z"/><path d="M30 84L96 52L128 70" /><path d="M30 84V108"/>
+            <circle cx="62" cy="96" r="5"/><circle cx="96" cy="94" r="3.5"/><circle cx="102" cy="75" r="3"/>
+            <rect x="142" y="66" width="32" height="42" rx="5" class="brass"/><rect x="144" y="56" width="28" height="10" rx="3" class="brass"/><path class="brass" d="M146 82H170V96H146Z" stroke-opacity=".6"/>
+            <path d="M20 108H184" stroke-opacity=".6"/>
+          </g>
+          <text class="anno" x="6" y="14">FIG. B</text><text class="anno small" x="44" y="124">CHEESE</text><text class="anno small" x="148" y="124">JAR</text>
+        </svg>
+        <p class="r-no">02</p>
+        <h3>The deli</h3>
+        <p>Deli food to go with the drinks. The deli range, product information and allergens are to be confirmed.</p>
+        <p class="r-link"><a href="#find">Ask the shop</a></p>
+      </li>
+      <li class="range reveal" style="--d:140ms">
+        <svg viewBox="0 0 200 140" role="img" aria-label="Line drawing of a gift hamper basket with a bottle and a ribbon">
+          <g class="ln">
+            <path d="M48 70H152L142 118H58Z"/><path d="M52 84H148M55 98H145" stroke-opacity=".6"/><path d="M80 70L84 118M100 70V118M120 70L116 118" stroke-opacity=".5"/>
+            <path d="M52 70Q100 4 148 70" class="brass"/>
+            <path d="M88 70V40H96V70" /><path d="M89 40V32H95V40"/>
+            <path d="M110 70Q114 52 128 56Q124 70 124 70" />
+            <path d="M92 70L100 62L108 70" class="brass"/><circle cx="100" cy="62" r="3" class="brass"/>
+            <path d="M40 118H160" stroke-opacity=".6"/>
+          </g>
+          <text class="anno" x="6" y="14">FIG. C</text><text class="anno small" x="150" y="62">BOTTLE</text><text class="anno small" x="64" y="132">HAMPER</text>
+        </svg>
+        <p class="r-no">03</p>
+        <h3>Gift hampers</h3>
+        <p>Boxed gifts of beer and deli food. Contents and prices are to be agreed with the shop.</p>
+        <p class="r-link"><a href="#taplist">See a sample hamper</a></p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section class="section" id="taplist" aria-labelledby="tap-h">
+  <div class="wrap">
+    <header class="sec-head reveal"><p class="sec-no">03 / The shelf</p><h2 id="tap-h">The tap list</h2></header>
+    <p class="intro reveal">Eight of the fifteen sample products in the demonstration catalogue. Names, prices and notes are sample data, not the shop's real range or prices. Flavour dials run from 0 to 5: SW sweet, BI bitter, FR fruity, BO body.</p>
+    <div class="board">
+      <div class="tap tap-head" aria-hidden="true"><span>No.</span><span>Name</span><span>Style</span><span>Sweet / bitter / fruity / body</span><span>Price</span><span></span></div>
+      <ol class="taps">
+<li class="tap reveal" id="row-demo-amber-ale" style="--d:40ms">
+<span class="tap-no" aria-hidden="true">01</span>
+<div class="tap-name"><h3>Demo Amber Ale</h3><p>Malty and rounded, easy to share.</p><p class="tap-pair">Pairs with: Demo cheddar, Demo pork pie</p></div>
+<p class="tap-style"><span>Amber ale</span><span class="sub">Beer, bottle</span></p>
+<div class="dials" role="img" aria-label="Flavour dials: sweet 2, bitter 3, fruity 2, body 3, each out of 5"><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">SW</span><span class="fw">Sweet</span></span><span class="pips"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></span></span><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">BI</span><span class="fw">Bitter</span></span><span class="pips"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span></span><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">FR</span><span class="fw">Fruity</span></span><span class="pips"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></span></span><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">BO</span><span class="fw">Body</span></span><span class="pips"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span></span></div>
+<p class="tap-price"><span class="from">from</span> <b>&pound;3.80</b> <span class="tag">Sample</span></p>
+<button class="add" type="button" data-name="Demo Amber Ale" data-price="3.80">Add to basket<span class="sr"> Demo Amber Ale</span></button>
+</li>
+<li class="tap reveal" id="row-demo-dark-stout" style="--d:80ms">
+<span class="tap-no" aria-hidden="true">02</span>
+<div class="tap-name"><h3>Demo Dark Stout</h3><p>Dark, roasty and smooth.</p><p class="tap-pair">Pairs with: Demo smoked cheese, Demo chocolate</p></div>
+<p class="tap-style"><span>Stout</span><span class="sub">Beer, bottle</span></p>
+<div class="dials" role="img" aria-label="Flavour dials: sweet 2, bitter 4, fruity 1, body 5, each out of 5"><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">SW</span><span class="fw">Sweet</span></span><span class="pips"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></span></span><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">BI</span><span class="fw">Bitter</span></span><span class="pips"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i></span></span><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">FR</span><span class="fw">Fruity</span></span><span class="pips"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></span></span><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">BO</span><span class="fw">Body</span></span><span class="pips"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></span></div>
+<p class="tap-price"><span class="from">from</span> <b>&pound;4.20</b> <span class="tag">Sample</span></p>
+<button class="add" type="button" data-name="Demo Dark Stout" data-price="4.20">Add to basket<span class="sr"> Demo Dark Stout</span></button>
+</li>
+<li class="tap reveal" id="row-demo-pale-lager" style="--d:120ms">
+<span class="tap-no" aria-hidden="true">03</span>
+<div class="tap-name"><h3>Demo Pale Lager</h3><p>Crisp, light and clean.</p><p class="tap-pair">Pairs with: Demo oatcakes, Demo cheddar</p></div>
+<p class="tap-style"><span>Lager</span><span class="sub">Beer, bottle</span></p>
+<div class="dials" role="img" aria-label="Flavour dials: sweet 1, bitter 2, fruity 1, body 1, each out of 5"><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">SW</span><span class="fw">Sweet</span></span><span class="pips"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></span></span><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">BI</span><span class="fw">Bitter</span></span><span class="pips"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></span></span><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">FR</span><span class="fw">Fruity</span></span><span class="pips"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></span></span><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">BO</span><span class="fw">Body</span></span><span class="pips"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></span></span></div>
+<p class="tap-price"><span class="from">from</span> <b>&pound;3.50</b> <span class="tag">Sample</span></p>
+<button class="add" type="button" data-name="Demo Pale Lager" data-price="3.50">Add to basket<span class="sr"> Demo Pale Lager</span></button>
+</li>
+<li class="tap reveal" id="row-demo-session-ipa" style="--d:160ms">
+<span class="tap-no" aria-hidden="true">04</span>
+<div class="tap-name"><h3>Demo Session IPA</h3><p>Hoppy without the weight.</p><p class="tap-pair">Pairs with: Demo cured meat, Demo chutney</p></div>
+<p class="tap-style"><span>IPA</span><span class="sub">Beer, bottle</span></p>
+<div class="dials" role="img" aria-label="Flavour dials: sweet 2, bitter 4, fruity 3, body 2, each out of 5"><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">SW</span><span class="fw">Sweet</span></span><span class="pips"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></span></span><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">BI</span><span class="fw">Bitter</span></span><span class="pips"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i></span></span><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">FR</span><span class="fw">Fruity</span></span><span class="pips"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span></span><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">BO</span><span class="fw">Body</span></span><span class="pips"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></span></span></div>
+<p class="tap-price"><span class="from">from</span> <b>&pound;4.10</b> <span class="tag">Sample</span></p>
+<button class="add" type="button" data-name="Demo Session IPA" data-price="4.10">Add to basket<span class="sr"> Demo Session IPA</span></button>
+</li>
+<li class="tap reveal" id="row-demo-fruit-beer" style="--d:200ms">
+<span class="tap-no" aria-hidden="true">05</span>
+<div class="tap-name"><h3>Demo Fruit Beer</h3><p>Bright and juicy.</p><p class="tap-pair">Pairs with: Demo soft cheese, Demo shortbread</p></div>
+<p class="tap-style"><span>Fruit beer</span><span class="sub">Beer, bottle</span></p>
+<div class="dials" role="img" aria-label="Flavour dials: sweet 4, bitter 1, fruity 5, body 2, each out of 5"><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">SW</span><span class="fw">Sweet</span></span><span class="pips"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i></span></span><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">BI</span><span class="fw">Bitter</span></span><span class="pips"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></span></span><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">FR</span><span class="fw">Fruity</span></span><span class="pips"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></span><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">BO</span><span class="fw">Body</span></span><span class="pips"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></span></span></div>
+<p class="tap-price"><span class="from">from</span> <b>&pound;4.00</b> <span class="tag">Sample</span></p>
+<button class="add" type="button" data-name="Demo Fruit Beer" data-price="4.00">Add to basket<span class="sr"> Demo Fruit Beer</span></button>
+</li>
+<li class="tap reveal" id="row-demo-dry-cider" style="--d:240ms">
+<span class="tap-no" aria-hidden="true">06</span>
+<div class="tap-name"><h3>Demo Dry Cider</h3><p>Sharp, clean and apple-led.</p><p class="tap-pair">Pairs with: Demo pork pie, Demo chutney</p></div>
+<p class="tap-style"><span>Dry cider</span><span class="sub">Cider, bottle</span></p>
+<div class="dials" role="img" aria-label="Flavour dials: sweet 1, bitter 4, fruity 2, body 2, each out of 5"><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">SW</span><span class="fw">Sweet</span></span><span class="pips"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></span></span><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">BI</span><span class="fw">Bitter</span></span><span class="pips"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i></span></span><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">FR</span><span class="fw">Fruity</span></span><span class="pips"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></span></span><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">BO</span><span class="fw">Body</span></span><span class="pips"><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i><i class=""></i></span></span></div>
+<p class="tap-price"><span class="from">from</span> <b>&pound;3.90</b> <span class="tag">Sample</span></p>
+<button class="add" type="button" data-name="Demo Dry Cider" data-price="3.90">Add to basket<span class="sr"> Demo Dry Cider</span></button>
+</li>
+<li class="tap reveal" id="row-demo-red-wine" style="--d:280ms">
+<span class="tap-no" aria-hidden="true">07</span>
+<div class="tap-name"><h3>Demo Red</h3><p>Soft and rounded.</p><p class="tap-pair">Pairs with: Demo cured meat, Demo hard cheese</p></div>
+<p class="tap-style"><span>Red wine</span><span class="sub">Wine, bottle</span></p>
+<div class="dials" role="img" aria-label="Flavour dials: sweet 1, bitter 3, fruity 3, body 4, each out of 5"><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">SW</span><span class="fw">Sweet</span></span><span class="pips"><i class="on"></i><i class=""></i><i class=""></i><i class=""></i><i class=""></i></span></span><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">BI</span><span class="fw">Bitter</span></span><span class="pips"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span></span><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">FR</span><span class="fw">Fruity</span></span><span class="pips"><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i><i class=""></i></span></span><span class="dial" aria-hidden="true"><span class="dl"><span class="ab">BO</span><span class="fw">Body</span></span><span class="pips"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class=""></i></span></span></div>
+<p class="tap-price"><span class="from">from</span> <b>&pound;11.00</b> <span class="tag">Sample</span></p>
+<button class="add" type="button" data-name="Demo Red" data-price="11.00">Add to basket<span class="sr"> Demo Red</span></button>
+</li>
+<li class="tap reveal" id="row-demo-hamper-beer" style="--d:320ms">
+<span class="tap-no" aria-hidden="true">08</span>
+<div class="tap-name"><h3>Demo Beer Hamper</h3><p>A selection of beers with something to eat. Contents to be agreed.</p></div>
+<p class="tap-style"><span>Hamper</span><span class="sub">Hamper, gift hamper</span></p>
+<p class="dials nodial">No dials. Contents to be agreed.</p>
+<p class="tap-price"><span class="from">from</span> <b>&pound;34.00</b> <span class="tag">Sample</span></p>
+<button class="add" type="button" data-name="Demo Beer Hamper" data-price="34.00">Add to basket<span class="sr"> Demo Beer Hamper</span></button>
+</li>
+      </ol>
+      <p class="board-foot">Sample data. Allergen and ABV details to be confirmed for every product.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="how" aria-labelledby="how-h">
+  <div class="wrap">
+    <header class="sec-head reveal"><p class="sec-no">04 / How it works</p><h2 id="how-h">From the list to your door, or the counter</h2></header>
+    <ol class="steps">
+      <li class="step reveal" style="--d:0ms">
+        <svg viewBox="0 0 120 100" aria-hidden="true"><g class="ln"><rect x="26" y="10" width="68" height="80" rx="4"/><path d="M38 30H82M38 50H82M38 70H70" stroke-opacity=".6"/><path class="amber-s" d="M36 36L42 42L52 26" transform="translate(30 -4)"/></g></svg>
+        <p class="s-no">Step 1</p><h3>Choose</h3><p>Pick from beer, cider, wine, kegs, deli food and hampers.</p>
+      </li>
+      <li class="step reveal" style="--d:70ms">
+        <svg viewBox="0 0 120 100" aria-hidden="true"><g class="ln"><rect x="8" y="42" width="46" height="38"/><path d="M31 42V80M8 58H54" stroke-opacity=".6"/><path class="brass" d="M60 62H78M72 55L79 62L72 69"/><path d="M84 46H114L110 32H88Z M86 46V80H112V46"/><rect x="94" y="60" width="10" height="20"/></g></svg>
+        <p class="s-no">Step 2</p><h3>Delivery or click &amp; collect</h3><p>Collect from Station Road, or have it sent. Delivery areas and prices to be confirmed.</p>
+      </li>
+      <li class="step reveal" style="--d:140ms">
+        <svg viewBox="0 0 120 100" aria-hidden="true"><g class="ln"><rect x="34" y="44" width="52" height="40" rx="5"/><path d="M44 44V34a16 16 0 0 1 32 0V44" class="brass"/><circle cx="60" cy="62" r="5"/><path d="M60 67V74"/></g></svg>
+        <p class="s-no">Step 3</p><h3>Pay securely</h3><p>Checkout would be handled by Shopify, not by this page.</p>
+      </li>
+      <li class="step reveal" style="--d:210ms">
+        <svg viewBox="0 0 120 100" aria-hidden="true"><g class="ln"><path d="M40 16H80L75 88H45Z"/><path d="M44 44H76L74 84H46Z" class="beer-s"/><path d="M42 28H78" stroke-opacity=".5"/><path d="M42 40q6-8 12-2t12-1 12 0" class="brass"/></g></svg>
+        <p class="s-no">Step 4</p><h3>Enjoy</h3><p>Slowly, and responsibly.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="section" id="find" aria-labelledby="find-h">
+  <div class="wrap">
+    <header class="sec-head reveal"><p class="sec-no">05 / Find us</p><h2 id="find-h">Come and see the shop</h2></header>
+    <div class="find-grid">
+      <div class="board reveal">
+        <dl class="info">
+          <div><dt>Address</dt><dd>Jack O'Beers &amp; Deli<br>13 Station Road<br>Milngavie, G62 8PG</dd></div>
+          <div><dt>Open</dt><dd>Wednesday to Monday, 11am to 7pm.<br>Tuesday: to be confirmed.</dd></div>
+          <div><dt>Phone</dt><dd><a href="tel:07405480950">07405 480950</a></dd></div>
+          <div><dt>Email</dt><dd><a href="mailto:sales@jackobeers.com">sales@jackobeers.com</a></dd></div>
+          <div><dt>Events</dt><dd>Planning an event? <a href="mailto:sales@jackobeers.com?subject=Event%20enquiry">Send an event enquiry</a>. Details to be confirmed.</dd></div>
+          <div><dt>Social</dt><dd class="social"><a href="#">Instagram <span>(link to be added)</span></a><a href="#">YouTube <span>(link to be added)</span></a><a href="#">Google <span>(link to be added)</span></a></dd></div>
+        </dl>
+        <p class="dir"><a class="btn btn-primary" href="https://www.google.com/maps/search/?api=1&amp;query=13+Station+Road+Milngavie+G62+8PG" target="_blank" rel="noopener">Get directions<span class="sr"> (opens Google Maps in a new tab)</span></a></p>
+      </div>
+      <div class="board hours reveal" style="--d:80ms">
+        <h3 class="h-title">The week on one gauge</h3>
+        <div class="axis" aria-hidden="true"><span style="left:0">9am</span><span style="left:25%">12pm</span><span style="left:50%">3pm</span><span style="left:75%">6pm</span><span style="left:100%">9pm</span></div>
+        <ul class="week">
+          <li><span class="day">Mon</span><span class="track"><span class="fill"></span></span><span class="txt">11am to 7pm</span></li>
+          <li class="tbc"><span class="day">Tue</span><span class="track"></span><span class="txt">To be confirmed</span></li>
+          <li><span class="day">Wed</span><span class="track"><span class="fill"></span></span><span class="txt">11am to 7pm</span></li>
+          <li><span class="day">Thu</span><span class="track"><span class="fill"></span></span><span class="txt">11am to 7pm</span></li>
+          <li><span class="day">Fri</span><span class="track"><span class="fill"></span></span><span class="txt">11am to 7pm</span></li>
+          <li><span class="day">Sat</span><span class="track"><span class="fill"></span></span><span class="txt">11am to 7pm</span></li>
+          <li><span class="day">Sun</span><span class="track"><span class="fill"></span></span><span class="txt">11am to 7pm</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="members" aria-labelledby="news-h">
+  <div class="wrap">
+    <header class="sec-head reveal"><p class="sec-no">06 / Newsletter</p><h2 id="news-h">Get the newsletter</h2></header>
+    <div class="news reveal">
+      <form id="news-form" class="news-form" novalidate>
+        <label for="email">Email address</label>
+        <div class="row"><input id="email" name="email" type="email" autocomplete="email" required placeholder="you@example.com"><button class="btn btn-primary" type="submit">Sign me up</button></div>
+        <p class="fine">Demonstration only: nothing is sent or saved. The real form would say how your details are used.</p>
+        <p class="msg" id="news-msg" role="status"></p>
+      </form>
+      <p class="members-note"><b>Members area.</b> Planned. Features and sign-in are to be confirmed.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap foot-grid">
+    <div class="f-brand"><span class="logo small"><img src="../../site/assets/media/jack-logo.png" width="244" height="258" alt="" loading="lazy"></span><p>Jack O'Beers &amp; Deli<br>13 Station Road, Milngavie, G62 8PG</p></div>
+    <p class="f-contact"><a href="tel:07405480950">07405 480950</a><a href="mailto:sales@jackobeers.com">sales@jackobeers.com</a></p>
+    <p class="f-note">Sample products are demonstration data. This page is a design concept: no orders are taken.</p>
+    <p class="f-age">Please drink responsibly. 18+ only.</p>
+  </div>
+</footer>
+<script src="concept.js" defer></script>
+</body>
+</html>

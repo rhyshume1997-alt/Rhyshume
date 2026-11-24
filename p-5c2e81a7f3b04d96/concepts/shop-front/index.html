@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#FFD95A">
+<title>Jack O'Beers &amp; Deli | Concept: The Shop Front</title>
+<meta name="description" content="Concept for discussion: the Jack O'Beers &amp; Deli website drawn as a shop front with a real OPEN/CLOSED door sign.">
+<link rel="preload" href="fonts/fredoka-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/nunito-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="concept.css">
+<script>document.documentElement.classList.add("js");</script>
+<script src="concept.js" defer></script>
+</head>
+<body>
+
+<!-- Shared drawing parts (flat style) -->
+<svg class="sprite" width="0" height="0" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="g-bottle" viewBox="0 0 40 100">
+      <path d="M15 5h10v14c0 6 11 10 11 24v47a6 6 0 0 1-6 6H10a6 6 0 0 1-6-6V43c0-14 11-18 11-24z" fill="var(--c,#C77A1E)" stroke="#16233F" stroke-width="3" stroke-linejoin="round"/>
+      <rect x="5.5" y="54" width="29" height="26" fill="#FFF6DD"/>
+      <circle cx="20" cy="67" r="6" fill="var(--c2,#C93A1F)"/>
+      <rect x="13" y="2" width="14" height="8" rx="3" fill="#16233F"/>
+    </symbol>
+    <symbol id="g-wine" viewBox="0 0 36 112">
+      <path d="M14 5h8v38c0 8 10 12 10 26v35a6 6 0 0 1-6 6H10a6 6 0 0 1-6-6V69c0-14 10-18 10-26z" fill="var(--c,#7A1F3D)" stroke="#16233F" stroke-width="3" stroke-linejoin="round"/>
+      <rect x="5.5" y="74" width="25" height="22" fill="#FFF6DD"/>
+      <path d="M12 85h12" stroke="#16233F" stroke-width="3" stroke-linecap="round"/>
+      <rect x="12" y="2" width="12" height="9" rx="2" fill="#16233F"/>
+    </symbol>
+    <symbol id="g-keg" viewBox="0 0 90 100">
+      <path d="M12 14C2 42 2 66 12 90h56c10-24 10-48 0-76z" fill="var(--c,#0F7070)" stroke="#16233F" stroke-width="3.5" stroke-linejoin="round"/>
+      <path d="M6 34h68M4 56h72M6 74h68" stroke="#16233F" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+      <ellipse cx="40" cy="14" rx="28" ry="9" fill="#FFF6DD" stroke="#16233F" stroke-width="3.5"/>
+      <rect x="66" y="54" width="20" height="9" rx="4" fill="#FFD95A" stroke="#16233F" stroke-width="3"/>
+      <path d="M82 63v12" stroke="#16233F" stroke-width="5" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="g-hamper" viewBox="0 0 120 100">
+      <path d="M30 42C30 4 90 4 90 42" fill="none" stroke="#16233F" stroke-width="3.5" stroke-linecap="round"/>
+      <g transform="translate(36 6) scale(.55)"><use href="#g-bottle" width="40" height="100" style="--c:#C77A1E"/></g>
+      <g transform="translate(70 12) scale(.5)"><use href="#g-wine" width="36" height="112" style="--c:#2F7D4F"/></g>
+      <path d="M8 42h104l-9 48a6 6 0 0 1-6 5H23a6 6 0 0 1-6-5z" fill="#E0A85F" stroke="#16233F" stroke-width="3.5" stroke-linejoin="round"/>
+      <path d="M14 58h92M18 74h84M42 44l-3 48M64 44v50M86 44l3 48" stroke="#16233F" stroke-width="2.5" stroke-linecap="round" opacity=".55" fill="none"/>
+      <rect x="48" y="36" width="24" height="12" rx="6" fill="#C93A1F" stroke="#16233F" stroke-width="3"/>
+    </symbol>
+    <symbol id="g-cheese" viewBox="0 0 80 56">
+      <path d="M4 50V20L74 4v46z" fill="#FFD95A" stroke="#16233F" stroke-width="3.5" stroke-linejoin="round"/>
+      <path d="M4 20l70 14" stroke="#16233F" stroke-width="3" fill="none"/>
+      <circle cx="26" cy="36" r="5" fill="#E8B72E" stroke="#16233F" stroke-width="2.5"/>
+      <circle cx="52" cy="42" r="4" fill="#E8B72E" stroke="#16233F" stroke-width="2.5"/>
+      <circle cx="58" cy="22" r="4" fill="#E8B72E" stroke="#16233F" stroke-width="2.5"/>
+    </symbol>
+    <symbol id="g-jar" viewBox="0 0 50 64">
+      <rect x="6" y="14" width="38" height="46" rx="10" fill="#CDEBE6" stroke="#16233F" stroke-width="3.5"/>
+      <rect x="9" y="3" width="32" height="14" rx="5" fill="#C93A1F" stroke="#16233F" stroke-width="3.5"/>
+      <rect x="13" y="26" width="9" height="26" rx="4.5" fill="#2F7D4F"/>
+      <rect x="26" y="30" width="9" height="22" rx="4.5" fill="#3F9A63"/>
+    </symbol>
+    <symbol id="g-salami" viewBox="0 0 90 40">
+      <rect x="4" y="6" width="82" height="28" rx="14" fill="#B84A3A" stroke="#16233F" stroke-width="3.5"/>
+      <path d="M22 8v24M40 8v24M58 8v24M76 10v20" stroke="#FFF6DD" stroke-width="3" stroke-linecap="round" opacity=".8"/>
+    </symbol>
+    <symbol id="g-glass" viewBox="0 0 50 80">
+      <path d="M6 6h38l-4 66a6 6 0 0 1-6 5H16a6 6 0 0 1-6-5z" fill="#FFD95A" stroke="#16233F" stroke-width="3.5" stroke-linejoin="round"/>
+      <path d="M5 6c0-5 6-6 10-3 4-4 12-4 16 0 4-3 14-2 14 3z" fill="#FFF6DD" stroke="#16233F" stroke-width="3" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="g-apple" viewBox="0 0 40 40">
+      <path d="M20 12c-6-5-16-1-15 10 1 9 7 16 12 15 2-.5 3-1.5 3-1.5s1 1 3 1.5c5 1 11-6 12-15 1-11-9-15-15-10z" fill="#C93A1F" stroke="#16233F" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M20 12c0-4 1-7 4-9" stroke="#16233F" stroke-width="3" stroke-linecap="round" fill="none"/>
+    </symbol>
+  </defs>
+</svg>
+
+<a class="skip" href="#main">Skip to the main content</a>
+<aside class="concept-tag" aria-label="Concept label">Concept for discussion</aside>
+
+<header class="site-header" id="top">
+  <div class="header-in">
+    <a class="brand" href="#top" aria-label="Jack O'Beers &amp; Deli, back to the top">
+      <img src="../../site/assets/media/jack-logo.png" width="244" height="258" alt="Jack O'Beers &amp; Deli">
+    </a>
+
+    <nav class="nav" id="nav" aria-label="Main">
+      <ul class="nav-list">
+        <li class="has-sub">
+          <button type="button" class="nav-link sub-toggle" id="shop-toggle" aria-expanded="false" aria-controls="shop-sub">Shop <svg class="chev" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <ul class="sub" id="shop-sub">
+            <li><a class="sub-link" href="#shelf" data-filter="beers">Beer</a></li>
+            <li><a class="sub-link" href="#shelf" data-filter="ciders">Cider</a></li>
+            <li><a class="sub-link" href="#shelf" data-filter="wines">Wine</a></li>
+            <li><a class="sub-link" href="#shelf" data-filter="kegs">Kegs</a></li>
+            <li><a class="sub-link" href="#shelf" data-filter="hampers">Hampers</a></li>
+          </ul>
+        </li>
+        <li><a class="nav-link" href="#deli">Deli</a></li>
+        <li><a class="nav-link" href="#click-collect">Click &amp; collect</a></li>
+        <li><a class="nav-link" href="#shipping">Shipping</a></li>
+        <li><a class="nav-link" href="#about">About</a></li>
+        <li><a class="nav-link" href="#members">Members</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <button type="button" class="basket-btn" id="basket-btn" aria-expanded="false" aria-controls="basket-panel">
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h16l-1.6 10a2 2 0 0 1-2 1.7H7.6a2 2 0 0 1-2-1.7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8 9V7a4 4 0 0 1 8 0v2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <span>Basket</span>
+        <span class="count" id="basket-count">0<span class="sr-only"> items</span></span>
+      </button>
+      <button type="button" class="menu-btn" id="menu-btn" aria-expanded="false" aria-controls="nav">
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+        <span>Menu</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="basket-panel" id="basket-panel" role="region" aria-labelledby="basket-title" hidden>
+    <div class="basket-head">
+      <h2 id="basket-title">Your basket</h2>
+      <button type="button" class="mini-btn" id="basket-close">Close</button>
+    </div>
+    <p class="basket-empty" id="basket-empty">Nothing in here yet. Pop something in from the shelf.</p>
+    <ul class="basket-list" id="basket-list"></ul>
+    <p class="note">Demonstration only. Nothing is stored or sent, and there is no checkout in this concept. The real shop would hand over to Shopify to pay.</p>
+    <button type="button" class="mini-btn" id="basket-clear" hidden>Empty the basket</button>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- THE SHOP FRONT: the page is the scene -->
+  <section class="front" aria-labelledby="hero-title">
+    <div class="front-text">
+      <h1 id="hero-title">Fresh from keg to bottle, no foam, no fuss.</h1>
+      <p class="lede">Come on in! Craft beer, deli food and gift hampers, all under one stripy awning.</p>
+    </div>
+
+    <div class="scene-crop">
+      <div class="scene" id="scene">
+        <svg class="scene-art" viewBox="0 0 1000 600" aria-hidden="true" focusable="false" preserveAspectRatio="xMidYMid meet">
+          <!-- clouds -->
+          <g fill="#FFF6DD" stroke="#16233F" stroke-width="4" stroke-linejoin="round">
+            <path d="M30 84c0-16 14-24 28-18 4-14 28-16 36-2 16-5 28 5 26 20z"/>
+            <path d="M846 70c0-14 12-20 24-16 4-12 24-14 30-2 14-4 24 6 22 18z"/>
+          </g>
+          <!-- building -->
+          <rect x="60" y="112" width="880" height="432" rx="22" fill="#0F7070" stroke="#16233F" stroke-width="6"/>
+          <path d="M60 300h880" stroke="#0A5555" stroke-width="3" opacity=".45"/>
+          <rect x="40" y="100" width="920" height="48" rx="18" fill="#FFF6DD" stroke="#16233F" stroke-width="6"/>
+          <path d="M66 124h868" stroke="#16233F" stroke-width="3" stroke-dasharray="2 14" stroke-linecap="round" opacity=".5"/>
+
+          <!-- sign board -->
+          <g>
+            <path d="M420 148V132M580 148V132" stroke="#16233F" stroke-width="5" stroke-linecap="round"/>
+            <rect x="352" y="10" width="296" height="152" rx="34" fill="#FFFBEF" stroke="#16233F" stroke-width="6"/>
+            <rect x="364" y="22" width="272" height="128" rx="24" fill="none" stroke="#FFD95A" stroke-width="5" stroke-dasharray="1 12" stroke-linecap="round"/>
+            <image href="../../site/assets/media/jack-logo.png" x="437" y="16" width="126" height="133" preserveAspectRatio="xMidYMid meet"/>
+            <use href="#g-glass" x="378" y="56" width="34" height="54" transform="rotate(-8 395 83)"/>
+            <use href="#g-glass" x="588" y="56" width="34" height="54" transform="rotate(8 605 83)"/>
+          </g>
+
+          <!-- window -->
+          <g>
+            <path d="M104 540V402A181 84 0 0 1 466 402V540Z" fill="#C93A1F" stroke="#16233F" stroke-width="6" stroke-linejoin="round"/>
+            <path d="M122 540V404A163 68 0 0 1 448 404V540Z" fill="#FFEFB0" stroke="#16233F" stroke-width="5"/>
+            <path d="M122 540V404A163 68 0 0 1 448 404V540Z" fill="#CDEBE6" opacity=".35"/>
+            <!-- shelf 1 -->
+            <g>
+              <use href="#g-bottle" x="150" y="352" width="34" height="85" style="--c:#C77A1E"/>
+              <use href="#g-bottle" x="192" y="352" width="34" height="85" style="--c:#2F7D4F;--c2:#FFD95A"/>
+              <use href="#g-bottle" x="234" y="352" width="34" height="85" style="--c:#7A3E12"/>
+              <use href="#g-wine" x="278" y="342" width="32" height="95" style="--c:#7A1F3D"/>
+              <use href="#g-bottle" x="320" y="352" width="34" height="85" style="--c:#E0A233;--c2:#0F7070"/>
+              <use href="#g-bottle" x="362" y="352" width="34" height="85" style="--c:#0F7070;--c2:#FFD95A"/>
+              <use href="#g-bottle" x="402" y="352" width="34" height="85" style="--c:#C77A1E"/>
+              <rect x="122" y="436" width="326" height="14" fill="#B27240" stroke="#16233F" stroke-width="4"/>
+            </g>
+            <!-- shelf 2 -->
+            <g>
+              <use href="#g-cheese" x="140" y="465" width="68" height="48"/>
+              <use href="#g-jar" x="222" y="456" width="44" height="56"/>
+              <use href="#g-jar" x="274" y="456" width="44" height="56"/>
+              <use href="#g-salami" x="332" y="486" width="76" height="26" transform="rotate(-6 370 499)"/>
+              <use href="#g-apple" x="412" y="478" width="32" height="32"/>
+              <rect x="122" y="512" width="326" height="14" fill="#B27240" stroke="#16233F" stroke-width="4"/>
+            </g>
+            <path d="M138 396c20-30 50-44 90-48" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" fill="none" opacity=".6"/>
+          </g>
+
+          <!-- plant pot and house number -->
+          <g>
+            <circle cx="510" cy="352" r="24" fill="#FFD95A" stroke="#16233F" stroke-width="5"/>
+            <text x="510" y="361" text-anchor="middle" font-family="Fredoka, sans-serif" font-weight="700" font-size="25" fill="#16233F">13</text>
+            <path d="M500 540l-6-50h32l-6 50z" fill="#E0A85F" stroke="#16233F" stroke-width="4" stroke-linejoin="round"/>
+            <path d="M510 490c-14-12-18-30-8-44 12 8 14 28 8 44zM510 490c10-14 22-18 30-12-4 12-16 18-30 12zM510 490c-2-18 4-34 16-40 2 16-4 32-16 40z" fill="#3F9A63" stroke="#16233F" stroke-width="3.5" stroke-linejoin="round"/>
+          </g>
+
+          <!-- doorway: the lit shop behind the door -->
+          <g>
+            <path d="M550 540V386A120 92 0 0 1 790 386V540Z" fill="#FFF6DD" stroke="#16233F" stroke-width="6" stroke-linejoin="round"/>
+            <path d="M560 540V386A110 82 0 0 1 780 386V540Z" fill="#FFE08A"/>
+            <path d="M560 540V386A110 82 0 0 1 780 386V540Z" fill="none" stroke="#16233F" stroke-width="4"/>
+            <rect x="572" y="436" width="196" height="10" fill="#B27240" stroke="#16233F" stroke-width="3"/>
+            <rect x="572" y="494" width="196" height="10" fill="#B27240" stroke="#16233F" stroke-width="3"/>
+            <g fill="#7A3E12" stroke="#16233F" stroke-width="2.5" stroke-linejoin="round">
+              <rect x="590" y="404" width="14" height="32" rx="4"/><rect x="612" y="408" width="14" height="28" rx="4"/>
+              <rect x="700" y="402" width="14" height="34" rx="4"/><rect x="722" y="408" width="14" height="28" rx="4"/>
+              <rect x="590" y="462" width="30" height="32" rx="6" fill="#0F7070"/><rect x="640" y="466" width="30" height="28" rx="6" fill="#C93A1F"/>
+              <rect x="690" y="460" width="30" height="34" rx="6" fill="#FFD95A"/>
+            </g>
+            <path d="M670 306v28" stroke="#16233F" stroke-width="3"/>
+            <path d="M652 354a18 18 0 0 1 36 0z" fill="#C93A1F" stroke="#16233F" stroke-width="3.5" stroke-linejoin="round"/>
+            <circle cx="670" cy="358" r="5" fill="#FFF6DD"/>
+          </g>
+
+          <!-- barrel -->
+          <g>
+            <path d="M812 540c-14-20-14-62 0-84h86c14 22 14 64 0 84z" fill="#B27240" stroke="#16233F" stroke-width="5" stroke-linejoin="round"/>
+            <path d="M808 482h94M806 514h98" stroke="#16233F" stroke-width="5" stroke-linecap="round"/>
+            <path d="M834 458c-6 24-6 56 0 80M876 458c6 24 6 56 0 80" stroke="#16233F" stroke-width="3" opacity=".45" fill="none"/>
+            <ellipse cx="855" cy="456" rx="43" ry="9" fill="#E0A85F" stroke="#16233F" stroke-width="4"/>
+          </g>
+
+          <!-- awning (this group sways very slightly) -->
+          <g class="awning">
+            <path d="M40.0 175 H116.7 V236 A38.3 38.3 0 0 1 40.0 236 Z" fill="#C93A1F"/>
+<path d="M116.7 175 H193.3 V236 A38.3 38.3 0 0 1 116.7 236 Z" fill="#FFF6DD"/>
+<path d="M193.3 175 H270.0 V236 A38.3 38.3 0 0 1 193.3 236 Z" fill="#C93A1F"/>
+<path d="M270.0 175 H346.7 V236 A38.3 38.3 0 0 1 270.0 236 Z" fill="#FFF6DD"/>
+<path d="M346.7 175 H423.3 V236 A38.3 38.3 0 0 1 346.7 236 Z" fill="#C93A1F"/>
+<path d="M423.3 175 H500.0 V236 A38.3 38.3 0 0 1 423.3 236 Z" fill="#FFF6DD"/>
+<path d="M500.0 175 H576.7 V236 A38.3 38.3 0 0 1 500.0 236 Z" fill="#C93A1F"/>
+<path d="M576.7 175 H653.3 V236 A38.3 38.3 0 0 1 576.7 236 Z" fill="#FFF6DD"/>
+<path d="M653.3 175 H730.0 V236 A38.3 38.3 0 0 1 653.3 236 Z" fill="#C93A1F"/>
+<path d="M730.0 175 H806.7 V236 A38.3 38.3 0 0 1 730.0 236 Z" fill="#FFF6DD"/>
+<path d="M806.7 175 H883.3 V236 A38.3 38.3 0 0 1 806.7 236 Z" fill="#C93A1F"/>
+<path d="M883.3 175 H960.0 V236 A38.3 38.3 0 0 1 883.3 236 Z" fill="#FFF6DD"/>
+          </g>
+          <rect x="34" y="163" width="932" height="26" rx="13" fill="#16233F"/>
+
+          <!-- pavement -->
+          <rect x="0" y="540" width="1000" height="60" fill="#E7C98F" stroke="#16233F" stroke-width="6"/>
+          <path d="M60 570h110M230 570h150M440 570h120M620 570h170M850 570h100M0 556h30M120 556h110M300 556h90M470 556h130M680 556h90M830 556h140" stroke="#16233F" stroke-width="3" stroke-linecap="round" opacity=".28"/>
+        </svg>
+
+        <!-- The real door. A button laid over the doorway. -->
+        <button type="button" class="door" id="door" aria-controls="shelves" aria-expanded="false">
+          <span class="sr-only">Open the shop door and come in. </span>
+          <span class="door-leaf" aria-hidden="true">
+            <svg class="door-art" viewBox="0 0 220 240" focusable="false">
+              <path d="M4 240V84A106 80 0 0 1 216 84V240Z" fill="#C93A1F" stroke="#16233F" stroke-width="6" stroke-linejoin="round"/>
+              <circle cx="110" cy="58" r="26" fill="#CDEBE6" stroke="#16233F" stroke-width="5"/>
+              <path d="M96 52c3-6 9-9 15-9" stroke="#fff" stroke-width="5" stroke-linecap="round" fill="none" opacity=".7"/>
+              <rect x="24" y="170" width="76" height="56" rx="14" fill="#DC5A3F" stroke="#16233F" stroke-width="4"/>
+              <rect x="120" y="170" width="76" height="56" rx="14" fill="#DC5A3F" stroke="#16233F" stroke-width="4"/>
+              <rect x="24" y="96" width="30" height="62" rx="12" fill="#DC5A3F" stroke="#16233F" stroke-width="4"/>
+              <rect x="166" y="96" width="30" height="62" rx="12" fill="#DC5A3F" stroke="#16233F" stroke-width="4"/>
+              <circle cx="182" cy="160" r="9" fill="#FFD95A" stroke="#16233F" stroke-width="4"/>
+              <circle cx="110" cy="96" r="5" fill="#16233F"/>
+              <path d="M110 98L72 114M110 98L148 114" stroke="#16233F" stroke-width="3.5" stroke-linecap="round"/>
+            </svg>
+            <span class="sign" id="sign">
+              <span class="sign-face sign-open"><span class="sign-word">OPEN</span></span>
+              <span class="sign-face sign-closed"><span class="sign-word">CLOSED</span><span class="sign-sub" id="sign-sub" hidden>Tuesday to be confirmed</span></span>
+            </span>
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <div class="status-card">
+      <p class="status-line" id="shop-status" role="status"><span class="dot" aria-hidden="true"></span><span id="status-text">Checking the sign...</span></p>
+      <p class="hours-line">Wednesday to Monday, 11am to 7pm. Tuesday to be confirmed.</p>
+      <div class="status-actions">
+        <button type="button" class="btn btn-primary" id="let-in" aria-controls="shelves" aria-expanded="false">Let me in</button>
+        <a class="btn btn-ghost" href="#find-us">Find us</a>
+      </div>
+      <p class="hint" id="door-hint">Tap the door, or press Let me in, to step inside. The sign on the door follows our real hours (UK time).</p>
+    </div>
+  </section>
+
+  <!-- THE SHOP INTERIOR -->
+  <div class="interior" id="shelves" data-closed>
+
+    <section class="shelf-section" id="ranges" aria-labelledby="ranges-title" style="--i:0">
+      <div class="section-head">
+        <p class="eyebrow">Welcome in</p>
+        <h2 id="ranges-title" tabindex="-1">Three shelves, all the same size</h2>
+        <p class="section-lede">Craft beer, deli food and gift hampers get equal space here. Have a wander.</p>
+      </div>
+      <div class="ranges">
+        <article class="range range-beer" id="beer">
+          <svg class="range-art" viewBox="0 0 220 120" aria-hidden="true" focusable="false">
+            <ellipse cx="110" cy="108" rx="96" ry="9" fill="#16233F" opacity=".14"/>
+            <use href="#g-keg" x="14" y="26" width="84" height="82" style="--c:#0F7070"/>
+            <use href="#g-bottle" x="112" y="12" width="38" height="96" style="--c:#C77A1E"/>
+            <use href="#g-bottle" x="152" y="24" width="34" height="84" style="--c:#2F7D4F;--c2:#FFD95A"/>
+            <use href="#g-glass" x="186" y="46" width="30" height="62"/>
+          </svg>
+          <h3>Craft beer</h3>
+          <p>Beers, ciders, wines and kegs. Bottled, poured and ready to take home.</p>
+          <p class="small">Fresh from keg to bottle, no foam, no fuss.</p>
+          <a class="btn btn-solid-dark" href="#shelf" data-filter="beers">See the beer</a>
+        </article>
+        <article class="range range-deli" id="deli">
+          <svg class="range-art" viewBox="0 0 220 120" aria-hidden="true" focusable="false">
+            <ellipse cx="110" cy="108" rx="96" ry="9" fill="#16233F" opacity=".14"/>
+            <use href="#g-cheese" x="12" y="58" width="92" height="50"/>
+            <use href="#g-salami" x="22" y="30" width="96" height="40" transform="rotate(-8 70 50)"/>
+            <use href="#g-jar" x="120" y="42" width="52" height="66"/>
+            <use href="#g-jar" x="164" y="52" width="46" height="56"/>
+          </svg>
+          <h3>The deli</h3>
+          <p>Good things to eat, picked to go with what is on the shelf next door.</p>
+          <p class="small">The deli range is to be confirmed.</p>
+          <a class="btn btn-solid-dark" href="mailto:sales@jackobeers.com?subject=Deli%20question">Ask about the deli</a>
+        </article>
+        <article class="range range-hampers" id="hampers">
+          <svg class="range-art" viewBox="0 0 220 120" aria-hidden="true" focusable="false">
+            <ellipse cx="110" cy="108" rx="96" ry="9" fill="#16233F" opacity=".14"/>
+            <use href="#g-hamper" x="46" y="6" width="128" height="104"/>
+          </svg>
+          <h3>Gift hampers</h3>
+          <p>Ready-to-give boxes of beer and deli favourites, for birthdays and thank-yous.</p>
+          <p class="small">Hamper contents are to be confirmed.</p>
+          <a class="btn btn-solid-dark" href="#shelf" data-filter="hampers">See the hampers</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="shelf-section" id="shelf" aria-labelledby="shelf-title" style="--i:1">
+      <div class="section-head">
+        <p class="eyebrow">Sample products <span class="badge">Sample</span></p>
+        <h2 id="shelf-title" tabindex="-1">Fresh on the shelf</h2>
+        <p class="section-lede">Pick a shelf, then pop things in the basket. Every product, price and detail here is demonstration data.</p>
+      </div>
+      <div class="filters" role="group" aria-label="Choose a shelf">
+        <button type="button" class="chip" data-filter="all" aria-pressed="true">All</button>
+        <button type="button" class="chip" data-filter="beers" aria-pressed="false">Beer</button>
+        <button type="button" class="chip" data-filter="ciders" aria-pressed="false">Cider</button>
+        <button type="button" class="chip" data-filter="wines" aria-pressed="false">Wine</button>
+        <button type="button" class="chip" data-filter="kegs" aria-pressed="false">Kegs</button>
+        <button type="button" class="chip" data-filter="hampers" aria-pressed="false">Hampers</button>
+      </div>
+      <p class="filter-note" id="filter-note" aria-live="polite">Showing all 8 sample products.</p>
+      <ul class="products" id="products"></ul>
+      <p class="note">Prices are sample prices. Strength (ABV), allergens and pairings will be on each real product page. Allergen details are to be confirmed.</p>
+    </section>
+
+    <section class="shelf-section" id="how" aria-labelledby="how-title" style="--i:2">
+      <div class="section-head">
+        <p class="eyebrow">Four easy steps</p>
+        <h2 id="how-title">How it works</h2>
+      </div>
+      <ol class="steps">
+        <li class="step">
+          <svg viewBox="0 0 100 90" aria-hidden="true" focusable="false"><circle cx="50" cy="46" r="40" fill="#FFEFB0"/><use href="#g-bottle" x="26" y="14" width="26" height="66" style="--c:#C77A1E"/><use href="#g-jar" x="54" y="36" width="30" height="40"/><path d="M60 22l6-8 8 8" fill="none" stroke="#16233F" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <h3><span class="step-no">1</span> Choose</h3>
+          <p>Pick your beer, cider, wine, deli food or hamper.</p>
+        </li>
+        <li class="step">
+          <svg viewBox="0 0 100 90" aria-hidden="true" focusable="false"><circle cx="50" cy="46" r="40" fill="#CDEBE6"/><rect x="14" y="40" width="46" height="28" rx="5" fill="#FFF6DD" stroke="#16233F" stroke-width="4"/><path d="M60 50h14l10 10v8H60z" fill="#FFD95A" stroke="#16233F" stroke-width="4" stroke-linejoin="round"/><circle cx="30" cy="72" r="7" fill="#16233F"/><circle cx="72" cy="72" r="7" fill="#16233F"/><circle cx="30" cy="72" r="2.5" fill="#FFF6DD"/><circle cx="72" cy="72" r="2.5" fill="#FFF6DD"/></svg>
+          <h3><span class="step-no">2</span> Pick how you get it</h3>
+          <p>Click and collect in Milngavie, or delivery.</p>
+        </li>
+        <li class="step">
+          <svg viewBox="0 0 100 90" aria-hidden="true" focusable="false"><circle cx="50" cy="46" r="40" fill="#FBE0D6"/><rect x="20" y="30" width="60" height="38" rx="8" fill="#FFF6DD" stroke="#16233F" stroke-width="4"/><path d="M20 42h60" stroke="#16233F" stroke-width="8"/><rect x="28" y="54" width="16" height="6" rx="3" fill="#C93A1F"/><path d="M62 19v-5a8 8 0 0 1 16 0v5" fill="none" stroke="#16233F" stroke-width="4" stroke-linecap="round" transform="translate(-14 8)"/></svg>
+          <h3><span class="step-no">3</span> Pay securely</h3>
+          <p>You pay on Shopify's secure checkout.</p>
+        </li>
+        <li class="step">
+          <svg viewBox="0 0 100 90" aria-hidden="true" focusable="false"><circle cx="50" cy="46" r="40" fill="#FFEFB0"/><use href="#g-glass" x="22" y="22" width="30" height="50" transform="rotate(-10 37 47)"/><use href="#g-glass" x="48" y="22" width="30" height="50" transform="rotate(10 63 47)"/><path d="M50 12v6M40 16l2 5M60 16l-2 5" stroke="#16233F" stroke-width="3.5" stroke-linecap="round"/></svg>
+          <h3><span class="step-no">4</span> Enjoy</h3>
+          <p>Share it, gift it, or save it for later. Cheers!</p>
+        </li>
+      </ol>
+      <div class="two-up">
+        <article class="info-card" id="click-collect">
+          <h3>Click &amp; collect</h3>
+          <p>Order online, then collect from the shop at 13 Station Road, Milngavie.</p>
+          <p class="tbc">Collection times and how it works: to be confirmed.</p>
+        </article>
+        <article class="info-card" id="shipping">
+          <h3>Shipping</h3>
+          <p>UK delivery, and international shipping where possible.</p>
+          <p class="tbc">Delivery prices and countries: to be confirmed.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="shelf-section" id="find-us" aria-labelledby="find-title" style="--i:3">
+      <div class="section-head">
+        <p class="eyebrow">Pop round</p>
+        <h2 id="find-title">Find us</h2>
+      </div>
+      <div class="find">
+        <div class="find-card">
+          <h3 id="about">About us</h3>
+          <p>Jack O'Beers &amp; Deli is a craft beer and deli shop in Milngavie. Fresh from keg to bottle, no foam, no fuss.</p>
+          <address>
+            <strong>Jack O'Beers &amp; Deli</strong><br>
+            13 Station Road<br>Milngavie<br>G62 8PG
+          </address>
+          <ul class="contact">
+            <li><span class="label">Phone</span> <a href="tel:07405480950">07405 480950</a></li>
+            <li><span class="label">Email</span> <a href="mailto:sales@jackobeers.com">sales@jackobeers.com</a></li>
+          </ul>
+          <a class="btn btn-primary" href="https://www.google.com/maps/search/?api=1&amp;query=Jack%20O%27Beers%20%26%20Deli%2C%2013%20Station%20Road%2C%20Milngavie%2C%20G62%208PG" rel="noopener" target="_blank">Get directions<span class="sr-only"> (opens Google Maps in a new tab)</span></a>
+          <ul class="socials" aria-label="Social links (to be added)">
+            <li><a href="#" class="pill-link">Instagram: link to be added</a></li>
+            <li><a href="#" class="pill-link">YouTube: link to be added</a></li>
+            <li><a href="#" class="pill-link">Google: link to be added</a></li>
+          </ul>
+        </div>
+        <div class="find-card hours-card">
+          <h3>Opening hours</h3>
+          <ul class="hours" id="hours">
+            <li data-day="1"><span>Monday</span><span>11am to 7pm</span></li>
+            <li data-day="2" class="tbc-row"><span>Tuesday</span><span>To be confirmed</span></li>
+            <li data-day="3"><span>Wednesday</span><span>11am to 7pm</span></li>
+            <li data-day="4"><span>Thursday</span><span>11am to 7pm</span></li>
+            <li data-day="5"><span>Friday</span><span>11am to 7pm</span></li>
+            <li data-day="6"><span>Saturday</span><span>11am to 7pm</span></li>
+            <li data-day="0"><span>Sunday</span><span>11am to 7pm</span></li>
+          </ul>
+          <div class="events">
+            <h3>Events, kegs and keezers</h3>
+            <p>Planning a do? Event enquiries are welcome. Keg and keezer rental may be possible: details to be confirmed.</p>
+            <a class="btn btn-ghost" href="mailto:sales@jackobeers.com?subject=Event%20enquiry">Email an event enquiry</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="shelf-section" aria-labelledby="news-title" style="--i:4">
+      <div class="two-up">
+        <article class="info-card news-card" id="newsletter">
+          <h2 id="news-title">The newsletter</h2>
+          <p>New arrivals and shop news, now and then. Demonstration only: nothing is sent or stored.</p>
+          <form class="news-form" id="news-form" novalidate>
+            <label for="news-email">Your email address</label>
+            <div class="news-row">
+              <input type="email" id="news-email" name="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required>
+              <button type="submit" class="btn btn-primary">Sign me up</button>
+            </div>
+            <p class="form-msg" id="news-msg" role="status"></p>
+          </form>
+        </article>
+        <article class="info-card" id="members">
+          <h2>Members' corner</h2>
+          <p>A members area is planned, with a place to keep your details and orders.</p>
+          <p class="tbc">What members get: to be confirmed.</p>
+        </article>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-in">
+    <img src="../../site/assets/media/jack-logo.png" width="244" height="258" alt="" class="foot-logo">
+    <div>
+      <p class="drink"><strong>Please drink responsibly. 18+ only.</strong></p>
+      <p>Jack O'Beers &amp; Deli, 13 Station Road, Milngavie, G62 8PG</p>
+      <p>Open Wednesday to Monday, 11am to 7pm. Tuesday to be confirmed.</p>
+      <p>Premises licence includes off-sales: details to be supplied.</p>
+      <p class="fine">Website concept for discussion. Product names, prices and details are samples.</p>
+    </div>
+  </div>
+</footer>
+
+<p class="sr-only" id="live" role="status"></p>
+</body>
+</html>

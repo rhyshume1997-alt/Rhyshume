@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Review a concept</title>
+<link rel="stylesheet" href="review.css">
+</head>
+<body>
+<header class="bar">
+<a href="index.html">&larr; All concepts</a>
+<h1 id="title">Concept</h1>
+<span class="sp"></span>
+<div class="seg" role="group" aria-label="Screen size"><button type="button" data-v="desktop" aria-pressed="true">Desktop</button><button type="button" data-v="phone" aria-pressed="false">Phone</button></div>
+<a class="btn" id="open" href="#" target="_blank" rel="noopener">Open full screen</a>
+</header>
+<div class="main">
+<div class="stage" id="stage"><iframe id="frame" title="Concept" src="about:blank"></iframe></div>
+<aside class="pane" id="pane" aria-label="Your feedback"></aside>
+</div>
+<button class="btn big toggle-pane" id="toggle" type="button" aria-expanded="false" aria-controls="pane">Give feedback</button>
+<script src="review.js"></script>
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Jack O'Beers &amp; Deli | The Deli Counter (concept)</title>
+<meta name="description" content="Concept for discussion: a New York deli counter style home page for Jack O'Beers &amp; Deli, Milngavie.">
+<link rel="preload" href="fonts/alfa-slab-one-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/dm-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="concept.css">
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+
+<!-- Shared drawn symbols -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-beer" viewBox="0 0 64 80">
+      <path d="M27 4h10v4h-2v14c0 4 8 8 8 16v34a4 4 0 0 1-4 4H25a4 4 0 0 1-4-4V38c0-8 8-12 8-16V8h-2z" fill="var(--c1)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
+      <rect x="21" y="42" width="22" height="22" fill="var(--c2)" stroke="var(--ink)" stroke-width="3"/>
+      <path d="M29 4h6" stroke="var(--ink)" stroke-width="3"/>
+    </symbol>
+    <symbol id="i-cider" viewBox="0 0 64 80">
+      <path d="M26 4h12v18l6 10v38a4 4 0 0 1-4 4H24a4 4 0 0 1-4-4V32l6-10z" fill="var(--c1)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
+      <circle cx="32" cy="50" r="10" fill="var(--c2)" stroke="var(--ink)" stroke-width="3"/>
+      <path d="M32 40c0-3 1-4 3-5" stroke="var(--ink)" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-wine" viewBox="0 0 64 80">
+      <path d="M28 2h8v22c0 6 6 8 6 16v32a4 4 0 0 1-4 4H26a4 4 0 0 1-4-4V40c0-8 6-10 6-16z" fill="var(--c1)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
+      <rect x="22" y="46" width="20" height="18" fill="var(--c2)" stroke="var(--ink)" stroke-width="3"/>
+    </symbol>
+    <symbol id="i-hamper" viewBox="0 0 64 80">
+      <path d="M18 28c0-14 28-14 28 0" fill="none" stroke="var(--ink)" stroke-width="3"/>
+      <path d="M10 28h44l-4 40a4 4 0 0 1-4 4H18a4 4 0 0 1-4-4z" fill="var(--c1)" stroke="var(--ink)" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M30 28h4v44h-4z" fill="var(--c2)" stroke="var(--ink)" stroke-width="2"/>
+      <path d="M32 28c-8-12-16-2-8 0zM32 28c8-12 16-2 8 0z" fill="var(--c2)" stroke="var(--ink)" stroke-width="2.5" stroke-linejoin="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<aside class="concept-label" aria-label="Concept status">Concept for discussion</aside>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="awning" aria-hidden="true"></div>
+
+<header class="site-header" id="top">
+  <div class="bar wrap">
+    <a class="brand" href="#top" aria-label="Jack O'Beers &amp; Deli, back to top">
+      <img src="../../site/assets/media/jack-logo.png" width="52" height="55" alt="Jack O'Beers bull logo">
+      <span class="brand-name">Jack O'Beers<span> &amp; Deli</span></span>
+    </a>
+
+    <nav class="nav" aria-label="Main">
+      <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="navList">
+        <span class="burger" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="nav-toggle-text">Menu</span>
+      </button>
+      <ul class="nav-list" id="navList">
+        <li class="has-sub">
+          <button type="button" class="sub-toggle" aria-expanded="false" aria-controls="shopSub">Shop <span class="caret" aria-hidden="true"></span></button>
+          <ul class="sub" id="shopSub">
+            <li><a href="#shelf">Beer</a></li>
+            <li><a href="#shelf">Cider</a></li>
+            <li><a href="#shelf">Wine</a></li>
+            <li><a href="#shelf">Kegs</a></li>
+            <li><a href="#hampers">Hampers</a></li>
+          </ul>
+        </li>
+        <li><a href="#deli">Deli</a></li>
+        <li><a href="#how">Click &amp; collect</a></li>
+        <li><a href="#how">Shipping</a></li>
+        <li><a href="#find">About</a></li>
+        <li><a href="#newsletter">Members</a></li>
+      </ul>
+    </nav>
+
+    <div class="basket-wrap">
+      <button class="basket-btn" id="basketBtn" type="button" aria-expanded="false" aria-controls="basketPanel">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M3 8h18l-2 12H5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8 8a4 4 0 0 1 8 0" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+        <span>Basket</span> <span class="count" id="basketCount" aria-label="items in basket">0</span>
+      </button>
+      <div class="basket-panel" id="basketPanel" hidden>
+        <p class="eyebrow">Your basket (demonstration)</p>
+        <ul id="basketList" class="basket-list"><li class="muted">Nothing here yet.</li></ul>
+        <p class="small muted">Sample items only. Real checkout would be Shopify's.</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- HERO -->
+<section class="hero tiles" aria-labelledby="h1">
+  <div class="wrap hero-grid">
+    <div class="hero-copy rv">
+      <p class="eyebrow">Milngavie's beer and deli counter</p>
+      <h1 id="h1">Fresh from keg to bottle, no foam, no fuss.</h1>
+      <p class="lead">Craft beer on one side. Deli and gift hampers on the other. Pull up a stool, have a look round, and ask us anything.</p>
+      <div class="cta-row">
+        <a class="btn btn-red" href="#shelf">Browse the shelf</a>
+        <a class="btn btn-ghost" href="#ticket-machine">Take a number</a>
+      </div>
+      <svg class="stamp" viewBox="0 0 200 200" width="132" height="132" aria-hidden="true">
+        <defs><path id="circ" d="M100 100m-74 0a74 74 0 1 1 148 0a74 74 0 1 1-148 0"/></defs>
+        <circle cx="100" cy="100" r="94" fill="none" stroke="#B02A1F" stroke-width="6"/>
+        <circle cx="100" cy="100" r="86" fill="none" stroke="#B02A1F" stroke-width="2"/>
+        <circle cx="100" cy="100" r="54" fill="none" stroke="#B02A1F" stroke-width="2"/>
+        <text font-family="Alfa Slab One, serif" font-size="19" letter-spacing="3.2" fill="#B02A1F"><textPath href="#circ" startOffset="0">NO FOAM · NO FUSS · NO FOAM · NO FUSS ·</textPath></text>
+        <g transform="translate(100 100)" fill="none" stroke="#B02A1F" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+          <path d="M-9-34h18v16l8 12v34h-34v-34l8-12z"/><path d="M-17 4h34"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- SIGNATURE: ticket dispenser -->
+    <div class="station rv" id="ticket-machine">
+      <h2 class="station-title">Take a number</h2>
+      <div class="serving" aria-hidden="true">
+        <span class="serving-label">Now serving</span>
+        <span class="serving-num" id="servingNum">038</span>
+      </div>
+      <div class="dispenser">
+        <div class="disp-top"><span>Please take a ticket</span></div>
+        <div class="disp-body">
+          <button class="pull" id="takeBtn" type="button" aria-describedby="takeHelp">
+            <span class="pull-big">Take a number</span>
+            <span class="pull-small">Press, tap, or hit Enter</span>
+          </button>
+          <div class="slot" aria-hidden="true"></div>
+        </div>
+        <div class="out" id="out" aria-hidden="true"></div>
+        <div class="tray" aria-label="Your tickets" role="group">
+          <div class="tray-inner" id="tray"><p class="tray-empty" id="trayEmpty">Your ticket lands here.</p></div>
+        </div>
+      </div>
+      <p class="small" id="takeHelp">The ticket tells you which counter to head to. Numbers are just for fun, not a real queue.</p>
+      <p class="sr-only" id="takeStatus" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+
+<!-- RANGES -->
+<section class="section ranges" id="ranges" aria-labelledby="h-ranges">
+  <div class="wrap">
+    <div class="sect-head rv">
+      <p class="eyebrow">Today's menu board</p>
+      <h2 id="h-ranges">Three counters. Same welcome.</h2>
+    </div>
+    <div class="board">
+      <article class="counter c-beer rv" id="beer" aria-labelledby="h-beer">
+        <span class="flag" aria-hidden="true">Now serving here</span>
+        <svg class="art" viewBox="0 0 120 80" aria-hidden="true" style="--c1:#F0B83A;--c2:#F4EBD6"><use href="#i-beer" x="0" width="40" height="52" y="26"/><use href="#i-cider" x="38" width="40" height="52" y="20" style="--c1:#B02A1F"/><use href="#i-wine" x="76" width="40" height="52" y="14" style="--c1:#1D4A38;--c2:#F4EBD6"/></svg>
+        <p class="eyebrow">Counter 1</p>
+        <h3 id="h-beer" tabindex="-1">Craft beer</h3>
+        <p>Craft beers, ciders and wines, plus kegs for parties.</p>
+        <ul class="tags"><li>Beer</li><li>Cider</li><li>Wine</li><li>Kegs</li></ul>
+        <p class="small">Keg and keezer rental: details to be confirmed.</p>
+        <a class="btn btn-cream" href="#shelf">See the shelf</a>
+      </article>
+
+      <article class="counter c-deli rv" id="deli" aria-labelledby="h-deli">
+        <span class="flag" aria-hidden="true">Now serving here</span>
+        <svg class="art" viewBox="0 0 120 80" aria-hidden="true"><path d="M8 66 L70 30 L112 66 Z" fill="#F0B83A" stroke="#231B16" stroke-width="3" stroke-linejoin="round"/><circle cx="62" cy="55" r="5" fill="#F4EBD6" stroke="#231B16" stroke-width="2.5"/><circle cx="86" cy="58" r="3.5" fill="#F4EBD6" stroke="#231B16" stroke-width="2.5"/><circle cx="40" cy="58" r="3" fill="#F4EBD6" stroke="#231B16" stroke-width="2.5"/><path d="M18 20c10-8 24-8 34 0" fill="none" stroke="#F4EBD6" stroke-width="3" stroke-linecap="round"/></svg>
+        <p class="eyebrow">Counter 2</p>
+        <h3 id="h-deli" tabindex="-1">The deli</h3>
+        <p>Good things to eat, cut and wrapped while you chat. Handy with a bottle.</p>
+        <ul class="tags"><li>Deli food</li><li>Pairings</li><li>Allergen info</li></ul>
+        <p class="small">Full deli range: to be confirmed.</p>
+        <a class="btn btn-cream" href="#shelf">See the shelf</a>
+      </article>
+
+      <article class="counter c-hamper rv" id="hampers" aria-labelledby="h-hamper">
+        <span class="flag" aria-hidden="true">Now serving here</span>
+        <svg class="art" viewBox="0 0 120 80" aria-hidden="true" style="--c1:#B02A1F;--c2:#F0B83A"><use href="#i-hamper" x="28" width="64" height="80"/></svg>
+        <p class="eyebrow">Counter 3</p>
+        <h3 id="h-hamper" tabindex="-1">Gift hampers</h3>
+        <p>Beer, deli and a bit of ribbon, packed up ready to give.</p>
+        <ul class="tags"><li>Beer hampers</li><li>Deli hampers</li><li>Gifts</li></ul>
+        <p class="small">Contents and prices: to be confirmed.</p>
+        <a class="btn btn-cream" href="#shelf">See the shelf</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- SHELF -->
+<section class="section shelf tiles-dark" id="shelf" aria-labelledby="h-shelf">
+  <div class="wrap">
+    <div class="sect-head rv">
+      <p class="eyebrow light">Off the shelf</p>
+      <h2 id="h-shelf">Grab a tag</h2>
+      <p class="sample-note"><strong>Sample products and prices.</strong> These are demonstration items only. Real range, ABV, allergens and prices are to be confirmed.</p>
+    </div>
+    <ul class="cards" id="cards"></ul>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section how" id="how" aria-labelledby="h-how">
+  <div class="wrap">
+    <div class="sect-head rv">
+      <p class="eyebrow">Order of service</p>
+      <h2 id="h-how">How it works</h2>
+      <p>Online ordering, click and collect, UK delivery and international shipping where possible. Final details to be confirmed.</p>
+    </div>
+    <ol class="stubs">
+      <li class="stub rv">
+        <svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true"><path d="M6 52h52" stroke="#231B16" stroke-width="3"/><rect x="10" y="22" width="12" height="30" rx="2" fill="#F0B83A" stroke="#231B16" stroke-width="3"/><rect x="26" y="12" width="12" height="40" rx="2" fill="#B02A1F" stroke="#231B16" stroke-width="3"/><rect x="42" y="26" width="12" height="26" rx="2" fill="#1D4A38" stroke="#231B16" stroke-width="3"/></svg>
+        <span class="stub-no">1</span>
+        <h3>Choose</h3>
+        <p>Pick your beer, cider, wine, deli food or hamper.</p>
+      </li>
+      <li class="stub rv">
+        <svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true"><path d="M12 24h40l-3 32H15z" fill="#F0B83A" stroke="#231B16" stroke-width="3" stroke-linejoin="round"/><path d="M22 24c0-12 20-12 20 0" fill="none" stroke="#231B16" stroke-width="3"/><circle cx="32" cy="40" r="4" fill="#F4EBD6" stroke="#231B16" stroke-width="2.5"/></svg>
+        <span class="stub-no">2</span>
+        <h3>Collect or deliver</h3>
+        <p>Click and collect in store, or have it delivered. UK delivery, and international where possible.</p>
+      </li>
+      <li class="stub rv">
+        <svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true"><rect x="6" y="16" width="52" height="34" rx="5" fill="#F4EBD6" stroke="#231B16" stroke-width="3"/><path d="M6 26h52" stroke="#231B16" stroke-width="6"/><rect x="12" y="38" width="14" height="5" fill="#B02A1F"/></svg>
+        <span class="stub-no">3</span>
+        <h3>Pay securely</h3>
+        <p>Checkout is handled by Shopify.</p>
+      </li>
+      <li class="stub rv">
+        <svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true"><path d="M16 10h32l-4 44a4 4 0 0 1-4 4H24a4 4 0 0 1-4-4z" fill="#F0B83A" stroke="#231B16" stroke-width="3" stroke-linejoin="round"/><path d="M17 10h30v10H17z" fill="#F4EBD6" stroke="#231B16" stroke-width="3" stroke-linejoin="round"/></svg>
+        <span class="stub-no">4</span>
+        <h3>Enjoy</h3>
+        <p>Pour it, plate it, share it. Plenty of pairing ideas on each product.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- FIND US -->
+<section class="section find" id="find" aria-labelledby="h-find">
+  <div class="wrap find-grid">
+    <div class="receipt rv">
+      <p class="eyebrow">Come and say hello</p>
+      <h2 id="h-find">Find us</h2>
+      <address>
+        Jack O'Beers &amp; Deli<br>
+        13 Station Road<br>
+        Milngavie<br>
+        G62 8PG
+      </address>
+      <ul class="contact">
+        <li><span>Phone</span> <a href="tel:+447405480950">07405 480950</a></li>
+        <li><span>Email</span> <a href="mailto:sales@jackobeers.com">sales@jackobeers.com</a></li>
+      </ul>
+      <a class="btn btn-red" href="https://www.google.com/maps/search/?api=1&amp;query=13+Station+Road+Milngavie+G62+8PG" target="_blank" rel="noopener">Get directions</a>
+      <p class="small">Opens Google Maps in a new tab.</p>
+    </div>
+
+    <div class="hours-board rv">
+      <h3>Opening hours</h3>
+      <table>
+        <caption class="sr-only">Opening hours</caption>
+        <tbody>
+          <tr><th scope="row">Monday</th><td>11am to 7pm</td></tr>
+          <tr><th scope="row">Tuesday</th><td class="tbc">To be confirmed</td></tr>
+          <tr><th scope="row">Wednesday</th><td>11am to 7pm</td></tr>
+          <tr><th scope="row">Thursday</th><td>11am to 7pm</td></tr>
+          <tr><th scope="row">Friday</th><td>11am to 7pm</td></tr>
+          <tr><th scope="row">Saturday</th><td>11am to 7pm</td></tr>
+          <tr><th scope="row">Sunday</th><td>11am to 7pm</td></tr>
+        </tbody>
+      </table>
+      <p class="small">Off-sales licence details to be supplied. Event enquiries: email or call us.</p>
+      <ul class="social">
+        <li><a href="#">Instagram <span>link to be added</span></a></li>
+        <li><a href="#">YouTube <span>link to be added</span></a></li>
+        <li><a href="#">Google reviews <span>link to be added</span></a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="section news" id="newsletter" aria-labelledby="h-news">
+  <div class="wrap news-wrap rv">
+    <div>
+      <p class="eyebrow light">Daily specials, sort of</p>
+      <h2 id="h-news">Get the news from behind the counter</h2>
+      <p>New arrivals, hampers and events, in your inbox now and then. A members area is planned: details to be confirmed.</p>
+    </div>
+    <form class="news-form" id="newsForm" novalidate>
+      <label for="email">Your email address</label>
+      <div class="row">
+        <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+        <button class="btn btn-mustard" type="submit">Sign me up</button>
+      </div>
+      <p class="small light" id="newsMsg" role="status">Demonstration only. Nothing is sent or stored.</p>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="tile-band" aria-hidden="true"></div>
+  <div class="wrap foot-grid">
+    <div>
+      <p class="foot-name">Jack O'Beers &amp; Deli</p>
+      <p>13 Station Road, Milngavie, G62 8PG</p>
+      <p><a href="tel:+447405480950">07405 480950</a> &middot; <a href="mailto:sales@jackobeers.com">sales@jackobeers.com</a></p>
+    </div>
+    <nav aria-label="Footer">
+      <ul class="foot-links">
+        <li><a href="#shelf">Shop</a></li>
+        <li><a href="#deli">Deli</a></li>
+        <li><a href="#how">Click &amp; collect</a></li>
+        <li><a href="#how">Shipping</a></li>
+        <li><a href="#find">About</a></li>
+        <li><a href="#newsletter">Members</a></li>
+      </ul>
+    </nav>
+  </div>
+  <p class="wrap age"><strong>Please drink responsibly. 18+ only.</strong></p>
+  <p class="wrap fine">Concept for discussion. Sample products, prices and imagery are placeholders. Logo supplied by the shop.</p>
+</footer>
+
+<script src="concept.js"></script>
+</body>
+</html>

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Jack O'Beers &amp; Deli | Concept: The Local</title>
+<meta name="description" content="Concept for discussion: a neighbourhood-shop website for Jack O'Beers &amp; Deli, 13 Station Road, Milngavie.">
+<link rel="preload" href="fonts/zilla-slab-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="concept.css">
+<script>document.documentElement.classList.add('js')</script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<aside class="concept-tag" aria-label="Status">Concept for discussion</aside>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="thistle" viewBox="0 0 48 64">
+      <g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M24 62V34"/>
+        <path d="M24 52c-6-1-11-5-13-11 6 0 11 3 13 8"/>
+        <path d="M24 46c6-1 11-5 13-11-6 0-11 3-13 8"/>
+        <path d="M13 24c0-6 4-10 11-10s11 4 11 10c0 6-4 10-11 10s-11-4-11-10z"/>
+        <path d="M18 18l3 12M24 16v18M30 18l-3 12M15 24l18 0"/>
+        <path d="M14 14l-3-6M24 12V4M34 14l3-6M18 12l-2-5M30 12l2-5"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="site-head" id="top">
+  <div class="tartan" aria-hidden="true"></div>
+  <div class="head-row wrap">
+    <a class="brand" href="#top">
+      <img src="../../site/assets/media/jack-logo.png" width="244" height="258" alt="" class="brand-logo">
+      <span class="brand-name">Jack O&rsquo;Beers <span>&amp; Deli</span></span>
+    </a>
+    <div class="head-tools">
+      <button class="basket-btn" type="button" id="basket-btn" aria-label="Basket, 0 items. Demonstration only.">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h16l-1.6 10a2 2 0 0 1-2 1.7H7.6a2 2 0 0 1-2-1.7L4 9z"/><path d="M8.5 9l3.5-5 3.5 5"/></svg>
+        <span class="basket-word">Basket</span>
+        <span class="basket-count" id="basket-count" aria-hidden="true">0</span>
+      </button>
+      <button class="menu-btn" type="button" id="menu-btn" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    </div>
+    <nav class="site-nav" id="site-nav" aria-label="Main">
+      <ul class="nav-list">
+        <li class="has-sub">
+          <button type="button" class="sub-btn" aria-expanded="false" aria-controls="sub-shop">Shop <span class="caret" aria-hidden="true"></span></button>
+          <ul class="sub" id="sub-shop">
+            <li><a href="#shelf" data-filter="beers">Beer</a></li>
+            <li><a href="#shelf" data-filter="ciders">Cider</a></li>
+            <li><a href="#shelf" data-filter="wines">Wine</a></li>
+            <li><a href="#shelf" data-filter="kegs">Kegs</a></li>
+            <li><a href="#shelf" data-filter="hampers">Hampers</a></li>
+          </ul>
+        </li>
+        <li><a href="#deli">Deli</a></li>
+        <li><a href="#collect">Click &amp; collect</a></li>
+        <li><a href="#shipping">Shipping</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#members">Members</a></li>
+      </ul>
+    </nav>
+  </div>
+  <p class="sr-only" role="status" id="basket-status"></p>
+</header>
+
+<main id="main">
+
+<!-- 1. HERO: the ledger page and the noticeboard -->
+<section class="hero wrap" aria-labelledby="h1">
+  <div class="ledger-page rv">
+    <p class="kicker">13 Station Road, Milngavie</p>
+    <h1 id="h1">Fresh from keg to bottle, <span class="nowrap">no foam,</span> no fuss.</h1>
+    <p class="lede">Craft beer, ciders, wines, kegs, deli food and gift hampers, all under one roof. Online shopping, click and collect and delivery are planned; this page shows how they could look.</p>
+    <p class="actions">
+      <a class="btn btn-primary" href="#shelf">Browse the shelf</a>
+      <a class="btn btn-ghost" href="#find">Find the shop</a>
+    </p>
+  </div>
+
+  <aside class="board rv" aria-label="Noticeboard">
+    <h2 class="board-title">On the board</h2>
+    <ul class="notices">
+      <li class="notice n1">
+        <span class="pin" aria-hidden="true"></span>
+        <h3>Hours</h3>
+        <p>Wednesday to Monday,<br>11am to 7pm.<br><span class="tbc">Tuesday: to be confirmed.</span></p>
+      </li>
+      <li class="notice n2">
+        <span class="pin" aria-hidden="true"></span>
+        <h3>Events</h3>
+        <p>Planning a gathering? Event enquiries are welcome at <a href="mailto:sales@jackobeers.com">sales@jackobeers.com</a>.</p>
+      </li>
+      <li class="notice n3">
+        <span class="pin" aria-hidden="true"></span>
+        <h3>New in</h3>
+        <p>The shelf below. It is sample stock for this demonstration, so please do not ask for a Demo Stout.</p>
+      </li>
+    </ul>
+  </aside>
+</section>
+
+<!-- 3. THE THREE RANGES -->
+<section class="ranges wrap" id="ranges" aria-labelledby="h-ranges">
+  <div class="section-head rv">
+    <p class="kicker">The ledger</p>
+    <h2 id="h-ranges">Three ranges, equal space</h2>
+    <p class="sub-lede">Beer and deli get the same room on the shelves, and the hampers bring the two together.</p>
+  </div>
+  <div class="ledger-cols">
+    <article class="col rv" id="beer-range">
+      <p class="folio">No. 1</p>
+      <h3 class="sign">Craft beer</h3>
+      <p>Craft beer, with ciders, wines and kegs alongside for bigger gatherings. Flavour, food pairing and allergen details will sit with every product.</p>
+      <a class="more" href="#shelf" data-filter="beers">See sample beers</a>
+    </article>
+    <article class="col rv" id="deli">
+      <p class="folio">No. 2</p>
+      <h3 class="sign">The deli</h3>
+      <p>Deli food with the same space as the beer. The full range is still to be confirmed by the shop, so we have not made one up.</p>
+      <a class="more" href="mailto:sales@jackobeers.com?subject=Deli%20question">Ask about the deli</a>
+    </article>
+    <article class="col rv" id="hampers">
+      <p class="folio">No. 3</p>
+      <h3 class="sign">Gift hampers</h3>
+      <p>Boxed gifts that put beer and deli together. Contents and prices are to be agreed with the shop.</p>
+      <a class="more" href="#shelf" data-filter="hampers">See sample hampers</a>
+    </article>
+  </div>
+</section>
+
+<!-- 4. PRODUCT SHELF -->
+<section class="shelf wrap" id="shelf" aria-labelledby="h-shelf">
+  <div class="section-head rv">
+    <p class="kicker">The shelf</p>
+    <h2 id="h-shelf">Sample stock</h2>
+    <p class="sub-lede">Demonstration products and prices only. Nothing here is for sale, and the basket does not check out.</p>
+  </div>
+  <div class="filters" role="group" aria-label="Filter the sample shelf">
+    <button type="button" class="chip" data-filter="all" aria-pressed="true">All</button>
+    <button type="button" class="chip" data-filter="beers" aria-pressed="false">Beer</button>
+    <button type="button" class="chip" data-filter="ciders" aria-pressed="false">Cider</button>
+    <button type="button" class="chip" data-filter="wines" aria-pressed="false">Wine</button>
+    <button type="button" class="chip" data-filter="kegs" aria-pressed="false">Kegs</button>
+    <button type="button" class="chip" data-filter="hampers" aria-pressed="false">Hampers</button>
+  </div>
+  <p class="count" id="shelf-count" role="status">Showing 8 of 8 sample products</p>
+  <ul class="cards" id="cards">
+    <li class="card" data-collection="beers">
+      <p class="card-kind"><span>Beer</span> <span class="sample-tag">Sample</span></p>
+      <h3>Demo Amber Ale</h3>
+      <p class="card-line">Malty and rounded, easy to share.</p>
+      <dl class="flav" aria-label="Flavour, sample data"><div><dt>Sweet</dt><dd><span class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span><span class="sr-only">2 out of 5</span></dd></div><div><dt>Bitter</dt><dd><span class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span><span class="sr-only">3 out of 5</span></dd></div><div><dt>Fruity</dt><dd><span class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span><span class="sr-only">2 out of 5</span></dd></div><div><dt>Body</dt><dd><span class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span><span class="sr-only">3 out of 5</span></dd></div></dl>
+      <div class="card-buy">
+        <p class="price"><span class="from">From</span> <strong>&pound;3.80</strong> <span class="sample-tag">Sample</span></p>
+        <button type="button" class="btn btn-add" data-title="Demo Amber Ale" aria-label="Add to basket: Demo Amber Ale">Add to basket</button>
+      </div>
+    </li>
+    <li class="card" data-collection="beers">
+      <p class="card-kind"><span>Beer</span> <span class="sample-tag">Sample</span></p>
+      <h3>Demo Dark Stout</h3>
+      <p class="card-line">Dark, roasty and smooth.</p>
+      <dl class="flav" aria-label="Flavour, sample data"><div><dt>Sweet</dt><dd><span class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span><span class="sr-only">2 out of 5</span></dd></div><div><dt>Bitter</dt><dd><span class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="sr-only">4 out of 5</span></dd></div><div><dt>Fruity</dt><dd><span class="dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></span><span class="sr-only">1 out of 5</span></dd></div><div><dt>Body</dt><dd><span class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span><span class="sr-only">5 out of 5</span></dd></div></dl>
+      <div class="card-buy">
+        <p class="price"><span class="from">From</span> <strong>&pound;4.20</strong> <span class="sample-tag">Sample</span></p>
+        <button type="button" class="btn btn-add" data-title="Demo Dark Stout" aria-label="Add to basket: Demo Dark Stout">Add to basket</button>
+      </div>
+    </li>
+    <li class="card" data-collection="beers">
+      <p class="card-kind"><span>Beer</span> <span class="sample-tag">Sample</span></p>
+      <h3>Demo Pale Lager</h3>
+      <p class="card-line">Crisp, light and clean.</p>
+      <dl class="flav" aria-label="Flavour, sample data"><div><dt>Sweet</dt><dd><span class="dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></span><span class="sr-only">1 out of 5</span></dd></div><div><dt>Bitter</dt><dd><span class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span><span class="sr-only">2 out of 5</span></dd></div><div><dt>Fruity</dt><dd><span class="dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></span><span class="sr-only">1 out of 5</span></dd></div><div><dt>Body</dt><dd><span class="dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></span><span class="sr-only">1 out of 5</span></dd></div></dl>
+      <div class="card-buy">
+        <p class="price"><span class="from">From</span> <strong>&pound;3.50</strong> <span class="sample-tag">Sample</span></p>
+        <button type="button" class="btn btn-add" data-title="Demo Pale Lager" aria-label="Add to basket: Demo Pale Lager">Add to basket</button>
+      </div>
+    </li>
+    <li class="card" data-collection="ciders">
+      <p class="card-kind"><span>Cider</span> <span class="sample-tag">Sample</span></p>
+      <h3>Demo Dry Cider</h3>
+      <p class="card-line">Sharp, clean and apple-led.</p>
+      <dl class="flav" aria-label="Flavour, sample data"><div><dt>Sweet</dt><dd><span class="dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></span><span class="sr-only">1 out of 5</span></dd></div><div><dt>Bitter</dt><dd><span class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="sr-only">4 out of 5</span></dd></div><div><dt>Fruity</dt><dd><span class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span><span class="sr-only">2 out of 5</span></dd></div><div><dt>Body</dt><dd><span class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span><span class="sr-only">2 out of 5</span></dd></div></dl>
+      <div class="card-buy">
+        <p class="price"><span class="from">From</span> <strong>&pound;3.90</strong> <span class="sample-tag">Sample</span></p>
+        <button type="button" class="btn btn-add" data-title="Demo Dry Cider" aria-label="Add to basket: Demo Dry Cider">Add to basket</button>
+      </div>
+    </li>
+    <li class="card" data-collection="wines">
+      <p class="card-kind"><span>Wine</span> <span class="sample-tag">Sample</span></p>
+      <h3>Demo Red</h3>
+      <p class="card-line">Soft and rounded.</p>
+      <dl class="flav" aria-label="Flavour, sample data"><div><dt>Sweet</dt><dd><span class="dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></span><span class="sr-only">1 out of 5</span></dd></div><div><dt>Bitter</dt><dd><span class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span><span class="sr-only">3 out of 5</span></dd></div><div><dt>Fruity</dt><dd><span class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span><span class="sr-only">3 out of 5</span></dd></div><div><dt>Body</dt><dd><span class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span><span class="sr-only">4 out of 5</span></dd></div></dl>
+      <div class="card-buy">
+        <p class="price"><span class="from">From</span> <strong>&pound;11.00</strong> <span class="sample-tag">Sample</span></p>
+        <button type="button" class="btn btn-add" data-title="Demo Red" aria-label="Add to basket: Demo Red">Add to basket</button>
+      </div>
+    </li>
+    <li class="card" data-collection="kegs">
+      <p class="card-kind"><span>Keg</span> <span class="sample-tag">Sample</span></p>
+      <h3>Demo Amber Ale, keg</h3>
+      <p class="card-line">For parties and pubs at home. Size and deposit to be confirmed.</p>
+      <dl class="flav" aria-label="Flavour, sample data"><div><dt>Sweet</dt><dd><span class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span><span class="sr-only">2 out of 5</span></dd></div><div><dt>Bitter</dt><dd><span class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span><span class="sr-only">3 out of 5</span></dd></div><div><dt>Fruity</dt><dd><span class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></span><span class="sr-only">2 out of 5</span></dd></div><div><dt>Body</dt><dd><span class="dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span><span class="sr-only">3 out of 5</span></dd></div></dl>
+      <div class="card-buy">
+        <p class="price"><span class="from">From</span> <strong>&pound;72.00</strong> <span class="sample-tag">Sample</span></p>
+        <button type="button" class="btn btn-add" data-title="Demo Amber Ale, keg" aria-label="Add to basket: Demo Amber Ale, keg">Add to basket</button>
+      </div>
+    </li>
+    <li class="card" data-collection="hampers">
+      <p class="card-kind"><span>Hamper</span> <span class="sample-tag">Sample</span></p>
+      <h3>Demo Beer Hamper</h3>
+      <p class="card-line">A selection of beers with something to eat. Contents to be agreed.</p>
+      <p class="flav-tbc">Contents <span class="tbc">to be agreed</span></p>
+      <div class="card-buy">
+        <p class="price"><span class="price-tbc">Price to be agreed</span></p>
+        <button type="button" class="btn btn-add" data-title="Demo Beer Hamper" aria-label="Add to basket: Demo Beer Hamper">Add to basket</button>
+      </div>
+    </li>
+    <li class="card" data-collection="hampers">
+      <p class="card-kind"><span>Hamper</span> <span class="sample-tag">Sample</span></p>
+      <h3>Demo Deli Hamper</h3>
+      <p class="card-line">Deli favourites for sharing. Contents to be agreed.</p>
+      <p class="flav-tbc">Contents <span class="tbc">to be agreed</span></p>
+      <div class="card-buy">
+        <p class="price"><span class="price-tbc">Price to be agreed</span></p>
+        <button type="button" class="btn btn-add" data-title="Demo Deli Hamper" aria-label="Add to basket: Demo Deli Hamper">Add to basket</button>
+      </div>
+    </li>
+  </ul>
+</section>
+
+<!-- 5. HOW IT WORKS -->
+<section class="how wrap" id="how" aria-labelledby="h-how">
+  <div class="section-head rv">
+    <p class="kicker">How it works</p>
+    <h2 id="h-how">Four steps, no fuss</h2>
+  </div>
+  <ol class="steps">
+    <li class="step rv">
+      <svg viewBox="0 0 64 64" class="step-ico" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20h28v30a4 4 0 0 1-4 4H22a4 4 0 0 1-4-4V20z"/><path d="M18 28h28M24 20v-6h16v6"/><path d="M26 38l4 4 8-9"/></g></svg>
+      <span class="step-no">1</span><h3>Choose</h3><p>Pick beer, cider, wine, deli food or a hamper.</p>
+    </li>
+    <li class="step rv">
+      <svg viewBox="0 0 64 64" class="step-ico" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 40V22h28v18"/><path d="M36 28h10l8 8v4H36"/><circle cx="19" cy="44" r="5"/><circle cx="45" cy="44" r="5"/><path d="M24 44h16"/></g></svg>
+      <span class="step-no">2</span><h3>Collect or deliver</h3><p>Click and collect from the shop, or have it sent.</p>
+    </li>
+    <li class="step rv">
+      <svg viewBox="0 0 64 64" class="step-ico" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><rect x="16" y="28" width="32" height="24" rx="4"/><path d="M22 28v-6a10 10 0 0 1 20 0v6"/><circle cx="32" cy="40" r="3"/><path d="M32 43v4"/></g></svg>
+      <span class="step-no">3</span><h3>Pay securely</h3><p>Checkout is handled by Shopify, not by this page.</p>
+    </li>
+    <li class="step rv">
+      <svg viewBox="0 0 64 64" class="step-ico" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12h24l-3 36a4 4 0 0 1-4 4h-10a4 4 0 0 1-4-4L20 12z"/><path d="M21 22h22"/><path d="M26 32c3 2 9 2 12 0"/></g></svg>
+      <span class="step-no">4</span><h3>Enjoy</h3><p>Sensibly, and at your own pace. Adults only.</p>
+    </li>
+  </ol>
+  <div class="notes-row">
+    <article class="mini rv" id="collect">
+      <h3>Click &amp; collect</h3>
+      <p>Collect from 13 Station Road. Collection times and notice needed are <span class="tbc">to be confirmed</span>.</p>
+    </article>
+    <article class="mini rv" id="shipping">
+      <h3>Shipping</h3>
+      <p>UK delivery, and international shipping where possible. Rates and countries are <span class="tbc">to be confirmed</span>. Alcohol is sent to over 18s only.</p>
+    </article>
+    <article class="mini rv" id="kegs-rental">
+      <h3>Kegs and keezers</h3>
+      <p>Keg sales are shown on the shelf. Keg and &ldquo;keezer&rdquo; rental (a chest freezer converted to taps) is possible; details are <span class="tbc">to be confirmed</span>.</p>
+    </article>
+  </div>
+</section>
+
+<!-- 9. MEMBERS and the signature interaction -->
+<section class="members" id="members" aria-labelledby="h-members">
+  <div class="members-in wrap">
+    <div class="members-copy rv">
+      <p class="kicker light">Members</p>
+      <h2 id="h-members">A Members area, for the regulars</h2>
+      <p>A Members area is wanted for the site. What members get is <strong>to be agreed with the shop</strong>, so nothing is promised here.</p>
+      <p>The card on the right is one idea, borrowed from a real object: the regulars&rsquo; stamp card kept by the till. Try stamping it. Your progress stays in this browser only.</p>
+      <svg class="thistle-lg" viewBox="0 0 48 64" width="64" height="86" aria-hidden="true" focusable="false"><use href="#thistle"/></svg>
+    </div>
+
+    <div class="card-wrap rv">
+      <p class="idea-label" id="idea-label">A design idea for the Members area, not an offer: what members get is to be agreed with the shop.</p>
+      <div class="stampcard" id="stampcard" role="group" aria-labelledby="card-title" aria-describedby="idea-label">
+        <div class="tartan tartan-thin" aria-hidden="true"></div>
+        <div class="card-top">
+          <h3 id="card-title">Regulars&rsquo; card</h3>
+          <p class="card-count"><span id="card-count">0</span> of 10 stamped</p>
+        </div>
+        <ol class="slots" id="slots">
+          <li><button type="button" class="slot" data-n="1" aria-label="Slot 1 of 10"><span class="slot-no" aria-hidden="true">1</span><svg class="ink" viewBox="0 0 80 80" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="3.2"><circle cx="40" cy="40" r="34"/><circle cx="40" cy="40" r="27" stroke-width="1.6"/></g><text x="40" y="38" text-anchor="middle" font-size="9.5" font-weight="700" fill="currentColor" letter-spacing=".6">REGULAR</text><text x="40" y="53" text-anchor="middle" font-size="7.5" fill="currentColor" letter-spacing=".4">STATION RD</text></svg></button></li>
+          <li><button type="button" class="slot" data-n="2" aria-label="Slot 2 of 10"><span class="slot-no" aria-hidden="true">2</span><svg class="ink" viewBox="0 0 80 80" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="3.2"><circle cx="40" cy="40" r="34"/><circle cx="40" cy="40" r="27" stroke-width="1.6"/></g><text x="40" y="38" text-anchor="middle" font-size="9.5" font-weight="700" fill="currentColor" letter-spacing=".6">REGULAR</text><text x="40" y="53" text-anchor="middle" font-size="7.5" fill="currentColor" letter-spacing=".4">STATION RD</text></svg></button></li>
+          <li><button type="button" class="slot" data-n="3" aria-label="Slot 3 of 10"><span class="slot-no" aria-hidden="true">3</span><svg class="ink" viewBox="0 0 80 80" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="3.2"><circle cx="40" cy="40" r="34"/><circle cx="40" cy="40" r="27" stroke-width="1.6"/></g><text x="40" y="38" text-anchor="middle" font-size="9.5" font-weight="700" fill="currentColor" letter-spacing=".6">REGULAR</text><text x="40" y="53" text-anchor="middle" font-size="7.5" fill="currentColor" letter-spacing=".4">STATION RD</text></svg></button></li>
+          <li><button type="button" class="slot" data-n="4" aria-label="Slot 4 of 10"><span class="slot-no" aria-hidden="true">4</span><svg class="ink" viewBox="0 0 80 80" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="3.2"><circle cx="40" cy="40" r="34"/><circle cx="40" cy="40" r="27" stroke-width="1.6"/></g><text x="40" y="38" text-anchor="middle" font-size="9.5" font-weight="700" fill="currentColor" letter-spacing=".6">REGULAR</text><text x="40" y="53" text-anchor="middle" font-size="7.5" fill="currentColor" letter-spacing=".4">STATION RD</text></svg></button></li>
+          <li><button type="button" class="slot" data-n="5" aria-label="Slot 5 of 10"><span class="slot-no" aria-hidden="true">5</span><svg class="ink" viewBox="0 0 80 80" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="3.2"><circle cx="40" cy="40" r="34"/><circle cx="40" cy="40" r="27" stroke-width="1.6"/></g><text x="40" y="38" text-anchor="middle" font-size="9.5" font-weight="700" fill="currentColor" letter-spacing=".6">REGULAR</text><text x="40" y="53" text-anchor="middle" font-size="7.5" fill="currentColor" letter-spacing=".4">STATION RD</text></svg></button></li>
+          <li><button type="button" class="slot" data-n="6" aria-label="Slot 6 of 10"><span class="slot-no" aria-hidden="true">6</span><svg class="ink" viewBox="0 0 80 80" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="3.2"><circle cx="40" cy="40" r="34"/><circle cx="40" cy="40" r="27" stroke-width="1.6"/></g><text x="40" y="38" text-anchor="middle" font-size="9.5" font-weight="700" fill="currentColor" letter-spacing=".6">REGULAR</text><text x="40" y="53" text-anchor="middle" font-size="7.5" fill="currentColor" letter-spacing=".4">STATION RD</text></svg></button></li>
+          <li><button type="button" class="slot" data-n="7" aria-label="Slot 7 of 10"><span class="slot-no" aria-hidden="true">7</span><svg class="ink" viewBox="0 0 80 80" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="3.2"><circle cx="40" cy="40" r="34"/><circle cx="40" cy="40" r="27" stroke-width="1.6"/></g><text x="40" y="38" text-anchor="middle" font-size="9.5" font-weight="700" fill="currentColor" letter-spacing=".6">REGULAR</text><text x="40" y="53" text-anchor="middle" font-size="7.5" fill="currentColor" letter-spacing=".4">STATION RD</text></svg></button></li>
+          <li><button type="button" class="slot" data-n="8" aria-label="Slot 8 of 10"><span class="slot-no" aria-hidden="true">8</span><svg class="ink" viewBox="0 0 80 80" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="3.2"><circle cx="40" cy="40" r="34"/><circle cx="40" cy="40" r="27" stroke-width="1.6"/></g><text x="40" y="38" text-anchor="middle" font-size="9.5" font-weight="700" fill="currentColor" letter-spacing=".6">REGULAR</text><text x="40" y="53" text-anchor="middle" font-size="7.5" fill="currentColor" letter-spacing=".4">STATION RD</text></svg></button></li>
+          <li><button type="button" class="slot" data-n="9" aria-label="Slot 9 of 10"><span class="slot-no" aria-hidden="true">9</span><svg class="ink" viewBox="0 0 80 80" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="3.2"><circle cx="40" cy="40" r="34"/><circle cx="40" cy="40" r="27" stroke-width="1.6"/></g><text x="40" y="38" text-anchor="middle" font-size="9.5" font-weight="700" fill="currentColor" letter-spacing=".6">REGULAR</text><text x="40" y="53" text-anchor="middle" font-size="7.5" fill="currentColor" letter-spacing=".4">STATION RD</text></svg></button></li>
+          <li><button type="button" class="slot" data-n="10" aria-label="Slot 10 of 10"><span class="slot-no" aria-hidden="true">10</span><svg class="ink" viewBox="0 0 80 80" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor" stroke-width="3.2"><circle cx="40" cy="40" r="34"/><circle cx="40" cy="40" r="27" stroke-width="1.6"/></g><text x="40" y="38" text-anchor="middle" font-size="9.5" font-weight="700" fill="currentColor" letter-spacing=".6">REGULAR</text><text x="40" y="53" text-anchor="middle" font-size="7.5" fill="currentColor" letter-spacing=".4">STATION RD</text></svg></button></li>
+        </ol>
+        <p class="card-help" id="card-help">Tap, or press Enter on, the next empty slot to stamp it.</p>
+        <p class="card-full" id="card-full" role="status" hidden>
+          <strong>Card full.</strong> Well done. What a full card earns is still to be agreed, so this one pays nothing.
+        </p>
+        <div class="card-foot">
+          <button type="button" class="btn btn-small btn-ghost-dark" id="card-reset">Reset card</button>
+          <p class="sr-only" role="status" id="card-live"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+<section class="about wrap" id="about" aria-labelledby="h-about">
+  <div class="about-grid">
+    <div class="rv">
+      <p class="kicker">About</p>
+      <h2 id="h-about">The shop on Station Road</h2>
+    </div>
+    <div class="rv">
+      <p>Jack O&rsquo;Beers &amp; Deli is a shop at 13 Station Road, Milngavie, selling craft beer, ciders, wines, kegs, deli food and gift hampers. Its own line sums it up: <em>fresh from keg to bottle, no foam, no fuss</em>.</p>
+      <p class="tbc-line">The shop&rsquo;s own story, its people and its off-sales licence details are <span class="tbc">to be supplied</span>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 6. FIND US -->
+<section class="find wrap" id="find" aria-labelledby="h-find">
+  <div class="section-head rv">
+    <p class="kicker">Find us</p>
+    <h2 id="h-find">From the station to the door</h2>
+  </div>
+  <div class="find-grid">
+    <figure class="route rv">
+      <svg viewBox="0 0 640 300" role="img" aria-labelledby="route-t route-d">
+        <title id="route-t">Stylised route from the station to 13 Station Road</title>
+        <desc id="route-d">An abstract line from a sign reading The station to a sign reading 13 Station Road. Not to scale and not a real map.</desc>
+        <rect x="0" y="0" width="640" height="300" rx="18" class="rt-bg"/>
+        <g class="rt-grid" aria-hidden="true">
+          <path d="M0 60H640M0 120H640M0 180H640M0 240H640"/>
+        </g>
+        <path class="rt-line" d="M162 216 C 220 216, 200 100, 280 100 S 380 190, 460 190 S 500 120, 532 96"/>
+        <path class="rt-dots" d="M162 216 C 220 216, 200 100, 280 100 S 380 190, 460 190 S 500 120, 532 96"/>
+        <g class="rt-sign rt-from">
+          <rect x="30" y="196" width="130" height="40" rx="8"/>
+          <text x="95" y="222" text-anchor="middle">The station</text>
+        </g>
+        <g class="rt-sign rt-to">
+          <rect x="426" y="38" width="190" height="56" rx="8"/>
+          <text x="521" y="62" text-anchor="middle" class="rt-small">The door</text>
+          <text x="521" y="82" text-anchor="middle">13 Station Road</text>
+        </g>
+        <circle cx="532" cy="96" r="8" class="rt-door"/>
+        <circle cx="162" cy="216" r="6" class="rt-walker"/>
+      </svg>
+      <figcaption>Stylised, not to scale and not a real map. For the proper route, use Get directions.</figcaption>
+    </figure>
+
+    <div class="details rv">
+      <address>
+        <p class="addr">13 Station Road<br>Milngavie<br>G62 8PG</p>
+      </address>
+      <dl class="hours">
+        <div><dt>Wednesday to Monday</dt><dd>11am to 7pm</dd></div>
+        <div><dt>Tuesday</dt><dd class="tbc">to be confirmed</dd></div>
+      </dl>
+      <ul class="contact">
+        <li><span>Phone</span> <a href="tel:07405480950">07405 480950</a></li>
+        <li><span>Email</span> <a href="mailto:sales@jackobeers.com">sales@jackobeers.com</a></li>
+      </ul>
+      <p><a class="btn btn-primary" href="https://www.google.com/maps/search/?api=1&amp;query=13+Station+Road+Milngavie+G62+8PG" target="_blank" rel="noopener">Get directions<span class="sr-only"> (opens Google Maps in a new tab)</span></a></p>
+      <ul class="social" aria-label="Social links (placeholders)">
+        <li><a href="#" data-placeholder>Instagram <span>link to be added</span></a></li>
+        <li><a href="#" data-placeholder>YouTube <span>link to be added</span></a></li>
+        <li><a href="#" data-placeholder>Google <span>link to be added</span></a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 7. NEWSLETTER -->
+<section class="news wrap" id="news" aria-labelledby="h-news">
+  <div class="news-in rv">
+    <div>
+      <h2 id="h-news">The newsletter</h2>
+      <p>Now and then, and only when there is something worth saying. This form is a demonstration: nothing is sent or saved.</p>
+    </div>
+    <form id="news-form" novalidate>
+      <label for="news-email">Email address</label>
+      <div class="news-row">
+        <input id="news-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required aria-describedby="news-msg">
+        <button type="submit" class="btn btn-primary">Sign up (demo)</button>
+      </div>
+      <p id="news-msg" class="news-msg" role="status"></p>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<!-- 8. FOOTER -->
+<footer class="site-foot">
+  <div class="tartan" aria-hidden="true"></div>
+  <div class="foot-in wrap">
+    <svg class="thistle-sm" viewBox="0 0 48 64" width="34" height="46" aria-hidden="true" focusable="false"><use href="#thistle"/></svg>
+    <div>
+      <p class="foot-name">Jack O&rsquo;Beers &amp; Deli</p>
+      <p>13 Station Road, Milngavie, G62 8PG</p>
+      <p>Open Wednesday to Monday, 11am to 7pm. Tuesday to be confirmed.</p>
+    </div>
+    <div>
+      <p class="foot-18"><strong>Please drink responsibly. 18+ only.</strong></p>
+      <p class="foot-small">Concept for discussion. Sample products, prices and wording are for demonstration only.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="concept.js"></script>
+</body>
+</html>
