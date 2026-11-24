@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<script>if(!/\/$/.test(location.pathname)&&!/\.html$/.test(location.pathname)&&!/\/(index|drinks|product)$/.test(location.pathname))location.replace(location.pathname+"/"+location.search+location.hash)</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="theme-color" content="#1d0f0a">
+<title>The shelf | Jack O’Beers &amp; Deli</title>
+<link rel="icon" href="../site/assets/media/jack-logo.png">
+<link rel="preload" href="../site/assets/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="rev5.css">
+</head>
+<body data-solid="1">
+<a class="skip" href="#main">Skip to the content</a>
+<header class="hdr"><div class="wrap hdr-in">
+<a class="brand" href="index.html" aria-label="Jack O&rsquo;Beers &amp; Deli, home"><img src="../site/assets/media/jack-logo.png" alt="" width="46" height="46"><span>Jack <b>O&rsquo;</b>Beers</span></a>
+<nav aria-label="Main"><ul class="tabs" id="tabs">
+<li><button class="tab" type="button" data-drop aria-expanded="false" aria-controls="d-shop">Shop <svg width="10" height="6" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+<div class="drop" id="d-shop" hidden><a href="drinks.html?c=beers">Beers<small>Crisp lagers to dark stouts</small></a><a href="drinks.html?c=ciders">Ciders<small>Dry through to fruity</small></a><a href="drinks.html?c=wines">Wines<small>For the deli counter</small></a><a href="drinks.html?c=kegs">Kegs<small>For parties</small></a><a href="index.html#hampers">Gift hampers<small>Drinks and deli, boxed</small></a></div></li>
+<li><a class="tab" href="index.html#deli">Deli</a></li><li><a class="tab" href="index.html#services">Click &amp; collect</a></li><li><a class="tab" href="index.html#services">Shipping</a></li><li><a class="tab" href="index.html#find">Find us</a></li><li><a class="tab" href="index.html#services">Members</a></li></ul></nav>
+<a class="iconbtn" href="drinks.html" aria-label="Browse the drinks"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l4.5 4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></a>
+<a class="cartbtn" href="#" data-open-cart><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h12l-1 13H7L6 7zm3-1a3 3 0 016 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span class="lbl">Basket</span> <span class="n" data-count>0</span></a>
+<button class="menubtn" type="button" id="menubtn" aria-expanded="false" aria-controls="tabs"><span>Menu</span></button></div></header>
+<main id="main">
+<section class="page-top"><div class="wrap"><p class="mono">The shelf</p><h1 class="h2">Pick a glass, <em>any glass.</em></h1></div></section>
+<section class="shelf cream" id="shelf" style="padding-top:4rem"><div class="wrap"><ul class="rows" id="rows" aria-label="Choose a shelf"></ul>
+<div class="shelf-area"><div class="shelf-bar"><p id="shelf-status" role="status">Loading&hellip;</p><label class="sort">Sort <select id="sort"><option value="featured">Featured</option><option value="price-asc">Price, low to high</option><option value="price-desc">Price, high to low</option><option value="name">Name, A to Z</option></select></label></div>
+<ul class="board" aria-label="Drinks on the shelf"></ul>
+<p class="hint" style="margin-top:1.2rem">Sample products and prices. Photos, ABV and allergens are to be supplied.</p></div></div></section>
+</main>
+<footer class="find" id="find"><div class="wrap"><p class="mono">Find us</p><h2 class="h2">Come in, <em>we&rsquo;re open.</em></h2>
+<div class="grid"><div><h3>The shop</h3><p>13 Station Road<br>Milngavie<br>G62 8PG<br><a href="https://www.google.com/maps/search/?api=1&query=Jack+O'Beers+%26+Deli,+13+Station+Road,+Milngavie,+G62+8PG" target="_blank" rel="noopener noreferrer">Get directions<span class="vh"> (opens Google Maps)</span></a></p><p style="margin-top:.8rem">Wednesday to Monday, 11am to 7pm<br>Tuesday: <span class="tbc">to be confirmed</span></p><p style="margin-top:.8rem"><a href="tel:07405480950">07405 480950</a><br><a href="mailto:sales@jackobeers.com">sales@jackobeers.com</a></p></div>
+<div><h3>Follow</h3><ul><li><a href="#" data-placeholder>Instagram</a> <span class="tbc">link to be added</span></li><li><a href="#" data-placeholder>YouTube</a> <span class="tbc">link to be added</span></li><li><a href="#" data-placeholder>Google page</a> <span class="tbc">link to be added</span></li></ul></div>
+<div><h3>Newsletter</h3><form id="nl" novalidate style="display:grid;gap:.7rem"><label for="nl-e" style="font-weight:700">Email</label><input id="nl-e" name="email" type="email" autocomplete="email" style="min-height:3rem;padding:.5rem 1rem;border-radius:99px;border:2px solid var(--brass);background:#fffdf6;color:var(--ink)"><label style="display:flex;gap:.6rem"><input type="checkbox" name="consent" style="width:1.3rem;height:1.3rem;flex:none;margin-top:.2rem"><span>Yes, send me news and offers. I can unsubscribe at any time.</span></label><button class="btn sm" type="submit">Join the list</button><p id="nl-s" role="status"></p></form></div></div>
+<div class="fine"><p><b>Please drink responsibly. You must be 18 or over to buy alcohol.</b> <a href="#" data-placeholder>Age policy</a> &middot; <a href="#" data-placeholder>Privacy</a> &middot; <a href="#" data-placeholder>Terms</a></p><p>Rev 5 working preview by Rhys Hume. Sample products and prices; images marked temporary are AI-generated and not the shop&rsquo;s own. Not live.</p></div></div></footer>
+<dialog id="label" class="sheet" closedby="any" aria-labelledby="label-t"><div class="pane"><button class="x" type="button" data-close aria-label="Close">&times;</button><div id="label-body" style="display:grid;gap:1.1rem"></div></div></dialog>
+<dialog id="cart" class="sheet" closedby="any" aria-labelledby="cart-t"><div class="pane"><button class="x" type="button" data-close aria-label="Close basket">&times;</button><h2 id="cart-t">Your basket</h2><div id="cart-body"></div><div class="row-act"><button class="btn" id="cart-ck" type="button">Checkout</button></div><p class="note-s">Delivery or click &amp; collect is chosen at checkout. Secure checkout by Shopify once connected.</p></div></dialog>
+<dialog id="demo-ck" closedby="any" aria-labelledby="dc-t"><div class="pane"><button class="x" type="button" data-close aria-label="Close">&times;</button><h2 id="dc-t">Checkout isn&rsquo;t connected yet</h2><p>This is a design preview, so nothing is charged. When the shop&rsquo;s Shopify is connected this goes to Shopify&rsquo;s own checkout.</p><div class="row-act"><button class="btn" type="button" data-close>Got it</button></div></div></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="../site/data/products.js" defer></script>
+<script src="rev5.js" defer></script>
+</body>
+</html>
