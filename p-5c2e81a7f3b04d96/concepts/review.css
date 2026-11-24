@@ -69,3 +69,5 @@ fieldset.el .hint { font-size: .9rem; color: var(--mut); margin: 0 0 .5rem; }
 .card .done { font-size: .9rem; font-weight: 700; color: var(--ok); }
 .card .acts { display: flex; gap: .5rem; flex-wrap: wrap; padding: 0 1.1rem 1.1rem; }
 .note-b { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: .8rem 1rem; max-width: 44rem; }
+
+.thumb-link{display:block}.card .thumb{aspect-ratio:16/10}.card .acts .btn{flex:1;min-height:3.25rem}.card .body p{margin:0;color:var(--mut)}
