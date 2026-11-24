@@ -2,7 +2,9 @@
 """Generates every page of the Jack O'Beers site from one shared layout.  Run:  python3 _src/build.py
 Edit copy here (or in the page functions below), re-run, commit the generated .html files.
 Placeholders look like [to be confirmed] and render as small tags so nothing unverified reads as fact."""
-import html, os, re, json
+import html, os, re, json, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from illu import process
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 E = html.escape
@@ -97,6 +99,7 @@ def footer():
 <label class="check"><input type="checkbox" name="consent"><span>Yes, send me news and offers. I can unsubscribe at any time.</span></label>
 <button class="btn sm" type="submit">Join the list</button><p data-status role="status"></p></form></div>
 </div>
+<div class="rest" aria-hidden="true"><img src="assets/media/jack-logo.png" alt="" width="88" height="88"><span class="zz"><i>z</i><i>z</i><i>z</i></span></div>
 <div class="fine"><p><b>Please drink responsibly. You must be 18 or over to buy alcohol.</b> <a href="age-policy.html">Age policy</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · <a href="returns.html">Delivery &amp; returns</a></p>
 <p>Preview build by Rhys Hume. Products, prices and some details are placeholders until the shop supplies them.</p></div>
 </div></footer>'''
@@ -125,7 +128,7 @@ def page(slug, title, desc, body, key="", cls="", extra_attrs="", motion=False, 
     if motion:
         scripts += ['assets/js/gsap.min.js', 'assets/js/ScrollTrigger.min.js']
     scripts += ['assets/js/ui.js', 'assets/js/shop.js']
-    scripts += ['assets/js/motion.js']
+    scripts += ['assets/js/motion.js', 'assets/js/transition.js']
     if cls == 'drain-page':
         scripts += ['assets/js/beer.js', 'assets/js/pint.js']
     sc = "\n".join(f'<script src="{s}" defer></script>' for s in scripts)
@@ -175,8 +178,6 @@ def tiles(items, cream=False):
     return '<div class="grid g3">' + "".join(f'<a class="tile{c} rv" href="{h}"><h3>{t}</h3><p>{d}</p><span class="go">Take a look &rarr;</span></a>' for h, t, d in items) + '</div>'
 
 # ---------------- pages ----------------
-STRIP = ''.join(f'<span>{w}</span>' for w in ['Craft beer', 'Ciders', 'Wines', 'Deli', 'Gift hampers', 'Kegs', 'Click &amp; collect'])
-
 def home():
     hero = f'''<section class="hero" aria-labelledby="h1">
 <video muted loop playsinline preload="metadata" poster="assets/media/pour-poster.webp" autoplay aria-hidden="true"><source src="assets/media/pour.webm" type="video/webm"><source src="assets/media/pour.mp4" type="video/mp4"></video>
@@ -188,8 +189,7 @@ def home():
 <div class="btns"><a class="btn" href="shop.html">Explore the shop</a><a class="btn ghost" href="deli.html">Discover the deli</a></div>
 </div>
 <p class="img-tag">Temporary AI-generated footage</p>
-</section><div class="counter-lip" aria-hidden="true"></div>
-<div class="strip" aria-hidden="true"><div class="strip-in">{STRIP}{STRIP}</div></div>'''
+</section><div class="counter-lip" aria-hidden="true"></div>'''
     body = f'''
 <section class="sec"><div class="wrap">
 <div class="sec-head"><p class="mono">The shelves</p><h2>Shop by shelf</h2></div>
@@ -202,6 +202,9 @@ def home():
 <a class="tile cream rv" href="deli.html"><h3>The deli</h3><p>Pies, cheese, cured meats and sweet things to go with whatever is in your glass.</p><span class="go">See the deli &rarr;</span></a>
 <a class="tile rv" href="hampers.html"><h3>Gift hampers</h3><p>Ready-made hampers of drinks and deli, boxed and ready to give.</p><span class="go">Find a gift &rarr;</span></a>
 </div></div></section>
+<section class="sec"><div class="wrap"><div class="sec-head"><p class="mono">How it works</p><h2>From the shelf to your door</h2></div>
+{process([("basket", "Choose", "Fill your basket with beer, cider, wine, deli and gifts."), ("calendar", "Pick how you get it", "Click &amp; collect from the shop, or have it delivered."), ("card", "Pay securely", "One checkout, handled by Shopify."), ("glass", "Enjoy", "Pour, share and come back for more.")])}
+</div></section>
 <section class="sec alt"><div class="wrap"><div class="sec-head"><p class="mono">On the shelf now</p><h2>Fresh in</h2></div>
 <ul class="cards" id="featured" style="list-style:none" aria-label="Featured products"></ul>
 <p style="margin-top:1.4rem"><a class="btn dk" href="beers.html">See all the beers</a></p></div></section>
@@ -300,7 +303,7 @@ def cart():
     page("cart", "Basket", "Your basket.", body, key="cart")
 
 def collect():
-    steps = '''<ol class="steps" style="list-style:none"><li><h3>Choose your drinks</h3><p>Fill your basket as normal.</p></li><li><h3>Pick a time</h3><p>Choose a day and a window that suits you.</p></li><li><h3>Pay at checkout</h3><p>One secure payment, same as delivery.</p></li><li><h3>Come and collect</h3><p>Bring your order number and photo ID. We&rsquo;ll have it ready.</p></li></ol>'''
+    steps = process([("basket", "Choose your drinks", "Fill your basket as normal."), ("calendar", "Pick a time", "A day and a window that suits you."), ("card", "Pay at checkout", "One secure payment, same as delivery."), ("shop", "Come and collect", "Bring your order number and photo ID. It will be ready.")])
     body = f'''{head("Click &amp; collect", "Order online, pick it up from the shop. Simple as that.", "Click &amp; collect", "Collect")}
 <section class="sec" style="padding-top:0"><div class="wrap"><h2 class="vh">How it works</h2>{steps}</div></section>
 <section class="sec alt"><div class="wrap grid g2" style="align-items:start"><div><h2>Pick your time</h2><p class="lede" style="margin:.7rem 0 1rem">Choose a slot now and we&rsquo;ll remember it in your basket.</p>
@@ -313,6 +316,7 @@ def shipping():
     body = f'''{head("Shipping", "Good drinks, brought to your door. Here is how delivery works.", "Shipping", "Delivery")}
 <section class="sec" style="padding-top:0"><div class="wrap"><div class="prose">
 <p class="notice"><b>Draft.</b> Delivery areas, prices and times below are placeholders until the shop confirms its carriers and licence conditions. Alcohol delivery rules have not been checked.</p>
+<h2 class="vh">How delivery works</h2>{process([("card", "Order and pay", "Choose delivery at the basket and pay at checkout."), ("box", "We pack it", "Packed carefully and ready to go."), ("van", "On its way", "Sent with a courier. Tracking details to follow."), ("id", "Age check", "Someone aged 18 or over takes delivery. We may ask for ID.")], "wide")}
 <h2>Where we deliver</h2><p>We aim to offer UK delivery and, where possible, international shipping. {tbc("Which countries, and whether alcohol can be sent abroad, to be confirmed")}</p>
 <h2>What it costs and how long it takes</h2><div class="tw" tabindex="0" role="region" aria-label="Delivery table, scrolls sideways"><table><thead><tr><th>Service</th><th>Cost</th><th>Time</th></tr></thead><tbody><tr><td>Standard delivery</td><td>{tbc("to be confirmed")}</td><td>{tbc("to be confirmed")}</td></tr><tr><td>Kegs and bulk</td><td>{tbc("to be confirmed")}</td><td>{tbc("to be confirmed")}</td></tr><tr><td>Hampers</td><td>{tbc("to be confirmed")}</td><td>{tbc("to be confirmed")}</td></tr></tbody></table></div>
 <h2>Age checks</h2><p>You must be 18 or over to buy alcohol. Someone aged 18 or over must be there to accept the delivery, and we may ask for ID. {tbc("Carrier age-check process to be confirmed")}</p>
