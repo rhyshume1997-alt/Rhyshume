@@ -1,6 +1,21 @@
-# Jack O'Beers: five website concepts (private, noindex)
+# Jack O'Beers: five website concepts, round 2 (private, noindex)
 
-Open `index.html` (the board). Each concept is independent: its own folder with `index.html`, `concept.css`, `concept.js`, fonts (SIL OFL) and `NOTES.md` (palette with contrast ratios, type pairing, layout idea, the signature interaction, trade-offs, and what is assumed or missing).
+**Round 2 is the current set.** Five takes on the approved preview site, all in the agreed colours (mahogany, forest, cream, amber, brass; the browns, cream and amber come from the logo) and the preview's feel (dark stage, cream shelves, round cards, pill nav, illustrated how-it-works). Open `index.html` (the board).
+
+| Folder | Concept | Signature interaction |
+|---|---|---|
+| `long-pour/` | The cinematic preview taken to the whole page | The pint behind every section empties as you scroll; "Fill it up again" refills it |
+| `wake-jack/` | A quiet counter with Jack asleep on it | Wake Jack and he headbutts each section away (in-page, keyboard and hash friendly) |
+| `the-shelves/` | Warm cream shelves, ticket-stub cards | Four taste dials re-order the beer shelf (sample flavour data) |
+| `keg-to-bottle/` | The tagline as a scroll story down a pipe | The beer line fills with amber as you scroll; stop counter, skip link |
+| `hamper-table/` | Gift-led, hamper on the counter | Pack a hamper, write the gift tag, wrap it, add to basket |
+
+Round 1 (different colours, rejected) is kept in `earlier.html` and its folders (`deli-counter`, `tap-room`, `shop-front`, `hamper-box`, `local-pub`).
+
+Each concept folder: `index.html`, `concept.css`, `concept.js`, `fonts/` (SIL OFL), `NOTES.md` (what was taken from the preview, what is different, contrast ratios, trade-offs, assumptions). Only the home page exists in each concept; other links jump to sections or show a "not part of the concept" note.
+
+## How it works (both rounds)
+Each concept is independent: its own folder with `index.html`, `concept.css`, `concept.js`, fonts (SIL OFL) and `NOTES.md` (palette with contrast ratios, type pairing, layout idea, the signature interaction, trade-offs, and what is assumed or missing).
 
 | Folder | Concept | Signature interaction |
 |---|---|---|

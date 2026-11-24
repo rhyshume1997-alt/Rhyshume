@@ -1,0 +1,11 @@
+Fonts self-hosted in this folder
+================================
+Source Sans 3 (source-sans-3-*.woff2): SIL Open Font License 1.1. Full text: SOURCE-SANS-3-OFL.txt.
+Newsreader (newsreader-latin.woff2): SIL Open Font License 1.1.
+IBM Plex Mono (ibm-plex-mono-400-latin.woff2): SIL Open Font License 1.1.
+
+The OFL 1.1 text in SOURCE-SANS-3-OFL.txt is the same licence text that covers Newsreader and IBM Plex Mono; only the copyright
+header line differs per font family. Before launch, copy each family's own upstream OFL file (with its exact copyright line) into this
+folder. The upstream copyright lines were NOT re-checked here.
+
+The Dubai font is NOT stored or served anywhere in this project (web licence unverified). Source Sans 3 is used as the closest open match.
