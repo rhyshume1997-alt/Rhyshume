@@ -64,8 +64,8 @@
     var c = CONCEPTS[id], d = load(id); d.r = d.r || {}; d.n = d.n || {};
     document.title = 'Review: ' + c.name;
     $('#title').textContent = c.name;
-    $('#frame').src = id + '/index.html'; $('#frame').title = c.name + ' concept';
-    $('#open').href = id + '/index.html';
+    $('#frame').src = id + '/'; $('#frame').title = c.name + ' concept';
+    $('#open').href = id + '/';
     var html = '<h2>What do you think?</h2><p>Tap one for each part. Add a few words if you like. It saves as you go. Takes about 3 minutes.</p>';
     html += '<div class="who"><label class="lbl" for="who">Your name (optional)</label><input type="text" id="who" autocomplete="name" value="' + esc(d.who || '') + '"></div>';
     elements(id).forEach(function (e) {
