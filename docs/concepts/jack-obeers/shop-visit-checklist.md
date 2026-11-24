@@ -3,7 +3,7 @@
 13 Station Road, Milngavie, G62 8PG. Open Wednesday to Monday, 11am to 7pm (Tuesday not confirmed). Tick as you go. Everything marked **SLOT** replaces a placeholder on the site, so name files exactly as shown.
 
 ## 0. Before you go (10 minutes)
-- [ ] Phone or camera charged, spare battery, enough storage (shoot 4K video, RAW or highest-quality JPEG)
+- [ ] iPhone 16 Pro Max and DJI Osmo Pocket 3 fully charged, spare battery or power bank, fast microSD (V30+, 128 GB or more) in the Pocket 3, enough phone storage (see the video guide for settings)
 - [ ] Tripod or a stable surface, a small clip-on light or a white card for bounce, microfibre cloth, lens wipe
 - [ ] Notebook, or voice memo on, for answers (section 5)
 - [ ] The preview link open on your phone to show them: https://rhyshume-f1m7j2wza-rhsys-projects.vercel.app/p-5c2e81a7f3b04d96/site/ (share link, expires 1:42 PM on 25 Nov; ask me for a fresh one)

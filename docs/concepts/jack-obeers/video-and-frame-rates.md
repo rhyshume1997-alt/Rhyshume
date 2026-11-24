@@ -1,6 +1,6 @@
 # Jack O'Beers: video, frame rates and camera settings
 
-Filming with an **iPhone 16 Pro Max** and a **DJI** camera. Short answers first, details after.
+Filming with an **iPhone 16 Pro Max** and a **DJI Osmo Pocket 3**. Short answers first, details after.
 
 ## Can the website handle 4K video?
 **Short answer: film in 4K, but the website should play a 1080p copy.** Browsers can technically play 4K, but a 4K clip is 50 to 200 MB for a short loop. On a phone or slow connection it would stall, drain data and slow the whole page. The site is built for short, muted, looping clips that start instantly.
@@ -36,14 +36,38 @@ The UK mains is 50 Hz, so **shoot 25 fps (or 50 fps) with a 1/50 (or 1/100) shut
 - **Lighting and lens:** wipe the lens, switch the flash off, and shoot near a window or with a soft light. Hold it landscape, locked on a tripod or a stable stand.
 - **Photos:** use the 48 MP ProRAW/HEIF only if you want very large files. **JPEG or HEIF at 12 MP** is fine for the site. For the six-frame pint and keezer sequences use the **tripod, same settings and the main lens**.
 
-## DJI
-Which DJI is it (Osmo Pocket 3, Osmo Action, a drone, a gimbal)? The settings below work for any of them. **Tell me the model and I will give exact menu names.**
-- **4K, 25 fps** for normal footage, **4K 100 or 120 fps** for slow motion (the Action cameras and Pocket 3 support this).
-- **Colour profile: Normal / Rec.709**, not D-Log or HLG, unless you plan to grade it. HDR and log look flat on the web without conversion.
-- **Shutter:** about double the frame rate (1/50 at 25 fps). In bright daylight use an **ND filter** so you can keep that shutter.
-- **White balance:** set manually (3200 to 5600 K) rather than auto, so colours do not drift while filming.
-- **Stabilisation:** on for walking shots, **off for locked-off tripod shots**.
-- Use the DJI for **smooth moves** (walk-through, gimbal push-ins) and the iPhone for **detail and slow-motion pours**, or the other way round. Just match the frame rate and white balance between them.
+## DJI Osmo Pocket 3
+Menu names can differ a little between firmware versions, so glance at each setting on the day. These are the settings to look for.
+
+**Set once, before you start**
+- **Card:** a fast microSD (V30 or better, 128 GB or more). 4K 120 fps fills a card quickly.
+- **Resolution and frame rate (normal clips):** **4K, 25 fps** (shutter 1/50).
+- **Slow-motion clips:** the **Slow Motion mode at 4K 120 fps** (about 4.8x slower when played back at 25 fps). Use this for the hero pour and the tap pull.
+- **Colour:** **Normal** (standard colour), **not D-Log M or HLG**. D-Log and HLG look flat or washed out on the web unless graded. Keep the iPhone on SDR too so the two match.
+- **Codec:** **H.265 (HEVC)** is fine and saves space; **H.264** is safest if the editing software struggles.
+- **Exposure:** use **Pro mode** and set the shutter to **1/50** at 25 fps (about **1/240** at 120 fps), **ISO as low as the light allows**, and **lock exposure** so it does not pump when the camera moves. In bright daylight fit an **ND filter** to keep the shutter at 1/50.
+- **White balance:** set it **manually** (about 3200 K under warm shop bulbs, 5600 K for daylight) and set the **same value on the iPhone**, so colours match between the two.
+- **Stabilisation:** **RockSteady on** for walking shots, **off on a tripod**.
+- **Gimbal mode:** **Follow** for walk-throughs and gentle pans; **Tilt lock** for steady push-ins and pans; use **FPV** only for a deliberate feel. Keep **SpinShot** off.
+- **Screen and focus:** flip the screen to see yourself or tilt it to vertical only if you need a vertical clip. Autofocus is fine for most shots; **tap the subject** (glass, tap, product) to focus on it and keep the lens clean.
+- **Sound:** record the built-in microphone for reference only. The website clips are **muted**, and do not play music in the shop (licensing).
+
+**Per shot**
+
+| Shot | Pocket 3 mode | Notes |
+|---|---|---|
+| Hero pour, tap pull, keg pour | Slow Motion, **4K 120 fps** | Backlight or side light, dark background, glass steady. Shoot a few takes. |
+| Walk-through, shop front | **4K 25 fps**, Follow mode, RockSteady on | Slow steady walk, elbows tucked. |
+| Deli counter, hamper packing | **4K 25 fps**, Tilt lock or on a tripod | Close, locked-off, hands only. |
+| Product spins or details | **4K 25 fps**, tripod | Slow turntable or a slow slide. |
+
+**Use the Pocket 3 for moving shots and slow-motion pours, and the iPhone 16 Pro Max for photos and any locked-off close-ups.** Match white balance and frame rate between them.
+
+**Keep it going**
+- Charge it fully (it records about two to three hours at 4K 25) and bring a spare battery or a power bank if you can.
+- It can overheat in long 4K 120 recording; shoot short takes (10 to 20 seconds).
+- Wipe the lens, and wipe fingerprints from the screen: smudges show in the footage.
+- Transfer with a card reader or the cable; do not send the files through messaging apps.
 
 ## Keep the originals
 - **Keep every original file** at full 4K and the highest frame rate (no re-saving, no WhatsApp, no AirDrop-as-compressed).
