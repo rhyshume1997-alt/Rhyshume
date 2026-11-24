@@ -1,0 +1,5 @@
+Jack O'Beers site (private design build, not live)
+1. Unzip, then double-click index.html (opens in your browser; sample products work straight from disk).
+2. Or serve it:  python3 -m http.server   then open http://localhost:8000/
+Shop is in DEMO mode: sample products, nothing is charged. To connect Shopify later edit assets/js/config.js (see README.md).
+Temporary: all photos/video are AI-generated stand-ins, not the shop's.

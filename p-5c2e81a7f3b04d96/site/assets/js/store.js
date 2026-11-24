@@ -17,7 +17,7 @@
   function ls(k, v) { try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { return null; } }
 
   /* ---------------- Shopify adapter ---------------- */
-  var META = ['descriptor', 'kind', 'flavour_sweet', 'flavour_bitter', 'flavour_fruity', 'flavour_body', 'pairings', 'allergens', 'abv'];
+  var META = ['descriptor', 'blurb', 'kind', 'flavour_sweet', 'flavour_bitter', 'flavour_fruity', 'flavour_body', 'pairings', 'allergens', 'abv'];
   var PRODUCT_FRAGMENT = 'fragment P on Product { id handle title description productType tags featuredImage { url altText } images(first: 6) { nodes { url altText } } ' +
     'variants(first: 20) { nodes { id title availableForSale price { amount currencyCode } } } ' +
     'metafields(identifiers: [' + META.map(function (k) { return '{ namespace: "custom", key: "' + k + '" }'; }).join(', ') + ']) { key value } }';
@@ -37,7 +37,7 @@
     if (m.flavour_sweet != null || m.flavour_bitter != null || m.flavour_fruity != null || m.flavour_body != null) fl = { sweet: num(m.flavour_sweet), bitter: num(m.flavour_bitter), fruity: num(m.flavour_fruity), body: num(m.flavour_body) };
     var pairings = []; if (m.pairings) { try { var j = JSON.parse(m.pairings); pairings = Array.isArray(j) ? j : []; } catch (e) { pairings = String(m.pairings).split(',').map(function (s) { return s.trim(); }).filter(Boolean); } }
     var desc = p.description || '';
-    return { handle: p.handle, title: p.title, collection: collection || '', productType: p.productType || '', tags: p.tags || [], descriptor: m.descriptor || (desc.split(/(?<=[.!?])\s/)[0] || ''),
+    return { handle: p.handle, title: p.title, collection: collection || '', productType: p.productType || '', tags: p.tags || [], descriptor: m.descriptor || (desc.split(/(?<=[.!?])\s/)[0] || ''), blurb: m.blurb || (desc.length > 160 ? desc.slice(0, 157) + '...' : desc),
       description: desc, kind: m.kind || 'bottle', flavour: fl, pairings: pairings, abv: m.abv || '', allergens: m.allergens || '',
       image: p.featuredImage ? { url: p.featuredImage.url, alt: p.featuredImage.altText || p.title } : null, images: ((p.images && p.images.nodes) || []).map(function (i) { return { url: i.url, alt: i.altText || p.title }; }),
       variants: ((p.variants && p.variants.nodes) || []).map(function (v) { return { id: v.id, title: v.title, price: parseFloat(v.price.amount), available: v.availableForSale }; }), demo: false };
@@ -83,7 +83,7 @@
 
   /* ---------------- Demo adapter ---------------- */
   var demoData = null;
-  function loadDemo() { if (demoData) return demoData; demoData = fetch(base + (C.catalogueFile || 'data/products.json')).then(function (r) { if (!r.ok) throw new Error('catalogue'); return r.json(); }).then(function (d) { d.products.forEach(function (p) { p.demo = true; }); return d; }); return demoData; }
+  function loadDemo() { if (demoData) return demoData; if (window.JO_DEMO) { var dd = JSON.parse(JSON.stringify(window.JO_DEMO)); dd.products.forEach(function (p) { p.demo = true; }); demoData = Promise.resolve(dd); return demoData; } demoData = fetch(base + (C.catalogueFile || 'data/products.json')).then(function (r) { if (!r.ok) throw new Error('catalogue'); return r.json(); }).then(function (d) { d.products.forEach(function (p) { p.demo = true; }); return d; }); return demoData; }
   var demo = {
     collection: function (h) { return loadDemo().then(function (d) { var c = d.collections[h] || { title: h, lede: '' }; return { title: c.title, lede: c.lede, products: d.products.filter(function (p) { return p.collection === h; }) }; }); },
     product: function (handle) { return loadDemo().then(function (d) { return d.products.filter(function (p) { return p.handle === handle; })[0] || null; }); },

@@ -84,7 +84,7 @@ def drawer():
 <div class="toast" id="toast" role="status" aria-live="polite"></div>'''
 
 def page(slug, title, desc, body, key="", cls="", extra_attrs="", motion=False, dpage=None, hero_head=""):
-    scripts = ['assets/js/config.js', 'assets/js/store.js']
+    scripts = ['assets/js/config.js', 'data/products.js', 'assets/js/store.js']
     if motion:
         scripts += ['assets/js/gsap.min.js', 'assets/js/ScrollTrigger.min.js']
     scripts += ['assets/js/ui.js', 'assets/js/shop.js']

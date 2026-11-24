@@ -55,7 +55,8 @@
      "price": 3.8,
      "available": true
     }
-   ]
+   ],
+   "blurb": "A copper-coloured ale with a toasty malt middle and a gentle bitter finish. Pours with a creamy head and drinks easily alongside a ploughman’s."
   },
   {
    "handle": "demo-dark-stout",
@@ -89,7 +90,8 @@
      "price": 4.2,
      "available": true
     }
-   ]
+   ],
+   "blurb": "Deep and dark with roasted coffee and cocoa notes, full-bodied but smooth. One for a slow evening, or poured over ice cream."
   },
   {
    "handle": "demo-pale-lager",
@@ -123,7 +125,8 @@
      "price": 3.5,
      "available": true
     }
-   ]
+   ],
+   "blurb": "Pale gold, crisp and refreshing with a clean, dry finish. A good all-rounder for warm days and plates of salty snacks."
   },
   {
    "handle": "demo-fruit-beer",
@@ -156,7 +159,8 @@
      "price": 4.0,
      "available": true
     }
-   ]
+   ],
+   "blurb": "A light, bright beer brewed with fruit for a juicy, slightly sweet sip. Easy to like if you’re new to craft beer."
   },
   {
    "handle": "demo-session-ipa",
@@ -190,7 +194,8 @@
      "price": 4.1,
      "available": true
     }
-   ]
+   ],
+   "blurb": "Hop aroma and a bitter bite, but low enough in strength to have a second. Citrus and pine on the nose."
   },
   {
    "handle": "demo-dry-cider",
@@ -223,7 +228,8 @@
      "price": 3.9,
      "available": true
     }
-   ]
+   ],
+   "blurb": "Made from apples, with a sharp, dry, almost wine-like finish. Lovely chilled, and with rich or salty food."
   },
   {
    "handle": "demo-medium-cider",
@@ -256,7 +262,8 @@
      "price": 3.9,
      "available": true
     }
-   ]
+   ],
+   "blurb": "Not too dry, not too sweet: ripe apple with a soft fizz. The one to hand round when you’re not sure what people like."
   },
   {
    "handle": "demo-berry-cider",
@@ -289,7 +296,8 @@
      "price": 4.1,
      "available": true
     }
-   ]
+   ],
+   "blurb": "Crisp apple cider with a hit of summer berries. Sweet and fruity, served over plenty of ice."
   },
   {
    "handle": "demo-red-wine",
@@ -322,7 +330,8 @@
      "price": 11.0,
      "available": true
     }
-   ]
+   ],
+   "blurb": "Soft, smooth and easy-drinking, with ripe red fruit and gentle tannins. A friendly partner for cheese and cured meats."
   },
   {
    "handle": "demo-white-wine",
@@ -355,13 +364,14 @@
      "price": 10.5,
      "available": true
     }
-   ]
+   ],
+   "blurb": "Fresh and zesty with green apple and citrus. Best served well chilled with lighter food."
   },
   {
    "handle": "demo-rose-wine",
-   "title": "Demo Ros\u00e9",
+   "title": "Demo Rosé",
    "collection": "wines",
-   "productType": "Ros\u00e9 wine",
+   "productType": "Rosé wine",
    "tags": [
     "rose"
    ],
@@ -388,7 +398,8 @@
      "price": 10.5,
      "available": true
     }
-   ]
+   ],
+   "blurb": "A pale, dry rose with strawberry and melon notes. Made for sunny afternoons and sharing plates."
   },
   {
    "handle": "demo-keg-amber-20l",
@@ -419,7 +430,8 @@
      "price": 72.0,
      "available": true
     }
-   ]
+   ],
+   "blurb": "The amber ale in a keg, for parties, weddings and big get-togethers. Size, deposit, tap hire and delivery to be confirmed."
   },
   {
    "handle": "demo-keg-lager-30l",
@@ -450,7 +462,8 @@
      "price": 88.0,
      "available": true
     }
-   ]
+   ],
+   "blurb": "The pale lager by the keg, for when a crowd is coming. Size, deposit, tap hire and delivery to be confirmed."
   },
   {
    "handle": "demo-hamper-beer",
@@ -475,7 +488,8 @@
      "price": 34.0,
      "available": true
     }
-   ]
+   ],
+   "blurb": "A boxed selection of beers with something to eat alongside, ready to give. Contents and price to be agreed."
   },
   {
    "handle": "demo-hamper-deli",
@@ -500,7 +514,8 @@
      "price": 42.0,
      "available": true
     }
-   ]
+   ],
+   "blurb": "A hamper of deli favourites made for sharing. Contents and price to be agreed."
   }
  ]
 }

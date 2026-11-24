@@ -155,6 +155,8 @@ p { text-wrap: pretty; }
 .card-b h3 a { text-decoration: none; }
 .card-b h3 a::after { content: ""; position: absolute; inset: 0; }
 .card { position: relative; }
+.card .desc { font-weight: 600; }
+.card .blurb { font-size: .94rem; line-height: 1.5; color: var(--ink-2); }
 .chips { display: flex; flex-wrap: wrap; gap: .35rem; }
 .chip { max-width: 100%; overflow-wrap: anywhere; }
 .card .price { overflow-wrap: anywhere; min-width: 0; }

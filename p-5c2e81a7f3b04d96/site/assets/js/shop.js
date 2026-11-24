@@ -23,7 +23,7 @@
     var v = variantOf(p), avail = v && v.available;
     return '<li class="card" data-handle="' + esc(p.handle) + '" data-kind="' + esc(p.kind) + '"><div class="slot">' + photo(p, p.title) + '</div>' +
       '<div class="card-b"><div class="chips">' + (p.demo ? '<span class="chip">Sample</span>' : '') + '<span class="chip k">' + esc(p.productType || p.kind) + '</span></div>' +
-      '<h3><a href="product.html?h=' + encodeURIComponent(p.handle) + '">' + esc(p.title) + '</a></h3><p>' + esc(p.descriptor) + '</p></div>' +
+      '<h3><a href="product.html?h=' + encodeURIComponent(p.handle) + '">' + esc(p.title) + '</a></h3><p class="desc">' + esc(p.descriptor) + '</p>' + (p.blurb && !/^\[.*\]$/.test(p.blurb) ? '<p class="blurb">' + esc(p.blurb) + '</p>' : '') + (p.pairings && p.pairings.length ? '<p class="blurb"><b>Goes with:</b> ' + p.pairings.map(esc).join(', ') + '</p>' : '') + '</div>' +
       '<div class="card-f"><div class="price">' + priceText(p) + (p.demo ? '<small>Sample price</small>' : '') + '</div>' +
       '<div class="card-act">' + (avail ? '<button class="btn sm" type="button" data-add="' + esc(p.handle) + '">Add to basket</button><button class="btn sm ghost" type="button" data-buy="' + esc(p.handle) + '">Buy now</button>' : '<span class="tbc">Sold out</span>') + '</div></div></li>';
   }
@@ -81,7 +81,7 @@
         '<button class="btn" type="button" id="p-add">Add to basket</button><button class="btn dk" type="button" id="p-buy">Buy now</button></div>' +
         '<div class="pay-opts"><span>Choose how you get it at the basket: <b>delivery</b> or <b>click and collect</b>.</span><span data-live-only>You pay securely on Shopify&rsquo;s checkout.</span><span data-demo-only>Demonstration mode: checkout is not connected, nothing is charged.</span></div></div>' +
         '<h2 style="font-size:1.6rem">Flavour</h2>' + dials(p.flavour) +
-        '<dl class="dl"><div><dt>About</dt><dd>' + tbc(p.description) + '</dd></div><div><dt>Goes well with</dt><dd>' + (p.pairings.length ? p.pairings.map(esc).join(', ') : '<span class="tbc">to be supplied</span>') + '</dd></div><div><dt>ABV</dt><dd>' + tbc(p.abv || '[ABV to be confirmed]') + '</dd></div><div><dt>Allergens</dt><dd>' + tbc(p.allergens || '[Allergens to be verified]') + '</dd></div></dl>' +
+        '<dl class="dl"><div><dt>About</dt><dd>' + tbc(p.blurb && !/^\[.*\]$/.test(p.blurb) ? p.blurb : p.description) + '</dd></div><div><dt>Goes well with</dt><dd>' + (p.pairings.length ? p.pairings.map(esc).join(', ') : '<span class="tbc">to be supplied</span>') + '</dd></div><div><dt>ABV</dt><dd>' + tbc(p.abv || '[ABV to be confirmed]') + '</dd></div><div><dt>Allergens</dt><dd>' + tbc(p.allergens || '[Allergens to be verified]') + '</dd></div></dl>' +
         '<p class="note-s">Please drink responsibly. 18+ only. We check age on delivery and collection.</p></div>';
       $$('[data-demo-only]', root).forEach(function (n) { n.hidden = Store.mode !== 'demo'; }); $$('[data-live-only]', root).forEach(function (n) { n.hidden = Store.mode !== 'shopify'; });
       var sel = $('#variant', root); if (sel) sel.addEventListener('change', function () { v = p.variants[+sel.value]; $('#pprice').firstChild.textContent = Store.money(v.price); });
