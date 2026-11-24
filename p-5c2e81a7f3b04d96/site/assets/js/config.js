@@ -13,8 +13,8 @@ window.JO_CONFIG = {
   /* Newsletter. Any endpoint that accepts a form POST of { email, consent } (Shopify Forms, Klaviyo, Mailchimp or your own). Empty = demonstration. */
   newsletterEndpoint: '',
 
-  /* Click and collect. PLACEHOLDERS until the shop confirms days, hours and lead time. weekdays: 0 Sunday to 6 Saturday. */
-  collection: { weekdays: [3, 4, 5, 6], windows: ['12:00 to 14:00', '14:00 to 17:00'], leadHours: 24, horizonDays: 10 },
+  /* Click and collect. Days and windows follow the shop's stated opening hours (Wednesday to Monday, 11am to 7pm; weekdays: 0 Sunday to 6 Saturday). Lead time and slot sizes are still PLACEHOLDERS. */
+  collection: { weekdays: [3, 4, 5, 6, 0, 1], windows: ['11:00 to 13:00', '13:00 to 16:00', '16:00 to 19:00'], leadHours: 24, horizonDays: 10 },
 
   currency: 'GBP',
   locale: 'en-GB',

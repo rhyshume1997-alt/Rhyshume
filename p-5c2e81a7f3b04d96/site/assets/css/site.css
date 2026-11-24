@@ -308,6 +308,12 @@ th { font: 400 .78rem var(--mono); letter-spacing: .1em; text-transform: upperca
 .foot ul { list-style: none; display: grid; gap: .45rem; }
 .foot-cols { display: grid; gap: 2rem; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); }
 .foot .field input[type="email"] { background: #fffdf6; }
+.foot .note-s, .dark .note-s { color: #e1d4b3; }
+.social { list-style: none; display: grid; gap: .5rem; }
+.social a { font-weight: 600; }
+.foot .social a { color: #f2e8d2; }
+.tagline { font-family: var(--serif); font-style: italic; font-size: 1.25rem; color: var(--amber-hi); }
+.is-placeholder { text-decoration-style: dashed; }
 .foot .fine { margin-top: 2.2rem; padding-top: 1.2rem; border-top: 1px solid rgba(240, 182, 83, .25); font-size: .88rem; display: grid; gap: .4rem; }
 .toast { position: fixed; z-index: 150; inset-inline: 0; bottom: 1.2rem; margin-inline: auto; width: max-content; max-width: 92vw; background: var(--forest); color: var(--paper); padding: .8rem 1.3rem; border-radius: 99px; border: 1px solid var(--amber); box-shadow: 0 10px 30px rgba(0, 0, 0, .4); transform: translateY(150%); visibility: hidden; transition: transform .3s var(--ease), visibility 0s .3s; }
 .toast.on { transform: none; visibility: visible; transition-delay: 0s; }

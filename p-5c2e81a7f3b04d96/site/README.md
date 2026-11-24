@@ -1,5 +1,18 @@
 # Jack O'Beers site (private build, not live)
 
+## Quick connect to Shopify (the site is built for this)
+Everything Shopify-related is in **one file, `assets/js/config.js`**. Nothing else in the site needs to change.
+1. In Shopify admin: Settings > Apps and sales channels > Develop apps (or install the **Headless** channel) and create an app with the **Storefront API**. Scopes: read products and inventory, read and write checkouts.
+2. Copy the **Storefront API public access token**.
+3. In `config.js` set `shopifyDomain` (the `your-store.myshopify.com` address) and `storefrontToken`. Leave `apiBase` empty.
+4. Make sure collections exist with the handles `beers`, `ciders`, `wines`, `kegs`, `hampers`. Optional product metafields (namespace `custom`) fill the descriptions: `descriptor`, `blurb`, `flavour_sweet/bitter/fruity/body` (0-5), `pairings`, `allergens`, `abv`.
+5. Reload: the "Sample" labels disappear, products, prices and stock come from Shopify, and **Checkout** goes to Shopify's own checkout. In Shopify turn on local pickup for click & collect.
+Until both values are set the site stays in demo mode (sample products, nothing is charged). Details below.
+
+## Shop details on the site (supplied by the shop by email, Nov 2026)
+Name Jack O'Beers & Deli; tagline "Fresh from keg to bottle - no foam, no fuss."; 13 Station Road, Milngavie, G62 8PG; 07405 480950; sales@jackobeers.com; open Wednesday to Monday, 11am to 7pm (Tuesday not mentioned, shown as to be confirmed). They also said: they use Shopify for products, stock and payments; equal space for craft beer and deli including gift hampers; click & collect, UK delivery and international shipping where possible; premises licence includes off-sales; they want event enquiries. Prices, quote and personal names from the emails are deliberately not used. All of this lives in `BUSINESS` at the top of `_src/build.py`.
+**Placeholder links** (Instagram, YouTube, Google page) are in `SOCIAL` in `_src/build.py`. Put the real address between the quotes, run `python3 _src/build.py`, and the link goes live (opens in a new tab). Until then they show "link to be added" and do nothing.
+
 Static multi-page site: HTML + one CSS file + small vanilla JS modules, GSAP only for the opening and the draining glass.
 Shopify is the back end through the Storefront API; **checkout is Shopify's own**. With no credentials the site runs in **demo mode** on `data/products.json` and charges nothing.
 

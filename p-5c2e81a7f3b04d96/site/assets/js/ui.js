@@ -111,5 +111,8 @@
   };
   $$('form[data-newsletter]').forEach(function (f) { JO.newsletterForm(f, $('[data-status]', f)); });
 
+  /* placeholder links (social, Google page) do nothing until the real address is added in _src/build.py */
+  $$('[data-placeholder]').forEach(function (a) { a.addEventListener('click', function (e) { e.preventDefault(); JO.toast('That link is still to be added.'); }); });
+
   if (window.Store) Store.cart.load().catch(function () { /* offline: basket stays empty */ });
 })();
