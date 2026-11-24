@@ -14,7 +14,16 @@
   var hero = $('.hero');
   if (hero) {
     var vid = $('video', hero);
-    if (vid) { if (reduced) { vid.removeAttribute('autoplay'); vid.pause(); } else { var pr = vid.play(); if (pr && pr.catch) pr.catch(function () {}); } }
+    if (vid) {
+      if (reduced) { vid.removeAttribute('autoplay'); vid.pause(); }
+      else {
+        var pr = vid.play(); if (pr && pr.catch) pr.catch(function () {});
+        /* no work while the video is off-screen or the tab is hidden */
+        var inView = true, sync = function () { if (inView && !document.hidden) { var q = vid.play(); if (q && q.catch) q.catch(function () {}); } else vid.pause(); };
+        if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { inView = es[0].isIntersecting; sync(); }, { threshold: 0.05 }).observe(hero);
+        document.addEventListener('visibilitychange', sync);
+      }
+    }
     var h1 = $('[data-lit]', hero), sign = $('.sign', hero);
     if (h1) {
       var text = h1.textContent; h1.setAttribute('aria-label', text); h1.textContent = '';
