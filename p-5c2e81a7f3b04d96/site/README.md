@@ -1,0 +1,44 @@
+# Jack O'Beers site (private build, not live)
+
+Static multi-page site: HTML + one CSS file + small vanilla JS modules, GSAP only for the opening and the draining glass.
+Shopify is the back end through the Storefront API; **checkout is Shopify's own**. With no credentials the site runs in **demo mode** on `data/products.json` and charges nothing.
+
+## Run, edit, build
+- Pages are generated: edit `_src/build.py`, then `python3 _src/build.py`. Commit the generated `.html` files.
+- Any static host works (Vercel serves it with `cleanUrls`). The private path stays `noindex` via `vercel.json`; **remove noindex only at launch**.
+
+## Connect Shopify (one file: `assets/js/config.js`)
+1. In Shopify: create a custom app (or the Headless channel), enable the **Storefront API** with scopes `unauthenticated_read_product_listings`, `unauthenticated_read_product_inventory`, `unauthenticated_read_metaobjects` (if used), `unauthenticated_write_checkouts`, `unauthenticated_read_checkouts`. Copy the **public Storefront access token**. Never use an Admin token in the browser.
+2. Set `shopifyDomain` (the `.myshopify.com` domain), `storefrontToken`, and keep `apiVersion` current.
+3. Create collections with these **handles**: `beers`, `ciders`, `wines`, `kegs`, `hampers` (the page `data-collection` matches the handle).
+4. Optional product metafields (namespace `custom`): `descriptor`, `kind`, `flavour_sweet`, `flavour_bitter`, `flavour_fruity`, `flavour_body` (0-5), `pairings` (JSON list or comma text), `allergens`, `abv`. Missing values show as "to be confirmed", never invented.
+5. Products load from Shopify; cart is a Storefront `Cart` (id in `localStorage`); **Checkout** sends the buyer to `cart.checkoutUrl`. Payment methods are whatever the shop enables in Shopify (cards, Apple Pay, Google Pay, PayPal, etc.).
+6. Click & collect: enable **local pickup** in Shopify shipping settings. The chosen slot is saved as cart attributes `delivery_method`, `collection_date`, `collection_window` and appears on the order. Slot rules (days, windows, lead time) are placeholders in `config.js`.
+7. Members: set `accountUrl` to Shopify's customer-account sign-in. The sign-in dialog on `members.html` is a **demonstration wall only**; it is not security. Real gating must be server-side (Shopify customer accounts, or a server check).
+8. Newsletter: set `newsletterEndpoint` to a form-POST endpoint (Shopify Forms, Klaviyo, Mailchimp or your own).
+Tested against a mocked Storefront endpoint (collection, product, cartCreate, cartLinesAdd, cartAttributesUpdate, redirect to `checkoutUrl`). **Not tested against a real store.**
+
+## Pages and the two-click rule
+Every page is one click from the header or footer; the shop shelves are two (Shop > Beers); products are two from home (home > shelf > product).
+`index, shop, beers, ciders, wines, kegs, hampers, product (?h=handle), deli, click-and-collect, shipping, newsletter, about, members, cart, privacy, terms, returns, age-policy, 404`.
+
+## Real photos, video, menus
+- Product photos come from Shopify (`featuredImage`). Until set, a dashed **Photo slot** shows.
+- **Draining glass** (beers page): `assets/media/glass-empty.svg` and `glass-full.svg` are **temporary drawings**. Replace with photos of the *same glass, same framing, same size* (portrait 5:8, transparent or matching background; full glass with foam, empty glass with lacing). Scroll scrubs a clip from the top of the full layer down to the empty one. Reduced-motion shows the full glass, static.
+- Hero film `assets/media/pour.*` is **AI-generated reference footage**, not the shop. The bottle image is also AI-generated. Replace both with the shop's own film/photos.
+- Deli menu: `deli.html` has sample categories; supply real items, prices and allergens.
+- Logo: supplied 355 px PNG used as-is; a vector/high-res file is needed.
+
+## Fonts
+Source Sans 3 (closest open match to Dubai), Newsreader (headlines), IBM Plex Mono (labels), all SIL OFL, self-hosted. Dubai is **not** included (licence unverified). See `assets/fonts/OFL-NOTICES.txt`.
+
+## Launch checklist (not done)
+- [ ] Client confirms trading name, brand colours (palette is provisional), logo files
+- [ ] Alcohol compliance reviewed by the client's adviser: licensing, age verification (the gate is a self-declaration only), delivery rules, advertising, payment/sale process
+- [ ] Legal pages written/checked (privacy, terms, returns, age policy are placeholders); cookie/analytics consent if analytics added
+- [ ] Real products, prices, ABV, allergens, photos, deli menu, address, hours, collection and delivery rules
+- [ ] GSAP licence terms read (https://gsap.com/standard-license)
+- [ ] SEO: pages are noindex; collection/product content is rendered by JS, so add prerendering or a Shopify-theme/Hydrogen approach before relying on search
+- [ ] Server-side member gating; Shopify customer accounts
+- [ ] Test with a real Shopify store (checkout, local pickup, taxes, shipping zones, age-check app)
+- [ ] Performance pass with real photos/video; accessibility re-test; remove `noindex`
