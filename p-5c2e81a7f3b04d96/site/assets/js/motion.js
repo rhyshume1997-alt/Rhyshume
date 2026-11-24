@@ -33,14 +33,4 @@
     }
   }
 
-  /* draining glass: the full glass is clipped away from the top as the page scrolls, so the beer level falls to the empty glass */
-  var drain = $('.drain');
-  if (drain) {
-    var full = $('.full', drain), meter = $('.drain-level i'), top0 = 0.0, FOAM = 12, END = 88;
-    function set(p) { var t = p * END; full.style.clipPath = 'inset(' + t + '% 0 0 0)'; if (meter) meter.style.transform = 'scaleY(' + (1 - p) + ')'; }
-    if (reduced) { set(0); }
-    else if (hasG) { var o = { p: 0 }; ScrollTrigger.create({ trigger: document.documentElement, start: 'top top', end: 'max', scrub: .6, onUpdate: function (s) { set(s.progress); } }); set(0); }
-    else { var tick = function () { var m = document.documentElement.scrollHeight - innerHeight; set(m > 0 ? Math.min(1, scrollY / m) : 0); }; addEventListener('scroll', tick, { passive: true }); tick(); }
-    window.addEventListener('jo:layout', function () { if (hasG) ScrollTrigger.refresh(); });
-  }
 })();

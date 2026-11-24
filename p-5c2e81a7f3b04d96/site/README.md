@@ -24,7 +24,7 @@ Every page is one click from the header or footer; the shop shelves are two (Sho
 
 ## Real photos, video, menus
 - Product photos come from Shopify (`featuredImage`). Until set, a dashed **Photo slot** shows.
-- **Draining glass** (beers page): `assets/media/glass-empty.svg` and `glass-full.svg` are **temporary drawings**. Replace with photos of the *same glass, same framing, same size* (portrait 5:8, transparent or matching background; full glass with foam, empty glass with lacing). Scroll scrubs a clip from the top of the full layer down to the empty one. Reduced-motion shows the full glass, static.
+- **Whole-screen pint** (beers page): `assets/js/beer.js` draws the entire screen as beer with a WebGL shader (backlit amber, rising bubbles, foam head on the surface, foam lacing as it falls). No glass is drawn. Scroll sets the level; it settles like a liquid. This is a **generated stand-in**. The most lifelike result will be **real macro footage** of a pint being drunk (camera inside/at the level, no glass edge, 1080p+, bubbles and foam visible, level falling steadily top to bottom, ~10-20 s, H.264 + WebM, under ~8 MB) scrubbed by scroll; swap `beer.js` for a video scrub when supplied. Reduced motion or no WebGL: a still full pint, no scrubbing.
 - Hero film `assets/media/pour.*` is **AI-generated reference footage**, not the shop. The bottle image is also AI-generated. Replace both with the shop's own film/photos.
 - Deli menu: `deli.html` has sample categories; supply real items, prices and allergens.
 - Logo: supplied 355 px PNG used as-is; a vector/high-res file is needed.
