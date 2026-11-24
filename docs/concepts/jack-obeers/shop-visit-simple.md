@@ -17,33 +17,43 @@ Shop: 13 Station Road, Milngavie, G62 8PG. Open 11am to 7pm, Wednesday to Monday
 
 ## Shape rule: hold the phone sideways
 
-**Everything is landscape (phone sideways) except products and hampers, which are square.**
+![The 3 shapes: wide, tall, square](shapes.png)
+
+**Wide** is longer than it is tall (also called landscape). **Tall** is taller than it is wide (portrait). **Square** is the same height and width.
+
+**Everything is WIDE (phone sideways) except products and hampers, which are SQUARE.**
 On a phone screen the site shows only the middle strip of each wide picture. So keep the important part in the **middle half**, and leave empty space round it. I crop to size later.
 
 **Photos (iPhone 16 Pro Max, main lens)**
 
 | Photo | Shape | Keep in the middle | Goes on |
 |---|---|---|---|
-| Pint, 6 frames | Landscape | Glass and foam | Beers page background |
-| Keezer, 6 frames | Landscape | Taps and glass | Keezer page background |
+| Pint, 6 frames | Wide | Glass and foam | Beers page background |
+| Keezer, 6 frames | Wide | Taps and glass | Keezer page background |
 | Each product | Square | Product centred, space all round | Shop cards, product pages, Shopify |
 | Each hamper | Square, from above | Hamper centred | Hampers page, Shopify |
-| Deli, inside, shop front | Landscape | Nothing important at the edges | Home, Deli, About |
-| Team (if they agree) | Portrait, plus 1 landscape group | Face in the top third | About |
+| Deli, inside, shop front | Wide | Nothing important at the edges | Home, Deli, About |
+| Team (if they agree) | Tall, plus 1 wide group | Face in the top third | About |
 
-Square on the iPhone: Camera app, tap the arrow at the top, choose Square. If you cannot, shoot normally and leave space; I crop.
+**How to shoot square on the iPhone:**
+
+1. Open the Camera app
+2. Tap the small arrow at the top of the screen
+3. Tap the shape button (it says 4:3) and pick **1:1**. That is square.
+
+Cannot find it? Shoot normally and leave space round the product. I crop it square.
 
 **Video (Pocket 3, 4K)**
 
 | Clip | Shape | Keep in the middle | Goes on |
 |---|---|---|---|
-| Hero pour (slow motion) | Landscape | Glass in the centre, dark calm background, nothing in the bottom third | Home page, full screen |
-| Walk-through | Landscape | Subject centred | Home, About |
-| Deli counter, hands only | Landscape | Hands and food | Deli page |
-| Hamper packing, from above | Landscape | Hamper centred | Hampers page |
-| Shop front, locked off | Landscape | Sign centred | About, Contact |
+| Hero pour (slow motion) | Wide | Glass in the centre, dark calm background, nothing in the bottom third | Home page, full screen |
+| Walk-through | Wide | Subject centred | Home, About |
+| Deli counter, hands only | Wide | Hands and food | Deli page |
+| Hamper packing, from above | Wide | Hamper centred | Hampers page |
+| Shop front, locked off | Wide | Sign centred | About, Contact |
 
-**Optional, not for the website:** film the hero pour again in portrait (9:16) for Instagram Reels and YouTube Shorts.
+**Optional, not for the website:** film the hero pour again tall (9:16) for Instagram Reels and YouTube Shorts.
 
 **File names:** `beer-1` to `beer-6`, `keezer-1` to `keezer-6`, `product-name-1`, `hamper-name-1`, `hero-pour-1`, `walkthrough-1`.
 
@@ -65,7 +75,7 @@ Write the answers next to each one.
 
 Same glass, same spot, nothing moved between frames.
 
-1. Tripod. Lock focus, exposure and white balance. **Landscape (phone sideways).** Glass and foam in the middle half.
+1. Tripod. Lock focus, exposure and white balance. **Wide (phone sideways).** Glass and foam in the middle half.
 2. `beer-1`: full pint with foam head
 3. `beer-2`: about 80% left, `beer-3`: 60%, `beer-4`: 40%
 4. `beer-5`: 20%, `beer-6`: empty with foam on the glass
@@ -77,7 +87,7 @@ Use the iPhone, main lens, 12 MP.
 
 ## 3. Keezer photos: 6 frames (30 min)
 
-Same method. **Landscape.** Taps and glass in the middle half, in the same place in every frame.
+Same method. **Wide.** Taps and glass in the middle half, in the same place in every frame.
 
 1. `keezer-1`: empty glass under the tap
 2. `keezer-2` to `keezer-5`: glass filling in four steps
@@ -93,11 +103,11 @@ Each clip 10 to 20 seconds. No talking. No music playing in the shop.
 **iPhone settings:** 4K 25 fps, HDR Video off, main lens, lock exposure.
 **Slow motion:** Pocket 3 Slow Motion, 4K 120 fps.
 
-1. Hero pour: beer into a glass, slow motion. **Landscape.** Glass centred. Shoot 3 takes.
-2. Walk through the shop, slow, Pocket 3 Follow mode. **Landscape.**
+1. Hero pour: beer into a glass, slow motion. **Wide.** Glass centred. Shoot 3 takes.
+2. Walk through the shop, slow, Pocket 3 Follow mode. **Wide.**
 3. Deli counter: hands only, cutting cheese or lifting a pie.
 4. A hamper being packed, from above.
-5. Shop front, locked off, in daylight. **Landscape.**
+5. Shop front, locked off, in daylight. **Wide.**
 
 ---
 
@@ -105,8 +115,8 @@ Each clip 10 to 20 seconds. No talking. No music playing in the shop.
 
 1. Every product, front-on, on a plain light card. **Square**, product in the middle
 2. A close-up of every label (ABV and allergens come from the label)
-3. Deli items (landscape) and every gift hamper (**square**, from above)
-4. Shop front, inside, the counter, the taps (**landscape**)
+3. Deli items (wide) and every gift hamper (**square**, from above)
+4. Shop front, inside, the counter, the taps (**wide**)
 5. The signage and anything showing the brand colours
 
 ---
