@@ -15,6 +15,40 @@ Shop: 13 Station Road, Milngavie, G62 8PG. Open 11am to 7pm, Wednesday to Monday
 
 ---
 
+## Shape rule: hold the phone sideways
+
+**Everything is landscape (phone sideways) except products and hampers, which are square.**
+On a phone screen the site shows only the middle strip of each wide picture. So keep the important part in the **middle half**, and leave empty space round it. I crop to size later.
+
+**Photos (iPhone 16 Pro Max, main lens)**
+
+| Photo | Shape | Keep in the middle | Goes on |
+|---|---|---|---|
+| Pint, 6 frames | Landscape | Glass and foam | Beers page background |
+| Keezer, 6 frames | Landscape | Taps and glass | Keezer page background |
+| Each product | Square | Product centred, space all round | Shop cards, product pages, Shopify |
+| Each hamper | Square, from above | Hamper centred | Hampers page, Shopify |
+| Deli, inside, shop front | Landscape | Nothing important at the edges | Home, Deli, About |
+| Team (if they agree) | Portrait, plus 1 landscape group | Face in the top third | About |
+
+Square on the iPhone: Camera app, tap the arrow at the top, choose Square. If you cannot, shoot normally and leave space; I crop.
+
+**Video (Pocket 3, 4K)**
+
+| Clip | Shape | Keep in the middle | Goes on |
+|---|---|---|---|
+| Hero pour (slow motion) | Landscape | Glass in the centre, dark calm background, nothing in the bottom third | Home page, full screen |
+| Walk-through | Landscape | Subject centred | Home, About |
+| Deli counter, hands only | Landscape | Hands and food | Deli page |
+| Hamper packing, from above | Landscape | Hamper centred | Hampers page |
+| Shop front, locked off | Landscape | Sign centred | About, Contact |
+
+**Optional, not for the website:** film the hero pour again in portrait (9:16) for Instagram Reels and YouTube Shorts.
+
+**File names:** `beer-1` to `beer-6`, `keezer-1` to `keezer-6`, `product-name-1`, `hamper-name-1`, `hero-pour-1`, `walkthrough-1`.
+
+---
+
 ## 1. Ask 5 questions (15 min)
 
 - [ ] Is Tuesday open? What are the final opening hours?
@@ -31,7 +65,7 @@ Write the answers next to each one.
 
 Same glass, same spot, nothing moved between frames.
 
-1. Tripod. Lock focus, exposure and white balance. Landscape.
+1. Tripod. Lock focus, exposure and white balance. **Landscape (phone sideways).** Glass and foam in the middle half.
 2. `beer-1`: full pint with foam head
 3. `beer-2`: about 80% left, `beer-3`: 60%, `beer-4`: 40%
 4. `beer-5`: 20%, `beer-6`: empty with foam on the glass
@@ -43,7 +77,7 @@ Use the iPhone, main lens, 12 MP.
 
 ## 3. Keezer photos: 6 frames (30 min)
 
-Same method. Taps and glass in the same place in every frame.
+Same method. **Landscape.** Taps and glass in the middle half, in the same place in every frame.
 
 1. `keezer-1`: empty glass under the tap
 2. `keezer-2` to `keezer-5`: glass filling in four steps
@@ -59,20 +93,20 @@ Each clip 10 to 20 seconds. No talking. No music playing in the shop.
 **iPhone settings:** 4K 25 fps, HDR Video off, main lens, lock exposure.
 **Slow motion:** Pocket 3 Slow Motion, 4K 120 fps.
 
-1. Hero pour: beer into a glass, slow motion. Shoot 3 takes.
-2. Walk through the shop, slow, Pocket 3 Follow mode.
+1. Hero pour: beer into a glass, slow motion. **Landscape.** Glass centred. Shoot 3 takes.
+2. Walk through the shop, slow, Pocket 3 Follow mode. **Landscape.**
 3. Deli counter: hands only, cutting cheese or lifting a pie.
 4. A hamper being packed, from above.
-5. Shop front, locked off, in daylight.
+5. Shop front, locked off, in daylight. **Landscape.**
 
 ---
 
 ## 5. Products and shop photos (60 min)
 
-1. Every product, front-on, on a plain light card
+1. Every product, front-on, on a plain light card. **Square**, product in the middle
 2. A close-up of every label (ABV and allergens come from the label)
-3. Deli items and every gift hamper, from above
-4. Shop front, inside, the counter, the taps
+3. Deli items (landscape) and every gift hamper (**square**, from above)
+4. Shop front, inside, the counter, the taps (**landscape**)
 5. The signage and anything showing the brand colours
 
 ---
