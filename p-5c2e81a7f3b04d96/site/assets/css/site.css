@@ -179,7 +179,7 @@ p { text-wrap: pretty; }
 .beer[hidden] { display: none; }
 .beer.beer-still { background: radial-gradient(120% 90% at 50% 8%, #fbd36a 0, #e29a22 35%, #a8560a 70%, #4d1f04 100%); }
 .pint { position: fixed; inset: 0; z-index: -1; background: #2a1408; overflow: hidden; }
-.pint img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 25%; user-select: none; pointer-events: none; will-change: opacity; }
+.pint img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: var(--pint-pos, 50% 25%); user-select: none; pointer-events: none; will-change: opacity; }
 .pint[hidden] { display: none; }
 /* level gauge: same scale as the frames (100% full, 0% empty), amber beer with a foam cap */
 .drain-level { position: fixed; inset-inline-end: 1rem; top: 50%; translate: 0 -50%; z-index: 20; width: .9rem; height: 10rem; border-radius: 6px 6px 8px 8px; background: rgba(29, 15, 10, .78); border: 2px solid var(--cream); overflow: hidden; }

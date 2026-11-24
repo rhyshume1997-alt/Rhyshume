@@ -92,7 +92,8 @@ window.JO_startBeerShader = function () {
   var loc = gl.getAttribLocation(pr, 'a'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
   var uR = gl.getUniformLocation(pr, 'R'), uT = gl.getUniformLocation(pr, 'T'), uS = gl.getUniformLocation(pr, 'S');
 
-  var FULL = 0.93, EMPTY = 0.035, level = FULL, target = FULL, t0 = performance.now(), running = true, still = reduced;
+  var fillDir = cv.dataset.dir === 'fill', FULL = 0.93, EMPTY = 0.035, level = fillDir ? EMPTY : FULL, target = level, t0 = performance.now(), running = true, still = reduced;
+  if (still) level = target = FULL; /* reduced motion: one still, full pint (also for the fill direction) */
   function resize() {
     var small = innerWidth < 700, scale = Math.min(window.devicePixelRatio || 1, 1.5) * (small ? .55 : .7);
     cv.width = Math.max(2, Math.round(innerWidth * scale)); cv.height = Math.max(2, Math.round(innerHeight * scale));
@@ -103,9 +104,9 @@ window.JO_startBeerShader = function () {
   function frame(now) {
     if (!running) return;
     if (!still) {
-      target = FULL + (EMPTY - FULL) * progress();
+      target = fillDir ? EMPTY + (FULL - EMPTY) * progress() : FULL + (EMPTY - FULL) * progress();
       level += (target - level) * .09; /* the level settles like a liquid, it never jumps */
-      if (meter) meter.style.transform = 'scaleY(' + Math.max(0, Math.min(1, (level - EMPTY) / (FULL - EMPTY))) + ')';
+      if (meter) meter.style.transform = 'scaleY(' + Math.max(0, Math.min(1, (level - EMPTY) / (FULL - EMPTY))) + ')'; /* reads the level directly, so it is right for drain and fill */
       draw((now - t0) / 1000);
     }
     requestAnimationFrame(frame);

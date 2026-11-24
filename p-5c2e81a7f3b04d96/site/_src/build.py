@@ -167,8 +167,13 @@ def home():
 <section class="sec alt"><div class="wrap narrow" style="text-align:center"><p class="mono">Never miss a thing</p><h2>Join the newsletter</h2><p class="lede" style="margin:.8rem auto 1.4rem">New arrivals, events and the odd offer. No spam.</p><a class="btn dk" href="newsletter.html">Sign me up</a></div></section>'''
     page("index", TITLE, "The best of British beer, cider and wine, plus a deli counter.", body, key="home", cls="home", motion=True, hero_head=hero)
 
-DRAIN = '''<div class="pint" aria-hidden="true" data-state="loading"></div><canvas class="beer" aria-hidden="true" hidden></canvas>
-<div class="drain-level" aria-hidden="true"><i></i></div>'''
+def pint_markup(prefix="beer-", direction="drain", pos=""):
+    """Full-screen scroll background (assets/js/pint.js). direction: drain (frame 1 full) or fill (frame 1 empty)."""
+    p = f' data-pos="{pos}"' if pos else ""
+    return (f'<div class="pint" aria-hidden="true" data-state="loading" data-prefix="{prefix}" data-dir="{direction}"{p}></div>'
+            f'<canvas class="beer" aria-hidden="true" data-dir="{direction}" hidden></canvas>\n<div class="drain-level" aria-hidden="true"><i></i></div>')
+
+DRAIN = pint_markup()
 
 def collection(h, t, lede, drain=False, note=""):
     cls = "drain-page" if drain else ""
@@ -184,6 +189,24 @@ def collection(h, t, lede, drain=False, note=""):
 {'<p class="drain-note">Temporary: the pint behind this page is made of AI-generated stand-in images, not shop photography. Real photos of the shop&rsquo;s own pour will replace them.</p>' if drain else ''}
 </div></section>'''
     page(h, t, lede, body, key="shop", dpage="collection", cls=cls, extra_attrs=f'data-collection="{h}"', motion=drain)
+
+def keezer_test():
+    """Separate TEST page for the keezer scroll background. Not linked from the site. Nothing here is a real rental offer."""
+    items = [("Rental price", "to be confirmed"), ("Available dates", "to be confirmed"), ("Deposit", "to be confirmed"),
+             ("Kegs per unit", "to be confirmed"), ("Delivery", "to be confirmed"), ("Collection", "to be confirmed")]
+    cards = "".join(f'<li class="card rv"><div class="card-b"><div class="chips"><span class="chip">Placeholder</span></div><h3>{t}</h3><p>{tbc(v)}</p></div><div class="card-f"></div></li>' for t, v in items)
+    body = pint_markup("keezer-", "fill", "50% 45%") + f'''
+{head("Keezer rental (test page)", "A test of the full-screen keezer background. The glass fills as you scroll.", "Keezer test", "Test page")}
+<section><div class="wrap" style="padding-bottom:5rem">
+<div class="toolbar"><p class="notice"><b>Test page, not a real offer.</b> A keezer is read here as a chest freezer converted to serve kegs through taps. Nothing about the rental is agreed or assumed: every detail below is a placeholder.</p>
+<p class="note-s">Temporary: the pictures behind this page are AI-generated stand-ins, not shop photography and not the shop&rsquo;s own equipment.</p></div>
+<h2 class="vh">Rental details</h2><ul class="cards" style="list-style:none">{cards}</ul>
+<div class="toolbar" style="margin-top:1.4rem"><h2 style="font-size:1.6rem">How the background works</h2><p>Six frames cross-fade as you scroll: empty glass at the top of the page, a full pint at the bottom. Only opacity animates. With reduced motion you get one still frame.</p><p class="note-s">The kegs page is unchanged. Using this on the kegs page, and any change to its name, buttons or copy, is waiting for the shop&rsquo;s say-so.</p></div>
+<p class="note-s foot-note" style="margin-top:1.4rem">Please drink responsibly. 18+ only.</p>
+<p class="drain-note">Temporary: AI-generated stand-in images of a keezer, not shop photography.</p>
+</div></section>'''
+    page("keezer-test", "Keezer rental (test)", "Test page for the keezer background.", body, key="kegs", cls="drain-page", motion=True)
+
 
 def shop():
     body = head("The shop", "Everything on the shelves, in one place. Pick a shelf to start.", "Shop", "Explore") + '<section class="sec" style="padding-top:0"><div class="wrap"><h2 class="vh">Shelves</h2>' + tiles([(f"{h}.html", t, d) for h, t, d in COLLECTIONS], cream=True) + '</div></section>'
@@ -292,7 +315,7 @@ def main():
     collection("wines", "Wines", "Wines to go with the deli counter.")
     collection("kegs", "Kegs", "Beer by the keg, for parties and pubs at home.", note=f'<p class="notice" style="margin-bottom:1.2rem">Keg size, deposit and equipment rental are {tbc("to be confirmed with the shop")}. Nothing here is assumed.</p>')
     collection("hampers", "Hampers", "Ready-made hampers of drinks and deli.")
-    product(); cart(); collect(); shipping(); deli(); newsletter(); members(); about()
+    keezer_test(); product(); cart(); collect(); shipping(); deli(); newsletter(); members(); about()
     legal("privacy", "Privacy notice", "How we look after your information.", ["Who the data controller is and how to contact them", "What is collected (orders, accounts, newsletter, cookies and analytics) and why", "Who it is shared with (Shopify, payment and delivery providers, email provider)", "Retention, your rights and how to complain"])
     legal("terms", "Terms of sale", "The terms that apply when you buy from us.", ["Who we are, prices, tax and payment", "Orders, acceptance and cancellation", "Age restrictions and alcohol sale conditions", "Liability and governing law"])
     legal("returns", "Delivery & returns", "What happens if something goes wrong.", ["Delivery times, areas and costs", "Damaged or incorrect items and how to tell us", "Cancellations and refunds, including rules for perishable and alcoholic goods", "Click and collect problems"])
