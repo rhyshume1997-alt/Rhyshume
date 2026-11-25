@@ -337,3 +337,7 @@ dialog::backdrop { background: rgba(15, 7, 4, .75); backdrop-filter: blur(3px); 
 .hcard.tier ul { margin: .4rem 0 .8rem; padding-left: 1.1rem; }
 .btn[disabled] { opacity: .6; cursor: not-allowed; }
 @media (max-width: 40rem) { .about-people { grid-template-columns: 1fr 1fr; gap: .8rem; } }
+
+/* the mascot frames do the getting up, so the medallion no longer needs to rotate */
+.medal { transform: none; transition: none; }
+.medal-in img { object-fit: contain; padding: .35rem; }
