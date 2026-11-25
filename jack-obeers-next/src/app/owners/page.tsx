@@ -3,6 +3,7 @@ import { getCatalogue } from "@/lib/catalogue";
 import { authStatus, getOwner } from "@/lib/auth";
 import { eventsBackend, listOwnerEvents } from "@/lib/events-store";
 import { deleteEvent, logout } from "./actions";
+import { turnstileSiteKey } from "@/lib/turnstile";
 import { EventForm, LoginForm } from "./forms";
 
 export const metadata = { title: "Owners | Jack O’Beers & Deli", robots: { index: false, follow: false } };
@@ -35,7 +36,7 @@ export default async function Page() {
               status.ready ? (
                 <>
                   <h2 className="h3">Sign in</h2>
-                  <LoginForm />
+                  <LoginForm siteKey={turnstileSiteKey()} />
                 </>
               ) : (
                 <p className="lede">Owner sign-in is not set up yet. <span className="tbc">Logins to be created</span></p>
@@ -51,7 +52,7 @@ export default async function Page() {
                   <p className="own-warn"><b>Practice mode.</b> Events added here are not in Shopify and disappear when the site restarts. They do show on the Events page so you can see how it looks.</p>
                 )}
                 <h2 className="h3">Add an event</h2>
-                <EventForm />
+                <EventForm siteKey={turnstileSiteKey()} />
                 <h2 className="h3" style={{ marginTop: "2.5rem" }}>Events now</h2>
                 {events.length === 0 ? (
                   <p>No events yet.</p>

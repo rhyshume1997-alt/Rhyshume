@@ -3,7 +3,8 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { checkLogin, endSession, getOwner, startSession } from "@/lib/auth";
-import { checkGuard, minutes, rateLimit, visitorIp } from "@/lib/antispam";
+import { guardForm, minutes, rateLimit, visitorIp } from "@/lib/antispam";
+import { multiLine, oneLine, stripLinks, tooManyLinks, LIMITS } from "@/lib/sanitize";
 import { createOwnerEvent, deleteOwnerEvent } from "@/lib/events-store";
 
 export type FormState = { ok?: boolean; error?: string; message?: string } | undefined;
@@ -11,17 +12,18 @@ export type FormState = { ok?: boolean; error?: string; message?: string } | und
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export async function login(_prev: FormState, form: FormData): Promise<FormState> {
-  const name = String(form.get("name") || "");
-  if (checkGuard(form) === "bot") {
-    await wait(900);
-    return { error: "That did not work. Please reload the page and try again." };
+  const name = String(form.get("name") || "").slice(0, 80);
+  const guard = await guardForm(form, await visitorIp(), "login", { limit: 5, windowMs: 10 * 60_000 });
+  if (!guard.ok) {
+    if (guard.kind === "bot") {
+      await wait(900);
+      return { error: "That name or password is not right." }; // the same reply a real wrong password gets
+    }
+    return { error: guard.message };
   }
-  // Slow down guessing: per visitor address, and per account name so one account cannot be attacked from many addresses.
-  const byIp = rateLimit(`login:ip:${await visitorIp()}`, 10, 10 * 60_000);
-  const byName = rateLimit(`login:name:${name.toLowerCase().slice(0, 40)}`, 6, 15 * 60_000);
-  if (!byIp.ok || !byName.ok) {
-    return { error: `Too many attempts. Please wait ${minutes(Math.max(byIp.retryAfterMs, byName.retryAfterMs))} minutes and try again.` };
-  }
+  // Also slow down one account being attacked from many addresses.
+  const byName = rateLimit(`login:name:${name.toLowerCase()}`, 6, 15 * 60_000);
+  if (!byName.ok) return { error: `Too many attempts. Please wait ${minutes(byName.retryAfterMs)} minutes and try again.` };
   const owner = checkLogin(name, String(form.get("password") || ""));
   if (!owner) {
     await wait(700); // slows down guessing
@@ -39,10 +41,11 @@ export async function logout(): Promise<void> {
 export async function createEvent(_prev: FormState, form: FormData): Promise<FormState> {
   const owner = await getOwner();
   if (!owner) return { error: "Please sign in again." };
-  if (checkGuard(form) === "bot") return { error: "That did not work. Please reload the page and try again." };
-  if (!rateLimit(`event:${owner.name}`, 20, 60_000).ok) return { error: "Too many changes in a minute. Please wait a little." };
-  const title = String(form.get("title") || "").trim();
-  const description = String(form.get("description") || "").trim();
+  const guard = await guardForm(form, await visitorIp(), "event", { limit: 10, windowMs: 10 * 60_000 });
+  if (!guard.ok) return guard.kind === "bot" ? { ok: true, message: "Added." } : { error: guard.message };
+  const title = stripLinks(oneLine(form.get("title"), LIMITS.title * 2)).slice(0, LIMITS.title);
+  const description = multiLine(form.get("description"), LIMITS.message + 1);
+  if (tooManyLinks(description)) return { error: "Please keep to two links or fewer in the description." };
   const date = String(form.get("date") || "");
   const time = String(form.get("time") || "");
   const price = Number(String(form.get("price") || "").replace(",", "."));

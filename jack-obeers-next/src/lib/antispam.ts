@@ -1,4 +1,5 @@
 import { headers } from "next/headers";
+import { MESSAGES, verifyTurnstile } from "@/lib/turnstile";
 
 /**
  * Anti-spam helpers for every public form and write endpoint. Server only.
@@ -6,7 +7,7 @@ import { headers } from "next/headers";
  * Three cheap layers, none of which needs an outside service or shows a puzzle to a real person:
  *  1. Rate limits, per visitor address and per account name.
  *  2. A honeypot field (people never see it, bots fill it in) and a minimum fill-in time (a form posted in under
- *     2.5 seconds was not typed by a person). Both come from <GuardFields />.
+ *     3 seconds was not typed by a person). Both come from <GuardFields />.
  *  3. For the JSON endpoint: the request must come from this site's own pages, be JSON, and be small.
  *
  * Limits are counted in memory, so on Vercel each running server instance counts for itself. That stops a script
@@ -42,9 +43,10 @@ export async function visitorIp(): Promise<string> {
   return clientIp(await headers());
 }
 
-export const HONEYPOT = "company_website";
+// Not a name browsers autofill (no "website", "email", "phone", "address").
+export const HONEYPOT = "contact_pref_zq";
 export const FILLED_AT = "_t";
-const MIN_FILL_MS = 2500;
+const MIN_FILL_MS = 3000;
 const MAX_FILL_MS = 12 * 60 * 60 * 1000;
 
 /** "bot" if the honeypot was filled in, the timer is missing or forged, or the form was sent too fast. */
@@ -70,3 +72,24 @@ export function sameOrigin(req: Request): boolean {
 }
 
 export const minutes = (ms: number) => Math.max(1, Math.ceil(ms / 60000));
+
+export type Outcome =
+  | { ok: true }
+  | { ok: false; kind: "bot" }
+  | { ok: false; kind: "rate"; status: 429; message: string; retryAfterMs: number }
+  | { ok: false; kind: "turnstile"; status: 400 | 503; message: string };
+
+/**
+ * One call that protects a public form, in this order, and returns before anything is sent or written:
+ *  1. rate limit for this visitor address on this endpoint (counts every try, bots included),
+ *  2. honeypot and minimum fill time. A "bot" outcome should get a normal-looking success reply, so it does not retry,
+ *  3. the Cloudflare Turnstile token, checked on the server.
+ */
+export async function guardForm(form: FormData, ip: string, endpoint: string, opts: { limit?: number; windowMs?: number } = {}): Promise<Outcome> {
+  const rl = rateLimit(`${endpoint}:${ip}`, opts.limit ?? 5, opts.windowMs ?? 10 * 60_000);
+  if (!rl.ok) return { ok: false, kind: "rate", status: 429, message: MESSAGES.rate, retryAfterMs: rl.retryAfterMs };
+  if (checkGuard(form) === "bot") return { ok: false, kind: "bot" };
+  const v = await verifyTurnstile(form.get("cf-turnstile-response"), ip);
+  if (!v.ok) return { ok: false, kind: "turnstile", status: v.reason === "unavailable" ? 503 : 400, message: v.reason === "missing" ? MESSAGES.missing : v.reason === "unavailable" ? MESSAGES.unavailable : MESSAGES.failed };
+  return { ok: true };
+}

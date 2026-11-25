@@ -263,6 +263,6 @@ export function initRev5(P: any[]): () => void {
 
   /* placeholder links */
   $$('[data-placeholder]').forEach(function (a) { a.addEventListener('click', function (e) { e.preventDefault(); toast('That link is still to be added.'); }); });
-  var nl = $('#nl'), nlShown = Date.now(), nlLast = 0; if (nl) nl.addEventListener('submit', function (e) { e.preventDefault(); var s = $('#nl-s'); /* anti-spam: a filled honeypot or a form sent in under 2.5 seconds is a script. It gets the normal reply and nothing happens. Real sending must repeat these checks on the server. */ if ((nl.company_website && nl.company_website.value) || Date.now() - nlShown < 2500) { s.textContent = 'Thank you. (Demonstration only: nothing was sent.)'; return; } if (Date.now() - nlLast < 30000) { s.textContent = 'Please wait a moment before trying again.'; return; } if (!nl.email.checkValidity() || !nl.email.value) { s.textContent = 'Please enter a valid email address.'; return; } if (!nl.consent.checked) { s.textContent = 'Please tick the box so we know you are happy to hear from us.'; return; } nlLast = Date.now(); s.textContent = 'Thank you. (Demonstration only: nothing was sent.)'; nl.reset(); });
+  /* the newsletter form is now a React component (NewsletterForm) that posts to /api/newsletter */
   return function () { offs.forEach(function (f) { f(); }); };
 }

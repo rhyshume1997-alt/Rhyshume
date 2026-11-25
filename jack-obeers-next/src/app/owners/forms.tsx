@@ -1,29 +1,28 @@
 "use client";
 
 import { useActionState } from "react";
-import { GuardFields } from "@/components/GuardFields";
+import { SpamGuard } from "@/components/SpamGuard";
 import { createEvent, login, type FormState } from "./actions";
 
-export function LoginForm() {
+export function LoginForm({ siteKey }: { siteKey: string | null }) {
   const [state, action, pending] = useActionState<FormState, FormData>(login, undefined);
   return (
     <form action={action} className="own-form" autoComplete="on">
-      <GuardFields />
       <label htmlFor="o-name">Name</label>
       <input id="o-name" name="name" type="text" autoComplete="username" required />
       <label htmlFor="o-pass">Password</label>
       <input id="o-pass" name="password" type="password" autoComplete="current-password" required />
+      <SpamGuard siteKey={siteKey} resetKey={state} />
       <button className="btn" type="submit" disabled={pending}>{pending ? "Signing in…" : "Sign in"}</button>
       <p role="alert" className="own-err">{state?.error}</p>
     </form>
   );
 }
 
-export function EventForm() {
+export function EventForm({ siteKey }: { siteKey: string | null }) {
   const [state, action, pending] = useActionState<FormState, FormData>(createEvent, undefined);
   return (
     <form action={action} className="own-form" key={state?.ok ? state.message : "f"}>
-      <GuardFields />
       <label htmlFor="e-title">Event name</label>
       <input id="e-title" name="title" type="text" maxLength={100} required />
       <div className="own-row">
@@ -42,6 +41,7 @@ export function EventForm() {
       </div>
       <label htmlFor="e-desc">What is it? (optional)</label>
       <textarea id="e-desc" name="description" rows={4} maxLength={1000} />
+      <SpamGuard siteKey={siteKey} resetKey={state} />
       <button className="btn" type="submit" disabled={pending}>{pending ? "Adding…" : "Add the event"}</button>
       <p role="status" className={state?.error ? "own-err" : "own-ok"}>{state?.error || state?.message}</p>
     </form>

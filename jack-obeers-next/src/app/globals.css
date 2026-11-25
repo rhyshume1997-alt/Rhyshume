@@ -801,3 +801,4 @@ html[data-tr="1"] .tr[data-state="idle"] .tr-wipe { transform: none; transition:
 .ilkley-video { width: 100%; max-height: 32rem; object-fit: contain; border-radius: 1.2rem; background: #1d0f0a; display: block; }
 @media (max-width: 40rem) { .ilkley { grid-template-columns: 1fr; } .ilkley-video { max-width: 18rem; margin-inline: auto; } }
 .taps .keg, .taps .keg p { color: var(--ink); }
+.ts-box:empty { display: none; } .ts-box { margin-top: .2rem; }

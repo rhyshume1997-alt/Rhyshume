@@ -1,6 +1,8 @@
 import { Behaviour } from "@/components/Behaviour";
 import { getCatalogue } from "@/lib/catalogue";
 import { demoOn, getMember, type Tier } from "@/lib/members";
+import { SpamGuard } from "@/components/SpamGuard";
+import { MESSAGES, turnstileSiteKey } from "@/lib/turnstile";
 import { demoSignIn, memberSignOut } from "./actions";
 
 export const metadata = { title: "Members | Jack O’Beers & Deli", robots: { index: false, follow: false } };
@@ -21,7 +23,8 @@ const SECTIONS: Section[] = [
 
 const rank: Record<Tier, number> = { regular: 1, legend: 2 };
 
-export default async function Page() {
+export default async function Page({ searchParams }: { searchParams: Promise<{ check?: string }> }) {
+  const check = (await searchParams).check === "failed";
   const catalogue = await getCatalogue();
   const member = await getMember();
   return (
@@ -44,6 +47,8 @@ export default async function Page() {
                 {demoOn() && (
                   <form action={demoSignIn} className="own-warn">
                     <p><b>Preview only.</b> Try the page as a member:</p>
+                    <SpamGuard siteKey={turnstileSiteKey()} />
+                    {check && <p role="alert" className="own-err">{MESSAGES.failed}</p>}
                     <button className="btn ghost on-cream sm" style={{ color: "var(--ink)" }} name="tier" value="regular">As The Regular</button>{" "}
                     <button className="btn ghost on-cream sm" style={{ color: "var(--ink)" }} name="tier" value="legend">As The Legend</button>
                   </form>
