@@ -5,12 +5,12 @@
 <body>
 <div class="tk-bar"><div class="tk-in"><span class="tk-title">Jack O&rsquo;Beers &amp; Deli</span>
 <span class="tk-prog"><span class="tk-track"><span class="tk-fill"></span></span><span class="tk-num"></span></span>
-<span class="tk-menu"><button type="button" id="tk-copy">Copy my ticks</button><button type="button" id="tk-paste">Paste ticks</button></span></div>
+<span class="tk-menu"><button type="button" id="tk-send" class="primary">Send answers</button><details class="tk-more"><summary>More</summary><div class="menu"><button type="button" id="tk-reset">Clear this page</button><button type="button" id="tk-copy">Copy backup</button><button type="button" id="tk-paste">Paste backup</button></div></details></span></div>
 <nav class="chips" aria-label="Sections"><a href="#job">My job list</a><a href="#docs">Documents</a><a href="#previews">Previews</a><a href="#concepts">Concepts</a><a href="#facts">Facts</a></nav></div>
 
 <main>
 <h1>Everything in one place</h1>
-<p class="sub">Private. Not live. Tap a line to tick it. Open a document to tick things inside it. The bar at the top shows how far you are.</p>
+<p class="sub">Private. Not live. Tick a line, answer Yes / No and add a note. Open a document to do the same inside it. The bar shows how far you are. Press <b>Send answers</b> to get everything in one go.</p>
 <div class="warn"><b>Before this branch is ever merged:</b> delete the <code>hq</code> folder. It holds draft contracts and client notes.</div>
 
 <details class="sec" id="job" open><summary>My job list</summary><div class="in">
@@ -23,12 +23,12 @@
 <div><h3>At the meeting</h3><ul>
 <li>Grant: approved yet? When will he hear?</li>
 <li>Does he want the custom storefront? (needs a new quote)</li>
-<li>Pay in full or monthly? Tick it on the contract</li>
+<li data-opts="Pay in full|Monthly|Not decided">Pay in full or monthly? Tick it on the contract</li>
 <li>Show the five concepts and note what he likes</li>
-<li>Get the Shopify invite (never his password)</li>
-<li>Ask about the DNA till sync</li>
-<li>Premises licence, hours and age checks</li>
-<li>Logo as a vector file</li>
+<li data-opts="Got it|Promised|Not yet">Get the Shopify invite (never his password)</li>
+<li data-opts="Syncs|Does not sync|Do not know">Ask about the DNA till sync</li>
+<li data-opts="Covered|Not covered|Checking">Premises licence, hours and age checks</li>
+<li data-opts="Got it|Promised|No">Logo as a vector file</li>
 <li>Agree a shoot day</li></ul></div>
 <div><h3>After</h3><ul>
 <li>Send the revised quote</li>

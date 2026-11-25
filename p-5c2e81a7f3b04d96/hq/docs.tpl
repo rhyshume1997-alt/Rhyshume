@@ -5,9 +5,9 @@
 <body>
 <div class="tk-bar"><div class="tk-in"><a class="back" href="../">&larr; Everything</a><span class="tk-title">$title$</span>
 <span class="tk-prog"><span class="tk-track"><span class="tk-fill"></span></span><span class="tk-num"></span></span>
-<span class="tk-menu"><button type="button" id="tk-reset">Untick all</button><button type="button" id="tk-copy">Copy my ticks</button><button type="button" id="tk-paste">Paste ticks</button></span></div></div>
-<main data-tick>
-<p class="sub">Tap a line to tick it off. Your ticks are saved in this browser.</p>
+<span class="tk-menu"><button type="button" id="tk-send" class="primary">Send answers</button><details class="tk-more"><summary>More</summary><div class="menu"><button type="button" id="tk-reset">Clear this page</button><button type="button" id="tk-copy">Copy backup</button><button type="button" id="tk-paste">Paste backup</button></div></details></span></div></div>
+<main data-tick$if(qa)$ data-qa="all"$endif$>
+<p class="sub">Tick a line, answer Yes / No, and add a note where you need one. Everything is saved in this browser. When you are done, press <b>Send answers</b>.</p>
 $body$
 </main>
 <script src="../tick.js"></script>
