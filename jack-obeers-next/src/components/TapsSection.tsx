@@ -9,7 +9,6 @@ import { TAP_WALL_FULL } from "@/lib/photos";
 const CLIPS = [
   { loop: MEDIA.takeaway, caption: "A bottle filled straight from the tap wall" },
   { loop: MEDIA.pour, caption: "A beer poured, in slow motion" },
-  { loop: MEDIA.settling, caption: "A fresh pint settling, in slow motion" },
 ];
 
 /**
