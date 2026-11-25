@@ -28,21 +28,29 @@ export function lowStock(v: { stock?: number | null } | undefined): number | nul
   return typeof n === "number" && n >= 1 && n <= LOW_STOCK_AT ? n : null;
 }
 
+/** Small print under a name: capital first letter. All-caps names become Title Case; mixed case is left alone. */
+export function tidy(x: string | null | undefined): string {
+  const t = (x || "").trim();
+  if (!t) return "";
+  const cased = t === t.toUpperCase() && /[A-Z]/.test(t) ? t.toLowerCase().replace(/(^|[\s(\-/])([a-z])/g, (_m, a, b) => a + b.toUpperCase()) : t;
+  return cased.charAt(0).toUpperCase() + cased.slice(1);
+}
+
 export function toCard(p: Product): Card {
   const v = p.variants.find((x) => x.available) || p.variants[0];
   return {
     handle: p.handle,
     category: p.category,
     name: p.name,
-    brewery: p.brewery,
+    brewery: tidy(p.brewery),
     abv: p.abvNum,
-    style: p.style,
+    style: tidy(p.style),
     styles: p.styles,
     price: v ? v.price : 0,
     available: p.variants.some((x) => x.available),
     buy: buyLink(p),
     glass: p.glass,
-    profile: p.profile,
+    profile: p.profile ? { ...p.profile, flavour: (p.profile.flavour || []).map(tidy) } : null,
     pairing: safePairings(p.profile),
     pairingConfirmed: !!(p.profile && p.profile.pairingConfirmed),
     sample: !!p.sample,

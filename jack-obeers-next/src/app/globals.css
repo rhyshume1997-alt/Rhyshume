@@ -1076,3 +1076,21 @@ html.opening .open-skip { display: inline-flex; align-items: center; }
 .pair-item { font: 600 1.05rem var(--ui); }
 .bestsellers { background: var(--cream); padding: 1.6rem 0 .6rem; margin: 0; }
 .bestsellers .wrap > ul { max-width: 100%; }
+
+/* Readability round: darker small print, opaque header, labels visible, phone cards. */
+.hdr.solid { background: #1d0f0a; }
+.pg-count { color: #3a2d20; }
+.pg-brew { color: #2e2418; font-weight: 600; }
+.pg-meta { color: #6b3508; }
+.pg-flav li { color: #261b10; background: #ecd9a8; }
+.find-q > span { color: #261b10; }
+.find-hint { color: #3a2d20; }
+.pg-name { -webkit-line-clamp: 3; line-clamp: 3; }
+@media (max-width: 40rem) {
+  .pg-top { grid-template-columns: 3.2rem minmax(0, 1fr); gap: .3rem; }
+  .pg-glassbox { width: 3.2rem; margin-right: 0; }
+  .pg-glassbox .pg-glass { width: 2rem; margin-left: .6rem; }
+  .pg-text { padding-left: .3rem; }
+  .pg-name { font-size: .98rem; }
+}
+.page-top .mono { color: #f0b653; }
