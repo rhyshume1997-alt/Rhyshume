@@ -4,10 +4,21 @@ import { SiteFooter } from "@/components/SiteFooter";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://jackobeers.com"),
   title: "Jack O’Beers & Deli | Craft beer, cider, wine, deli and gifts, Milngavie",
-  // Private preview: keep out of search engines until the client approves launch.
+  description:
+    "An independent British drinks shop and deli at 13 Station Road, Milngavie. Craft beer, cider, wine, deli and gifts. Open Wednesday to Monday, 11am to 7pm.",
+  // Kept out of search engines until Michael approves launch. Change to index: true then.
   robots: { index: false, follow: false, noarchive: true },
   icons: { icon: "/media/jack-logo.png" },
+  openGraph: {
+    type: "website",
+    locale: "en_GB",
+    siteName: "Jack O’Beers & Deli",
+    title: "Jack O’Beers & Deli, Milngavie",
+    description: "Craft beer, cider, wine, deli and gifts. 13 Station Road, Milngavie.",
+    images: [{ url: "/media/jack-logo.png", width: 512, height: 512 }],
+  },
 };
 
 export const viewport: Viewport = {

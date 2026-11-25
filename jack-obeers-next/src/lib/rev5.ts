@@ -44,6 +44,11 @@ export function initRev5(P: any[]): () => void {
   function price(p) { return Math.min.apply(null, p.variants.map(function (v) { return v.price; })); }
   function by(h) { return P.filter(function (p) { return p.handle === h; })[0]; }
   var uid = 0;
+  function photo(p, cls) {
+    if (!p.image) return '';
+    var u = p.image + (p.image.indexOf('?') > -1 ? '&' : '?') + 'width=720';
+    return '<img class="' + cls + '" src="' + esc(u) + '" alt="' + esc(p.title) + '" width="720" height="720" loading="lazy" decoding="async">';
+  }
   function glass(p, lvl) {
     var id = 'g' + (++uid), c = colour(p);
     return '<svg viewBox="0 0 100 150" aria-hidden="true" focusable="false"><defs><clipPath id="' + id + '"><path d="M15 10 H85 L76 138 Q75 143 70 143 H30 Q25 143 24 138 Z"/></clipPath></defs>' +
@@ -166,7 +171,7 @@ export function initRev5(P: any[]): () => void {
     var dlg = $('#label');
     function open(h) {
       var p = by(h); if (!p || !dlg) return;
-      $('#label-body').innerHTML = '<div style="display:grid;grid-template-columns:auto 1fr;gap:1.2rem;align-items:center"><div class="glass" style="--now:' + lvlOf(p) + ';width:5.5rem" aria-hidden="true">' + glass(p) + '</div><div><p class="mono">' + esc(SHELVES[p.collection]) + ' · ' + esc(p.productType) + (p.sample ? ' · sample' : '') + '</p><h2 id="label-t">' + esc(p.title) + '</h2></div></div>' +
+      $('#label-body').innerHTML = photo(p, 'lbl-photo') + '<div style="display:grid;grid-template-columns:auto 1fr;gap:1.2rem;align-items:center"><div class="glass" style="--now:' + lvlOf(p) + ';width:5.5rem" aria-hidden="true">' + glass(p) + '</div><div><p class="mono">' + esc(SHELVES[p.collection]) + ' · ' + esc(p.productType) + (p.sample ? ' · sample' : '') + '</p><h2 id="label-t">' + esc(p.title) + '</h2></div></div>' +
         '<p class="lede" style="font-size:1.15rem">' + esc(p.descriptor) + ' ' + esc(p.blurb || '') + '</p><h3 class="vh">Flavour</h3>' + dials(p.flavour) +
         '<dl class="dl"><div><dt>Goes well with</dt><dd>' + (p.pairings && p.pairings.length ? p.pairings.map(esc).join(', ') : '<span class="tbc">to be supplied</span>') + '</dd></div><div><dt>ABV</dt><dd><span class="tbc">to be confirmed</span></dd></div><div><dt>Allergens</dt><dd><span class="tbc">to be verified from the label</span></dd></div></dl>' +
         '<div class="row-act"><span class="price" style="font-size:1.5rem">' + money(price(p)) + (p.sample ? '<small>sample price</small>' : '') + '</span><button class="btn" type="button" data-add="' + esc(p.handle) + '">Add to basket</button><a class="btn ghost" href="/product?h=' + encodeURIComponent(p.handle) + '">Open full page</a></div><p class="note-s">Please drink responsibly. 18+ only.</p>';
@@ -227,7 +232,7 @@ export function initRev5(P: any[]): () => void {
   if (pdp) {
     var h = new URLSearchParams(location.search).get('h'), p = by(h) || P[0], qn = 1;
     document.title = p.title + ' | Jack O’Beers';
-    pdp.innerHTML = '<div class="glass" style="--now:' + lvlOf(p) + '" aria-hidden="true">' + glass(p) + '</div><div style="display:grid;gap:1.1rem"><p class="mono">' + esc(SHELVES[p.collection]) + ' · ' + esc(p.productType) + (p.sample ? ' · sample product' : '') + '</p><h1 class="h2">' + esc(p.title) + '</h1><p class="lede">' + esc(p.descriptor) + ' ' + esc(p.blurb || '') + '</p>' + dials(p.flavour) +
+    pdp.innerHTML = '<div class="pdp-l">' + photo(p, 'pdp-photo') + '<div class="glass" style="--now:' + lvlOf(p) + '" aria-hidden="true">' + glass(p) + '</div></div><div style="display:grid;gap:1.1rem"><p class="mono">' + esc(SHELVES[p.collection]) + ' · ' + esc(p.productType) + (p.sample ? ' · sample product' : '') + '</p><h1 class="h2">' + esc(p.title) + '</h1><p class="lede">' + esc(p.descriptor) + ' ' + esc(p.blurb || '') + '</p>' + dials(p.flavour) +
       '<dl class="dl"><div><dt>Goes well with</dt><dd>' + (p.pairings || []).map(esc).join(', ') + '</dd></div><div><dt>ABV</dt><dd><span class="tbc">to be confirmed</span></dd></div><div><dt>Allergens</dt><dd><span class="tbc">to be verified from the label</span></dd></div></dl>' +
       '<div class="row-act"><span class="price" style="font-size:1.6rem">' + money(price(p)) + (p.sample ? '<small>sample price</small>' : '') + '</span><div class="qty" role="group" aria-label="Quantity"><button type="button" id="qm" aria-label="Fewer">−</button><output id="qo" aria-live="polite">1</output><button type="button" id="qp" aria-label="More">+</button></div><button class="btn" id="addq" type="button">Add to basket</button></div><p class="note-s">Please drink responsibly. 18+ only. Checkout is not connected in this preview.</p><p><a class="btn ghost on-cream" href="/?c=' + esc(p.collection) + '#shelf" style="color:var(--ink)">← Back to the shelf</a></p></div>';
     $('#qm').addEventListener('click', function () { qn = Math.max(1, qn - 1); $('#qo').textContent = qn; });
