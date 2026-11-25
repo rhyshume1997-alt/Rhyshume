@@ -43,7 +43,8 @@ export function AboutSection({ standalone = false }: { standalone?: boolean } = 
           </div>
           <div className="about-side">
             <Hours />
-            <span className="jack-cheer" role="img" aria-label="Jack the bull, smiling" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className="about-logo" src="/media/jack-logo.png" alt="Jack O’Beers and Deli logo: Jack the bull with a barrel" width={244} height={258} loading="lazy" decoding="async" />
           </div>
         </div>
         <PhotoStrip />
