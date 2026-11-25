@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { StickyBar } from "@/components/StickyBar";
 import { PageTransition } from "@/components/PageTransition";
 import { JsonLd } from "@/components/JsonLd";
 import { storeSchema, websiteSchema } from "@/lib/schema";
@@ -40,6 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SiteHeader />
         {children}
         <SiteFooter />
+        <StickyBar />
         <PageTransition />
       </body>
     </html>

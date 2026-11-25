@@ -973,3 +973,15 @@ html.loaded .jack-cheer { background-image: url(/media/jack-cheer.webp); }
 
 /* ---- conversion 4: honest low stock tag ---- */
 .pg-low { display: inline-block; margin-left: .6rem; padding: .15rem .6rem; border-radius: 99px; background: #fbe3d6; color: #7a2e12; font: 700 .8rem var(--ui); vertical-align: .15em; }
+
+
+/* ---- conversion 5: phone-only quick bar ---- */
+.sticky-bar { display: none; }
+@media (max-width: 40rem) {
+  .sticky-bar { position: fixed; z-index: 80; inset: auto 0 0 0; display: grid; grid-template-columns: 1fr 1fr 1.3fr; gap: .5rem; padding: .55rem .7rem calc(.55rem + env(safe-area-inset-bottom)); background: #1d0f0a; border-top: 1px solid #5b2f1a; }
+  .sticky-bar a { display: flex; align-items: center; justify-content: center; min-height: 2.9rem; border-radius: 99px; background: #3a1c11; color: #f8f1df; font: 700 1rem var(--ui); text-decoration: none; }
+  .sticky-bar a:active { transform: scale(.97); }
+  .sticky-bar .sb-main { background: #d9992b; color: #2a1608; }
+  body { padding-bottom: calc(4.4rem + env(safe-area-inset-bottom)); }
+  .toast { bottom: calc(5.2rem + env(safe-area-inset-bottom)); }
+}

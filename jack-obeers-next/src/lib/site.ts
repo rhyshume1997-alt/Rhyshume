@@ -49,3 +49,7 @@ export const GOOGLE_PROOF = {
   checked: "25 Nov 2026",
   url: LINKS.google,
 } as const;
+
+/** The Google Maps directions link used in the footer, the phone bar and the walkers page. */
+export const DIRECTIONS_URL = "https://www.google.com/maps/search/?api=1&query=Jack+O'Beers+%26+Deli,+13+Station+Road,+Milngavie,+G62+8PG";
+export const PHONE_HREF = `tel:${PHONE.replace(/\s/g, "")}`;
