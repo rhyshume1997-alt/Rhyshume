@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Jack O' Beers: build plan</title>
+  <style>
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <style>body{max-width:52rem;margin:0 auto;padding:1rem;font:17px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;color:#1d0f0a;background:#f6efe0}h1,h2,h3{font-family:Georgia,serif;line-height:1.2}h2{margin-top:2rem;border-top:2px solid #d9ccb0;padding-top:1rem}table{border-collapse:collapse;width:100%;background:#fffaf0;font-size:.95rem;display:block;overflow-x:auto}td,th{border:1px solid #d9ccb0;padding:.4rem .6rem;vertical-align:top;text-align:left}code{background:#eadfc6;padding:.1rem .3rem;border-radius:.3rem}a{color:#8a4b12}</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Jack O' Beers: build plan</h1>
+</header>
+<h1 id="jack-o-beers-deli-implementation-preparation">Jack O’ Beers
+&amp; Deli: implementation preparation</h1>
+<p>Date: 25 November 2026. Status: <strong>planning only</strong>.
+Nothing here has been built, deployed or connected to any live
+system.</p>
+<p>Labels used throughout: <strong>[CONFIRMED]</strong> came from the
+client workbook, the quote PDF or the client’s emails.
+<strong>[ASSUMED]</strong> is my reading, needs a yes/no.
+<strong>[SUGGESTED]</strong> is my idea, not agreed.</p>
+<h2 id="read-this-first-three-findings">0. Read this first: three
+findings</h2>
+<ol type="1">
+<li><strong>The quote and the brief do not describe the same
+job.</strong> Quote Q-2026-0101 (12 Nov 2026) is “Website, Standard”,
+£2,000, with “Online shop: existing, no extra cost: we connect the new
+website to the shop you already run”. A headless Next.js storefront on
+the Shopify Storefront API, with custom product pages, click and
+collect, delivery rules and customer accounts, is a larger build than
+“connect to an existing shop”. I have not changed the price or the
+scope. Decide with the client, in writing, which of these applies before
+work starts (see section 6).</li>
+<li><strong>There is no Next.js repo for this project.</strong> This
+repository (<code>Rhyshume</code>) is a static HTML site on Vercel. The
+only Next.js repo reachable is Build AI Here, a different business,
+which its own instructions say not to touch. “Use the existing stack”
+therefore means a new, separate Next.js project. I have not scaffolded
+it (see section 8).</li>
+<li><strong>Start is gated.</strong> The quote says the start date
+depends on the grant being approved and it is not a contract until
+signed. I can’t see a signed copy. No paid implementation should begin
+until grant approval and written acceptance, as you set out.</li>
+</ol>
+<h2 id="confirmed-requirements">1. Confirmed requirements</h2>
+<p>From the workbook (<code>meet</code> section, client’s own words) and
+the quote.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Area</th>
+<th>Confirmed</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Business</td>
+<td>Best of British beers, ciders, wines and British food. Mix of
+customers, main target young families. Reached via Google, Instagram,
+Facebook.</td>
+</tr>
+<tr class="even">
+<td>Systems</td>
+<td>Shopify store exists. DNA till service exists. No current website.
+Client has the domain.</td>
+</tr>
+<tr class="odd">
+<td>Main goal</td>
+<td>Buy online. Also: click and collect, shipping, hampers, rental
+(keezer) units.</td>
+</tr>
+<tr class="even">
+<td>Pages/features ticked</td>
+<td>Services, gallery, contact, catalogue, shop, customer accounts, plus
+“membership area”.</td>
+</tr>
+<tr class="odd">
+<td>Product pages</td>
+<td>Two-click route: click a beer, see a description underneath with
+in-depth flavour profile, food pairings, allergens.</td>
+</tr>
+<tr class="even">
+<td>Look</td>
+<td>Warm, friendly, rounded, homey, “New York deli”. Colours and fonts
+from the logo. Client mentioned the Dubai font.</td>
+</tr>
+<tr class="odd">
+<td>Logo</td>
+<td>Client says the logo is perfect. Lying-down logo animates to stand
+up and leads into the next page.</td>
+</tr>
+<tr class="even">
+<td>Motion</td>
+<td>Bottle filling a glass; brown beer-bottle cursor; vector/rounded,
+soft faded corners that blend into the background, “not blocky”.</td>
+</tr>
+<tr class="odd">
+<td>Imagery</td>
+<td>Client will take new photos of the shop. Some beer photos exist;
+more needed. Some videos exist; “need some professional ones”.</td>
+</tr>
+<tr class="even">
+<td>Content</td>
+<td>Client supplies all content.</td>
+</tr>
+<tr class="odd">
+<td>Keezer idea</td>
+<td>Two kegs for keezer units; charge for what is used; customer picks
+dates.</td>
+</tr>
+<tr class="even">
+<td>Access</td>
+<td>Client’s note: “need access to the API”.</td>
+</tr>
+<tr class="odd">
+<td>Commercial</td>
+<td>£2,000 one-off, not VAT registered. 50% (£1,000) before work, 50% on
+completion. Care plan £60/month, kept apart. Domain, hosting, platform
+fees separate. Dates depend on client content and answers. Quote valid
+to 12 Dec 2026.</td>
+</tr>
+<tr class="even">
+<td>Law</td>
+<td>Scottish jurisdiction noted in the workbook.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Not confirmed</strong> (so not requirements yet): Dubai font
+licence, membership design, keezer booking and pricing, international
+alcohol delivery, whether accounts are wanted at launch, animation
+scope.</p>
+<h2 id="missing-client-assets-and-access">2. Missing client assets and
+access</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Need</th>
+<th>Why</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Signed quote and grant approval</td>
+<td>Gate for starting</td>
+<td>Not seen</td>
+</tr>
+<tr class="even">
+<td>Shopify store URL (<code>xxx.myshopify.com</code>) and a
+collaborator or staff invite for Rhys</td>
+<td>Everything below</td>
+<td>Not supplied</td>
+</tr>
+<tr class="odd">
+<td>Which Shopify plan, which apps installed (POS, DNA sync, shipping,
+age check)</td>
+<td>Decides what is possible</td>
+<td>Unknown</td>
+</tr>
+<tr class="even">
+<td>How DNA till data reaches Shopify (native sync, third-party
+connector, manual)</td>
+<td>Stock accuracy</td>
+<td><strong>Unknown. Must be established before any integration is
+proposed.</strong></td>
+</tr>
+<tr class="odd">
+<td>Product data: titles, descriptions, flavour, pairings, allergens,
+ABV, size, images</td>
+<td>Product pages</td>
+<td>Partly in Shopify (unchecked)</td>
+</tr>
+<tr class="even">
+<td>Logo in vector (SVG/AI/PDF), exact colours, lying-down version</td>
+<td>Branding and animation</td>
+<td>Client says have logo; file not received</td>
+</tr>
+<tr class="odd">
+<td>Dubai font licence (web use)</td>
+<td>Font</td>
+<td>Unverified</td>
+</tr>
+<tr class="even">
+<td>Shop photos and video (Rhys shooting)</td>
+<td>Imagery</td>
+<td>Planned, not done</td>
+</tr>
+<tr class="odd">
+<td>Premises licence and operating plan; whether off-sales and delivery
+are covered</td>
+<td>Alcohol sales</td>
+<td>Not seen</td>
+</tr>
+<tr class="even">
+<td>Delivery area, couriers, prices, click and collect times and
+process</td>
+<td>Checkout rules</td>
+<td>Unset</td>
+</tr>
+<tr class="odd">
+<td>Opening hours (Tuesday unconfirmed), phone, email, social links,
+Google profile</td>
+<td>Contact page</td>
+<td>Mostly known, Tuesday open</td>
+</tr>
+<tr class="even">
+<td>Hamper contents and prices</td>
+<td>Hampers page</td>
+<td>Unset</td>
+</tr>
+<tr class="odd">
+<td>Domain registrar login route (not the password; use delegated access
+or have the client make DNS changes)</td>
+<td>Go live</td>
+<td>Client owns domain</td>
+</tr>
+<tr class="even">
+<td>Privacy contact details and who is data controller</td>
+<td>Legal pages</td>
+<td>Unset</td>
+</tr>
+</tbody>
+</table>
+<h2 id="shopify-integration-plan">3. Shopify integration plan</h2>
+<p>Principle: Shopify stays the only system for products, stock, cart,
+orders and hosted checkout. The website holds no product database, stock
+or payments.</p>
+<p><strong>Nothing below has been tested against the real
+store.</strong> The earlier JS adapter only ran against a mocked
+endpoint.</p>
+<ol type="1">
+<li><strong>Storefront API.</strong> GraphQL, public access token (safe
+in the browser by design, limited to storefront read and cart). Create a
+custom app or Headless channel in Shopify admin. Version pinned (for
+example the latest stable at build time; check before use).
+<ul>
+<li>Storefront scopes needed: read products and variants, read
+collections, read inventory (“unauthenticated_read_product_inventory”),
+read product tags, read metaobjects/metafields, write and read
+checkouts/carts (<code>unauthenticated_write_checkouts</code>,
+<code>unauthenticated_read_checkouts</code>), customer read/write only
+if accounts approved.</li>
+<li>Admin API token: <strong>not needed</strong> for the core build. If
+ever needed, server only, in Vercel environment variables, never in the
+browser.</li>
+</ul></li>
+<li><strong>Products and collections.</strong> Collections: Beer, Cider,
+Wine, Deli, Hampers (names to confirm). Products carry metafields in a
+<code>custom</code> namespace for flavour profile, pairings, allergens,
+ABV, volume, origin. These must be created and filled in Shopify admin
+by the client or by Rhys with access. <strong>[SUGGESTED]</strong></li>
+<li><strong>Inventory and availability.</strong> Read
+<code>availableForSale</code> and <code>quantityAvailable</code> from
+the Storefront API. If DNA does not sync to Shopify, the site can show
+only what Shopify believes; overselling risk then sits with the shop.
+Output of the DNA investigation decides whether online ordering of
+stock-limited items is safe.</li>
+<li><strong>Cart.</strong> Use Storefront <code>cartCreate</code>,
+<code>cartLinesAdd</code>, <code>cartLinesUpdate</code>,
+<code>cartLinesRemove</code>, <code>cartAttributesUpdate</code>. Store
+only the cart ID in a cookie/localStorage so the cart survives
+reloads.</li>
+<li><strong>Checkout.</strong> Redirect to <code>cart.checkoutUrl</code>
+(Shopify-hosted). No custom payment form, no card data on the site.</li>
+<li><strong>Click and collect.</strong> Preferred: Shopify local pickup
+at the shop location, which gives a native pickup option at checkout.
+Site shows pickup hours and instructions. Needs: the shop set up as a
+Shopify location with pickup enabled. Collection must include an age
+check at handover (see section 7).</li>
+<li><strong>Delivery.</strong> Configured in Shopify shipping profiles
+and zones, not in site code. The site shows the information page and may
+show an estimate from the cart’s <code>deliveryGroups</code>. Alcohol
+delivery stays off at launch.</li>
+<li><strong>Customer accounts.</strong> Shopify’s new customer accounts
+use the Customer Account API and OAuth with hosted login. Only if
+approved. The simplest option is a link to Shopify’s hosted account
+page, which is cheaper and safer. Membership is out of scope until
+specified.</li>
+<li><strong>Credentials needed from the client (never pasted into chat
+or committed):</strong> store domain, a collaborator invitation, and a
+Storefront access token generated in admin, placed straight into Vercel
+environment variables (<code>SHOPIFY_STORE_DOMAIN</code>,
+<code>SHOPIFY_STOREFRONT_TOKEN</code>). Passwords, card details and
+private keys are never requested.</li>
+<li><strong>Webhooks/revalidation.</strong> Optional later: Shopify
+webhook to revalidate cached pages when products change. Needs a secret
+in env vars. <strong>[SUGGESTED]</strong></li>
+</ol>
+<h2 id="proposed-website-structure">4. Proposed website structure</h2>
+<p>All pages <strong>[SUGGESTED]</strong> except where the workbook
+lists the feature.</p>
+<ul>
+<li>Home (logo stands up, leads into the shop; featured collections;
+find us)</li>
+<li>Beer: catalogue and product pages (flavour profile, pairings,
+allergens, ABV)</li>
+<li>Cider and wine: same templates</li>
+<li>Deli: catalogue and product pages</li>
+<li>Gift hampers</li>
+<li>Cart, then Shopify hosted checkout</li>
+<li>Click and collect</li>
+<li>Delivery information</li>
+<li>About</li>
+<li>Contact and event enquiries (form with spam protection, goes to
+sales@jackobeers.com)</li>
+<li>Account (link to Shopify hosted account, if approved)</li>
+<li>Legal: privacy, cookies, terms, allergen notice, alcohol and age
+policy</li>
+<li>Held back until separately approved: keezer rental, membership,
+international delivery</li>
+</ul>
+<h2 id="photography-and-video-specification">5. Photography and video
+specification</h2>
+<p>Rhys is shooting. Design uses real images, with clearly labelled
+placeholders only where a shot is missing.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Subject</th>
+<th>Shots</th>
+<th>Ratio and size</th>
+<th>Format and budget</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Exterior</td>
+<td>Front, signage, street, day and golden hour</td>
+<td>16:9 and 4:5, 3000px long edge</td>
+<td>Source RAW/HEIC; deliver AVIF + WebP + JPEG, hero ≤ 200 KB, other ≤
+120 KB</td>
+</tr>
+<tr class="even">
+<td>Interior</td>
+<td>Counter, shelves, fridges, seating</td>
+<td>16:9, 3:2</td>
+<td>Same</td>
+</tr>
+<tr class="odd">
+<td>Beer and cider</td>
+<td>Each product front-on, plain or soft background, plus mood
+shots</td>
+<td>4:5 product, 1:1 card; 2000px</td>
+<td>≤ 80 KB card, ≤ 150 KB detail</td>
+</tr>
+<tr class="even">
+<td>Wine</td>
+<td>Bottles, labels readable</td>
+<td>4:5</td>
+<td>Same</td>
+</tr>
+<tr class="odd">
+<td>Deli</td>
+<td>Counter, produce, close-ups</td>
+<td>4:3, 1:1</td>
+<td>Same</td>
+</tr>
+<tr class="even">
+<td>Hampers</td>
+<td>Whole hamper, contents laid out</td>
+<td>4:5, 3:2</td>
+<td>Same</td>
+</tr>
+<tr class="odd">
+<td>Pouring footage</td>
+<td>Pour into a glass, side-on, steady, plain background</td>
+<td>16:9 and 9:16; shoot 4K 50/60 fps</td>
+<td>Delivered H.264 and AV1/VP9 or HEVC where supported; 1080p, ≤ 1.5 MB
+per 6 s loop hero, ≤ 3 MB maximum; muted, poster frame</td>
+</tr>
+<tr class="even">
+<td>Keezer equipment</td>
+<td>Unit, taps, kegs (for later phase)</td>
+<td>3:2</td>
+<td>Same as images</td>
+</tr>
+<tr class="odd">
+<td>Logo animation</td>
+<td>Vector logo and a lying-down version, separate layers</td>
+<td>SVG</td>
+<td>Prefer CSS/SVG animation, under 30 KB; fallback is a static
+logo</td>
+</tr>
+</tbody>
+</table>
+<p>Accessibility: every image gets meaningful alt text written with the
+client; decorative images get empty alt. Video is muted, never autoplays
+under <code>prefers-reduced-motion</code> (poster shown instead), has no
+essential information in it, and has a captions or text equivalent where
+speech is used.</p>
+<p>Total page weight target <strong>[SUGGESTED]</strong>: home under 1.5
+MB on first load excluding video; video loads lazily.</p>
+<h2 id="scope-inclusions-and-exclusions">6. Scope: inclusions and
+exclusions</h2>
+<p>Quote basis (confirmed): website, Standard, connected to the existing
+Shopify shop, £2,000.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Item</th>
+<th>Position</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Responsive website using real photos</td>
+<td>Within quote <strong>[ASSUMED]</strong></td>
+</tr>
+<tr class="even">
+<td>Connect to existing shop</td>
+<td>Within quote (stated)</td>
+</tr>
+<tr class="odd">
+<td>Homepage, About, Contact, product/collection pages</td>
+<td>Within quote <strong>[ASSUMED]</strong>, page count not in the quote
+PDF</td>
+</tr>
+<tr class="even">
+<td>Hosted checkout via Shopify</td>
+<td>Within quote <strong>[ASSUMED]</strong></td>
+</tr>
+<tr class="odd">
+<td>Click and collect (via Shopify pickup)</td>
+<td>Needs decision</td>
+</tr>
+<tr class="even">
+<td>Delivery information page</td>
+<td>Needs decision (information only is cheap; delivery rules are
+Shopify config)</td>
+</tr>
+<tr class="odd">
+<td>Gift hampers</td>
+<td>Needs decision (a collection page is small; a builder is not)</td>
+</tr>
+<tr class="even">
+<td>Custom headless Storefront API build in Next.js</td>
+<td><strong>Needs decision. Likely larger than Standard.</strong></td>
+</tr>
+<tr class="odd">
+<td>Customer accounts</td>
+<td>Needs decision</td>
+</tr>
+<tr class="even">
+<td>Animations (logo stand-up, pour, bottle cursor)</td>
+<td>Needs decision; ideas from the meeting, not approved extras</td>
+</tr>
+<tr class="odd">
+<td>Keezer rental with dates and usage pricing</td>
+<td><strong>Excluded</strong> until separately scoped and priced</td>
+</tr>
+<tr class="even">
+<td>Membership area</td>
+<td><strong>Excluded</strong> until separately scoped</td>
+</tr>
+<tr class="odd">
+<td>International alcohol delivery</td>
+<td><strong>Excluded</strong></td>
+</tr>
+<tr class="even">
+<td>Alcohol delivery at launch</td>
+<td><strong>Excluded</strong> until compliance verified</td>
+</tr>
+<tr class="odd">
+<td>Photography and video production</td>
+<td>Client/Rhys supply; not in the quote</td>
+</tr>
+<tr class="even">
+<td>Domain, hosting, Shopify fees</td>
+<td>Separate, paid to providers</td>
+</tr>
+<tr class="odd">
+<td>£60/month care plan</td>
+<td>Separate monthly</td>
+</tr>
+</tbody>
+</table>
+<p>Any item marked “needs decision” that goes ahead beyond Standard
+should be quoted separately and accepted in writing. The £2,000 does not
+change silently.</p>
+<h2 id="legal-and-technical-blockers">7. Legal and technical
+blockers</h2>
+<p>Prompts to verify with the client, the licensing board and a Scottish
+licensing solicitor. This is not legal advice.</p>
+<ul>
+<li><strong>Premises licence and operating plan</strong>: confirm it
+permits off-sales, and whether it covers sales by mail order, online or
+delivery.</li>
+<li><strong>Licensed hours for off-sales</strong>: the website must not
+take or release alcohol orders outside permitted hours; collection
+windows must sit inside them.</li>
+<li><strong>Age verification</strong>: a self-declared “I am over 18”
+gate is not verification. Needs a decision on the check at order, at
+collection and at delivery.</li>
+<li><strong>Courier handover checks</strong>: courier must be
+contractually required to check age on handover and refuse if
+unverified.</li>
+<li><strong>Minimum unit pricing</strong> (Scotland): every alcohol line
+must meet the minimum price per unit. Check prices against current rate
+before listing.</li>
+<li><strong>Delivery records</strong>: licensing rules expect records
+for deliveries (what, where, when, who received). Decide how Shopify
+orders become that record.</li>
+<li><strong>Destination restrictions</strong>: where the shop may
+deliver, and what is allowed to leave Scotland or the UK. Out of the UK
+is excluded.</li>
+<li><strong>Payment capture</strong>: manual capture is not assumed to
+satisfy the licensing law. Shopify’s normal capture settings are not to
+be changed without approval.</li>
+<li><strong>Food allergen information</strong>: allergens must be shown
+for deli and any food product, and consistent at the point of sale.</li>
+<li><strong>Privacy and cookies</strong>: privacy notice, cookie banner
+only if non-essential cookies/analytics are used, contact form data
+handling.</li>
+<li><strong>Technical</strong>: DNA till to Shopify sync unknown;
+Shopify plan features; custom domain DNS; Dubai font licence; GSAP
+licence terms if used (unverified).</li>
+</ul>
+<p>Until these are resolved: alcohol checkout and delivery stay
+disabled; click and collect for alcohol stays off.</p>
+<h2 id="implementation-sequence">8. Implementation sequence</h2>
+<p>Nothing starts before grant approval and written acceptance.</p>
+<ol type="1">
+<li>Written acceptance of requirements and quote; scope decisions from
+section 6.</li>
+<li>Shopify discovery: store access, plan, apps, DNA sync, products and
+metafields (read-only).</li>
+<li>Compliance review with client; decide alcohol policy.</li>
+<li>Create a <strong>new</strong> private repo for the site (not this
+one, not Build AI Here). Next.js App Router, TypeScript strict,
+Tailwind, Vitest, Playwright, pnpm. Justify dependencies.</li>
+<li>Isolated design prototypes with placeholder data and real photos as
+they arrive. No credentials.</li>
+<li>Shopify read-only integration against a development store or the
+real store’s catalogue with a read-only token.</li>
+<li>Cart and hosted checkout redirect, tested with Shopify’s test mode
+on a development store, not with live payments.</li>
+<li>Content, product metafields, legal pages.</li>
+<li>Accessibility, performance, security review.</li>
+<li>Client review, written approval, then DNS and launch by the client
+or with their approval.</li>
+<li>Care plan begins.</li>
+</ol>
+<p>Why I have not scaffolded the app yet: your own rule says no
+implementation before grant approval and written acceptance, and it is
+undecided whether this is the Standard build or a larger one.</p>
+<h2 id="testing-and-acceptance-checklist">9. Testing and acceptance
+checklist</h2>
+<p>Nothing below has been run for this new build. For the earlier static
+preview I ran Chromium checks only (axe zero violations, header overlap,
+reduced motion, mobile tap); no real store, no real devices.</p>
+<ul class="task-list">
+<li><label><input type="checkbox" />Typecheck, lint, unit tests
+pass</label></li>
+<li><label><input type="checkbox" />Product, collection, cart flows
+against a development store</label></li>
+<li><label><input type="checkbox" />Cart persists across reload;
+quantity limits respect inventory</label></li>
+<li><label><input type="checkbox" />Checkout redirect lands on Shopify
+hosted page; no card fields on our domain</label></li>
+<li><label><input type="checkbox" />Click and collect option appears and
+shows correct hours</label></li>
+<li><label><input type="checkbox" />Alcohol checkout and delivery remain
+disabled, verified by trying to order</label></li>
+<li><label><input type="checkbox" />Allergens, ABV and flavour data show
+on every product page</label></li>
+<li><label><input type="checkbox" />Keyboard-only navigation, visible
+focus, screen reader labels</label></li>
+<li><label><input type="checkbox" />WCAG 2.2 AA via axe plus manual
+checks</label></li>
+<li><label><input type="checkbox" /><code>prefers-reduced-motion</code>
+honoured; no autoplay video</label></li>
+<li><label><input type="checkbox" />Mobile layouts at 320, 360, 390, 768
+px; real iPhone and Android devices</label></li>
+<li><label><input type="checkbox" />Core Web Vitals on a throttled
+mobile profile; image and video budgets met</label></li>
+<li><label><input type="checkbox" />Contact and event form: spam
+protection, delivery to the correct inbox</label></li>
+<li><label><input type="checkbox" />Privacy, cookie and allergen pages
+present</label></li>
+<li><label><input type="checkbox" />No secrets in the repo; environment
+variables only</label></li>
+<li><label><input type="checkbox" />Client sign-off in
+writing</label></li>
+</ul>
+<h2 id="questions-that-genuinely-block-development">10. Questions that
+genuinely block development</h2>
+<ol type="1">
+<li>Is the grant approved, and has the quote been signed? (Blocks
+starting.)</li>
+<li>Does the client accept a custom Next.js storefront (vs a Standard
+connection to the existing shop), and if larger, will the quote be
+revised in writing?</li>
+<li>Shopify store access: URL, plan and a collaborator invite.</li>
+<li>How does the DNA till sync to Shopify, if at all?</li>
+<li>Does the premises licence cover off-sales and online or delivery
+sales, and what are the permitted hours? (Blocks any alcohol
+checkout.)</li>
+<li>Who verifies age at collection and delivery, and how?</li>
+<li>Do customer accounts launch at day one?</li>
+<li>Is the Dubai font licensed for web use?</li>
+</ol>
+<p>Everything else can proceed with placeholders.</p>
+</body>
+</html>
