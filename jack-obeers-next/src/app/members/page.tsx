@@ -5,7 +5,7 @@ import { SpamGuard } from "@/components/SpamGuard";
 import { MESSAGES, turnstileSiteKey } from "@/lib/turnstile";
 import { demoSignIn, memberSignOut } from "./actions";
 
-export const metadata = { title: "Members | Jack O’Beers & Deli", robots: { index: false, follow: false } };
+export const metadata = { title: "Members", robots: { index: false, follow: false } };
 export const dynamic = "force-dynamic";
 
 type Section = { title: string; min: Tier; text: string };

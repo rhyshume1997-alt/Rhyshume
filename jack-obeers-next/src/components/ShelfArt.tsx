@@ -19,7 +19,7 @@ export function ShelfArt({ kind }: { kind: Kind }) {
         <span className="sh-push" />
         <Glass spec={BEER} className="sh-glass" />
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="sh-bottle" src="/media/bottle-amber.webp" alt="" width={225} height={720} />
+        <img loading="lazy" className="sh-bottle" src="/media/bottle-amber.webp" alt="" width={225} height={720} />
       </span>
     );
   }
@@ -29,7 +29,7 @@ export function ShelfArt({ kind }: { kind: Kind }) {
         <span className="sh-push" />
         <Glass spec={CIDER} className="sh-glass" />
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="sh-bottle" src="/media/cider-bottle.webp" alt="" width={144} height={520} />
+        <img loading="lazy" className="sh-bottle" src="/media/cider-bottle.webp" alt="" width={144} height={520} />
       </span>
     );
   }
@@ -39,7 +39,7 @@ export function ShelfArt({ kind }: { kind: Kind }) {
         <span className="sh-push" />
         <Glass spec={WINE} className="sh-glass" />
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="sh-bottle" src="/media/wine-bottle.webp" alt="" width={133} height={520} />
+        <img loading="lazy" className="sh-bottle" src="/media/wine-bottle.webp" alt="" width={133} height={520} />
       </span>
     );
   }
@@ -47,14 +47,14 @@ export function ShelfArt({ kind }: { kind: Kind }) {
     return (
       <span className="art art-tickets" aria-hidden="true">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="sh-photo" src="/media/tickets.webp" alt="" width={520} height={350} />
+        <img loading="lazy" className="sh-photo" src="/media/tickets.webp" alt="" width={520} height={350} />
       </span>
     );
   }
   return (
     <span className="art art-subs" aria-hidden="true">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img className="sh-photo" src="/media/card.webp" alt="" width={520} height={343} />
+      <img loading="lazy" className="sh-photo" src="/media/card.webp" alt="" width={520} height={343} />
     </span>
   );
 }

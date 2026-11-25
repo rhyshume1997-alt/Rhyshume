@@ -1,3 +1,6 @@
+import { JsonLd } from "@/components/JsonLd";
+import { breadcrumbSchema } from "@/lib/schema";
+import { pageMeta } from "@/lib/seo";
 import { Behaviour } from "@/components/Behaviour";
 import { getCatalogue } from "@/lib/catalogue";
 import { getPublicEvents } from "@/lib/events-store";
@@ -5,7 +8,7 @@ import { Clip } from "@/components/Clip";
 import { MEDIA } from "@/lib/media";
 import { SHOP } from "@/lib/brand";
 
-export const metadata = { title: "Events | Jack O’Beers & Deli" };
+export const metadata = pageMeta({ title: "Events at the shop, Milngavie", description: "Events at Jack O’Beers and Deli, Milngavie, and how to get a ticket. We supplied the bar for 1,500 people at an England match screening at Ilkley Brewery.", path: "/events" });
 export const dynamic = "force-dynamic";
 
 function when(date: string | null, time: string | null): string {
@@ -22,6 +25,7 @@ export default async function Page() {
   const ticketsOn = process.env.CHECKOUT_ENABLED === "true";
   return (
     <>
+      <JsonLd data={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "Events", path: "/events" }])} />
       <main id="main">
         <section className="page-top">
           <div className="wrap">
@@ -58,7 +62,7 @@ export default async function Page() {
                 <h2 className="h3">Jack O&rsquo;Beers at Ilkley Brewery</h2>
                 <p>We supplied the bar for 1,500 people at an England match screening at Ilkley Brewery, Yorkshire.</p>
               </div>
-              <Clip className="ilkley-video" src={MEDIA.events.src} poster={MEDIA.events.poster} label="Video from the England match screening at Ilkley Brewery, Yorkshire, where Jack O’Beers supplied the bar for 1,500 people." />
+              <Clip className="ilkley-video" width={1080} height={1920} src={MEDIA.events.src} poster={MEDIA.events.poster} label="Video from the England match screening at Ilkley Brewery, Yorkshire, where Jack O’Beers supplied the bar for 1,500 people." />
             </div>
             <div className="enquiry">
               <div>

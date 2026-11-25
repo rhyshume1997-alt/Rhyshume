@@ -1,13 +1,17 @@
+import { JsonLd } from "@/components/JsonLd";
+import { breadcrumbSchema } from "@/lib/schema";
+import { pageMeta } from "@/lib/seo";
 import { Behaviour } from "@/components/Behaviour";
 import { getCatalogue } from "@/lib/catalogue";
 import { SHOP } from "@/lib/brand";
 
-export const metadata = { title: "About | Jack O’Beers & Deli" };
+export const metadata = pageMeta({ title: "About us, Michael and Tanya", description: "Michael Blakely and his wife run Jack O’Beers and Deli at 13 Station Road, Milngavie. 23 taps, the best of British produce, events and a sit-in deli menu.", path: "/about" });
 
 export default async function Page() {
   const catalogue = await getCatalogue();
   return (
     <>
+      <JsonLd data={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "About us", path: "/about" }])} />
       <main id="main">
         <section className="page-top">
           <div className="wrap">
@@ -29,7 +33,7 @@ export default async function Page() {
             </div>
             <div className="about-copy">
               <p className="lede">
-                {SHOP.owners[0]} and {SHOP.owners[1]} own Jack O’Beers &amp; Deli, an independent British drinks shop and deli at {SHOP.address[0]}, {SHOP.address[1]}.
+                {SHOP.owners[0]} and {SHOP.owners[1]} own Jack O’Beers and Deli, an independent British drinks shop and deli at {SHOP.address[0]}, {SHOP.address[1]}.
               </p>
               <p>
                 <span className="tbc">Their story, in their own words, to be supplied</span>

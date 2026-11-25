@@ -503,8 +503,7 @@ html[data-tr="1"] .tr[data-state="idle"] .tr-wipe { transform: none; transition:
 .door.l { transform-origin: left center; transform: rotateY(calc(var(--open, 0) * 105deg)); }
 .door.r { transform-origin: right center; transform: rotateY(calc(var(--open, 0) * -105deg)); }
 .door span { position: absolute; inset: 0 .12rem .7rem; border: .35rem solid #3a1c11; border-radius: .7rem .7rem .3rem .3rem; backface-visibility: hidden;
-  background: repeating-linear-gradient(180deg, transparent 0 .7rem, rgba(30, 12, 6, .45) .7rem .82rem), linear-gradient(90deg, #a56c3c, #8a5a36 50%, #7a4a2a);
-  box-shadow: inset 0 0 0 .18rem #b98a3e66, inset 0 .5rem .8rem rgba(255, 220, 170, .18); }
+  background: repeating-linear-gradient(180deg, transparent 0 .7rem, rgba(30, 12, 6, .45) .7rem .82rem), linear-gradient(90deg, #a56c3c, #8a5a36 50%, #7a4a2a); }
 .door.l span { transform-origin: left center; border-radius: 2.4rem .5rem .3rem .3rem / 1.8rem .5rem .3rem .3rem; }
 .door.r span { transform-origin: right center; border-radius: .5rem 2.4rem .3rem .3rem / .5rem 1.8rem .3rem .3rem; }
 .stage .img-tag { z-index: 6; }
@@ -832,3 +831,37 @@ html[data-tr="1"] .tr[data-state="idle"] .tr-wipe { transform: none; transition:
 .doors { opacity: clamp(0, calc(1 - (var(--pt, 0) - .3) * 8), 1); }
 @media (prefers-reduced-motion: reduce) { .interior video { filter: none; transform: none; } }
 .find .note-s, .taps .note-s, .deli .note-s { color: #e1d4b3; }
+
+
+/* ---- new pages: faq, product, walkers ---- */
+.faq { padding: clamp(2.5rem, 6vw, 4.5rem) 0; }
+.faq-item { max-width: 46rem; padding: 1.2rem 0; border-bottom: 1px solid #d9ccb0; }
+.faq-item h2 { margin-bottom: .4rem; }
+.faq-more { max-width: 46rem; margin-top: 1.6rem; }
+.prod { padding: clamp(2.5rem, 6vw, 4.5rem) 0; }
+.prod-grid { display: grid; grid-template-columns: minmax(0, 24rem) minmax(0, 1fr); gap: 2rem 3rem; align-items: start; }
+.prod-grid:not(:has(.prod-img)) { grid-template-columns: minmax(0, 40rem); }
+.prod-img { width: 100%; height: auto; border-radius: 1.6rem; background: #fffaf0; }
+.prod-body { display: grid; gap: 1rem; align-content: start; }
+.prod-meta { display: flex; flex-wrap: wrap; gap: .3rem 1rem; font: 600 1rem var(--ui); color: #8a4b12; }
+.prod-price { font: 600 2rem/1 var(--serif); } .prod-price small { font: 600 1rem var(--ui); color: #5f4f3d; margin-left: .5rem; }
+.prod-btns { max-width: 22rem; }
+@media (max-width: 52rem) { .prod-grid { grid-template-columns: 1fr; } }
+.walk-top { position: relative; isolation: isolate; overflow: hidden; }
+.walk-top .wrap { position: relative; z-index: 1; }
+.walk-top .lede { max-width: 40rem; background: rgba(29, 15, 10, .86); padding: .8rem 1.1rem; border-radius: 1rem; }
+.walk-bg::after { background: linear-gradient(rgba(29, 15, 10, .6), rgba(29, 15, 10, .25)); }
+.walk { padding: clamp(2.5rem, 6vw, 4.5rem) 0; }
+.walk-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 26rem); gap: 2rem 3rem; align-items: start; }
+.walk-copy { display: grid; gap: 1rem; max-width: 40rem; }
+.walk-copy .h3 { margin-top: .8rem; }
+.walk-photo { width: 100%; height: auto; border-radius: 1.6rem; }
+@media (max-width: 52rem) { .walk-grid { grid-template-columns: 1fr; } }
+.pg-name a { color: inherit; text-decoration: none; }
+@media (hover: hover) and (pointer: fine) { .pg-name a:hover { text-decoration: underline; text-underline-offset: 3px; } }
+
+/* the hero poster is a real image behind the video, so it can load early and at the right size */
+.bgv-poster, .bgv-poster img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.interior .bgv-poster { z-index: 1; filter: blur(calc(14px * (1 - min(1, max(0, (var(--pt, 0) - .2) * 3.5))))); transform: scale(1.06); }
+.interior video.enter { background: transparent; }
+@media (prefers-reduced-motion: reduce) { .interior .bgv-poster { filter: none; transform: none; } }

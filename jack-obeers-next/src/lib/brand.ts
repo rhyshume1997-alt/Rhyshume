@@ -23,7 +23,7 @@ export const BRAND = {
 };
 
 export const SHOP = {
-  name: "Jack O’Beers & Deli",
+  name: "Jack O’Beers and Deli",
   address: ["13 Station Road", "Milngavie", "G62 8PG"],
   phone: "07405 480950",
   email: "sales@jackobeers.com",

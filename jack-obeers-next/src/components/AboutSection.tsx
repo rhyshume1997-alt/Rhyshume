@@ -34,7 +34,7 @@ export function AboutSection() {
         </div>
         {MEDIA.michael && (
           <div className="about-video">
-            <Clip src={MEDIA.michael.src} poster={MEDIA.michael.poster} label="Michael welcomes you to Jack O’Beers. The words are written above." />
+            <Clip width={1920} height={1080} src={MEDIA.michael.src} poster={MEDIA.michael.poster} label="Michael welcomes you to Jack O’Beers. The words are written above." />
           </div>
         )}
         <PhotoStrip />

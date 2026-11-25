@@ -1,7 +1,7 @@
 import { Behaviour } from "@/components/Behaviour";
 import { getCatalogue } from "@/lib/catalogue";
 
-export const metadata = { title: 'Drinks | Jack O’Beers & Deli' };
+export const metadata = { title: 'Drinks', robots: { index: false, follow: true }, alternates: { canonical: '/beers' } };
 
 export default async function Page() {
   const catalogue = await getCatalogue();

@@ -46,7 +46,7 @@ export function ProductGrid({ cards, chips, checkoutOn, noun, intro }: { cards: 
                   <Glass spec={c.glass} className="pg-glass" />
                 </span>
                 <div className="pg-text">
-                  <h2 className="pg-name">{c.name}</h2>
+                  <h2 className="pg-name"><a href={`/product/${c.handle}`}>{c.name}</a></h2>
                   {c.brewery && <p className="pg-brew">{c.brewery}</p>}
                   <p className="pg-meta">
                     {c.abv !== null && <span>{c.abv}% ABV</span>}

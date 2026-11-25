@@ -6,7 +6,7 @@ import { deleteEvent, logout } from "./actions";
 import { turnstileSiteKey } from "@/lib/turnstile";
 import { EventForm, LoginForm } from "./forms";
 
-export const metadata = { title: "Owners | Jack O’Beers & Deli", robots: { index: false, follow: false } };
+export const metadata = { title: "Owners", robots: { index: false, follow: false } };
 export const dynamic = "force-dynamic";
 
 function when(date: string, time: string): string {

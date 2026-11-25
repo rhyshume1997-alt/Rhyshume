@@ -27,8 +27,10 @@ export const MEDIA = {
   settling: { wide: local("beer-settling-wide"), tall: null, posterWide: poster("beer-settling-wide"), posterTall: null },
   /** Has sound: shown with controls, never autoplays. */
   events: { src: blob("videos/events-ilkley-brewery-tall.mp4"), poster: poster("events-ilkley-brewery-tall") },
-  /** Michael's welcome. Not in the media repo yet. Set src and poster when it arrives. */
-  michael: null as { src: string; poster: string } | null,
+  /** Michael's welcome (28 MB, has sound, so it lives on Blob). Poster only until it is uploaded. */
+  michael: { src: blob("videos/michael-welcome.mp4"), poster: poster("michael-welcome") } as { src: string | null; poster: string },
+  /** Walking in through the door. A background on the walkers page. */
+  walkIn: { wide: local("walk-in-wide"), tall: local("walk-in-tall"), posterWide: poster("walk-in-wide"), posterTall: poster("walk-in-tall") },
 };
 
 export type Loop = { wide: string | null; tall: string | null; posterWide: string; posterTall: string | null };

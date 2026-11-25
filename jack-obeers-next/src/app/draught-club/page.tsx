@@ -1,7 +1,10 @@
+import { JsonLd } from "@/components/JsonLd";
+import { breadcrumbSchema } from "@/lib/schema";
+import { pageMeta } from "@/lib/seo";
 import { Behaviour } from "@/components/Behaviour";
 import { getCatalogue } from "@/lib/catalogue";
 
-export const metadata = { title: "The Draught Club | Jack O’Beers & Deli" };
+export const metadata = pageMeta({ title: "The Draught Club subscription", description: "The Draught Club at Jack O’Beers and Deli, Milngavie. Two monthly memberships with 10% off all fills, members-only beers and priority access to events.", path: "/draught-club" });
 
 /**
  * Tiers, from the shop's Draught Club leaflet. The shop has dropped The Local, so there are two tiers.
@@ -42,6 +45,7 @@ export default async function Page() {
   const catalogue = await getCatalogue();
   return (
     <>
+      <JsonLd data={breadcrumbSchema([{ name: "Home", path: "/" }, { name: "The Draught Club", path: "/draught-club" }])} />
       <main id="main">
         <section className="page-top">
           <div className="wrap">
