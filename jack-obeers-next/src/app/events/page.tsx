@@ -25,7 +25,7 @@ export default async function Page() {
             <h1 className="h2">Events at the shop, <em>and how to get a ticket.</em></h1>
           </div>
         </section>
-        <section className="cream" style={{ background: "var(--cream)" }}>
+        <section className="cream" style={{ background: "var(--cream)", paddingTop: "4rem" }}>
           <div className="wrap">
             {upcoming.length === 0 ? (
               <p className="lede">No events are listed right now. Check back soon, or ask about a private event below.</p>

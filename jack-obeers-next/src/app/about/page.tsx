@@ -17,7 +17,7 @@ export default async function Page() {
             </h1>
           </div>
         </section>
-        <section className="cream about" style={{ background: "var(--cream)" }}>
+        <section className="cream about" style={{ background: "var(--cream)", paddingTop: "4rem" }}>
           <div className="wrap">
             <div className="about-people">
               <figure className="arch-slot" role="img" aria-label={`Photo of ${SHOP.owners[0]} to be supplied`}>

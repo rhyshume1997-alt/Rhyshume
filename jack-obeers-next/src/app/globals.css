@@ -341,3 +341,15 @@ dialog::backdrop { background: rgba(15, 7, 4, .75); backdrop-filter: blur(3px); 
 /* the mascot frames do the getting up, so the medallion no longer needs to rotate */
 .medal { transform: none; transition: none; }
 .medal-in img { object-fit: contain; padding: .35rem; }
+/* draught club tiers */
+.tiers { grid-template-columns: repeat(auto-fit, minmax(min(19rem, 100%), 1fr)); max-width: 50rem; margin-inline: auto; align-items: start; }
+.hcard.tier .tier-price { margin: 0 0 .6rem; }
+.hcard.tier .tier-price b { font: 600 clamp(2rem, 4vw, 2.6rem)/1 var(--serif); }
+.hcard.tier .tier-price span { color: #6b5a48; font-weight: 600; }
+.tier-list { list-style: none; margin: .4rem 0 1rem; padding: 0; display: grid; gap: .35rem; }
+.tier-list li { position: relative; padding: .45rem .6rem .45rem 2rem; border-radius: .8rem; }
+.tier-list li::before { content: "\2713"; position: absolute; left: .7rem; top: .45rem; font-weight: 700; color: var(--green, #2a562f); }
+.tier-list li.up { background: #fbe9bd; font-weight: 600; }
+.tier-list li small { color: #6b5a48; font-weight: 400; }
+.tier-list .new { display: inline-block; font: 700 .65rem/1 ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; background: #2a562f; color: #fff; padding: .25rem .45rem; border-radius: 99px; margin-right: .5rem; vertical-align: .1em; }
+.tier-foot { text-align: center; margin: 1.6rem auto .4rem; max-width: 36rem; font-size: 1.1rem; }
