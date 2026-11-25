@@ -12,7 +12,7 @@ function read(): Note[] {
 }
 function write(n: Note[]) { try { localStorage.setItem(KEY, JSON.stringify(n)); } catch {} }
 const when = (t: number) => new Date(t).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
-const lookName = (l: string) => ({ original: "Original", classic: "Classic", backbar: "Back bar", cinematic: "Cinematic" } as Record<string, string>)[l] || "Original";
+const lookName = (l: string) => ({ behind: "Behind the Counter", original: "Original", classic: "Classic", backbar: "Back bar", cinematic: "Cinematic" } as Record<string, string>)[l] || "Original";
 
 /**
  * A notes drawer down the side of every preview page, so the owner or a reviewer can write what they like.
@@ -25,7 +25,7 @@ export function CommentsPanel() {
   const [name, setName] = useState("");
   const [all, setAll] = useState(false);
   const [path, setPath] = useState("/");
-  const [look, setLook] = useState("original");
+  const [look, setLook] = useState("behind");
   const [msg, setMsg] = useState("");
   const btn = useRef<HTMLButtonElement>(null);
   const area = useRef<HTMLTextAreaElement>(null);
@@ -34,7 +34,7 @@ export function CommentsPanel() {
     setNotes(read());
     try { setName(localStorage.getItem(NAME_KEY) || ""); } catch {}
     setPath(location.pathname);
-    setLook(document.documentElement.dataset.look || "original");
+    setLook(document.documentElement.dataset.look || "behind");
   }, []);
   useEffect(() => { if (open) area.current?.focus(); }, [open]);
   useEffect(() => {

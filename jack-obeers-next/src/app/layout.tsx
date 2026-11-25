@@ -38,7 +38,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="preload" href="/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <script dangerouslySetInnerHTML={{ __html: "try{if(sessionStorage.getItem('jo_tr')==='1')document.documentElement.dataset.tr='1'}catch(e){}addEventListener('load',function(){document.documentElement.classList.add('loaded')})" }} />
-        {!isIndexable() && <script dangerouslySetInnerHTML={{ __html: "try{var m=location.search.match(/[?&]look=(original|classic|backbar|cinematic)/),l=m?m[1]:sessionStorage.getItem('jo_look');if(m)sessionStorage.setItem('jo_look',l);if(l&&l!=='original')document.documentElement.dataset.look=l}catch(e){}" }} />}
+        {!isIndexable() && <script dangerouslySetInnerHTML={{ __html: "try{var m=location.search.match(/[?&]look=(behind|original|classic|backbar|cinematic)/),l=m?m[1]:(sessionStorage.getItem('jo_look')||'behind');if(m)sessionStorage.setItem('jo_look',l);document.documentElement.dataset.look=l}catch(e){document.documentElement.dataset.look='behind'}" }} />}
       </head>
       <body>
         <JsonLd data={[storeSchema(), websiteSchema()]} />

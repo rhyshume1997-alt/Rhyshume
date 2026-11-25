@@ -27,7 +27,7 @@ for (const path of PATHS) {
     await page.waitForLoadState("load");
     await page.waitForTimeout(1500); // the opening starts after load; Skip appears while it plays
     const skip = page.locator(".open-skip");
-    if (await skip.isVisible()) await skip.click(); // not counted
+    if (await skip.isVisible()) await skip.click({ force: true }); // not counted (the button moves while the opening plays, so do not wait for it to settle)
     const before = await basketCount(page);
     let clicks = 0;
     for (const step of path.steps) {

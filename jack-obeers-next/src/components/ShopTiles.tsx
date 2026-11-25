@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { PourWindow } from "@/components/PourWindow";
 import { KegBlurb } from "@/components/KegBlurb";
 import { ShelfArt } from "@/components/ShelfArt";
 import { ProductGrid } from "@/components/ProductGrid";
@@ -25,23 +26,23 @@ const DRINKS: { key: Key; title: string; unit: string; blurb: string; href: stri
  * Beer, Cider and Wine open their range in a panel under the tile row, on the same page. Event Tickets and
  * Subscription Services are links. The pages /beers, /ciders and /wines still work as direct links.
  */
-export function ShopTiles({ ranges, events, subs, checkoutOn }: { ranges: Record<Key, Range>; events: number; subs: number; checkoutOn: boolean }) {
+export function ShopTiles({ ranges, events, subs, checkoutOn, fancy = false }: { ranges: Record<Key, Range>; events: number; subs: number; checkoutOn: boolean; fancy?: boolean }) {
   const [open, setOpen] = useState<Key | null>(null);
   const panel = useRef<HTMLDivElement>(null);
-  const choose = (k: Key) => {
-    const next = open === k ? null : k;
-    setOpen(next);
-    if (next) {
-      const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-      // let the glass pour for a moment before the range slides into view
-      window.setTimeout(() => panel.current?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" }), reduced ? 0 : 1500);
-    }
-  };
+  const [hoverBeer, setHoverBeer] = useState(false);
+  const choose = (k: Key) => setOpen(open === k ? null : k);
+  // The range appears and scrolls into view straight away: no waiting for the pour. The pour is a separate element.
+  useEffect(() => {
+    if (!open) return;
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    panel.current?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+  }, [open]);
   const count = (n: number, one: string, many: string) => (n > 0 ? `${n} ${n === 1 ? one : many}` : "");
   const cur = DRINKS.find((d) => d.key === open) || null;
   return (
     <section className="tiles-sec cream" id="shelf" aria-labelledby="tl-h">
       <div className="wrap">
+        {fancy && <i className="bh-line" aria-hidden="true" />}
         <p className="mono">Shop</p>
         <h2 className="h2" id="tl-h">Pick a <em>shelf.</em></h2>
         <p className="shelf-hint">Click your selection.</p>
@@ -50,7 +51,8 @@ export function ShopTiles({ ranges, events, subs, checkoutOn }: { ranges: Record
             const n = ranges[d.key].cards.length;
             return (
               <li key={d.key}>
-                <button type="button" className="sh-item" data-kind={d.key} aria-expanded={open === d.key} aria-controls="range-panel" onPointerMove={trackSide} onPointerEnter={trackSide} onClick={() => choose(d.key)}>
+                <button type="button" className="sh-item" data-kind={d.key} aria-expanded={open === d.key} aria-controls="range-panel" onPointerMove={trackSide} onPointerEnter={(e) => { trackSide(e); if (d.key === "beer") setHoverBeer(true); }} onPointerLeave={() => { if (d.key === "beer") setHoverBeer(false); }} onFocus={() => { if (d.key === "beer") setHoverBeer(true); }} onBlur={() => { if (d.key === "beer") setHoverBeer(false); }} onClick={() => choose(d.key)}>
+                  {fancy && d.key === "beer" && <PourWindow playing={hoverBeer || open === "beer"} />}
                   <ShelfArt kind={d.key} />
                   <span className="sh-label"><b>{d.title}</b><span className="tile-n">{count(n, d.unit.replace(/s$/, ""), d.unit)}</span></span>
                 </button>

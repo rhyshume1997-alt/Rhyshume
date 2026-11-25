@@ -1263,3 +1263,153 @@ html:is([data-look="backbar"], [data-look="cinematic"]) .pg-btn { letter-spacing
 /* The original logo (brown bull, barrel and wording) below the opening times, in place of the cartoon sprite */
 .about-logo { display: block; width: 10.5rem; height: auto; margin-top: 1.4rem; }
 @media (max-width: 40rem) { .about-logo { width: 9.5rem; } }
+
+/* =====================================================================================================
+   BEHIND THE COUNTER (Rev 5 selected direction). Previews only: everything is keyed to <html data-look="behind">.
+   Newsreader for headings, Source Sans 3 for the interface, the real logo, the real tap wall, rounded and friendly.
+   Motion follows the same rules as the rest of the site: ease-out, nothing from scale(0), press feedback, hover only
+   on a real pointer, and fewer, gentler movements (not none) with reduced motion.
+   ===================================================================================================== */
+.bh-hero, .bh-line, .pour-window { display: none; }
+html[data-look]:not([data-look="behind"]) #main { display: flex; flex-direction: column; }
+html[data-look]:not([data-look="behind"]) #main > .greviews { order: 1; }
+html[data-look]:not([data-look="behind"]) #main > .about-home { order: 2; }
+html[data-look]:not([data-look="behind"]) #main > #shelf { order: 3; }
+html[data-look]:not([data-look="behind"]) #main > #best { order: 4; }
+html[data-look]:not([data-look="behind"]) #main > .taps { order: 5; }
+html[data-look]:not([data-look="behind"]) #main > .deli { order: 6; }
+html[data-look]:not([data-look="behind"]) #main > .hampers { order: 7; }
+html[data-look]:not([data-look="behind"]) #main > .services { order: 8; }
+
+html[data-look="behind"] .stage, html[data-look="behind"] .hero-card { display: none; }
+html[data-look="behind"] .bh-hero { display: flex; }
+html[data-look="behind"] .bh-line, html[data-look="behind"] .pour-window { display: block; }
+html[data-look="behind"] .hdr { background: linear-gradient(180deg, rgba(29, 15, 10, .82), rgba(29, 15, 10, 0)); }
+html[data-look="behind"] .hdr.solid { background: var(--mahogany); }
+
+/* ---- the opening ---- */
+.bh-hero { position: relative; z-index: 3; min-height: min(calc(100svh - 4.5rem), 56rem); background: var(--mahogany); color: var(--paper); isolation: isolate; }
+.bh-photo { position: absolute; inset: 0; z-index: -1; overflow: hidden; background: var(--mahogany); }
+.bh-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 70% 42%; transform-origin: 60% 40%; filter: brightness(1.45) contrast(1.06) saturate(1.05); }
+/* a lighting wash, not decoration: mahogany and deep green pull the room together and keep the headline readable over the brick */
+.bh-wash { position: absolute; inset: 0; background: linear-gradient(96deg, rgba(18, 41, 29, .92) 0%, rgba(29, 15, 10, .78) 28%, rgba(29, 15, 10, .22) 60%, rgba(18, 41, 29, .16) 100%), linear-gradient(0deg, rgba(29, 15, 10, .7), rgba(29, 15, 10, 0) 30%); }
+.bh-in { position: relative; flex: 0 1 auto; align-self: stretch; width: min(100% - 2 * var(--gut), 82rem); margin-inline: auto; display: flex; align-items: center; }
+.bh-copy { display: grid; gap: 1.15rem; justify-items: start; max-width: 40rem; padding: calc(var(--hdr) + 2.5rem) 0 6.2rem; }
+.bh-h1 { font-size: clamp(3.1rem, 7.4vw, 7.4rem); line-height: .94; letter-spacing: -.035em; font-weight: 400; text-wrap: balance; }
+.bh-h1 em { font-style: italic; color: var(--amber-hi); }
+.bh-lede { max-width: 29rem; font-size: clamp(1.05rem, 1.4vw, 1.25rem); color: #eadfc4; }
+.bh-cta { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: .3rem; }
+.bh-sign { position: absolute; right: 0; bottom: -2.9rem; z-index: 4; width: clamp(8.2rem, 13vw, 11.5rem); padding: .8rem .9rem .65rem; border-radius: 1.7rem; background: var(--paper); box-shadow: 0 14px 22px -16px rgba(0, 0, 0, .65); transform: rotate(-2.2deg); text-decoration: none; }
+.bh-sign img { width: 100%; height: auto; }
+@media (hover: hover) and (pointer: fine) { .bh-sign { transition: transform .3s var(--ease); } .bh-sign:hover { transform: rotate(-1deg) translateY(-3px); } }
+html[data-look="behind"] .open-hero { margin: 0; }
+
+/* ---- one continuous movement: the wall moves away while the cream shop slides up over it ---- */
+html[data-look="behind"] #shelf { position: relative; z-index: 2; margin-top: -2.8rem; border-radius: 2.8rem 2.8rem 0 0; padding-top: clamp(3.4rem, 6vw, 5.2rem); box-shadow: 0 -18px 30px -24px rgba(0, 0, 0, .6); }
+.bh-line { position: absolute; left: calc(var(--gut) * -.55); top: -3.4rem; width: 2px; height: 8.6rem; background: var(--amber); border-radius: 2px; transform-origin: top; }
+.bh-line::after { content: ""; position: absolute; left: 50%; bottom: -.42rem; width: .85rem; height: 1.05rem; margin-left: -.425rem; background: var(--amber); border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%; }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    html[data-look="behind"] .bh-photo img { animation: bh-away linear both; animation-timeline: scroll(root); animation-range: 0 85svh; }
+    html[data-look="behind"] .bh-wash { animation: bh-dim linear both; animation-timeline: scroll(root); animation-range: 0 85svh; }
+    html[data-look="behind"] .bh-copy { animation: bh-drift linear both; animation-timeline: scroll(root); animation-range: 0 70svh; }
+    html[data-look="behind"] .bh-line { animation: bh-pour linear both; animation-timeline: view(); animation-range: entry 0% cover 40%; }
+  }
+}
+@keyframes bh-away { to { transform: translateY(12%) scale(1.06); } }
+@keyframes bh-dim { to { background-color: rgba(29, 15, 10, .55); } }
+@keyframes bh-drift { to { transform: translateY(-1.6rem); opacity: .55; } }
+@keyframes bh-pour { from { transform: scaleY(.12); } to { transform: scaleY(1); } }
+
+/* ---- Pick a shelf: three tactile shelf labels, each with a real photograph ---- */
+html[data-look="behind"] .tiles-sec .mono::before { content: none; }
+html[data-look="behind"] .tiles-sec .h2 em { color: #96590f; }
+html[data-look="behind"] .pour-window { position: absolute; inset: 0; z-index: 0; background: #1d0f0a; }
+.pour-window video { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; }
+html[data-look="behind"] .sh-item::before { z-index: 1; }
+html[data-look="behind"] .tiles-sec .bar { margin-top: 1.4rem; padding: 0; border-radius: 0; overflow: visible; background: none; box-shadow: none; }
+html[data-look="behind"] .bar .sh-label { width: auto; justify-self: start; padding: 0; background: none; }
+html[data-look="behind"] .bar .shelf-row { row-gap: .8rem; }
+html[data-look="behind"] .shelf-row { margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: .8rem; align-items: stretch; row-gap: .8rem; }
+html[data-look="behind"] .shelf-row > li:nth-child(-n+3) { grid-column: span 2; }
+html[data-look="behind"] .shelf-row > li:nth-child(n+4) { grid-column: span 3; }
+html[data-look="behind"] .sh-item { position: relative; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start; min-height: 16rem; height: 100%; padding: 1.1rem 1.2rem 1.25rem; border-radius: 1.7rem; overflow: hidden; text-align: left; color: var(--paper); background-color: #2b140d; background-size: cover; background-position: center; box-shadow: 0 .5rem 0 -.1rem var(--wood), 0 .9rem 1.1rem -.8rem rgba(33, 20, 14, .7); transition: transform .2s var(--ease), box-shadow .2s var(--ease); }
+html[data-look="behind"] .sh-item::before { content: ""; position: absolute; inset: 0; width: auto; height: auto; margin: 0; border-radius: 0; box-shadow: none; background: linear-gradient(0deg, rgba(29, 15, 10, .9) 0%, rgba(29, 15, 10, .35) 48%, rgba(29, 15, 10, 0) 72%); }
+html[data-look="behind"] .sh-item .art { display: none; }
+html[data-look="behind"] .sh-item .sh-label { position: relative; z-index: 2; order: 0; margin: 0; gap: .15rem; }
+html[data-look="behind"] .sh-item .sh-label b { font: 400 clamp(1.7rem, 2.6vw, 2.3rem)/1 var(--serif); letter-spacing: -.02em; color: var(--paper); }
+html[data-look="behind"] .sh-item .tile-n { font: 600 .92rem var(--ui); color: var(--amber-hi); }
+html[data-look="behind"] .sh-item[data-kind="beer"] { background-color: #1d0f0a; }
+html[data-look="behind"] .sh-item[data-kind="cider"] { background-image: url(/media/photos/fridges-wide-1200.webp); background-position: 50% 50%; }
+html[data-look="behind"] .sh-item[data-kind="wine"] { background-image: url(/media/photos/wine-corner-1200.webp); background-position: 50% 55%; }
+html[data-look="behind"] .sh-item[data-kind="events"], html[data-look="behind"] .sh-item[data-kind="subs"] { min-height: 5.4rem; justify-content: center; padding: .9rem 1.2rem 1.05rem; color: var(--ink); background: var(--cream-2); box-shadow: 0 .4rem 0 -.1rem var(--wood-hi); }
+html[data-look="behind"] .sh-item[data-kind="events"]::before, html[data-look="behind"] .sh-item[data-kind="subs"]::before { display: none; }
+html[data-look="behind"] .sh-item[data-kind="events"] .sh-label b, html[data-look="behind"] .sh-item[data-kind="subs"] .sh-label b { font: 600 1.25rem/1.15 var(--serif); color: var(--ink); }
+html[data-look="behind"] .sh-item[data-kind="events"] .tile-n, html[data-look="behind"] .sh-item[data-kind="subs"] .tile-n { color: #7a4d0c; }
+html[data-look="behind"] .sh-item[aria-expanded="true"] { box-shadow: 0 .5rem 0 -.1rem var(--amber), 0 .9rem 1.1rem -.8rem rgba(33, 20, 14, .7); }
+html[data-look="behind"] .sh-item[aria-expanded="true"] .sh-label b { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 6px; text-decoration-color: var(--amber); }
+html[data-look="behind"] .sh-item:active { transform: translateY(2px) scale(.99); transition-duration: .1s; }
+html[data-look="behind"] .sh-item:focus-visible { outline: 3px solid var(--amber-hi); outline-offset: 4px; border-radius: 1.7rem; }
+@media (hover: hover) and (pointer: fine) { html[data-look="behind"] .sh-item:hover { transform: translateY(-3px); } }
+html[data-look="behind"] .shelf-hint { margin-bottom: 1.4rem; }
+
+@media (max-width: 53.99rem) {
+  /* the phone gets its own composition: the wall framed on the numbered taps, the headline over its lower edge, Shop drinks in the first screen */
+  .bh-hero { min-height: 0; padding-bottom: 5.4rem; }
+  html[data-look="behind"] .bh-hero { display: block; }
+  .bh-photo { height: min(56svh, 30rem); bottom: auto; }
+  .bh-photo img { object-position: 72% 46%; }
+  .bh-wash { background: linear-gradient(180deg, rgba(29, 15, 10, .7) 0%, rgba(29, 15, 10, 0) 22%, rgba(29, 15, 10, .06) 50%, var(--mahogany) 100%); }
+  .bh-in { position: static; display: block; width: min(100% - 2 * var(--gut), 40rem); }
+  .bh-copy { padding: calc(min(56svh, 30rem) - 7.6rem) 0 0; gap: .9rem; }
+  .bh-h1 { font-size: clamp(2.9rem, 13.4vw, 4.4rem); }
+  .bh-sign { right: var(--gut); bottom: -3.2rem; width: 7.2rem; padding: .6rem .6rem .5rem; border-radius: 1.3rem; }
+  html[data-look="behind"] #shelf { margin-top: -2.2rem; border-radius: 2.2rem 2.2rem 0 0; }
+  html[data-look="behind"] .shelf-row > li:nth-child(1) { grid-column: span 6; }
+  html[data-look="behind"] .shelf-row > li:nth-child(2), html[data-look="behind"] .shelf-row > li:nth-child(3) { grid-column: span 3; }
+  html[data-look="behind"] .shelf-row > li:nth-child(n+4) { grid-column: span 3; }
+  html[data-look="behind"] .sh-item { min-height: 11.5rem; padding: .9rem 1rem 1.1rem; }
+  html[data-look="behind"] .shelf-row > li:nth-child(1) .sh-item { min-height: 12.5rem; }
+  html[data-look="behind"] .sh-item .sh-label b { font-size: 1.6rem; }
+  html[data-look="behind"] .sh-item[data-kind="events"], html[data-look="behind"] .sh-item[data-kind="subs"] { min-height: 5.6rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bh-sign { transition: none; }
+  html[data-look="behind"] .sh-item { transition: none; }
+}
+
+/* Find me a beer: the footer's ".find" styles (wood band, tall padding) were leaking into the beer finder. Tidy for every look. */
+details.find { padding: 0; min-height: 0; }
+details.find::before { content: none; }
+details.find > summary { min-height: 2.75rem; display: flex; align-items: center; gap: .5rem; padding: .4rem 1.2rem; cursor: pointer; }
+
+/* ---- Behind the Counter: after the dark opening the shop is warm and natural ---- */
+html[data-look="behind"] .taps { background: var(--cream-2); color: var(--ink); }
+html[data-look="behind"] .taps-bg { display: none; }
+html[data-look="behind"] .taps .mono { color: var(--amber-d); }
+html[data-look="behind"] .taps h2 em { color: #8a500d; }
+html[data-look="behind"] .taps .lede, html[data-look="behind"] .taps figcaption { color: var(--ink-2); }
+
+html[data-look="behind"] .deli { background: var(--forest); color: var(--paper); padding-block: clamp(4rem, 8vw, 7rem); }
+html[data-look="behind"] .deli .sec-bg { display: none; }
+html[data-look="behind"] .deli .wrap { display: grid; grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr); column-gap: clamp(2rem, 6vw, 6rem); align-items: start; }
+html[data-look="behind"] .deli .wrap::before { content: ""; grid-column: 1; grid-row: 1 / span 5; align-self: start; position: sticky; top: calc(var(--hdr) + 1.5rem); aspect-ratio: 4 / 5; border-radius: 999px 999px 1.8rem 1.8rem; background: #0d1d14 url(/media/photos/deli-counter-1200.webp) 40% 50% / cover no-repeat; box-shadow: 0 .5rem 0 -.1rem var(--forest-3); }
+html[data-look="behind"] .deli .wrap > * { grid-column: 2; }
+html[data-look="behind"] .deli .mono { color: var(--amber-hi); }
+html[data-look="behind"] .deli h2 em { color: var(--amber-hi); }
+html[data-look="behind"] .deli-list { display: block; margin-top: 1.6rem; }
+html[data-look="behind"] .deli-item { display: block; padding: .95rem 0; border: 0; border-bottom: 1px dotted rgba(248, 241, 223, .4); border-radius: 0; background: none; }
+html[data-look="behind"] .deli-item img, html[data-look="behind"] .deli-ph { display: none; }
+html[data-look="behind"] .deli-item > div { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .15rem 1rem; align-items: baseline; }
+html[data-look="behind"] .deli-item h3 { font: 400 clamp(1.35rem, 2vw, 1.7rem)/1.15 var(--serif); }
+html[data-look="behind"] .deli-price { font: 600 1.15rem var(--serif); color: var(--amber-hi); }
+html[data-look="behind"] .deli-with, html[data-look="behind"] .deli-item .deli-add { grid-column: 1 / -1; }
+html[data-look="behind"] .deli-item .deli-add { justify-self: start; margin-top: .4rem; }
+@media (max-width: 53.99rem) {
+  html[data-look="behind"] .deli .wrap { grid-template-columns: minmax(0, 1fr); }
+  html[data-look="behind"] .deli .wrap::before { grid-column: 1; grid-row: auto; position: relative; top: 0; aspect-ratio: 16 / 11; width: 100%; margin-bottom: 1.6rem; border-radius: 999px 999px 1.4rem 1.4rem / 70% 70% 1.4rem 1.4rem; }
+  html[data-look="behind"] .deli .wrap > * { grid-column: 1; }
+}
+html[data-look="behind"] .taps .keg { background: #fbe9bd; color: var(--ink); }
+html[data-look="behind"] .taps .keg p { color: var(--ink); }
+html[data-look="behind"] .taps-copy .lede, html[data-look="behind"] .taps .lede { background: none; color: var(--ink-2); padding: 0; border: 0; }

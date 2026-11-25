@@ -8,7 +8,8 @@ Add `?look=` to any preview link. It is remembered for the tab (sessionStorage).
 
 | Link ending | Look |
 |---|---|
-| `?look=original` (or none) | The current site, unchanged, with the opening animation |
+| none, or `?look=behind` | **Behind the Counter** (Rev 5 selected direction), see BEHIND-THE-COUNTER.md |
+| `?look=original` | The earlier site, unchanged, with the opening animation |
 | `?look=classic` | The original page and animations in Bodoni Moda (headings) and Lora (text) |
 | `?look=backbar` | Dark tap-wall hero, brass square buttons, Cormorant Garamond and Lora |
 | `?look=cinematic` | Four full-screen video scenes, grain and letterbox bars, then the shop |

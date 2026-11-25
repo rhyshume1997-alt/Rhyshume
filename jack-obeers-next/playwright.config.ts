@@ -14,8 +14,12 @@ export default defineConfig({
   reporter: "list",
   use: { baseURL: "http://localhost:3201", launchOptions: exe ? { executablePath: exe } : {} },
   projects: [
-    { name: "desktop", use: { browserName: "chromium", viewport: { width: 1366, height: 850 } } },
-    { name: "iphone", use: { ...iphone, browserName: "chromium" } },
+    // The live-mode build (SITE_INDEXABLE=true): the site as it will be when it is the real, searchable site.
+    { name: "desktop", testIgnore: /behind\.spec\.ts/, use: { browserName: "chromium", viewport: { width: 1366, height: 850 } } },
+    { name: "iphone", testIgnore: /behind\.spec\.ts/, use: { ...iphone, browserName: "chromium" } },
+    // The preview-mode build: Behind the Counter is the default look, with the other looks behind ?look=.
+    { name: "behind-desktop", testMatch: /behind\.spec\.ts/, use: { baseURL: "http://localhost:3202", browserName: "chromium", viewport: { width: 1440, height: 900 } } },
+    { name: "behind-iphone", testMatch: /behind\.spec\.ts/, use: { ...iphone, baseURL: "http://localhost:3202", browserName: "chromium" } },
   ],
   webServer: [
     { command: "node tests/fake-shopify.cjs", port: 4470, reuseExistingServer: true },
@@ -25,6 +29,14 @@ export default defineConfig({
       timeout: 300_000,
       reuseExistingServer: false,
       env: { SHOPIFY_STORE_DOMAIN: "shop.test", SHOPIFY_STOREFRONT_TOKEN: "x", SHOPIFY_API_BASE: "http://localhost:4470", SITE_INDEXABLE: "true", TURNSTILE_ALLOW_TEST_KEYS: "true" },
+    },
+    {
+      // Preview mode: SITE_INDEXABLE is NOT set, and the build goes in its own folder so it can sit beside the live-mode build.
+      command: "sh -c \"NEXT_DIST_DIR=.next-preview pnpm build && NEXT_DIST_DIR=.next-preview pnpm start -p 3202\"",
+      port: 3202,
+      timeout: 300_000,
+      reuseExistingServer: false,
+      env: { SHOPIFY_STORE_DOMAIN: "shop.test", SHOPIFY_STOREFRONT_TOKEN: "x", SHOPIFY_API_BASE: "http://localhost:4470", TURNSTILE_ALLOW_TEST_KEYS: "true" },
     },
   ],
 });

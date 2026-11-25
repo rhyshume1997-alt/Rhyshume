@@ -192,7 +192,7 @@ export function initRev5(P: any[], PAIR: Record<string, string> = {}): () => voi
     function onInput(e) { if (e.target && e.target.closest && e.target.closest('.open-skip')) return; endOpening(false); }
     function startOpening() {
       var seen = false; try { seen = sessionStorage.getItem('jo_opened') === '1'; } catch (e) {}
-      if (reduced || seen || scrollY > 40 || location.hash || (document.documentElement.dataset.look && document.documentElement.dataset.look !== 'classic')) return;
+      if (reduced || seen || scrollY > 40 || location.hash || (document.documentElement.dataset.look && document.documentElement.dataset.look !== 'classic' && document.documentElement.dataset.look !== 'original')) return;
       try { sessionStorage.setItem('jo_opened', '1'); } catch (e) {}
       playing = true; document.documentElement.classList.add('opening');
       INPUTS.forEach(function (t) { window.addEventListener(t, onInput, { capture: true, passive: true }); });
@@ -263,7 +263,9 @@ export function initRev5(P: any[], PAIR: Record<string, string> = {}): () => voi
     }
 
     /* the weighted bottle cursor: shelf only, mouse only, never over text or controls */
-    if (fine && !reduced) {
+    if (document.documentElement.dataset.look === 'behind') {
+      /* Behind the Counter uses real pour footage instead of the bottle cursor and the cartoon glass */
+    } else if (fine && !reduced) {
       var bot = document.createElement('div'); bot.className = 'cur'; bot.setAttribute('aria-hidden', 'true'); bot.innerHTML = '<img src="/media/bottle-amber.webp" alt="" width="225" height="720" draggable="false">'; document.body.appendChild(bot); offs.push(function () { bot.remove(); });
       var px = 0, py = 0, bx = 0, by_ = 0, rot = 0, vx = 0, want = false, rafc = 0, pose = null, inside = false, W = 54;
       var BAD = 'h1,h2,h3,h4,p,small,b,label,a,button,input,select,summary,.tag,.meta,.rows,.shelf-bar,.hint,.sample-chip,dialog';

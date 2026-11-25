@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 const LOOKS = [
+  { id: "behind", label: "Behind the Counter" },
   { id: "original", label: "Original" },
   { id: "classic", label: "Classic" },
   { id: "backbar", label: "Back bar" },
@@ -23,8 +24,8 @@ export function LookEffects() {
 
 /** The look switch, shown inside the preview drawer. It reloads the page on the chosen look and remembers it for the tab. */
 export function LookSwitch() {
-  const [look, setLook] = useState<string>("original");
-  useEffect(() => { setLook(document.documentElement.dataset.look || "original"); }, []);
+  const [look, setLook] = useState<string>("behind");
+  useEffect(() => { setLook(document.documentElement.dataset.look || "behind"); }, []);
   const pick = (id: string) => {
     try { sessionStorage.setItem("jo_look", id); } catch {}
     const u = new URL(location.href);
