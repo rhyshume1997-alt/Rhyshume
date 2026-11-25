@@ -30,7 +30,7 @@ export function ShelfArt({ kind }: { kind: Kind }) {
       <span className="art art-cider" aria-hidden="true">
         <Glass spec={CIDER} className="sh-glass" />
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="sh-bottle" src="/media/cider-bottle.svg" alt="" width={60} height={170} />
+        <img className="sh-bottle" src="/media/cider-bottle.webp" alt="" width={144} height={520} />
       </span>
     );
   }
@@ -39,35 +39,22 @@ export function ShelfArt({ kind }: { kind: Kind }) {
       <span className="art art-wine" aria-hidden="true">
         <Glass spec={WINE} className="sh-glass" />
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="sh-bottle" src="/media/wine-bottle.svg" alt="" width={60} height={170} />
+        <img className="sh-bottle" src="/media/wine-bottle.webp" alt="" width={133} height={520} />
       </span>
     );
   }
   if (kind === "events") {
     return (
       <span className="art art-tickets" aria-hidden="true">
-        <svg viewBox="0 0 140 110" focusable="false">
-          <g transform="rotate(-9 70 55)">
-            <path d="M14 26h112v16a8 8 0 0 0 0 16v16H14V58a8 8 0 0 0 0-16z" fill="#E8B23A" stroke="#2a1a10" strokeWidth="3" strokeLinejoin="round" />
-            <path d="M92 28v44" stroke="#2a1a10" strokeWidth="2.4" strokeDasharray="5 5" />
-            <path d="M52 40l5 11 12 1-9 8 3 12-11-6-11 6 3-12-9-8 12-1z" fill="#fff6dd" stroke="#2a1a10" strokeWidth="2" strokeLinejoin="round" />
-          </g>
-          <g transform="rotate(7 70 60) translate(10 22)">
-            <path d="M14 26h112v16a8 8 0 0 0 0 16v16H14V58a8 8 0 0 0 0-16z" fill="#D6455D" stroke="#2a1a10" strokeWidth="3" strokeLinejoin="round" />
-            <path d="M92 28v44" stroke="#2a1a10" strokeWidth="2.4" strokeDasharray="5 5" />
-          </g>
-        </svg>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className="sh-photo" src="/media/tickets.webp" alt="" width={520} height={350} />
       </span>
     );
   }
   return (
     <span className="art art-subs" aria-hidden="true">
-      <svg viewBox="0 0 140 110" focusable="false">
-        <rect x="14" y="20" width="112" height="72" rx="12" fill="#2c5a41" stroke="#2a1a10" strokeWidth="3" />
-        <rect x="14" y="38" width="112" height="14" fill="#1b3a2a" />
-        <circle cx="42" cy="72" r="11" fill="#F0B653" stroke="#2a1a10" strokeWidth="2.4" />
-        <path d="M64 68h42M64 78h28" stroke="#f8f1df" strokeWidth="4" strokeLinecap="round" />
-      </svg>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img className="sh-photo" src="/media/card.webp" alt="" width={520} height={343} />
     </span>
   );
 }
