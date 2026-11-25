@@ -83,7 +83,15 @@ export function initRev5(P: any[]): () => void {
     var oc = e.target.closest('[data-open-cart]'); if (oc) { e.preventDefault(); $('#cart').showModal(); }
     var cl = e.target.closest('[data-close]'); if (cl) { var d = cl.closest('dialog'); if (d) d.close(); }
   });
-  var ckb = $('#cart-ck'); if (ckb) ckb.addEventListener('click', function () { $('#cart').close(); $('#demo-ck').showModal(); });
+  var ckb = $('#cart-ck'); if (ckb) ckb.addEventListener('click', function () {
+    var off = function () { $('#cart').close(); $('#demo-ck').showModal(); };
+    if (cart.some(function (l) { var p = by(l.h); return !p || p.sample; })) { off(); return; }
+    ckb.disabled = true;
+    fetch('/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ lines: cart }) })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { ckb.disabled = !cart.length; if (j && j.ok && j.url) { location.href = j.url; } else { off(); } })
+      .catch(function () { ckb.disabled = !cart.length; off(); });
+  });
   $$('dialog[closedby="any"]').forEach(function (d) { if (!('closedBy' in HTMLDialogElement.prototype)) d.addEventListener('click', function (e) { if (e.target === d) { var r = d.getBoundingClientRect(); if (!(r.top <= e.clientY && e.clientY <= r.bottom && r.left <= e.clientX && e.clientX <= r.right)) d.close(); } }); });
   renderCart();
 
@@ -234,7 +242,7 @@ export function initRev5(P: any[]): () => void {
     document.title = p.title + ' | Jack O’Beers';
     pdp.innerHTML = '<div class="pdp-l">' + photo(p, 'pdp-photo') + '<div class="glass" style="--now:' + lvlOf(p) + '" aria-hidden="true">' + glass(p) + '</div></div><div style="display:grid;gap:1.1rem"><p class="mono">' + esc(SHELVES[p.collection]) + ' · ' + esc(p.productType) + (p.sample ? ' · sample product' : '') + '</p><h1 class="h2">' + esc(p.title) + '</h1><p class="lede">' + esc(p.descriptor) + ' ' + esc(p.blurb || '') + '</p>' + dials(p.flavour) +
       '<dl class="dl"><div><dt>Goes well with</dt><dd>' + (p.pairings || []).map(esc).join(', ') + '</dd></div><div><dt>ABV</dt><dd><span class="tbc">to be confirmed</span></dd></div><div><dt>Allergens</dt><dd><span class="tbc">to be verified from the label</span></dd></div></dl>' +
-      '<div class="row-act"><span class="price" style="font-size:1.6rem">' + money(price(p)) + (p.sample ? '<small>sample price</small>' : '') + '</span><div class="qty" role="group" aria-label="Quantity"><button type="button" id="qm" aria-label="Fewer">−</button><output id="qo" aria-live="polite">1</output><button type="button" id="qp" aria-label="More">+</button></div><button class="btn" id="addq" type="button">Add to basket</button></div><p class="note-s">Please drink responsibly. 18+ only. Checkout is not connected in this preview.</p><p><a class="btn ghost on-cream" href="/?c=' + esc(p.collection) + '#shelf" style="color:var(--ink)">← Back to the shelf</a></p></div>';
+      '<div class="row-act"><span class="price" style="font-size:1.6rem">' + money(price(p)) + (p.sample ? '<small>sample price</small>' : '') + '</span><div class="qty" role="group" aria-label="Quantity"><button type="button" id="qm" aria-label="Fewer">−</button><output id="qo" aria-live="polite">1</output><button type="button" id="qp" aria-label="More">+</button></div><button class="btn" id="addq" type="button">Add to basket</button></div><p class="note-s">Please drink responsibly. 18+ only.</p><p><a class="btn ghost on-cream" href="/?c=' + esc(p.collection) + '#shelf" style="color:var(--ink)">← Back to the shelf</a></p></div>';
     $('#qm').addEventListener('click', function () { qn = Math.max(1, qn - 1); $('#qo').textContent = qn; });
     $('#qp').addEventListener('click', function () { qn = Math.min(24, qn + 1); $('#qo').textContent = qn; });
     $('#addq').addEventListener('click', function () { add(p.handle, qn); });
