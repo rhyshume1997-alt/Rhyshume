@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { Frame } from "@/components/Frame";
 import { Behaviour } from "@/components/Behaviour";
 import { JsonLd } from "@/components/JsonLd";
 import { buyLink, checkoutOn, getCatalogue, safePairings } from "@/lib/catalogue";
@@ -47,7 +48,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
         </section>
         <section className="cream prod" style={{ background: "var(--cream)" }}>
           <div className="wrap prod-grid">
-            {p.image && <Image className="prod-img" src={p.image} alt={`${p.name}${p.brewery ? `, ${p.brewery}` : ""}`} width={640} height={640} sizes="(max-width: 52rem) 100vw, 40vw" priority />}
+            {p.image && <Frame className="prod-img"><Image src={p.image} alt={`${p.name}${p.brewery ? `, ${p.brewery}` : ""}`} width={640} height={640} sizes="(max-width: 52rem) 100vw, 40vw" priority /></Frame>}
             <div className="prod-body">
               <p className="prod-meta">
                 {p.abvNum !== null && <span>{p.abvNum}% ABV</span>}

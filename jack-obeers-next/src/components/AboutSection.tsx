@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Frame } from "@/components/Frame";
 import { Clip } from "@/components/Clip";
 import { Hours } from "@/components/Hours";
 import { PhotoStrip } from "@/components/PhotoStrip";
@@ -17,6 +18,20 @@ export function AboutSection() {
       <div className="wrap">
         <p className="mono">About</p>
         <h2 className="h2" id="ah-h">About us</h2>
+        <div className="about-media">
+          <figure className="about-vid">
+            <Frame>
+              <Clip width={1280} height={720} src={MEDIA.michael.src} poster={MEDIA.michael.poster} label="Michael welcomes you to Jack O’Beers. The words are written below." />
+            </Frame>
+            <figcaption>Michael welcomes you to the shop</figcaption>
+          </figure>
+          <figure className="about-people">
+            <Frame>
+              <Image src={MICHAEL_AND_TANYA.file} alt={MICHAEL_AND_TANYA.alt} width={MICHAEL_AND_TANYA.width} height={MICHAEL_AND_TANYA.height} sizes="(max-width: 52rem) 100vw, 36vw" />
+            </Frame>
+            <figcaption>Michael and Tanya, who run Jack O’Beers and Deli</figcaption>
+          </figure>
+        </div>
         <div className="about-home-grid">
           <div className="about-copy">
             <p className="lede">Hello, welcome to Jack O&rsquo;Beers. My name&rsquo;s Michael Blakely, and my wife and I run Jack O&rsquo;Beers.</p>
@@ -27,16 +42,10 @@ export function AboutSection() {
             <p>We look forward to seeing you at Jack O&rsquo;Beers soon.</p>
           </div>
           <div className="about-side">
-            <Image className="about-photo" src={MICHAEL_AND_TANYA.file} alt={MICHAEL_AND_TANYA.alt} width={MICHAEL_AND_TANYA.width} height={MICHAEL_AND_TANYA.height} sizes="(max-width: 52rem) 100vw, 36vw" />
             <Hours />
             <span className="jack-cheer" role="img" aria-label="Jack the bull, smiling" />
           </div>
         </div>
-        {MEDIA.michael && (
-          <div className="about-video">
-            <Clip width={1920} height={1080} src={MEDIA.michael.src} poster={MEDIA.michael.poster} label="Michael welcomes you to Jack O’Beers. The words are written above." />
-          </div>
-        )}
         <PhotoStrip />
       </div>
     </section>

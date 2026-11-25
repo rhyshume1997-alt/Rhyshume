@@ -23,7 +23,7 @@ export async function CategoryPage({ category, eyebrow, heading, noun }: { categ
         </section>
         <section className="cream pg-sec" style={{ background: "var(--cream)" }}>
           <div className="wrap pg-wrap">
-            {cards.length === 0 ? <p className="lede">Nothing here yet.</p> : <ProductGrid cards={cards} chips={chips} checkoutOn={checkoutOn()} noun={noun} intro={category === "beer" ? <KegBlurb /> : undefined} />}
+            {cards.length === 0 ? <p className="lede">Nothing here yet.</p> : <ProductGrid cards={cards} chips={chips} checkoutOn={checkoutOn()} noun={noun} intro={category === "beer" ? <KegBlurb /> : undefined} segmented={category === "beer"} />}
           </div>
         </section>
       </main>

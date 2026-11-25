@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Frame } from "@/components/Frame";
 import { Behaviour } from "@/components/Behaviour";
 import { BgVideo } from "@/components/BgVideo";
 import { Hours } from "@/components/Hours";
@@ -43,7 +44,7 @@ export default async function Page() {
               <p>See <a href="/faq">questions and answers</a>, <a href="/beers">the beer range</a>, or <a href="https://www.google.com/maps/search/?api=1&query=Jack+O'Beers+%26+Deli,+13+Station+Road,+Milngavie,+G62+8PG" target="_blank" rel="noopener noreferrer">get directions<span className="vh"> (opens Google Maps)</span></a>.</p>
               <p className="note-s">18+ only, please drink responsibly.</p>
             </div>
-            <Image className="walk-photo" src="/media/photos/window-walkers-welcome-1200.webp" alt="The 'Walkers Welcome' window with the Jack O'Beers bull" width={1200} height={1200} sizes="(max-width: 52rem) 100vw, 40vw" />
+            <Frame className="walk-photo"><Image src="/media/photos/window-walkers-welcome-1200.webp" alt="The 'Walkers Welcome' window with the Jack O'Beers bull" width={1200} height={1200} sizes="(max-width: 52rem) 100vw, 40vw" /></Frame>
           </div>
         </section>
       </main>

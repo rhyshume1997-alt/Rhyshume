@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Frame } from "@/components/Frame";
 import { BgVideo } from "@/components/BgVideo";
 import { MEDIA } from "@/lib/media";
 import { DELI_CABINET, DELI_COUNTER } from "@/lib/photos";
@@ -46,7 +47,7 @@ export function DeliSection({ products }: { products: Product[] }) {
         </ul>
         <ul className="deli-photos" aria-label="Photos of the deli">
           {[DELI_COUNTER, DELI_CABINET].map((p) => (
-            <li key={p.file}><Image src={p.file} alt={p.alt} width={p.width} height={p.height} sizes="(max-width: 40rem) 100vw, 50vw" /></li>
+            <li key={p.file}><Frame><Image src={p.file} alt={p.alt} width={p.width} height={p.height} sizes="(max-width: 40rem) 100vw, 50vw" /></Frame></li>
           ))}
         </ul>
         <p className="hint deli-hint">

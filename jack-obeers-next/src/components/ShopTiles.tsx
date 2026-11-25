@@ -79,6 +79,7 @@ export function ShopTiles({ ranges, events, subs, checkoutOn }: { ranges: Record
                 checkoutOn={checkoutOn}
                 noun={cur.unit}
                 intro={cur.key === "beer" ? <KegBlurb /> : undefined}
+                segmented={cur.key === "beer"}
               />
             </>
           )}

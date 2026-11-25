@@ -141,7 +141,14 @@ export function initRev5(P: any[]): () => void {
       var f = Math.max(0, 1 - pt * 3);
       copy.style.opacity = f; copy.style.transform = 'translateY(' + (-pt * 60) + 'px)'; if (cue) cue.style.opacity = f; if (note) note.style.opacity = f; if (tag) tag.style.opacity = 1;
       counter.style.transform = 'translateY(' + (Math.max(0, pt - .55) / .45 * 105) + '%)';
-      arch.style.setProperty('--pt', pt); var drs = $('.doors'); if (drs) drs.style.visibility = pt > .42 ? 'hidden' : 'visible'; var jk = $('.jack-charge'); if (jk) jk.style.backgroundPosition = (Math.round(Math.min(1, pt / .28) * 11) / 11 * 100) + '% 0'; if (enter && !reduced && pt > .02 && enter.paused) { var q2 = enter.play(); if (q2 && q2.catch) q2.catch(function () {}); }
+      arch.style.setProperty('--pt', pt);
+      /* The doors and Jack move with transforms only (never left, top, width or height), so scrolling the opening cannot cause layout shift. */
+      var AW = arch.clientWidth, AH = arch.clientHeight, L0 = s.l / 100 * AW, R0 = s.r / 100 * AW, T0 = s.t / 100 * AH, B0 = s.b / 100 * AH;
+      var Lc = lerp(s.l, 0, e) / 100 * AW, Rc = lerp(s.r, 0, e) / 100 * AW, Tc = lerp(s.t, 0, e) / 100 * AH, Bc = lerp(s.b, 0, e) / 100 * AH;
+      arch.style.setProperty('--l0', s.l + '%'); arch.style.setProperty('--r0', s.r + '%'); arch.style.setProperty('--t0', s.t + '%'); arch.style.setProperty('--b0', s.b + '%');
+      arch.style.setProperty('--sc', (AH - Tc - Bc) / (AH - T0 - B0));
+      arch.style.setProperty('--dlx', (Lc - L0) + 'px'); arch.style.setProperty('--drx', (R0 - Rc) + 'px'); arch.style.setProperty('--dy', (B0 - Bc) + 'px');
+      arch.style.setProperty('--ldx', (((Lc - Rc) - (L0 - R0)) / 2) + 'px'); arch.style.setProperty('--ldy', (B0 - Bc) + 'px'); arch.style.setProperty('--pox', ((Lc + AW - Rc) / 2) + 'px'); var drs = $('.doors'); if (drs) drs.style.visibility = pt > .42 ? 'hidden' : 'visible'; var jk = $('.jack-charge'); if (jk) jk.style.backgroundPosition = (Math.round(Math.min(1, pt / .28) * 11) / 11 * 100) + '% 0'; if (enter && !reduced && pt > .02 && enter.paused) { var q2 = enter.play(); if (q2 && q2.catch) q2.catch(function () {}); }
       if (!medal) return;
       var run = Math.min(1, pt / .5), ex = innerWidth * (mob() ? .55 : .55) * ease(run);
       medal.style.translate = ex + 'px ' + (-Math.sin(run * Math.PI) * 8) + 'px'; medal.style.opacity = Math.max(0, 1 - Math.max(0, pt - .38) / .22);

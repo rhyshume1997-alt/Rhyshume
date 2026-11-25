@@ -4,6 +4,7 @@ import { pageMeta } from "@/lib/seo";
 import { Behaviour } from "@/components/Behaviour";
 import { getCatalogue } from "@/lib/catalogue";
 import { getPublicEvents } from "@/lib/events-store";
+import { Frame } from "@/components/Frame";
 import { Clip } from "@/components/Clip";
 import { MEDIA } from "@/lib/media";
 import { SHOP } from "@/lib/brand";
@@ -62,7 +63,7 @@ export default async function Page() {
                 <h2 className="h3">Jack O&rsquo;Beers at Ilkley Brewery</h2>
                 <p>We supplied the bar for 1,500 people at an England match screening at Ilkley Brewery, Yorkshire.</p>
               </div>
-              <Clip className="ilkley-video" width={1080} height={1920} src={MEDIA.events.src} poster={MEDIA.events.poster} label="Video from the England match screening at Ilkley Brewery, Yorkshire, where Jack O’Beers supplied the bar for 1,500 people." />
+              <Frame className="ilkley-frame"><Clip className="ilkley-video" width={720} height={1280} src={MEDIA.events.src} poster={MEDIA.events.poster} label="Video from the England match screening at Ilkley Brewery, Yorkshire, where Jack O’Beers supplied the bar for 1,500 people." /></Frame>
             </div>
             <div className="enquiry">
               <div>

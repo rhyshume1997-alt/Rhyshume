@@ -11,7 +11,7 @@
 set -euo pipefail
 : "${BLOB_READ_WRITE_TOKEN:?set BLOB_READ_WRITE_TOKEN first}"
 : "${MEDIA_DIR:?set MEDIA_DIR to your jack-obeers-media folder}"
-for f in events-ilkley-brewery-tall michael-welcome; do
+for f in landing-wide landing-tall; do
   file="$MEDIA_DIR/videos/$f.mp4"
   [ -f "$file" ] || { echo "skip $f (not found)"; continue; }
   npx --yes vercel@latest blob put "$file" --pathname "videos/$f.mp4" --rw-token "$BLOB_READ_WRITE_TOKEN" --content-type video/mp4 --allow-overwrite

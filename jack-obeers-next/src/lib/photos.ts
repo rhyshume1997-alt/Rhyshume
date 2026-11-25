@@ -10,4 +10,4 @@ export const INTERIOR_COUNTER_BULBS: Photo = { file: "/media/photos/interior-cou
 export const TAP_WALL_WIDE: Photo = { file: "/media/photos/tap-wall-wide-1200.webp", alt: "The wall of 23 taps", width: 1200, height: 900 };
 export const DELI_COUNTER: Photo = { file: "/media/photos/deli-counter-1200.webp", alt: "The deli counter: pies, cheese and charcuterie", width: 1200, height: 900 };
 export const DELI_CABINET: Photo = { file: "/media/photos/deli-cabinet-1200.webp", alt: "The deli cabinet", width: 1200, height: 900 };
-export const TAP_WALL_FULL = "/media/photos/tap-wall-wide-2400.webp";
+export const TAP_WALL_FULL: Photo = { file: "/media/photos/tap-wall-wide-2400.webp", alt: "The wall of 23 taps", width: 2400, height: 1800 };

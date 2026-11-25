@@ -1,8 +1,8 @@
 /**
  * Where the site's video and poster files are.
  *
- * Small clips live in public/media (git). The big ones (the Ilkley Brewery video, Michael's
- * welcome) are hosted on Vercel Blob, in the store "jack-obeers-media". They are switched on with BLOB_LIVE once the
+ * Small clips live in public/media (git). The big ones (the full-quality landing loops
+ * are hosted on Vercel Blob, in the store "jack-obeers-media". They are switched on with BLOB_LIVE once the
  * files have been uploaded (scripts/upload-blob-media.sh). Until then those places show their poster picture only.
  * Both values can also be set with NEXT_PUBLIC_BLOB_BASE and NEXT_PUBLIC_BLOB_LIVE ("true").
  *
@@ -25,10 +25,10 @@ export const MEDIA = {
   takeaway: { wide: local("takeaway-refill-wide"), tall: null, posterWide: poster("takeaway-refill-wide"), posterTall: null },
   pour: { wide: local("pour-wide"), tall: null, posterWide: poster("pour-wide"), posterTall: null },
   settling: { wide: local("beer-settling-wide"), tall: null, posterWide: poster("beer-settling-wide"), posterTall: null },
-  /** Has sound: shown with controls, never autoplays. */
-  events: { src: blob("videos/events-ilkley-brewery-tall.mp4"), poster: poster("events-ilkley-brewery-tall") },
-  /** Michael's welcome (28 MB, has sound, so it lives on Blob). Poster only until it is uploaded. */
-  michael: { src: blob("videos/michael-welcome.mp4"), poster: poster("michael-welcome") } as { src: string | null; poster: string },
+  /** Has sound: shown with controls, never autoplays. A 720p web copy (7.0 MB) in git. */
+  events: { src: local("events-ilkley-brewery-tall-720p"), poster: poster("events-ilkley-brewery-tall") },
+  /** Michael's welcome. A 720p web copy (8.5 MB, has sound) in git. The full 30 MB original is in the media repo. */
+  michael: { src: local("michael-welcome-720p"), poster: poster("michael-welcome") } as { src: string | null; poster: string },
   /** Walking in through the door. A background on the walkers page. */
   walkIn: { wide: local("walk-in-wide"), tall: local("walk-in-tall"), posterWide: poster("walk-in-wide"), posterTall: poster("walk-in-tall") },
 };

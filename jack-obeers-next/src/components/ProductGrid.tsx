@@ -5,7 +5,10 @@ import { Glass } from "@/components/Glass";
 import type { Card } from "@/lib/cards";
 
 /** The whole range on one screen. The chips filter in place, no page reload. Each card goes to Shopify checkout in one click. */
-export function ProductGrid({ cards, chips, checkoutOn, noun, intro }: { cards: Card[]; chips: string[]; checkoutOn: boolean; noun: string; intro?: React.ReactNode }) {
+/** The styles in the segmented filter on the beer range. Cider and wine are their own ranges, so those two are links. */
+const SEGMENT_STYLES = ["Lager", "Pale Ale", "IPA", "Stout", "Sour"];
+
+export function ProductGrid({ cards, chips, checkoutOn, noun, intro, segmented = false }: { cards: Card[]; chips: string[]; checkoutOn: boolean; noun: string; intro?: React.ReactNode; segmented?: boolean }) {
   const [active, setActive] = useState<string>("All");
   const [open, setOpen] = useState<string | null>(null);
   const [tapped, setTapped] = useState<string | null>(null);
@@ -17,7 +20,18 @@ export function ProductGrid({ cards, chips, checkoutOn, noun, intro }: { cards: 
   return (
     <div className="pg">
       {intro}
-      {chips.length > 0 && (
+      {segmented && (
+        <div className="seg" role="group" aria-label={`Filter the ${noun} by style`}>
+          {["All", ...SEGMENT_STYLES.filter((s) => chips.some((c) => c.toLowerCase() === s.toLowerCase()))].map((c) => (
+            <button key={c} type="button" className="seg-btn" aria-pressed={active === c} onClick={() => { setActive(c); setOpen(null); }}>
+              {c}
+            </button>
+          ))}
+          <a className="seg-btn seg-link" href="/ciders">Cider</a>
+          <a className="seg-btn seg-link" href="/wines">Wine</a>
+        </div>
+      )}
+      {!segmented && chips.length > 0 && (
         <div className="pg-chips" role="group" aria-label={`Filter the ${noun} by style`}>
           {all.map((c) => (
             <button key={c} type="button" className="pg-chip" aria-pressed={active === c} onClick={() => { setActive(c); setOpen(null); }}>
