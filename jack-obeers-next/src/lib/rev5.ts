@@ -88,6 +88,11 @@ export function initRev5(P: any[]): () => void {
     var note = left > 0 ? 'UK delivery is ' + money(SHIPPING.standard) + ' under ' + money(SHIPPING.freeFrom) + '.' : 'UK delivery is free from ' + money(SHIPPING.freeFrom) + '.';
     return '<div class="fd" style="--fill:' + fill.toFixed(3) + '"><svg class="fd-bottle" viewBox="0 0 60 170" width="36" height="102" aria-hidden="true" focusable="false"><defs><clipPath id="fdc"><path d="M24 10h12v38c0 8 14 14 14 32v76c0 4-3 6-6 6H16c-3 0-6-2-6-6V80c0-18 14-24 14-32z"/></clipPath></defs><g clip-path="url(#fdc)"><rect class="fd-liq" x="0" y="10" width="60" height="150" fill="#E0A030"/></g><path d="M24 10h12v38c0 8 14 14 14 32v76c0 4-3 6-6 6H16c-3 0-6-2-6-6V80c0-18 14-24 14-32z" fill="none" stroke="#2a1a10" stroke-width="3" stroke-linejoin="round"/><rect x="22" y="3" width="16" height="10" rx="3" fill="#B98A3E" stroke="#2a1a10" stroke-width="2.4"/></svg><div><p class="fd-msg" role="status">' + msg + '</p><p class="fd-note">' + note + '</p></div></div>';
   }
+  /* a small spark on the button that was pressed: 150 ms, ease-out. With reduced motion it is a still ring for a moment. */
+  function spark(btn) {
+    btn.classList.remove('sparked'); void btn.offsetWidth; btn.classList.add('sparked');
+    setTimeout(function () { btn.classList.remove('sparked'); }, reduced ? 500 : 220);
+  }
   function renderCart() {
     $$('[data-count]').forEach(function (n) { n.textContent = count(); });
     var b = $('#cart-body'); if (!b) return;
@@ -97,7 +102,7 @@ export function initRev5(P: any[]): () => void {
   }
   on(document, 'click', function (e) {
     var rm = e.target.closest('[data-rm]'); if (rm) { cart = cart.filter(function (l) { return l.h !== rm.dataset.rm; }); saveCart(); }
-    var a = e.target.closest('[data-add]'); if (a) add(a.dataset.add, +(a.dataset.q || 1));
+    var a = e.target.closest('[data-add]'); if (a) { add(a.dataset.add, +(a.dataset.q || 1)); spark(a); }
     var oc = e.target.closest('[data-open-cart]'); if (oc) { e.preventDefault(); $('#cart').showModal(); }
     var cl = e.target.closest('[data-close]'); if (cl) { var d = cl.closest('dialog'); if (d) d.close(); }
   });

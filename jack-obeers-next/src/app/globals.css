@@ -1018,3 +1018,15 @@ html.loaded .jack-cheer { background-image: url(/media/jack-cheer.webp); }
 .taps-fig { position: relative; }
 .seal { position: absolute; z-index: 3; width: clamp(6.5rem, 14vw, 9rem); height: auto; top: calc(-1 * clamp(2.2rem, 5vw, 3.4rem)); right: calc(-1 * clamp(.4rem, 1.5vw, 1.2rem)); filter: none; }
 @media (max-width: 52rem) { .seal { width: 6rem; top: -2.6rem; right: .4rem; } }
+
+
+/* ---- conversion 9: a small spark when something is added to the basket ---- */
+[data-add] { position: relative; }
+[data-add].sparked::after { content: ""; position: absolute; inset: -.5rem; border-radius: 99px; pointer-events: none; animation: spark .15s ease-out both;
+  background:
+    radial-gradient(circle at 8% 22%, #f0b653 0 .16rem, transparent .2rem), radial-gradient(circle at 24% 0%, #d9992b 0 .14rem, transparent .18rem),
+    radial-gradient(circle at 50% -4%, #f0b653 0 .17rem, transparent .21rem), radial-gradient(circle at 76% 0%, #d9992b 0 .14rem, transparent .18rem),
+    radial-gradient(circle at 93% 24%, #f0b653 0 .16rem, transparent .2rem), radial-gradient(circle at 96% 78%, #d9992b 0 .13rem, transparent .17rem),
+    radial-gradient(circle at 4% 80%, #d9992b 0 .13rem, transparent .17rem); }
+@keyframes spark { from { opacity: 1; transform: scale(.95); } to { opacity: 0; transform: scale(1.18); } }
+@media (prefers-reduced-motion: reduce) { [data-add].sparked::after { animation: none; opacity: 1; background: none; border: 2px solid #d9992b; inset: -.3rem; } }
