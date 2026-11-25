@@ -1,8 +1,70 @@
 [
-  {"match":"RASPBERRY SOUR","brewery":"Vault City","style":"Fruited sour","blurb":"Fresh raspberries up front in a refreshing sour, tart and sweet in equal measure.","flavour":["raspberry","tart","sweet"]},
-  {"match":"IRON BREW SOUR","brewery":"Vault City","style":"Sour","blurb":"Scotland's favourite soft drink turned into a sour beer.","flavour":["bubblegum","orange soda","citrus"]},
-  {"match":"BLOSSOM","brewery":"Otherworld","style":"NEIPA","blurb":"A full bodied hazy IPA with jasmine blossom, floral hops and juicy pineapple.","flavour":["jasmine","pineapple","vanilla","stone fruit","lime"]},
-  {"match":"JOSHUA JANE","brewery":"Ilkley","style":"Bitter","blurb":"A traditional Yorkshire bitter, nut brown with soft caramel and a little American hop character.","flavour":["caramel","nutty","hoppy"]},
-  {"match":"THESE STREETS","brewery":"Two Towns Down","style":"Pale ale","blurb":"Light, crisp, easy drinking pale ale from Paisley, fresh and citrusy.","flavour":["citrus","crisp","light"]},
-  {"match":"EKSTRA PREMIUM LAGER","brewery":"Svyturys","style":"Lager","blurb":"Lithuania's best known beer, a clean malty export lager with a dry, gently bitter finish.","flavour":["honey","toasted bread","dry finish"]}
+  {
+    "match": "RASPBERRY SOUR",
+    "brewery": "Vault City",
+    "style": "Fruited sour",
+    "blurb": "Raspberry front and centre. Tart and sweet in equal measure.",
+    "flavour": [
+      "raspberry",
+      "tart",
+      "sweet"
+    ]
+  },
+  {
+    "match": "IRON BREW SOUR",
+    "brewery": "Vault City",
+    "style": "Sour",
+    "blurb": "Scotland's favourite soft drink, made into a sour beer.",
+    "flavour": [
+      "bubblegum",
+      "orange soda",
+      "citrus"
+    ]
+  },
+  {
+    "match": "BLOSSOM",
+    "brewery": "Otherworld",
+    "style": "NEIPA",
+    "blurb": "Hazy and full bodied, with jasmine blossom and juicy pineapple.",
+    "flavour": [
+      "jasmine",
+      "pineapple",
+      "vanilla",
+      "stone fruit",
+      "lime"
+    ]
+  },
+  {
+    "match": "JOSHUA JANE",
+    "brewery": "Ilkley",
+    "style": "Bitter",
+    "blurb": "A traditional Yorkshire bitter. Nut brown, soft caramel, a bit of hop character.",
+    "flavour": [
+      "caramel",
+      "nutty",
+      "hoppy"
+    ]
+  },
+  {
+    "match": "THESE STREETS",
+    "brewery": "Two Towns Down",
+    "style": "Pale ale",
+    "blurb": "Light, crisp pale ale from Paisley. Fresh and citrusy.",
+    "flavour": [
+      "citrus",
+      "crisp",
+      "light"
+    ]
+  },
+  {
+    "match": "EKSTRA PREMIUM LAGER",
+    "brewery": "Svyturys",
+    "style": "Lager",
+    "blurb": "Lithuania's best known beer. Clean, malty, dry finish.",
+    "flavour": [
+      "honey",
+      "toasted bread",
+      "dry finish"
+    ]
+  }
 ]
