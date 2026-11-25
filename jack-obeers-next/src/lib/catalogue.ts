@@ -450,3 +450,47 @@ export function newIn(all: Product[], category: Category, now: number = Date.now
     .sort((a, b) => Date.parse(b.createdAt as string) - Date.parse(a.createdAt as string))
     .slice(0, 6);
 }
+
+
+/**
+ * Basket pairing: for a beer or cider in the basket, one deli item that goes with it. The match uses the deli names in the
+ * beer's profile pairings (src/data/profiles.json) and only real, in-stock deli products from Shopify. No match, no entry.
+ */
+export function pairingMap(all: Product[]): Record<string, string> {
+  const deli = all.filter((p) => p.category === "deli" && p.variants.some((v) => v.available));
+  const out: Record<string, string> = {};
+  for (const p of all) {
+    if (p.category !== "beer" && p.category !== "cider") continue;
+    for (const n of safePairings(p.profile)) {
+      const key = n.toLowerCase();
+      const hit = deli.find((d) => d.title.toLowerCase().includes(key) || key.includes(d.name.toLowerCase()));
+      if (hit) { out[p.handle] = hit.handle; break; }
+    }
+  }
+  return out;
+}
+
+/**
+ * Best sellers: Shopify's own best-selling sort (Storefront API, sortKey BEST_SELLING). The Storefront API only returns active,
+ * published products. We keep the ones that are in stock and can go in the basket, at most 6. No Shopify, no list.
+ */
+export async function getBestSellers(all: Product[], max = 6): Promise<Product[]> {
+  const domain = process.env.SHOPIFY_STORE_DOMAIN;
+  const token = process.env.SHOPIFY_STOREFRONT_TOKEN;
+  if (!domain || !token) return [];
+  try {
+    const res = await fetch(endpoint(domain), {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Shopify-Storefront-Access-Token": token },
+      body: JSON.stringify({ query: "query Best { products(first: 24, sortKey: BEST_SELLING) { nodes { handle } } }" }),
+      next: { revalidate: 600 },
+    });
+    if (!res.ok) return [];
+    const json = (await res.json()) as { errors?: unknown; data?: { products: { nodes: { handle: string }[] } } };
+    if (json.errors || !json.data) return [];
+    const byHandle = new Map(forBasket(all).map((p) => [p.handle, p]));
+    return json.data.products.nodes.map((n) => byHandle.get(n.handle)).filter((p): p is Product => !!p && !p.sample && p.variants.some((v) => v.available)).slice(0, max);
+  } catch {
+    return [];
+  }
+}

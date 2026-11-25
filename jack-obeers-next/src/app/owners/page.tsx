@@ -1,4 +1,4 @@
-import { Behaviour } from "@/components/Behaviour";
+import { BasketBehaviour } from "@/components/BasketBehaviour";
 import { getCatalogue } from "@/lib/catalogue";
 import { authStatus, getOwner } from "@/lib/auth";
 import { eventsBackend, listOwnerEvents } from "@/lib/events-store";
@@ -82,7 +82,7 @@ export default async function Page() {
           </div>
         </section>
       </main>
-      <Behaviour products={catalogue.products} solid={true} />
+      <BasketBehaviour solid={true} />
     </>
   );
 }

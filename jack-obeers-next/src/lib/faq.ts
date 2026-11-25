@@ -2,7 +2,7 @@ import { ADDRESS_LINE, PHONE } from "@/lib/site";
 
 /**
  * Plain answers for people and for AI answer engines. Short, one fact each, in Michael's plain tone.
- * `confirm` is shown on the page as "[Michael to confirm]" and is not part of the structured data.
+ * `confirm` marks answers Michael still needs to confirm. They are listed in MICHAEL-NEEDS.md and are not shown on the page.
  */
 export type Faq = { q: string; a: string; confirm?: boolean };
 
@@ -19,7 +19,7 @@ export const FAQ: Faq[] = [
   { q: "Do you sell wine and cider?", a: "Yes, both, and frizzante. Our wines include Georgian wines such as Tsinandali and Saperavi. Cider is on the taps and in the fridge." },
   {
     q: "What deli food do you sell?",
-    a: "Pork pies, salami beer sticks, cheeses, oatcakes, chutneys and chilli jams. You can also sit in to try our soups, dumplings and pies, with charcuterie.",
+    a: "Pork pies, salami beer sticks, cheeses, oatcakes, chutneys, chilli jams and popcorn at £3.50. You can also sit in to try our soups, dumplings and pies, with charcuterie.",
   },
   {
     q: "Can I order online?",

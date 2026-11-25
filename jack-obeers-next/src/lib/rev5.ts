@@ -4,13 +4,13 @@
 /* Jack O'Beers Rev 5: shared behaviour. Header, basket, toast, reveals, the opening, the shelf with its beer-bottle cursor, the label panel. */
 import { SHIPPING } from "@/lib/shipping";
 
-export function initRev5(P: any[]): () => void {
+export function initRev5(P: any[], PAIR: Record<string, string> = {}): () => void {
   const offs: Array<() => void> = [];
   const on = (t: any, type: string, fn: any, o?: any) => { t.addEventListener(type, fn, o); offs.push(() => t.removeEventListener(type, fn, o)); };
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
-  document.documentElement.classList.add('js');
+  document.documentElement.classList.add('js'); document.documentElement.dataset.rev5 = '1';
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
   var money = function (n) { return '£' + Number(n).toFixed(2); };
@@ -93,11 +93,22 @@ export function initRev5(P: any[]): () => void {
     btn.classList.remove('sparked'); void btn.offsetWidth; btn.classList.add('sparked');
     setTimeout(function () { btn.classList.remove('sparked'); }, reduced ? 500 : 220);
   }
+  /* one deli item that goes with a beer or cider in the basket (map built on the server from real Shopify products) */
+  function pairing() {
+    for (var i = 0; i < cart.length; i++) {
+      var dh = PAIR[cart[i].h];
+      if (dh && !cart.some(function (l) { return l.h === dh; })) {
+        var d = by(dh), b = by(cart[i].h);
+        if (d && b) return '<div class="pair"><div><p class="pair-msg">Goes well with your ' + esc(b.name || b.title) + '</p><p class="pair-item"><b>' + esc(d.name || d.title) + '</b> ' + money(price(d)) + '</p></div><button type="button" class="pg-btn soft" data-add="' + esc(dh) + '">Add<span class="vh"> ' + esc(d.name || d.title) + '</span></button></div>';
+      }
+    }
+    return '';
+  }
   function renderCart() {
     $$('[data-count]').forEach(function (n) { n.textContent = count(); });
     var b = $('#cart-body'); if (!b) return;
     var tot = 0;
-    b.innerHTML = cart.length ? '<ul>' + cart.map(function (l) { var p = by(l.h); if (!p) return ''; tot += price(p) * l.q; return '<li style="display:flex;justify-content:space-between;gap:1rem;padding:.6rem 0;border-bottom:1px solid var(--line)"><span><b>' + esc(p.title) + '</b> × ' + l.q + '<br><button class="rm" data-rm="' + esc(l.h) + '" style="background:none;border:0;text-decoration:underline;min-height:2.75rem;padding:0">Remove</button></span><span class="price">' + money(price(p) * l.q) + '</span></li>'; }).join('') + '</ul><p class="price" style="margin-top:1rem;display:flex;justify-content:space-between"><span>Subtotal' + (cart.some(function (l) { var q = by(l.h); return q && q.sample; }) ? ' (sample prices)' : '') + '</span><span>' + money(tot) + '</span></p>' + freeDelivery(tot) : '<p>Your basket is empty. Find something good on the shelf.</p>';
+    b.innerHTML = cart.length ? '<ul>' + cart.map(function (l) { var p = by(l.h); if (!p) return ''; tot += price(p) * l.q; return '<li style="display:flex;justify-content:space-between;gap:1rem;padding:.6rem 0;border-bottom:1px solid var(--line)"><span><b>' + esc(p.title) + '</b> × ' + l.q + '<br><button class="rm" data-rm="' + esc(l.h) + '" style="background:none;border:0;text-decoration:underline;min-height:2.75rem;padding:0">Remove</button></span><span class="price">' + money(price(p) * l.q) + '</span></li>'; }).join('') + '</ul><p class="price" style="margin-top:1rem;display:flex;justify-content:space-between"><span>Subtotal' + (cart.some(function (l) { var q = by(l.h); return q && q.sample; }) ? ' (sample prices)' : '') + '</span><span>' + money(tot) + '</span></p>' + pairing() + freeDelivery(tot) : '<p>Your basket is empty. Find something good on the shelf.</p>';
     var ck = $('#cart-ck'); if (ck) ck.disabled = !cart.length || !ageOk() || !minOk(); minNote();
   }
   on(document, 'click', function (e) {
@@ -303,8 +314,6 @@ export function initRev5(P: any[]): () => void {
     $('#addq').addEventListener('click', function () { add(p.handle, qn); });
   }
 
-  /* placeholder links */
-  $$('[data-placeholder]').forEach(function (a) { a.addEventListener('click', function (e) { e.preventDefault(); toast('That link is still to be added.'); }); });
   /* the newsletter form is now a React component (NewsletterForm) that posts to /api/newsletter */
-  return function () { offs.forEach(function (f) { f(); }); };
+  return function () { delete document.documentElement.dataset.rev5; offs.forEach(function (f) { f(); }); };
 }

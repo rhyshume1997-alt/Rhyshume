@@ -40,15 +40,25 @@ export const abs = (path: string) => `${SITE_URL}${path === "/" ? "" : path}`;
 export const STORE_ID = `${SITE_URL}/#store`;
 
 /**
- * The Google review numbers shown on the home page. Numbers only, no quotes from reviews.
- * To update: look at the Google listing, change these three values, and change the date to the day you looked.
+ * Google reviews. The site says only "5 star reviews on Google". It does not show a count or an average, and never
+ * quotes a review. checked is the day Rhys last looked at the listing. Change it when you look again.
+ *
+ * reviewsUrl: where "Read the reviews" goes (the Google listing).
+ * placeId: the shop's Google Place ID. When it is set, "Leave a review" opens Google's review box straight away
+ *   (https://search.google.com/local/writereview?placeid=...). Find it at
+ *   https://developers.google.com/maps/documentation/places/web-service/place-id (search for the shop) and paste it here.
+ *   Until then the button opens the Google listing, where the "Write a review" button is. It is listed in MICHAEL-NEEDS.md.
  */
-export const GOOGLE_PROOF = {
-  rating: 5.0,
-  reviews: 27,
+export const GOOGLE_REVIEWS = {
+  headline: "5 star reviews on Google",
   checked: "25 Nov 2026",
-  url: LINKS.google,
+  reviewsUrl: LINKS.google,
+  placeId: null as string | null,
 } as const;
+
+export const GOOGLE_WRITE_REVIEW_URL: string = GOOGLE_REVIEWS.placeId
+  ? `https://search.google.com/local/writereview?placeid=${GOOGLE_REVIEWS.placeId}`
+  : GOOGLE_REVIEWS.reviewsUrl;
 
 /** The Google Maps directions link used in the footer, the phone bar and the walkers page. */
 export const DIRECTIONS_URL = "https://www.google.com/maps/search/?api=1&query=Jack+O'Beers+%26+Deli,+13+Station+Road,+Milngavie,+G62+8PG";

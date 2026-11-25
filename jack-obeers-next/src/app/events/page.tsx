@@ -1,19 +1,21 @@
 import { JsonLd } from "@/components/JsonLd";
 import { breadcrumbSchema } from "@/lib/schema";
 import { pageMeta } from "@/lib/seo";
-import { Behaviour } from "@/components/Behaviour";
+import { BasketBehaviour } from "@/components/BasketBehaviour";
 import { forBasket, getCatalogue } from "@/lib/catalogue";
 import { getPublicEvents } from "@/lib/events-store";
 import { Frame } from "@/components/Frame";
 import { Clip } from "@/components/Clip";
 import { MEDIA } from "@/lib/media";
+import { NewsletterForm } from "@/components/NewsletterForm";
+import { turnstileSiteKey } from "@/lib/turnstile";
 import { SHOP } from "@/lib/brand";
 
 export const metadata = pageMeta({ title: "Events at the shop, Milngavie", description: "Events at Jack O’Beers and Deli, Milngavie, and how to get a ticket. We supplied the bar for 1,500 people at an England match screening at Ilkley Brewery.", path: "/events" });
 export const dynamic = "force-dynamic";
 
 function when(date: string | null, time: string | null): string {
-  if (!date) return "Date to be confirmed";
+  if (!date) return "";
   const d = new Date(date + "T12:00:00");
   const day = d.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
   return time ? `${day}, ${time}` : day;
@@ -22,7 +24,7 @@ function when(date: string | null, time: string | null): string {
 export default async function Page() {
   const [catalogue, ev] = await Promise.all([getCatalogue(), getPublicEvents()]);
   const today = new Date().toISOString().slice(0, 10);
-  const upcoming = ev.events.filter((e) => !e.date || e.date >= today).sort((a, b) => (a.date || "9999").localeCompare(b.date || "9999"));
+  const upcoming = ev.events.filter((e) => !e.sample && e.date && e.date >= today).sort((a, b) => (a.date || "9999").localeCompare(b.date || "9999"));
   const basketHandles = new Set(forBasket(catalogue.all).map((p) => p.handle));
   const ticketsOn = process.env.CHECKOUT_ENABLED === "true";
   return (
@@ -38,23 +40,23 @@ export default async function Page() {
         <section className="cream page-pad" style={{ background: "var(--cream)", paddingTop: "3rem" }}>
           <div className="wrap">
             {upcoming.length === 0 ? (
-              <p className="lede">No events are listed right now. Check back soon, or ask about a private event below.</p>
+              <div className="events-empty">
+                <h2 className="h3">Events coming soon</h2>
+                <p>Join the newsletter and we will tell you when the next one is on.</p>
+                <NewsletterForm id="nl-events" siteKey={turnstileSiteKey()} />
+              </div>
             ) : (
               <ul className="events">
                 {upcoming.map((e) => (
                   <li key={e.handle} className="hcard event">
-                    <p className="mono">{e.sample ? "Sample event" : "Event"}</p>
+                    <p className="mono">Event</p>
                     <h2 className="h3">{e.title}</h2>
                     <p className="when">{when(e.date, e.time)}</p>
                     {e.description && <p>{e.description}</p>}
-                    <p className="price">{e.price > 0 ? `£${e.price.toFixed(2)} a ticket` : <span className="tbc">price to be confirmed</span>}</p>
+                    {e.price > 0 && <p className="price">{`£${e.price.toFixed(2)} a ticket`}</p>}
                     <p className="hamper-btns">
                       {basketHandles.has(e.handle) && e.available && <button type="button" className="pg-btn soft" data-add={e.handle}>Add to basket<span className="vh"> {e.title}</span></button>}
-                      {ticketsOn && e.available && e.buy ? (
-                        <a className="btn dk" href={e.buy}>Buy tickets</a>
-                      ) : (
-                        <button className="btn dk" type="button" disabled>Tickets open soon</button>
-                      )}
+                      {ticketsOn && e.available && e.buy ? <a className="btn dk" href={e.buy}>Buy tickets</a> : null}
                     </p>
                   </li>
                 ))}
@@ -77,7 +79,7 @@ export default async function Page() {
           </div>
         </section>
       </main>
-      <Behaviour products={forBasket(catalogue.all)} solid={true} />
+      <BasketBehaviour solid={true} />
     </>
   );
 }

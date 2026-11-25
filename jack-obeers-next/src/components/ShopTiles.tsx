@@ -37,7 +37,7 @@ export function ShopTiles({ ranges, events, subs, checkoutOn }: { ranges: Record
       window.setTimeout(() => panel.current?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" }), reduced ? 0 : 1500);
     }
   };
-  const count = (n: number, one: string, many: string) => (n > 0 ? `${n} ${n === 1 ? one : many}` : "Coming soon");
+  const count = (n: number, one: string, many: string) => (n > 0 ? `${n} ${n === 1 ? one : many}` : "");
   const cur = DRINKS.find((d) => d.key === open) || null;
   return (
     <section className="tiles-sec cream" id="shelf" aria-labelledby="tl-h">

@@ -1,4 +1,4 @@
-import { Behaviour } from "@/components/Behaviour";
+import { BasketBehaviour } from "@/components/BasketBehaviour";
 import { getCatalogue } from "@/lib/catalogue";
 import { demoOn, getMember, type Tier } from "@/lib/members";
 import { SpamGuard } from "@/components/SpamGuard";
@@ -41,8 +41,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ c
             {!member ? (
               <>
                 <h2 className="h3">Sign in</h2>
-                <p className="lede">Members sign in with their Shopify account. <span className="tbc">Sign-in to be set up</span></p>
-                <p><button className="btn dk" type="button" disabled>Sign in</button></p>
+                <p className="lede">This is the members&rsquo; area for the Draught Club.</p>
                 <p>Not a member yet? <a href="/draught-club">See the two memberships</a>.</p>
                 {demoOn() && (
                   <form action={demoSignIn} className="own-warn">
@@ -57,7 +56,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ c
             ) : (
               <>
                 <div className="own-bar">
-                  Welcome, <b>{member.name}</b> <span className="tbc">{member.tier === "legend" ? "The Legend" : "The Regular"}</span>
+                  Welcome, <b>{member.name}</b> <b>{member.tier === "legend" ? "The Legend" : "The Regular"}</b>
                   <form action={memberSignOut} style={{ display: "inline" }}><button className="btn ghost on-cream sm" style={{ color: "var(--ink)" }} type="submit">Sign out</button></form>
                 </div>
                 <ul className="mem-grid">
@@ -66,9 +65,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ c
                     return (
                       <li key={s.title} className={"hcard " + (open ? "" : "locked")}>
                         <h2 className="h3">{s.title}</h2>
-                        {open ? (
-                          <p><span className="tbc">{s.text}, to be supplied by the shop</span></p>
-                        ) : (
+                        {open ? null : (
                           <p>Included with <b>The Legend</b>. <a href="/draught-club">See what it adds</a>.</p>
                         )}
                       </li>
@@ -80,7 +77,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ c
           </div>
         </section>
       </main>
-      <Behaviour products={catalogue.products} solid={true} />
+      <BasketBehaviour solid={true} />
     </>
   );
 }

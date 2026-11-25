@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Frame } from "@/components/Frame";
-import { Behaviour } from "@/components/Behaviour";
+import { BasketBehaviour } from "@/components/BasketBehaviour";
 import { JsonLd } from "@/components/JsonLd";
 import { buyLink, checkoutOn, getCatalogue, safePairings } from "@/lib/catalogue";
 import { lowStock } from "@/lib/cards";
@@ -63,25 +63,24 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
                   {p.profile.flavour.map((f) => <li key={f}>{f}</li>)}
                 </ul>
               )}
-              {pairs.length > 0 && <p className="pg-goes"><b>Goes with</b> {pairs.join(", ")}{!p.profile?.pairingConfirmed && <span className="pg-sugg">suggestion</span>}</p>}
+              {pairs.length > 0 && <p className="pg-goes"><b>Suggested with</b> {pairs.join(", ")}</p>}
               <div className="pg-btns prod-btns">
                 {available ? (
                   <>
                     <button type="button" className="pg-btn soft" data-add={p.handle}>Add to basket</button>
-                    {checkoutOn() && link ? <a className="pg-btn solid" href={link}>Buy now</a> : <button type="button" className="pg-btn solid" disabled>Buy now</button>}
+                    {checkoutOn() && link ? <a className="pg-btn solid" href={link}>Buy now</a> : null}
                   </>
                 ) : (
                   <button type="button" className="pg-btn solid" disabled>Sold out</button>
                 )}
               </div>
-              {!checkoutOn() && <p className="note-s">Online checkout opens soon. You can add this to your basket now, or come into the shop at 13 Station Road, Milngavie.</p>}
-              <p className="note-s">18+ only, please drink responsibly.</p>
+                            <p className="note-s">18+ only, please drink responsibly.</p>
               <p><a href={range[1]}>← All {range[0].toLowerCase()}</a></p>
             </div>
           </div>
         </section>
       </main>
-      <Behaviour products={catalogue.products} solid={true} />
+      <BasketBehaviour solid={true} />
     </>
   );
 }

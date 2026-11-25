@@ -1,6 +1,6 @@
 import { JsonLd } from "@/components/JsonLd";
 import { breadcrumbSchema } from "@/lib/schema";
-import { Behaviour } from "@/components/Behaviour";
+import { BasketBehaviour } from "@/components/BasketBehaviour";
 import { KegBlurb } from "@/components/KegBlurb";
 import { ProductGrid } from "@/components/ProductGrid";
 import { NewIn } from "@/components/NewIn";
@@ -29,7 +29,7 @@ export async function CategoryPage({ category, eyebrow, heading, noun }: { categ
           </div>
         </section>
       </main>
-      <Behaviour products={catalogue.products} solid={true} />
+      <BasketBehaviour solid={true} />
     </>
   );
 }

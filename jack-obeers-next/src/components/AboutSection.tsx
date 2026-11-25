@@ -12,12 +12,12 @@ import { MICHAEL_AND_TANYA } from "@/lib/photos";
  * them and must be checked with Michael before this goes live.
  * His welcome video goes in MEDIA.michael when the file arrives. The transcript below is its text version.
  */
-export function AboutSection() {
+export function AboutSection({ standalone = false }: { standalone?: boolean } = {}) {
   return (
     <section className="about-home" id="about" aria-labelledby="ah-h">
       <div className="wrap">
-        <p className="mono">About</p>
-        <h2 className="h2" id="ah-h">About us</h2>
+        {!standalone && <p className="mono">About</p>}
+        <h2 className={standalone ? "vh" : "h2"} id="ah-h">About us</h2>
         <div className="about-media">
           <figure className="about-vid">
             <Frame>

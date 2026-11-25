@@ -42,7 +42,6 @@ export function ProductGrid({ cards, chips, checkoutOn, noun, intro, segmented =
           ))}
         </div>
       )}
-      {!checkoutOn && <p className="note-s">Online checkout opens soon. You can add things to your basket now.</p>}
       <p className="pg-count" role="status">{shown.length} {shown.length === 1 ? noun.replace(/s$/, "") : noun}{active !== "All" ? `, ${active}` : ""}</p>
       <ul className="pg-grid">
         {shown.map((c) => {
@@ -71,7 +70,7 @@ export function ProductGrid({ cards, chips, checkoutOn, noun, intro, segmented =
                 </div>
               </div>
               <div className="pg-buy">
-                <span className="pg-price">£{c.price.toFixed(2)}{c.sample && <small> sample</small>}{c.low !== null && <span className="pg-low">Only {c.low} left</span>}</span>
+                <span className="pg-price">£{c.price.toFixed(2)}{c.low !== null && <span className="pg-low">Only {c.low} left</span>}</span>
                 {!c.available ? (
                   <button type="button" className="pg-btn solid" disabled>Sold out</button>
                 ) : (
@@ -79,9 +78,7 @@ export function ProductGrid({ cards, chips, checkoutOn, noun, intro, segmented =
                     <button type="button" className="pg-btn soft" data-add={c.handle}>Add to basket<span className="vh"> {c.name}</span></button>
                     {checkoutOn && c.buy ? (
                       <a className="pg-btn solid" href={c.buy}>Buy now<span className="vh"> {c.name}</span></a>
-                    ) : (
-                      <button type="button" className="pg-btn solid" disabled>Buy now</button>
-                    )}
+                    ) : null}
                   </span>
                 )}
               </div>
@@ -103,8 +100,7 @@ export function ProductGrid({ cards, chips, checkoutOn, noun, intro, segmented =
                       </ul>
                       {c.pairing.length > 0 && (
                         <p className="pg-goes">
-                          <b>Goes with</b> {c.pairing.join(", ")}
-                          {!c.pairingConfirmed && <span className="pg-sugg">suggestion</span>}
+                          <b>Suggested with</b> {c.pairing.join(", ")}
                         </p>
                       )}
                     </div>

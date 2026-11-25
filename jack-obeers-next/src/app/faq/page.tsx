@@ -1,4 +1,4 @@
-import { Behaviour } from "@/components/Behaviour";
+import { BasketBehaviour } from "@/components/BasketBehaviour";
 import { JsonLd } from "@/components/JsonLd";
 import { FAQ } from "@/lib/faq";
 import { getCatalogue } from "@/lib/catalogue";
@@ -28,14 +28,14 @@ export default async function Page() {
             {FAQ.map((f) => (
               <article key={f.q} className="faq-item">
                 <h2 className="h3">{f.q}</h2>
-                <p>{f.a}{f.confirm && <> <span className="tbc">[Michael to confirm]</span></>}</p>
+                <p>{f.a}</p>
               </article>
             ))}
             <p className="faq-more">More: <a href="/west-highland-way">for walkers on the West Highland Way</a>, <a href="/beers">the beer range</a>, <a href="/events">events</a>.</p>
           </div>
         </section>
       </main>
-      <Behaviour products={catalogue.products} solid={true} />
+      <BasketBehaviour solid={true} />
     </>
   );
 }

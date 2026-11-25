@@ -32,13 +32,13 @@ test("delivery bottle fills with the basket and says how much is left", async ({
   expect(fill).toBeLessThan(1);
 });
 
-test("google proof strip links to Google with the checked date", async ({ page }) => {
+test("google reviews: says 5 star reviews, no count, two links", async ({ page }) => {
   await page.goto("/");
-  const a = page.locator(".proof");
-  await expect(a).toContainText("5.0");
-  await expect(a).toContainText("27 Google reviews");
-  await expect(a).toContainText("25 Nov 2026");
-  await expect(a).toHaveAttribute("href", /maps\.app\.goo\.gl/);
+  const sec = page.locator(".greviews");
+  await expect(sec).toContainText("5 star reviews on Google");
+  await expect(sec).not.toContainText(/\d+ (Google )?reviews|from \d+|27/);
+  await expect(sec.locator("a", { hasText: "Read the reviews" })).toHaveAttribute("href", /maps\.app\.goo\.gl/);
+  await expect(sec.locator("a", { hasText: "Leave a review" })).toHaveAttribute("href", /google|goo\.gl/);
 });
 
 test("low stock tag shows only for 5 or fewer, nothing on others", async ({ page }) => {

@@ -1055,3 +1055,24 @@ html.opening .open-skip { display: inline-flex; align-items: center; }
 
 .deli-add { margin-top: .5rem; }
 .hamper-btns { display: flex; flex-wrap: wrap; gap: .5rem; }
+
+.hamper-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr)); gap: 1rem; }
+.hamper-img { width: 100%; height: auto; border-radius: .6rem; display: block; margin-bottom: .6rem; }
+.tile-n:empty { display: none; }
+.events-empty { max-width: 34rem; display: grid; gap: .8rem; padding: 1.4rem 1.6rem; border-radius: 1.4rem; background: #fffaf0; border: 2px solid #d9ccb0; }
+.events-empty .find, .events-empty form { color: var(--ink); }
+.events-empty #nl-events input[type=email] { width: 100%; }
+
+/* ---- Google reviews section ---- */
+.greviews { background: var(--paper); padding: 1.6rem 0 .4rem; }
+.greviews .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1.4rem; justify-content: center; }
+.greviews .h3 { margin: 0; }
+.gr-actions { margin: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
+
+/* ---- basket pairing suggestion ---- */
+.pair { display: flex; align-items: center; justify-content: space-between; gap: .8rem; margin-top: 1rem; padding: .8rem 1rem; border-radius: 1.2rem; background: #fffaf0; border: 2px solid #e2d6b8; }
+.pair p { margin: 0; }
+.pair-msg { font-size: .92rem; color: #5f4f3d; }
+.pair-item { font: 600 1.05rem var(--ui); }
+.bestsellers { background: var(--cream); padding: 1.6rem 0 .6rem; margin: 0; }
+.bestsellers .wrap > ul { max-width: 100%; }

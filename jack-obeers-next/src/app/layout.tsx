@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { CartFallback } from "@/components/CartFallback";
 import { StickyBar } from "@/components/StickyBar";
 import { PageTransition } from "@/components/PageTransition";
+import { getCatalogue } from "@/lib/catalogue";
 import { JsonLd } from "@/components/JsonLd";
 import { storeSchema, websiteSchema } from "@/lib/schema";
 import { NAME, SITE_URL, isIndexable } from "@/lib/site";
@@ -27,7 +29,7 @@ export const viewport: Viewport = {
   themeColor: "#1d0f0a",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en-GB">
       <head>
@@ -38,9 +40,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <JsonLd data={[storeSchema(), websiteSchema()]} />
         <a className="skip" href="#main">Skip to the content</a>
-        <SiteHeader />
+        <SiteHeader hampers={(await getCatalogue()).all.some((p) => p.category === "hampers")} />
         {children}
         <SiteFooter />
+        <CartFallback />
         <StickyBar />
         <PageTransition />
       </body>

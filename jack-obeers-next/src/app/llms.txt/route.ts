@@ -16,7 +16,7 @@ export function GET() {
 - Email: ${EMAIL}
 - Opening hours: ${SHOP.hours}
 - 23 taps on the wall. Beer, cider and wine can be transferred into a 500ml or 1 litre bottle to take home. A sealed bottle keeps for up to two weeks.
-- Deli: pork pies, salami beer sticks, cheeses, oatcakes, chutneys and chilli jams. A sit-in menu with soups, dumplings and pies.
+- Deli: pork pies, salami beer sticks, cheeses, oatcakes, chutneys, chilli jams and popcorn (£3.50). A sit-in menu with soups, dumplings and pies.
 - Online checkout is not open yet.
 
 ## Pages

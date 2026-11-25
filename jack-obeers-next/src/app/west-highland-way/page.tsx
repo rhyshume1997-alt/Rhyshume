@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Frame } from "@/components/Frame";
-import { Behaviour } from "@/components/Behaviour";
+import { BasketBehaviour } from "@/components/BasketBehaviour";
 import { BgVideo } from "@/components/BgVideo";
 import { Hours } from "@/components/Hours";
 import { JsonLd } from "@/components/JsonLd";
@@ -28,7 +28,7 @@ export default async function Page() {
           <div className="wrap">
             <p className="mono">Walkers welcome</p>
             <h1 className="h2">Near the start of the <em>West Highland Way.</em></h1>
-            <p className="lede">The West Highland Way starts in Milngavie. We are at {ADDRESS_LINE}, about 200 metres from the start, according to the West Highland Way listing. <span className="tbc">[Michael to confirm]</span></p>
+            <p className="lede">The West Highland Way starts in Milngavie. We are at {ADDRESS_LINE}, about 200 metres from the start, according to the West Highland Way listing.</p>
           </div>
         </section>
         <section className="cream walk" style={{ background: "var(--cream)" }}>
@@ -36,7 +36,7 @@ export default async function Page() {
             <div className="walk-copy">
               <h2 className="h3">What to pick up</h2>
               <p>Fresh draught beer or cider in a 500ml or 1 litre bottle, filled for you from our 23 taps. Wine can be transferred into a 500ml or 1 litre bottle too.</p>
-              <p>From the deli: {ALLOWED_PAIRINGS.map((x) => x.toLowerCase()).join(", ")}.</p>
+              <p>From the deli: {[...ALLOWED_PAIRINGS.map((x) => x.toLowerCase()), "popcorn"].join(", ")}.</p>
               <h2 className="h3">How the bottles keep</h2>
               <p>We fill the bottle straight from the keg with no foam. A sealed bottle keeps for up to two weeks.</p>
               <h2 className="h3">Opening hours</h2>
@@ -48,7 +48,7 @@ export default async function Page() {
           </div>
         </section>
       </main>
-      <Behaviour products={catalogue.products} solid={true} />
+      <BasketBehaviour solid={true} />
     </>
   );
 }

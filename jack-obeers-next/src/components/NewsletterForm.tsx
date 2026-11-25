@@ -4,14 +4,14 @@ import { useState } from "react";
 import { SpamGuard } from "@/components/SpamGuard";
 
 /** The footer newsletter form. It posts to /api/newsletter, which checks everything before anything happens. */
-export function NewsletterForm({ siteKey }: { siteKey: string | null }) {
+export function NewsletterForm({ siteKey, id = "nl" }: { siteKey: string | null; id?: string }) {
   const [msg, setMsg] = useState("");
   const [busy, setBusy] = useState(false);
   const [round, setRound] = useState(0);
   const input = { minHeight: "3rem", padding: ".5rem 1rem", borderRadius: "99px", border: "2px solid var(--brass)", background: "#fffdf6", color: "var(--ink)" } as const;
   return (
     <form
-      id="nl"
+      id={id}
       noValidate
       style={{ display: "grid", gap: ".7rem" }}
       onSubmit={async (e) => {
@@ -35,15 +35,15 @@ export function NewsletterForm({ siteKey }: { siteKey: string | null }) {
         }
       }}
     >
-      <label htmlFor="nl-e" style={{ fontWeight: 700 }}>Email</label>
-      <input id="nl-e" name="email" type="email" autoComplete="email" maxLength={254} style={input} />
+      <label htmlFor={`${id}-e`} style={{ fontWeight: 700 }}>Email</label>
+      <input id={`${id}-e`} name="email" type="email" autoComplete="email" maxLength={254} style={input} />
       <label style={{ display: "flex", gap: ".6rem" }}>
         <input type="checkbox" name="consent" style={{ width: "1.3rem", height: "1.3rem", flex: "none", marginTop: ".2rem" }} />
         <span>Yes, send me news and offers. I can unsubscribe at any time.</span>
       </label>
       <SpamGuard siteKey={siteKey} resetKey={round} />
       <button className="btn sm" type="submit" disabled={busy}>Join the list</button>
-      <p id="nl-s" role="status">{msg}</p>
+      <p id={`${id}-s`} role="status">{msg}</p>
     </form>
   );
 }

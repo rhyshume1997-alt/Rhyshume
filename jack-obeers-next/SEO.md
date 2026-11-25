@@ -156,5 +156,5 @@ Checkout and the payment hold rule (`CHECKOUT_ENABLED`, the 18+ declaration, the
 ## 9. Facts read from the shop-front photo
 
 The window says "23 taps from the wall", "craft beer", "cider" and "frizzante", and "Walkers welcome". The site already says
-23 taps (Michael's welcome says it too), so no extra marker was added. There is an old fashioned popcorn machine in the shop.
-Ask Michael whether popcorn is sold before the site says so. It does not.
+23 taps (Michael's welcome says it too), so no extra marker was added. There is an old fashioned popcorn machine in the shop. Popcorn is sold at 3.50 pounds, confirmed by Michael, and is in the
+deli copy, the FAQ and `/llms.txt`.

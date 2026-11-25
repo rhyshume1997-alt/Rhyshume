@@ -1,7 +1,8 @@
 import { JsonLd } from "@/components/JsonLd";
 import { breadcrumbSchema } from "@/lib/schema";
 import { pageMeta } from "@/lib/seo";
-import { Behaviour } from "@/components/Behaviour";
+import { BasketBehaviour } from "@/components/BasketBehaviour";
+import { PHONE_HREF } from "@/lib/site";
 import { getCatalogue } from "@/lib/catalogue";
 
 export const metadata = pageMeta({ title: "The Draught Club subscription", description: "The Draught Club at Jack O’Beers and Deli, Milngavie. Two monthly memberships with 10% off all fills, members-only beers and priority access to events.", path: "/draught-club" });
@@ -20,6 +21,10 @@ const LOCAL: Perk[] = [
   { text: "Priority access to events (Meet the Brewer and more)" },
 ];
 
+/**
+ * The prices are from the Draught Club leaflet Rhys supplied: The Regular 24.99 a month, The Legend 39.99 a month.
+ * Do not take them from Shopify (the draft products there are not the real prices).
+ */
 const TIERS: { name: string; price: string; icon: string; perks: Perk[] }[] = [
   {
     name: "The Regular",
@@ -71,16 +76,16 @@ export default async function Page() {
                       </li>
                     ))}
                   </ul>
-                  <p><button className="btn dk" type="button" disabled>Joining opens soon</button></p>
+                  <p><a className="btn dk" href={PHONE_HREF}>Ask about joining</a></p>
                 </article>
               ))}
             </div>
             <p className="tier-foot"><b>Fresh bottle. Fresh fill. Every time.</b> No oxygen. No foam. Just proper draught beer. Includes a fresh bottle with every fill.</p>
-            <p className="note-s">You must be 18 or over to join. How joining and paying each month will work, and when it opens, <span className="tbc">to be confirmed</span>. Nothing can be bought yet.</p>
+            <p className="note-s">You must be 18 or over to join.</p>
           </div>
         </section>
       </main>
-      <Behaviour products={catalogue.products} solid={true} />
+      <BasketBehaviour solid={true} />
     </>
   );
 }
