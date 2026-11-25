@@ -9,3 +9,5 @@ header line differs per font family. Before launch, copy each family's own upstr
 folder. The upstream copyright lines were NOT re-checked here.
 
 The Dubai font is NOT stored or served anywhere in this project (web licence unverified). Source Sans 3 is used as the closest open match.
+
+Cormorant Garamond (Christian Thalmann, Catharsis Fonts) and Lora (Cyreal): SIL Open Font License 1.1, https://openfontlicense.org. Used in the "back bar" and "cinematic" preview looks.
