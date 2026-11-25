@@ -43,3 +43,11 @@ pnpm build && pnpm start
 4. Real Storefront API client, cart cookie and checkout redirect (plan in `docs/concepts/jack-obeers/implementation/implementation-plan.md`).
 5. Alcohol checkout and delivery stay disabled until licensing checks are done.
 6. Replace the placeholder imagery with the shop's own photos and video.
+
+## Owners and members (draft)
+
+- `/owners`: Michael and Tanya sign in, add events and delete them. Passwords are stored only as scrypt hashes in `OWNER_USERS` (make each with `node scripts/hash-password.mjs michael`). Sessions are signed cookies (`SESSION_SECRET`). Every page and action checks the session itself.
+- Events are Shopify products of type "Event" with tags `date:YYYY-MM-DD` and `time:HH:MM`. `EVENTS_BACKEND=mock` (default) keeps them in memory for practice. `EVENTS_BACKEND=shopify` needs `SHOPIFY_ADMIN_TOKEN` (server only) and has **not been run against a real store**. Test it on a development store first.
+- `/members`: the layout and the tier gating (The Regular and The Legend) work with `MEMBERS_DEMO=true`. Real member sign-in (Shopify customer accounts) is not built.
+- `OWNER_DEMO` and `MEMBERS_DEMO` are for previews only. Never set them on the live site.
+- Not done: login rate limiting beyond a short delay (use the Vercel Firewall), two-step sign-in, password reset.

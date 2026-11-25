@@ -4,17 +4,17 @@ import { getCatalogue } from "@/lib/catalogue";
 export const metadata = { title: "The Draught Club | Jack O’Beers & Deli" };
 
 /**
- * Tiers, from the shop's Draught Club leaflet. The Local (£11.99 a month) is the base level and is not shown
- * as a card; its four benefits appear in both cards so the upgrades are easy to see.
- * `up: true` marks what is new at that level.
+ * Tiers, from the shop's Draught Club leaflet. The shop has dropped The Local, so there are two tiers.
+ * The four benefits that were in The Local are listed in both cards, so people can see what each upgrade adds.
+ * `up: true` marks what The Legend adds on top of The Regular.
  */
 type Perk = { text: string; up?: boolean; from?: string };
 
 const LOCAL: Perk[] = [
-  { text: "10% off all fills", from: "The Local" },
-  { text: "Access to the Beer Club Tap", from: "The Local" },
-  { text: "Members-only beers", from: "The Local" },
-  { text: "Priority access to events (Meet the Brewer and more)", from: "The Local" },
+  { text: "10% off all fills" },
+  { text: "Access to the Beer Club Tap" },
+  { text: "Members-only beers" },
+  { text: "Priority access to events (Meet the Brewer and more)" },
 ];
 
 const TIERS: { name: string; price: string; icon: string; perks: Perk[] }[] = [
@@ -22,7 +22,7 @@ const TIERS: { name: string; price: string; icon: string; perks: Perk[] }[] = [
     name: "The Regular",
     price: "£24.99",
     icon: "🍻",
-    perks: [...LOCAL, { text: "3 × 500ml beers included each month", up: true }, { text: "Early access to limited kegs", up: true }],
+    perks: [...LOCAL, { text: "3 × 500ml beers included each month" }, { text: "Early access to limited kegs" }],
   },
   {
     name: "The Legend",
@@ -51,7 +51,7 @@ export default async function Page() {
         </section>
         <section className="cream" style={{ background: "var(--cream)", paddingTop: "4rem" }}>
           <div className="wrap">
-            <p className="lede">Two ways to step up. Each one includes everything in The Local, and The Legend includes everything in The Regular. What is new at each level is marked <b>New</b>.</p>
+            <p className="lede">Two ways to join. The Legend includes everything in The Regular. What The Legend adds is marked <b>New</b>.</p>
             <div className="tiers">
               {TIERS.map((t) => (
                 <article key={t.name} className="hcard tier">

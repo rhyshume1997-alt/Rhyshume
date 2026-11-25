@@ -353,3 +353,19 @@ dialog::backdrop { background: rgba(15, 7, 4, .75); backdrop-filter: blur(3px); 
 .tier-list li small { color: #6b5a48; font-weight: 400; }
 .tier-list .new { display: inline-block; font: 700 .65rem/1 ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; background: #2a562f; color: #fff; padding: .25rem .45rem; border-radius: 99px; margin-right: .5rem; vertical-align: .1em; }
 .tier-foot { text-align: center; margin: 1.6rem auto .4rem; max-width: 36rem; font-size: 1.1rem; }
+/* owners and members */
+.own { max-width: 44rem; margin-inline: auto; }
+.own-form { display: grid; gap: .5rem; margin: .5rem 0 1rem; }
+.own-form label { font-weight: 700; margin-top: .4rem; }
+.own-form input, .own-form textarea { font: inherit; min-height: 3rem; padding: .5rem .9rem; border: 2px solid var(--brass); border-radius: 1rem; background: #fffdf6; color: var(--ink); width: 100%; }
+.own-form button { justify-self: start; margin-top: .6rem; }
+.own-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(11rem, 100%), 1fr)); gap: .8rem; }
+.own-err { color: #9b2c1c; font-weight: 700; min-height: 1.4rem; margin: 0; }
+.own-ok { color: #2a562f; font-weight: 700; min-height: 1.4rem; margin: 0; }
+.own-warn { background: #fff1d0; border: 2px solid #e0b24f; border-radius: 1rem; padding: .8rem 1rem; margin: 1rem 0; }
+.own-bar { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; margin-bottom: 1rem; }
+.own-list { list-style: none; padding: 0; margin: .6rem 0; display: grid; gap: .6rem; }
+.own-list li { display: flex; justify-content: space-between; gap: 1rem; align-items: start; background: #fff; border: 2px solid var(--line, #d9ccb0); border-radius: 1rem; padding: .8rem 1rem; }
+.own-list summary { cursor: pointer; font-weight: 700; color: #9b2c1c; min-height: 2.75rem; display: grid; align-items: center; }
+.mem-grid { list-style: none; padding: 0; margin: 1rem 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr)); gap: 1rem; }
+.hcard.locked { opacity: .7; border-style: dashed; }

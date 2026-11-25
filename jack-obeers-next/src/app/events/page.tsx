@@ -1,8 +1,10 @@
 import { Behaviour } from "@/components/Behaviour";
-import { getCatalogue, getEvents } from "@/lib/catalogue";
+import { getCatalogue } from "@/lib/catalogue";
+import { getPublicEvents } from "@/lib/events-store";
 import { SHOP } from "@/lib/brand";
 
 export const metadata = { title: "Events | Jack O’Beers & Deli" };
+export const dynamic = "force-dynamic";
 
 function when(date: string | null, time: string | null): string {
   if (!date) return "Date to be confirmed";
@@ -12,7 +14,7 @@ function when(date: string | null, time: string | null): string {
 }
 
 export default async function Page() {
-  const [catalogue, ev] = await Promise.all([getCatalogue(), getEvents()]);
+  const [catalogue, ev] = await Promise.all([getCatalogue(), getPublicEvents()]);
   const today = new Date().toISOString().slice(0, 10);
   const upcoming = ev.events.filter((e) => !e.date || e.date >= today).sort((a, b) => (a.date || "9999").localeCompare(b.date || "9999"));
   const ticketsOn = process.env.CHECKOUT_ENABLED === "true";
