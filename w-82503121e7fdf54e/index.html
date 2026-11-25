@@ -4448,6 +4448,7 @@ function meetBlank() {
     hasSite: { v: '', url: '' },
     picks: {}, main: '', otherAction: '',
     concepts: {},     /* slug -> { v: love|parts|no, why: '', pref: { colours: like|dislike ... } } */
+    direction: { first: '', standOut: '', avoid: '', priority: '' },
     inspo: [{ url: '', note: '' }, { url: '', note: '' }],
     feel: ['', '', ''], feelSt: '',
     pref: {},         /* overall words per category */
@@ -4473,7 +4474,7 @@ const MEET_Q = [
   { id: 'hasSite', st: 0, q: 'Have you already got a website?', help: 'If yes, ask for the address and what works or does not work about it.' },
   { id: 'actions', st: 1, q: 'When someone opens your website, what do you want them to do?', help: 'Are they meant to ring you, buy something or fill in a form?' },
   { id: 'main', st: 1, q: 'Which one matters most?', help: 'If everything matters, ask: if only one worked perfectly, which would it be?' },
-  { id: 'looks', st: 2, q: 'Which of these designs do you like?', help: 'Do not push them towards one. Ask what makes them react, then write their words.' },
+  { id: 'looks', st: 2, q: 'Which parts of these designs appeal to you, and why?', help: 'Let them react before offering ideas. Record what they like, what puts them off, and which specific part caused their reaction.' },
   { id: 'feel', st: 2, q: 'Three words for how you want your website to feel', help: 'If stuck, offer pairs: calm or lively? simple or detailed? traditional or modern?' },
   { id: 'logo', st: 3, q: 'Have you already got a logo?', help: 'Ask to see it. Is it in a file they can send, or only on a van or a letterhead?' },
   { id: 'photos', st: 3, q: 'Have you already got photographs?', help: 'Are they good enough, and who owns them? Do not use photos you cannot trace.' },
@@ -4490,7 +4491,7 @@ function mAnswered(id) {
     case 'hasSite': return !!m.hasSite.v;
     case 'actions': return Object.keys(m.picks).some(k => m.picks[k]) || mst('actions') === 'unsure';
     case 'main': return !!m.main || mst('main') === 'unsure';
-    case 'looks': return Object.keys(m.concepts).some(k => (m.concepts[k] || {}).v) || m.inspo.some(x => mclean(x.url)) || mst('looks') === 'unsure';
+    case 'looks': return Object.values(m.concepts).some(c => c.v && (mclean(c.why) || mclean(c.change) || Object.values(c.pref || {}).some(Boolean))) || m.inspo.some(x => mclean(x.url) && mclean(x.note)) || mst('looks') === 'unsure';
     case 'feel': return m.feel.some(x => mclean(x)) || m.feelSt === 'unsure';
     case 'logo': case 'photos': case 'videos': case 'colfont': case 'content': return !!m.have[id].v;
     case 'feat': return Object.keys(m.feat).some(k => m.feat[k]) || mst('feat') === 'unsure';
@@ -4634,8 +4635,8 @@ function mpref(slug, k, cur) { return `<div class="mpr"><span>${esc(k[1])}</span
 function mcard(c) {
   const m = M(); const cc = m.concepts[c.slug] || {}; const v = cc.v || '';
   const sw = c.palette.map(x => `<i style="background:${x}" title="${x}"></i>`).join('');
-  const detail = v ? `<div class="mdetail"><h3 class="mq3">What do you like about this?</h3>
-     <label class="mf"><span class="mfl">Their words</span><textarea data-k="meet.concepts.${c.slug}.why" rows="2" placeholder="What they like, in their words">${esc(cc.why || '')}</textarea></label>
+  const detail = v ? `<div class="mdetail"><h3 class="mq3">${v === "no" ? "What puts you off about this?" : "What do you like about this?"}</h3>
+     <label class="mf"><span class="mfl">Their words</span><textarea data-k="meet.concepts.${c.slug}.why" rows="2" placeholder="${v === "no" ? "What feels wrong, in their words" : "What they like, in their words"}">${esc(cc.why || '')}</textarea></label>
      <h3 class="mq3">What would you change?</h3>
      <label class="mf"><span class="mfl">Their words</span><textarea data-k="meet.concepts.${c.slug}.change" rows="2" placeholder="What they would change or avoid">${esc(cc.change || '')}</textarea></label>
      <h3 class="mq3">Which parts?</h3>
@@ -4655,7 +4656,14 @@ function stLook() {
   const m = M();
   const insp = m.inspo.map((x, i) => `<div class="minsp"><label class="mf"><span class="mfl">Website they like, address</span><input type="text" data-k="meet.inspo.${i}.url" value="${esc(x.url)}" placeholder="https://"></label><label class="mf"><span class="mfl">What they like about it</span><input type="text" data-k="meet.inspo.${i}.note" value="${esc(x.note)}" placeholder="In their words"></label>${m.inspo.length > 1 ? `<button type="button" class="btn sm2" data-act="minsprm" data-i="${i}" aria-label="Remove this website">Remove</button>` : ''}</div>`).join('');
   const prefs = MEET_PREFS.map(k => { const t = mTally(k[0]); return `<div class="mpsum"><h3 class="mq3">${esc(k[1])}</h3><p class="src">${t.lk.length ? 'Liked in: ' + esc(t.lk.join(', ')) : 'No likes marked yet'}${t.dk.length ? '<br>Not for them in: ' + esc(t.dk.join(', ')) : ''}</p>${mta('meet.pref.' + k[0], { label: 'In their own words (optional)', rows: 2, ph: 'What they want, or do not want' })}</div>`; }).join('');
-  return `<div class="mnote2"><b>You do not have to choose one.</b> These are made-up businesses, built to show different styles. Pick the bits you like from any of them and we will design something original for you.</div>
+  return `<div class="mnote2"><b>You do not have to choose one.</b> These are made-up businesses, built to show different styles. Pick individual details you like or dislike, and tell me why. A rating on its own does not give enough direction for a design.</div>
+  <section class="mq"><div class="mqh"><h2 class="mql">Make the first design specific</h2></div>
+   <p class="mlede">A few questions to turn the examples into an original design for your business. If you do not know yet, leave an answer empty and we will mark it for follow up.</p>
+   ${mta('meet.direction.first', { label: 'What should visitors notice first on the homepage?', rows: 2, ph: 'For example, the people, a product, the work or an important message' })}
+   ${mta('meet.direction.standOut', { label: 'What should feel different from other businesses in your sector?', rows: 2, ph: 'What should make this website memorable to your customers?' })}
+   ${mta('meet.direction.avoid', { label: 'What do you definitely not want it to look or feel like?', rows: 2, ph: 'Think about layouts, colours, type, photography or movement' })}
+   ${mta('meet.direction.priority', { label: 'Which two design details would matter most in the first concept?', rows: 2, ph: 'Choose two things you would be disappointed to lose' })}
+  </section>
   ${qcard('looks', `<div class="mcons">${MEET_CONCEPTS.map(mcard).join('')}</div><p class="hint">${MEET_HOSTED ? 'Working demos open in a new tab, from the public concepts page.' : 'Working demos open in a new tab. They run offline when the concepts folder sits beside this workbook.'} Each is a fictional concept by Rhys Hume, not a real business.</p>`)}
   <section class="mq"><div class="mqh"><h2 class="mql">Pulling it together</h2></div><p class="mlede">Colours, fonts, photographs, layouts, animations and the general atmosphere, one at a time.</p><div class="mprefsum">${prefs}</div></section>
   <section class="mq"><div class="mqh"><h2 class="mql">Websites you already like</h2></div><p class="hint">Any website, from any business. We take ideas and feel from them, never their text or pictures.</p>${insp}<button type="button" class="btn" data-act="minspadd">Add another website</button></section>
@@ -4721,7 +4729,12 @@ function meetModel() {
   MEET_PREFS.forEach(k => { const t = mTally(k[0]); const w = mclean(m.pref[k[0]]); if (t.lk.length || t.dk.length || w) add(o.conf, 'Style', k[1], [t.lk.length ? 'Liked in ' + t.lk.join(', ') : '', t.dk.length ? 'Not for them in ' + t.dk.join(', ') : '', w ? 'Their words: ' + w : ''].filter(Boolean).join('. ')); });
   m.inspo.filter(x => mclean(x.url)).forEach(x => add(o.conf, 'Style', 'Website they like', mclean(x.url) + (mclean(x.note) ? ' (' + mclean(x.note) + ')' : '')));
   const feel = m.feel.map(mclean).filter(Boolean); if (feel.length) add(o.conf, 'Style', 'Three words for the feel', feel.join(', ')); else add(o.open, 'Style', 'Three words for the feel', m.feelSt === 'unsure' ? 'The client is not sure yet' : 'Not answered yet');
-  if (!liked.length && !noped.length) add(o.open, 'Style', 'Reaction to the design concepts', mst('looks') === 'unsure' ? 'The client is not sure yet' : 'No reaction recorded yet');
+  if (!mAnswered('looks')) add(o.open, 'Style', 'Reaction to the design concepts', 'Record at least one specific reason, liked or disliked part, or reference website with an explanation');
+  [['first', 'First thing visitors should notice'], ['standOut', 'How the design should stand out'], ['avoid', 'What the design should avoid'], ['priority', 'Two most important design details']].forEach(([id, label]) => {
+    const value = mclean((m.direction || {})[id]);
+    if (value) add(o.conf, 'Style', label, value);
+    else add(o.open, 'Design', label, 'Not yet established with the client');
+  });
   MEET_ASSETS.forEach(a => { const x = m.have[a[0]]; if (x.v === 'yes' || x.v === 'some') add(o.conf, 'Assets', a[1], mAssetWord(x.v) + (mclean(x.note) ? '. ' + mclean(x.note) : '') + (x.who ? '. Provided by: ' + mRole(x.who) : '')); else if (x.v === 'no') add(o.conf, 'Assets', a[1], 'None' + (x.who ? '. ' + mRole(x.who) : '')); else add(o.open, 'Assets', a[1], x.v === 'unsure' ? 'The client is not sure' : 'Not asked yet'); });
   if (m.newMedia.v === 'yes' || m.newMedia.v === 'maybe') add(o.conf, 'Assets', 'New photography or film', (m.newMedia.v === 'yes' ? 'Requested' : 'Maybe') + (mclean(m.newMedia.note) ? '. ' + mclean(m.newMedia.note) : ''));
   m.files.forEach(f => add(o.conf, 'Assets', 'File shown in the meeting', f.name + ' (' + Math.round(f.size / 1024) + ' KB). The original is not stored in this record'));
@@ -4749,11 +4762,13 @@ function mGroup(list) { const g = {}; list.forEach(x => { (g[x.group] = g[x.grou
 /* Stage 6 */
 function stReview() {
   const m = M(), o = meetModel(); const g = mGroup(o.conf); const op = o.open;
+  const designOpen = op.filter(x => x.group === 'Design' || (x.group === 'Style' && x.label === 'Reaction to the design concepts'));
   const card = (title, stage, items) => `<section class="mrv"><div class="mrvh"><h2>${esc(title)}</h2><button type="button" class="btn sm2" data-act="mgo" data-i="${stage}">Change</button></div>${items.length ? '<ul>' + items.map(x => `<li><b>${esc(x.label)}</b><span>${esc(x.value)}</span></li>`).join('') + '</ul>' : '<p class="hint">Nothing recorded yet</p>'}</section>`;
   const pick = (grp, st) => card(grp, st, g[grp] || []);
   const concepts = MEET_CONCEPTS.filter(c => (m.concepts[c.slug] || {}).v && (m.concepts[c.slug] || {}).v !== 'no');
   const thumbs = concepts.length ? `<div class="mthumbs">${concepts.map(c => `<figure><img src="${c.d}" alt="${esc(c.name)} concept" width="180" height="113"><figcaption>${esc(c.name)} (${m.concepts[c.slug].v === 'love' ? 'loved' : 'some parts'})</figcaption></figure>`).join('')}</div>` : '';
   return `<p class="mlede">Here is everything I heard. Read it together. Change anything that is not right.</p>
+  <div class="mnote2"><b>Design direction check:</b> ${designOpen.length ? esc(designOpen.length + " design details still need clarifying before a strong concept brief") : "Enough design information recorded to prepare draft concepts for review, not an approved design or scope"}</div>
   <div class="mrvgrid">${pick('Business', 0)}${pick('Audience', 0)}${pick('Objective', 1)}<section class="mrv"><div class="mrvh"><h2>Design ideas</h2><button type="button" class="btn sm2" data-act="mgo" data-i="2">Change</button></div>${thumbs}${(g.Style || []).length ? '<ul>' + g.Style.map(x => `<li><b>${esc(x.label)}</b><span>${esc(x.value)}</span></li>`).join('') + '</ul>' : '<p class="hint">Nothing recorded yet</p>'}</section>${pick('Assets', 3)}${card('Requested functionality (requests only)', 4, o.req)}${pick('Dependencies', 4)}${card('Commercial scope still to be agreed', 5, o.scope)}<section class="mrv"><div class="mrvh"><h2>Next steps (proposed)</h2></div><ol>${o.next.map(x => `<li>${esc(x)}</li>`).join('')}</ol></section></div>
   <section class="mrv wide"><div class="mrvh"><h2>Still to find out</h2></div>${op.length ? '<ul>' + op.map(x => `<li><b>${esc(x.group)}: ${esc(x.label)}</b><span>${esc(x.value)}</span></li>`).join('') + '</ul>' : '<p>Nothing outstanding.</p>'}</section>
   ${qcard('understood', `${mseg('meet.review.v', [['yes', 'Yes, that is right'], ['partly', 'Mostly, a few changes'], ['no', 'No, let us go back']], m.review.v, 'mbig2')}${m.review.v === 'partly' || m.review.v === 'no' ? mta('meet.review.fix', { label: 'What should change?', rows: 3, ph: 'In their words' }) : ''}`, false)}
