@@ -10,6 +10,12 @@
 export const BRAND = {
   logo: "/media/jack-logo.svg",
   mascot: "/media/jack-mascot.svg",
+  /**
+   * The video inside the arched window at the top of the home page. As you scroll, the window grows to full
+   * screen, so this footage is what carries you into the shop. Today it is the temporary pour clip.
+   * When the shop-entrance video is ready, drop the three files in public/media and change these names.
+   */
+  hero: { poster: "/media/pour-poster.webp", webm: "/media/pour.webm", mp4: "/media/pour.mp4" },
   facade: null as string | null,
   interior: null as string | null,
   door: { left: 0.43, top: 0.36, width: 0.14, height: 0.56 },
