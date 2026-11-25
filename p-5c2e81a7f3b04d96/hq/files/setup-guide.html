@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>How to hook it all
+up | Jack O'Beers HQ</title><link rel="stylesheet" href="../style.css"></head>
+<body>
+<div class="tk-bar"><div class="tk-in"><a class="back" href="../">&larr; Everything</a><span class="tk-title">How
+to hook it all up</span>
+<span class="tk-prog"><span class="tk-track"><span class="tk-fill"></span></span><span class="tk-num"></span></span>
+<span class="tk-menu"><button type="button" id="tk-send" class="primary">Send answers</button><details class="tk-more"><summary>More</summary><div class="menu"><button type="button" id="tk-reset">Clear this page</button><button type="button" id="tk-copy">Copy backup</button><button type="button" id="tk-paste">Paste backup</button></div></details></span></div></div>
+<main data-tick>
+<p class="sub">Tick a line, answer Yes / No, and add a note where you need one. Everything is saved in this browser. When you are done, press <b>Send answers</b>.</p>
+<h1 id="how-to-hook-it-all-up">How to hook it all up</h1>
+<p>Simple steps, in order. Tick each one as you go. Write what you find
+in the notes. Do not skip ahead.</p>
+<p><strong>Three rules before you start</strong></p>
+<ul>
+<li>Do not change DNS (the domain settings), Shopify payment settings or
+anything live until the grant is approved, the contract is signed and
+the client has said yes in writing.</li>
+<li>Never ask him for a password, card details or a private key. Use
+invites. Paste secrets straight into Vercel yourself, never into a
+message.</li>
+<li>Alcohol checkout and alcohol delivery stay switched off until the
+licence checks are done.</li>
+</ul>
+<h2 id="the-words-in-plain-english">0. The words in plain English</h2>
+<ul>
+<li><strong>Domain:</strong> the web address, like
+<code>jackobeers.co.uk</code>. He owns it.</li>
+<li><strong>Registrar:</strong> the company he bought the domain from
+(GoDaddy, 123-reg, Namecheap and so on). The domain’s settings live
+there.</li>
+<li><strong>DNS:</strong> the address book. It says “this domain goes to
+that computer”.</li>
+<li><strong>Vercel:</strong> where the new website will live.</li>
+<li><strong>Shopify:</strong> his shop. It keeps the products, stock,
+basket, orders and checkout.</li>
+<li><strong>Storefront token:</strong> a long code that lets the website
+read his products and make a basket. It is not a password, but treat it
+as private.</li>
+<li><strong>Environment variable:</strong> a safe box in Vercel where
+you keep the token. The website reads it from there. It never goes in
+the code.</li>
+</ul>
+<h2 id="find-out-where-things-are-today-5-minutes-nothing-is-changed">1.
+Find out where things are today (5 minutes, nothing is changed)</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />Where is the domain registered?
+Write the company name in the note.</label></li>
+<li><label><input type="checkbox" />Is the domain already pointing at
+his Shopify shop? (If it opens his Shopify shop today, tell me before
+you touch anything. Moving it would take his current shop
+offline.)</label></li>
+<li><label><input type="checkbox" />Does he have email on the domain
+(like sales@jackobeers.com)? Who runs it?</label></li>
+<li><label><input type="checkbox" />What is his Shopify address? It
+looks like <code>something.myshopify.com</code>. Write it in the
+note.</label></li>
+<li><label><input type="checkbox" />Which Shopify plan is he
+on?</label></li>
+</ul>
+<h2 id="get-access-to-his-shopify-he-stays-in-control">2. Get access to
+his Shopify (he stays in control)</h2>
+<p>You never need his password. There are two safe ways. Use A
+first.</p>
+<p><strong>A. Collaborator access (best).</strong> You ask, he
+approves.</p>
+<ul class="task-list">
+<li><label><input type="checkbox" />Ask him for his <strong>collaborator
+request code</strong> (4 digits). He finds it in his Shopify admin under
+<strong>Settings, Users and permissions,
+Collaborators</strong>.</label></li>
+<li><label><input type="checkbox" />In your Shopify Partner or Dev
+Dashboard account: <strong>Stores, Request store access</strong>. Enter
+his shop address and the code.</label></li>
+<li><label><input type="checkbox" />Ask for only what you need: view
+products and collections, create and manage apps or sales channels. Do
+not ask for payments, billing or ownership.</label></li>
+<li><label><input type="checkbox" />He gets a request in his admin and
+presses approve. The shop then shows up in your account.</label></li>
+<li><label><input type="checkbox" />If it fails: check no staff member
+on his store uses your business email. If one does, he removes that user
+first.</label></li>
+</ul>
+<p><strong>B. Staff account.</strong> He invites you under
+<strong>Settings, Users and permissions, Add staff</strong>, with only
+the permissions you need. Same rule: no payments, billing or
+ownership.</p>
+<ul class="task-list">
+<li><label><input type="checkbox" />Access works? Write the date in the
+note.</label></li>
+</ul>
+<h2 id="get-the-storefront-token-the-key-the-website-uses">3. Get the
+Storefront token (the key the website uses)</h2>
+<p>This is what lets the website read his products and make a basket.
+The shop keeps everything. The website is only the front.</p>
+<p>Shopify moves its menus around, so if a name below is not where I
+say, type it into the search box at the top of his Shopify admin.</p>
+<p><strong>Easiest route: the Headless channel.</strong></p>
+<ul class="task-list">
+<li><label><input type="checkbox" />In his Shopify admin, open the
+<strong>Shopify App Store</strong> and add the <strong>Headless</strong>
+sales channel.</label></li>
+<li><label><input type="checkbox" />Create a storefront in
+it.</label></li>
+<li><label><input type="checkbox" />It shows a <strong>Public access
+token</strong> (Storefront API). Copy it.</label></li>
+<li><label><input type="checkbox" />Check the permissions it has. Tick
+only: view products and collections, view stock levels, create and
+update the basket (cart and checkout). Leave out customer data unless
+customer accounts are approved.</label></li>
+</ul>
+<p><strong>Other route: a custom app</strong> (if the Headless channel
+is not available).</p>
+<ul class="task-list">
+<li><label><input type="checkbox" />In the Dev Dashboard, or his admin
+under <strong>Settings, Apps and sales channels, Develop apps</strong>,
+make an app called <code>Jack O'Beers website</code>.</label></li>
+<li><label><input type="checkbox" />Under the Storefront API settings,
+choose the permissions listed above, then install it.</label></li>
+<li><label><input type="checkbox" />Copy the <strong>Storefront API
+access token</strong>.</label></li>
+</ul>
+<p>Notes:</p>
+<ul>
+<li><p>The Storefront token is meant to be public-safe. It can only read
+the shop and make a basket. It cannot see orders or take money.</p></li>
+<li><p>Do NOT use the <strong>Admin</strong> token for the website. You
+do not need it.</p></li>
+<li><p>Never paste the token into a chat, email or the code.</p></li>
+<li><p><label><input type="checkbox" />Token copied and kept somewhere
+safe for the next 10 minutes.</label></p></li>
+</ul>
+<h2 id="put-the-token-into-vercel-the-safe-box">4. Put the token into
+Vercel (the safe box)</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />Go to Vercel and make a <strong>new
+project</strong> for this site (not the old <code>rhyshume</code> one).
+Connect the GitHub repo that holds the site.</label></li>
+<li><label><input type="checkbox" />In the project: <strong>Settings,
+Environment Variables</strong>.</label></li>
+<li><label><input type="checkbox" />Add
+<code>SHOPIFY_STORE_DOMAIN</code> = his
+<code>something.myshopify.com</code> address.</label></li>
+<li><label><input type="checkbox" />Add
+<code>SHOPIFY_STOREFRONT_TOKEN</code> = the token. Tick
+<strong>Sensitive</strong> if it is offered. Apply it to Preview and
+Production.</label></li>
+<li><label><input type="checkbox" />Save. Then <strong>Redeploy</strong>
+so the site picks them up.</label></li>
+<li><label><input type="checkbox" />Delete the token from anywhere else
+you copied it.</label></li>
+</ul>
+<p><strong>Note on today’s prototype:</strong> the Next.js prototype
+still runs on sample products. It does not read these two variables yet.
+Adding the Shopify code is the next build step, after approval.</p>
+<h2 id="check-shopify-is-talking-to-the-site-safely">5. Check Shopify is
+talking to the site (safely)</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />Open the Vercel preview link. Do
+real products show instead of the sample ones? (Only works once the
+Shopify code is added.)</label></li>
+<li><label><input type="checkbox" />Does a product show the right price
+and “in stock”?</label></li>
+<li><label><input type="checkbox" />Put one item in the basket. Press
+Checkout. You should land on a <strong>Shopify</strong> page, not a page
+on our site. Stop there. Do not pay.</label></li>
+<li><label><input type="checkbox" />Check alcohol checkout and delivery
+are switched off.</label></li>
+<li><label><input type="checkbox" />Do not change any Shopify payment
+settings. Ask me first.</label></li>
+</ul>
+<h2 id="ask-about-stock-the-dna-till">6. Ask about stock (the DNA
+till)</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />Does the DNA till stock already
+match Shopify? Ask him. Write his answer.</label></li>
+<li><label><input type="checkbox" />If it does not, <strong>do nothing
+yet.</strong> Write down how it works and tell me.</label></li>
+</ul>
+<h2
+id="connect-the-domain-to-vercel-only-after-he-says-yes-in-writing">7.
+Connect the domain to Vercel (only after he says yes in writing)</h2>
+<p>This is the step that makes <code>jackobeers.co.uk</code> show the
+new website. Changing it takes the old thing off. Do it when he and you
+are both ready, not on a Friday afternoon.</p>
+<ul class="task-list">
+<li><label><input type="checkbox" />He has said yes to going live, in
+writing.</label></li>
+<li><label><input type="checkbox" />You have a note of every current DNS
+record (screenshot them). In particular any record that says
+<strong>MX</strong> (that is his email).</label></li>
+<li><label><input type="checkbox" />In Vercel: your project,
+<strong>Settings, Domains, Add</strong>. Type his domain, for example
+<code>jackobeers.co.uk</code>. Add <code>www.jackobeers.co.uk</code> too
+and make one send people to the other.</label></li>
+<li><label><input type="checkbox" />Vercel shows the records it wants.
+<strong>Use the values Vercel shows on your screen.</strong> They are
+usually:</label>
+<ul>
+<li><strong>A record</strong>, name <code>@</code>, value
+<code>76.76.21.21</code></li>
+<li><strong>CNAME record</strong>, name <code>www</code>, value
+<code>cname.vercel-dns.com</code></li>
+</ul></li>
+<li><label><input type="checkbox" />Log in to his registrar (he does it,
+or sits with you, or invites you). Find <strong>DNS</strong> or
+<strong>Manage DNS</strong>.</label></li>
+<li><label><input type="checkbox" />Change the existing <code>@</code> A
+record to the Vercel one. Change <code>www</code> to the Vercel CNAME.
+If there is an old record for the same name, edit or remove that one
+(two A records for <code>@</code> will clash).</label></li>
+<li><label><input type="checkbox" /><strong>Do not touch MX or TXT
+records</strong> (they keep his email working), unless Vercel itself
+asks you to add one TXT record to prove the domain is
+yours.</label></li>
+<li><label><input type="checkbox" />Wait. It can take a few minutes up
+to a day. Vercel’s Domains page shows a green tick when it is
+ready.</label></li>
+<li><label><input type="checkbox" />Vercel sets up the padlock (HTTPS)
+for you automatically. Open the domain and check the padlock
+shows.</label></li>
+<li><label><input type="checkbox" />Test email: send a test email to and
+from his address.</label></li>
+</ul>
+<p><strong>Do not move the nameservers</strong> to Vercel unless you
+have copied every record across first. Moving nameservers replaces his
+whole address book. Changing just the two records above is the safe
+way.</p>
+<p><strong>If the domain was pointing at his Shopify shop:</strong>
+changing these two records takes the old shop site off that address.
+Check section 1 first. The usual safe plan is to keep the shop on its
+own address (like <code>shop.jackobeers.co.uk</code>) or on Shopify’s
+checkout address, so checkout keeps working.</p>
+<h2 id="after-it-is-live">8. After it is live</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />Open the site on a phone and on a
+laptop.</label></li>
+<li><label><input type="checkbox" />Put one item in the basket and go to
+Checkout. Stop at the Shopify page.</label></li>
+<li><label><input type="checkbox" />Check the site is no longer hidden
+from search engines (it is hidden while it is a preview). Ask me to turn
+that on, do not guess.</label></li>
+<li><label><input type="checkbox" />Write down who holds which login:
+domain, Vercel, Shopify, email.</label></li>
+<li><label><input type="checkbox" />Tell me what happened and I will
+update the plan.</label></li>
+</ul>
+<h2 id="if-something-goes-wrong">9. If something goes wrong</h2>
+<ul>
+<li><strong>Site not showing after the domain change:</strong> wait an
+hour, then check the records match what Vercel shows. A leftover old
+record is the usual cause.</li>
+<li><strong>Shopify access request fails:</strong> a staff user with
+your email, or a wrong code. Ask him to check.</li>
+<li><strong>Basket works but products are the sample ones:</strong> the
+two variables are missing or wrong, or the site was not redeployed.</li>
+<li><strong>Email stopped:</strong> an MX record was changed by mistake.
+Put it back from your screenshot.</li>
+<li><strong>Anything about payments or licensing:</strong> stop and ask
+me.</li>
+</ul>
+<h2 id="where-this-comes-from">Where this comes from</h2>
+<p>I checked these pages today. I have not been into your or his
+accounts, so menu names can differ from what you see.</p>
+<ul>
+<li><a
+href="https://vercel.com/docs/domains/set-up-custom-domain">Vercel: set
+up a custom domain</a></li>
+<li><a
+href="https://vercel.com/docs/domains/managing-dns-records">Vercel:
+manage DNS records</a></li>
+<li><a href="https://vercel.com/docs/domains/troubleshooting">Vercel:
+troubleshooting domains</a></li>
+<li><a
+href="https://help.shopify.com/en/manual/your-account/staff-accounts/collaborator-accounts">Shopify:
+collaborator access</a></li>
+<li><a
+href="https://shopify.dev/docs/api/admin-graphql/latest/objects/StorefrontAccessToken">Shopify:
+Storefront access token</a></li>
+<li><a href="https://shopify.dev/docs/api/usage/access-scopes">Shopify:
+access scopes</a></li>
+</ul>
+<p>I could not confirm Shopify’s exact current click path for creating
+the token. If a menu does not match, use the search box in his admin and
+tell me what you see.</p>
+</main>
+<script src="../tick.js"></script>
+</body></html>
