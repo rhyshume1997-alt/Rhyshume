@@ -42,6 +42,7 @@ export function ProductGrid({ cards, chips, checkoutOn, noun, intro }: { cards: 
             >
               <div className="pg-top">
                 <span className="pg-glassbox">
+                  <span className="pg-push" />
                   <Glass spec={c.glass} className="pg-glass" />
                 </span>
                 <div className="pg-text">

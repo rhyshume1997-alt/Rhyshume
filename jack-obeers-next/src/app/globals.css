@@ -727,3 +727,44 @@ html[data-tr="1"] .tr[data-state="idle"] .tr-wipe { transform: none; transition:
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   .jack-cheer:hover { animation: jack-push 1.9s steps(11, end) both; }
 }
+
+
+/* ---- shelf art re-centred so Jack has room on both sides ---- */
+.sh-item .art { width: 11rem; }
+.art-beer .sh-glass { left: 3.4rem; width: 4.2rem; }
+.art-cider .sh-glass { left: 3.7rem; width: 3.6rem; }
+.art-wine .sh-glass { left: 3.5rem; width: 4rem; }
+.art-beer { --pour: translate(-1.1rem, -3.6rem) rotate(-112deg); }
+.art-cider { --pour: translate(-1.3rem, -3.3rem) rotate(-112deg); }
+.art-wine { --pour: translate(-1.35rem, -3.4rem) rotate(-112deg); }
+/* Jack touches the glass from whichever side he is on */
+.sh-push { width: 5.6rem; right: auto; left: auto; }
+.art .sh-push { left: calc(var(--gl, 3.4rem) + var(--gw, 4.2rem) - .5rem); }
+.sh-item[data-side="r"] .art .sh-push { left: calc(var(--gl, 3.4rem) - 5.6rem + .5rem); right: auto; transform: scaleX(-1); }
+.art-beer { --gl: 3.4rem; --gw: 4.2rem; }
+.art-cider { --gl: 3.7rem; --gw: 3.6rem; }
+.art-wine { --gl: 3.5rem; --gw: 4rem; }
+
+/* ---- cards: a smaller Jack beside the glass, tidier buttons ---- */
+.pg-glassbox, .pg-glassbox .pg-glass { width: 2.4rem; }
+.pg-glassbox { width: 4.8rem; margin-right: .2rem; }
+.pg-glassbox .pg-glass { position: relative; z-index: 1; margin-left: 1.2rem; }
+.pg-push { position: absolute; bottom: 0; width: 2.8rem; aspect-ratio: 222 / 210; background: url(/media/jack-push.webp) 0 0 / 1200% 100% no-repeat; opacity: 0; pointer-events: none; transition: opacity .2s ease-out; left: calc(1.2rem + 2.4rem - .35rem); }
+.pg-card[data-side="r"] .pg-push { left: calc(1.2rem - 2.8rem + .35rem); transform: scaleX(-1); }
+@media (hover: hover) and (pointer: fine) {
+  .pg-card:hover .pg-push { opacity: 1; animation: jack-push 2.2s steps(11, end) .25s both; }
+}
+@media (prefers-reduced-motion: reduce) { .pg-push, .pg-card:hover .pg-push { animation: none; opacity: 1; background-position: 0 0; } }
+.pg-btns { display: flex; flex-wrap: wrap; gap: .4rem; }
+.pg-btn { flex: 1 1 auto; min-height: 2.35rem; padding: .25rem .85rem; font-size: .92rem; }
+.pg-more { min-height: 2.2rem; font-size: .9rem; padding: .25rem .85rem; }
+.pg-buy { gap: .4rem; }
+.pg-card { gap: .45rem; }
+
+/* ---- the doors: Jack smaller, so he stays sharp ---- */
+.arch-logo { width: calc((100% - var(--l) - var(--r)) * .5); max-width: 15rem; transform: translateX(-50%) translateY(calc(var(--pt, 0) * -16%)) scale(calc(1 + var(--pt, 0) * .45)); }
+.pg-glassbox { flex: none; }
+.pg-top { grid-template-columns: 4.8rem minmax(0, 1fr); gap: .35rem; }
+.pg-push { width: 2.3rem; }
+.pg-card[data-side="r"] .pg-push { left: calc(1.2rem - 2.3rem + .35rem); }
+.pg-text { padding-left: .8rem; }
