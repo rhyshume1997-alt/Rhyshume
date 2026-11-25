@@ -8,7 +8,7 @@ import { getCatalogue } from "@/lib/catalogue";
 import { JsonLd } from "@/components/JsonLd";
 import { storeSchema, websiteSchema } from "@/lib/schema";
 import { NAME, SITE_URL, isIndexable } from "@/lib/site";
-import { LookPicker } from "@/components/LookPicker";
+import { LookEffects } from "@/components/LookPicker";
 import { CommentsPanel } from "@/components/CommentsPanel";
 import "./globals.css";
 
@@ -49,7 +49,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <CartFallback />
         <StickyBar />
         <PageTransition />
-        {!isIndexable() && <><LookPicker /><CommentsPanel /></>}
+        {!isIndexable() && <><LookEffects /><CommentsPanel /></>}
       </body>
     </html>
   );

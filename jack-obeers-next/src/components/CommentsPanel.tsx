@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { LookSwitch } from "@/components/LookPicker";
 
 type Note = { id: string; t: number; name: string; path: string; look: string; text: string };
 const KEY = "jo_notes";
@@ -65,10 +66,13 @@ export function CommentsPanel() {
   return (
     <>
       <button ref={btn} type="button" className="cm-tab" aria-expanded={open} aria-controls="cm-panel" onClick={() => setOpen((o) => !o)}>
-        Notes{notes.length ? <b>{notes.length}</b> : null}
+        Preview{notes.length ? <b>{notes.length}</b> : null}
       </button>
-      <aside id="cm-panel" className="cm-panel" aria-label="Preview notes" hidden={!open}>
-        <div className="cm-head"><h2>Notes on this preview</h2><button type="button" className="cm-x" aria-label="Close notes" onClick={() => { setOpen(false); btn.current?.focus(); }}>&times;</button></div>
+      <aside id="cm-panel" className="cm-panel" aria-label="Preview options and notes" hidden={!open}>
+        <div className="cm-head"><h2>Preview</h2><button type="button" className="cm-x" aria-label="Close notes" onClick={() => { setOpen(false); btn.current?.focus(); }}>&times;</button></div>
+        <p className="cm-l cm-first">Look</p>
+        <LookSwitch />
+        <p className="cm-l">Notes</p>
         <p className="cm-hint">Write anything: what you like, what to change. {`Page: ${path}, ${lookName(look)} look.`} Notes are saved on this device.</p>
         <label className="cm-l" htmlFor="cm-name">Your name</label>
         <input id="cm-name" className="cm-in" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" />

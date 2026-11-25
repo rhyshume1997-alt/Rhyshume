@@ -1217,3 +1217,45 @@ textarea.cm-in { resize: vertical; }
 @media (max-width: 40rem) { .cm-tab { top: 36%; } }
 @media (prefers-reduced-motion: reduce) { .cm-panel { animation: none; } }
 @media (max-width: 40rem) { html[data-look="classic"] .brand { font-size: 1.12rem; gap: .45rem; } html[data-look="classic"] .brand img { width: 2.5rem; height: 2.5rem; } }
+
+/* ===== Finish pass: phone cards, filter bar, carousels, preview drawer ===== */
+.look-picker { display: none; }
+.cm-looks { display: flex; flex-wrap: wrap; gap: .4rem; margin-bottom: .4rem; }
+.cm-looks button { min-height: 2.75rem; padding: 0 1rem; border-radius: 99px; border: 1px solid #d9a24c; background: transparent; color: #f2e8d5; font: 600 .85rem/1 var(--ui); transition: background-color .15s, transform .15s; }
+.cm-looks button[aria-pressed="true"] { background: #d9a24c; color: #150f0b; }
+.cm-looks button:active { transform: scale(.97); }
+.cm-first { margin-top: .4rem; }
+@media (hover: hover) and (pointer: fine) { .cm-looks button:hover:not([aria-pressed="true"]) { background: rgba(217, 162, 76, .25); } }
+
+/* carousels (best sellers, new in): wide enough for a name, a price and the button */
+.newin ul { grid-auto-columns: minmax(16.5rem, 18.5rem); }
+.newin-row { flex-wrap: wrap; row-gap: .5rem; }
+.newin .pg-btn { flex: none; white-space: nowrap; }
+
+/* buttons in the dark looks: small and tidy, never wider than their card */
+html:is([data-look="backbar"], [data-look="cinematic"]) .pg-btn { letter-spacing: .06em; font-size: .8rem; white-space: nowrap; }
+
+@media (max-width: 40rem) {
+  /* the style filter wraps instead of scrolling off the edge */
+  .seg { display: flex; flex-wrap: wrap; border-radius: 1.5rem; overflow: visible; }
+  .seg-link { margin-left: 0; }
+  .seg-link:first-of-type::before { display: none; }
+}
+@media (max-width: 34rem) {
+  /* one card per row on a phone: glass and words on top, price and button underneath, nothing cut off */
+  .pg-grid { grid-template-columns: 1fr; gap: .8rem; }
+  .pg-card { padding: .9rem 1rem; gap: .6rem; }
+  .pg-top { grid-template-columns: 3.4rem minmax(0, 1fr); gap: .6rem; align-items: center; padding-top: 0; }
+  .pg-glassbox { width: 3.4rem; margin: 0; }
+  .pg-glassbox .pg-glass { width: 2.2rem; margin-left: .6rem; }
+  .pg-text { padding-left: 0; }
+  .pg-name { font-size: 1.12rem; -webkit-line-clamp: 3; line-clamp: 3; }
+  .pg-brew { font-size: .95rem; }
+  .pg-meta { font-size: .85rem; gap: .1rem .8rem; font-variant-numeric: lining-nums; }
+  .pg-buy { flex-direction: row; align-items: center; justify-content: space-between; gap: .8rem; }
+  .pg-btns { display: flex; width: auto; flex: 0 0 auto; }
+  .pg-btn { flex: none; min-height: 2.75rem; padding-inline: 1.2rem; white-space: nowrap; font-size: .92rem; }
+  .pg-price { font-size: 1.3rem; }
+  .find-pick { flex-direction: column; align-items: stretch; }
+  .find-pick .pg-btn { width: 100%; }
+}
