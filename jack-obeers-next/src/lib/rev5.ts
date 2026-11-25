@@ -141,7 +141,7 @@ export function initRev5(P: any[]): () => void {
       var f = Math.max(0, 1 - pt * 3);
       copy.style.opacity = f; copy.style.transform = 'translateY(' + (-pt * 60) + 'px)'; if (cue) cue.style.opacity = f; if (note) note.style.opacity = f; if (tag) tag.style.opacity = 1;
       counter.style.transform = 'translateY(' + (Math.max(0, pt - .55) / .45 * 105) + '%)';
-      arch.style.setProperty('--pt', pt); if (enter && !reduced && pt > .02 && enter.paused) { var q2 = enter.play(); if (q2 && q2.catch) q2.catch(function () {}); }
+      arch.style.setProperty('--pt', pt); var jk = $('.jack-charge'); if (jk) jk.style.backgroundPosition = (Math.round(Math.min(1, pt / .28) * 11) / 11 * 100) + '% 0'; if (enter && !reduced && pt > .02 && enter.paused) { var q2 = enter.play(); if (q2 && q2.catch) q2.catch(function () {}); }
       if (!medal) return;
       var run = Math.min(1, pt / .5), ex = innerWidth * (mob() ? .55 : .55) * ease(run);
       medal.style.translate = ex + 'px ' + (-Math.sin(run * Math.PI) * 8) + 'px'; medal.style.opacity = Math.max(0, 1 - Math.max(0, pt - .38) / .22);

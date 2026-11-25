@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react";
 import { Glass } from "@/components/Glass";
-import { BRAND } from "@/lib/brand";
 import type { Card } from "@/lib/cards";
 
 /** The whole range on one screen. The chips filter in place, no page reload. Each card goes to Shopify checkout in one click. */
@@ -35,7 +34,7 @@ export function ProductGrid({ cards, chips, checkoutOn, noun, intro }: { cards: 
           return (
             <li
               key={c.handle}
-              data-cat={c.category} className={"pg-card" + (isOpen ? " open" : "") + (tapped === c.handle ? " is-filled" : "")}
+              data-cat={c.category} data-side="r" onPointerMove={(e) => { const r = e.currentTarget.getBoundingClientRect(); e.currentTarget.dataset.side = e.clientX < r.left + r.width / 2 ? "l" : "r"; }} className={"pg-card" + (isOpen ? " open" : "") + (tapped === c.handle ? " is-filled" : "")}
               onPointerUp={(e) => {
                 // touch and pen: a tap fills this glass and empties the last one. Mouse uses hover instead.
                 if (e.pointerType !== "mouse" && !(e.target as HTMLElement).closest("a,button")) setTapped(tapped === c.handle ? null : c.handle);
@@ -44,8 +43,6 @@ export function ProductGrid({ cards, chips, checkoutOn, noun, intro }: { cards: 
               <div className="pg-top">
                 <span className="pg-glassbox">
                   <Glass spec={c.glass} className="pg-glass" />
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img className="pg-jack" src={BRAND.mascot} alt="" width={64} height={62} />
                 </span>
                 <div className="pg-text">
                   <h2 className="pg-name">{c.name}</h2>

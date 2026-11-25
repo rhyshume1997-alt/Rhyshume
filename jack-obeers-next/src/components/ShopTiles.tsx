@@ -6,6 +6,12 @@ import { ShelfArt } from "@/components/ShelfArt";
 import { ProductGrid } from "@/components/ProductGrid";
 import type { Card } from "@/lib/cards";
 
+/** Remember which half of the item the pointer is on, so the glass can lean toward it and Jack can push from the other side. */
+const trackSide = (e: React.PointerEvent<HTMLElement>) => {
+  const r = e.currentTarget.getBoundingClientRect();
+  e.currentTarget.dataset.side = e.clientX < r.left + r.width / 2 ? "l" : "r";
+};
+
 type Range = { cards: Card[]; chips: string[] };
 type Key = "beer" | "cider" | "wine";
 
@@ -44,7 +50,7 @@ export function ShopTiles({ ranges, events, subs, checkoutOn }: { ranges: Record
             const n = ranges[d.key].cards.length;
             return (
               <li key={d.key}>
-                <button type="button" className="sh-item" data-kind={d.key} aria-expanded={open === d.key} aria-controls="range-panel" onClick={() => choose(d.key)}>
+                <button type="button" className="sh-item" data-kind={d.key} aria-expanded={open === d.key} aria-controls="range-panel" onPointerMove={trackSide} onPointerEnter={trackSide} onClick={() => choose(d.key)}>
                   <ShelfArt kind={d.key} />
                   <span className="sh-label"><b>{d.title}</b><span className="tile-n">{count(n, d.unit.replace(/s$/, ""), d.unit)}</span></span>
                 </button>
