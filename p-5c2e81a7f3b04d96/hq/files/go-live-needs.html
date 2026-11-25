@@ -4,12 +4,10 @@
 <title>What holds go-live
 back | Jack O'Beers HQ</title><link rel="stylesheet" href="../style.css"></head>
 <body>
-<div class="tk-bar"><div class="tk-in"><a class="back" href="../">&larr; Everything</a><span class="tk-title">What
-holds go-live back</span>
-<span class="tk-prog"><span class="tk-track"><span class="tk-fill"></span></span><span class="tk-num"></span></span>
-<span class="tk-menu"><button type="button" id="tk-send" class="primary">Send answers</button><details class="tk-more"><summary>More</summary><div class="menu"><button type="button" id="tk-reset">Clear this page</button><button type="button" id="tk-copy">Copy backup</button><button type="button" id="tk-paste">Paste backup</button></div></details></span></div></div>
-<main data-tick>
-<p class="sub">Tick a line, answer Yes / No, and add a note where you need one. Everything is saved in this browser. When you are done, press <b>Send answers</b>.</p>
+<div class="tk-bar"><div class="tk-in"><a class="back" href="../">&larr; Back</a><span class="tk-title">What
+holds go-live
+back</span><span class="badge">Read only</span></div></div>
+<main>
 <h1 id="what-i-need-from-him-to-go-live">What I need from him to go
 live</h1>
 <p><strong>Do this first (2 min):</strong> open this on your phone. Ask
@@ -80,41 +78,35 @@ spam</td>
 <hr />
 <h2 id="ask-first-15-min">Ask first (15 min)</h2>
 <ol type="1">
-<li><label><input type="checkbox" />Who holds the domain (which
-company), and who has the login?</label></li>
-<li><label><input type="checkbox" />What is the Shopify store address,
-and is it live?</label></li>
-<li><label><input type="checkbox" />Can he add you as a Shopify helper
-(collaborator)?</label></li>
-<li><label><input type="checkbox" />Can he show you his premises licence
-and the operating plan?</label></li>
-<li><label><input type="checkbox" />Which logo file is the original
-(vector), and what are the brand colours?</label></li>
-<li><label><input type="checkbox" />Who is the one person who says “yes,
-go live”?</label></li>
+<li>[ ] Who holds the domain (which company), and who has the
+login?</li>
+<li>[ ] What is the Shopify store address, and is it live?</li>
+<li>[ ] Can he add you as a Shopify helper (collaborator)?</li>
+<li>[ ] Can he show you his premises licence and the operating
+plan?</li>
+<li>[ ] Which logo file is the original (vector), and what are the brand
+colours?</li>
+<li>[ ] Who is the one person who says “yes, go live”?</li>
 </ol>
 <hr />
 <h2 id="domain-and-dns-10-min">1. Domain and DNS (10 min)</h2>
 <p><em>Why: the website needs the street name pointed at it. Without it,
 nobody finds the site.</em></p>
-<ul class="task-list">
-<li><label><input type="checkbox" /><strong>Where the domain is
-bought</strong> (registrar) and <strong>who has the login</strong>. He
-can add you as a helper, or change the settings while you
-watch.</label></li>
-<li><label><input type="checkbox" /><strong>A photo or screenshot of his
-DNS page today.</strong> This is the “before” picture. Never change it
-without one.</label></li>
-<li><label><input type="checkbox" /><strong>Who looks after his
-email</strong> (his emails look like Microsoft Outlook). The email lines
-in the phone book (MX, SPF, DKIM) must not be broken.</label></li>
-<li><label><input type="checkbox" /><strong>Which address is the
-website</strong> (jackobeers.com or www.jackobeers.com) and which is the
-shop checkout (for example shop.jackobeers.com). Not decided
-yet.</label></li>
-<li><label><input type="checkbox" /><strong>Permission to change the
-DNS</strong> on a day we both choose. Vercel and Shopify each give the
-exact lines to add; we copy them in.</label></li>
+<ul>
+<li>[ ] <strong>Where the domain is bought</strong> (registrar) and
+<strong>who has the login</strong>. He can add you as a helper, or
+change the settings while you watch.</li>
+<li>[ ] <strong>A photo or screenshot of his DNS page today.</strong>
+This is the “before” picture. Never change it without one.</li>
+<li>[ ] <strong>Who looks after his email</strong> (his emails look like
+Microsoft Outlook). The email lines in the phone book (MX, SPF, DKIM)
+must not be broken.</li>
+<li>[ ] <strong>Which address is the website</strong> (jackobeers.com or
+www.jackobeers.com) and which is the shop checkout (for example
+shop.jackobeers.com). Not decided yet.</li>
+<li>[ ] <strong>Permission to change the DNS</strong> on a day we both
+choose. Vercel and Shopify each give the exact lines to add; we copy
+them in.</li>
 </ul>
 <p><em>What I do after: connect the domain, get the padlock (HTTPS),
 make www and non-www go to the same place, turn search engines on, and
@@ -123,130 +115,115 @@ make his emails safe.</em></p>
 <h2 id="shopify-15-min">2. Shopify (15 min)</h2>
 <p><em>Why: Shopify holds the products, stock, orders and payments. The
 website just shows them and sends people to Shopify to pay.</em></p>
-<ul class="task-list">
-<li><label><input type="checkbox" /><strong>Store address</strong>
-(looks like <code>something.myshopify.com</code>) and the
-<strong>plan</strong> he is on</label></li>
-<li><label><input type="checkbox" /><strong>Add you as a
-collaborator</strong> (Settings, Users). Ask him to approve the request.
-You will need rights for: products, apps and sales channels, orders,
-shipping, and settings.</label></li>
-<li><label><input type="checkbox" /><strong>Make a custom app for the
-website</strong> (Settings, Apps, Develop apps). This gives a
-<strong>Storefront token</strong>. He can do it with you next to him.
-The steps are in the README.</label></li>
-<li><label><input type="checkbox" /><strong>Products ready?</strong>
-Export the product list (Products, Export). Check names, prices, photos,
-sizes, stock, and which collection each product is in. We need
-collections called <code>beers</code>, <code>ciders</code>,
-<code>wines</code>, <code>kegs</code>,
-<code>hampers</code>.</label></li>
-<li><label><input type="checkbox" /><strong>Test mode:</strong> agree a
-day to place a test order before going live</label></li>
+<ul>
+<li>[ ] <strong>Store address</strong> (looks like
+<code>something.myshopify.com</code>) and the <strong>plan</strong> he
+is on</li>
+<li>[ ] <strong>Add you as a collaborator</strong> (Settings, Users).
+Ask him to approve the request. You will need rights for: products, apps
+and sales channels, orders, shipping, and settings.</li>
+<li>[ ] <strong>Make a custom app for the website</strong> (Settings,
+Apps, Develop apps). This gives a <strong>Storefront token</strong>. He
+can do it with you next to him. The steps are in the README.</li>
+<li>[ ] <strong>Products ready?</strong> Export the product list
+(Products, Export). Check names, prices, photos, sizes, stock, and which
+collection each product is in. We need collections called
+<code>beers</code>, <code>ciders</code>, <code>wines</code>,
+<code>kegs</code>, <code>hampers</code>.</li>
+<li>[ ] <strong>Test mode:</strong> agree a day to place a test order
+before going live</li>
 </ul>
 <hr />
 <h2 id="money-tax-and-shipping-10-min">3. Money, tax and shipping (10
 min)</h2>
 <p><em>Why: if the money side is not set up, nobody can buy.</em></p>
-<ul class="task-list">
-<li><label><input type="checkbox" /><strong>Payments:</strong> is
-Shopify Payments on? Is Apple Pay, Google Pay or PayPal on? Is his bank
-account added and verified?</label></li>
-<li><label><input type="checkbox" /><strong>VAT:</strong> his VAT
-number, and whether prices include VAT</label></li>
-<li><label><input type="checkbox" /><strong>Shipping:</strong> which
-courier, which countries, the price and the time for each. UK only, or
-international too?</label></li>
-<li><label><input type="checkbox" /><strong>Click and collect:</strong>
-is local pickup set up for 13 Station Road? Which days and times, and
-how much notice?</label></li>
-<li><label><input type="checkbox" /><strong>The till:</strong> does the
-DNA till talk to Shopify, or does he update stock by hand?</label></li>
+<ul>
+<li>[ ] <strong>Payments:</strong> is Shopify Payments on? Is Apple Pay,
+Google Pay or PayPal on? Is his bank account added and verified?</li>
+<li>[ ] <strong>VAT:</strong> his VAT number, and whether prices include
+VAT</li>
+<li>[ ] <strong>Shipping:</strong> which courier, which countries, the
+price and the time for each. UK only, or international too?</li>
+<li>[ ] <strong>Click and collect:</strong> is local pickup set up for
+13 Station Road? Which days and times, and how much notice?</li>
+<li>[ ] <strong>The till:</strong> does the DNA till talk to Shopify, or
+does he update stock by hand?</li>
 </ul>
 <hr />
 <h2 id="licence-and-age-checks-10-min">4. Licence and age checks (10
 min)</h2>
 <p><em>Why: alcohol has rules. These can stop a launch. Do not guess.
 Ask him and his adviser.</em></p>
-<ul class="task-list">
-<li><label><input type="checkbox" /><strong>Premises licence and
-operating plan</strong> (a copy or a photo). He told us it includes
-off-sales.</label></li>
-<li><label><input type="checkbox" /><strong>Does it allow delivery, and
-sales over the internet?</strong> Ask the licensing board (East
-Dunbartonshire Council) if he is not sure.</label></li>
-<li><label><input type="checkbox" /><strong>Age check at
-checkout:</strong> just a tick box, or something stronger? And who
-checks ID when the parcel arrives, or when someone
-collects?</label></li>
-<li><label><input type="checkbox" /><strong>Does the licence say
-anything about the website</strong> (what must be shown)? Ask his
-adviser.</label></li>
-<li><label><input type="checkbox" /><strong>Who looks over the age
-policy and the delivery rules</strong> before launch?</label></li>
+<ul>
+<li>[ ] <strong>Premises licence and operating plan</strong> (a copy or
+a photo). He told us it includes off-sales.</li>
+<li>[ ] <strong>Does it allow delivery, and sales over the
+internet?</strong> Ask the licensing board (East Dunbartonshire Council)
+if he is not sure.</li>
+<li>[ ] <strong>Age check at checkout:</strong> just a tick box, or
+something stronger? And who checks ID when the parcel arrives, or when
+someone collects?</li>
+<li>[ ] <strong>Does the licence say anything about the website</strong>
+(what must be shown)? Ask his adviser.</li>
+<li>[ ] <strong>Who looks over the age policy and the delivery
+rules</strong> before launch?</li>
 </ul>
 <hr />
 <h2 id="legal-pages-and-business-details-10-min">5. Legal pages and
 business details (10 min)</h2>
 <p><em>Why: a shop website must say who the shop is, and how it looks
 after people’s information.</em></p>
-<ul class="task-list">
-<li><label><input type="checkbox" /><strong>Full legal name</strong>,
-address, email and <strong>company number</strong> (if it is a limited
-company)</label></li>
-<li><label><input type="checkbox" /><strong>VAT
-number</strong></label></li>
-<li><label><input type="checkbox" /><strong>Is he registered with the
-ICO</strong> (the data protection office)?</label></li>
-<li><label><input type="checkbox" /><strong>Who writes or
-checks:</strong> privacy notice, terms of sale, returns and refunds. We
-have only drafts with notes.</label></li>
-<li><label><input type="checkbox" /><strong>Cookies:</strong> do we use
-any tracking (analytics)? If not, we can keep it simple.</label></li>
+<ul>
+<li>[ ] <strong>Full legal name</strong>, address, email and
+<strong>company number</strong> (if it is a limited company)</li>
+<li>[ ] <strong>VAT number</strong></li>
+<li>[ ] <strong>Is he registered with the ICO</strong> (the data
+protection office)?</li>
+<li>[ ] <strong>Who writes or checks:</strong> privacy notice, terms of
+sale, returns and refunds. We have only drafts with notes.</li>
+<li>[ ] <strong>Cookies:</strong> do we use any tracking (analytics)? If
+not, we can keep it simple.</li>
 </ul>
 <hr />
 <h2 id="words-pictures-and-details-the-rest-of-the-visit">6. Words,
 pictures and details (the rest of the visit)</h2>
 <p><em>Why: the site is built. It needs his real things.</em></p>
-<ul class="task-list">
-<li><label><input type="checkbox" /><strong>Logo file</strong> (vector)
-and <strong>colours</strong> (hex codes)</label></li>
-<li><label><input type="checkbox" /><strong>Photos and video:</strong>
-see the photo plan (<code>what-to-shoot</code>)</label></li>
-<li><label><input type="checkbox" /><strong>Every product:</strong>
-name, short description, size, price, <strong>ABV, allergens (from the
-label)</strong>, “goes well with”</label></li>
-<li><label><input type="checkbox" /><strong>Opening hours</strong> with
-Tuesday, bank holidays and Christmas</label></li>
-<li><label><input type="checkbox" /><strong>About text</strong> and what
-he does <strong>not</strong> do</label></li>
-<li><label><input type="checkbox" /><strong>Hampers:</strong> what goes
-in, price, gift message, send to someone else?</label></li>
-<li><label><input type="checkbox" /><strong>Events:</strong> what he
-does, how many people, prices</label></li>
-<li><label><input type="checkbox" /><strong>Keezer and keg
-rental:</strong> what it is, price, deposit, dates, delivery,
-rules</label></li>
-<li><label><input type="checkbox" /><strong>Links:</strong> Instagram,
-YouTube, Google Business Profile (and ask to be added as a manager
-there)</label></li>
-<li><label><input type="checkbox" /><strong>Newsletter:</strong> which
-tool he uses, and what he will send</label></li>
+<ul>
+<li>[ ] <strong>Logo file</strong> (vector) and <strong>colours</strong>
+(hex codes)</li>
+<li>[ ] <strong>Photos and video:</strong> see the photo plan
+(<code>what-to-shoot</code>)</li>
+<li>[ ] <strong>Every product:</strong> name, short description, size,
+price, <strong>ABV, allergens (from the label)</strong>, “goes well
+with”</li>
+<li>[ ] <strong>Opening hours</strong> with Tuesday, bank holidays and
+Christmas</li>
+<li>[ ] <strong>About text</strong> and what he does
+<strong>not</strong> do</li>
+<li>[ ] <strong>Hampers:</strong> what goes in, price, gift message,
+send to someone else?</li>
+<li>[ ] <strong>Events:</strong> what he does, how many people,
+prices</li>
+<li>[ ] <strong>Keezer and keg rental:</strong> what it is, price,
+deposit, dates, delivery, rules</li>
+<li>[ ] <strong>Links:</strong> Instagram, YouTube, Google Business
+Profile (and ask to be added as a manager there)</li>
+<li>[ ] <strong>Newsletter:</strong> which tool he uses, and what he
+will send</li>
 </ul>
 <hr />
 <h2 id="decisions-he-must-make">7. Decisions he must make</h2>
 <ol type="1">
-<li><label><input type="checkbox" /><strong>Which concept he
-likes</strong> (the feedback file from the board)</label></li>
-<li><label><input type="checkbox" /><strong>Date he wants to go
-live.</strong> He told us the site should be done by 31 January
-2027.</label></li>
-<li><label><input type="checkbox" /><strong>Who looks after the site
-after launch</strong> (updates, hosting)</label></li>
-<li><label><input type="checkbox" /><strong>Who pays for
-hosting</strong> and where the bill goes</label></li>
-<li><label><input type="checkbox" /><strong>What happens if something
-breaks</strong> (who we ring)</label></li>
+<li>[ ] <strong>Which concept he likes</strong> (the feedback file from
+the board)</li>
+<li>[ ] <strong>Date he wants to go live.</strong> He told us the site
+should be done by 31 January 2027.</li>
+<li>[ ] <strong>Who looks after the site after launch</strong> (updates,
+hosting)</li>
+<li>[ ] <strong>Who pays for hosting</strong> and where the bill
+goes</li>
+<li>[ ] <strong>What happens if something breaks</strong> (who we
+ring)</li>
 </ol>
 <hr />
 <h2 id="what-will-hold-it-back-in-order">What will hold it back (in
@@ -264,21 +241,18 @@ without it)</li>
 <hr />
 <h2 id="what-i-do-on-my-side-not-from-him">What I do on my side (not
 from him)</h2>
-<ul class="task-list">
-<li><label><input type="checkbox" />Connect the Storefront token in
-<code>config.js</code> and test a real order in test mode</label></li>
-<li><label><input type="checkbox" />Point the domain at Vercel and add
-the email lines safely</label></li>
-<li><label><input type="checkbox" />Turn off the “private” setting and
-add the sitemap</label></li>
-<li><label><input type="checkbox" />Replace temporary AI pictures and
-“to be confirmed” tags with his real ones</label></li>
-<li><label><input type="checkbox" />Final check: phone, speed,
-accessibility, test order, test collection slot</label></li>
+<ul>
+<li>[ ] Connect the Storefront token in <code>config.js</code> and test
+a real order in test mode</li>
+<li>[ ] Point the domain at Vercel and add the email lines safely</li>
+<li>[ ] Turn off the “private” setting and add the sitemap</li>
+<li>[ ] Replace temporary AI pictures and “to be confirmed” tags with
+his real ones</li>
+<li>[ ] Final check: phone, speed, accessibility, test order, test
+collection slot</li>
 </ul>
 <hr />
 <p><strong>Next:</strong> put this on your phone and start with “Ask
 first”.</p>
 </main>
-<script src="../tick.js"></script>
 </body></html>

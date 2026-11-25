@@ -1,10 +1,10 @@
 /* Tick lists, Yes/No answers and notes for the private HQ pages. Everything is saved in this browser (localStorage). */
 (function () {
   'use strict';
-  var ANS = 'jo-ans-v2', OLD = 'jo-ticks-v1', META = 'jo-meta-v1';
+  var ANS = 'jo-ans-v3', OLD = 'jo-ticks-v1', META = 'jo-meta-v1';
   function rd(k) { try { return JSON.parse(localStorage.getItem(k) || '{}') || {}; } catch (e) { return {}; } }
   var ans = rd(ANS), meta = rd(META), old = rd(OLD);
-  Object.keys(old).forEach(function (k) { if (old[k] && !ans[k]) ans[k] = { t: 1 }; });
+
   function wr() { try { localStorage.setItem(ANS, JSON.stringify(ans)); localStorage.setItem(META, JSON.stringify(meta)); } catch (e) { } }
   var path = location.pathname.replace(/index\.html$/, '');
   var pageTitle = ((document.querySelector('.tk-title') || {}).textContent || document.title).replace(/\s+/g, ' ').trim();
@@ -50,7 +50,8 @@
     input.dataset.k = key;
     var r = ans[key] || {};
     input.checked = !!r.t;
-    var b = { input: input, row: row, head: headOf(row), key: key, q: textOf(row) };
+    var hd = headOf(row);
+    var b = { input: input, row: row, head: hd, key: key, q: textOf(row), sec: hd >= 0 ? hs[hd].textContent.replace(/\s*\d+\/\d+\s*$/, '').trim() : '' };
     boxes.push(b);
     buildQA(b, row);
   });
@@ -79,11 +80,11 @@
     holder.appendChild(qa);
     b.qa = qa; b.ta = ta; b.nb = nb;
     nb.addEventListener('click', function () { ta.hidden = !ta.hidden; nb.setAttribute('aria-expanded', String(!ta.hidden)); if (!ta.hidden) ta.focus(); });
-    ta.addEventListener('input', function () { var x = rec(b.key); x.n = ta.value; x.q = b.q; x.p = pageTitle; nb.textContent = ta.value ? 'Note' : '+ Note'; wr(); });
+    ta.addEventListener('input', function () { var x = rec(b.key); x.n = ta.value; x.q = b.q; x.p = b.sec || pageTitle; nb.textContent = ta.value ? 'Note' : '+ Note'; wr(); });
     qa.addEventListener('click', function (e) {
       var btn = e.target.closest('.qa-opt'); if (!btn) return;
       var x = rec(b.key), on = x.a !== btn.dataset.v;
-      x.a = on ? btn.dataset.v : ''; x.q = b.q; x.p = pageTitle;
+      x.a = on ? btn.dataset.v : ''; x.q = b.q; x.p = b.sec || pageTitle;
       if (on) { x.t = 1; b.input.checked = true; } wr(); paint();
     });
   }
@@ -111,7 +112,7 @@
   document.addEventListener('change', function (e) {
     var i = e.target; if (!i.dataset || !i.dataset.k) return;
     var x = rec(i.dataset.k); x.t = i.checked ? 1 : 0;
-    var b = boxes.filter(function (z) { return z.key === i.dataset.k; })[0]; if (b) { x.q = b.q; x.p = pageTitle; }
+    var b = boxes.filter(function (z) { return z.key === i.dataset.k; })[0]; if (b) { x.q = b.q; x.p = b.sec || pageTitle; }
     wr(); paint();
   });
   document.addEventListener('click', function (e) {
