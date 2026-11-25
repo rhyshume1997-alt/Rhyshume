@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { clientIp, rateLimit, sameOrigin } from "@/lib/antispam";
 import { getCatalogue } from "@/lib/catalogue";
 
 // Checkout is OFF unless CHECKOUT_ENABLED is exactly "true" in Vercel.
@@ -21,6 +22,13 @@ export async function POST(req: Request) {
   const domain = process.env.SHOPIFY_STORE_DOMAIN;
   const token = process.env.SHOPIFY_STOREFRONT_TOKEN;
   if (!domain || !token) return NextResponse.json({ ok: false, reason: "off" }, { status: 503 });
+
+  // Anti-spam: only this site's own pages, only small JSON, and a limit per visitor so nobody can fill Shopify with carts.
+  if (!sameOrigin(req)) return NextResponse.json({ ok: false, reason: "origin" }, { status: 403 });
+  if (!(req.headers.get("content-type") || "").includes("application/json")) return NextResponse.json({ ok: false, reason: "bad" }, { status: 415 });
+  if (Number(req.headers.get("content-length") || 0) > 20_000) return NextResponse.json({ ok: false, reason: "bad" }, { status: 413 });
+  const limit = rateLimit(`checkout:${clientIp(req.headers)}`, 8, 60_000);
+  if (!limit.ok) return NextResponse.json({ ok: false, reason: "slow" }, { status: 429, headers: { "Retry-After": String(Math.ceil(limit.retryAfterMs / 1000)) } });
 
   let body: { lines?: { h?: string; q?: number }[]; dob?: string; ageConfirmed?: boolean };
   try {

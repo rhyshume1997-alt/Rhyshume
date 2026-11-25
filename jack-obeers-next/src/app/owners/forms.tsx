@@ -1,12 +1,14 @@
 "use client";
 
 import { useActionState } from "react";
+import { GuardFields } from "@/components/GuardFields";
 import { createEvent, login, type FormState } from "./actions";
 
 export function LoginForm() {
   const [state, action, pending] = useActionState<FormState, FormData>(login, undefined);
   return (
     <form action={action} className="own-form" autoComplete="on">
+      <GuardFields />
       <label htmlFor="o-name">Name</label>
       <input id="o-name" name="name" type="text" autoComplete="username" required />
       <label htmlFor="o-pass">Password</label>
@@ -21,6 +23,7 @@ export function EventForm() {
   const [state, action, pending] = useActionState<FormState, FormData>(createEvent, undefined);
   return (
     <form action={action} className="own-form" key={state?.ok ? state.message : "f"}>
+      <GuardFields />
       <label htmlFor="e-title">Event name</label>
       <input id="e-title" name="title" type="text" maxLength={100} required />
       <div className="own-row">
