@@ -16,7 +16,7 @@ const local = (name: string) => `/media/videos/${name}.mp4`;
 
 export const MEDIA = {
   /** The opening: plays behind the saloon doors. Wide on desktop, tall on a phone. Web-sized copies (the full-quality loops are in the media repo). */
-  landing: { wide: local("landing-wide"), tall: local("landing-tall"), posterWide: poster("landing-wide"), posterTall: poster("landing-tall") },
+  landing: { wide: local("landing-wide"), tall: local("landing-tall"), posterWide: "/media/posters/landing-wide-hero.webp", posterTall: "/media/posters/landing-tall-hero.webp" },
   /** Section backgrounds (compressed for the web, muted loops). */
   bgTaps: { wide: local("bg-taps-wide"), tall: local("bg-taps-tall"), posterWide: poster("bg-taps-wide"), posterTall: poster("bg-taps-tall") },
   bgDeli: { wide: local("bg-deli-wide"), tall: local("bg-deli-tall"), posterWide: poster("bg-deli-wide"), posterTall: poster("bg-deli-tall") },

@@ -69,7 +69,7 @@ export function BgVideo({ loop, className, priority = false, afterInput = false 
       <picture className="bgv-poster">
         {loop.posterTall && <source media="(max-width: 832px)" srcSet={loop.posterTall} />}
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={loop.posterWide} alt="" width={1920} height={1080} fetchPriority="high" decoding="async" />
+        <img src={loop.posterWide} alt="" width={960} height={540} fetchPriority="high" decoding="async" />
       </picture>
       {video}
     </>

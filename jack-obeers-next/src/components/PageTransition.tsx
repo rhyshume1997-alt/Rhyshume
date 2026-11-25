@@ -60,7 +60,7 @@ export function PageTransition() {
     <div ref={root} className="tr" data-state="idle" aria-hidden="true">
       <div className="tr-wipe">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img ref={bull} className="tr-bull" src={FRAMES[0]} alt="" width={482} height={362} />
+        <img ref={bull} className="tr-bull" src={FRAMES[0]} alt="" width={482} height={362} loading="lazy" fetchPriority="low" />
       </div>
     </div>
   );

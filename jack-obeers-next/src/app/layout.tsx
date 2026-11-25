@@ -32,8 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="preload" href="/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
-        <link rel="preload" href="/fonts/source-sans-3-latin-700-normal.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
-        <script dangerouslySetInnerHTML={{ __html: "try{if(sessionStorage.getItem('jo_tr')==='1')document.documentElement.dataset.tr='1'}catch(e){}" }} />
+        <script dangerouslySetInnerHTML={{ __html: "try{if(sessionStorage.getItem('jo_tr')==='1')document.documentElement.dataset.tr='1'}catch(e){}addEventListener('load',function(){document.documentElement.classList.add('loaded')})" }} />
       </head>
       <body>
         <JsonLd data={[storeSchema(), websiteSchema()]} />

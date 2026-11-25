@@ -99,19 +99,21 @@ Lab numbers from a production build running on this computer, on an emulated Pix
 
 | Page | FCP | LCP | CLS | Blocking time | Weight |
 |---|---|---|---|---|---|
-| `/` | 1.0 s | 5.1 s (hero poster image) | 0.004 | ~170 ms | 5.0 MB |
+| `/` | 0.9 s | 1.1 s (hero poster image) | 0.005 | ~170 ms | 5.1 MB |
 | `/beers` | 1.2 s | 1.2 s (text) | 0.008 | ~400 ms | 0.3 MB |
 | `/faq` | 0.9 s | 0.9 s (text) | 0.000 | ~130 ms | 0.3 MB |
 | `/west-highland-way` | 0.9 s | 4.3 s (background poster) | 0.000 | ~110 ms | 3.4 MB |
 | `/product/…` | 0.9 s | 3.9 s (footer poster) | 0.001 | ~90 ms | 0.5 MB |
 
-Targets: LCP 2.5 s or less, CLS 0.1 or less. CLS passes everywhere. LCP passes on text pages and misses on pages led by
-a picture, partly because the test connection is deliberately slow.
+Targets: LCP 2.5 s or less, CLS 0.1 or less. CLS passes everywhere. LCP on `/` is now 1.1 s (it was 5.0 s: median of 5 runs
+each). The walkers and product pages still miss, because their largest item is a background poster picture; the test
+connection is also deliberately slow.
 
 What was done:
 
 - Layout shift: fonts are preloaded (CLS on `/faq` and the walkers page fell from 0.06 to 0.00). Images and posters carry width and height.
-- The hero picture is a real image, sized for the screen (tall on phones), fetched early, with the video on top.
+- The hero picture is a small WebP (38 KB on phones, 46 KB on desktop, down from 215 and 304 KB), preloaded first with high priority,
+  sized for the screen, with the video on top. The 150 KB Jack sprites and one font are requested only after the page has loaded.
   Before this, the wide poster loaded on phones and the first frame arrived at 8.5 s.
 - Videos start after the page has loaded, only when near the screen, pause when off screen, and are skipped on save-data
   or slow connections and with reduced motion (poster only). The footer loop waits for the first scroll.

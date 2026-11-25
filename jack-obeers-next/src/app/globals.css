@@ -865,3 +865,9 @@ html[data-tr="1"] .tr[data-state="idle"] .tr-wipe { transform: none; transition:
 .interior .bgv-poster { z-index: 1; filter: blur(calc(14px * (1 - min(1, max(0, (var(--pt, 0) - .2) * 3.5))))); transform: scale(1.06); }
 .interior video.enter { background: transparent; }
 @media (prefers-reduced-motion: reduce) { .interior .bgv-poster { filter: none; transform: none; } }
+
+/* the hero Jack sprite (150 KB) is only requested after the page has loaded, so the hero picture gets the bandwidth first */
+.jack-charge { background-image: none; }
+html.loaded .jack-charge { background-image: url(/media/jack-charge.webp); }
+.jack-cheer { background-image: none; }
+html.loaded .jack-cheer { background-image: url(/media/jack-cheer.webp); }
