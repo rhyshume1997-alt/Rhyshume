@@ -38,3 +38,14 @@ export function isIndexable(): boolean {
 
 export const abs = (path: string) => `${SITE_URL}${path === "/" ? "" : path}`;
 export const STORE_ID = `${SITE_URL}/#store`;
+
+/**
+ * The Google review numbers shown on the home page. Numbers only, no quotes from reviews.
+ * To update: look at the Google listing, change these three values, and change the date to the day you looked.
+ */
+export const GOOGLE_PROOF = {
+  rating: 5.0,
+  reviews: 27,
+  checked: "25 Nov 2026",
+  url: LINKS.google,
+} as const;

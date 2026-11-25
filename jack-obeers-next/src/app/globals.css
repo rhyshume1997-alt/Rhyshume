@@ -961,3 +961,11 @@ html.loaded .jack-cheer { background-image: url(/media/jack-cheer.webp); }
 .fd-liq { transform: scaleY(var(--fill, 0)); transform-origin: 50% 100%; transform-box: fill-box; transition: transform .3s cubic-bezier(.23, 1, .32, 1); }
 .fd-msg { margin: 0; font: 700 1.05rem var(--ui); color: #21140e; }
 .fd-note { margin: .15rem 0 0; font-size: .92rem; color: #5f4f3d; }
+
+
+/* ---- conversion 3: Google numbers strip ---- */
+.proof-wrap { background: var(--paper); padding: 1.1rem 0 0; }
+.proof { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .3rem .8rem; width: max-content; max-width: calc(100% - 2 * var(--gut)); margin: 0 auto; padding: .55rem 1.2rem; border-radius: 99px; background: #fffaf0; border: 2px solid #e2d6b8; color: var(--ink); text-decoration: none; font: 600 1rem var(--ui); }
+.proof-stars { display: inline-flex; gap: .1rem; }
+.proof small { color: #5f4f3d; font-weight: 400; font-size: .88rem; }
+@media (hover: hover) and (pointer: fine) { .proof:hover { border-color: #8a4b12; } }
