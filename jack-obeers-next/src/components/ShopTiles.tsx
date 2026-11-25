@@ -27,7 +27,8 @@ export function ShopTiles({ ranges, events, subs, checkoutOn }: { ranges: Record
     setOpen(next);
     if (next) {
       const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-      requestAnimationFrame(() => panel.current?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" }));
+      // let the glass pour for a moment before the range slides into view
+      window.setTimeout(() => panel.current?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" }), reduced ? 0 : 1500);
     }
   };
   const count = (n: number, one: string, many: string) => (n > 0 ? `${n} ${n === 1 ? one : many}` : "Coming soon");
@@ -38,7 +39,7 @@ export function ShopTiles({ ranges, events, subs, checkoutOn }: { ranges: Record
         <p className="mono">Shop</p>
         <h2 className="h2" id="tl-h">Pick a <em>shelf.</em></h2>
         <p className="shelf-hint">Click your selection.</p>
-        <ul className="shelf-row">
+        <div className="bar"><ul className="shelf-row">
           {DRINKS.map((d) => {
             const n = ranges[d.key].cards.length;
             return (
@@ -56,7 +57,7 @@ export function ShopTiles({ ranges, events, subs, checkoutOn }: { ranges: Record
           <li>
             <a className="sh-item" data-kind="subs" href="/draught-club"><ShelfArt kind="subs" /><span className="sh-label"><b>Subscription Services</b><span className="tile-n">{count(subs, "plan", "plans")}</span></span></a>
           </li>
-        </ul>
+        </ul></div>
         <div ref={panel} id="range-panel" className="range-panel" role="region" aria-label={cur ? `${cur.title} range` : "Range"} hidden={!cur}>
           {cur && (
             <>

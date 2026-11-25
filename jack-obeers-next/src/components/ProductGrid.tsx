@@ -59,16 +59,26 @@ export function ProductGrid({ cards, chips, checkoutOn, noun, intro }: { cards: 
                 <span className="pg-price">£{c.price.toFixed(2)}{c.sample && <small> sample</small>}</span>
                 {!c.available ? (
                   <button type="button" className="btn sm" disabled>Sold out</button>
-                ) : checkoutOn && c.buy ? (
-                  <a className="btn sm" href={c.buy}>Buy now<span className="vh"> {c.name}</span></a>
                 ) : (
-                  <button type="button" className="btn sm" disabled>Checkout opens soon</button>
+                  <span className="pg-btns">
+                    <button type="button" className="btn sm ghost on-cream" data-add={c.handle}>Add to basket<span className="vh"> {c.name}</span></button>
+                    {checkoutOn && c.buy ? (
+                      <a className="btn sm" href={c.buy}>Buy now<span className="vh"> {c.name}</span></a>
+                    ) : (
+                      <button type="button" className="btn sm" disabled>Checkout opens soon</button>
+                    )}
+                  </span>
                 )}
               </div>
               {c.profile && (
                 <>
+                  {!isOpen && (
+                    <ul className="pg-flav pg-flav-mini" aria-label="Flavours">
+                      {c.profile.flavour.slice(0, 3).map((f) => <li key={f}>{f}</li>)}
+                    </ul>
+                  )}
                   <button type="button" className="pg-more" aria-expanded={isOpen} onClick={() => setOpen(isOpen ? null : c.handle)}>
-                    {isOpen ? "Less" : "More"}<span className="vh"> about {c.name}</span>
+                    {isOpen ? "Hide flavour profile" : "See flavour profile"}<span className="vh"> for {c.name}</span>
                   </button>
                   {isOpen && (
                     <div className="pg-detail">

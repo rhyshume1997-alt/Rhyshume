@@ -3,8 +3,9 @@ import { BRAND } from "@/lib/brand";
 
 type Kind = "beer" | "cider" | "wine" | "events" | "subs";
 
-const BEER = { colour: "#E0A030", head: "#FFF3D6", haze: false };
-const CIDER = { colour: "#EBC85A", head: "#FFF8E0", haze: false };
+const BEER = { colour: "#E0A030", head: "#FFF3D6", haze: false, foam: true };
+const CIDER = { colour: "#EBC85A", head: "#FFF8E0", haze: false, foam: false };
+const WINE = { colour: "#8A1F33", head: "#fff", haze: false, shape: "wine" as const, foam: false };
 
 /**
  * The little cartoon on each shelf item. Beer: an empty glass that fills while the amber bottle tips over it and
@@ -28,24 +29,17 @@ export function ShelfArt({ kind }: { kind: Kind }) {
     return (
       <span className="art art-cider" aria-hidden="true">
         <Glass spec={CIDER} className="sh-glass" />
-        <svg className="sh-apple" viewBox="0 0 60 64" focusable="false">
-          <path d="M30 18c-8-8-24-4-24 14 0 14 9 28 18 28 3 0 4-2 6-2s3 2 6 2c9 0 18-14 18-28 0-18-16-22-24-14z" fill="#B8402B" stroke="#2a1a10" strokeWidth="2.6" strokeLinejoin="round" />
-          <path d="M30 18c0-6 2-11 6-14" fill="none" stroke="#2a1a10" strokeWidth="2.6" strokeLinecap="round" />
-          <path d="M36 6c6-2 10 0 12 3-5 2-10 2-12-3z" fill="#5E8C3A" stroke="#2a1a10" strokeWidth="2.2" strokeLinejoin="round" />
-        </svg>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className="sh-bottle" src="/media/cider-bottle.svg" alt="" width={60} height={170} />
       </span>
     );
   }
   if (kind === "wine") {
     return (
       <span className="art art-wine" aria-hidden="true">
-        <svg viewBox="0 0 120 160" focusable="false">
-          <path d="M50 8h20v34c0 8 12 14 12 30v76c0 4-3 6-6 6H44c-3 0-6-2-6-6V72c0-16 12-22 12-30z" fill="#3E5B33" stroke="#2a1a10" strokeWidth="3" strokeLinejoin="round" />
-          <rect x="49" y="4" width="22" height="12" rx="3" fill="#B98A3E" stroke="#2a1a10" strokeWidth="2.6" />
-          <rect x="40" y="92" width="40" height="38" rx="4" fill="#F8F1DF" stroke="#2a1a10" strokeWidth="2.4" />
-          <path d="M60 100l4 9 10 1-7 7 2 10-9-5-9 5 2-10-7-7 10-1z" fill="#B98A3E" />
-          <path d="M45 56c2-6 6-8 6-14" fill="none" stroke="#fff" strokeOpacity=".4" strokeWidth="3" strokeLinecap="round" />
-        </svg>
+        <Glass spec={WINE} className="sh-glass" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className="sh-bottle" src="/media/wine-bottle.svg" alt="" width={60} height={170} />
       </span>
     );
   }

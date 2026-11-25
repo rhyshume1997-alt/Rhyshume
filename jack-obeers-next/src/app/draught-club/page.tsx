@@ -49,7 +49,7 @@ export default async function Page() {
             <h1 className="h2">The Draught Club. <em>Fresh beer from the tap, bottled for you.</em></h1>
           </div>
         </section>
-        <section className="cream" style={{ background: "var(--cream)", paddingTop: "4rem" }}>
+        <section className="cream page-pad" style={{ background: "var(--cream)", paddingTop: "3rem" }}>
           <div className="wrap">
             <p className="lede">Two ways to join. The Legend includes everything in The Regular. What The Legend adds is marked <b>New</b>.</p>
             <div className="tiers">

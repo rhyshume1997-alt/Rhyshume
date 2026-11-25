@@ -27,7 +27,7 @@ export default async function Page() {
             <h1 className="h2">Events at the shop, <em>and how to get a ticket.</em></h1>
           </div>
         </section>
-        <section className="cream" style={{ background: "var(--cream)", paddingTop: "4rem" }}>
+        <section className="cream page-pad" style={{ background: "var(--cream)", paddingTop: "3rem" }}>
           <div className="wrap">
             {upcoming.length === 0 ? (
               <p className="lede">No events are listed right now. Check back soon, or ask about a private event below.</p>
@@ -51,11 +51,13 @@ export default async function Page() {
                 ))}
               </ul>
             )}
-            <h2 className="h3" style={{ marginTop: "2.5rem" }}>Planning your own?</h2>
-            <p>Tell us what you have in mind and we will get back to you.</p>
-            <p>
-              <a className="btn ghost on-cream" style={{ color: "var(--ink)" }} href={`mailto:${SHOP.email}?subject=Event%20enquiry`}>Email an event enquiry</a>
-            </p>
+            <div className="enquiry">
+              <div>
+                <h2 className="h3">Planning your own?</h2>
+                <p>Tell us what you have in mind and we will get back to you.</p>
+              </div>
+              <a className="btn dk" href={`mailto:${SHOP.email}?subject=Event%20enquiry`}>Email an event enquiry</a>
+            </div>
           </div>
         </section>
       </main>

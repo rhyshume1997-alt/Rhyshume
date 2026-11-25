@@ -28,7 +28,7 @@ export function safePairings(p: Profile | null): string[] {
 }
 
 /** How a glass is drawn. These colours are design choices, not facts about the drink. */
-export type GlassSpec = { colour: string; head: string; haze: boolean };
+export type GlassSpec = { colour: string; head: string; haze: boolean; /** pint glass for beer and cider, wine glass for wine */ shape?: "pint" | "wine"; /** false for cider and wine: a plain coloured glass with no foam head */ foam?: boolean };
 
 export type Product = {
   handle: string;
@@ -203,7 +203,7 @@ function enrich(r: Raw, sample = false): Product {
     styles: [...styles],
     style,
     profile,
-    glass: withColour(glassFor(blob), profile),
+    glass: { ...withColour(glassFor(blob), profile), shape: category === "wine" ? "wine" : "pint", foam: category === "beer" },
     variantNumericId: buy ? buy.id.split("/").pop() || null : null,
   };
 }
