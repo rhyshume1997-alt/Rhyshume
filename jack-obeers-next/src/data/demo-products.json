@@ -1,0 +1,521 @@
+{
+ "_note": "DEMONSTRATION CATALOGUE. Names, prices, flavour scores and pairings are samples, not real stock. In Shopify mode this file is not used.",
+ "collections": {
+  "beers": {
+   "title": "Beers",
+   "lede": "British beers, from crisp lagers to dark stouts."
+  },
+  "ciders": {
+   "title": "Ciders",
+   "lede": "British ciders, dry through to fruity."
+  },
+  "wines": {
+   "title": "Wines",
+   "lede": "Wines to go with the deli counter."
+  },
+  "kegs": {
+   "title": "Kegs",
+   "lede": "Beer by the keg, for parties and pubs at home."
+  },
+  "hampers": {
+   "title": "Hampers",
+   "lede": "Ready-made hampers of drinks and deli."
+  }
+ },
+ "products": [
+  {
+   "handle": "demo-amber-ale",
+   "title": "Demo Amber Ale",
+   "collection": "beers",
+   "productType": "Amber ale",
+   "tags": [
+    "amber",
+    "ale"
+   ],
+   "descriptor": "Malty and rounded, easy to share.",
+   "description": "[Full description to be supplied by the shop]",
+   "kind": "bottle",
+   "flavour": {
+    "sweet": 2,
+    "bitter": 3,
+    "fruity": 2,
+    "body": 3
+   },
+   "pairings": [
+    "Demo cheddar",
+    "Demo pork pie"
+   ],
+   "abv": "[ABV to be confirmed]",
+   "allergens": "[Allergens to be verified]",
+   "image": null,
+   "variants": [
+    {
+     "id": "demo-demo-amber-ale-1",
+     "title": "Default",
+     "price": 3.8,
+     "available": true
+    }
+   ],
+   "blurb": "A copper-coloured ale with a toasty malt middle and a gentle bitter finish. Pours with a creamy head and drinks easily alongside a ploughman’s."
+  },
+  {
+   "handle": "demo-dark-stout",
+   "title": "Demo Dark Stout",
+   "collection": "beers",
+   "productType": "Stout",
+   "tags": [
+    "dark",
+    "stout"
+   ],
+   "descriptor": "Dark, roasty and smooth.",
+   "description": "[Full description to be supplied by the shop]",
+   "kind": "bottle",
+   "flavour": {
+    "sweet": 2,
+    "bitter": 4,
+    "fruity": 1,
+    "body": 5
+   },
+   "pairings": [
+    "Demo smoked cheese",
+    "Demo chocolate"
+   ],
+   "abv": "[ABV to be confirmed]",
+   "allergens": "[Allergens to be verified]",
+   "image": null,
+   "variants": [
+    {
+     "id": "demo-demo-dark-stout-1",
+     "title": "Default",
+     "price": 4.2,
+     "available": true
+    }
+   ],
+   "blurb": "Deep and dark with roasted coffee and cocoa notes, full-bodied but smooth. One for a slow evening, or poured over ice cream."
+  },
+  {
+   "handle": "demo-pale-lager",
+   "title": "Demo Pale Lager",
+   "collection": "beers",
+   "productType": "Lager",
+   "tags": [
+    "pale",
+    "lager"
+   ],
+   "descriptor": "Crisp, light and clean.",
+   "description": "[Full description to be supplied by the shop]",
+   "kind": "bottle",
+   "flavour": {
+    "sweet": 1,
+    "bitter": 2,
+    "fruity": 1,
+    "body": 1
+   },
+   "pairings": [
+    "Demo oatcakes",
+    "Demo cheddar"
+   ],
+   "abv": "[ABV to be confirmed]",
+   "allergens": "[Allergens to be verified]",
+   "image": null,
+   "variants": [
+    {
+     "id": "demo-demo-pale-lager-1",
+     "title": "Default",
+     "price": 3.5,
+     "available": true
+    }
+   ],
+   "blurb": "Pale gold, crisp and refreshing with a clean, dry finish. A good all-rounder for warm days and plates of salty snacks."
+  },
+  {
+   "handle": "demo-fruit-beer",
+   "title": "Demo Fruit Beer",
+   "collection": "beers",
+   "productType": "Fruit beer",
+   "tags": [
+    "fruit"
+   ],
+   "descriptor": "Bright and juicy.",
+   "description": "[Full description to be supplied by the shop]",
+   "kind": "bottle",
+   "flavour": {
+    "sweet": 4,
+    "bitter": 1,
+    "fruity": 5,
+    "body": 2
+   },
+   "pairings": [
+    "Demo soft cheese",
+    "Demo shortbread"
+   ],
+   "abv": "[ABV to be confirmed]",
+   "allergens": "[Allergens to be verified]",
+   "image": null,
+   "variants": [
+    {
+     "id": "demo-demo-fruit-beer-1",
+     "title": "Default",
+     "price": 4.0,
+     "available": true
+    }
+   ],
+   "blurb": "A light, bright beer brewed with fruit for a juicy, slightly sweet sip. Easy to like if you’re new to craft beer."
+  },
+  {
+   "handle": "demo-session-ipa",
+   "title": "Demo Session IPA",
+   "collection": "beers",
+   "productType": "IPA",
+   "tags": [
+    "ipa",
+    "hoppy"
+   ],
+   "descriptor": "Hoppy without the weight.",
+   "description": "[Full description to be supplied by the shop]",
+   "kind": "bottle",
+   "flavour": {
+    "sweet": 2,
+    "bitter": 4,
+    "fruity": 3,
+    "body": 2
+   },
+   "pairings": [
+    "Demo cured meat",
+    "Demo chutney"
+   ],
+   "abv": "[ABV to be confirmed]",
+   "allergens": "[Allergens to be verified]",
+   "image": null,
+   "variants": [
+    {
+     "id": "demo-demo-session-ipa-1",
+     "title": "Default",
+     "price": 4.1,
+     "available": true
+    }
+   ],
+   "blurb": "Hop aroma and a bitter bite, but low enough in strength to have a second. Citrus and pine on the nose."
+  },
+  {
+   "handle": "demo-dry-cider",
+   "title": "Demo Dry Cider",
+   "collection": "ciders",
+   "productType": "Dry cider",
+   "tags": [
+    "dry"
+   ],
+   "descriptor": "Sharp, clean and apple-led.",
+   "description": "[Full description to be supplied by the shop]",
+   "kind": "bottle",
+   "flavour": {
+    "sweet": 1,
+    "bitter": 4,
+    "fruity": 2,
+    "body": 2
+   },
+   "pairings": [
+    "Demo pork pie",
+    "Demo chutney"
+   ],
+   "abv": "[ABV to be confirmed]",
+   "allergens": "[Allergens to be verified]",
+   "image": null,
+   "variants": [
+    {
+     "id": "demo-demo-dry-cider-1",
+     "title": "Default",
+     "price": 3.9,
+     "available": true
+    }
+   ],
+   "blurb": "Made from apples, with a sharp, dry, almost wine-like finish. Lovely chilled, and with rich or salty food."
+  },
+  {
+   "handle": "demo-medium-cider",
+   "title": "Demo Medium Cider",
+   "collection": "ciders",
+   "productType": "Medium cider",
+   "tags": [
+    "medium"
+   ],
+   "descriptor": "Balanced, easy-going.",
+   "description": "[Full description to be supplied by the shop]",
+   "kind": "bottle",
+   "flavour": {
+    "sweet": 3,
+    "bitter": 2,
+    "fruity": 3,
+    "body": 2
+   },
+   "pairings": [
+    "Demo cheddar",
+    "Demo oatcakes"
+   ],
+   "abv": "[ABV to be confirmed]",
+   "allergens": "[Allergens to be verified]",
+   "image": null,
+   "variants": [
+    {
+     "id": "demo-demo-medium-cider-1",
+     "title": "Default",
+     "price": 3.9,
+     "available": true
+    }
+   ],
+   "blurb": "Not too dry, not too sweet: ripe apple with a soft fizz. The one to hand round when you’re not sure what people like."
+  },
+  {
+   "handle": "demo-berry-cider",
+   "title": "Demo Berry Cider",
+   "collection": "ciders",
+   "productType": "Fruit cider",
+   "tags": [
+    "fruit"
+   ],
+   "descriptor": "Sweet berries over crisp apple.",
+   "description": "[Full description to be supplied by the shop]",
+   "kind": "bottle",
+   "flavour": {
+    "sweet": 4,
+    "bitter": 1,
+    "fruity": 5,
+    "body": 2
+   },
+   "pairings": [
+    "Demo shortbread",
+    "Demo soft cheese"
+   ],
+   "abv": "[ABV to be confirmed]",
+   "allergens": "[Allergens to be verified]",
+   "image": null,
+   "variants": [
+    {
+     "id": "demo-demo-berry-cider-1",
+     "title": "Default",
+     "price": 4.1,
+     "available": true
+    }
+   ],
+   "blurb": "Crisp apple cider with a hit of summer berries. Sweet and fruity, served over plenty of ice."
+  },
+  {
+   "handle": "demo-red-wine",
+   "title": "Demo Red",
+   "collection": "wines",
+   "productType": "Red wine",
+   "tags": [
+    "red"
+   ],
+   "descriptor": "Soft and rounded.",
+   "description": "[Full description to be supplied by the shop]",
+   "kind": "wine",
+   "flavour": {
+    "sweet": 1,
+    "bitter": 3,
+    "fruity": 3,
+    "body": 4
+   },
+   "pairings": [
+    "Demo cured meat",
+    "Demo hard cheese"
+   ],
+   "abv": "[ABV to be confirmed]",
+   "allergens": "[Allergens to be verified]",
+   "image": null,
+   "variants": [
+    {
+     "id": "demo-demo-red-wine-1",
+     "title": "Default",
+     "price": 11.0,
+     "available": true
+    }
+   ],
+   "blurb": "Soft, smooth and easy-drinking, with ripe red fruit and gentle tannins. A friendly partner for cheese and cured meats."
+  },
+  {
+   "handle": "demo-white-wine",
+   "title": "Demo White",
+   "collection": "wines",
+   "productType": "White wine",
+   "tags": [
+    "white"
+   ],
+   "descriptor": "Fresh and bright.",
+   "description": "[Full description to be supplied by the shop]",
+   "kind": "wine",
+   "flavour": {
+    "sweet": 2,
+    "bitter": 4,
+    "fruity": 4,
+    "body": 2
+   },
+   "pairings": [
+    "Demo soft cheese",
+    "Demo oatcakes"
+   ],
+   "abv": "[ABV to be confirmed]",
+   "allergens": "[Allergens to be verified]",
+   "image": null,
+   "variants": [
+    {
+     "id": "demo-demo-white-wine-1",
+     "title": "Default",
+     "price": 10.5,
+     "available": true
+    }
+   ],
+   "blurb": "Fresh and zesty with green apple and citrus. Best served well chilled with lighter food."
+  },
+  {
+   "handle": "demo-rose-wine",
+   "title": "Demo Rosé",
+   "collection": "wines",
+   "productType": "Rosé wine",
+   "tags": [
+    "rose"
+   ],
+   "descriptor": "Light and fruity.",
+   "description": "[Full description to be supplied by the shop]",
+   "kind": "wine",
+   "flavour": {
+    "sweet": 3,
+    "bitter": 2,
+    "fruity": 4,
+    "body": 2
+   },
+   "pairings": [
+    "Demo cured meat",
+    "Demo chutney"
+   ],
+   "abv": "[ABV to be confirmed]",
+   "allergens": "[Allergens to be verified]",
+   "image": null,
+   "variants": [
+    {
+     "id": "demo-demo-rose-wine-1",
+     "title": "Default",
+     "price": 10.5,
+     "available": true
+    }
+   ],
+   "blurb": "A pale, dry rose with strawberry and melon notes. Made for sunny afternoons and sharing plates."
+  },
+  {
+   "handle": "demo-keg-amber-20l",
+   "title": "Demo Amber Ale, keg",
+   "collection": "kegs",
+   "productType": "Keg",
+   "tags": [
+    "keg",
+    "amber"
+   ],
+   "descriptor": "For parties and pubs at home. Size and deposit to be confirmed.",
+   "description": "[Full description to be supplied by the shop]",
+   "kind": "keg",
+   "flavour": {
+    "sweet": 2,
+    "bitter": 3,
+    "fruity": 2,
+    "body": 3
+   },
+   "pairings": [],
+   "abv": "[ABV to be confirmed]",
+   "allergens": "[Allergens to be verified]",
+   "image": null,
+   "variants": [
+    {
+     "id": "demo-keg-amber-20l-1",
+     "title": "Keg (size to be confirmed)",
+     "price": 72.0,
+     "available": true
+    }
+   ],
+   "blurb": "The amber ale in a keg, for parties, weddings and big get-togethers. Size, deposit, tap hire and delivery to be confirmed."
+  },
+  {
+   "handle": "demo-keg-lager-30l",
+   "title": "Demo Pale Lager, keg",
+   "collection": "kegs",
+   "productType": "Keg",
+   "tags": [
+    "keg",
+    "lager"
+   ],
+   "descriptor": "A crowd-pleaser by the keg. Size and deposit to be confirmed.",
+   "description": "[Full description to be supplied by the shop]",
+   "kind": "keg",
+   "flavour": {
+    "sweet": 1,
+    "bitter": 2,
+    "fruity": 1,
+    "body": 1
+   },
+   "pairings": [],
+   "abv": "[ABV to be confirmed]",
+   "allergens": "[Allergens to be verified]",
+   "image": null,
+   "variants": [
+    {
+     "id": "demo-keg-lager-30l-1",
+     "title": "Keg (size to be confirmed)",
+     "price": 88.0,
+     "available": true
+    }
+   ],
+   "blurb": "The pale lager by the keg, for when a crowd is coming. Size, deposit, tap hire and delivery to be confirmed."
+  },
+  {
+   "handle": "demo-hamper-beer",
+   "title": "Demo Beer Hamper",
+   "collection": "hampers",
+   "productType": "Hamper",
+   "tags": [
+    "hamper"
+   ],
+   "descriptor": "A selection of beers with something to eat. Contents to be agreed.",
+   "description": "[Full description to be supplied by the shop]",
+   "kind": "hamper",
+   "flavour": null,
+   "pairings": [],
+   "abv": "[ABV to be confirmed]",
+   "allergens": "[Allergens to be verified]",
+   "image": null,
+   "variants": [
+    {
+     "id": "demo-demo-hamper-beer-1",
+     "title": "Default",
+     "price": 34.0,
+     "available": true
+    }
+   ],
+   "blurb": "A boxed selection of beers with something to eat alongside, ready to give. Contents and price to be agreed."
+  },
+  {
+   "handle": "demo-hamper-deli",
+   "title": "Demo Deli Hamper",
+   "collection": "hampers",
+   "productType": "Hamper",
+   "tags": [
+    "hamper"
+   ],
+   "descriptor": "Deli favourites for sharing. Contents to be agreed.",
+   "description": "[Full description to be supplied by the shop]",
+   "kind": "hamper",
+   "flavour": null,
+   "pairings": [],
+   "abv": "[ABV to be confirmed]",
+   "allergens": "[Allergens to be verified]",
+   "image": null,
+   "variants": [
+    {
+     "id": "demo-demo-hamper-deli-1",
+     "title": "Default",
+     "price": 42.0,
+     "available": true
+    }
+   ],
+   "blurb": "A hamper of deli favourites made for sharing. Contents and price to be agreed."
+  }
+ ]
+}
