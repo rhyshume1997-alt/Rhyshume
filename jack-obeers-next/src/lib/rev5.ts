@@ -192,7 +192,7 @@ export function initRev5(P: any[], PAIR: Record<string, string> = {}): () => voi
     function onInput(e) { if (e.target && e.target.closest && e.target.closest('.open-skip')) return; endOpening(false); }
     function startOpening() {
       var seen = false; try { seen = sessionStorage.getItem('jo_opened') === '1'; } catch (e) {}
-      if (reduced || seen || scrollY > 40 || location.hash || document.documentElement.dataset.look) return;
+      if (reduced || seen || scrollY > 40 || location.hash || (document.documentElement.dataset.look && document.documentElement.dataset.look !== 'classic')) return;
       try { sessionStorage.setItem('jo_opened', '1'); } catch (e) {}
       playing = true; document.documentElement.classList.add('opening');
       INPUTS.forEach(function (t) { window.addEventListener(t, onInput, { capture: true, passive: true }); });

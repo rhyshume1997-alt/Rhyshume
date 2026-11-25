@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 const LOOKS = [
   { id: "original", label: "Original" },
+  { id: "classic", label: "Classic" },
   { id: "backbar", label: "Back bar" },
   { id: "cinematic", label: "Cinematic" },
 ] as const;
