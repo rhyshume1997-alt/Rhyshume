@@ -46,7 +46,7 @@ em, .it { font-style: italic; color: var(--amber); }
 .btn.ghost { background: transparent; color: inherit; border-color: currentColor; }
 .btn.dk { background: var(--forest); border-color: var(--forest); color: var(--paper); }
 .btn.sm { min-height: 2.75rem; padding: .3rem 1.1rem; font-size: .96rem; }
-@media (hover: hover) and (pointer: fine) { .btn:hover { background: var(--amber-hi); border-color: var(--amber-hi); transform: translateY(-1px); box-shadow: 0 8px 20px rgba(0, 0, 0, .28); } .btn.ghost:hover { background: rgba(217, 153, 43, .18); box-shadow: none; } .btn.dk:hover { background: var(--forest-3); border-color: var(--forest-3); } }
+@media (hover: hover) and (pointer: fine) { .btn:hover { background: var(--amber-hi); border-color: var(--amber-hi); transform: translateY(-1px); } .btn.ghost:hover { background: rgba(217, 153, 43, .18); box-shadow: none; } .btn.dk:hover { background: var(--forest-3); border-color: var(--forest-3); } }
 
 /* header */
 .hdr { position: fixed; inset: 0 0 auto 0; z-index: 90; color: var(--paper); transition: background-color .3s, border-color .3s; border-bottom: 1px solid transparent; }
@@ -493,7 +493,6 @@ html[data-tr="1"] .tr[data-state="idle"] .tr-wipe { transform: none; transition:
 /* what is behind the doors: the shop's video once it exists, a warm back bar until then */
 .interior { position: absolute; inset: 0; z-index: 1;
   background:
-    radial-gradient(40% 40% at 50% 28%, rgba(255, 214, 140, .55), transparent 70%) var(--l) 0 / 100% 100% no-repeat,
     linear-gradient(#3a1c11, #5b2f1a 70%, #4a2416); }
 .arch video.enter { z-index: 1; opacity: 1; }
 .arch-logo { position: absolute; z-index: 5; left: calc((var(--l) + 100% - var(--r)) / 2); bottom: calc(var(--b) + (100% - var(--t) - var(--b)) * .03); width: calc((100% - var(--l) - var(--r)) * .62); max-width: 26rem; transform-origin: 50% 100%; transform: translateX(-50%) translateY(calc(var(--pt, 0) * -22%)) scale(calc(1 + var(--pt, 0) * 1.1)); opacity: clamp(0, calc(1 - (var(--pt, 0) - .22) * 2.4), 1); pointer-events: none; }
@@ -505,7 +504,7 @@ html[data-tr="1"] .tr[data-state="idle"] .tr-wipe { transform: none; transition:
 .door.r { transform-origin: right center; transform: rotateY(calc(var(--open, 0) * -105deg)); }
 .door span { position: absolute; inset: 0 .12rem .7rem; border: .35rem solid #3a1c11; border-radius: .7rem .7rem .3rem .3rem; backface-visibility: hidden;
   background: repeating-linear-gradient(180deg, transparent 0 .7rem, rgba(30, 12, 6, .45) .7rem .82rem), linear-gradient(90deg, #a56c3c, #8a5a36 50%, #7a4a2a);
-  box-shadow: inset 0 0 0 .18rem #b98a3e66, inset 0 .5rem .8rem rgba(255, 220, 170, .18), 0 .6rem 1rem rgba(0, 0, 0, .45); }
+  box-shadow: inset 0 0 0 .18rem #b98a3e66, inset 0 .5rem .8rem rgba(255, 220, 170, .18); }
 .door.l span { transform-origin: left center; border-radius: 2.4rem .5rem .3rem .3rem / 1.8rem .5rem .3rem .3rem; }
 .door.r span { transform-origin: right center; border-radius: .5rem 2.4rem .3rem .3rem / .5rem 1.8rem .3rem .3rem; }
 .stage .img-tag { z-index: 6; }
@@ -591,7 +590,6 @@ html[data-tr="1"] .tr[data-state="idle"] .tr-wipe { transform: none; transition:
 /* ---- the bar behind the shelf ---- */
 .bar { position: relative; margin-top: 1.4rem; border-radius: 1.8rem; overflow: hidden; padding-top: 5rem;
   background:
-    radial-gradient(60% 55% at 50% 0%, rgba(255, 226, 160, .7), transparent 70%),
     url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='84' viewBox='0 0 240 84'><g fill='%23b99a62'><rect x='10' y='24' width='11' height='46' rx='3'/><rect x='13' y='10' width='5' height='18'/><rect x='34' y='30' width='13' height='40' rx='3'/><rect x='38' y='16' width='5' height='18'/><path d='M62 70V40q0-8 6-12V8h6v20q6 4 6 12v30z'/><rect x='96' y='32' width='15' height='38' rx='3'/><rect x='101' y='18' width='5' height='18'/><rect x='124' y='22' width='11' height='48' rx='3'/><rect x='127' y='8' width='5' height='18'/><path d='M150 70V42q0-8 6-12V12h6v18q6 4 6 12v28z'/><rect x='184' y='30' width='13' height='40' rx='3'/><rect x='188' y='16' width='5' height='18'/><rect x='210' y='26' width='12' height='44' rx='3'/><rect x='213' y='12' width='5' height='18'/></g><rect x='0' y='70' width='240' height='5' fill='%23a5834c'/></svg>") 0 .6rem / 15rem auto repeat-x,
     repeating-linear-gradient(90deg, #d6bf94 0 3.4rem, #cdb487 3.4rem calc(3.4rem + 2px), #d6bf94 calc(3.4rem + 2px) 6.8rem);
 }
@@ -647,10 +645,10 @@ html[data-tr="1"] .tr[data-state="idle"] .tr-wipe { transform: none; transition:
 .pg-price { font: 600 1.25rem var(--serif); }
 
 /* ---- shelf: photo items, new bottles, cursors ---- */
-.art-tickets .sh-photo, .art-subs .sh-photo { position: absolute; left: 50%; bottom: .2rem; width: 7.8rem; height: auto; transform: translateX(-50%) rotate(-4deg); transition: transform .3s ease-out; filter: drop-shadow(0 6px 5px rgba(60, 30, 10, .3)); }
+.art-tickets .sh-photo, .art-subs .sh-photo { position: absolute; left: 50%; bottom: .2rem; width: 7.8rem; height: auto; transform: translateX(-50%) rotate(-4deg); transition: transform .3s ease-out;  }
 .art-subs .sh-photo { width: 7.4rem; }
-.art-cider .sh-bottle, .art-wine .sh-bottle { height: 8rem; width: auto; filter: drop-shadow(0 3px 3px rgba(60, 30, 10, .25)); }
-.sh-bottle { filter: drop-shadow(0 3px 3px rgba(60, 30, 10, .25)); }
+.art-cider .sh-bottle, .art-wine .sh-bottle { height: 8rem; width: auto;  }
+.sh-bottle {  }
 @media (hover: hover) and (pointer: fine) {
   .sh-item[data-kind=cider]:hover { cursor: url(/media/cursor-cider.png) 2 56, pointer; }
   .sh-item[data-kind=wine]:hover { cursor: url(/media/cursor-wine.png) 2 57, pointer; }
@@ -771,10 +769,10 @@ html[data-tr="1"] .tr[data-state="idle"] .tr-wipe { transform: none; transition:
 
 /* ---- media: backgrounds, clips, photos ---- */
 .interior video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
-.interior-shade { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(rgba(20, 10, 6, .55), rgba(20, 10, 6, .3) 40%, rgba(20, 10, 6, .72)); }
+.interior-shade { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(rgba(20, 10, 6, .4), rgba(20, 10, 6, .05) 45%, rgba(20, 10, 6, .35)); }
 .sec-bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
-.sec-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(rgba(18, 41, 29, .82), rgba(18, 41, 29, .9)); }
-.find .sec-bg::after { background: linear-gradient(rgba(29, 15, 10, .8), rgba(29, 15, 10, .92)); }
+.sec-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(rgba(18, 41, 29, .88), rgba(18, 41, 29, .3) 40%, rgba(18, 41, 29, .12)); }
+.find .sec-bg::after { background: linear-gradient(rgba(29, 15, 10, .75), rgba(29, 15, 10, .2) 45%, rgba(29, 15, 10, .15)); }
 .sec-video { width: 100%; height: 100%; object-fit: cover; }
 .deli, .find { position: relative; isolation: isolate; }
 .deli > .wrap, .find > .wrap { position: relative; z-index: 1; }
@@ -784,7 +782,7 @@ html[data-tr="1"] .tr[data-state="idle"] .tr-wipe { transform: none; transition:
 .taps .h2 em { color: var(--amber-hi); }
 .taps .lede { max-width: 36rem; color: #eadfc4; }
 .taps-bg { position: absolute; inset: 0; z-index: 0; }
-.taps-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(rgba(29, 15, 10, .78), rgba(29, 15, 10, .9)); }
+.taps-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(rgba(29, 15, 10, .85), rgba(29, 15, 10, .3) 40%, rgba(29, 15, 10, .15)); }
 .taps-photo { object-fit: cover; }
 .taps-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .clips { list-style: none; margin: 2rem 0 1.6rem; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(17rem, 100%), 1fr)); gap: 1.2rem; }
@@ -802,3 +800,35 @@ html[data-tr="1"] .tr[data-state="idle"] .tr-wipe { transform: none; transition:
 @media (max-width: 40rem) { .ilkley { grid-template-columns: 1fr; } .ilkley-video { max-width: 18rem; margin-inline: auto; } }
 .taps .keg, .taps .keg p { color: var(--ink); }
 .ts-box:empty { display: none; } .ts-box { margin-top: .2rem; }
+
+
+/* ---- tidy: no glows, photos and video left visible, roomier cards, readable greys, shorter lines ---- */
+/* Text that sits over a photo or video goes on a solid panel instead of under a heavy wash. */
+.deli-item, .find .grid > div, .taps .lede, .deli-hint, .deli .lede { background: rgba(18, 41, 29, .86); }
+.find .grid > div { background: rgba(29, 15, 10, .86); padding: 1.4rem 1.5rem; border-radius: 1.4rem; }
+.taps .lede, .deli-hint { display: inline-block; padding: .8rem 1.1rem; border-radius: 1rem; background: rgba(29, 15, 10, .86); }
+.deli-hint { background: rgba(18, 41, 29, .86); }
+.pg-card { padding: .95rem 1.05rem; gap: .6rem; }
+.pg-grid { grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr)); gap: .85rem; }
+.pg-flav li { padding: .3rem .8rem; }
+.pg-more { padding: .4rem 1rem; }
+.pg-btn[disabled] { background: #efe6d2; color: #5f4f3d; }
+@media (max-width: 40rem) { .pg-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; } .pg-card { padding: .8rem .75rem; } }
+/* the pushing Jack is not drawn at all until it is needed, rather than sitting invisible */
+.pg-push { display: none; opacity: 1; }
+@media (hover: hover) and (pointer: fine) { .pg-card:hover .pg-push { display: block; animation: jack-push 2.2s steps(11, end) .25s both, pg-in .2s ease-out both; } }
+@keyframes pg-in { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .pg-card .pg-push { display: block; animation: none; background-position: 0 0; } }
+.sh-push { display: none; }
+@media (hover: hover) and (pointer: fine) { .sh-item:hover .sh-push { display: block; animation: jack-push 2.2s steps(11, end) .25s both, pg-in .2s ease-out both; } }
+.sh-item:focus-visible .sh-push, .sh-item[aria-expanded="true"] .sh-push { display: block; animation: jack-push 2.2s steps(11, end) .25s both; }
+@media (prefers-reduced-motion: reduce) { .sh-item .sh-push { display: block; animation: none; background-position: 0 0; } }
+.about-copy p, .keg p, .svc .body p, .hcard p, .ilkley p, .enquiry p, .deli-with, .lede { max-width: 62ch; }
+.sh-push { opacity: 1; }
+
+
+/* ---- the archway is back; the shop behind the doors is soft until Jack is through, then the doors are gone ---- */
+.interior video, .interior .interior-img { filter: blur(calc(14px * (1 - min(1, max(0, (var(--pt, 0) - .2) * 3.5))))); transform: scale(1.06); will-change: filter; }
+.doors { opacity: clamp(0, calc(1 - (var(--pt, 0) - .3) * 8), 1); }
+@media (prefers-reduced-motion: reduce) { .interior video { filter: none; transform: none; } }
+.find .note-s, .taps .note-s, .deli .note-s { color: #e1d4b3; }

@@ -137,11 +137,11 @@ export function initRev5(P: any[]): () => void {
       raf = 0; pt += (tgt - pt) * (reduced ? 1 : .18); if (Math.abs(tgt - pt) < .001) pt = tgt; else raf = requestAnimationFrame(paint);
       var e = ease(Math.min(1, pt / .7)), s = S();
       arch.style.setProperty('--t', lerp(s.t, 0, e) + '%'); arch.style.setProperty('--r', lerp(s.r, 0, e) + '%'); arch.style.setProperty('--b', lerp(s.b, 0, e) + '%'); arch.style.setProperty('--l', lerp(s.l, 0, e) + '%');
-      arch.style.setProperty('--rad', lerp(10, 0, e) + 'px'); arch.style.setProperty('--rad2', lerp(10, 0, e) + 'px'); arch.style.setProperty('--open', Math.min(1, pt / .3));
+      arch.style.setProperty('--rad', lerp(999, 0, e) + 'px'); arch.style.setProperty('--rad2', lerp(26, 0, e) + 'px'); arch.style.setProperty('--open', Math.min(1, pt / .3));
       var f = Math.max(0, 1 - pt * 3);
       copy.style.opacity = f; copy.style.transform = 'translateY(' + (-pt * 60) + 'px)'; if (cue) cue.style.opacity = f; if (note) note.style.opacity = f; if (tag) tag.style.opacity = 1;
       counter.style.transform = 'translateY(' + (Math.max(0, pt - .55) / .45 * 105) + '%)';
-      arch.style.setProperty('--pt', pt); var jk = $('.jack-charge'); if (jk) jk.style.backgroundPosition = (Math.round(Math.min(1, pt / .28) * 11) / 11 * 100) + '% 0'; if (enter && !reduced && pt > .02 && enter.paused) { var q2 = enter.play(); if (q2 && q2.catch) q2.catch(function () {}); }
+      arch.style.setProperty('--pt', pt); var drs = $('.doors'); if (drs) drs.style.visibility = pt > .42 ? 'hidden' : 'visible'; var jk = $('.jack-charge'); if (jk) jk.style.backgroundPosition = (Math.round(Math.min(1, pt / .28) * 11) / 11 * 100) + '% 0'; if (enter && !reduced && pt > .02 && enter.paused) { var q2 = enter.play(); if (q2 && q2.catch) q2.catch(function () {}); }
       if (!medal) return;
       var run = Math.min(1, pt / .5), ex = innerWidth * (mob() ? .55 : .55) * ease(run);
       medal.style.translate = ex + 'px ' + (-Math.sin(run * Math.PI) * 8) + 'px'; medal.style.opacity = Math.max(0, 1 - Math.max(0, pt - .38) / .22);

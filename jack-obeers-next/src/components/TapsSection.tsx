@@ -32,7 +32,7 @@ export function TapsSection() {
             </li>
           ))}
         </ul>
-        <KegBlurb />
+        <KegBlurb label="Bottles to take home" />
       </div>
     </section>
   );
