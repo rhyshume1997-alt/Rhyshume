@@ -1030,3 +1030,14 @@ html.loaded .jack-cheer { background-image: url(/media/jack-cheer.webp); }
     radial-gradient(circle at 4% 80%, #d9992b 0 .13rem, transparent .17rem); }
 @keyframes spark { from { opacity: 1; transform: scale(.95); } to { opacity: 0; transform: scale(1.18); } }
 @media (prefers-reduced-motion: reduce) { [data-add].sparked::after { animation: none; opacity: 1; background: none; border: 2px solid #d9992b; inset: -.3rem; } }
+
+
+/* ---- conversion 10: new in row on the beer page ---- */
+.newin { margin: .8rem 0 1.2rem; }
+.newin h2 { display: flex; align-items: center; gap: .55rem; margin-bottom: .6rem; }
+.newin-dot { width: .6rem; height: .6rem; border-radius: 50%; background: #d9992b; }
+.newin ul { list-style: none; margin: 0; padding: 0; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(13.5rem, 15rem); gap: .8rem; overflow-x: auto; padding-bottom: .4rem; scroll-snap-type: x proximity; }
+.newin li { display: grid; gap: .25rem; align-content: start; padding: .9rem 1rem; border-radius: 1.1rem; background: #fffaf0; border: 2px solid #d9ccb0; scroll-snap-align: start; }
+.newin li a { color: inherit; text-decoration: none; font: 600 1.02rem/1.2 var(--serif); }
+.newin li small { color: #5f4f3d; }
+.newin-row { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-top: .3rem; }

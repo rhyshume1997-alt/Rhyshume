@@ -3,7 +3,8 @@ import { breadcrumbSchema } from "@/lib/schema";
 import { Behaviour } from "@/components/Behaviour";
 import { KegBlurb } from "@/components/KegBlurb";
 import { ProductGrid } from "@/components/ProductGrid";
-import { checkoutOn, getCatalogue, type Category } from "@/lib/catalogue";
+import { NewIn } from "@/components/NewIn";
+import { checkoutOn, getCatalogue, newIn, type Category } from "@/lib/catalogue";
 import { rangeOf } from "@/lib/cards";
 
 /** One range on one screen: a compact grid, style chips that filter in place, Buy now on every card. */
@@ -23,6 +24,7 @@ export async function CategoryPage({ category, eyebrow, heading, noun }: { categ
         </section>
         <section className="cream pg-sec" style={{ background: "var(--cream)" }}>
           <div className="wrap pg-wrap">
+            {category === "beer" && <NewIn products={newIn(catalogue.all, "beer")} />}
             {cards.length === 0 ? <p className="lede">Nothing here yet.</p> : <ProductGrid cards={cards} chips={chips} checkoutOn={checkoutOn()} noun={noun} intro={category === "beer" ? <KegBlurb /> : undefined} segmented={category === "beer"} />}
           </div>
         </section>

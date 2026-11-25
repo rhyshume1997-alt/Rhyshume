@@ -63,6 +63,8 @@ export type Product = {
   glass: GlassSpec;
   /** The number at the end of the variant id, for a cart permalink. */
   variantNumericId: string | null;
+  /** When the product was created in Shopify (ISO date), or null on sample data. */
+  createdAt: string | null;
 };
 
 export type Catalogue = {
@@ -175,6 +177,7 @@ type Raw = {
   tags: string[];
   image: string | null;
   variants: Variant[];
+  createdAt?: string | null;
 };
 
 const OWN_NAMES = ["jack o' beers", "jack o’beers", "jack o'beers", "jack o’ beers", "jack o beers", "jack o' beers & deli", "jack o’beers & deli"];
@@ -215,6 +218,7 @@ function enrich(r: Raw, sample = false): Product {
     profile,
     glass: { ...withColour(glassFor(blob), profile), shape: category === "wine" ? "wine" : "pint", foam: category === "beer" },
     variantNumericId: buy ? buy.id.split("/").pop() || null : null,
+    createdAt: r.createdAt || null,
   };
 }
 
@@ -237,6 +241,7 @@ query Catalogue($cursor: String) {
       productType
       vendor
       tags
+      createdAt
       featuredImage { url }
       variants(first: 20) { nodes { id title availableForSale price { amount } } }
     }
@@ -287,6 +292,7 @@ type ShopifyProduct = {
   productType: string;
   vendor: string;
   tags: string[];
+  createdAt?: string;
   featuredImage: { url: string } | null;
   variants: { nodes: { id: string; title: string; availableForSale: boolean; price: { amount: string } }[] };
 };
@@ -323,10 +329,10 @@ async function fetchAll(domain: string, token: string): Promise<ShopifyProduct[]
 function fromNode(n: ShopifyProduct, stock: Map<string, number> = new Map()): Product | null {
   const variants = n.variants.nodes.map((v) => ({ id: v.id, title: v.title, price: Number(v.price.amount), available: v.availableForSale, stock: stock.has(v.id) ? (stock.get(v.id) as number) : null }));
   if (!variants.length) return null;
-  return enrich({ handle: n.handle, title: n.title, description: n.description, productType: n.productType, vendor: n.vendor, tags: n.tags, image: n.featuredImage ? n.featuredImage.url : null, variants });
+  return enrich({ handle: n.handle, title: n.title, description: n.description, productType: n.productType, vendor: n.vendor, tags: n.tags, image: n.featuredImage ? n.featuredImage.url : null, variants, createdAt: n.createdAt || null });
 }
 
-const SAMPLE = demo as unknown as { collections: Catalogue["collections"]; products: Omit<Product, "category" | "name" | "brewery" | "abvNum" | "styles" | "style" | "profile" | "glass" | "variantNumericId">[] };
+const SAMPLE = demo as unknown as { collections: Catalogue["collections"]; products: Omit<Product, "category" | "name" | "brewery" | "abvNum" | "styles" | "style" | "profile" | "glass" | "variantNumericId" | "createdAt">[] };
 
 function sampleCatalogue(): Catalogue {
   const products = SAMPLE.products.map((p) =>
@@ -420,4 +426,23 @@ export async function getEvents(): Promise<{ events: ShopEvent[]; live: boolean 
       };
     });
   return { events, live: true };
+}
+
+
+/**
+ * The beers that are new in. They come from the date each product was created in Shopify: created in the last 30 days,
+ * newest first, at most 6. If most of the range was created in the last 30 days (a bulk import, not real new arrivals)
+ * the row is left out, so it never says something untrue.
+ */
+export const NEW_IN_DAYS = 30;
+export function newIn(all: Product[], category: Category, now: number = Date.now()): Product[] {
+  const dated = all.filter((p) => p.createdAt && !p.sample);
+  if (!dated.length) return [];
+  const cutoff = now - NEW_IN_DAYS * 86_400_000;
+  const recent = dated.filter((p) => Date.parse(p.createdAt as string) >= cutoff);
+  if (recent.length > dated.length / 2) return [];
+  return recent
+    .filter((p) => p.category === category && p.variants.some((v) => v.available))
+    .sort((a, b) => Date.parse(b.createdAt as string) - Date.parse(a.createdAt as string))
+    .slice(0, 6);
 }
