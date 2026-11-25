@@ -27,6 +27,7 @@ export function ProductGrid({ cards, chips, checkoutOn, noun, intro }: { cards: 
           ))}
         </div>
       )}
+      {!checkoutOn && <p className="note-s">Online checkout opens soon. You can add things to your basket now.</p>}
       <p className="pg-count" role="status">{shown.length} {shown.length === 1 ? noun.replace(/s$/, "") : noun}{active !== "All" ? `, ${active}` : ""}</p>
       <ul className="pg-grid">
         {shown.map((c) => {
@@ -34,7 +35,7 @@ export function ProductGrid({ cards, chips, checkoutOn, noun, intro }: { cards: 
           return (
             <li
               key={c.handle}
-              className={"pg-card" + (isOpen ? " open" : "") + (tapped === c.handle ? " is-filled" : "")}
+              data-cat={c.category} className={"pg-card" + (isOpen ? " open" : "") + (tapped === c.handle ? " is-filled" : "")}
               onPointerUp={(e) => {
                 // touch and pen: a tap fills this glass and empties the last one. Mouse uses hover instead.
                 if (e.pointerType !== "mouse" && !(e.target as HTMLElement).closest("a,button")) setTapped(tapped === c.handle ? null : c.handle);
@@ -58,14 +59,14 @@ export function ProductGrid({ cards, chips, checkoutOn, noun, intro }: { cards: 
               <div className="pg-buy">
                 <span className="pg-price">£{c.price.toFixed(2)}{c.sample && <small> sample</small>}</span>
                 {!c.available ? (
-                  <button type="button" className="btn sm" disabled>Sold out</button>
+                  <button type="button" className="pg-btn solid" disabled>Sold out</button>
                 ) : (
                   <span className="pg-btns">
-                    <button type="button" className="btn sm ghost on-cream" data-add={c.handle}>Add to basket<span className="vh"> {c.name}</span></button>
+                    <button type="button" className="pg-btn soft" data-add={c.handle}>Add to basket<span className="vh"> {c.name}</span></button>
                     {checkoutOn && c.buy ? (
-                      <a className="btn sm" href={c.buy}>Buy now<span className="vh"> {c.name}</span></a>
+                      <a className="pg-btn solid" href={c.buy}>Buy now<span className="vh"> {c.name}</span></a>
                     ) : (
-                      <button type="button" className="btn sm" disabled>Checkout opens soon</button>
+                      <button type="button" className="pg-btn solid" disabled>Buy now</button>
                     )}
                   </span>
                 )}

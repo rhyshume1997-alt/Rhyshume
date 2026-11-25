@@ -496,24 +496,18 @@ html[data-tr="1"] .tr[data-state="idle"] .tr-wipe { transform: none; transition:
     radial-gradient(40% 40% at 50% 28%, rgba(255, 214, 140, .55), transparent 70%) var(--l) 0 / 100% 100% no-repeat,
     linear-gradient(#3a1c11, #5b2f1a 70%, #4a2416); }
 .arch video.enter { z-index: 1; opacity: 1; }
-.arch-logo { position: absolute; z-index: 2; left: calc((var(--l) + 100% - var(--r)) / 2); top: calc(var(--t) + (100% - var(--t) - var(--b)) * .4); width: calc((100% - var(--l) - var(--r)) * .8); max-width: 34rem; transform: translate(-50%, -50%) scale(calc(1 + var(--pt, 0) * .7)); opacity: calc(1 - var(--pt, 0) * 1.6); pointer-events: none; }
+.arch-logo { position: absolute; z-index: 5; left: calc((var(--l) + 100% - var(--r)) / 2); bottom: calc(var(--b) + (100% - var(--t) - var(--b)) * .03); width: calc((100% - var(--l) - var(--r)) * .62); max-width: 26rem; transform-origin: 50% 100%; transform: translateX(-50%) translateY(calc(var(--pt, 0) * -22%)) scale(calc(1 + var(--pt, 0) * 1.1)); opacity: clamp(0, calc(1 - (var(--pt, 0) - .22) * 2.4), 1); pointer-events: none; }
 .arch-logo img { display: block; width: 100%; height: auto; }
 /* the saloon doors: hinged at the outer edges, they swing toward you as you scroll */
-.doors { position: absolute; z-index: 4; left: var(--l); right: var(--r); bottom: var(--b); top: calc(var(--t) + (100% - var(--t) - var(--b)) * .5); display: flex; perspective: 1100px; perspective-origin: 50% 40%; pointer-events: none; }
+.doors { position: absolute; z-index: 3; left: var(--l); right: var(--r); bottom: var(--b); top: calc(var(--t) + (100% - var(--t) - var(--b)) * .5); display: flex; perspective: 1100px; perspective-origin: 50% 40%; pointer-events: none; }
 .door { flex: 1; position: relative; transform-style: preserve-3d; }
-.door.l { transform-origin: left center; transform: rotateY(calc(var(--open, 0) * -105deg)); }
-.door.r { transform-origin: right center; transform: rotateY(calc(var(--open, 0) * 105deg)); }
+.door.l { transform-origin: left center; transform: rotateY(calc(var(--open, 0) * 105deg)); }
+.door.r { transform-origin: right center; transform: rotateY(calc(var(--open, 0) * -105deg)); }
 .door span { position: absolute; inset: 0 .12rem .7rem; border: .35rem solid #3a1c11; border-radius: .7rem .7rem .3rem .3rem; backface-visibility: hidden;
   background: repeating-linear-gradient(180deg, transparent 0 .7rem, rgba(30, 12, 6, .45) .7rem .82rem), linear-gradient(90deg, #a56c3c, #8a5a36 50%, #7a4a2a);
   box-shadow: inset 0 0 0 .18rem #b98a3e66, inset 0 .5rem .8rem rgba(255, 220, 170, .18), 0 .6rem 1rem rgba(0, 0, 0, .45); }
 .door.l span { transform-origin: left center; border-radius: 2.4rem .5rem .3rem .3rem / 1.8rem .5rem .3rem .3rem; }
 .door.r span { transform-origin: right center; border-radius: .5rem 2.4rem .3rem .3rem / .5rem 1.8rem .3rem .3rem; }
-@media (prefers-reduced-motion: no-preference) {
-  .door.l span { animation: door-bump-l 1.6s ease-out 1.5s 1 both; }
-  .door.r span { animation: door-bump-r 1.6s ease-out 1.5s 1 both; }
-}
-@keyframes door-bump-l { 0% { transform: rotateY(0); } 25% { transform: rotateY(-14deg); } 55% { transform: rotateY(-4deg); } 80% { transform: rotateY(-7deg); } 100% { transform: rotateY(0); } }
-@keyframes door-bump-r { 0% { transform: rotateY(0); } 25% { transform: rotateY(14deg); } 55% { transform: rotateY(4deg); } 80% { transform: rotateY(7deg); } 100% { transform: rotateY(0); } }
 .stage .img-tag { z-index: 6; }
 
 /* ---- hours, links ---- */
@@ -666,3 +660,31 @@ html[data-tr="1"] .tr[data-state="idle"] .tr-wipe { transform: none; transition:
   .sh-item:hover .art-subs .sh-photo { transform: translateX(-50%) translateY(-6px) rotate(-9deg) scale(1.04); }
 }
 @media (prefers-reduced-motion: reduce) { .art-tickets .sh-photo, .art-subs .sh-photo { transition: none; } }
+
+
+/* ---- card buttons: soft pills, calm press feedback (ease-out, short, hover only on a mouse) ---- */
+.pg-btns { display: grid; grid-template-columns: 1fr; gap: .45rem; width: 100%; }
+.pg-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 2.6rem; padding: .35rem 1.1rem; border: 0; border-radius: 99px; font: 600 .98rem var(--ui); text-decoration: none; cursor: pointer; white-space: nowrap; transition: background-color .15s ease-out, transform .15s ease-out, color .15s ease-out; }
+.pg-btn.soft { background: #f3e6c3; color: #4a2a0e; }
+.pg-btn.solid { background: #d9992b; color: #2a1608; }
+.pg-btn[disabled] { background: #eadfc8; color: #8a7a62; cursor: not-allowed; opacity: 1; }
+.pg-btn:active:not([disabled]) { transform: scale(.97); }
+.pg-btn:focus-visible { outline: 3px solid #8a4b12; outline-offset: 2px; }
+@media (hover: hover) and (pointer: fine) {
+  .pg-btn.soft:hover { background: #ecd9a8; }
+  .pg-btn.solid:not([disabled]):hover { background: #e6a93a; }
+}
+.pg-buy { gap: .5rem; }
+.pg-price { display: block; }
+.pg-text { min-width: 0; }
+.pg-name { overflow-wrap: anywhere; }
+.pg-card { min-width: 0; }
+.pg-more { border: 0; background: #f6ecd2; padding: .3rem .95rem; min-height: 2.4rem; }
+@media (hover: hover) and (pointer: fine) { .pg-more:hover { background: #efdfb2; } }
+/* the pouring bottle follows the mouse over a card, and the glass fills */
+@media (hover: hover) and (pointer: fine) {
+  .pg-card[data-cat=beer]:hover { cursor: url(/media/cursor-beer.png) 2 56, default; }
+  .pg-card[data-cat=cider]:hover { cursor: url(/media/cursor-cider.png) 3 57, default; }
+  .pg-card[data-cat=wine]:hover { cursor: url(/media/cursor-wine.png) 3 57, default; }
+  .pg-card .pg-btn, .pg-card .pg-more, .pg-card a { cursor: pointer; }
+}

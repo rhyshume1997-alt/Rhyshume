@@ -2,6 +2,7 @@ import { buyLink, safePairings, STYLE_CHIPS, type Category, type GlassSpec, type
 
 export type Card = {
   handle: string;
+  category: Category;
   name: string;
   brewery: string;
   abv: number | null;
@@ -22,6 +23,7 @@ export function toCard(p: Product): Card {
   const v = p.variants.find((x) => x.available) || p.variants[0];
   return {
     handle: p.handle,
+    category: p.category,
     name: p.name,
     brewery: p.brewery,
     abv: p.abvNum,
