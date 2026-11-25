@@ -1,0 +1,265 @@
+/* FEEL · feel.css
+   How the app moves, in one file. The tokens on top are the only numbers; every move reads them.
+   Pick the app's feel on <html data-feel-tone="crisp|soft|lively"> (crisp when absent).
+   Put a move on an element with data-feel="press", "sheet", "dialog", "drawer", "pop", "toast", "backdrop" or "page"
+   (several at once are fine: data-feel="press toast").
+   States it understands, so it works with what the app already uses:
+     data-state="open|closed"      Radix, shadcn/ui, Vaul, Ark      (exit waits for the animation)
+     data-feel-state="open|closed" the kit's own usePresence / settled()
+     data-closed / data-enter / data-leave   Headless UI v2 (transition prop)
+     <dialog open> and [popover]   native, with @starting-style
+   Respects prefers-reduced-motion at the bottom: movement becomes a fade, nothing is lost. */
+
+/* ── Tokens ─────────────────────────────────────────────────────────────── */
+:root {
+  /* crisp: tools, dashboards, money, anything used all day. Quick, exact, no bounce. */
+  --feel-press: 0.97;                      /* how far a pressed thing sinks */
+  --feel-fast: 100ms;                      /* press, toggles, small state changes */
+  --feel-base: 180ms;                      /* menus, popovers, toasts */
+  --feel-slow: 260ms;                      /* sheets, dialogs, pages */
+  --feel-exit: 0.7;                        /* leaving takes this share of arriving */
+  --feel-out: cubic-bezier(0.22, 1, 0.36, 1);      /* arrive: fast start, soft landing */
+  --feel-in: cubic-bezier(0.4, 0, 1, 1);           /* leave: gathers speed on the way out */
+  --feel-in-out: cubic-bezier(0.65, 0, 0.35, 1);   /* move from one place on screen to another */
+  --feel-release: linear(0, 0.0136 2.04%, 0.0484 4.08%, 0.0974 6.12%, 0.1552 8.16%, 0.4069 16.33%, 0.5207 20.41%, 0.5719 22.45%, 0.6189 24.49%, 0.7009 28.57%, 0.7676 32.65%, 0.821 36.73%, 0.8631 40.82%, 0.8959 44.9%, 0.9317 51.02%, 0.9556 57.14%, 0.9787 67.35%, 0.9926 81.63%, 1);          /* a pressed thing coming back */
+  --feel-release-time: 408ms;
+  --feel-pop: linear(0, 0.0136 2.04%, 0.0484 4.08%, 0.0974 6.12%, 0.1552 8.16%, 0.4069 16.33%, 0.5207 20.41%, 0.5719 22.45%, 0.6189 24.49%, 0.7009 28.57%, 0.7676 32.65%, 0.821 36.73%, 0.8631 40.82%, 0.8959 44.9%, 0.9317 51.02%, 0.9556 57.14%, 0.9787 67.35%, 0.9926 81.63%, 1);              /* menus, popovers, centred dialogs */
+  --feel-pop-time: 408ms;
+  --feel-toast: linear(0, 0.0101 1.82%, 0.0368 3.64%, 0.0751 5.45%, 0.1214 7.27%, 0.2266 10.91%, 0.3895 16.36%, 0.4897 20%, 0.5788 23.64%, 0.656 27.27%, 0.7215 30.91%, 0.776 34.55%, 0.821 38.18%, 0.8734 43.64%, 0.9113 49.09%, 0.9454 56.36%, 0.9707 65.45%, 0.988 78.18%, 1);
+  --feel-toast-time: 458ms;
+  --feel-page-shift: 32px;                 /* how far a page travels when it changes */
+}
+:root[data-feel-tone="soft"] {
+  /* soft: calm, wellness, reading, premium. Slower, gentle, still no bounce. */
+  --feel-press: 0.98;
+  --feel-fast: 140ms;
+  --feel-base: 240ms;
+  --feel-slow: 340ms;
+  --feel-release: linear(0, 0.0079 1.61%, 0.0288 3.23%, 0.0596 4.84%, 0.0974 6.45%, 0.186 9.68%, 0.4219 17.74%, 0.5073 20.97%, 0.584 24.19%, 0.6516 27.42%, 0.71 30.65%, 0.7822 35.48%, 0.838 40.32%, 0.8806 45.16%, 0.9213 51.61%, 0.9487 58.06%, 0.9734 67.74%, 0.9892 80.65%, 0.9969 98.39%, 1);
+  --feel-release-time: 517ms;
+  --feel-pop: linear(0, 0.0079 1.61%, 0.0288 3.23%, 0.0596 4.84%, 0.0974 6.45%, 0.186 9.68%, 0.4219 17.74%, 0.5073 20.97%, 0.584 24.19%, 0.6516 27.42%, 0.71 30.65%, 0.7822 35.48%, 0.838 40.32%, 0.8806 45.16%, 0.9213 51.61%, 0.9487 58.06%, 0.9734 67.74%, 0.9892 80.65%, 0.9969 98.39%, 1);
+  --feel-pop-time: 517ms;
+  --feel-toast: linear(0, 0.0063 1.45%, 0.0232 2.9%, 0.0484 4.35%, 0.0799 5.8%, 0.1552 8.7%, 0.4069 17.39%, 0.5207 21.74%, 0.6189 26.09%, 0.7009 30.43%, 0.7676 34.78%, 0.821 39.13%, 0.8631 43.48%, 0.9052 49.28%, 0.9408 56.52%, 0.9668 65.22%, 0.985 76.81%, 0.9964 97.1%, 1);
+  --feel-toast-time: 575ms;
+  --feel-page-shift: 24px;
+}
+:root[data-feel-tone="lively"] {
+  /* lively: consumer, social, games, anything meant to be fun. Springs with a little bounce. */
+  --feel-press: 0.95;
+  --feel-fast: 100ms;
+  --feel-base: 220ms;
+  --feel-slow: 320ms;
+  --feel-release: linear(0, 0.0081 1.47%, 0.0305 2.94%, 0.0647 4.41%, 0.1082 5.88%, 0.159 7.35%, 0.2747 10.29%, 0.522 16.18%, 0.6372 19.12%, 0.7401 22.06%, 0.8283 25%, 0.9011 27.94%, 0.9585 30.88%, 1.0018 33.82%, 1.0325 36.76%, 1.0524 39.71%, 1.0665 44.12%, 1.067 48.53%, 1.0518 55.88%, 1.0133 70.59%, 0.9983 82.35%, 0.9958 98.53%, 1);
+  --feel-release-time: 567ms;
+  --feel-pop: linear(0, 0.0103 1.79%, 0.0381 3.57%, 0.0791 5.36%, 0.1297 7.14%, 0.1867 8.93%, 0.4966 17.86%, 0.608 21.43%, 0.7048 25%, 0.7855 28.57%, 0.8507 32.14%, 0.9016 35.71%, 0.9401 39.29%, 0.9682 42.86%, 0.9951 48.21%, 1.0089 53.57%, 1.0152 62.5%, 1);
+  --feel-pop-time: 467ms;
+  --feel-toast: linear(0, 0.0064 1.43%, 0.0241 2.86%, 0.051 4.29%, 0.0855 5.71%, 0.1257 7.14%, 0.2182 10%, 0.471 17.14%, 0.6107 21.43%, 0.6927 24.29%, 0.7646 27.14%, 0.826 30%, 0.8773 32.86%, 0.919 35.71%, 0.9657 40%, 0.9967 44.29%, 1.0153 48.57%, 1.0266 54.29%, 1.0268 62.86%, 1.0034 91.43%, 1);
+  --feel-toast-time: 583ms;
+  --feel-page-shift: 40px;
+}
+
+/* ── Press: answers the finger the moment it lands, comes back with a spring ─── */
+[data-feel~="press"] {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;              /* no double-tap zoom wait */
+  transition:
+    scale var(--feel-release-time) var(--feel-release),
+    background-color var(--feel-fast) ease-out, color var(--feel-fast) ease-out,
+    border-color var(--feel-fast) ease-out, box-shadow var(--feel-fast) ease-out, opacity var(--feel-fast) ease-out;
+}
+[data-feel~="press"]:active:not(:disabled):not([aria-disabled="true"]):not([data-disabled]) {
+  scale: var(--feel-press);
+  transition-duration: var(--feel-fast);
+  transition-timing-function: var(--feel-out);
+}
+/* Big surfaces (cards, rows) sink less: data-feel="press" data-feel-size="large". */
+[data-feel~="press"][data-feel-size="large"]:active:not(:disabled):not([aria-disabled="true"]):not([data-disabled]) { scale: calc(1 - (1 - var(--feel-press)) / 2); }
+
+/* ── Sheet: rises from the bottom edge, leaves the way it came, never overshoots ─ */
+[data-feel~="sheet"]:is([data-state="open"], [data-feel-state="open"]) {
+  animation: feel-rise var(--feel-slow) var(--feel-out) both;
+}
+[data-feel~="sheet"]:is([data-state="closed"], [data-feel-state="closed"]) {
+  animation: feel-sink calc(var(--feel-slow) * var(--feel-exit)) var(--feel-in) both;
+}
+@keyframes feel-rise { from { translate: 0 100%; } }
+@keyframes feel-sink { to { translate: 0 100%; } }
+
+/* ── Drawer: the same from a side (data-feel-side="left"; right is the default) ─── */
+[data-feel~="drawer"]:is([data-state="open"], [data-feel-state="open"]) {
+  animation: feel-from-end var(--feel-slow) var(--feel-out) both;
+}
+[data-feel~="drawer"]:is([data-state="closed"], [data-feel-state="closed"]) {
+  animation: feel-to-end calc(var(--feel-slow) * var(--feel-exit)) var(--feel-in) both;
+}
+[data-feel~="drawer"][data-feel-side="left"]:is([data-state="open"], [data-feel-state="open"]) { animation-name: feel-from-start; }
+[data-feel~="drawer"][data-feel-side="left"]:is([data-state="closed"], [data-feel-state="closed"]) { animation-name: feel-to-start; }
+@keyframes feel-from-end { from { translate: 100% 0; } }
+@keyframes feel-to-end { to { translate: 100% 0; } }
+@keyframes feel-from-start { from { translate: -100% 0; } }
+@keyframes feel-to-start { to { translate: -100% 0; } }
+
+/* ── Dialog (centred) and pop (menus, popovers, selects): grow from where they belong ─ */
+[data-feel~="dialog"]:is([data-state="open"], [data-feel-state="open"]) {
+  animation: feel-grow var(--feel-pop-time) var(--feel-pop) both;
+}
+[data-feel~="dialog"]:is([data-state="closed"], [data-feel-state="closed"]) {
+  animation: feel-shrink calc(var(--feel-base) * var(--feel-exit)) var(--feel-in) both;
+}
+@keyframes feel-grow { from { opacity: 0; scale: 0.96; translate: 0 8px; } }
+@keyframes feel-shrink { to { opacity: 0; scale: 0.98; } }
+
+[data-feel~="pop"] {
+  /* Opens out of its trigger: Radix tells us where that is; otherwise set --feel-origin. */
+  transform-origin: var(--radix-popover-content-transform-origin, var(--radix-dropdown-menu-content-transform-origin, var(--radix-select-content-transform-origin, var(--radix-context-menu-content-transform-origin, var(--radix-hover-card-content-transform-origin, var(--radix-tooltip-content-transform-origin, var(--feel-origin, top center)))))));
+}
+[data-feel~="pop"]:is([data-state="open"], [data-state="delayed-open"], [data-state="instant-open"], [data-feel-state="open"]) {
+  animation: feel-pop-in var(--feel-pop-time) var(--feel-pop) both;
+}
+[data-feel~="pop"]:is([data-state="closed"], [data-feel-state="closed"]) {
+  animation: feel-pop-out calc(var(--feel-base) * var(--feel-exit)) var(--feel-in) both;
+}
+@keyframes feel-pop-in { from { opacity: 0; scale: 0.95; } }
+@keyframes feel-pop-out { to { opacity: 0; scale: 0.97; } }
+
+/* ── Toast: arrives from its edge (bottom by default, data-feel-from="top"), leaves softly ─ */
+[data-feel~="toast"]:is([data-state="open"], [data-feel-state="open"], :not([data-state], [data-feel-state])) {
+  animation: feel-toast-in var(--feel-toast-time) var(--feel-toast) both;
+}
+[data-feel~="toast"]:is([data-state="closed"], [data-feel-state="closed"]) {
+  animation: feel-toast-out calc(var(--feel-base) * var(--feel-exit)) var(--feel-in) both;
+}
+[data-feel~="toast"][data-feel-from="top"] { --feel-toast-from: calc(-100% - 24px); }
+@keyframes feel-toast-in { from { opacity: 0; translate: 0 var(--feel-toast-from, calc(100% + 24px)); scale: 0.96; } }
+@keyframes feel-toast-out { to { opacity: 0; scale: 0.96; } }
+
+/* ── Backdrop: fades under its sheet or dialog ───────────────────────────── */
+[data-feel~="backdrop"]:is([data-state="open"], [data-feel-state="open"]) {
+  animation: feel-fade-in var(--feel-slow) var(--feel-out) both;
+}
+[data-feel~="backdrop"]:is([data-state="closed"], [data-feel-state="closed"]) {
+  animation: feel-fade-out calc(var(--feel-slow) * var(--feel-exit)) var(--feel-in) both;
+}
+@keyframes feel-fade-in { from { opacity: 0; } }
+@keyframes feel-fade-out { to { opacity: 0; } }
+
+/* Thrown away by a drag (drag.ts): already off screen, so no second exit. */
+[data-feel-dragged="out"] { animation: none !important; }
+/* While a finger holds it, nothing else animates it. */
+[data-feel-dragging] { transition: none !important; user-select: none; -webkit-user-select: none; }
+/* A grab bar or header that starts drags: the browser must not scroll from it. */
+[data-feel-handle] { touch-action: none; cursor: grab; }
+[data-feel-handle]:active { cursor: grabbing; }
+
+/* ── Headless UI v2 (transition prop): data-closed is the "away" state ─────── */
+[data-feel~="sheet"][data-transition] { transition: translate var(--feel-slow) var(--feel-out); }
+[data-feel~="sheet"][data-closed] { translate: 0 100%; }
+[data-feel~="sheet"][data-leave] { transition-duration: calc(var(--feel-slow) * var(--feel-exit)); transition-timing-function: var(--feel-in); }
+[data-feel~="drawer"][data-transition] { transition: translate var(--feel-slow) var(--feel-out); }
+[data-feel~="drawer"][data-closed] { translate: 100% 0; }
+[data-feel~="drawer"][data-feel-side="left"][data-closed] { translate: -100% 0; }
+[data-feel~="drawer"][data-leave] { transition-duration: calc(var(--feel-slow) * var(--feel-exit)); transition-timing-function: var(--feel-in); }
+:is([data-feel~="dialog"], [data-feel~="pop"])[data-transition] { transition: opacity var(--feel-base) var(--feel-out), scale var(--feel-pop-time) var(--feel-pop); }
+:is([data-feel~="dialog"], [data-feel~="pop"])[data-closed] { opacity: 0; scale: 0.96; }
+:is([data-feel~="dialog"], [data-feel~="pop"])[data-leave] { transition-duration: calc(var(--feel-base) * var(--feel-exit)); transition-timing-function: var(--feel-in); }
+[data-feel~="backdrop"][data-transition] { transition: opacity var(--feel-slow) var(--feel-out); }
+[data-feel~="backdrop"][data-closed] { opacity: 0; }
+[data-feel~="toast"][data-transition] { transition: opacity var(--feel-base) var(--feel-out), translate var(--feel-toast-time) var(--feel-toast), scale var(--feel-toast-time) var(--feel-toast); }
+[data-feel~="toast"][data-closed] { opacity: 0; translate: 0 var(--feel-toast-from, calc(100% + 24px)); scale: 0.96; }
+
+/* ── Native <dialog> and [popover]: enter from @starting-style, exit kept on screen by allow-discrete ─ */
+dialog:is([data-feel~="sheet"], [data-feel~="dialog"], [data-feel~="drawer"]),
+[popover]:is([data-feel~="pop"], [data-feel~="toast"]) {
+  transition:
+    translate var(--feel-slow) var(--feel-out), scale var(--feel-pop-time) var(--feel-pop), opacity var(--feel-base) var(--feel-out),
+    overlay var(--feel-slow) allow-discrete, display var(--feel-slow) allow-discrete;
+}
+dialog[data-feel~="sheet"]:not([open]) { translate: 0 100%; }
+dialog[data-feel~="drawer"]:not([open]) { translate: 100% 0; }
+dialog[data-feel~="drawer"][data-feel-side="left"]:not([open]) { translate: -100% 0; }
+dialog[data-feel~="dialog"]:not([open]), [popover][data-feel~="pop"]:not(:popover-open) { opacity: 0; scale: 0.96; }
+[popover][data-feel~="toast"]:not(:popover-open) { opacity: 0; translate: 0 var(--feel-toast-from, calc(100% + 24px)); }
+dialog:is([data-feel~="sheet"], [data-feel~="dialog"], [data-feel~="drawer"]):not([open]),
+[popover]:is([data-feel~="pop"], [data-feel~="toast"]):not(:popover-open) {
+  transition-duration: calc(var(--feel-slow) * var(--feel-exit));
+  transition-timing-function: var(--feel-in);
+}
+@starting-style {
+  dialog[data-feel~="sheet"][open] { translate: 0 100%; }
+  dialog[data-feel~="drawer"][open] { translate: 100% 0; }
+  dialog[data-feel~="drawer"][data-feel-side="left"][open] { translate: -100% 0; }
+  dialog[data-feel~="dialog"][open], [popover][data-feel~="pop"]:popover-open { opacity: 0; scale: 0.96; }
+  [popover][data-feel~="toast"]:popover-open { opacity: 0; translate: 0 var(--feel-toast-from, calc(100% + 24px)); }
+}
+dialog:is([data-feel~="sheet"], [data-feel~="dialog"], [data-feel~="drawer"])::backdrop {
+  background-color: rgb(0 0 0 / 0);
+  transition: background-color var(--feel-slow) var(--feel-out), overlay var(--feel-slow) allow-discrete, display var(--feel-slow) allow-discrete;
+}
+dialog:is([data-feel~="sheet"], [data-feel~="dialog"], [data-feel~="drawer"])[open]::backdrop { background-color: var(--feel-scrim, rgb(0 0 0 / 0.4)); }
+@starting-style {
+  dialog:is([data-feel~="sheet"], [data-feel~="dialog"], [data-feel~="drawer"])[open]::backdrop { background-color: rgb(0 0 0 / 0); }
+}
+
+/* ── Page change ─────────────────────────────────────────────────────────────
+   1. Apps that change pages in the browser: nav.ts go() sets html[data-feel-nav] around a View Transition.
+   2. Next.js App Router 16.2+: React <ViewTransition> with the classes feel-forward / feel-back / feel-fade.
+   3. Multi-page sites (a real page load each time): add  @view-transition { navigation: auto; }  yourself.
+   4. Anything else: data-feel="page" on the page's root plays an arrival (enter only). */
+::view-transition-group(root) { animation-duration: var(--feel-slow); }
+html[data-feel-nav="forward"]::view-transition-old(root), ::view-transition-old(.feel-forward) {
+  animation: feel-leave-start calc(var(--feel-slow) * var(--feel-exit)) var(--feel-in) both;
+}
+html[data-feel-nav="forward"]::view-transition-new(root), ::view-transition-new(.feel-forward) {
+  animation: feel-arrive-end var(--feel-slow) var(--feel-out) both;
+}
+html[data-feel-nav="back"]::view-transition-old(root), ::view-transition-old(.feel-back) {
+  animation: feel-leave-end calc(var(--feel-slow) * var(--feel-exit)) var(--feel-in) both;
+}
+html[data-feel-nav="back"]::view-transition-new(root), ::view-transition-new(.feel-back) {
+  animation: feel-arrive-start var(--feel-slow) var(--feel-out) both;
+}
+html[data-feel-nav="fade"]::view-transition-old(root), ::view-transition-old(.feel-fade) {
+  animation: feel-fade-out calc(var(--feel-base) * var(--feel-exit)) var(--feel-in) both;
+}
+html[data-feel-nav="fade"]::view-transition-new(root), ::view-transition-new(.feel-fade) {
+  animation: feel-fade-in var(--feel-base) var(--feel-out) both;
+}
+@keyframes feel-leave-start { to { opacity: 0; translate: calc(var(--feel-page-shift) * var(--feel-dir, 1) * -1) 0; } }
+@keyframes feel-arrive-end { from { opacity: 0; translate: calc(var(--feel-page-shift) * var(--feel-dir, 1)) 0; } }
+@keyframes feel-leave-end { to { opacity: 0; translate: calc(var(--feel-page-shift) * var(--feel-dir, 1)) 0; } }
+@keyframes feel-arrive-start { from { opacity: 0; translate: calc(var(--feel-page-shift) * var(--feel-dir, 1) * -1) 0; } }
+[dir="rtl"] { --feel-dir: -1; } /* right-to-left apps: forward comes from the left */
+[data-feel~="page"] { animation: feel-page-in var(--feel-slow) var(--feel-out) both; }
+@keyframes feel-page-in { from { opacity: 0; translate: 0 8px; } }
+
+/* ── Reduced motion: nothing travels; things fade; feedback stays ─────────── */
+@media (prefers-reduced-motion: reduce) {
+  [data-feel~="press"]:active:not(:disabled):not([aria-disabled="true"]):not([data-disabled]) { scale: 1; opacity: 0.7; }
+  [data-feel~="press"][data-feel-size="large"]:active:not(:disabled):not([aria-disabled="true"]):not([data-disabled]) { scale: 1; }
+  @keyframes feel-rise { from { opacity: 0; } }
+  @keyframes feel-sink { to { opacity: 0; } }
+  @keyframes feel-from-end { from { opacity: 0; } }
+  @keyframes feel-to-end { to { opacity: 0; } }
+  @keyframes feel-from-start { from { opacity: 0; } }
+  @keyframes feel-to-start { to { opacity: 0; } }
+  @keyframes feel-grow { from { opacity: 0; } }
+  @keyframes feel-shrink { to { opacity: 0; } }
+  @keyframes feel-pop-in { from { opacity: 0; } }
+  @keyframes feel-pop-out { to { opacity: 0; } }
+  @keyframes feel-toast-in { from { opacity: 0; } }
+  @keyframes feel-toast-out { to { opacity: 0; } }
+  @keyframes feel-leave-start { to { opacity: 0; } }
+  @keyframes feel-arrive-end { from { opacity: 0; } }
+  @keyframes feel-leave-end { to { opacity: 0; } }
+  @keyframes feel-arrive-start { from { opacity: 0; } }
+  @keyframes feel-page-in { from { opacity: 0; } }
+  [data-feel~="sheet"]:is([data-closed]), dialog[data-feel~="sheet"]:not([open]),
+  [data-feel~="drawer"]:is([data-closed]), dialog[data-feel~="drawer"]:not([open]) { translate: none; opacity: 0; }
+  :is([data-feel~="dialog"], [data-feel~="pop"])[data-closed], dialog[data-feel~="dialog"]:not([open]), [popover][data-feel~="pop"]:not(:popover-open) { scale: none; }
+  [data-feel~="toast"][data-closed], [popover][data-feel~="toast"]:not(:popover-open) { translate: none; scale: none; }
+  @starting-style {
+    dialog:is([data-feel~="sheet"], [data-feel~="drawer"])[open] { translate: none; opacity: 0; }
+    dialog[data-feel~="dialog"][open], [popover][data-feel~="pop"]:popover-open { scale: none; }
+    [popover][data-feel~="toast"]:popover-open { translate: none; }
+  }
+}
