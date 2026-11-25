@@ -1,0 +1,8 @@
+[
+  {"match":"RASPBERRY SOUR","brewery":"Vault City","style":"Fruited sour","blurb":"Fresh raspberries up front in a refreshing sour, tart and sweet in equal measure.","flavour":["raspberry","tart","sweet"]},
+  {"match":"IRON BREW SOUR","brewery":"Vault City","style":"Sour","blurb":"Scotland's favourite soft drink turned into a sour beer.","flavour":["bubblegum","orange soda","citrus"]},
+  {"match":"BLOSSOM","brewery":"Otherworld","style":"NEIPA","blurb":"A full bodied hazy IPA with jasmine blossom, floral hops and juicy pineapple.","flavour":["jasmine","pineapple","vanilla","stone fruit","lime"]},
+  {"match":"JOSHUA JANE","brewery":"Ilkley","style":"Bitter","blurb":"A traditional Yorkshire bitter, nut brown with soft caramel and a little American hop character.","flavour":["caramel","nutty","hoppy"]},
+  {"match":"THESE STREETS","brewery":"Two Towns Down","style":"Pale ale","blurb":"Light, crisp, easy drinking pale ale from Paisley, fresh and citrusy.","flavour":["citrus","crisp","light"]},
+  {"match":"EKSTRA PREMIUM LAGER","brewery":"Svyturys","style":"Lager","blurb":"Lithuania's best known beer, a clean malty export lager with a dry, gently bitter finish.","flavour":["honey","toasted bread","dry finish"]}
+]

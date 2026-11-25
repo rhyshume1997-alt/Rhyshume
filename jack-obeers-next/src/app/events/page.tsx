@@ -41,9 +41,11 @@ export default async function Page() {
                     {e.description && <p>{e.description}</p>}
                     <p className="price">{e.price > 0 ? `£${e.price.toFixed(2)} a ticket` : <span className="tbc">price to be confirmed</span>}</p>
                     <p>
-                      <button className="btn dk" type="button" disabled>
-                        {ticketsOn && e.available ? "Buy tickets" : "Tickets open soon"}
-                      </button>
+                      {ticketsOn && e.available && e.buy ? (
+                        <a className="btn dk" href={e.buy}>Buy tickets</a>
+                      ) : (
+                        <button className="btn dk" type="button" disabled>Tickets open soon</button>
+                      )}
                     </p>
                   </li>
                 ))}

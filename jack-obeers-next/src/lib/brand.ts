@@ -30,3 +30,14 @@ export const SHOP = {
   hours: "Wednesday to Monday, 11am to 7pm",
   owners: ["Michael", "Tanya"],
 };
+
+/**
+ * Photos of the shop and the bars, for the About section. Put the compressed files in public/media/photos and they
+ * appear. A photo whose file is missing is simply left out. Alt text says what is in the picture and does not name
+ * anyone. Only use pictures the shop has agreed to publish, and check the people in them are happy to appear.
+ */
+export const PHOTOS: { file: string; alt: string }[] = [
+  { file: "counter.webp", alt: "Behind a slatted wooden counter with a round Jack O’Beers & Deli sign, a beer pump handle, bottles of beer and wine, and chalkboards" },
+  { file: "bottle-filler.webp", alt: "A slatted wooden bar unit with a bottle filling machine and a red parasol on top, on a decked patio" },
+  { file: "event-bars.webp", alt: "Two wooden bars with beer taps and round Jack O’Beers & Deli signs, set up outdoors under bunting" },
+];
