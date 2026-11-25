@@ -1009,9 +1009,9 @@ html.loaded .jack-cheer { background-image: url(/media/jack-cheer.webp); }
 .find-q > span { min-width: 8.5rem; font-weight: 600; }
 .find-q .seg { margin: 0; background: #eadfc6; }
 .find-hint { margin: 0; color: #5f4f3d; }
-.find-pick { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem 1rem; padding: .7rem 1rem; border-radius: 1rem; background: #fffaf0; }
+.find-pick { color: var(--ink); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem 1rem; padding: .7rem 1rem; border-radius: 1rem; background: #fffaf0; }
 .find-pick small { display: block; color: #5f4f3d; }
-.find-pick a { color: inherit; text-decoration: none; }
+.find-pick a { color: var(--ink); text-decoration: none; }
 
 
 /* ---- conversion 8: the round seal ---- */
