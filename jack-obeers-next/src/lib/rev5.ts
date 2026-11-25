@@ -107,16 +107,18 @@ export function initRev5(P: any[]): () => void {
   /* ============ THE OPENING ============ */
   var stage = $('.stage');
   if (stage) {
-    var arch = $('.arch'), copy = $('.hero-copy'), medal = $('.medal'), counter = $('.counter'), cue = $('.scrollcue'), vid = $('.arch video'), tag = $('.stage .img-tag'), note = $('.sleep-note');
+    var arch = $('.arch'), copy = $('.hero-copy'), medal = $('.medal'), counter = $('.counter'), cue = $('.scrollcue'), vid = null, enter = $('.arch video.enter'), tag = $('.stage .img-tag'), note = $('.sleep-note');
     var h1 = $('.hero-copy h1'), chars = [];
     $$('.w', h1).forEach(function (w) { var t = w.textContent; w.textContent = ''; t.split('').forEach(function (c) { var s = document.createElement('span'); s.className = 'ch'; s.textContent = c; w.appendChild(s); chars.push(s); }); });
-    h1.setAttribute('aria-label', 'Fresh from keg to bottle, no foam, no fuss.');
+    h1.setAttribute('aria-label', h1.textContent.replace(/\s+/g, ' ').trim());
     var litUpTo = 0, done = false;
     function light(n) { for (var i = litUpTo; i < Math.min(n, chars.length); i++) chars[i].classList.add('lit'); litUpTo = Math.max(litUpTo, n); }
-    if (reduced) { light(chars.length); medal.classList.add('up'); if (vid) { vid.removeAttribute('autoplay'); vid.preload = 'metadata'; vid.pause(); vid.addEventListener('play', function () { vid.pause(); }); } }
+    if (reduced) { light(chars.length); if (medal) medal.classList.add('up'); if (vid) { vid.removeAttribute('autoplay'); vid.preload = 'metadata'; vid.pause(); vid.addEventListener('play', function () { vid.pause(); }); } }
     else {
       /* the beer in the glass writes the headline: letters light in step with the pour's progress */
-      setTimeout(function () { medal.classList.add('up'); }, 900);
+      if (medal) setTimeout(function () { medal.classList.add('up'); }, 900);
+      /* no video drives the headline now, so the letters light one after another */
+      var li = 0, lt = setInterval(function () { light(++li * 2); if (litUpTo >= chars.length) clearInterval(lt); }, 70);
       var tick = function () {
         if (!vid || done) return;
         var d = vid.duration || 5, p = Math.min(1, vid.currentTime / (d * 0.82));
@@ -139,6 +141,8 @@ export function initRev5(P: any[]): () => void {
       var f = Math.max(0, 1 - pt * 3);
       copy.style.opacity = f; copy.style.transform = 'translateY(' + (-pt * 60) + 'px)'; if (cue) cue.style.opacity = f; if (note) note.style.opacity = f; if (tag) tag.style.opacity = 1;
       counter.style.transform = 'translateY(' + (Math.max(0, pt - .55) / .45 * 105) + '%)';
+      arch.style.setProperty('--pt', pt); if (enter && !reduced && pt > .02 && enter.paused) { var q2 = enter.play(); if (q2 && q2.catch) q2.catch(function () {}); }
+      if (!medal) return;
       var run = Math.min(1, pt / .5), ex = innerWidth * (mob() ? .55 : .55) * ease(run);
       medal.style.translate = ex + 'px ' + (-Math.sin(run * Math.PI) * 8) + 'px'; medal.style.opacity = Math.max(0, 1 - Math.max(0, pt - .38) / .22);
     }

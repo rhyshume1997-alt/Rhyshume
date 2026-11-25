@@ -1,3 +1,4 @@
+import { Hours } from "@/components/Hours";
 import { PhotoStrip } from "@/components/PhotoStrip";
 
 /**
@@ -16,7 +17,7 @@ export function AboutSection() {
             <p className="lede">We also run events, and there&rsquo;s a beer club if you want to join.</p>
           </div>
           <ul className="about-ph-list">
-            <li><span className="tbc">[Michael to add: opening hours]</span></li>
+            <li><Hours /></li>
             <li><span className="tbc">[Michael to add: a line on how the shop started]</span></li>
           </ul>
         </div>

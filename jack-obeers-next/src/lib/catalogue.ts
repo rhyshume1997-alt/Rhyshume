@@ -3,7 +3,7 @@ import profiles from "@/data/profiles.json";
 
 export type Variant = { id: string; title: string; price: number; available: boolean };
 
-export type Category = "beer" | "cider" | "wine" | "events" | "subscriptions" | "other";
+export type Category = "beer" | "cider" | "wine" | "events" | "subscriptions" | "deli" | "hampers" | "other";
 
 export type Profile = {
   match: string;
@@ -85,6 +85,8 @@ export function categoryOf(productType: string): Category {
   if (!t) return "other";
   if (t.includes("event") || t.includes("ticket")) return "events";
   if (t.includes("subscription") || t.includes("membership")) return "subscriptions";
+  if (t.includes("hamper")) return "hampers";
+  if (t.includes("deli") || t.includes("food") || t.includes("snack") || t.includes("cheese") || t.includes("pie") || t.includes("chutney") || t.includes("preserve")) return "deli";
   if (t.includes("cider")) return "cider";
   if (t.includes("wine") || t.includes("prosecco") || t.includes("sparkling")) return "wine";
   if (t.includes("beer") || t.includes("lager") || t.includes("ale") || t.includes("stout") || t.includes("ipa") || t.includes("porter") || t.includes("sour")) return "beer";
@@ -176,7 +178,7 @@ function enrich(r: Raw, sample = false): Product {
   const style = profile ? profile.style : styles[0] || (category === "beer" ? "" : r.productType.trim());
   const buy = r.variants.find((v) => v.available) || r.variants[0];
   const blob = [profile ? profile.style : "", ...r.tags, r.title, r.productType].join(" ");
-  const col: Record<Category, string> = { beer: "beers", cider: "ciders", wine: "wines", events: "events", subscriptions: "subscriptions", other: "other" };
+  const col: Record<Category, string> = { beer: "beers", cider: "ciders", wine: "wines", events: "events", subscriptions: "subscriptions", deli: "deli", hampers: "hampers", other: "other" };
   return {
     handle: r.handle,
     title: r.title.trim(),

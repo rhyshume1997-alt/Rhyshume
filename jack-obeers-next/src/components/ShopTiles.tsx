@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { KegBlurb } from "@/components/KegBlurb";
+import { ShelfArt } from "@/components/ShelfArt";
 import { ProductGrid } from "@/components/ProductGrid";
 import type { Card } from "@/lib/cards";
 
@@ -36,24 +37,24 @@ export function ShopTiles({ ranges, events, subs, checkoutOn }: { ranges: Record
       <div className="wrap">
         <p className="mono">Shop</p>
         <h2 className="h2" id="tl-h">Pick a <em>shelf.</em></h2>
-        <ul className="tiles">
+        <p className="shelf-hint">Click your selection.</p>
+        <ul className="shelf-row">
           {DRINKS.map((d) => {
             const n = ranges[d.key].cards.length;
             return (
               <li key={d.key}>
-                <button type="button" className="tile" aria-expanded={open === d.key} aria-controls="range-panel" onClick={() => choose(d.key)}>
-                  <b>{d.title}</b>
-                  <span className="tile-n">{count(n, d.unit.replace(/s$/, ""), d.unit)}</span>
-                  <small>{d.blurb}</small>
+                <button type="button" className="sh-item" data-kind={d.key} aria-expanded={open === d.key} aria-controls="range-panel" onClick={() => choose(d.key)}>
+                  <ShelfArt kind={d.key} />
+                  <span className="sh-label"><b>{d.title}</b><span className="tile-n">{count(n, d.unit.replace(/s$/, ""), d.unit)}</span></span>
                 </button>
               </li>
             );
           })}
           <li>
-            <a className="tile" href="/events"><b>Event Tickets</b><span className="tile-n">{count(events, "event", "events")}</span><small>What&rsquo;s on and how to get in</small></a>
+            <a className="sh-item" data-kind="events" href="/events"><ShelfArt kind="events" /><span className="sh-label"><b>Event Tickets</b><span className="tile-n">{count(events, "event", "events")}</span></span></a>
           </li>
           <li>
-            <a className="tile" href="/draught-club"><b>Subscription Services</b><span className="tile-n">{count(subs, "plan", "plans")}</span><small>The Draught Club</small></a>
+            <a className="sh-item" data-kind="subs" href="/draught-club"><ShelfArt kind="subs" /><span className="sh-label"><b>Subscription Services</b><span className="tile-n">{count(subs, "plan", "plans")}</span></span></a>
           </li>
         </ul>
         <div ref={panel} id="range-panel" className="range-panel" role="region" aria-label={cur ? `${cur.title} range` : "Range"} hidden={!cur}>

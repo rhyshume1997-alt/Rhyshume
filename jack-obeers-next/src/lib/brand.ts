@@ -16,6 +16,12 @@ export const BRAND = {
    * When the shop-entrance video is ready, drop the three files in public/media and change these names.
    */
   hero: { poster: "/media/pour-poster.webp", webm: "/media/pour.webm", mp4: "/media/pour.mp4" },
+  /**
+   * The Remotion entrance video that plays inside the arch and carries you into the shop as you scroll.
+   * null today: the arch holds the animated Jack. When the video is ready, put the files in public/media
+   * and set these three paths. The logo then fades out as the video takes over.
+   */
+  enter: null as { poster: string; webm: string; mp4: string } | null,
   facade: null as string | null,
   interior: null as string | null,
   door: { left: 0.43, top: 0.36, width: 0.14, height: 0.56 },
@@ -27,7 +33,7 @@ export const SHOP = {
   address: ["13 Station Road", "Milngavie", "G62 8PG"],
   phone: "07405 480950",
   email: "sales@jackobeers.com",
-  hours: "Wednesday to Monday, 11am to 7pm",
+  hours: "Wednesday to Monday, 11am to 7pm. Closed on Tuesday.",
   owners: ["Michael", "Tanya"],
 };
 
@@ -40,4 +46,25 @@ export const PHOTOS: { file: string; alt: string }[] = [
   { file: "counter.webp", alt: "Behind a slatted wooden counter with a round Jack O’Beers & Deli sign, a beer pump handle, bottles of beer and wine, and chalkboards" },
   { file: "bottle-filler.webp", alt: "A slatted wooden bar unit with a bottle filling machine and a red parasol on top, on a decked patio" },
   { file: "event-bars.webp", alt: "Two wooden bars with beer taps and round Jack O’Beers & Deli signs, set up outdoors under bunting" },
+];
+
+/** Where the shop is online. The Instagram and Google links were supplied by the owner. YouTube is not supplied yet. */
+export const LINKS = {
+  instagram: "https://www.instagram.com/jack.o.beers/",
+  google: "https://maps.app.goo.gl/MegXAVddMbibLx6J6",
+  youtube: null as string | null,
+};
+
+/**
+ * Opening hours. Wednesday to Monday 11am to 7pm came from the shop's own details, and Tuesday closed was
+ * confirmed by the owner. They could not be read from the Google listing, so check them against it.
+ */
+export const HOURS: { day: string; open: string | null }[] = [
+  { day: "Monday", open: "11am to 7pm" },
+  { day: "Tuesday", open: null },
+  { day: "Wednesday", open: "11am to 7pm" },
+  { day: "Thursday", open: "11am to 7pm" },
+  { day: "Friday", open: "11am to 7pm" },
+  { day: "Saturday", open: "11am to 7pm" },
+  { day: "Sunday", open: "11am to 7pm" },
 ];
