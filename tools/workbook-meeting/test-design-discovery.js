@@ -32,4 +32,5 @@ for (const name of ['first', 'standOut', 'avoid', 'priority']) {
 assert.ok(source.includes("if (value) add(o.conf, 'Style', label, value)"), 'recorded direction goes to design brief');
 assert.ok(source.includes("else add(o.open, 'Design', label"), 'missing direction is flagged');
 assert.ok(source.includes('Design direction check:'), 'review shows readiness check');
+assert.ok(source.indexOf('Make the first design specific') < source.indexOf("  ${qcard('looks',"), 'ask first impression before showing examples');
 console.log('Design discovery regression checks passed');
