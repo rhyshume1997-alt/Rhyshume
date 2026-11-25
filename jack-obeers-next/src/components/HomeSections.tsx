@@ -1,3 +1,7 @@
+import Image from "next/image";
+import { BgVideo } from "@/components/BgVideo";
+import { MEDIA } from "@/lib/media";
+import { DELI_CABINET, DELI_COUNTER } from "@/lib/photos";
 import { ALLOWED_PAIRINGS, buyLink, type Product } from "@/lib/catalogue";
 
 const money = (n: number) => `£${n.toFixed(2)}`;
@@ -23,6 +27,7 @@ export function DeliSection({ products }: { products: Product[] }) {
     : ALLOWED_PAIRINGS.map((n) => ({ key: n, name: n, price: null as number | null, image: null as string | null, with: goesWith(n) }));
   return (
     <section className="deli" id="deli" aria-labelledby="deli-h">
+      <div className="sec-bg" aria-hidden="true"><BgVideo loop={MEDIA.bgDeli} className="sec-video" /></div>
       <div className="wrap">
         <p className="mono">The deli counter</p>
         <h2 className="h2" id="deli-h">Good things to eat, <em>next to the beer.</em></h2>
@@ -37,6 +42,11 @@ export function DeliSection({ products }: { products: Product[] }) {
                 {it.with.length > 0 && <p className="deli-with">Suggested with {it.with.join(", ")}</p>}
               </div>
             </li>
+          ))}
+        </ul>
+        <ul className="deli-photos" aria-label="Photos of the deli">
+          {[DELI_COUNTER, DELI_CABINET].map((p) => (
+            <li key={p.file}><Image src={p.file} alt={p.alt} width={p.width} height={p.height} sizes="(max-width: 40rem) 100vw, 50vw" /></li>
           ))}
         </ul>
         <p className="hint deli-hint">

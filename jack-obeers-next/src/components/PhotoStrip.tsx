@@ -1,17 +1,14 @@
-import { existsSync } from "node:fs";
-import { join } from "node:path";
-import { PHOTOS } from "@/lib/brand";
+import Image from "next/image";
+import { INTERIOR_COUNTER_BULBS, SHOPFRONT_STREET } from "@/lib/photos";
 
-/** The shop photos, shown only when the files exist in public/media/photos. */
+/** Photos of the shop, under About us. Alt text comes from the media repo. */
 export function PhotoStrip() {
-  const have = PHOTOS.filter((p) => existsSync(join(process.cwd(), "public", "media", "photos", p.file)));
-  if (!have.length) return null;
+  const list = [SHOPFRONT_STREET, INTERIOR_COUNTER_BULBS];
   return (
     <ul className="photo-strip" aria-label="Photos of the shop">
-      {have.map((p) => (
+      {list.map((p) => (
         <li key={p.file}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={`/media/photos/${p.file}`} alt={p.alt} loading="lazy" decoding="async" />
+          <Image src={p.file} alt={p.alt} width={p.width} height={p.height} sizes="(max-width: 40rem) 100vw, 50vw" />
         </li>
       ))}
     </ul>

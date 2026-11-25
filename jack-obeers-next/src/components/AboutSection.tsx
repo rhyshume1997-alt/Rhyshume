@@ -1,9 +1,15 @@
+import Image from "next/image";
+import { Clip } from "@/components/Clip";
 import { Hours } from "@/components/Hours";
 import { PhotoStrip } from "@/components/PhotoStrip";
+import { MEDIA } from "@/lib/media";
+import { MICHAEL_AND_TANYA } from "@/lib/photos";
 
 /**
- * About us, at the top of the home page. The words are Michael's own, condensed. Keep them plain: no exclamation marks,
- * no hype. The suppliers named (Jarvis Pickle, Hammond, Belhaven) were dictated, so Michael should check the spellings.
+ * About us, at the top of the home page. The words are Michael's welcome, from his transcript, as he said it.
+ * Keep them plain and in his voice. "Jarvis Pickle", "Hammond" and "Belhaven" are spelled as the transcription heard
+ * them and must be checked with Michael before this goes live.
+ * His welcome video goes in MEDIA.michael when the file arrives. The transcript below is its text version.
  */
 export function AboutSection() {
   return (
@@ -13,17 +19,24 @@ export function AboutSection() {
         <h2 className="h2" id="ah-h">About us</h2>
         <div className="about-home-grid">
           <div className="about-copy">
-            <p className="lede">Hello, welcome to Jack O&rsquo;Beers. I&rsquo;m Michael Blakely, and my wife and I run the shop.</p>
-            <p>We have 23 taps on the wall, with our own transfer system so the beer and cider are keg fresh. Wine can be transferred into a 500ml or 1 litre bottle, to enjoy at home, at a friend&rsquo;s, or wherever you like.</p>
-            <p>In the fridge we focus on the best of British produce, the same as the wall does for beer. We aim to bring you the best quality at the best affordable prices.</p>
-            <p>We run events throughout the year. You can also sit in to try our soups and dumplings, or the pies from Jarvis Pickle, with charcuterie from Hammond and fish charcuterie from Belhaven.</p>
+            <p className="lede">Hello, welcome to Jack O&rsquo;Beers. My name&rsquo;s Michael Blakely, and my wife and I run Jack O&rsquo;Beers.</p>
+            <p>We have 23 taps on the wall, with our custom transfer system to ensure keg-fresh beer and cider. And wine can be transferred into a 500ml or 1 litre bottle for you to take home and enjoy in the comfort of your own home, or at a friend&rsquo;s, or wherever you want to enjoy it.</p>
+            <p>In the fridge we focus on the best of British produce, as we do on the wall for the best of British beers.</p>
+            <p>At Jack O&rsquo;Beers, we&rsquo;re focused on ensuring that we can bring you the best quality at the best affordable prices.</p>
+            <p>We have many events that are running throughout the year, and we also offer a sit-in experience to try some of our beautiful soups and dumplings, or our wonderful pies that we have from Jarvis Pickle. They truly are amazing. It&rsquo;s matched in with our charcuterie from Hammond, and also our fish charcuterie that we do from Belhaven.</p>
             <p>We look forward to seeing you at Jack O&rsquo;Beers soon.</p>
           </div>
           <div className="about-side">
+            <Image className="about-photo" src={MICHAEL_AND_TANYA.file} alt={MICHAEL_AND_TANYA.alt} width={MICHAEL_AND_TANYA.width} height={MICHAEL_AND_TANYA.height} sizes="(max-width: 52rem) 100vw, 36vw" />
             <Hours />
             <span className="jack-cheer" role="img" aria-label="Jack the bull, smiling" />
           </div>
         </div>
+        {MEDIA.michael && (
+          <div className="about-video">
+            <Clip src={MEDIA.michael.src} poster={MEDIA.michael.poster} label="Michael welcomes you to Jack O’Beers. The words are written above." />
+          </div>
+        )}
         <PhotoStrip />
       </div>
     </section>

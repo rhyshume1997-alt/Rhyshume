@@ -107,7 +107,7 @@ export function initRev5(P: any[]): () => void {
   /* ============ THE OPENING ============ */
   var stage = $('.stage');
   if (stage) {
-    var arch = $('.arch'), copy = $('.hero-copy'), medal = $('.medal'), counter = $('.counter'), cue = $('.scrollcue'), vid = null, enter = $('.arch video.enter'), tag = $('.stage .img-tag'), note = $('.sleep-note');
+    var arch = $('.arch'), copy = $('.hero-copy'), medal = $('.medal'), counter = $('.counter'), cue = $('.scrollcue'), vid = null, enter = null, tag = $('.stage .img-tag'), note = $('.sleep-note');
     var h1 = $('.hero-copy h1'), chars = [];
     $$('.w', h1).forEach(function (w) { var t = w.textContent; w.textContent = ''; t.split('').forEach(function (c) { var s = document.createElement('span'); s.className = 'ch'; s.textContent = c; w.appendChild(s); chars.push(s); }); });
     h1.setAttribute('aria-label', h1.textContent.replace(/\s+/g, ' ').trim());

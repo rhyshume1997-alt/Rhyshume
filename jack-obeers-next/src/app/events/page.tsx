@@ -1,6 +1,8 @@
 import { Behaviour } from "@/components/Behaviour";
 import { getCatalogue } from "@/lib/catalogue";
 import { getPublicEvents } from "@/lib/events-store";
+import { Clip } from "@/components/Clip";
+import { MEDIA } from "@/lib/media";
 import { SHOP } from "@/lib/brand";
 
 export const metadata = { title: "Events | Jack O’Beers & Deli" };
@@ -51,6 +53,13 @@ export default async function Page() {
                 ))}
               </ul>
             )}
+            <div className="ilkley">
+              <div>
+                <h2 className="h3">Jack O&rsquo;Beers at Ilkley Brewery</h2>
+                <p>We supplied the bar for 1,500 people at an England match screening at Ilkley Brewery, Yorkshire.</p>
+              </div>
+              <Clip className="ilkley-video" src={MEDIA.events.src} poster={MEDIA.events.poster} label="Video from the England match screening at Ilkley Brewery, Yorkshire, where Jack O’Beers supplied the bar for 1,500 people." />
+            </div>
             <div className="enquiry">
               <div>
                 <h2 className="h3">Planning your own?</h2>
