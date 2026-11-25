@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Hook it all up: 12
+steps | Jack O'Beers HQ</title><link rel="stylesheet" href="../style.css"></head>
+<body>
+<div class="tk-bar"><div class="tk-in"><a class="back" href="../">&larr; Everything</a><span class="tk-title">Hook
+it all up: 12 steps</span>
+<span class="tk-prog"><span class="tk-track"><span class="tk-fill"></span></span><span class="tk-num"></span></span>
+<span class="tk-menu"><button type="button" id="tk-send" class="primary">Send answers</button><details class="tk-more"><summary>More</summary><div class="menu"><button type="button" id="tk-reset">Clear this page</button><button type="button" id="tk-copy">Copy backup</button><button type="button" id="tk-paste">Paste backup</button></div></details></span></div></div>
+<main data-tick>
+<p class="sub">Tick a line, answer Yes / No, and add a note where you need one. Everything is saved in this browser. When you are done, press <b>Send answers</b>.</p>
+<h1 id="hook-it-all-up-12-steps">Hook it all up: 12 steps</h1>
+<p>The short version. Tick as you go. The long version is under “Full
+version” on the hub if you get stuck.</p>
+<p><strong>Never ask for a password. Never change anything live until
+the grant is approved, the contract is signed and he has said yes in
+writing.</strong></p>
+<h2 id="before-launch-you-and-shopify">Before launch (you and
+Shopify)</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />1. Ask him three things: Is the
+domain at GoDaddy, and does it show his Shopify shop today? Is the DNA
+till stock synced with Shopify? Does he have email on the
+domain?</label></li>
+<li><label><input type="checkbox" />2. Ask him for his Shopify
+<strong>collaborator code</strong> (4 digits). He finds it in Shopify
+under Settings, Users and permissions, Collaborators. Also get his store
+address (<code>something.myshopify.com</code>).</label></li>
+<li><label><input type="checkbox" />3. In your Shopify Partner / Dev
+Dashboard: <strong>Stores, Request store access.</strong> Enter the
+address and code. Ask only for apps and products, never payments or
+ownership. He presses approve.</label></li>
+<li><label><input type="checkbox" />4. In his Shopify, add the
+<strong>Headless</strong> channel, make a storefront, copy the
+<strong>public Storefront token</strong>. (If there is no Headless
+channel, make a custom app with product and basket permissions
+instead.)</label></li>
+<li><label><input type="checkbox" />5. In Vercel: <strong>new
+project</strong> from the site’s GitHub repo.</label></li>
+<li><label><input type="checkbox" />6. In the project, <strong>Settings,
+Environment Variables</strong>: add <code>SHOPIFY_STORE_DOMAIN</code>
+(his <code>.myshopify.com</code> address) and
+<code>SHOPIFY_STOREFRONT_TOKEN</code> (the token). Redeploy. Delete the
+token from anywhere else.</label></li>
+<li><label><input type="checkbox" />7. Test on the Vercel preview link:
+real products show, add one to the basket, press Checkout and land on a
+<strong>Shopify</strong> page. Stop there. Do not pay. Alcohol checkout
+stays off.</label></li>
+</ul>
+<h2 id="launch-day-only-with-his-written-yes">Launch day (only with his
+written yes)</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />8. Sit with him at GoDaddy.
+<strong>Screenshot all the current DNS records first</strong> (DNS,
+Manage DNS).</label></li>
+<li><label><input type="checkbox" />9. In Vercel: <strong>Settings,
+Domains, Add</strong> his domain, plus the <code>www</code> one. Vercel
+shows two records. Use the values on screen. Usually an
+<strong>A</strong> record (name <code>@</code>, value
+<code>76.76.21.21</code>) and a <strong>CNAME</strong> record (name
+<code>www</code>, value <code>cname.vercel-dns.com</code>).</label></li>
+<li><label><input type="checkbox" />10. In GoDaddy, change the existing
+<code>@</code> A record and the <code>www</code> CNAME to those. Remove
+any “parked” record or domain forwarding that clashes. <strong>Do not
+touch MX (email) records.</strong></label></li>
+<li><label><input type="checkbox" />11. Wait (minutes to a day). Vercel
+shows a green tick and the padlock appears. Open the site on your
+phone.</label></li>
+<li><label><input type="checkbox" />12. Test: send a test email to and
+from his address. Add one item to the basket and go to Checkout, stop at
+Shopify. Write down who holds which login (domain, Vercel,
+Shopify).</label></li>
+</ul>
+<p><strong>If something breaks:</strong> wait an hour, then check the
+records match what Vercel shows. If email stops, put the MX record back
+from your screenshot. Anything about payments or licences: stop and
+ask.</p>
+</main>
+<script src="../tick.js"></script>
+</body></html>
