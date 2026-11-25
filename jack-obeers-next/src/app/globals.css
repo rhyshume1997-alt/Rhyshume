@@ -928,3 +928,17 @@ html.loaded .jack-cheer { background-image: url(/media/jack-cheer.webp); }
 .door.r { left: calc(var(--l0) + (100% - var(--l0) - var(--r0)) / 2); transform-origin: right bottom; transform: translate(var(--drx, 0px), var(--dy, 0px)) scale(var(--sc, 1)) rotateY(calc(var(--open, 0) * -105deg)); }
 .arch-logo { left: calc((var(--l0) + 100% - var(--r0)) / 2); bottom: calc(var(--b0) + (100% - var(--t0) - var(--b0)) * .03); width: calc((100% - var(--l0) - var(--r0)) * .5); max-width: 15rem; transform-origin: 50% 100%; will-change: transform;
   transform: translate(calc(-50% + var(--ldx, 0px)), var(--ldy, 0px)) translateY(calc(var(--pt, 0) * -16%)) scale(calc(1 + var(--pt, 0) * .7)); }
+
+
+/* ---- the frame is now the shop window: black surround like the window and door frames (#161616), and the dark green and
+   cream striped awning across the top edge. Colours sampled from the shop-front photo: green #2c4a3b, cream #e6e3d2,
+   black #161616. Stripes are about 1.5 percent of the picture wide, like the awning. CSS only. The picture keeps its own
+   shape, because the awning sits in extra frame above it. ---- */
+.frame { --awn: clamp(.7rem, 2.4vw, 1.1rem); --stripe: clamp(.35rem, 1.2vw, .55rem); padding-top: calc(var(--trim) + var(--awn));
+  background:
+    linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, 0)) 0 var(--awn) / 100% .3rem no-repeat,
+    linear-gradient(#e6e3d2, #e6e3d2) 0 var(--awn) / 100% 1px no-repeat,
+    repeating-linear-gradient(90deg, #2c4a3b 0 var(--stripe), #e6e3d2 var(--stripe) calc(var(--stripe) * 2)) 0 0 / 100% var(--awn) no-repeat,
+    linear-gradient(160deg, #232322, #161616 45%, #0b0b0b); }
+.frame::before { inset: calc(var(--trim) + var(--awn) + .3rem) calc(var(--trim) + .3rem) calc(var(--trim) + .3rem); }
+.frame::after { inset: calc(var(--trim) + var(--awn)) var(--trim) var(--trim); }

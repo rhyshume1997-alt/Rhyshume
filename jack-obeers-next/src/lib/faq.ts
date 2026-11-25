@@ -16,7 +16,7 @@ export const FAQ: Faq[] = [
   { q: "How long does takeaway draught beer keep?", a: "A sealed bottle keeps for up to two weeks." },
   { q: "What are your opening hours?", a: "We are open Wednesday to Monday, 11am to 7pm, and closed on Tuesday.", confirm: true },
   { q: "Do you sell cans and bottles?", a: "Yes. Our fridges are full of craft beer, cider and wine, including cans. You can also take home a fresh bottle filled from the taps." },
-  { q: "Do you sell wine and cider?", a: "Yes, both. Our wines include Georgian wines such as Tsinandali and Saperavi. Cider is on the taps and in the fridge." },
+  { q: "Do you sell wine and cider?", a: "Yes, both, and frizzante. Our wines include Georgian wines such as Tsinandali and Saperavi. Cider is on the taps and in the fridge." },
   {
     q: "What deli food do you sell?",
     a: "Pork pies, salami beer sticks, cheeses, oatcakes, chutneys and chilli jams. You can also sit in to try our soups, dumplings and pies, with charcuterie.",
