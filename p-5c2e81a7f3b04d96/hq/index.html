@@ -1,84 +1,111 @@
 <!doctype html>
 <html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow,noarchive">
-<title>Jack O'Beers &amp; Deli: everything in one place</title>
-<style>
-:root{--ink:#1d0f0a;--paper:#f6efe0;--card:#fffaf0;--line:#d9ccb0;--accent:#8a4b12;--ok:#1f6b3a}
-*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
-main{max-width:60rem;margin:0 auto;padding:1.2rem 1rem 4rem}
-h1{font:600 2rem/1.15 Georgia,serif;margin:.6rem 0 .2rem}h2{font:600 1.25rem Georgia,serif;margin:2rem 0 .6rem;padding-top:1rem;border-top:2px solid var(--line)}
-p{margin:.3rem 0}.sub{color:#5a4a3a}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(15rem,1fr));gap:.7rem}
-a.card{display:block;background:var(--card);border:2px solid var(--line);border-radius:1.1rem;padding:.8rem 1rem;color:inherit;text-decoration:none;min-height:4.2rem}
-a.card:hover,a.card:focus-visible{border-color:var(--accent)}a.card b{display:block}a.card small{color:#6b5a48}
-.tag{display:inline-block;font:600 .7rem/1 ui-monospace,monospace;text-transform:uppercase;letter-spacing:.04em;padding:.25rem .5rem;border-radius:99px;background:#eadfc6;margin-left:.3rem;vertical-align:middle}
-.warn{background:#fff1d0;border:2px solid #e0b24f;border-radius:1rem;padding:.8rem 1rem;margin:1rem 0}
-table{border-collapse:collapse;width:100%;background:var(--card);border-radius:.8rem;overflow:hidden}td{padding:.5rem .8rem;border-bottom:1px solid var(--line);vertical-align:top}td:first-child{width:11rem;color:#6b5a48}
-.todo li{margin:.2rem 0}
-</style></head><body><main>
-<h1>Jack O&rsquo;Beers &amp; Deli</h1>
-<p class="sub">Everything in one place. Private, not live, not for sending to the client as it stands.</p>
-<div class="warn"><b>Before this branch is ever merged:</b> delete the <code>hq</code> folder. It holds draft contracts and client notes. It is hidden from search engines and sits on a protected preview, but it is not meant for the live site.</div>
+<title>Jack O'Beers &amp; Deli | HQ</title><link rel="stylesheet" href="style.css"></head>
+<body>
+<div class="tk-bar"><div class="tk-in"><span class="tk-title">Jack O&rsquo;Beers &amp; Deli</span>
+<span class="tk-prog"><span class="tk-track"><span class="tk-fill"></span></span><span class="tk-num"></span></span>
+<span class="tk-menu"><button type="button" id="tk-copy">Copy my ticks</button><button type="button" id="tk-paste">Paste ticks</button></span></div>
+<nav class="chips" aria-label="Sections"><a href="#job">My job list</a><a href="#docs">Documents</a><a href="#previews">Previews</a><a href="#concepts">Concepts</a><a href="#facts">Facts</a></nav></div>
 
-<h2>Do today</h2>
+<main>
+<h1>Everything in one place</h1>
+<p class="sub">Private. Not live. Tap a line to tick it. Open a document to tick things inside it. The bar at the top shows how far you are.</p>
+<div class="warn"><b>Before this branch is ever merged:</b> delete the <code>hq</code> folder. It holds draft contracts and client notes.</div>
+
+<details class="sec" id="job" open><summary>My job list</summary><div class="in">
+<div class="cols job" data-tick>
+<div><h3>Before the meeting</h3><ul>
+<li>Open &ldquo;What to ask and get today&rdquo; on my phone</li>
+<li>Print or open the contract (Word and fillable PDF)</li>
+<li>Check the concepts board loads on my phone</li>
+<li>Charge the phone and the Pocket 3</li></ul></div>
+<div><h3>At the meeting</h3><ul>
+<li>Grant: approved yet? When will he hear?</li>
+<li>Does he want the custom storefront? (needs a new quote)</li>
+<li>Pay in full or monthly? Tick it on the contract</li>
+<li>Show the five concepts and note what he likes</li>
+<li>Get the Shopify invite (never his password)</li>
+<li>Ask about the DNA till sync</li>
+<li>Premises licence, hours and age checks</li>
+<li>Logo as a vector file</li>
+<li>Agree a shoot day</li></ul></div>
+<div><h3>After</h3><ul>
+<li>Send the revised quote</li>
+<li>Send the contract for signing</li>
+<li>Write up his answers and what is still missing</li>
+<li>Solicitor to check the contract</li>
+<li>Do not start work until the grant is approved and it is signed</li></ul></div>
+</div></div></details>
+
+<details class="sec" id="docs" open><summary>Documents</summary><div class="in">
+<h3>Run the meeting</h3>
 <div class="grid">
-<a class="card" href="files/ask-him-today.docx"><b>What to ask and get today</b><small>Word. Tick as you go.</small></a>
-<a class="card" href="files/Jack-OBeers-Payment-Choice.docx"><b>Pay in full or monthly</b><small>One page. Word.</small></a>
-<a class="card" href="files/Jack-OBeers-Contract-Word.docx"><b>Contract, editable</b><small>Word. Quote layout, then the terms.</small></a>
-<a class="card" href="files/Jack-OBeers-Contract-Editable.pdf"><b>Contract, fillable PDF</b><small>Yellow boxes are fields.</small></a>
-<a class="card" href="files/Jack-OBeers-Contract-DRAFT-filled.pdf"><b>Long contract with my suggested values</b><small>PDF. 21 clauses.</small></a>
-<a class="card" href="files/build-plan.html"><b>Build plan (10 parts)</b><small>Web page. Requirements, Shopify, blockers, tests.</small></a>
-<a class="card" href="files/build-plan.docx"><b>Build plan, Word</b><small>Same plan to edit or print.</small></a>
+<a class="card" data-doc href="files/ask-him-today.html" data-total="57"><span class="kind tick">TICK LIST</span><b>What to ask and get today</b><small>Questions, access, files, scope, legal checks.</small><span class="badge">0/57</span><span class="mini"><i></i></span></a>
+<a class="card" data-doc href="files/shop-visit-checklist.html" data-total="55"><span class="kind tick">TICK LIST</span><b>Shop visit checklist</b><small>The full one, slot by slot.</small><span class="badge">0/55</span><span class="mini"><i></i></span></a>
+<a class="card" data-doc href="files/shop-visit-simple.html" data-total="54"><span class="kind tick">TICK LIST</span><b>Shop visit, simple</b><small>The short version.</small><span class="badge">0/54</span><span class="mini"><i></i></span></a>
+<a class="card" href="files/shop-visit-pack.docx"><span class="kind word">WORD</span><b>Shop visit pack</b><small>Everything for the visit, to print.</small></a>
 </div>
 
-<h2>Shoot and visit</h2>
+<h3>Money and contract</h3>
 <div class="grid">
-<a class="card" href="files/shop-visit-simple.docx"><b>Shop visit, simple</b><small>Word.</small></a>
-<a class="card" href="files/what-to-shoot.docx"><b>What to shoot</b><small>Photos and video, which device.</small></a>
-<a class="card" href="files/go-live-needs.docx"><b>What holds go-live back</b><small>DNS, Shopify, access.</small></a>
-<a class="card" href="files/shop-visit-pack.docx"><b>Shop visit pack</b><small>Everything for the visit.</small></a>
+<a class="card" href="files/Jack-OBeers-Payment-Choice.docx"><span class="kind word">WORD</span><b>Pay in full or monthly</b><small>One page.</small></a>
+<a class="card" href="files/Jack-OBeers-Contract-Word.docx"><span class="kind word">WORD</span><b>Contract, editable</b><small>Quote layout, then the terms.</small></a>
+<a class="card" href="files/Jack-OBeers-Contract-Editable.pdf"><span class="kind pdf">PDF</span><b>Contract, fillable</b><small>Yellow boxes are fields.</small></a>
+<a class="card" href="files/Jack-OBeers-Contract-DRAFT-filled.pdf"><span class="kind pdf">PDF</span><b>Long contract, my suggested values</b><small>21 clauses.</small></a>
 </div>
 
-<h2>Website previews <span class="tag">sample data</span></h2>
+<h3>Plan and go-live</h3>
 <div class="grid">
-<a class="card" href="../rev5/"><b>Rev 5, the cinematic one</b><small>Home. Pour opening, shelf, bottle cursor.</small></a>
-<a class="card" href="../rev5/drinks.html?c=beers"><b>Rev 5 shelf</b><small>Pick a drink, see the label panel.</small></a>
-<a class="card" href="../site/"><b>Full preview site</b><small>20+ pages, Shopify-ready adapter.</small></a>
-<a class="card" href="../site/keezer-test.html"><b>Keezer test page</b><small>Fill animation test.</small></a>
+<a class="card" data-doc href="files/build-plan.html" data-total="127"><span class="kind tick">TICK LIST</span><b>Build plan (10 parts)</b><small>Requirements, Shopify, blockers, tests.</small><span class="badge">0/127</span><span class="mini"><i></i></span></a>
+<a class="card" data-doc href="files/go-live-needs.html" data-total="66"><span class="kind tick">TICK LIST</span><b>What holds go-live back</b><small>DNS, Shopify, access.</small><span class="badge">0/66</span><span class="mini"><i></i></span></a>
+<a class="card" href="files/build-plan.docx"><span class="kind word">WORD</span><b>Build plan, Word</b><small>To edit or print.</small></a>
+<a class="card" href="files/go-live-needs.docx"><span class="kind word">WORD</span><b>Go-live needs, Word</b><small>To edit or print.</small></a>
 </div>
 
-<h2>The five concepts to show him <span class="tag">round 1</span></h2>
+<h3>Photos and video</h3>
 <div class="grid">
-<a class="card" href="../concepts/"><b>Concepts board</b><small>All five, with the like and dislike notes.</small></a>
-<a class="card" href="../concepts/deli-counter/"><b>Deli counter</b></a>
-<a class="card" href="../concepts/tap-room/"><b>Tap room</b></a>
-<a class="card" href="../concepts/shop-front/"><b>Shop front</b></a>
-<a class="card" href="../concepts/hamper-box/"><b>Hamper box</b></a>
-<a class="card" href="../concepts/local-pub/"><b>Local pub</b></a>
+<a class="card" data-doc href="files/what-to-shoot.html" data-total="14"><span class="kind tick">TICK LIST</span><b>What to shoot</b><small>Which device, which shape.</small><span class="badge">0/14</span><span class="mini"><i></i></span></a>
+<a class="card" href="files/what-to-shoot.docx"><span class="kind word">WORD</span><b>What to shoot, Word</b><small>To print.</small></a>
 </div>
+</div></details>
 
-<h2>Round 2 <span class="tag">earlier round</span></h2>
+<details class="sec" id="previews" open><summary>Website previews <span class="badge">sample data</span></summary><div class="in"><div class="grid">
+<a class="card" href="../rev5/"><span class="kind view">VIEW</span><b>Rev 5, the cinematic one</b><small>Pour opening, shelf, bottle cursor.</small></a>
+<a class="card" href="../rev5/drinks.html?c=beers"><span class="kind view">VIEW</span><b>Rev 5 shelf</b><small>Pick a drink, see the label panel.</small></a>
+<a class="card" href="../site/"><span class="kind view">VIEW</span><b>Full preview site</b><small>20+ pages, Shopify-ready adapter.</small></a>
+<a class="card" href="../site/keezer-test.html"><span class="kind view">VIEW</span><b>Keezer test page</b><small>Fill animation test.</small></a>
+</div></div></details>
+
+<details class="sec" id="concepts" open><summary>Concepts to show him</summary><div class="in">
+<h3>Round 1, the five</h3>
 <div class="grid">
-<a class="card" href="../concepts/earlier.html"><b>Earlier round page</b></a>
-<a class="card" href="../concepts/long-pour/"><b>Long pour</b></a>
-<a class="card" href="../concepts/wake-jack/"><b>Wake Jack</b></a>
-<a class="card" href="../concepts/the-shelves/"><b>The shelves</b></a>
-<a class="card" href="../concepts/keg-to-bottle/"><b>Keg to bottle</b></a>
-<a class="card" href="../concepts/hamper-table/"><b>Hamper table</b></a>
+<a class="card" href="../concepts/"><span class="kind view">BOARD</span><b>Concepts board</b><small>All five, with like and dislike notes.</small></a>
+<a class="card" href="../concepts/deli-counter/"><span class="kind view">VIEW</span><b>Deli counter</b></a>
+<a class="card" href="../concepts/tap-room/"><span class="kind view">VIEW</span><b>Tap room</b></a>
+<a class="card" href="../concepts/shop-front/"><span class="kind view">VIEW</span><b>Shop front</b></a>
+<a class="card" href="../concepts/hamper-box/"><span class="kind view">VIEW</span><b>Hamper box</b></a>
+<a class="card" href="../concepts/local-pub/"><span class="kind view">VIEW</span><b>Local pub</b></a>
 </div>
+<h3>Round 2, earlier</h3>
+<div class="grid">
+<a class="card" href="../concepts/earlier.html"><span class="kind view">BOARD</span><b>Earlier round board</b></a>
+<a class="card" href="../concepts/long-pour/"><span class="kind view">VIEW</span><b>Long pour</b></a>
+<a class="card" href="../concepts/wake-jack/"><span class="kind view">VIEW</span><b>Wake Jack</b></a>
+<a class="card" href="../concepts/the-shelves/"><span class="kind view">VIEW</span><b>The shelves</b></a>
+<a class="card" href="../concepts/keg-to-bottle/"><span class="kind view">VIEW</span><b>Keg to bottle</b></a>
+<a class="card" href="../concepts/hamper-table/"><span class="kind view">VIEW</span><b>Hamper table</b></a>
+</div></div></details>
 
-<h2>The facts</h2>
-<table>
+<details class="sec" id="facts"><summary>The facts</summary><div class="in">
+<table class="facts">
 <tr><td>Business</td><td>Jack O&rsquo; Beers &amp; Deli, 13 Station Road, Milngavie, G62 8PG</td></tr>
 <tr><td>Contact</td><td>Michael Blakely, 07405 480950, sales@jackobeers.com</td></tr>
 <tr><td>Open</td><td>Wednesday to Monday, 11am to 7pm. Tuesday not confirmed.</td></tr>
 <tr><td>Quote</td><td>Q-2026-0101, 12 Nov 2026, &pound;2,000 Website Standard, not VAT registered, 50% / 50%, care plan &pound;60 a month, valid to 12 Dec 2026. The custom storefront needs a revised quote.</td></tr>
 <tr><td>Status</td><td>Grant not approved. Nothing paid starts until it is and the contract is signed. Alcohol checkout and delivery stay off until licence checks are done.</td></tr>
-<tr><td>Code</td><td>Repo <code>rhyshume1997-alt/Rhyshume</code>, branch <code>claude/jack-obeers-rev5</code>. Next.js prototype in <code>jack-obeers-next/</code> (run it locally, it is not hosted here).</td></tr>
-</table>
-
-<h2>Still open</h2>
-<ul class="todo">
-<li>Grant approved? Quote signed?</li><li>Revised quote for the custom storefront</li><li>Shopify invite and plan</li><li>DNA till: does it sync with Shopify?</li><li>Premises licence, hours and age checks</li><li>Delivery area and courier</li><li>Logo as a vector file</li><li>Pay in full or monthly?</li>
-</ul>
-</main></body></html>
+<tr><td>Code</td><td>Repo <code>rhyshume1997-alt/Rhyshume</code>, branch <code>claude/jack-obeers-rev5</code>. Next.js prototype in <code>jack-obeers-next/</code> (local only).</td></tr>
+</table></div></details>
+</main>
+<script src="tick.js"></script>
+</body></html>
