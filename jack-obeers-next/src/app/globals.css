@@ -996,3 +996,19 @@ html.loaded .jack-cheer { background-image: url(/media/jack-cheer.webp); }
   .hero-card ul { margin: 0; padding: 0; list-style: none; display: grid; gap: .25rem; font-size: .95rem; color: #3a2a18; }
   .open-hero { display: none; }
 }
+
+
+/* ---- conversion 7: find me a beer ---- */
+.find { margin: .6rem 0 .4rem; border-radius: 1.4rem; background: #f6ecd2; }
+.find > summary { list-style: none; cursor: pointer; padding: .8rem 1.2rem; min-height: 2.9rem; font: 700 1.05rem var(--ui); color: #21140e; }
+.find > summary::-webkit-details-marker { display: none; }
+.find > summary::after { content: ""; display: inline-block; width: .5rem; height: .5rem; margin-left: .6rem; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-2px) rotate(45deg); }
+.find[open] > summary::after { transform: translateY(1px) rotate(-135deg); }
+.find-body { display: grid; gap: .7rem; padding: 0 1.2rem 1.1rem; }
+.find-q { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1rem; }
+.find-q > span { min-width: 8.5rem; font-weight: 600; }
+.find-q .seg { margin: 0; background: #eadfc6; }
+.find-hint { margin: 0; color: #5f4f3d; }
+.find-pick { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem 1rem; padding: .7rem 1rem; border-radius: 1rem; background: #fffaf0; }
+.find-pick small { display: block; color: #5f4f3d; }
+.find-pick a { color: inherit; text-decoration: none; }

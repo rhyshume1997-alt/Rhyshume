@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { FindABeer } from "@/components/FindABeer";
 import { Glass } from "@/components/Glass";
 import type { Card } from "@/lib/cards";
 
@@ -20,6 +21,7 @@ export function ProductGrid({ cards, chips, checkoutOn, noun, intro, segmented =
   return (
     <div className="pg">
       {intro}
+      {segmented && <FindABeer cards={cards} />}
       {segmented && (
         <div className="seg" role="group" aria-label={`Filter the ${noun} by style`}>
           {["All", ...SEGMENT_STYLES.filter((s) => chips.some((c) => c.toLowerCase() === s.toLowerCase()))].map((c) => (
