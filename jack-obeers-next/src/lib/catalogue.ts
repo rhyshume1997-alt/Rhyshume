@@ -114,15 +114,24 @@ export function parseAbv(title: string): { abv: number | null; rest: string } {
 function profileCategory(p: Profile): Category {
   const st = p.style.toLowerCase();
   if (st.includes("cider")) return "cider";
+  if (/\b(ale|ipa|lager|beer|porter|stout|sour)\b/.test(st)) return "beer"; // so "American red ale" is a beer, not a wine
   if (/\b(white|red|ros\u00e9|rose|sparkling)\b/.test(st)) return "wine";
   return "beer";
+}
+
+/**
+ * A profile's match text. Plain text must appear in the title. "A+B" needs both, and "!C" means the title must not
+ * contain C, for products that share a name (for example the plain Festoon, not Festoon Black or Festoon Gold).
+ */
+function matches(title: string, match: string): boolean {
+  return match.split("+").every((part) => (part.startsWith("!") ? !title.includes(part.slice(1).toLowerCase()) : title.includes(part.toLowerCase())));
 }
 
 export function profileFor(title: string, category: Category): Profile | null {
   if (category !== "beer" && category !== "cider" && category !== "wine") return null;
   const t = title.toLowerCase();
   const list = profiles as Profile[];
-  return list.find((p) => profileCategory(p) === category && t.includes(p.match.toLowerCase())) || null;
+  return list.find((p) => profileCategory(p) === category && matches(t, p.match)) || null;
 }
 
 /** The glass colour by style. Design choices from Rhys, not facts. */
@@ -185,7 +194,7 @@ function enrich(r: Raw, sample = false): Product {
     collection: col[category],
     productType: r.productType.trim(),
     tags: r.tags,
-    descriptor: profile ? profile.brewery : vendor || r.productType.trim(),
+    descriptor: profile && profile.brewery ? profile.brewery : vendor || r.productType.trim(),
     description: r.description || "",
     kind: "bottle",
     flavour: null,
@@ -198,7 +207,7 @@ function enrich(r: Raw, sample = false): Product {
     sample,
     category,
     name: titleCase(rest) || r.title.trim(),
-    brewery: profile ? profile.brewery : vendor,
+    brewery: profile && profile.brewery ? profile.brewery : vendor,
     abvNum: abv,
     styles: [...styles],
     style,

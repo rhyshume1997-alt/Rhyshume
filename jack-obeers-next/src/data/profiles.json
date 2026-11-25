@@ -282,5 +282,147 @@
       "Oatcakes"
     ],
     "pairingConfirmed": false
+  },
+  {
+    "match": "SHEEPS CAR NAMED DESIRE",
+    "brewery": "Bini Brew Co",
+    "style": "Pale ale",
+    "blurb": "Easy pale ale from Bini, named after their Sheepscar brewery in Leeds. Piney and spicy from Chinook, with citrus underneath.",
+    "flavour": [
+      "piney",
+      "spicy",
+      "citrus",
+      "bitter"
+    ],
+    "pairingConfirmed": false
+  },
+  {
+    "match": "URSUS",
+    "brewery": "",
+    "style": "Lager",
+    "blurb": "Romania's big lager. Pale gold and malty, with a hint of citrus and a clean dry finish.",
+    "flavour": [
+      "malty",
+      "citrus",
+      "clean",
+      "dry"
+    ],
+    "pairingConfirmed": false
+  },
+  {
+    "match": "IMPERIAL PORTERIS",
+    "brewery": "",
+    "style": "Baltic porter",
+    "blurb": "Dark Lithuanian porter. Smooth, with caramel and chocolate.",
+    "flavour": [
+      "caramel",
+      "chocolate",
+      "dark",
+      "smooth"
+    ],
+    "pairingConfirmed": false
+  },
+  {
+    "match": "KRIEK",
+    "brewery": "",
+    "style": "Cherry beer",
+    "colour": "#9B1B30",
+    "blurb": "Ruby red cherry beer from Lithuania. Sweet and sour together, with ripe cherry and a light hop edge.",
+    "flavour": [
+      "cherry",
+      "sweet",
+      "sour"
+    ],
+    "pairingConfirmed": false
+  },
+  {
+    "match": "RASPBERRY+CIDER",
+    "brewery": "Sheppy's",
+    "style": "Medium cider",
+    "blurb": "Somerset cider made with pure raspberry juice. Light, lightly fizzy and not too sweet.",
+    "flavour": [
+      "raspberry",
+      "light",
+      "medium"
+    ],
+    "pairingConfirmed": false
+  },
+  {
+    "match": "FESTOON+!BLACK+!GOLD",
+    "brewery": "Amity",
+    "style": "Helles lager",
+    "blurb": "Amity's take on the classic helles. Crisp, bready and bitter.",
+    "flavour": [
+      "crisp",
+      "bready",
+      "bitter"
+    ],
+    "pairingConfirmed": false
+  },
+  {
+    "match": "SYNC RATE",
+    "brewery": "Amity",
+    "style": "American red ale",
+    "colour": "#8B2E1F",
+    "blurb": "Amity's red ale. Deep caramel malt with piney, citrus hops.",
+    "flavour": [
+      "caramel",
+      "pine",
+      "citrus"
+    ],
+    "pairingConfirmed": false
+  },
+  {
+    "match": "BIGGER BOAT",
+    "brewery": "Amity",
+    "style": "Double IPA",
+    "colour": "#E6B422",
+    "blurb": "Amity's double IPA. Mango, passionfruit and papaya, with a firm bitterness holding it together.",
+    "flavour": [
+      "mango",
+      "passionfruit",
+      "papaya",
+      "bitter"
+    ],
+    "pairingConfirmed": false
+  },
+  {
+    "match": "JET LAG",
+    "brewery": "Ilkley",
+    "style": "West Coast IPA",
+    "blurb": "Ilkley's West Coast IPA. Resinous and bitter, with grapefruit, orange peel and tropical fruit.",
+    "flavour": [
+      "resinous",
+      "grapefruit",
+      "orange",
+      "tropical"
+    ],
+    "pairingConfirmed": false
+  },
+  {
+    "match": "KRSU",
+    "brewery": "Aldaris",
+    "style": "Cherry beer",
+    "colour": "#9B1B30",
+    "blurb": "Latvian cherry beer. Sweet and fruity.",
+    "flavour": [
+      "cherry",
+      "sweet",
+      "fruity"
+    ],
+    "pairingConfirmed": false
+  },
+  {
+    "match": "SAPERAVI+!SEMI+!SWEET",
+    "brewery": "",
+    "style": "Dry red",
+    "blurb": "Georgia's main red grape made dry. Blackberry, sour cherry and plum, with firm tannin.",
+    "flavour": [
+      "blackberry",
+      "sour cherry",
+      "plum",
+      "tannin"
+    ],
+    "pairingConfirmed": false
   }
 ]
