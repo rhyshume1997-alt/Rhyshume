@@ -2,6 +2,8 @@
 /* Lifted from the Rev 5 static preview (rev5.js) so the design behaves the same in Next.js.
    Temporary: it drives the DOM directly. Next steps are to replace it piece by piece with React components. */
 /* Jack O'Beers Rev 5: shared behaviour. Header, basket, toast, reveals, the opening, the shelf with its beer-bottle cursor, the label panel. */
+import { SHIPPING } from "@/lib/shipping";
+
 export function initRev5(P: any[]): () => void {
   const offs: Array<() => void> = [];
   const on = (t: any, type: string, fn: any, o?: any) => { t.addEventListener(type, fn, o); offs.push(() => t.removeEventListener(type, fn, o)); };
@@ -79,11 +81,18 @@ export function initRev5(P: any[]): () => void {
   function saveCart() { ls('jo5_cart', JSON.stringify(cart)); renderCart(); }
   function count() { return cart.reduce(function (a, l) { return a + l.q; }, 0); }
   function add(h, q) { var l = cart.filter(function (x) { return x.h === h; })[0]; if (l) l.q += q; else cart.push({ h: h, q: q }); saveCart(); var p = by(h); toast((p ? p.title : 'Item') + ' added to your basket'); }
+  /* the delivery bottle: it fills as the basket grows toward free UK delivery (numbers in src/lib/shipping.ts) */
+  function freeDelivery(tot) {
+    var left = SHIPPING.freeFrom - tot, fill = Math.max(0, Math.min(1, tot / SHIPPING.freeFrom));
+    var msg = left > 0 ? 'Add ' + money(Math.ceil(left * 100) / 100) + ' for free delivery' : 'You have free UK delivery';
+    var note = left > 0 ? 'UK delivery is ' + money(SHIPPING.standard) + ' under ' + money(SHIPPING.freeFrom) + '.' : 'UK delivery is free from ' + money(SHIPPING.freeFrom) + '.';
+    return '<div class="fd" style="--fill:' + fill.toFixed(3) + '"><svg class="fd-bottle" viewBox="0 0 60 170" width="36" height="102" aria-hidden="true" focusable="false"><defs><clipPath id="fdc"><path d="M24 10h12v38c0 8 14 14 14 32v76c0 4-3 6-6 6H16c-3 0-6-2-6-6V80c0-18 14-24 14-32z"/></clipPath></defs><g clip-path="url(#fdc)"><rect class="fd-liq" x="0" y="10" width="60" height="150" fill="#E0A030"/></g><path d="M24 10h12v38c0 8 14 14 14 32v76c0 4-3 6-6 6H16c-3 0-6-2-6-6V80c0-18 14-24 14-32z" fill="none" stroke="#2a1a10" stroke-width="3" stroke-linejoin="round"/><rect x="22" y="3" width="16" height="10" rx="3" fill="#B98A3E" stroke="#2a1a10" stroke-width="2.4"/></svg><div><p class="fd-msg" role="status">' + msg + '</p><p class="fd-note">' + note + '</p></div></div>';
+  }
   function renderCart() {
     $$('[data-count]').forEach(function (n) { n.textContent = count(); });
     var b = $('#cart-body'); if (!b) return;
     var tot = 0;
-    b.innerHTML = cart.length ? '<ul>' + cart.map(function (l) { var p = by(l.h); if (!p) return ''; tot += price(p) * l.q; return '<li style="display:flex;justify-content:space-between;gap:1rem;padding:.6rem 0;border-bottom:1px solid var(--line)"><span><b>' + esc(p.title) + '</b> × ' + l.q + '<br><button class="rm" data-rm="' + esc(l.h) + '" style="background:none;border:0;text-decoration:underline;min-height:2.75rem;padding:0">Remove</button></span><span class="price">' + money(price(p) * l.q) + '</span></li>'; }).join('') + '</ul><p class="price" style="margin-top:1rem;display:flex;justify-content:space-between"><span>Subtotal' + (cart.some(function (l) { var q = by(l.h); return q && q.sample; }) ? ' (sample prices)' : '') + '</span><span>' + money(tot) + '</span></p>' : '<p>Your basket is empty. Find something good on the shelf.</p>';
+    b.innerHTML = cart.length ? '<ul>' + cart.map(function (l) { var p = by(l.h); if (!p) return ''; tot += price(p) * l.q; return '<li style="display:flex;justify-content:space-between;gap:1rem;padding:.6rem 0;border-bottom:1px solid var(--line)"><span><b>' + esc(p.title) + '</b> × ' + l.q + '<br><button class="rm" data-rm="' + esc(l.h) + '" style="background:none;border:0;text-decoration:underline;min-height:2.75rem;padding:0">Remove</button></span><span class="price">' + money(price(p) * l.q) + '</span></li>'; }).join('') + '</ul><p class="price" style="margin-top:1rem;display:flex;justify-content:space-between"><span>Subtotal' + (cart.some(function (l) { var q = by(l.h); return q && q.sample; }) ? ' (sample prices)' : '') + '</span><span>' + money(tot) + '</span></p>' + freeDelivery(tot) : '<p>Your basket is empty. Find something good on the shelf.</p>';
     var ck = $('#cart-ck'); if (ck) ck.disabled = !cart.length || !ageOk() || !minOk(); minNote();
   }
   on(document, 'click', function (e) {

@@ -953,3 +953,11 @@ html.loaded .jack-cheer { background-image: url(/media/jack-cheer.webp); }
 @media (min-width: 72rem) { .open-header { display: inline-flex; } .hdr-in { grid-template-columns: auto 1fr auto auto auto auto; } }
 .open-hero { background: transparent; padding-left: 0; min-width: 17rem; color: #f1e6cb; }
 @media (max-width: 40rem) { .open-hero { min-width: 0; } }
+
+
+/* ---- conversion 2: the free delivery bottle in the basket ---- */
+.fd { display: flex; align-items: center; gap: 1rem; margin-top: 1rem; padding: .8rem 1rem; border-radius: 1.2rem; background: #f6ecd2; }
+.fd-bottle { flex: none; }
+.fd-liq { transform: scaleY(var(--fill, 0)); transform-origin: 50% 100%; transform-box: fill-box; transition: transform .3s cubic-bezier(.23, 1, .32, 1); }
+.fd-msg { margin: 0; font: 700 1.05rem var(--ui); color: #21140e; }
+.fd-note { margin: .15rem 0 0; font-size: .92rem; color: #5f4f3d; }
