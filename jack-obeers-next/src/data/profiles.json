@@ -8,7 +8,11 @@
       "raspberry",
       "tart",
       "sweet"
-    ]
+    ],
+    "pairing": [
+      "Artisan cheese"
+    ],
+    "pairingConfirmed": false
   },
   {
     "match": "IRON BREW SOUR",
@@ -19,7 +23,9 @@
       "bubblegum",
       "orange soda",
       "citrus"
-    ]
+    ],
+    "colour": "#E8761E",
+    "pairingConfirmed": false
   },
   {
     "match": "BLOSSOM",
@@ -32,7 +38,11 @@
       "vanilla",
       "stone fruit",
       "lime"
-    ]
+    ],
+    "pairing": [
+      "Artisan cheese"
+    ],
+    "pairingConfirmed": false
   },
   {
     "match": "JOSHUA JANE",
@@ -43,7 +53,12 @@
       "caramel",
       "nutty",
       "hoppy"
-    ]
+    ],
+    "pairing": [
+      "Award-winning pork pie",
+      "Chutney"
+    ],
+    "pairingConfirmed": false
   },
   {
     "match": "THESE STREETS",
@@ -54,7 +69,12 @@
       "citrus",
       "crisp",
       "light"
-    ]
+    ],
+    "pairing": [
+      "Oatcakes",
+      "Artisan cheese"
+    ],
+    "pairingConfirmed": false
   },
   {
     "match": "EKSTRA PREMIUM LAGER",
@@ -65,6 +85,202 @@
       "honey",
       "toasted bread",
       "dry finish"
-    ]
+    ],
+    "pairing": [
+      "Salami beer sticks"
+    ],
+    "pairingConfirmed": false
+  },
+  {
+    "match": "WATERPISTOL",
+    "brewery": "Amity",
+    "style": "Juicy pale ale",
+    "blurb": "Amity's most popular beer. Juicy pale ale from Leeds.",
+    "flavour": [
+      "juicy"
+    ],
+    "pairing": [
+      "Award-winning pork pie"
+    ],
+    "pairingConfirmed": false
+  },
+  {
+    "match": "SLAKE",
+    "brewery": "Ilkley",
+    "style": "Lager",
+    "blurb": "Ilkley's lager. Crisp and clean. Voted best premium packaged lager in the UK by SIBA in 2024.",
+    "flavour": [
+      "crisp",
+      "clean",
+      "refreshing"
+    ],
+    "pairing": [
+      "Salami beer sticks",
+      "Oatcakes"
+    ],
+    "pairingConfirmed": false
+  },
+  {
+    "match": "ILKLEY BREWERY - PALE",
+    "brewery": "Ilkley",
+    "style": "Pale ale",
+    "blurb": "Crisp and dry with a zesty finish. Fresh cut grass on the nose and a floral hop finish.",
+    "flavour": [
+      "crisp",
+      "dry",
+      "zesty",
+      "floral"
+    ],
+    "pairing": [
+      "Artisan cheese",
+      "Oatcakes"
+    ],
+    "pairingConfirmed": false
+  },
+  {
+    "match": "DEVILS BRIDGE",
+    "brewery": "Kirkby Lonsdale",
+    "style": "IPA",
+    "blurb": "New world hops, a big citrus hit and a bitter finish. Clean and crisp.",
+    "flavour": [
+      "citrus",
+      "floral",
+      "bitter"
+    ],
+    "pairing": [
+      "Salami beer sticks",
+      "Chutney"
+    ],
+    "pairingConfirmed": false
+  },
+  {
+    "match": "PITCH",
+    "brewery": "Otherworld",
+    "style": "Czech dark lager",
+    "colour": "#3B2314",
+    "blurb": "Czech dark lager. Toasted malt, a little sweetness and floral Czech hops. Matured in whisky casks, so there's some oak and vanilla.",
+    "flavour": [
+      "toasted malt",
+      "floral hops",
+      "oak",
+      "vanilla"
+    ],
+    "pairing": [
+      "Salami beer sticks",
+      "Chutney"
+    ],
+    "pairingConfirmed": false
+  },
+  {
+    "match": "BA NYX",
+    "brewery": "Otherworld",
+    "style": "Barrel aged porter",
+    "blurb": "A rich, dark porter based on a 19th century recipe, aged in barrels.",
+    "flavour": [
+      "rich",
+      "dark",
+      "barrel aged"
+    ],
+    "pairing": [
+      "Artisan cheese",
+      "Chilli jam"
+    ],
+    "pairingConfirmed": false
+  },
+  {
+    "match": "BELTER",
+    "brewery": "Two Towns Down",
+    "style": "Lager",
+    "blurb": "Crisp, refreshing lager from Paisley, made with German Hallertau hops.",
+    "flavour": [
+      "crisp",
+      "refreshing",
+      "German hops"
+    ],
+    "pairing": [
+      "Award-winning pork pie"
+    ],
+    "pairingConfirmed": false
+  },
+  {
+    "match": "HELLES YEAH",
+    "brewery": "Bini Brew Co",
+    "style": "Helles lager",
+    "blurb": "A classic Helles. Light and pale with a mild sweetness and low bitterness.",
+    "flavour": [
+      "crisp",
+      "mild sweetness",
+      "low bitterness"
+    ],
+    "pairing": [
+      "Award-winning pork pie",
+      "Salami beer sticks"
+    ],
+    "pairingConfirmed": false
+  },
+  {
+    "match": "RADLER - FRUITED",
+    "brewery": "Vault City",
+    "style": "Fruited radler",
+    "colour": "#F2D45C",
+    "blurb": "Lemon, grapefruit and pineapple. Light and easy at 3.4%.",
+    "flavour": [
+      "lemon",
+      "grapefruit",
+      "pineapple"
+    ],
+    "pairing": [
+      "Oatcakes",
+      "Artisan cheese"
+    ],
+    "pairingConfirmed": false
+  },
+  {
+    "match": "200 MEDIUM CIDER",
+    "brewery": "Sheppy's",
+    "style": "Medium cider",
+    "blurb": "Medium cider from Somerset. Full flavoured with a bit of tannin, lightly sparkling.",
+    "flavour": [
+      "medium",
+      "apple",
+      "tannin",
+      "lightly sparkling"
+    ],
+    "pairing": [
+      "Award-winning pork pie"
+    ],
+    "pairingConfirmed": false
+  },
+  {
+    "match": "CIDER WITH ELDERFLOWER",
+    "brewery": "Sheppy's",
+    "style": "Sweet cider",
+    "blurb": "Light dessert apple with a fragrant elderflower. Sweet.",
+    "flavour": [
+      "apple",
+      "elderflower",
+      "sweet"
+    ],
+    "pairing": [
+      "Artisan cheese"
+    ],
+    "pairingConfirmed": false
+  },
+  {
+    "match": "TSINANDALI",
+    "brewery": "Askaneli Brothers",
+    "style": "Dry white",
+    "blurb": "Georgian dry white from Kakheti. Lemon, grapefruit and peach with a clean dry finish.",
+    "flavour": [
+      "lemon",
+      "grapefruit",
+      "peach",
+      "dry"
+    ],
+    "pairing": [
+      "Artisan cheese",
+      "Oatcakes"
+    ],
+    "pairingConfirmed": false
   }
 ]

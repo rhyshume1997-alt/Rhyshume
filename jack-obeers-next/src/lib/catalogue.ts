@@ -5,7 +5,27 @@ export type Variant = { id: string; title: string; price: number; available: boo
 
 export type Category = "beer" | "cider" | "wine" | "events" | "subscriptions" | "other";
 
-export type Profile = { match: string; brewery: string; style: string; blurb: string; flavour: string[] };
+export type Profile = {
+  match: string;
+  brewery: string;
+  style: string;
+  blurb: string;
+  flavour: string[];
+  /** Optional override for the glass colour. */
+  colour?: string;
+  /** Deli items that go with it. Only the items in ALLOWED_PAIRINGS are ever shown. */
+  pairing?: string[];
+  /** false means these are suggestions for Michael to confirm or edit. */
+  pairingConfirmed?: boolean;
+};
+
+/** The only foods the site may name. */
+export const ALLOWED_PAIRINGS = ["Award-winning pork pie", "Salami beer sticks", "Artisan cheese", "Oatcakes", "Chutney", "Chilli jam"] as const;
+
+export function safePairings(p: Profile | null): string[] {
+  if (!p || !p.pairing) return [];
+  return p.pairing.filter((x) => (ALLOWED_PAIRINGS as readonly string[]).includes(x));
+}
 
 /** How a glass is drawn. These colours are design choices, not facts about the drink. */
 export type GlassSpec = { colour: string; head: string; haze: boolean };
@@ -88,11 +108,19 @@ export function parseAbv(title: string): { abv: number | null; rest: string } {
   return { abv: Number.isFinite(n) ? n : null, rest };
 }
 
+/** Which range a profile belongs to, from its style. */
+function profileCategory(p: Profile): Category {
+  const st = p.style.toLowerCase();
+  if (st.includes("cider")) return "cider";
+  if (/\b(white|red|ros\u00e9|rose|sparkling)\b/.test(st)) return "wine";
+  return "beer";
+}
+
 export function profileFor(title: string, category: Category): Profile | null {
-  if (category !== "beer") return null;
+  if (category !== "beer" && category !== "cider" && category !== "wine") return null;
   const t = title.toLowerCase();
   const list = profiles as Profile[];
-  return list.find((p) => t.includes(p.match.toLowerCase())) || null;
+  return list.find((p) => profileCategory(p) === category && t.includes(p.match.toLowerCase())) || null;
 }
 
 /** The glass colour by style. Design choices from Rhys, not facts. */
@@ -116,6 +144,14 @@ export function glassFor(blob: string): GlassSpec {
   if (has("red", "merlot", "malbec", "shiraz", "rioja", "cabernet", "pinot noir")) return { colour: "#7B1E2B", head: "#E9C9CF", haze: false };
   if (has("white", "chardonnay", "sauvignon", "pinot grigio", "riesling", "wine")) return { colour: "#E8D98A", head: FOAM, haze: false };
   return { colour: "#E0A030", head: FOAM, haze: false };
+}
+
+/** A profile can set its own liquid colour. A very dark colour gets a tan head. */
+function withColour(g: GlassSpec, profile: Profile | null): GlassSpec {
+  if (!profile || !profile.colour) return g;
+  const n = parseInt(profile.colour.replace("#", ""), 16);
+  const lum = (0.299 * ((n >> 16) & 255) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255;
+  return { colour: profile.colour, head: lum < 0.25 ? "#C9A66B" : g.head, haze: g.haze };
 }
 
 type Raw = {
@@ -165,7 +201,7 @@ function enrich(r: Raw, sample = false): Product {
     styles: [...styles],
     style,
     profile,
-    glass: glassFor(blob),
+    glass: withColour(glassFor(blob), profile),
     variantNumericId: buy ? buy.id.split("/").pop() || null : null,
   };
 }

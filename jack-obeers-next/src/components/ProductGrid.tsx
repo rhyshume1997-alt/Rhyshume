@@ -2,27 +2,14 @@
 
 import { useMemo, useState } from "react";
 import { Glass } from "@/components/Glass";
-import type { GlassSpec, Profile } from "@/lib/catalogue";
-
-export type Card = {
-  handle: string;
-  name: string;
-  brewery: string;
-  abv: number | null;
-  style: string;
-  styles: string[];
-  price: number;
-  available: boolean;
-  buy: string | null;
-  glass: GlassSpec;
-  profile: Profile | null;
-  sample: boolean;
-};
+import { BRAND } from "@/lib/brand";
+import type { Card } from "@/lib/cards";
 
 /** The whole range on one screen. The chips filter in place, no page reload. Each card goes to Shopify checkout in one click. */
-export function ProductGrid({ cards, chips, checkoutOn, noun }: { cards: Card[]; chips: string[]; checkoutOn: boolean; noun: string }) {
+export function ProductGrid({ cards, chips, checkoutOn, noun, intro }: { cards: Card[]; chips: string[]; checkoutOn: boolean; noun: string; intro?: React.ReactNode }) {
   const [active, setActive] = useState<string>("All");
   const [open, setOpen] = useState<string | null>(null);
+  const [tapped, setTapped] = useState<string | null>(null);
   const shown = useMemo(
     () => (active === "All" ? cards : cards.filter((c) => c.styles.some((s) => s.toLowerCase() === active.toLowerCase()))),
     [cards, active],
@@ -30,6 +17,7 @@ export function ProductGrid({ cards, chips, checkoutOn, noun }: { cards: Card[];
   const all = ["All", ...chips];
   return (
     <div className="pg">
+      {intro}
       {chips.length > 0 && (
         <div className="pg-chips" role="group" aria-label={`Filter the ${noun} by style`}>
           {all.map((c) => (
@@ -44,9 +32,20 @@ export function ProductGrid({ cards, chips, checkoutOn, noun }: { cards: Card[];
         {shown.map((c) => {
           const isOpen = open === c.handle;
           return (
-            <li key={c.handle} className={"pg-card" + (isOpen ? " open" : "")}>
+            <li
+              key={c.handle}
+              className={"pg-card" + (isOpen ? " open" : "") + (tapped === c.handle ? " is-filled" : "")}
+              onPointerUp={(e) => {
+                // touch and pen: a tap fills this glass and empties the last one. Mouse uses hover instead.
+                if (e.pointerType !== "mouse" && !(e.target as HTMLElement).closest("a,button")) setTapped(tapped === c.handle ? null : c.handle);
+              }}
+            >
               <div className="pg-top">
-                <Glass spec={c.glass} className="pg-glass" />
+                <span className="pg-glassbox">
+                  <Glass spec={c.glass} className="pg-glass" />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img className="pg-jack" src={BRAND.mascot} alt="" width={64} height={62} />
+                </span>
                 <div className="pg-text">
                   <h2 className="pg-name">{c.name}</h2>
                   {c.brewery && <p className="pg-brew">{c.brewery}</p>}
@@ -77,6 +76,12 @@ export function ProductGrid({ cards, chips, checkoutOn, noun }: { cards: Card[];
                       <ul className="pg-flav" aria-label="Flavours">
                         {c.profile.flavour.map((f) => <li key={f}>{f}</li>)}
                       </ul>
+                      {c.pairing.length > 0 && (
+                        <p className="pg-goes">
+                          <b>Goes with</b> {c.pairing.join(", ")}
+                          {!c.pairingConfirmed && <span className="pg-sugg">suggestion</span>}
+                        </p>
+                      )}
                     </div>
                   )}
                 </>

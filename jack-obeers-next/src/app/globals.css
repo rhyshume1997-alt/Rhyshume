@@ -429,3 +429,60 @@ dialog::backdrop { background: rgba(15, 7, 4, .75); backdrop-filter: blur(3px); 
 .photo-strip { list-style: none; margin: 2rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr)); gap: 1rem; }
 .photo-strip img { width: 100%; height: 22rem; object-fit: cover; border-radius: 1.6rem; display: block; }
 @media (max-width: 40rem) { .photo-strip img { height: 16rem; } }
+
+/* ---- empty glasses that fill, and the logo that jumps out ---- */
+.tile { font: inherit; text-align: left; cursor: pointer; width: 100%; }
+.tile[aria-expanded="true"] { border-color: #8a4b12; background: #fff3d4; }
+.pg-top { padding-top: .8rem; }
+.pg-glassbox { position: relative; display: block; width: 2.4rem; }
+.pg-glassbox .pg-glass { display: block; width: 2.4rem; }
+.pg-card .liq { transform: scaleY(0); transform-origin: 50% 100%; transform-box: fill-box; transition: transform .7s cubic-bezier(.3, .8, .3, 1); }
+.pg-card .foam { opacity: 0; transform: translateY(5px); transition: opacity .2s ease-out .6s, transform .2s ease-out .6s; }
+.pg-jack { position: absolute; left: 50%; bottom: 58%; width: 2.1rem; height: auto; opacity: 0; transform: translate(-50%, 75%) scale(.5); transform-origin: 50% 100%; pointer-events: none; }
+@keyframes jack-hop { 0% { opacity: 0; transform: translate(-50%, 75%) scale(.5); } 45% { opacity: 1; transform: translate(-50%, -85%) scale(1.05); } 100% { opacity: 1; transform: translate(-50%, -40%) scale(1); } }
+@media (hover: hover) and (pointer: fine) {
+  .pg-card:hover .liq { transform: none; }
+  .pg-card:hover .foam { opacity: 1; transform: none; }
+  .pg-card:hover .pg-jack { animation: jack-hop .5s ease-out .7s both; }
+}
+.pg-card:focus-within .liq, .pg-card.is-filled .liq { transform: none; }
+.pg-card:focus-within .foam, .pg-card.is-filled .foam { opacity: 1; transform: none; }
+.pg-card:focus-within .pg-jack, .pg-card.is-filled .pg-jack { animation: jack-hop .5s ease-out .7s both; }
+@media (prefers-reduced-motion: reduce) {
+  .pg-card .liq { transform: none; transition: none; }
+  .pg-card .foam { opacity: 1; transform: none; transition: none; }
+  .pg-card .pg-jack, .pg-card:hover .pg-jack, .pg-card:focus-within .pg-jack, .pg-card.is-filled .pg-jack { animation: none; opacity: 1; transform: translate(-50%, -40%); }
+}
+/* ---- the range panel under the tiles, the keg block, goes with ---- */
+.range-panel { margin-top: 1.2rem; padding: 1rem 1rem 1.2rem; background: #fff6e3; border: 2px solid #d9ccb0; border-radius: 1.6rem; scroll-margin-top: 5rem; animation: panel-in .2s ease-out; }
+.range-panel[hidden] { display: none; }
+@keyframes panel-in { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .range-panel { animation: none; } }
+.range-head { display: flex; flex-wrap: wrap; align-items: center; gap: .8rem; margin-bottom: .4rem; }
+.range-head .h3 { margin: 0; flex: 1; }
+.range-all { font-weight: 600; color: #8a4b12; }
+.range-close { font: 600 .9rem system-ui; min-height: 2.75rem; padding: .2rem 1rem; border: 2px solid #d9ccb0; background: #fff; border-radius: 99px; cursor: pointer; }
+.range-panel .pg-chips { background: #fff6e3; top: 3.9rem; }
+.keg { margin: .4rem 0 .8rem; padding: .8rem 1rem; background: #fbe9bd; border-radius: 1.1rem; }
+.keg p { margin: 0 0 .4rem; }
+.keg p:last-child { margin: 0; }
+.pg-goes { margin: .5rem 0 0; font-size: .9rem; }
+.pg-sugg { margin-left: .5rem; font: 700 .62rem ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; background: #eadfc6; color: #5a4a3a; padding: .2rem .4rem; border-radius: 99px; vertical-align: .1em; }
+/* ---- the headbutt page change ---- */
+.tr { position: fixed; inset: 0; z-index: 9999; pointer-events: none; visibility: hidden; }
+.tr-wipe { position: absolute; inset: 0; background: #2a562f; transform: translateX(-102%); }
+.tr-bull { position: absolute; right: -4vw; top: 50%; width: min(46vw, 380px); height: auto; transform: translateY(-50%); }
+.tr[data-state="cover"] { visibility: visible; pointer-events: auto; }
+.tr[data-state="cover"] .tr-wipe { transform: none; transition: transform .3s cubic-bezier(.2, .8, .2, 1); }
+.tr[data-state="open"] { visibility: visible; }
+.tr[data-state="open"] .tr-wipe { transform: translateX(102%); transition: transform .26s cubic-bezier(.4, 0, .2, 1); }
+/* the new page starts covered. This is set by a tiny script in the head before anything paints. */
+html[data-tr="1"] .tr { visibility: visible; }
+html[data-tr="1"] .tr[data-state="idle"] .tr-wipe { transform: none; transition: none; }
+@media (prefers-reduced-motion: reduce) {
+  .tr-bull { display: none; }
+  .tr-wipe { transform: none; opacity: 0; }
+  .tr[data-state="cover"] .tr-wipe { opacity: 1; transition: opacity .15s linear; }
+  .tr[data-state="open"] .tr-wipe { transform: none; opacity: 0; transition: opacity .15s linear; }
+  html[data-tr="1"] .tr[data-state="idle"] .tr-wipe { opacity: 1; }
+}
