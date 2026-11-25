@@ -66,6 +66,15 @@ export function initRev5(P: any[]): () => void {
   }
 
   /* ---- basket ---- */
+  var MIN_ORDER = 35;
+  function subtotal() { return cart.reduce(function (a, l) { var p = by(l.h); return a + (p ? price(p) * l.q : 0); }, 0); }
+  function minOk() { return subtotal() >= MIN_ORDER; }
+  function minNote() { var m = $('#min-msg'); if (!m) return; var s = subtotal(); m.textContent = (cart.length && s < MIN_ORDER) ? 'Minimum order is ' + money(MIN_ORDER) + '. Add ' + money(MIN_ORDER - s) + ' more to check out.' : 'Minimum order ' + money(MIN_ORDER) + '.'; }
+  function ageOf(v) { if (!v) return -1; var d = new Date(v + 'T00:00:00'); if (isNaN(d)) return -1; var n = new Date(), a = n.getFullYear() - d.getFullYear(), m = n.getMonth() - d.getMonth(); if (m < 0 || (m === 0 && n.getDate() < d.getDate())) a--; return a; }
+  function ageOk() { var d = $('#age-dob'), c = $('#age-ok'); return !!(d && c && c.checked && ageOf(d.value) >= 18); }
+  function ageNote() { var d = $('#age-dob'), c = $('#age-ok'), m = $('#age-msg'); if (!m || !d || !c) return; var a = ageOf(d.value); m.textContent = (d.value && a < 18) ? 'You need to be 18 or over to order drinks.' : ((d.value && a >= 18 && !c.checked) ? 'Please tick the box to confirm.' : ''); var ck = $('#cart-ck'); if (ck) ck.disabled = !cart.length || !ageOk() || !minOk(); minNote(); }
+  document.addEventListener('input', function (e) { if (e.target && (e.target.id === 'age-dob' || e.target.id === 'age-ok')) ageNote(); });
+
   var cart = []; try { cart = JSON.parse(ls('jo5_cart') || '[]'); } catch (e) { cart = []; }
   function saveCart() { ls('jo5_cart', JSON.stringify(cart)); renderCart(); }
   function count() { return cart.reduce(function (a, l) { return a + l.q; }, 0); }
@@ -75,7 +84,7 @@ export function initRev5(P: any[]): () => void {
     var b = $('#cart-body'); if (!b) return;
     var tot = 0;
     b.innerHTML = cart.length ? '<ul>' + cart.map(function (l) { var p = by(l.h); if (!p) return ''; tot += price(p) * l.q; return '<li style="display:flex;justify-content:space-between;gap:1rem;padding:.6rem 0;border-bottom:1px solid var(--line)"><span><b>' + esc(p.title) + '</b> × ' + l.q + '<br><button class="rm" data-rm="' + esc(l.h) + '" style="background:none;border:0;text-decoration:underline;min-height:2.75rem;padding:0">Remove</button></span><span class="price">' + money(price(p) * l.q) + '</span></li>'; }).join('') + '</ul><p class="price" style="margin-top:1rem;display:flex;justify-content:space-between"><span>Subtotal' + (cart.some(function (l) { var q = by(l.h); return q && q.sample; }) ? ' (sample prices)' : '') + '</span><span>' + money(tot) + '</span></p>' : '<p>Your basket is empty. Find something good on the shelf.</p>';
-    var ck = $('#cart-ck'); if (ck) ck.disabled = !cart.length;
+    var ck = $('#cart-ck'); if (ck) ck.disabled = !cart.length || !ageOk() || !minOk(); minNote();
   }
   on(document, 'click', function (e) {
     var rm = e.target.closest('[data-rm]'); if (rm) { cart = cart.filter(function (l) { return l.h !== rm.dataset.rm; }); saveCart(); }
@@ -85,9 +94,9 @@ export function initRev5(P: any[]): () => void {
   });
   var ckb = $('#cart-ck'); if (ckb) ckb.addEventListener('click', function () {
     var off = function () { $('#cart').close(); $('#demo-ck').showModal(); };
-    if (cart.some(function (l) { var p = by(l.h); return !p || p.sample; })) { off(); return; }
+    if (cart.some(function (l) { var p = by(l.h); return !p || p.sample; })) { off(); return; } if (!ageOk()) { ageNote(); return; }
     ckb.disabled = true;
-    fetch('/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ lines: cart }) })
+    fetch('/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ lines: cart, dob: $('#age-dob').value, ageConfirmed: $('#age-ok').checked }) })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) { ckb.disabled = !cart.length; if (j && j.ok && j.url) { location.href = j.url; } else { off(); } })
       .catch(function () { ckb.disabled = !cart.length; off(); });
