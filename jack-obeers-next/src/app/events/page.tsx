@@ -2,7 +2,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { breadcrumbSchema } from "@/lib/schema";
 import { pageMeta } from "@/lib/seo";
 import { Behaviour } from "@/components/Behaviour";
-import { getCatalogue } from "@/lib/catalogue";
+import { forBasket, getCatalogue } from "@/lib/catalogue";
 import { getPublicEvents } from "@/lib/events-store";
 import { Frame } from "@/components/Frame";
 import { Clip } from "@/components/Clip";
@@ -23,6 +23,7 @@ export default async function Page() {
   const [catalogue, ev] = await Promise.all([getCatalogue(), getPublicEvents()]);
   const today = new Date().toISOString().slice(0, 10);
   const upcoming = ev.events.filter((e) => !e.date || e.date >= today).sort((a, b) => (a.date || "9999").localeCompare(b.date || "9999"));
+  const basketHandles = new Set(forBasket(catalogue.all).map((p) => p.handle));
   const ticketsOn = process.env.CHECKOUT_ENABLED === "true";
   return (
     <>
@@ -47,7 +48,8 @@ export default async function Page() {
                     <p className="when">{when(e.date, e.time)}</p>
                     {e.description && <p>{e.description}</p>}
                     <p className="price">{e.price > 0 ? `£${e.price.toFixed(2)} a ticket` : <span className="tbc">price to be confirmed</span>}</p>
-                    <p>
+                    <p className="hamper-btns">
+                      {basketHandles.has(e.handle) && e.available && <button type="button" className="pg-btn soft" data-add={e.handle}>Add to basket<span className="vh"> {e.title}</span></button>}
                       {ticketsOn && e.available && e.buy ? (
                         <a className="btn dk" href={e.buy}>Buy tickets</a>
                       ) : (
@@ -75,7 +77,7 @@ export default async function Page() {
           </div>
         </section>
       </main>
-      <Behaviour products={catalogue.products} solid={true} />
+      <Behaviour products={forBasket(catalogue.all)} solid={true} />
     </>
   );
 }

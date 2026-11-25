@@ -1041,3 +1041,17 @@ html.loaded .jack-cheer { background-image: url(/media/jack-cheer.webp); }
 .newin li a { color: inherit; text-decoration: none; font: 600 1.02rem/1.2 var(--serif); }
 .newin li small { color: #5f4f3d; }
 .newin-row { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-top: .3rem; }
+
+
+/* ---- the opening: visible Skip while it plays; skipped entirely with reduced motion ---- */
+.open-skip { display: none; position: absolute; z-index: 7; left: 50%; bottom: calc(17svh + .9rem); transform: translateX(-50%); min-height: 2.75rem; padding: .35rem 1.4rem; border: 2px solid #f8f1df; border-radius: 99px; background: rgba(29, 15, 10, .8); color: #f8f1df; font: 700 1rem var(--ui); cursor: pointer; }
+html.opening .open-skip { display: inline-flex; align-items: center; }
+.open-skip:active { transform: translateX(-50%) scale(.97); }
+@media (prefers-reduced-motion: reduce) {
+  .stage { height: auto; min-height: 100svh; }
+  .stage-in { position: relative; min-height: 100svh; }
+  .doors, .arch-logo, .open-skip { display: none !important; }
+}
+
+.deli-add { margin-top: .5rem; }
+.hamper-btns { display: flex; flex-wrap: wrap; gap: .5rem; }

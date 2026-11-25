@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { clientIp, rateLimit, sameOrigin } from "@/lib/antispam";
-import { getCatalogue } from "@/lib/catalogue";
+import { forBasket, getCatalogue } from "@/lib/catalogue";
 
 // Checkout is OFF unless CHECKOUT_ENABLED is exactly "true" in Vercel.
 // Do not turn it on until the licence and age-check for selling alcohol are confirmed.
@@ -51,7 +51,7 @@ export async function POST(req: Request) {
   const lines: { merchandiseId: string; quantity: number }[] = [];
   let subtotal = 0;
   for (const l of (body.lines || []).slice(0, 50)) {
-    const p = catalogue.products.find((x) => x.handle === l.h);
+    const p = forBasket(catalogue.all).find((x) => x.handle === l.h);
     const v = p && (p.variants.find((x) => x.available) || null);
     const q = Math.max(1, Math.min(24, Math.floor(Number(l.q) || 1)));
     if (v) {

@@ -364,6 +364,10 @@ export async function getCatalogue(): Promise<Catalogue> {
   }
 }
 
+/** Everything that can go in the basket: drinks, deli, hampers and event tickets. Subscriptions are joined in another way. */
+export const BASKET_CATEGORIES: Category[] = ["beer", "cider", "wine", "deli", "hampers", "events"];
+export const forBasket = (all: Product[]): Product[] => all.filter((p) => BASKET_CATEGORIES.includes(p.category));
+
 /** The link that puts one of a variant in a cart and goes straight to Shopify checkout. */
 export function buyLink(p: Product): string | null {
   const domain = process.env.SHOPIFY_STORE_DOMAIN;

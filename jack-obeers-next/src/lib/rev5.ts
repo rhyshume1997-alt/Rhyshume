@@ -146,7 +146,7 @@ export function initRev5(P: any[]): () => void {
     var S = function () { return mob() ? { t: 49, r: 7, b: 21, l: 7 } : { t: 13, r: 6, b: 19, l: 57 }; };
     var lerp = function (a, b, t) { return a + (b - a) * t; }, ease = function (t) { return 1 - Math.pow(1 - t, 3); };
     var pt = 0, tgt = 0, raf = 0;
-    function prog() { var r = stage.getBoundingClientRect(), max = stage.offsetHeight - innerHeight; return Math.min(1, Math.max(0, -r.top / max)); }
+    function prog() { var r = stage.getBoundingClientRect(), max = stage.offsetHeight - innerHeight; if (max <= 0) return 0; return Math.min(1, Math.max(0, -r.top / max)); }
     function paint() {
       raf = 0; pt += (tgt - pt) * (reduced ? 1 : .18); if (Math.abs(tgt - pt) < .001) pt = tgt; else raf = requestAnimationFrame(paint);
       var e = ease(Math.min(1, pt / .7)), s = S();
@@ -169,6 +169,27 @@ export function initRev5(P: any[]): () => void {
     }
     function onScroll() { tgt = prog(); if (!raf) raf = requestAnimationFrame(paint); }
     on(window, 'scroll', onScroll, { passive: true }); on(window, 'resize', onScroll); onScroll();
+    /* The opening plays once per visit, after the page has loaded, with a visible Skip. Any touch, click, key or wheel stops it
+       at once, so it never blocks the shop. With reduced motion it does not play. It adds no clicks. */
+    var skipBtn = $('.open-skip'), playing = false, rafId = 0, INPUTS = ['wheel', 'touchstart', 'pointerdown', 'keydown'];
+    function aboutTop() { var a = $('#about'); return a ? a.getBoundingClientRect().top + scrollY - 4 : stage.offsetHeight; }
+    function endOpening(jump) {
+      var was = playing; playing = false; cancelAnimationFrame(rafId); document.documentElement.classList.remove('opening');
+      INPUTS.forEach(function (t) { window.removeEventListener(t, onInput, true); });
+      if (jump && was) scrollTo({ top: aboutTop(), behavior: 'instant' });
+    }
+    function onInput(e) { if (e.target && e.target.closest && e.target.closest('.open-skip')) return; endOpening(false); }
+    function startOpening() {
+      var seen = false; try { seen = sessionStorage.getItem('jo_opened') === '1'; } catch (e) {}
+      if (reduced || seen || scrollY > 40 || location.hash) return;
+      try { sessionStorage.setItem('jo_opened', '1'); } catch (e) {}
+      playing = true; document.documentElement.classList.add('opening');
+      INPUTS.forEach(function (t) { window.addEventListener(t, onInput, { capture: true, passive: true }); });
+      var y0 = scrollY, y1 = aboutTop(), t0 = performance.now(), D = 3400;
+      (function step(now) { if (!playing) return; var k = Math.min(1, (now - t0) / D), e = 1 - Math.pow(1 - k, 3); scrollTo({ top: y0 + (y1 - y0) * e, behavior: 'instant' }); if (k < 1) rafId = requestAnimationFrame(step); else endOpening(false); })(t0);
+    }
+    if (skipBtn) on(skipBtn, 'click', function (e) { e.preventDefault(); endOpening(true); });
+    if (!reduced) { if (document.readyState === 'complete') setTimeout(startOpening, 900); else window.addEventListener('load', function () { setTimeout(startOpening, 900); }, { once: true }); }
     on(document, 'visibilitychange', function () { if (!vid || reduced) return; if (document.hidden) vid.pause(); else if (pt < .9) { var q = vid.play(); if (q && q.catch) q.catch(function () {}); } });
     /* "Come in": Jack lunges and the opening is carried away */
     var go = $('[data-come-in]');

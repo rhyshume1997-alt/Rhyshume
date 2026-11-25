@@ -28,7 +28,7 @@ export function openStatus(now: Date = new Date()): Status {
   if (isOpenDay(day) && minutes < OPEN) return { open: false, text: `Opens ${clock(OPEN)} today` };
   for (let i = 1; i <= 7; i++) {
     const next = (day + i) % 7;
-    if (isOpenDay(next)) return { open: false, text: `${isOpenDay(day) ? "" : "Closed today. "}Opens ${clock(OPEN)} ${i === 1 ? "tomorrow" : DAY_NAMES[next]}` };
+    if (isOpenDay(next)) return { open: false, text: `${isOpenDay(day) ? "" : "Closed today. "}Opens ${clock(OPEN)} ${DAY_NAMES[next]}` };
   }
   return { open: false, text: "Closed" };
 }

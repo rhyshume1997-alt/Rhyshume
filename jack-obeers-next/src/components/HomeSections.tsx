@@ -24,8 +24,8 @@ export function DeliSection({ products }: { products: Product[] }) {
       .slice(0, 3)
       .map((p) => p.name);
   const items = deli.length
-    ? deli.map((p) => ({ key: p.handle, name: p.name, price: priceOf(p), image: p.image, with: goesWith(p.name) }))
-    : ALLOWED_PAIRINGS.map((n) => ({ key: n, name: n, price: null as number | null, image: null as string | null, with: goesWith(n) }));
+    ? deli.map((p) => ({ key: p.handle, handle: p.handle as string | null, available: p.variants.some((v) => v.available), name: p.name, price: priceOf(p), image: p.image, with: goesWith(p.name) }))
+    : ALLOWED_PAIRINGS.map((n) => ({ key: n, handle: null as string | null, available: false, name: n, price: null as number | null, image: null as string | null, with: goesWith(n) }));
   return (
     <section className="deli" id="deli" aria-labelledby="deli-h">
       <div className="sec-bg" aria-hidden="true"><BgVideo loop={MEDIA.bgDeli} className="sec-video" /></div>
@@ -41,6 +41,7 @@ export function DeliSection({ products }: { products: Product[] }) {
                 <h3>{it.name}</h3>
                 <p className="deli-price">{it.price !== null ? money(it.price) : <span className="tbc">price to be confirmed</span>}</p>
                 {it.with.length > 0 && <p className="deli-with">Suggested with {it.with.join(", ")}</p>}
+                {it.handle && it.available && <button type="button" className="pg-btn soft deli-add" data-add={it.handle}>Add to basket<span className="vh"> {it.name}</span></button>}
               </div>
             </li>
           ))}
@@ -79,8 +80,9 @@ export function HampersSection({ products, checkoutOn }: { products: Product[]; 
                     <article key={p.handle} className="hcard rv">
                       <h3>{p.name}</h3>
                       {priceOf(p) !== null && <p>{money(priceOf(p) as number)}</p>}
-                      <p>
-                        {checkoutOn && v && link ? <a className="btn sm dk" href={link}>Buy now</a> : <span className="tbc">{v ? "Checkout opens soon" : "Sold out"}</span>}
+                      <p className="hamper-btns">
+                        {v && <button type="button" className="pg-btn soft" data-add={p.handle}>Add to basket<span className="vh"> {p.name}</span></button>}
+                        {checkoutOn && v && link ? <a className="pg-btn solid" href={link}>Buy now</a> : !v ? <span className="tbc">Sold out</span> : null}
                       </p>
                     </article>
                   );
