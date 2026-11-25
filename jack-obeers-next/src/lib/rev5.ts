@@ -148,7 +148,7 @@ export function initRev5(P: any[]): () => void {
       arch.style.setProperty('--t', lerp(s.t, 0, e) + '%'); arch.style.setProperty('--r', lerp(s.r, 0, e) + '%'); arch.style.setProperty('--b', lerp(s.b, 0, e) + '%'); arch.style.setProperty('--l', lerp(s.l, 0, e) + '%');
       arch.style.setProperty('--rad', lerp(999, 0, e) + 'px'); arch.style.setProperty('--rad2', lerp(26, 0, e) + 'px'); arch.style.setProperty('--open', Math.min(1, pt / .3));
       var f = Math.max(0, 1 - pt * 3);
-      copy.style.opacity = f; copy.style.transform = 'translateY(' + (-pt * 60) + 'px)'; if (cue) cue.style.opacity = f; if (note) note.style.opacity = f; if (tag) tag.style.opacity = 1;
+      copy.style.opacity = f; copy.style.transform = 'translateY(' + (-pt * 60) + 'px)'; var hcd = $('.hero-card'); if (hcd) { hcd.style.opacity = f; hcd.style.transform = 'translateY(' + (-pt * 60) + 'px)'; } if (cue) cue.style.opacity = f; if (note) note.style.opacity = f; if (tag) tag.style.opacity = 1;
       counter.style.transform = 'translateY(' + (Math.max(0, pt - .55) / .45 * 105) + '%)';
       arch.style.setProperty('--pt', pt);
       /* The doors and Jack move with transforms only (never left, top, width or height), so scrolling the opening cannot cause layout shift. */

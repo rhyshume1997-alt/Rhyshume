@@ -7,7 +7,7 @@ import { openStatus, type Status } from "@/lib/open-now";
  * A small pill that says whether the shop is open, in UK time. Before the page runs it shows the plain hours, so the
  * pill is the same size and nothing moves when the live text arrives.
  */
-export function OpenNow({ variant = "header" }: { variant?: "header" | "hero" }) {
+export function OpenNow({ variant = "header" }: { variant?: "header" | "hero" | "card" }) {
   const [s, setS] = useState<Status | null>(null);
   useEffect(() => {
     const tick = () => setS(openStatus());

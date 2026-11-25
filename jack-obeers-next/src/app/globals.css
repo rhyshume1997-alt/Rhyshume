@@ -985,3 +985,14 @@ html.loaded .jack-cheer { background-image: url(/media/jack-cheer.webp); }
   body { padding-bottom: calc(4.4rem + env(safe-area-inset-bottom)); }
   .toast { bottom: calc(5.2rem + env(safe-area-inset-bottom)); }
 }
+
+
+/* ---- conversion 6: floating card in the hero (wide screens). Phones keep the open-now pill under the words. ---- */
+.hero-card { display: none; }
+@media (min-width: 52rem) and (min-height: 46rem) {
+  .hero-card { display: grid; gap: .5rem; position: absolute; z-index: 5; inset-inline-start: var(--gut); bottom: calc(17svh + 1.4rem); width: min(24rem, 40vw); padding: 1rem 1.2rem; border-radius: 1.4rem; background: #fffaf0; color: var(--ink); box-shadow: 0 .9rem 1.6rem rgba(0, 0, 0, .35); }
+  .hero-card .open-pill { background: #f1e6cb; color: var(--ink); min-width: 0; justify-self: start; }
+  .hc-addr { margin: 0; font: 400 1.05rem var(--ui); }
+  .hero-card ul { margin: 0; padding: 0; list-style: none; display: grid; gap: .25rem; font-size: .95rem; color: #3a2a18; }
+  .open-hero { display: none; }
+}
