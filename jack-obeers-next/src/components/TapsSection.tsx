@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { BgVideo } from "@/components/BgVideo";
+import { Seal } from "@/components/Seal";
 import { Frame } from "@/components/Frame";
 import { KegBlurb } from "@/components/KegBlurb";
 import { MEDIA } from "@/lib/media";
@@ -28,9 +29,12 @@ export function TapsSection() {
             <h2 className="h2" id="tp-h">Keg fresh, <em>to take home.</em></h2>
             <p className="lede">There are 23 taps on the wall. Beer, cider and wine are transferred into a 500ml or 1 litre bottle for you to take home.</p>
           </div>
-          <Frame className="taps-frame">
+          <div className="taps-fig">
+            <Seal />
+            <Frame className="taps-frame">
             <Image src={TAP_WALL_FULL.file} alt={TAP_WALL_FULL.alt} width={TAP_WALL_FULL.width} height={TAP_WALL_FULL.height} sizes="(max-width: 52rem) 100vw, 58vw" />
-          </Frame>
+            </Frame>
+          </div>
         </div>
         <ul className="clips">
           {CLIPS.map((c) => (
