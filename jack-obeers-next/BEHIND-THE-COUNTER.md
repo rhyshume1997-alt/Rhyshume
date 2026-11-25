@@ -16,7 +16,7 @@ pills and rounded corners, no glows.
 | Opening | Saloon doors and Jack, scroll-driven opening that auto-scrolls once | Dark tap-wall hero, brass buttons, square corners | Four full-screen video scenes, letterbox bars, grain | Real tap wall, headline left, one short hero, shop visible beneath it. No auto-scroll, no lock |
 | Type | Newsreader + Source Sans | Cormorant Garamond + Lora, uppercase labels | Cormorant Garamond + Lora | Newsreader (italic only on "come on in." and one word per section) + Source Sans 3 |
 | Buttons | Pills | Sharp, uppercase, tracked | Sharp, uppercase, tracked | Pills, sentence case |
-| Logo | In the arch and header | Header only | Header only | Original client logo on a cream sign that straddles the dark/cream edge, plus the header |
+| Logo | In the arch and header | Header only | Header only | The supplied logo files: the transparent lying-bull PNG straight onto the dark photograph on desktop, the supplied vector on a cream sign on phones and in About, plus the header |
 | After the opening | About, then the shelf | Same as Original | Four scenes, then the shop | The shelf comes first, straight after the opening |
 | Shelf | Cartoon glasses, a floating bottle cursor, 1.5 s wait before the range scrolled in | Same as Original | Same as Original | Three photo tiles, real pour inside Beer, range appears at once, no floating bottle |
 | Deli | Dark section with background video and cards | same | same | Deep green block, arched real photo, menu-board list (not cards) |

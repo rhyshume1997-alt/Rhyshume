@@ -18,7 +18,9 @@ test("opens on the Behind the Counter look with one headline and Shop drinks in 
   expect(box!.y + box!.height).toBeLessThan(vh);
   expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
   // the original client logo is on the page
-  await expect(page.locator('.bh-sign img[src="/media/jack-logo.png"]')).toBeVisible();
+  // the supplied logo files: transparent lying PNG on desktop, vector SVG on a phone
+  const logo = page.locator(".bh-lying img[src=\"/media/jack-logo-lying.png\"], .bh-sign img[src=\"/media/jack-logo.svg\"]");
+  expect(await logo.evaluateAll((els) => els.filter((e) => (e as HTMLElement).offsetParent !== null).length)).toBe(1);
 });
 
 test("the opening does not run the old scroll-jacking opening or lock scrolling", async ({ page }) => {

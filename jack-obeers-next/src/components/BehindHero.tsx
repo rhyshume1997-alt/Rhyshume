@@ -3,7 +3,7 @@ import { ADDRESS } from "@/lib/site";
 
 /**
  * "Behind the Counter" opening. The real tap wall is the picture. The headline sits to the left on dark mahogany and
- * deep green, the original logo sits on a cream sign that straddles the edge of the cream shop below, and an amber
+ * deep green, the supplied transparent logo sits on the photograph (desktop) or the supplied vector logo on a cream sign (phone), and an amber
  * line (see .bh-line in the shelf) runs from here into the shelf. On a phone the wall is framed on the numbered taps
  * and the headline sits over the lower part of the picture, so nothing is empty and Shop drinks is in the first screen.
  * Only rendered on previews.
@@ -29,9 +29,15 @@ export function BehindHero() {
             <a className="btn ghost" href="#find">Find us</a>
           </div>
         </div>
+        {/* Desktop: the supplied transparent lying logo, straight onto the dark photograph (its outline is made for dark). */}
+        <a className="bh-lying" href="/" aria-label={`Jack O’Beers and Deli, ${ADDRESS.street}, ${ADDRESS.town}`}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/media/jack-logo-lying.png" alt="Jack O’Beers and Deli logo: Jack the bull lying down with a barrel" width={480} height={370} loading="lazy" decoding="async" />
+        </a>
+        {/* Phone: the supplied vector logo on a cream sign that straddles the edge of the cream shop. */}
         <a className="bh-sign" href="/" aria-label={`Jack O’Beers and Deli, ${ADDRESS.street}, ${ADDRESS.town}`}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/media/jack-logo.png" alt="Jack O’Beers and Deli: Jack the bull with a barrel" width={244} height={258} />
+          <img src="/media/jack-logo.svg" alt="Jack O’Beers and Deli logo: Jack the bull with a barrel" width={280} height={288} loading="lazy" decoding="async" />
         </a>
       </div>
     </section>

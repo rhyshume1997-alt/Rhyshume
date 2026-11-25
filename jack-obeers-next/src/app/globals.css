@@ -1299,7 +1299,7 @@ html[data-look="behind"] .hdr.solid { background: var(--mahogany); }
 .bh-h1 em { font-style: italic; color: var(--amber-hi); }
 .bh-lede { max-width: 29rem; font-size: clamp(1.05rem, 1.4vw, 1.25rem); color: #eadfc4; }
 .bh-cta { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: .3rem; }
-.bh-sign { position: absolute; right: 0; bottom: -2.9rem; z-index: 4; width: clamp(8.2rem, 13vw, 11.5rem); padding: .8rem .9rem .65rem; border-radius: 1.7rem; background: var(--paper); box-shadow: 0 14px 22px -16px rgba(0, 0, 0, .65); transform: rotate(-2.2deg); text-decoration: none; }
+.bh-sign { display: none; position: absolute; right: 0; bottom: -2.9rem; z-index: 4; width: clamp(8.2rem, 13vw, 11.5rem); padding: .8rem .9rem .65rem; border-radius: 1.7rem; background: var(--paper); box-shadow: 0 14px 22px -16px rgba(0, 0, 0, .65); transform: rotate(-2.2deg); text-decoration: none; }
 .bh-sign img { width: 100%; height: auto; }
 @media (hover: hover) and (pointer: fine) { .bh-sign { transition: transform .3s var(--ease); } .bh-sign:hover { transform: rotate(-1deg) translateY(-3px); } }
 html[data-look="behind"] .open-hero { margin: 0; }
@@ -1413,3 +1413,13 @@ html[data-look="behind"] .deli-item .deli-add { justify-self: start; margin-top:
 html[data-look="behind"] .taps .keg { background: #fbe9bd; color: var(--ink); }
 html[data-look="behind"] .taps .keg p { color: var(--ink); }
 html[data-look="behind"] .taps-copy .lede, html[data-look="behind"] .taps .lede { background: none; color: var(--ink-2); padding: 0; border: 0; }
+
+/* the supplied logo files in the Behind the Counter opening */
+.bh-lying { position: absolute; right: 0; bottom: 3.4rem; z-index: 4; width: clamp(10rem, 18vw, 16.5rem); text-decoration: none; }
+.bh-lying img { width: 100%; height: auto; filter: drop-shadow(0 .5rem .7rem rgba(0, 0, 0, .5)); }
+@media (hover: hover) and (pointer: fine) { .bh-lying { transition: transform .3s var(--ease); } .bh-lying:hover { transform: translateY(-3px); } }
+@media (max-width: 53.99rem) {
+  .bh-lying { display: none; }
+  .bh-sign { display: block; }
+}
+@media (prefers-reduced-motion: reduce) { .bh-lying { transition: none; } }
