@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     "An independent British drinks shop and deli at 13 Station Road, Milngavie. Craft beer, cider, wine, deli and gifts. Open Wednesday to Monday, 11am to 7pm.",
   // Kept out of search engines until Michael approves launch. Change to index: true then.
   robots: { index: false, follow: false, noarchive: true },
-  icons: { icon: "/media/jack-logo.png" },
+  icons: { icon: "/media/jack-mascot.svg" },
   openGraph: {
     type: "website",
     locale: "en_GB",

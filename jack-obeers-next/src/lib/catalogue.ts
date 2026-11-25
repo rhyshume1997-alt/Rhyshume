@@ -148,3 +148,70 @@ export async function getCatalogue(): Promise<Catalogue> {
     return fallback;
   }
 }
+
+
+export type ShopEvent = {
+  handle: string;
+  title: string;
+  description: string;
+  image: string | null;
+  price: number;
+  available: boolean;
+  /** YYYY-MM-DD, from a tag on the Shopify product written as date:2026-12-05 */
+  date: string | null;
+  /** HH:MM, from a tag written as time:19:00 */
+  time: string | null;
+  sample?: boolean;
+};
+
+const SAMPLE_EVENTS: ShopEvent[] = [
+  { handle: "sample-event", title: "Sample event: tasting night", description: "A made-up example so you can see how an event looks. Real events come from the shop.", image: null, price: 0, available: false, date: "2099-01-01", time: "19:00", sample: true },
+];
+
+/**
+ * Events are products in Shopify with the product type "Event" and a tag date:YYYY-MM-DD (and optionally time:HH:MM).
+ * The owners add or delete an event by adding or deleting that product in Shopify. Tickets are that product's
+ * variants, so they are sold through Shopify checkout. Nothing is stored on this site.
+ */
+export async function getEvents(): Promise<{ events: ShopEvent[]; live: boolean }> {
+  const domain = process.env.SHOPIFY_STORE_DOMAIN;
+  const token = process.env.SHOPIFY_STOREFRONT_TOKEN;
+  if (!domain || !token) return { events: SAMPLE_EVENTS, live: false };
+  try {
+    const out: ShopEvent[] = [];
+    let cursor: string | null = null;
+    for (let page = 0; page < 5; page++) {
+      const res: Response = await fetch(`https://${domain}/api/${API_VERSION}/graphql.json`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Shopify-Storefront-Access-Token": token },
+        body: JSON.stringify({ query: QUERY, variables: { cursor } }),
+        next: { revalidate: 300 },
+      });
+      if (!res.ok) throw new Error(`Shopify ${res.status}`);
+      const json: { errors?: unknown; data: { products: { nodes: ShopifyProduct[]; pageInfo: { hasNextPage: boolean; endCursor: string | null } } } } = await res.json();
+      if (json.errors) throw new Error("Shopify errors");
+      for (const n of json.data.products.nodes) {
+        if (n.productType.trim().toLowerCase() !== "event") continue;
+        const v = n.variants.nodes;
+        const date = n.tags.map((t) => t.match(/^date:(\d{4}-\d{2}-\d{2})$/i)).find(Boolean);
+        const time = n.tags.map((t) => t.match(/^time:(\d{2}:\d{2})$/i)).find(Boolean);
+        out.push({
+          handle: n.handle,
+          title: n.title.trim(),
+          description: n.description || "",
+          image: n.featuredImage ? n.featuredImage.url : null,
+          price: v.length ? Math.min(...v.map((x) => Number(x.price.amount))) : 0,
+          available: v.some((x) => x.availableForSale),
+          date: date ? date[1] : null,
+          time: time ? time[1] : null,
+        });
+      }
+      if (!json.data.products.pageInfo.hasNextPage) break;
+      cursor = json.data.products.pageInfo.endCursor;
+    }
+    return { events: out, live: true };
+  } catch (e) {
+    console.error("Shopify events failed", e);
+    return { events: SAMPLE_EVENTS, live: false };
+  }
+}
