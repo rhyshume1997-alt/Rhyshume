@@ -5,6 +5,7 @@ import { Frame } from "@/components/Frame";
 import { Behaviour } from "@/components/Behaviour";
 import { JsonLd } from "@/components/JsonLd";
 import { buyLink, checkoutOn, getCatalogue, safePairings } from "@/lib/catalogue";
+import { lowStock } from "@/lib/cards";
 import { breadcrumbSchema, productDescription, productPrice, productSchema } from "@/lib/schema";
 import { pageMeta } from "@/lib/seo";
 
@@ -35,6 +36,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
   const { price, available } = productPrice(p);
   const range = RANGE[p.category as keyof typeof RANGE] || RANGE.beer;
   const link = buyLink(p);
+  const low = lowStock(p.variants.find((x) => x.available) || p.variants[0]);
   const pairs = safePairings(p.profile);
   return (
     <>
@@ -54,7 +56,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
                 {p.abvNum !== null && <span>{p.abvNum}% ABV</span>}
                 {p.style && <span>{p.style}</span>}
               </p>
-              <p className="prod-price">£{price.toFixed(2)} <small>{available ? "In stock" : "Sold out"}</small></p>
+              <p className="prod-price">£{price.toFixed(2)} <small>{available ? "In stock" : "Sold out"}</small>{low !== null && <span className="pg-low">Only {low} left</span>}</p>
               {p.profile && <p className="lede">{p.profile.blurb}</p>}
               {p.profile && (
                 <ul className="pg-flav" aria-label="Flavours">

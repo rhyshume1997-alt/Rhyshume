@@ -969,3 +969,7 @@ html.loaded .jack-cheer { background-image: url(/media/jack-cheer.webp); }
 .proof-stars { display: inline-flex; gap: .1rem; }
 .proof small { color: #5f4f3d; font-weight: 400; font-size: .88rem; }
 @media (hover: hover) and (pointer: fine) { .proof:hover { border-color: #8a4b12; } }
+
+
+/* ---- conversion 4: honest low stock tag ---- */
+.pg-low { display: inline-block; margin-left: .6rem; padding: .15rem .6rem; border-radius: 99px; background: #fbe3d6; color: #7a2e12; font: 700 .8rem var(--ui); vertical-align: .15em; }

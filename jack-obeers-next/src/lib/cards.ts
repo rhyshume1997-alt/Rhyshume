@@ -17,7 +17,16 @@ export type Card = {
   pairing: string[];
   pairingConfirmed: boolean;
   sample: boolean;
+  /** Only set when Shopify says 5 or fewer are left. */
+  low: number | null;
 };
+
+/** "Only N left" shows only when Shopify says so: at least 1 and at most 5. Nothing is ever invented. */
+export const LOW_STOCK_AT = 5;
+export function lowStock(v: { stock?: number | null } | undefined): number | null {
+  const n = v ? v.stock : null;
+  return typeof n === "number" && n >= 1 && n <= LOW_STOCK_AT ? n : null;
+}
 
 export function toCard(p: Product): Card {
   const v = p.variants.find((x) => x.available) || p.variants[0];
@@ -37,6 +46,7 @@ export function toCard(p: Product): Card {
     pairing: safePairings(p.profile),
     pairingConfirmed: !!(p.profile && p.profile.pairingConfirmed),
     sample: !!p.sample,
+    low: lowStock(v),
   };
 }
 

@@ -1,7 +1,8 @@
 import demo from "@/data/demo-products.json";
 import profiles from "@/data/profiles.json";
 
-export type Variant = { id: string; title: string; price: number; available: boolean };
+/** stock is how many Shopify says are left, or null when Shopify is not sharing stock numbers. */
+export type Variant = { id: string; title: string; price: number; available: boolean; stock?: number | null };
 
 export type Category = "beer" | "cider" | "wine" | "events" | "subscriptions" | "deli" | "hampers" | "other";
 
@@ -242,6 +243,43 @@ query Catalogue($cursor: String) {
   }
 }`;
 
+/**
+ * Stock numbers are a separate, optional request. Shopify only shares them when the Storefront API token has the
+ * "Read inventory" permission (unauthenticated_read_product_inventory). Without it this quietly returns nothing, and the
+ * site shows no stock tags at all. It never guesses.
+ */
+const STOCK_QUERY = `
+query Stock($cursor: String) {
+  products(first: ${PAGE_SIZE}, after: $cursor) {
+    pageInfo { hasNextPage endCursor }
+    nodes { variants(first: 20) { nodes { id quantityAvailable } } }
+  }
+}`;
+
+async function fetchStock(domain: string, token: string): Promise<Map<string, number>> {
+  const out = new Map<string, number>();
+  try {
+    let cursor: string | null = null;
+    for (let page = 0; page < MAX_PAGES; page++) {
+      const res: Response = await fetch(endpoint(domain), {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Shopify-Storefront-Access-Token": token },
+        body: JSON.stringify({ query: STOCK_QUERY, variables: { cursor } }),
+        next: { revalidate: 300 },
+      });
+      if (!res.ok) return new Map();
+      const json = (await res.json()) as { errors?: unknown; data?: { products: { nodes: { variants: { nodes: { id: string; quantityAvailable: number | null }[] } }[]; pageInfo: { hasNextPage: boolean; endCursor: string | null } } } };
+      if (json.errors || !json.data) return new Map();
+      for (const p of json.data.products.nodes) for (const v of p.variants.nodes) if (typeof v.quantityAvailable === "number") out.set(v.id, v.quantityAvailable);
+      if (!json.data.products.pageInfo.hasNextPage) break;
+      cursor = json.data.products.pageInfo.endCursor;
+    }
+  } catch {
+    return new Map();
+  }
+  return out;
+}
+
 type ShopifyProduct = {
   handle: string;
   title: string;
@@ -282,8 +320,8 @@ async function fetchAll(domain: string, token: string): Promise<ShopifyProduct[]
   return out;
 }
 
-function fromNode(n: ShopifyProduct): Product | null {
-  const variants = n.variants.nodes.map((v) => ({ id: v.id, title: v.title, price: Number(v.price.amount), available: v.availableForSale }));
+function fromNode(n: ShopifyProduct, stock: Map<string, number> = new Map()): Product | null {
+  const variants = n.variants.nodes.map((v) => ({ id: v.id, title: v.title, price: Number(v.price.amount), available: v.availableForSale, stock: stock.has(v.id) ? (stock.get(v.id) as number) : null }));
   if (!variants.length) return null;
   return enrich({ handle: n.handle, title: n.title, description: n.description, productType: n.productType, vendor: n.vendor, tags: n.tags, image: n.featuredImage ? n.featuredImage.url : null, variants });
 }
@@ -309,7 +347,8 @@ export async function getCatalogue(): Promise<Catalogue> {
   const sample = sampleCatalogue();
   if (!domain || !token) return sample;
   try {
-    const all = (await fetchAll(domain, token)).map(fromNode).filter((p): p is Product => !!p);
+    const stock = await fetchStock(domain, token);
+    const all = (await fetchAll(domain, token)).map((n) => fromNode(n, stock)).filter((p): p is Product => !!p);
     if (!all.length) return sample;
     const products = all.filter((p) => p.category === "beer" || p.category === "cider" || p.category === "wine");
     return { collections: SAMPLE.collections, products, all, live: true };

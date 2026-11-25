@@ -69,7 +69,7 @@ export function ProductGrid({ cards, chips, checkoutOn, noun, intro, segmented =
                 </div>
               </div>
               <div className="pg-buy">
-                <span className="pg-price">£{c.price.toFixed(2)}{c.sample && <small> sample</small>}</span>
+                <span className="pg-price">£{c.price.toFixed(2)}{c.sample && <small> sample</small>}{c.low !== null && <span className="pg-low">Only {c.low} left</span>}</span>
                 {!c.available ? (
                   <button type="button" className="pg-btn solid" disabled>Sold out</button>
                 ) : (
