@@ -17,8 +17,6 @@ When Michael sends the item, it goes in the place named.
   Also check 50 pounds free delivery and 4.99 under it against the Shopify shipping setup.
 - **Opening hours:** confirm Wednesday to Monday 11am to 7pm and Tuesday closed, and whether bank holidays differ.
 - **Hero card:** confirm "2 minutes from Milngavie station" and "200 m from the West Highland Way start".
-- **Google reviews:** the shop's Google Place ID, so "Leave a review" opens the review box directly. Until then the button
-  opens the Google listing. Set `placeId` in `src/lib/site.ts`. I could not find it from the short Google link.
 - **Footer:** the pages for the age policy, privacy and terms (links are hidden until the pages exist), and a YouTube channel if there is one.
 
 ## About us

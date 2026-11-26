@@ -16,10 +16,11 @@ export const ADDRESS_LINE = `${ADDRESS.street}, ${ADDRESS.town}, ${ADDRESS.postc
  * Only real, working addresses. Instagram and the Google listing are supplied. The rest are in SEO.md for Rhys to fill in:
  *   Facebook, Untappd venue, CAMRA WhatPub, Bing Places, Apple Business Connect, TripAdvisor, West Highland Way listing.
  */
-export const SAME_AS: string[] = [LINKS.instagram, LINKS.google];
+const GOOGLE_REVIEW_LINK = "https://g.page/r/CdfUxddA7FDHEBM/review"; // the real review link from the Google Business Profile, supplied by Rhys
+export const SAME_AS: string[] = [LINKS.instagram, LINKS.google, GOOGLE_REVIEW_LINK];
 
-/** Latitude and longitude. Leave null until Rhys supplies them. Never guess. */
-export const GEO: { lat: number; lng: number } | null = null;
+/** Latitude and longitude of the shop on Google Maps, supplied by Rhys. */
+export const GEO: { lat: number; lng: number } | null = { lat: 55.9419793, lng: -4.3166612 };
 
 /** Shown in the schema as opening hours. Wednesday to Monday 11am to 7pm, Tuesday closed. [Michael to confirm] */
 export const OPENING = {
@@ -44,21 +45,16 @@ export const STORE_ID = `${SITE_URL}/#store`;
  * quotes a review. checked is the day Rhys last looked at the listing. Change it when you look again.
  *
  * reviewsUrl: where "Read the reviews" goes (the Google listing).
- * placeId: the shop's Google Place ID. When it is set, "Leave a review" opens Google's review box straight away
- *   (https://search.google.com/local/writereview?placeid=...). Find it at
- *   https://developers.google.com/maps/documentation/places/web-service/place-id (search for the shop) and paste it here.
- *   Until then the button opens the Google listing, where the "Write a review" button is. It is listed in MICHAEL-NEEDS.md.
+ * writeReviewUrl: where "Leave a review" goes. The real review link from the Google Business Profile, supplied by Rhys.
  */
 export const GOOGLE_REVIEWS = {
   headline: "5 star reviews on Google",
   checked: "25 Nov 2026",
   reviewsUrl: LINKS.google,
-  placeId: null as string | null,
+  writeReviewUrl: GOOGLE_REVIEW_LINK,
 } as const;
 
-export const GOOGLE_WRITE_REVIEW_URL: string = GOOGLE_REVIEWS.placeId
-  ? `https://search.google.com/local/writereview?placeid=${GOOGLE_REVIEWS.placeId}`
-  : GOOGLE_REVIEWS.reviewsUrl;
+export const GOOGLE_WRITE_REVIEW_URL: string = GOOGLE_REVIEWS.writeReviewUrl;
 
 /** The Google Maps directions link used in the footer, the phone bar and the walkers page. */
 export const DIRECTIONS_URL = "https://www.google.com/maps/search/?api=1&query=Jack+O'Beers+%26+Deli,+13+Station+Road,+Milngavie,+G62+8PG";
