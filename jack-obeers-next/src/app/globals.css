@@ -1958,3 +1958,11 @@ html[data-look="behind"] .atb-add[data-state="busy"] .atb-t { opacity: .7; }
   html[data-look="behind"] .pg-buy .atb-msg { grid-column: 1 / -1; }
   html[data-look="behind"] .atb-add { min-width: 0; padding-inline: .8rem; }
 }
+
+/* Brass scrollbars for the sideways strips (New in, filters, boards): mahogany track, brass thumb. Firefox uses scrollbar-color; Chromium and Safari use the pseudo-elements. */
+@supports not selector(::-webkit-scrollbar) { html[data-look="behind"] :is(.newin ul, .seg, .board) { scrollbar-width: thin; scrollbar-color: #b98a3e #2a150d; } }
+html[data-look="behind"] :is(.newin ul, .seg, .board)::-webkit-scrollbar { height: .7rem; background: #2a150d; border-radius: 99px; }
+html[data-look="behind"] :is(.newin ul, .seg, .board)::-webkit-scrollbar-track { background: #2a150d; border-radius: 99px; box-shadow: inset 0 1px 2px rgba(0, 0, 0, .6); }
+html[data-look="behind"] :is(.newin ul, .seg, .board)::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #dcbc78, #a47b33); border: 2px solid #2a150d; border-radius: 99px; }
+html[data-look="behind"] :is(.newin ul, .seg, .board)::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #e8cb8b, #b2873b); }
+html[data-look="behind"] :is(.newin ul, .seg, .board)::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
