@@ -38,6 +38,6 @@ at its corner above the heading. The cinematic band keeps the headline over the 
 - **Typography:** captions use the same readable serif as the interface, the Polaroid caption uses its italic once, headlines are unchanged. No heading was touched.
 
 ## Limits
-- Local screenshots use the test shop, which has no deli products, so the deli list there shows the fallback names (no prices or buttons). The deployed preview uses the real products.
+- The deli list shows names without prices or Add to basket buttons, locally and on the deployed preview, because the deli items are not set up as products in Shopify yet (only popcorn has a confirmed price). This is the existing fallback, not a change in Rev 7. The Rev 6 "before" screenshots happened to be taken with deli products present, which is why the before and after deli shots differ in that one respect.
 - Not checked on a real phone, Safari or Firefox.
 - The Polaroid and mount crops were chosen by eye on the supplied photographs; they should be reviewed if the photographs change.
