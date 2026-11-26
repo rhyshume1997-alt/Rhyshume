@@ -22,12 +22,13 @@ export function BehindHero() {
       <div className="bh-in">
         <div className="bh-copy">
           <OpenNow variant="hero" />
-          <h1 className="bh-h1">Welcome, <em>come on in.</em></h1>
+          <h1 className="bh-h1"><span className="bh-l1">Welcome,</span> <span className="bh-l2">come on in<i className="bh-dot">.</i></span></h1>
           <p className="bh-lede">Independent British drink shop in Milngavie. Come in, have a look along the shelf, and take something good home to enjoy.</p>
           <div className="bh-cta">
             <a className="btn" href="#shelf">Shop drinks</a>
             <a className="btn ghost" href="#find">Find us</a>
           </div>
+          <p className="bh-foot">Craft beer &middot; cider &middot; wine &middot; deli &middot; gifts</p>
         </div>
         {/* Desktop: the supplied transparent lying logo, straight onto the dark photograph (its outline is made for dark). */}
         <a className="bh-lying" href="/" aria-label={`Jack O’Beers and Deli, ${ADDRESS.street}, ${ADDRESS.town}`}>

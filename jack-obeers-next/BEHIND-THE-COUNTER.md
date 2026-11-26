@@ -1,3 +1,5 @@
+> Superseded in part by REV6-DESIGN.md (illustrated shelf restored, new type system, de-boxed layout). This file records the Rev 5 build.
+
 # Rev 5: Behind the Counter (selected direction)
 
 A private preview. It lives on the beers branch, behind the preview-only look switch. It is the default look on previews

@@ -73,42 +73,74 @@ test("panel scrolling starts straight away (no 1.5 s wait)", async ({ page }) =>
   await page.waitForFunction((y) => Math.abs(scrollY - y) > 8, y0, { timeout: 700 });
 });
 
-test("the real pour plays on hover and focus, and nothing floats", async ({ page, isMobile }) => {
-  test.skip(!!isMobile, "hover is a desktop pointer interaction; touch is covered by the tap test");
+test("the illustrated shelf is back: wooden shelf, bottles, glass, Jack, and the glass fills on hover", async ({ page, isMobile }) => {
+  test.skip(!!isMobile, "hover is a desktop pointer interaction; the tap test covers touch");
   await page.goto("/");
   await page.getByRole("link", { name: "Shop drinks" }).first().click();
-  const beer = page.locator(".sh-item[data-kind=beer]");
-  await beer.hover();
-  const video = page.locator(".sh-item[data-kind=beer] video");
-  await expect.poll(async () => video.evaluate((v: HTMLVideoElement) => !v.paused && v.currentTime > 0), { timeout: 4000 }).toBe(true);
-  expect(await video.evaluate((v: HTMLVideoElement) => v.src)).toContain("/media/videos/pour-wide.mp4");
-  // the old floating bottle cursor and cartoon glass are not used in this look
-  await expect(page.locator(".cur")).toHaveCount(0);
-  expect(await page.locator(".sh-item[data-kind=beer] .art").evaluate((e) => getComputedStyle(e).display)).toBe("none");
+  await page.waitForTimeout(1200);
+  // five shelf items, the drawn art is shown (not hidden behind photographs), and there is no photo or video in the tiles
+  await expect(page.locator(".shelf-row .sh-item")).toHaveCount(5);
+  expect(await page.locator(".sh-item[data-kind=beer] .art").evaluate((e) => getComputedStyle(e).display)).not.toBe("none");
+  await expect(page.locator(".sh-item[data-kind=beer] .sh-bottle")).toHaveCount(1);
+  await expect(page.locator(".sh-item[data-kind=beer] .sh-glass")).toHaveCount(1);
+  await expect(page.locator(".sh-item video")).toHaveCount(0);
+  // wait out the entrance gesture so we are testing hover, not that
+  await page.waitForTimeout(1500);
+  await expect(page.locator(".sh-item.is-demo")).toHaveCount(0, { timeout: 8000 });
+  await page.mouse.move(4, 4); // the pointer may be resting over the tile after the scroll; start from a clear spot
+  await page.waitForTimeout(900);
+  const liq = page.locator(".sh-item[data-kind=beer] .sh-glass .liq");
+  const t0 = await liq.evaluate((e) => getComputedStyle(e).transform);
+  await page.locator(".sh-item[data-kind=beer]").hover();
+  await expect.poll(async () => liq.evaluate((e) => getComputedStyle(e).transform), { timeout: 3000 }).not.toBe(t0);
 });
 
-test("tapping Beer starts the pour and opens the range together (touch)", async ({ page, isMobile }) => {
+test("the shelf does one short gesture when it comes into view and never blocks a click", async ({ page }) => {
+  await page.goto("/");
+  await page.waitForTimeout(1200);
+  await page.evaluate(() => document.querySelector("#shelf")!.scrollIntoView());
+  await expect(page.locator(".sh-item.is-demo")).toHaveCount(1, { timeout: 2000 });
+  // clicking during the gesture works at once
+  await page.locator(".sh-item[data-kind=wine]").click();
+  await expect(page.locator("#range-panel")).toBeVisible({ timeout: 1000 });
+  // and it settles back on its own
+  await expect(page.locator(".sh-item.is-demo")).toHaveCount(0, { timeout: 5000 });
+});
+
+test("the beer bottle cursor shows only over the drawn shelf items, never over text or controls elsewhere", async ({ page, isMobile }) => {
+  test.skip(!!isMobile, "mouse only");
+  await page.goto("/");
+  await page.getByRole("link", { name: "Shop drinks" }).first().click();
+  await page.waitForTimeout(1300);
+  const beer = page.locator(".sh-item[data-kind=beer]");
+  await beer.hover();
+  expect(await beer.evaluate((e) => getComputedStyle(e).cursor)).toContain("cursor-beer.png");
+  // the heading, the basket and the body use the normal cursor
+  expect(await page.locator("#tl-h").evaluate((e) => getComputedStyle(e).cursor)).not.toContain("cursor-beer");
+  expect(await page.locator(".cartbtn").first().evaluate((e) => getComputedStyle(e).cursor)).not.toContain("cursor-beer");
+  expect(await page.locator("body").evaluate((e) => getComputedStyle(e).cursor)).not.toContain("cursor-beer");
+});
+
+test("tapping Beer opens the range at once (touch)", async ({ page, isMobile }) => {
   test.skip(!isMobile, "touch only");
   await page.goto("/");
   await page.getByRole("link", { name: "Shop drinks" }).first().click();
+  await page.waitForTimeout(1200);
   await page.locator(".sh-item[data-kind=beer]").tap();
   await expect(page.locator("#range-panel")).toBeVisible({ timeout: 1000 });
-  const video = page.locator(".sh-item[data-kind=beer] video");
-  await expect.poll(async () => video.evaluate((v: HTMLVideoElement) => !v.paused), { timeout: 4000 }).toBe(true);
+  await expect(page.locator(".sh-item[data-kind=beer]")).toHaveAttribute("aria-expanded", "true");
 });
 
 test.describe("reduced motion", () => {
   test.use({ reducedMotion: "reduce" });
-  test("static opening, drawn amber line, still pour frame, range still opens at once", async ({ page }) => {
+  test("static opening, no entrance gesture, filled glass, range still opens at once", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator(".bh-h1")).toBeVisible();
-    await page.getByRole("link", { name: "Shop drinks" }).first().click();
-    expect(await page.locator(".bh-line").evaluate((e) => getComputedStyle(e).transform)).toBe("none");
     expect(await page.locator(".bh-photo img").evaluate((e) => getComputedStyle(e).animationName)).toBe("none");
-    const video = page.locator(".sh-item[data-kind=beer] video");
-    if (await page.evaluate(() => matchMedia("(hover: hover)").matches)) await page.locator(".sh-item[data-kind=beer]").hover();
-    await page.waitForTimeout(1200);
-    expect(await video.evaluate((v: HTMLVideoElement) => v.paused)).toBe(true);
+    await page.getByRole("link", { name: "Shop drinks" }).first().click();
+    await page.waitForTimeout(1500);
+    await expect(page.locator(".sh-item.is-demo")).toHaveCount(0);
+    expect(await page.locator(".sh-item[data-kind=beer] .sh-glass .liq").evaluate((e) => getComputedStyle(e).transform)).not.toBe("matrix(1, 0, 0, 0, 0, 0)");
     await page.locator(".sh-item[data-kind=cider]").click();
     await expect(page.locator("#range-panel")).toBeVisible({ timeout: 1000 });
   });
@@ -139,4 +171,29 @@ test("the preview drawer offers all five looks and Behind the Counter is selecte
   const looks = page.locator(".cm-looks button");
   await expect(looks).toHaveCount(5);
   await expect(page.locator('.cm-looks button[aria-pressed="true"]')).toHaveText("Behind the Counter");
+});
+
+test("typography: Gloock headlines, Source Serif 4 text, no italic headlines, no stack of labels", async ({ page }) => {
+  await page.goto("/");
+  const fam = async (sel: string) => page.locator(sel).first().evaluate((e) => getComputedStyle(e).fontFamily);
+  expect(await fam(".bh-h1")).toContain("Gloock");
+  expect(await fam("body")).toContain("Source Serif 4");
+  expect(await fam(".bh-cta .btn")).toContain("Source Serif 4");
+  // no italic in any heading, and no heading carries a coloured emphasis word
+  const italics = await page.locator("h1, h2, h3").evaluateAll((els) => els.filter((e) => getComputedStyle(e).fontStyle === "italic" || e.querySelector("em") && getComputedStyle(e.querySelector("em")!).fontStyle === "italic").length);
+  expect(italics).toBe(0);
+  // the small labels above headings are gone from the page
+  const labels = await page.locator("#main .mono").evaluateAll((els) => els.filter((e) => (e as HTMLElement).offsetParent !== null).length);
+  expect(labels).toBe(0);
+  // entrances are off: nothing waits for a reveal
+  const hidden = await page.locator(".rv").evaluateAll((els) => els.filter((e) => getComputedStyle(e).opacity !== "1").length);
+  expect(hidden).toBe(0);
+});
+
+test("the three typography candidates can be compared with ?type=", async ({ page }) => {
+  for (const [t, fam] of [["a", "Gloock"], ["b", "Bodoni Moda"], ["c", "Newsreader"]] as const) {
+    await page.goto(`/?type=${t}`);
+    expect(await page.locator(".bh-h1").evaluate((e) => getComputedStyle(e.querySelector(".bh-l2")!).fontFamily)).toContain(fam);
+  }
+  await page.goto("/?type=a");
 });

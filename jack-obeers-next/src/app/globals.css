@@ -1270,7 +1270,7 @@ html:is([data-look="backbar"], [data-look="cinematic"]) .pg-btn { letter-spacing
    Motion follows the same rules as the rest of the site: ease-out, nothing from scale(0), press feedback, hover only
    on a real pointer, and fewer, gentler movements (not none) with reduced motion.
    ===================================================================================================== */
-.bh-hero, .bh-line, .pour-window { display: none; }
+.bh-hero, .bh-line { display: none; }
 html[data-look]:not([data-look="behind"]) #main { display: flex; flex-direction: column; }
 html[data-look]:not([data-look="behind"]) #main > .greviews { order: 1; }
 html[data-look]:not([data-look="behind"]) #main > .about-home { order: 2; }
@@ -1283,7 +1283,7 @@ html[data-look]:not([data-look="behind"]) #main > .services { order: 8; }
 
 html[data-look="behind"] .stage, html[data-look="behind"] .hero-card { display: none; }
 html[data-look="behind"] .bh-hero { display: flex; }
-html[data-look="behind"] .bh-line, html[data-look="behind"] .pour-window { display: block; }
+html[data-look="behind"] .bh-line { display: block; }
 html[data-look="behind"] .hdr { background: linear-gradient(180deg, rgba(29, 15, 10, .82), rgba(29, 15, 10, 0)); }
 html[data-look="behind"] .hdr.solid { background: var(--mahogany); }
 
@@ -1321,37 +1321,6 @@ html[data-look="behind"] #shelf { position: relative; z-index: 2; margin-top: -2
 @keyframes bh-drift { to { transform: translateY(-1.6rem); opacity: .55; } }
 @keyframes bh-pour { from { transform: scaleY(.12); } to { transform: scaleY(1); } }
 
-/* ---- Pick a shelf: three tactile shelf labels, each with a real photograph ---- */
-html[data-look="behind"] .tiles-sec .mono::before { content: none; }
-html[data-look="behind"] .tiles-sec .h2 em { color: #96590f; }
-html[data-look="behind"] .pour-window { position: absolute; inset: 0; z-index: 0; background: #1d0f0a; }
-.pour-window video { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; }
-html[data-look="behind"] .sh-item::before { z-index: 1; }
-html[data-look="behind"] .tiles-sec .bar { margin-top: 1.4rem; padding: 0; border-radius: 0; overflow: visible; background: none; box-shadow: none; }
-html[data-look="behind"] .bar .sh-label { width: auto; justify-self: start; padding: 0; background: none; }
-html[data-look="behind"] .bar .shelf-row { row-gap: .8rem; }
-html[data-look="behind"] .shelf-row { margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: .8rem; align-items: stretch; row-gap: .8rem; }
-html[data-look="behind"] .shelf-row > li:nth-child(-n+3) { grid-column: span 2; }
-html[data-look="behind"] .shelf-row > li:nth-child(n+4) { grid-column: span 3; }
-html[data-look="behind"] .sh-item { position: relative; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start; min-height: 16rem; height: 100%; padding: 1.1rem 1.2rem 1.25rem; border-radius: 1.7rem; overflow: hidden; text-align: left; color: var(--paper); background-color: #2b140d; background-size: cover; background-position: center; box-shadow: 0 .5rem 0 -.1rem var(--wood), 0 .9rem 1.1rem -.8rem rgba(33, 20, 14, .7); transition: transform .2s var(--ease), box-shadow .2s var(--ease); }
-html[data-look="behind"] .sh-item::before { content: ""; position: absolute; inset: 0; width: auto; height: auto; margin: 0; border-radius: 0; box-shadow: none; background: linear-gradient(0deg, rgba(29, 15, 10, .9) 0%, rgba(29, 15, 10, .35) 48%, rgba(29, 15, 10, 0) 72%); }
-html[data-look="behind"] .sh-item .art { display: none; }
-html[data-look="behind"] .sh-item .sh-label { position: relative; z-index: 2; order: 0; margin: 0; gap: .15rem; }
-html[data-look="behind"] .sh-item .sh-label b { font: 400 clamp(1.7rem, 2.6vw, 2.3rem)/1 var(--serif); letter-spacing: -.02em; color: var(--paper); }
-html[data-look="behind"] .sh-item .tile-n { font: 600 .92rem var(--ui); color: var(--amber-hi); }
-html[data-look="behind"] .sh-item[data-kind="beer"] { background-color: #1d0f0a; }
-html[data-look="behind"] .sh-item[data-kind="cider"] { background-image: url(/media/photos/fridges-wide-1200.webp); background-position: 50% 50%; }
-html[data-look="behind"] .sh-item[data-kind="wine"] { background-image: url(/media/photos/wine-corner-1200.webp); background-position: 50% 55%; }
-html[data-look="behind"] .sh-item[data-kind="events"], html[data-look="behind"] .sh-item[data-kind="subs"] { min-height: 5.4rem; justify-content: center; padding: .9rem 1.2rem 1.05rem; color: var(--ink); background: var(--cream-2); box-shadow: 0 .4rem 0 -.1rem var(--wood-hi); }
-html[data-look="behind"] .sh-item[data-kind="events"]::before, html[data-look="behind"] .sh-item[data-kind="subs"]::before { display: none; }
-html[data-look="behind"] .sh-item[data-kind="events"] .sh-label b, html[data-look="behind"] .sh-item[data-kind="subs"] .sh-label b { font: 600 1.25rem/1.15 var(--serif); color: var(--ink); }
-html[data-look="behind"] .sh-item[data-kind="events"] .tile-n, html[data-look="behind"] .sh-item[data-kind="subs"] .tile-n { color: #7a4d0c; }
-html[data-look="behind"] .sh-item[aria-expanded="true"] { box-shadow: 0 .5rem 0 -.1rem var(--amber), 0 .9rem 1.1rem -.8rem rgba(33, 20, 14, .7); }
-html[data-look="behind"] .sh-item[aria-expanded="true"] .sh-label b { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 6px; text-decoration-color: var(--amber); }
-html[data-look="behind"] .sh-item:active { transform: translateY(2px) scale(.99); transition-duration: .1s; }
-html[data-look="behind"] .sh-item:focus-visible { outline: 3px solid var(--amber-hi); outline-offset: 4px; border-radius: 1.7rem; }
-@media (hover: hover) and (pointer: fine) { html[data-look="behind"] .sh-item:hover { transform: translateY(-3px); } }
-html[data-look="behind"] .shelf-hint { margin-bottom: 1.4rem; }
 
 @media (max-width: 53.99rem) {
   /* the phone gets its own composition: the wall framed on the numbered taps, the headline over its lower edge, Shop drinks in the first screen */
@@ -1365,17 +1334,9 @@ html[data-look="behind"] .shelf-hint { margin-bottom: 1.4rem; }
   .bh-h1 { font-size: clamp(2.9rem, 13.4vw, 4.4rem); }
   .bh-sign { right: var(--gut); bottom: -3.2rem; width: 7.2rem; padding: .6rem .6rem .5rem; border-radius: 1.3rem; }
   html[data-look="behind"] #shelf { margin-top: -2.2rem; border-radius: 2.2rem 2.2rem 0 0; }
-  html[data-look="behind"] .shelf-row > li:nth-child(1) { grid-column: span 6; }
-  html[data-look="behind"] .shelf-row > li:nth-child(2), html[data-look="behind"] .shelf-row > li:nth-child(3) { grid-column: span 3; }
-  html[data-look="behind"] .shelf-row > li:nth-child(n+4) { grid-column: span 3; }
-  html[data-look="behind"] .sh-item { min-height: 11.5rem; padding: .9rem 1rem 1.1rem; }
-  html[data-look="behind"] .shelf-row > li:nth-child(1) .sh-item { min-height: 12.5rem; }
-  html[data-look="behind"] .sh-item .sh-label b { font-size: 1.6rem; }
-  html[data-look="behind"] .sh-item[data-kind="events"], html[data-look="behind"] .sh-item[data-kind="subs"] { min-height: 5.6rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .bh-sign { transition: none; }
-  html[data-look="behind"] .sh-item { transition: none; }
 }
 
 /* Find me a beer: the footer's ".find" styles (wood band, tall padding) were leaking into the beer finder. Tidy for every look. */
@@ -1387,7 +1348,6 @@ details.find > summary { min-height: 2.75rem; display: flex; align-items: center
 html[data-look="behind"] .taps { background: var(--cream-2); color: var(--ink); }
 html[data-look="behind"] .taps-bg { display: none; }
 html[data-look="behind"] .taps .mono { color: var(--amber-d); }
-html[data-look="behind"] .taps h2 em { color: #8a500d; }
 html[data-look="behind"] .taps .lede, html[data-look="behind"] .taps figcaption { color: var(--ink-2); }
 
 html[data-look="behind"] .deli { background: var(--forest); color: var(--paper); padding-block: clamp(4rem, 8vw, 7rem); }
@@ -1396,7 +1356,6 @@ html[data-look="behind"] .deli .wrap { display: grid; grid-template-columns: min
 html[data-look="behind"] .deli .wrap::before { content: ""; grid-column: 1; grid-row: 1 / span 5; align-self: start; position: sticky; top: calc(var(--hdr) + 1.5rem); aspect-ratio: 4 / 5; border-radius: 999px 999px 1.8rem 1.8rem; background: #0d1d14 url(/media/photos/deli-counter-1200.webp) 40% 50% / cover no-repeat; box-shadow: 0 .5rem 0 -.1rem var(--forest-3); }
 html[data-look="behind"] .deli .wrap > * { grid-column: 2; }
 html[data-look="behind"] .deli .mono { color: var(--amber-hi); }
-html[data-look="behind"] .deli h2 em { color: var(--amber-hi); }
 html[data-look="behind"] .deli-list { display: block; margin-top: 1.6rem; }
 html[data-look="behind"] .deli-item { display: block; padding: .95rem 0; border: 0; border-bottom: 1px dotted rgba(248, 241, 223, .4); border-radius: 0; background: none; }
 html[data-look="behind"] .deli-item img, html[data-look="behind"] .deli-ph { display: none; }
@@ -1423,3 +1382,187 @@ html[data-look="behind"] .taps-copy .lede, html[data-look="behind"] .taps .lede 
   .bh-sign { display: block; }
 }
 @media (prefers-reduced-motion: reduce) { .bh-lying { transition: none; } }
+
+/* =====================================================================================================
+   REV 6: Behind the Counter, refined. Everything below is keyed to html[data-look="behind"] (previews only).
+   Rules for this layer: every device is borrowed from the real shop (the tap wall and its oak rail, the wooden shelf, the
+   price cards under the taps, the deli counter, the awning, Jack). Boxes only where something is physically a box.
+   Surfaces, hairline rules and spacing organise the rest. Italics are not a house style. Nothing animates just because it can.
+   ===================================================================================================== */
+@font-face { font-family: "Gloock"; font-weight: 400; font-style: normal; font-display: swap; src: url("/fonts/gloock-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Source Serif 4"; font-weight: 400; font-style: normal; font-display: swap; src: url("/fonts/source-serif-4-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Source Serif 4"; font-weight: 600; font-style: normal; font-display: swap; src: url("/fonts/source-serif-4-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Source Serif 4"; font-weight: 400; font-style: italic; font-display: swap; src: url("/fonts/source-serif-4-latin-400-italic.woff2") format("woff2"); }
+@font-face { font-family: "Spectral"; font-weight: 400; font-style: normal; font-display: swap; src: url("/fonts/spectral-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Spectral"; font-weight: 500; font-style: normal; font-display: swap; src: url("/fonts/spectral-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Spectral"; font-weight: 600; font-style: normal; font-display: swap; src: url("/fonts/spectral-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Spectral"; font-weight: 400; font-style: italic; font-display: swap; src: url("/fonts/spectral-latin-400-italic.woff2") format("woff2"); }
+@font-face { font-family: "Lora"; font-weight: 400; font-style: italic; font-display: swap; src: url("/fonts/lora-latin-400-italic.woff2") format("woff2"); }
+
+/* the type system: one expressive serif for headlines (--serif), one readable serif for text and controls (--ui) */
+html[data-look="behind"] { --serif: "Gloock", Georgia, serif; --ui: "Source Serif 4", Georgia, serif; --hw: 400; --ht: -.012em; --hl: 1.02; --bs: 1.0625rem; --price-w: 600; }
+html[data-look="behind"][data-type="b"] { --serif: "Bodoni Moda", Georgia, serif; --ui: "Spectral", Georgia, serif; --hw: 500; --ht: -.02em; --hl: 1; --bs: 1.125rem; }
+html[data-look="behind"][data-type="c"] { --serif: "Newsreader", Georgia, serif; --ui: "Lora", Georgia, serif; --hw: 400; --ht: -.03em; --hl: .98; --bs: 1.0625rem; }
+html[data-look="behind"] body { font-size: var(--bs); font-optical-sizing: auto; font-variant-numeric: lining-nums; }
+html[data-look="behind"] :is(h1, h2, h3, .brand) { font-weight: var(--hw); letter-spacing: var(--ht); line-height: var(--hl); }
+html[data-look="behind"] em, html[data-look="behind"] .it { font-style: normal; color: inherit; }
+html[data-look="behind"] .btn, html[data-look="behind"] .pg-btn, html[data-look="behind"] .tab, html[data-look="behind"] .cartbtn, html[data-look="behind"] .menubtn { font-family: var(--ui); }
+
+/* fewer labels, fewer entrances, calmer scale */
+html[data-look="behind"] #main .mono { display: none; }
+html[data-look="behind"] .js .rv, html[data-look="behind"] .rv { opacity: 1; transform: none; transition: none; }
+html[data-look="behind"] .h2 { font-size: clamp(2.2rem, 4.8vw, 4.1rem); }
+html[data-look="behind"] .lede { font-size: clamp(1.05rem, 1.3vw, 1.2rem); }
+
+/* ---- the opening, set like a restaurant advertisement ---- */
+html[data-look="behind"] .bh-copy { gap: 1.05rem; max-width: 43rem; }
+html[data-look="behind"] .bh-h1 { font-size: inherit; line-height: .95; letter-spacing: var(--ht); display: grid; gap: .02em; }
+.bh-l1 { display: block; font-size: clamp(1.9rem, 3.6vw, 3.4rem); line-height: 1; color: #eadfc4; }
+.bh-l2 { display: block; font-size: clamp(3.4rem, 7.4vw, 7.2rem); line-height: .92; color: var(--paper); }
+.bh-dot { font-style: normal; color: var(--amber-hi); }
+.bh-foot { margin-top: .6rem; padding-top: .8rem; border-top: 1px solid rgba(242, 232, 210, .35); font: 400 .95rem/1.3 var(--ui); color: #d8cdb3; align-self: stretch; max-width: 30rem; }
+@media (max-width: 53.99rem) { .bh-l1 { font-size: clamp(1.6rem, 7vw, 2.2rem); } .bh-l2 { font-size: clamp(3.1rem, 15.5vw, 5rem); } }
+
+/* ---- one continuous movement: the oak rail of the tap wall becomes the edge of the shop ---- */
+html[data-look="behind"] #shelf { margin-top: 0; border-radius: 0; box-shadow: none; padding-top: clamp(2.8rem, 5vw, 4.4rem); background: var(--cream); }
+html[data-look="behind"] #shelf::before { content: ""; position: absolute; left: 0; right: 0; top: -1.15rem; height: 1.15rem; background: linear-gradient(180deg, #c9a06b 0 12%, #9a6b3f 12% 58%, #5a341c 58% 100%); box-shadow: 0 -14px 22px -14px rgba(0, 0, 0, .75); }
+html[data-look="behind"] .bh-line { display: none; }
+html[data-look="behind"] .bh-sign { box-shadow: 0 10px 14px -12px rgba(0, 0, 0, .6); }
+@media (max-width: 53.99rem) { html[data-look="behind"] #shelf { margin-top: 0; } html[data-look="behind"] #shelf::before { top: -.9rem; height: .9rem; } }
+
+/* ---- Pick a shelf: the illustrated shelf, on a real plank. The shelf is the structure; there is no box around it ---- */
+html[data-look="behind"] .tiles-sec .h2 { margin-bottom: .4rem; }
+html[data-look="behind"] .shelf-hint { margin: 0; color: var(--ink-2); font: 400 1rem var(--ui); }
+html[data-look="behind"] .tiles-sec .bar { margin: 2.2rem calc(50% - 50vw) 0; width: 100vw; max-width: none; border-radius: 0; padding: 5.2rem var(--gut) 0; box-shadow: 0 1.1rem 1.4rem -1.2rem rgba(33, 20, 14, .6); }
+html[data-look="behind"] .tiles-sec .shelf-row { max-width: 82rem; margin-inline: auto; }
+html[data-look="behind"] .sh-item::before { height: .95rem; border-radius: 0; background: linear-gradient(180deg, #d1a977, #ad7a47 52%, #8a5a33); box-shadow: inset 0 1px 0 rgba(255, 244, 220, .5), 0 1px 0 rgba(33, 20, 14, .35); }
+html[data-look="behind"] .bar .sh-label { padding: 1rem .5rem 1.2rem; background: repeating-linear-gradient(90deg, rgba(0, 0, 0, .09) 0 1px, transparent 1px 11px), linear-gradient(180deg, #5d3621, #4a2816 70%, #3d2112); border-bottom: .3rem solid #2b170b; box-shadow: inset 0 1px 0 rgba(255, 230, 190, .18); }
+html[data-look="behind"] .sh-item .sh-label b { font-family: var(--serif); font-weight: var(--hw); font-size: 1.45rem; letter-spacing: 0; color: #f6ead2; }
+html[data-look="behind"] .sh-item .tile-n { font: 400 .98rem var(--ui); color: #e9c77f; }
+html[data-look="behind"] .art::after { content: ""; position: absolute; left: 10%; right: 10%; bottom: -.1rem; height: .55rem; background: radial-gradient(ellipse at center, rgba(33, 20, 14, .42), transparent 70%); z-index: -1; }
+html[data-look="behind"] .sh-push { filter: saturate(.82) contrast(1.03); }
+html[data-look="behind"] .sh-item:focus-visible { outline: 3px solid var(--amber-hi); outline-offset: -3px; border-radius: 0; }
+/* the shelf's own entrance: one beer, one gesture, the same as hover and focus */
+.sh-item.is-demo .sh-bottle { transform: var(--pour, none); }
+.sh-item.is-demo .sh-glass .liq { transform: none; }
+.sh-item.is-demo .sh-glass .foam { opacity: 1; transform: none; }
+.sh-item.is-demo .sh-push { display: block; opacity: 1; animation: jack-push 2.2s steps(11, end) .3s both; }
+.sh-item.is-demo .art .sh-glass { transform: rotate(-7deg); }
+
+/* ---- the range: open, set like a menu. Hairlines and space, not boxes ---- */
+html[data-look="behind"] .range-panel { margin-top: 0; padding: 2.4rem 0 1rem; background: none; border: 0; border-radius: 0; animation: none; }
+html[data-look="behind"] .range-head { padding-bottom: .7rem; border-bottom: 1px solid var(--ink); }
+html[data-look="behind"] .range-head .h3 { font-size: clamp(1.8rem, 3vw, 2.5rem); }
+html[data-look="behind"] .range-close { border: 0; background: none; border-radius: 0; text-decoration: underline; text-underline-offset: .2em; font-family: var(--ui); }
+html[data-look="behind"] .keg { background: none; border-radius: 0; border-left: 3px solid var(--amber); padding: .2rem 0 .2rem 1rem; margin: 1.1rem 0 1rem; }
+html[data-look="behind"] details.find { background: none; border-radius: 0; border-block: 1px solid rgba(33, 20, 14, .35); margin: 0 0 .8rem; }
+html[data-look="behind"] .seg { background: none; border-radius: 0; padding: 0; gap: .2rem 1.4rem; overflow: visible; flex-wrap: wrap; display: flex; margin: .6rem 0 .8rem; }
+html[data-look="behind"] .seg-btn { background: none; border-radius: 0; padding: .3rem .1rem; border-bottom: 3px solid transparent; font-family: var(--ui); }
+html[data-look="behind"] .seg-btn[aria-pressed="true"] { background: none; color: var(--ink); border-bottom-color: var(--amber); }
+html[data-look="behind"] .seg-link { margin-left: 0; }
+html[data-look="behind"] .seg-link:first-of-type::before { display: none; }
+html[data-look="behind"] .pg-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 25rem), 1fr)); gap: 0 clamp(2rem, 4vw, 4.5rem); }
+html[data-look="behind"] .pg-card { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 1.2rem; row-gap: .5rem; align-items: center; padding: 1.05rem 0 1.1rem; background: none; border: 0; border-bottom: 1px dotted rgba(33, 20, 14, .45); border-radius: 0; box-shadow: none; }
+html[data-look="behind"] .pg-top { grid-column: 1; grid-template-columns: 3.2rem minmax(0, 1fr); padding-top: 0; }
+html[data-look="behind"] .pg-buy { grid-column: 2; flex-direction: column; align-items: flex-end; width: auto; gap: .4rem; }
+html[data-look="behind"] .pg-btns { display: flex; width: auto; }
+html[data-look="behind"] .pg-flav-mini, html[data-look="behind"] .pg-more, html[data-look="behind"] .pg-detail { grid-column: 1 / -1; }
+html[data-look="behind"] .pg-name { font-family: var(--serif); font-weight: var(--hw); font-size: 1.25rem; line-height: 1.12; letter-spacing: 0; }
+html[data-look="behind"] .pg-price { font: var(--price-w) 1.3rem var(--ui); }
+html[data-look="behind"] .pg-brew, html[data-look="behind"] .pg-meta { font-family: var(--ui); }
+html[data-look="behind"] .pg-flav li { border-radius: 0; background: none; border-bottom: 1px solid rgba(33, 20, 14, .4); padding: 0 .1rem; font-family: var(--ui); }
+html[data-look="behind"] .pg-more { border: 0; background: none; border-radius: 0; padding: 0; text-decoration: underline; text-underline-offset: .2em; font-family: var(--ui); }
+@media (max-width: 34rem) {
+  html[data-look="behind"] .pg-card { grid-template-columns: minmax(0, 1fr); }
+  html[data-look="behind"] .pg-buy { grid-column: 1; flex-direction: row; align-items: center; justify-content: space-between; width: 100%; }
+}
+
+/* best sellers: a typographic strip, not a row of cards */
+html[data-look="behind"] .newin ul { gap: 0; }
+html[data-look="behind"] .newin li { background: none; border: 0; border-radius: 0; border-left: 1px solid rgba(33, 20, 14, .35); padding: .3rem 1.2rem .5rem; }
+html[data-look="behind"] .newin li:first-child { border-left: 0; padding-left: 0; }
+html[data-look="behind"] .newin li a { font-family: var(--serif); font-weight: var(--hw); font-size: 1.2rem; letter-spacing: 0; }
+html[data-look="behind"] .newin h2 { font-size: clamp(1.7rem, 3vw, 2.4rem); }
+html[data-look="behind"] .newin-dot { display: none; }
+
+/* ---- the rest of the page: different jobs, different layouts ---- */
+html[data-look="behind"] .greviews { padding-block: 1.4rem; border-block: 1px solid rgba(33, 20, 14, .3); background: none; }
+/* photographs: plain, like pinned prints. Only the shopfront keeps the awning frame, because it is a picture of the awning */
+html[data-look="behind"] .frame { padding: 0; background: none; box-shadow: none; border-radius: 0; }
+html[data-look="behind"] .frame::before, html[data-look="behind"] .frame::after { display: none; }
+html[data-look="behind"] .photo-strip li:first-child .frame, html[data-look="behind"] .about-people .frame { padding: var(--trim); padding-top: calc(var(--trim) + var(--awn)); background: linear-gradient(160deg, #2c2b29, #1b1a19 42%, #100f0e); box-shadow: 0 .55rem 1.2rem rgba(29, 15, 10, .28); border-radius: .4rem; }
+html[data-look="behind"] .photo-strip li:first-child .frame::before, html[data-look="behind"] .about-people .frame::before { display: block; }
+html[data-look="behind"] .about-home h2 { max-width: 14ch; }
+html[data-look="behind"] .about-copy .lede { font-family: var(--serif); font-weight: var(--hw); font-size: clamp(1.4rem, 2.2vw, 1.9rem); line-height: 1.25; letter-spacing: 0; color: var(--ink); }
+html[data-look="behind"] .about-copy { max-width: 40rem; }
+html[data-look="behind"] .hours-list li { border-bottom-style: dotted; }
+html[data-look="behind"] .taps { padding-block: clamp(3.4rem, 6vw, 5.5rem) clamp(2.4rem, 4vw, 3.4rem); }
+html[data-look="behind"] .taps .keg, html[data-look="behind"] .taps .keg p { background: none; color: var(--ink); }
+html[data-look="behind"] .deli .wrap::before { border-radius: 0; box-shadow: none; aspect-ratio: 4 / 5; }
+@media (max-width: 53.99rem) { html[data-look="behind"] .deli .wrap::before { border-radius: 0; aspect-ratio: 16 / 11; } }
+html[data-look="behind"] .deli-item h3 { letter-spacing: 0; }
+html[data-look="behind"] .deli-price { font-family: var(--ui); }
+/* the footer: columns divided by hairlines, not three boxes */
+html[data-look="behind"] .find .grid > div { background: none; border-radius: 0; padding: .2rem 1.4rem 0 0; border-top: 1px solid rgba(242, 232, 210, .35); }
+html[data-look="behind"] .find .grid { gap: 1.6rem 3rem; }
+html[data-look="behind"] .find .h2 { font-size: clamp(2.2rem, 4.6vw, 3.8rem); }
+html[data-look="behind"] .services .h2 { font-size: clamp(2rem, 4vw, 3.2rem); }
+html[data-look="behind"] .svc summary .nm { font-family: var(--serif); font-weight: var(--hw); letter-spacing: 0; }
+
+/* ---- Rev 6 fixes from the rendered review ---- */
+/* the plank runs the full width of the wall and every label is the same height, so the shelf stays level */
+html[data-look="behind"] .tiles-sec .bar { position: relative; }
+html[data-look="behind"] .tiles-sec .bar::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 5.85rem; z-index: 0; background: linear-gradient(180deg, #d1a977 0, #ad7a47 .48rem, #8a5a33 .95rem, #5d3621 .95rem, #4a2816 72%, #3d2112 100%); border-bottom: .3rem solid #2b170b; }
+html[data-look="behind"] .tiles-sec .shelf-row { position: relative; z-index: 1; }
+html[data-look="behind"] .bar .sh-label { min-height: 4.9rem; align-content: center; border-bottom: 0; background: repeating-linear-gradient(90deg, rgba(0, 0, 0, .08) 0 1px, transparent 1px 11px); box-shadow: none; }
+html[data-look="behind"] .sh-item::before { background: linear-gradient(180deg, #d1a977, #ad7a47 52%, #8a5a33); }
+html[data-look="behind"] .brand { font-size: 1.28rem; }
+@media (max-width: 40rem) {
+  html[data-look="behind"] .brand { font-size: 1.05rem; gap: .4rem; }
+  html[data-look="behind"] .brand img { width: 2.5rem; height: 2.5rem; }
+  /* the shelf on a phone: beer, cider and wine stand side by side on one shelf; tickets and card on a lower shelf */
+  html[data-look="behind"] .tiles-sec .bar { padding-top: 3.6rem; }
+  html[data-look="behind"] .tiles-sec .bar::after { display: none; }
+  html[data-look="behind"] .tiles-sec .shelf-row { grid-template-columns: repeat(6, minmax(0, 1fr)); row-gap: 2.6rem; max-width: 100%; padding-bottom: 0; }
+  html[data-look="behind"] .shelf-row > li:nth-child(-n+3) { grid-column: span 2; }
+  html[data-look="behind"] .shelf-row > li:nth-child(n+4) { grid-column: span 3; }
+  html[data-look="behind"] .shelf-row > li:nth-child(-n+3) .art { zoom: .72; }
+  html[data-look="behind"] .shelf-row > li:nth-child(n+4) .art { zoom: .8; }
+  html[data-look="behind"] .bar .sh-label { min-height: 4.3rem; padding-inline: .2rem; }
+  html[data-look="behind"] .sh-item .sh-label b { font-size: 1.12rem; }
+  html[data-look="behind"] .sh-item .tile-n { font-size: .86rem; }
+  html[data-look="behind"] .sh-item { background: none; }
+}
+html[data-look="behind"] .bar .sh-label { background: repeating-linear-gradient(90deg, rgba(0, 0, 0, .08) 0 1px, transparent 1px 11px), #4a2816; }
+html[data-look="behind"] .tiles-sec .bar::after { background: repeating-linear-gradient(90deg, rgba(0, 0, 0, .08) 0 1px, transparent 1px 11px), linear-gradient(180deg, #d1a977 0, #ad7a47 .48rem, #8a5a33 .95rem, #4a2816 .95rem, #4a2816 100%); }
+
+/* leftovers: no italic numerals, a footer you can read, less empty space under the shelf */
+html[data-look="behind"] .svc .no { font-style: normal; font-family: var(--serif); }
+html[data-look="behind"] .find { background: var(--mahogany); }
+html[data-look="behind"] .find .sec-bg { opacity: .2; }
+html[data-look="behind"] .tiles-sec { padding-bottom: clamp(1.6rem, 3vw, 2.6rem); }
+
+/* ---- events and the club: a ticket list and two plans in columns, not a set of boxed cards ---- */
+html[data-look="behind"] .hcard { background: none; border: 0; border-radius: 0; box-shadow: none; padding: 0; }
+html[data-look="behind"] .hcard h2, html[data-look="behind"] .hcard h3 { font-size: clamp(1.5rem, 2.4vw, 1.9rem); letter-spacing: 0; }
+html[data-look="behind"] .events { display: block; max-width: 46rem; margin: 1.4rem 0 0; }
+html[data-look="behind"] .hcard.event { padding: 1.3rem 0 1.4rem; border-bottom: 1px dotted rgba(33, 20, 14, .5); gap: .35rem; }
+html[data-look="behind"] .hcard.event:first-child { border-top: 1px solid var(--ink); }
+html[data-look="behind"] .hcard.event .price { font-family: var(--ui); }
+html[data-look="behind"] .tiers { max-width: 56rem; margin: 1.6rem 0 0; gap: 0; align-items: start; }
+html[data-look="behind"] .hcard.tier { padding: .4rem clamp(1.2rem, 3vw, 2.4rem) 1.2rem 0; }
+html[data-look="behind"] .hcard.tier + .hcard.tier { padding-left: clamp(1.2rem, 3vw, 2.4rem); border-left: 1px solid rgba(33, 20, 14, .45); }
+html[data-look="behind"] .tier-list li { border-radius: 0; padding: .35rem 0 .35rem 1.7rem; }
+html[data-look="behind"] .tier-list li::before { left: 0; top: .35rem; }
+html[data-look="behind"] .tier-list li.up { background: none; font-weight: 600; box-shadow: inset 3px 0 0 var(--amber); padding-left: 2.1rem; }
+html[data-look="behind"] .tier-list li.up::before { left: .4rem; }
+html[data-look="behind"] .tier-list .new { border-radius: 0; background: none; color: #7a4d0c; padding: 0; margin-right: .4rem; font-family: var(--ui); text-decoration: underline; text-underline-offset: .2em; }
+html[data-look="behind"] .tier-foot { text-align: left; margin-left: 0; }
+html[data-look="behind"] .enquiry { background: none; border: 0; border-radius: 0; border-top: 1px solid var(--ink); padding: 1.6rem 0 0; margin: 2.6rem 0 0; max-width: 46rem; }
+html[data-look="behind"] .ilkley { max-width: 46rem; }
+@media (max-width: 40rem) {
+  html[data-look="behind"] .tiers { display: block; }
+  html[data-look="behind"] .hcard.tier + .hcard.tier { padding-left: 0; border-left: 0; border-top: 1px solid rgba(33, 20, 14, .45); margin-top: 1rem; padding-top: 1.4rem; }
+}
+/* no coloured emphasis word in any heading (the older section rules were more specific than the Behind reset) */
+html[data-look="behind"] .h2 em, html[data-look="behind"] .h3 em, html[data-look="behind"] .taps .h2 em, html[data-look="behind"] .deli .h2 em, html[data-look="behind"] .cream .h2 em, html[data-look="behind"] .dk .h2 em, html[data-look="behind"] .services .h2 em, html[data-look="behind"] .find .h2 em { color: inherit; font-style: normal; }

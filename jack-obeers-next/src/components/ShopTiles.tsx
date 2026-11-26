@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { PourWindow } from "@/components/PourWindow";
 import { KegBlurb } from "@/components/KegBlurb";
 import { ShelfArt } from "@/components/ShelfArt";
 import { ProductGrid } from "@/components/ProductGrid";
@@ -29,8 +28,21 @@ const DRINKS: { key: Key; title: string; unit: string; blurb: string; href: stri
 export function ShopTiles({ ranges, events, subs, checkoutOn, fancy = false }: { ranges: Record<Key, Range>; events: number; subs: number; checkoutOn: boolean; fancy?: boolean }) {
   const [open, setOpen] = useState<Key | null>(null);
   const panel = useRef<HTMLDivElement>(null);
-  const [hoverBeer, setHoverBeer] = useState(false);
+  const bar = useRef<HTMLDivElement>(null);
+  const [demo, setDemo] = useState(false);
   const choose = (k: Key) => setOpen(open === k ? null : k);
+  // When the shelf comes into view the beer bottle tips over the glass once and Jack reacts. It is one short gesture, it
+  // never blocks a click, hover and focus still do the same thing, and with reduced motion it does not run.
+  useEffect(() => {
+    const el = bar.current;
+    if (!fancy || !el || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let t = 0;
+    const io = new IntersectionObserver((es) => {
+      if (es[0].isIntersecting) { setDemo(true); t = window.setTimeout(() => setDemo(false), 3400); io.disconnect(); }
+    }, { threshold: 0.6 });
+    io.observe(el);
+    return () => { io.disconnect(); window.clearTimeout(t); };
+  }, [fancy]);
   // The range appears and scrolls into view straight away: no waiting for the pour. The pour is a separate element.
   useEffect(() => {
     if (!open) return;
@@ -46,13 +58,12 @@ export function ShopTiles({ ranges, events, subs, checkoutOn, fancy = false }: {
         <p className="mono">Shop</p>
         <h2 className="h2" id="tl-h">Pick a <em>shelf.</em></h2>
         <p className="shelf-hint">Click your selection.</p>
-        <div className="bar"><ul className="shelf-row">
+        <div className="bar" ref={bar}><ul className="shelf-row">
           {DRINKS.map((d) => {
             const n = ranges[d.key].cards.length;
             return (
               <li key={d.key}>
-                <button type="button" className="sh-item" data-kind={d.key} aria-expanded={open === d.key} aria-controls="range-panel" onPointerMove={trackSide} onPointerEnter={(e) => { trackSide(e); if (d.key === "beer") setHoverBeer(true); }} onPointerLeave={() => { if (d.key === "beer") setHoverBeer(false); }} onFocus={() => { if (d.key === "beer") setHoverBeer(true); }} onBlur={() => { if (d.key === "beer") setHoverBeer(false); }} onClick={() => choose(d.key)}>
-                  {fancy && d.key === "beer" && <PourWindow playing={hoverBeer || open === "beer"} />}
+                <button type="button" className={"sh-item" + (demo && d.key === "beer" ? " is-demo" : "")} data-kind={d.key} aria-expanded={open === d.key} aria-controls="range-panel" onPointerMove={trackSide} onPointerEnter={trackSide} onClick={() => choose(d.key)}>
                   <ShelfArt kind={d.key} />
                   <span className="sh-label"><b>{d.title}</b><span className="tile-n">{count(n, d.unit.replace(/s$/, ""), d.unit)}</span></span>
                 </button>
