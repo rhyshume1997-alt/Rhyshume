@@ -1490,16 +1490,12 @@ html[data-look="behind"] .greviews { padding-block: 1.4rem; border-block: 1px so
 /* photographs: plain, like pinned prints. Only the shopfront keeps the awning frame, because it is a picture of the awning */
 html[data-look="behind"] .frame { padding: 0; background: none; box-shadow: none; border-radius: 0; }
 html[data-look="behind"] .frame::before, html[data-look="behind"] .frame::after { display: none; }
-html[data-look="behind"] .photo-strip li:first-child .frame, html[data-look="behind"] .about-people .frame { padding: var(--trim); padding-top: calc(var(--trim) + var(--awn)); background: linear-gradient(160deg, #2c2b29, #1b1a19 42%, #100f0e); box-shadow: 0 .55rem 1.2rem rgba(29, 15, 10, .28); border-radius: .4rem; }
-html[data-look="behind"] .photo-strip li:first-child .frame::before, html[data-look="behind"] .about-people .frame::before { display: block; }
 html[data-look="behind"] .about-home h2 { max-width: 14ch; }
 html[data-look="behind"] .about-copy .lede { font-family: var(--serif); font-weight: var(--hw); font-size: clamp(1.4rem, 2.2vw, 1.9rem); line-height: 1.25; letter-spacing: 0; color: var(--ink); }
 html[data-look="behind"] .about-copy { max-width: 40rem; }
 html[data-look="behind"] .hours-list li { border-bottom-style: dotted; }
 html[data-look="behind"] .taps { padding-block: clamp(3.4rem, 6vw, 5.5rem) clamp(2.4rem, 4vw, 3.4rem); }
 html[data-look="behind"] .taps .keg, html[data-look="behind"] .taps .keg p { background: none; color: var(--ink); }
-html[data-look="behind"] .deli .wrap::before { border-radius: 0; box-shadow: none; aspect-ratio: 4 / 5; }
-@media (max-width: 53.99rem) { html[data-look="behind"] .deli .wrap::before { border-radius: 0; aspect-ratio: 16 / 11; } }
 html[data-look="behind"] .deli-item h3 { letter-spacing: 0; }
 html[data-look="behind"] .deli-price { font-family: var(--ui); }
 /* the footer: columns divided by hairlines, not three boxes */
@@ -1566,3 +1562,125 @@ html[data-look="behind"] .ilkley { max-width: 46rem; }
 }
 /* no coloured emphasis word in any heading (the older section rules were more specific than the Behind reset) */
 html[data-look="behind"] .h2 em, html[data-look="behind"] .h3 em, html[data-look="behind"] .taps .h2 em, html[data-look="behind"] .deli .h2 em, html[data-look="behind"] .cream .h2 em, html[data-look="behind"] .dk .h2 em, html[data-look="behind"] .services .h2 em, html[data-look="behind"] .find .h2 em { color: inherit; font-style: normal; }
+
+
+/* =====================================================================================================
+   REV 7: the photograph system. Three treatments, three jobs, one beer mat. All keyed to html[data-look="behind"].
+   Cinematic: the opening and the numbered-taps band (no frame, type set around the picture).
+   Mount: a picture mounted on cream with a fine printed line and a caption, in three variations (deli, interiors, supporting).
+   Polaroid: Michael and Tanya only (the personal story).
+   Beer mat: a real card coaster with the round Jack badge, tucked behind the deli mount and the polaroid, nowhere else.
+   ===================================================================================================== */
+.beermat, .taps-cine, .deli-lead { display: none; }
+.mount figcaption { display: none; }
+
+/* pictures sit flat inside their treatment: the old black awning frame is not used in this look */
+html[data-look="behind"] :is(.mount-pic, .pol-pic, .photo-strip, .deli-photos) .frame { padding: 0; background: none; box-shadow: none; border-radius: 0; line-height: 0; }
+html[data-look="behind"] :is(.mount-pic, .pol-pic) .frame::before, html[data-look="behind"] :is(.mount-pic, .pol-pic) .frame::after { display: none; }
+html[data-look="behind"] :is(.mount-pic, .pol-pic) img { display: block; width: 100%; height: auto; border-radius: 0; }
+
+/* ---- mount: mounted on cream, a fine printed line, a caption ---- */
+html[data-look="behind"] .mount { --mp: clamp(.7rem, 1.5vw, 1rem); position: relative; margin: 0; display: grid; gap: .85rem; }
+html[data-look="behind"] .mount figcaption { display: block; font: 400 .95rem/1.4 var(--ui); max-width: 30ch; }
+html[data-look="behind"] .mount figcaption::before { content: ""; display: block; width: 1.9rem; height: 2px; margin-bottom: .5rem; background: var(--amber); }
+html[data-look="behind"] .mount-pic { position: relative; z-index: 1; background: #fbf6ea; padding: var(--mp); box-shadow: 0 1px 0 rgba(33, 20, 14, .14), 0 .9rem 1.2rem -1rem rgba(0, 0, 0, .6); }
+html[data-look="behind"] .mount-pic::after { content: ""; position: absolute; inset: calc(var(--mp) - .42rem); border: 1px solid rgba(33, 20, 14, .3); pointer-events: none; }
+/* b: a printed plate, the caption inside the margin */
+html[data-look="behind"] .mount-b { background: #fbf6ea; padding: var(--mp) var(--mp) 0; gap: 0; box-shadow: 0 1px 0 rgba(33, 20, 14, .14), 0 .9rem 1.2rem -1rem rgba(0, 0, 0, .6); }
+html[data-look="behind"] .mount-b .mount-pic { background: none; box-shadow: none; padding: 0; }
+html[data-look="behind"] .mount-b .mount-pic::after { inset: .42rem; border-color: rgba(251, 246, 234, .7); }
+html[data-look="behind"] .mount-b figcaption { max-width: none; padding: .85rem .1rem 1rem; color: #3a281a; text-align: right; }
+html[data-look="behind"] .mount-b figcaption::before { margin-left: auto; }
+/* c: the caption set beside the picture, at its foot */
+html[data-look="behind"] .mount-c { grid-template-columns: minmax(7rem, 11rem) minmax(0, 1fr); column-gap: 1.3rem; align-items: end; }
+html[data-look="behind"] .mount-c figcaption { order: -1; padding-bottom: .3rem; }
+
+/* where the mounts are used */
+html[data-look="behind"] .photo-strip { align-items: start; gap: 2.4rem clamp(2rem, 5vw, 4.5rem); }
+html[data-look="behind"] .photo-strip li:nth-child(2) { margin-top: clamp(0rem, 4vw, 3.2rem); }
+html[data-look="behind"] .photo-strip .mount-pic img, html[data-look="behind"] .photo-strip .mount-b .mount-pic img { height: 21rem; object-fit: cover; }
+html[data-look="behind"] .photo-strip .mount-b { color: var(--ink); }
+html[data-look="behind"] .deli-lead { display: block; grid-column: 1 !important; grid-row: 1 / span 5; align-self: start; position: sticky; top: calc(var(--hdr) + 1.5rem); max-width: 27rem; }
+html[data-look="behind"] .deli .wrap::before { display: none; }
+html[data-look="behind"] .deli-lead .mount-pic img { aspect-ratio: 4 / 5; object-fit: cover; object-position: 38% 62%; }
+html[data-look="behind"] .deli-photos { display: block; margin-top: 2.4rem; }
+html[data-look="behind"] .deli-photos li:first-child { display: none; }
+html[data-look="behind"] .deli-photos .mount-pic img { aspect-ratio: 3 / 2; object-fit: cover; }
+html[data-look="behind"] .deli .mount figcaption { color: #e6dcc3; }
+
+/* ---- polaroid: Michael and Tanya, a small print on the desk ---- */
+html[data-look="behind"] .polaroid { position: relative; margin: .8rem 0 1.8rem 1.2rem; max-width: 25rem; justify-self: center; transform: rotate(-2.4deg) translateY(.6rem); transform-origin: 50% 88%; transition: transform .7s cubic-bezier(.23, 1, .32, 1); }
+html[data-look="behind"] .polaroid.in { transform: rotate(-1.4deg); }
+html[data-look="behind"] .polaroid .pol-pic { position: relative; z-index: 1; padding: .95rem .95rem 3.7rem; background: #faf5e8; box-shadow: 0 1px 1px rgba(0, 0, 0, .12), 0 1.1rem 1.4rem -1rem rgba(33, 20, 14, .65); }
+html[data-look="behind"] .polaroid .pol-pic img { aspect-ratio: 1 / 1; object-fit: cover; object-position: 27% 62%; filter: sepia(.07) contrast(1.02) saturate(.96); box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .06); }
+/* a little photographic grain over the picture only, never over the border */
+html[data-look="behind"] .polaroid .pol-pic::after { content: ""; position: absolute; left: .95rem; right: .95rem; top: .95rem; bottom: 3.7rem; background: var(--grain); opacity: .13; mix-blend-mode: overlay; pointer-events: none; }
+html[data-look="behind"] .polaroid figcaption { position: absolute; z-index: 2; left: 1rem; right: 1rem; bottom: .75rem; min-height: 2.6rem; display: flex; align-items: center; font: italic 400 1rem/1.25 var(--ui); color: #4a382c; transform: rotate(-.5deg); }
+
+/* ---- beer mat: card, a printed ring, the round Jack badge. It slides out from behind its picture once ---- */
+html[data-look="behind"] .beermat { display: grid; place-items: center; position: absolute; z-index: 0; width: clamp(5.4rem, 8.5vw, 7.4rem); aspect-ratio: 1; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle at 50% 50%, #efe0b9 0 57%, #cfae6f 57% 58.8%, #efe0b9 58.8% 100%);
+  box-shadow: inset 0 0 0 .2rem #e4d09f, 0 .45rem .7rem -.45rem rgba(0, 0, 0, .55);
+  transform: translate(var(--mx, 0), var(--my, 0)) rotate(var(--mr, 14deg)); transition: transform .85s cubic-bezier(.23, 1, .32, 1); }
+html[data-look="behind"] .beermat img { width: 62%; height: auto; display: block; }
+html[data-look="behind"] .polaroid .beermat { left: -3.4rem; bottom: 3.4rem; --mr: -17deg; --mx: 1.6rem; }
+html[data-look="behind"] .polaroid.in .beermat { --mx: 0; }
+html[data-look="behind"] .deli-lead .beermat { right: -3.6rem; top: 3.2rem; --mr: -12deg; --mx: -1.8rem; }
+html[data-look="behind"] .deli-lead.in .beermat { --mx: 0; }
+
+/* ---- cinematic: the numbered taps, wide, with the type set around it ---- */
+html[data-look="behind"] .taps { position: relative; isolation: isolate; overflow: hidden; background: #1d0f0a; color: var(--paper); padding-block: clamp(4rem, 9vw, 8rem) clamp(2.4rem, 4vw, 3.4rem); }
+html[data-look="behind"] .taps-cine { display: block; position: absolute; inset: 0; z-index: -1; }
+html[data-look="behind"] .taps-cine img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; filter: brightness(1.3) contrast(1.05); }
+html[data-look="behind"] .taps-cine::after { content: ""; position: absolute; inset: 0; background: linear-gradient(95deg, rgba(29, 15, 10, .94) 0%, rgba(29, 15, 10, .82) 34%, rgba(29, 15, 10, .3) 68%, rgba(18, 41, 29, .22) 100%), linear-gradient(0deg, rgba(29, 15, 10, .9), rgba(29, 15, 10, 0) 42%); }
+html[data-look="behind"] .taps-cine-cap { position: absolute; right: var(--gut); top: 1.3rem; font: 400 .9rem var(--ui); color: #d8cdb3; }
+html[data-look="behind"] .taps-grid { grid-template-columns: minmax(0, 34rem) minmax(0, 1fr); min-height: clamp(16rem, 26vw, 22rem); align-items: end; }
+html[data-look="behind"] .taps-fig .frame { display: none; }
+html[data-look="behind"] .taps-fig { position: relative; justify-self: end; align-self: end; min-height: 9rem; width: 9rem; }
+html[data-look="behind"] .taps-fig .seal { top: auto; bottom: 0; right: 0; width: 8.6rem; }
+html[data-look="behind"] .taps h2 { color: var(--paper); }
+html[data-look="behind"] .taps .lede, html[data-look="behind"] .taps-copy .lede { color: #eadfc4; }
+html[data-look="behind"] .taps figcaption { color: #d8cdb3; }
+html[data-look="behind"] .taps .keg, html[data-look="behind"] .taps .keg p { color: #eadfc4; }
+html[data-look="behind"] .taps .clips { margin-top: 2.6rem; gap: 1.4rem; }
+html[data-look="behind"] .taps .clips figure { margin: 0; }
+
+/* the other supporting pictures take the mount look too */
+html[data-look="behind"] :is(.walk-photo, .prod-img).frame { background: #fbf6ea; padding: .9rem; position: relative; box-shadow: 0 1px 0 rgba(33, 20, 14, .14), 0 .9rem 1.2rem -1rem rgba(0, 0, 0, .6); border-radius: 0; }
+html[data-look="behind"] :is(.walk-photo, .prod-img).frame::before { display: block; inset: .5rem; border: 1px solid rgba(33, 20, 14, .3); }
+html[data-look="behind"] :is(.walk-photo, .prod-img).frame::after { display: none; }
+
+@media (max-width: 53.99rem) {
+  html[data-look="behind"] .deli-lead { position: relative; top: 0; grid-row: auto; max-width: 22rem; margin: 0 0 1.8rem; }
+  html[data-look="behind"] .deli-lead .mount-pic img { aspect-ratio: 4 / 3; }
+  html[data-look="behind"] .deli-lead .beermat { right: -.5rem; top: -1.6rem; width: 5rem; }
+  html[data-look="behind"] .polaroid { margin: .6rem auto 1.6rem; max-width: 22rem; }
+  html[data-look="behind"] .polaroid .beermat { left: -.6rem; right: auto; bottom: 3rem; width: 4.6rem; }
+  html[data-look="behind"] .mount-c { grid-template-columns: minmax(0, 1fr); }
+  html[data-look="behind"] .mount-c figcaption { order: 1; }
+  html[data-look="behind"] .photo-strip .mount-pic img, html[data-look="behind"] .photo-strip .mount-b .mount-pic img { height: 15rem; }
+  html[data-look="behind"] .photo-strip li:nth-child(2) { margin-top: 0; }
+  html[data-look="behind"] .taps-grid { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+  html[data-look="behind"] .taps-fig { justify-self: start; min-height: 7rem; width: 7rem; }
+  html[data-look="behind"] .taps-fig .seal { width: 6.4rem; }
+  html[data-look="behind"] .taps-cine img { object-position: 62% 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-look="behind"] .polaroid, html[data-look="behind"] .beermat { transition: none; }
+  html[data-look="behind"] .polaroid { transform: rotate(-1.4deg); }
+  html[data-look="behind"] .polaroid .beermat, html[data-look="behind"] .deli-lead .beermat { --mx: 0; }
+}
+
+/* the picture's box is sized by the box itself, not by the image, so nothing moves while the picture loads */
+html[data-look="behind"] .polaroid .pol-pic .frame { position: relative; aspect-ratio: 1 / 1; }
+html[data-look="behind"] .polaroid .pol-pic .frame img { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; }
+html[data-look="behind"] .deli-lead .mount-pic .frame { position: relative; aspect-ratio: 4 / 5; }
+html[data-look="behind"] .deli-lead .mount-pic .frame img { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; }
+html[data-look="behind"] .deli-photos .mount-pic .frame { position: relative; aspect-ratio: 3 / 2; }
+html[data-look="behind"] .deli-photos .mount-pic .frame img { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; }
+html[data-look="behind"] .photo-strip .mount-pic .frame { position: relative; height: 21rem; }
+html[data-look="behind"] .photo-strip .mount-pic .frame img { position: absolute; inset: 0; width: 100%; height: 100%; }
+@media (max-width: 53.99rem) {
+  html[data-look="behind"] .deli-lead .mount-pic .frame { aspect-ratio: 4 / 3; }
+  html[data-look="behind"] .photo-strip .mount-pic .frame { height: 15rem; }
+}

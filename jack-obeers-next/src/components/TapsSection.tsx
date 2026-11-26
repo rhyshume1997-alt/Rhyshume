@@ -4,6 +4,7 @@ import { Seal } from "@/components/Seal";
 import { Frame } from "@/components/Frame";
 import { KegBlurb } from "@/components/KegBlurb";
 import { MEDIA } from "@/lib/media";
+import { isIndexable } from "@/lib/site";
 import { TAP_WALL_FULL } from "@/lib/photos";
 
 const CLIPS = [
@@ -18,6 +19,13 @@ const CLIPS = [
 export function TapsSection() {
   return (
     <section className="taps" id="taps" aria-labelledby="tp-h">
+      {!isIndexable() && (
+        <div className="taps-cine" aria-hidden="true">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/media/photos/taps-numbered-close-2400.webp" alt="" width={2400} height={1800} loading="lazy" decoding="async" />
+          <span className="taps-cine-cap">The numbered taps</span>
+        </div>
+      )}
       <div className="taps-bg" aria-hidden="true">
         <BgVideo loop={MEDIA.bgTaps} className="taps-video" />
       </div>

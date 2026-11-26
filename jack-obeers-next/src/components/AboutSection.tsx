@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Frame } from "@/components/Frame";
+import { Polaroid } from "@/components/Photo";
 import { Clip } from "@/components/Clip";
 import { Hours } from "@/components/Hours";
 import { PhotoStrip } from "@/components/PhotoStrip";
@@ -25,12 +26,9 @@ export function AboutSection({ standalone = false }: { standalone?: boolean } = 
             </Frame>
             <figcaption>Michael welcomes you to the shop</figcaption>
           </figure>
-          <figure className="about-people">
-            <Frame>
-              <Image src={MICHAEL_AND_TANYA.file} alt={MICHAEL_AND_TANYA.alt} width={MICHAEL_AND_TANYA.width} height={MICHAEL_AND_TANYA.height} sizes="(max-width: 52rem) 100vw, 36vw" />
-            </Frame>
-            <figcaption>Michael and Tanya, who run Jack O’Beers and Deli</figcaption>
-          </figure>
+          <Polaroid className="about-people" mat caption="Michael and Tanya, who run Jack O’Beers and Deli">
+            <Image src={MICHAEL_AND_TANYA.file} alt={MICHAEL_AND_TANYA.alt} width={MICHAEL_AND_TANYA.width} height={MICHAEL_AND_TANYA.height} sizes="(max-width: 52rem) 100vw, 36vw" />
+          </Polaroid>
         </div>
         <div className="about-home-grid">
           <div className="about-copy">

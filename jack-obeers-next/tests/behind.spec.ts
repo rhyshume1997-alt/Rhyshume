@@ -197,3 +197,49 @@ test("the three typography candidates can be compared with ?type=", async ({ pag
   }
   await page.goto("/?type=a");
 });
+
+test("Rev 7 photo system: polaroid only for Michael and Tanya, mounts elsewhere, no black awning frame, two beer mats", async ({ page }) => {
+  await page.goto("/");
+  await page.waitForTimeout(1200);
+  // exactly one polaroid, and it is Michael and Tanya
+  await expect(page.locator(".polaroid")).toHaveCount(1);
+  await expect(page.locator(".polaroid .pol-pic img")).toHaveAttribute("alt", /Michael and Tanya/);
+  // mounts are used for the deli and the shop photos; none of them is a polaroid
+  expect(await page.locator(".mount").count()).toBeGreaterThanOrEqual(4);
+  expect(await page.locator(".polaroid .mount, .mount .polaroid").count()).toBe(0);
+  // the old black frame is not around any of these pictures
+  const framed = await page.locator(".mount-pic .frame, .pol-pic .frame").evaluateAll((els) => els.filter((e) => getComputedStyle(e).backgroundImage !== "none" || getComputedStyle(e).paddingLeft !== "0px").length);
+  expect(framed).toBe(0);
+  // the beer mat is a small, selective detail: exactly two, both decorative and hidden from assistive technology
+  await expect(page.locator(".beermat")).toHaveCount(2);
+  expect(await page.locator(".beermat").evaluateAll((els) => els.every((e) => e.getAttribute("aria-hidden") === "true" && getComputedStyle(e).pointerEvents === "none"))).toBe(true);
+  // no horizontal scroll
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
+});
+
+test("Rev 7: a beer mat never sits over text or a control", async ({ page }) => {
+  await page.goto("/");
+  await page.waitForTimeout(1000);
+  for (const sel of [".polaroid .beermat", ".deli-lead .beermat"]) {
+    await page.locator(sel).scrollIntoViewIfNeeded();
+    await page.waitForTimeout(1300);
+    const hit = await page.evaluate((s) => {
+      const m = document.querySelector(s)!.getBoundingClientRect();
+      const els = [...document.querySelectorAll("#main :is(p, h1, h2, h3, a, button, li, summary, input)")].filter((e) => !e.closest(".beermat, .mount-pic, .pol-pic, figcaption"));
+      return els.filter((e) => { const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0 && r.left < m.right && r.right > m.left && r.top < m.bottom && r.bottom > m.top && (e.textContent || "").trim().length > 0; }).map((e) => e.tagName + ":" + (e.textContent || "").trim().slice(0, 24));
+    }, sel);
+    expect(hit, `${sel} overlaps ${hit.join(", ")}`).toEqual([]);
+  }
+});
+
+test.describe("Rev 7 reduced motion", () => {
+  test.use({ reducedMotion: "reduce" });
+  test("polaroid and beer mats are static and already in place", async ({ page }) => {
+    await page.goto("/");
+    await page.waitForTimeout(800);
+    const t = await page.locator(".polaroid").evaluate((e) => ({ tr: getComputedStyle(e).transitionDuration, rot: getComputedStyle(e).transform }));
+    expect(parseFloat(t.tr)).toBeLessThan(0.001); // a global reduced-motion rule makes durations effectively zero
+    expect(t.rot).not.toBe("none");
+    expect(parseFloat(await page.locator(".polaroid .beermat").evaluate((e) => getComputedStyle(e).transitionDuration))).toBeLessThan(0.001);
+  });
+});
