@@ -5,6 +5,8 @@ import { BgVideo } from "@/components/BgVideo";
 import { MEDIA } from "@/lib/media";
 import { DELI_CABINET, DELI_COUNTER } from "@/lib/photos";
 import { ALLOWED_PAIRINGS, buyLink, type Product } from "@/lib/catalogue";
+import { AddToBasket } from "@/components/AddToBasket";
+import { stockOf } from "@/lib/cards";
 
 /** Popcorn is sold at 3.50 pounds, confirmed by Michael. */
 export const POPCORN_PRICE = 3.5;
@@ -27,8 +29,8 @@ export function DeliSection({ products }: { products: Product[] }) {
       .slice(0, 3)
       .map((p) => p.name);
   const items = deli.length
-    ? deli.map((p) => ({ key: p.handle, handle: p.handle as string | null, available: p.variants.some((v) => v.available), name: p.name, price: priceOf(p), image: p.image, with: goesWith(p.name) }))
-    : [...ALLOWED_PAIRINGS.map((n) => ({ key: n, handle: null as string | null, available: false, name: n as string, price: null as number | null, image: null as string | null, with: goesWith(n) })), { key: "Popcorn", handle: null as string | null, available: false, name: "Popcorn", price: POPCORN_PRICE as number | null, image: null as string | null, with: [] as string[] }];
+    ? deli.map((p) => ({ key: p.handle, handle: p.handle as string | null, available: p.variants.some((v) => v.available), stock: stockOf(p), name: p.name, price: priceOf(p), image: p.image, with: goesWith(p.name) }))
+    : [...ALLOWED_PAIRINGS.map((n) => ({ key: n, handle: null as string | null, available: false, stock: null as number | null, name: n as string, price: null as number | null, image: null as string | null, with: goesWith(n) })), { key: "Popcorn", handle: null as string | null, available: false, stock: null as number | null, name: "Popcorn", price: POPCORN_PRICE as number | null, image: null as string | null, with: [] as string[] }];
   return (
     <section className="deli" id="deli" aria-labelledby="deli-h">
       <div className="sec-bg" aria-hidden="true"><BgVideo loop={MEDIA.bgDeli} className="sec-video" /></div>
@@ -49,7 +51,7 @@ export function DeliSection({ products }: { products: Product[] }) {
                 <h3>{it.name}</h3>
                 {it.price !== null && <p className="deli-price">{money(it.price)}</p>}
                 {it.with.length > 0 && <p className="deli-with">Suggested with {it.with.join(", ")}</p>}
-                {it.handle && it.available && <button type="button" className="pg-btn soft deli-add" data-add={it.handle}>Add to basket<span className="vh"> {it.name}</span></button>}
+                {it.handle && it.available && <span className="deli-add"><AddToBasket handle={it.handle} name={it.name} stock={it.stock} /></span>}
               </div>
             </li>
           ))}
@@ -83,7 +85,7 @@ export function HampersSection({ products, checkoutOn }: { products: Product[]; 
                 <h3>{p.name}</h3>
                 {priceOf(p) !== null && <p>{money(priceOf(p) as number)}</p>}
                 <p className="hamper-btns">
-                  {v && <button type="button" className="pg-btn soft" data-add={p.handle}>Add to basket<span className="vh"> {p.name}</span></button>}
+                  {v && <AddToBasket handle={p.handle} name={p.name} stock={stockOf(p)} />}
                   {checkoutOn && v && link ? <a className="pg-btn solid" href={link}>Buy now</a> : !v ? <span>Sold out</span> : null}
                 </p>
               </article>

@@ -5,7 +5,8 @@ import { Frame } from "@/components/Frame";
 import { BasketBehaviour } from "@/components/BasketBehaviour";
 import { JsonLd } from "@/components/JsonLd";
 import { buyLink, checkoutOn, getCatalogue, safePairings } from "@/lib/catalogue";
-import { lowStock } from "@/lib/cards";
+import { lowStock, stockOf } from "@/lib/cards";
+import { AddToBasket } from "@/components/AddToBasket";
 import { breadcrumbSchema, productDescription, productPrice, productSchema } from "@/lib/schema";
 import { pageMeta } from "@/lib/seo";
 
@@ -67,7 +68,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
               <div className="pg-btns prod-btns">
                 {available ? (
                   <>
-                    <button type="button" className="pg-btn soft" data-add={p.handle}>Add to basket</button>
+                    <AddToBasket handle={p.handle} name={p.name} stock={stockOf(p)} />
                     {checkoutOn() && link ? <a className="pg-btn solid" href={link}>Buy now</a> : null}
                   </>
                 ) : (

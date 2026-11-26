@@ -15,11 +15,11 @@ export default defineConfig({
   use: { baseURL: "http://localhost:3201", launchOptions: exe ? { executablePath: exe } : {} },
   projects: [
     // The live-mode build (SITE_INDEXABLE=true): the site as it will be when it is the real, searchable site.
-    { name: "desktop", testIgnore: /behind\.spec\.ts/, use: { browserName: "chromium", viewport: { width: 1366, height: 850 } } },
-    { name: "iphone", testIgnore: /behind\.spec\.ts/, use: { ...iphone, browserName: "chromium" } },
+    { name: "desktop", testIgnore: /(behind|brass)\.spec\.ts/, use: { browserName: "chromium", viewport: { width: 1366, height: 850 } } },
+    { name: "iphone", testIgnore: /(behind|brass)\.spec\.ts/, use: { ...iphone, browserName: "chromium" } },
     // The preview-mode build: Behind the Counter is the default look, with the other looks behind ?look=.
-    { name: "behind-desktop", testMatch: /behind\.spec\.ts/, use: { baseURL: "http://localhost:3202", browserName: "chromium", viewport: { width: 1440, height: 900 } } },
-    { name: "behind-iphone", testMatch: /behind\.spec\.ts/, use: { ...iphone, baseURL: "http://localhost:3202", browserName: "chromium" } },
+    { name: "behind-desktop", testMatch: /(behind|brass)\.spec\.ts/, use: { baseURL: "http://localhost:3202", browserName: "chromium", viewport: { width: 1440, height: 900 } } },
+    { name: "behind-iphone", testMatch: /(behind|brass)\.spec\.ts/, use: { ...iphone, baseURL: "http://localhost:3202", browserName: "chromium" } },
   ],
   webServer: [
     { command: "node tests/fake-shopify.cjs", port: 4470, reuseExistingServer: true },

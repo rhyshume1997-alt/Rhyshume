@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { Card } from "@/lib/cards";
+import { AddToBasket } from "@/components/AddToBasket";
 
 /**
  * "Find me a beer": three tap questions, no sign-up. It matches the answers to the flavour chips in src/data/profiles.json,
@@ -75,7 +76,7 @@ export function FindABeer({ cards }: { cards: Card[] }) {
                 <a href={`/product/${c.handle}`}><b>{c.name}</b></a>
                 <small>{[c.brewery, c.abv !== null ? `${c.abv}% ABV` : "", `£${c.price.toFixed(2)}`].filter(Boolean).join(" · ")}{why.length ? ` · ${why.join(", ")}` : ""}</small>
               </div>
-              <button type="button" className="pg-btn soft" data-add={c.handle}>Add to basket<span className="vh"> {c.name}</span></button>
+              <AddToBasket handle={c.handle} name={c.name} stock={c.stock} />
             </div>
           ))}
         </div>

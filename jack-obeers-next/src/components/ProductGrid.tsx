@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { FindABeer } from "@/components/FindABeer";
 import { Glass } from "@/components/Glass";
 import type { Card } from "@/lib/cards";
+import { AddToBasket } from "@/components/AddToBasket";
 
 /** The whole range on one screen. The chips filter in place, no page reload. Each card goes to Shopify checkout in one click. */
 /** The styles in the segmented filter on the beer range. Cider and wine are their own ranges, so those two are links. */
@@ -75,7 +76,7 @@ export function ProductGrid({ cards, chips, checkoutOn, noun, intro, segmented =
                   <button type="button" className="pg-btn solid" disabled>Sold out</button>
                 ) : (
                   <span className="pg-btns">
-                    <button type="button" className="pg-btn soft" data-add={c.handle}>Add to basket<span className="vh"> {c.name}</span></button>
+                    <AddToBasket handle={c.handle} name={c.name} stock={c.stock} />
                     {checkoutOn && c.buy ? (
                       <a className="pg-btn solid" href={c.buy}>Buy now<span className="vh"> {c.name}</span></a>
                     ) : null}

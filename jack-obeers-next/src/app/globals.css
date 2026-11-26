@@ -1847,3 +1847,114 @@ html[data-look="behind"] .range-panel .pg-chips { background: none; top: auto; }
 html[data-look="behind"] :is(.prod-price, .hcard.tier .tier-price b) { font-family: var(--ui); font-weight: 600; font-variant-numeric: lining-nums; }
 /* the product names in the Best sellers strip and the New in row: display face, one weight (the <b> was declared bold) */
 html[data-look="behind"] .newin li a b { font-weight: 400; }
+
+/* ==== Brass Selector button system (Rev 11) ====
+   One family: mahogany, brushed brass, warm cream, a restrained amber. Depth comes from a hard offset edge, not blur.
+   Press: moves in 2px in 140 ms, ease-out. Hover finish change is gated to real pointers. Reduced motion keeps the colour
+   and light changes and drops the movement. Buy now (.pg-btn.solid), Sold out and the fixed Call bar are not touched. */
+:root { --bz-brass-1: #dcbc78; --bz-brass-2: #c39b4b; --bz-brass-3: #a47b33; --bz-edge: #6f5018; --bz-wood: #2a150d; --bz-wood-2: #1d0f0a; --bz-cream: #f4e9cd; --bz-lit: #f0b653; }
+
+/* baseline for every look: layout and states only (the brass finish below is the Behind the Counter look) */
+.atb { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; max-width: 100%; }
+.atb-q { display: inline-flex; align-items: center; }
+.atb-step { font: 600 1.15rem/1 var(--ui); min-width: 2.75rem; min-height: 2.75rem; border: 1px solid var(--brass); border-radius: 50%; background: var(--cream-2); color: var(--ink); cursor: pointer; padding: 0; }
+.atb-step[aria-disabled="true"] { opacity: .4; cursor: not-allowed; }
+.atb-n { min-width: 2rem; text-align: center; font: 600 1.05rem var(--ui); font-variant-numeric: tabular-nums; }
+.atb-add { flex: 1 1 9.5rem; display: inline-grid; grid-template-columns: auto auto; justify-content: center; align-items: center; column-gap: .55rem; }
+.atb-t, .atb-d { grid-row: 1; grid-column: 2; }
+.atb-led { grid-row: 1; grid-column: 1; }
+.atb-d, .atb-led { display: none; }
+.atb-msg { flex-basis: 100%; font: 500 .86rem/1.35 var(--ui); }
+.atb-msg:not(.bad) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.atb-msg.bad { color: #8a2c1a; }
+.atb-msg:empty { display: none; }
+
+html[data-look="behind"] .atb { gap: .5rem .55rem; }
+html[data-look="behind"] .atb-msg.bad { color: #8a2c1a; font-weight: 600; }
+html[data-look="behind"] .atb-led, html[data-look="behind"] .atb-d { display: block; }
+
+/* shared mechanics: a button is a key with a hard edge under it; pressing sends it into the edge */
+html[data-look="behind"] :is(.bh-cta .btn, .gr-actions .pg-btn, .atb-add, .atb-step) {
+  transition: transform .14s ease-out, box-shadow .14s ease-out, background-color .15s ease-out, color .15s ease-out, border-color .15s ease-out;
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation; text-transform: none; letter-spacing: .01em; text-decoration: none;
+}
+html[data-look="behind"] :is(.bh-cta .btn, .gr-actions .pg-btn, .atb-add, .atb-step):focus-visible { outline: 3px solid #8a4b12; outline-offset: 3px; }
+html[data-look="behind"] .bh-cta .btn:focus-visible { outline-color: #fff3d0; }
+
+/* 1. primary: Shop drinks. Brushed brass, dark lettering, a fine inset edge */
+html[data-look="behind"] .bh-cta .btn:not(.ghost) {
+  min-height: 3rem; padding: .55rem 1.6rem; border: 1px solid var(--bz-edge); border-radius: 99px; color: #24130a; font: 700 1.02rem var(--ui);
+  background: repeating-linear-gradient(90deg, rgba(255,255,255,.07) 0 1px, rgba(0,0,0,.035) 1px 3px), linear-gradient(180deg, var(--bz-brass-1), var(--bz-brass-2) 55%, var(--bz-brass-3));
+  box-shadow: inset 0 1px 0 rgba(255,244,205,.7), inset 0 0 0 3px rgba(255,236,180,.12), inset 0 -2px 0 rgba(90,60,15,.3), 0 3px 0 var(--bz-edge), 0 7px 14px rgba(0,0,0,.28);
+}
+html[data-look="behind"] .bh-cta .btn:not(.ghost):active { transform: translateY(2px); box-shadow: inset 0 1px 0 rgba(255,244,205,.5), inset 0 0 0 3px rgba(255,236,180,.1), inset 0 -1px 0 rgba(90,60,15,.3), 0 1px 0 var(--bz-edge), 0 2px 6px rgba(0,0,0,.25); }
+/* 2. secondary: Find us. Dark walnut, fine brass outline, cream lettering */
+html[data-look="behind"] .bh-cta .btn.ghost {
+  min-height: 3rem; padding: .55rem 1.6rem; border: 1px solid var(--bz-brass-2); border-radius: 99px; color: var(--bz-cream); font: 600 1.02rem var(--ui); background: linear-gradient(180deg, #3a1d11, var(--bz-wood));
+  box-shadow: inset 0 1px 0 rgba(255,225,160,.16), inset 0 0 0 3px rgba(185,138,62,.1), 0 3px 0 #0e0604, 0 7px 14px rgba(0,0,0,.28);
+}
+html[data-look="behind"] .bh-cta .btn.ghost:active { transform: translateY(2px); box-shadow: inset 0 1px 0 rgba(255,225,160,.1), inset 0 0 0 3px rgba(185,138,62,.08), 0 1px 0 #0e0604, 0 2px 6px rgba(0,0,0,.25); }
+
+/* 3. reviews: engraved. "Read the reviews" is cream with an engraved brass keyline; "Leave a review" is flat brass. Same family, quieter than the primary */
+html[data-look="behind"] .gr-actions .pg-btn { min-height: 2.75rem; padding: .35rem 1.3rem; border-radius: 99px; font: 600 .98rem var(--ui); }
+html[data-look="behind"] .gr-actions .pg-btn.soft {
+  background: #f6ecd2; color: #3a200f; border: 1px solid var(--bz-brass-2);
+  box-shadow: inset 0 0 0 3px #f6ecd2, inset 0 0 0 4px rgba(163,123,51,.5), 0 2px 0 rgba(111,80,24,.55);
+}
+html[data-look="behind"] .gr-actions .pg-btn.solid {
+  background: linear-gradient(180deg, #d5b169, #be9647); color: #24130a; border: 1px solid var(--bz-edge);
+  box-shadow: inset 0 1px 0 rgba(255,244,205,.55), inset 0 0 0 3px rgba(255,236,180,.1), 0 2px 0 var(--bz-edge);
+}
+html[data-look="behind"] .gr-actions .pg-btn:active { transform: translateY(2px); box-shadow: inset 0 0 0 3px rgba(0,0,0,0), 0 0 0 var(--bz-edge); }
+
+/* 4. quantity: two small brass-rimmed keys either side of the count */
+html[data-look="behind"] .atb-q { gap: .3rem; padding: .15rem; border: 1px solid rgba(163,123,51,.65); border-radius: 99px; background: rgba(42,21,13,.06); }
+html[data-look="behind"] .atb-step {
+  min-width: 2.45rem; min-height: 2.45rem; border: 1px solid var(--bz-brass-2); color: var(--bz-brass-1); font: 600 1.25rem/1 var(--ui);
+  background: linear-gradient(180deg, #3a1d11, var(--bz-wood)); box-shadow: inset 0 1px 0 rgba(255,225,160,.16), 0 2px 0 #0e0604;
+}
+html[data-look="behind"] .atb-step:active:not([aria-disabled="true"]) { transform: translateY(2px); box-shadow: inset 0 1px 0 rgba(255,225,160,.1), 0 0 0 #0e0604; }
+html[data-look="behind"] .atb-step[aria-disabled="true"] { color: #7d6638; border-color: rgba(163,123,51,.5); box-shadow: none; opacity: 1; cursor: not-allowed; }
+html[data-look="behind"] .atb-n { min-width: 1.9rem; font: 600 1.1rem var(--ui); color: var(--ink); }
+
+/* 5. Add to basket: the Brass Selector. Mahogany key, brass edge, a small light that comes on once the basket has the item */
+html[data-look="behind"] .atb-add {
+  position: relative; min-height: 2.75rem; padding: .35rem 1.2rem .35rem 1rem; border: 1px solid var(--bz-brass-2); border-radius: 99px; color: var(--bz-cream); font: 600 .98rem var(--ui); cursor: pointer;
+  background: linear-gradient(180deg, #3a1d11, var(--bz-wood) 60%, var(--bz-wood-2));
+  box-shadow: inset 0 1px 0 rgba(255,225,160,.18), inset 0 0 0 3px rgba(185,138,62,.1), 0 3px 0 #0e0604;
+}
+html[data-look="behind"] .atb-add:active:not([data-state="busy"]), html[data-look="behind"] .atb-add[data-state="busy"], html[data-look="behind"] .atb-add[data-state="added"] {
+  transform: translateY(2px); box-shadow: inset 0 1px 0 rgba(255,225,160,.1), inset 0 0 0 3px rgba(185,138,62,.08), 0 1px 0 #0e0604;
+}
+html[data-look="behind"] .atb-add[data-state="busy"] { cursor: progress; }
+html[data-look="behind"] .atb-led { width: .55rem; height: .55rem; border-radius: 50%; background: #5a3a16; box-shadow: inset 0 1px 1px rgba(0,0,0,.6), 0 0 0 1px rgba(185,138,62,.55); transition: background-color .15s ease-out, box-shadow .15s ease-out; }
+html[data-look="behind"] .atb-add[data-state="busy"] .atb-led { background: #a8761f; }
+html[data-look="behind"] .atb-add[data-state="added"] .atb-led { background: var(--bz-lit); box-shadow: 0 0 0 1px rgba(255,225,160,.8), 0 0 7px 1px rgba(240,182,83,.75); }
+html[data-look="behind"] .atb-add[data-state="error"] .atb-led { background: #b4442f; box-shadow: 0 0 0 1px rgba(255,200,180,.5); }
+html[data-look="behind"] .atb-t, html[data-look="behind"] .atb-d { transition: opacity .15s ease-out; white-space: nowrap; }
+html[data-look="behind"] .atb-d { opacity: 0; }
+html[data-look="behind"] .atb-add[data-state="added"] .atb-t { opacity: 0; }
+html[data-look="behind"] .atb-add[data-state="added"] .atb-d { opacity: 1; }
+html[data-look="behind"] .atb-add[data-state="busy"] .atb-t { opacity: .7; }
+
+@media (hover: hover) and (pointer: fine) {
+  html[data-look="behind"] .bh-cta .btn:not(.ghost):hover { background: repeating-linear-gradient(90deg, rgba(255,255,255,.1) 0 1px, rgba(0,0,0,.03) 1px 3px), linear-gradient(180deg, #e8cb8b, #cfa75a 55%, #b2873b); }
+  html[data-look="behind"] .bh-cta .btn.ghost:hover { border-color: var(--bz-brass-1); background: linear-gradient(180deg, #46241a, #2f180f); }
+  html[data-look="behind"] .gr-actions .pg-btn.soft:hover { background: #fbf3dd; }
+  html[data-look="behind"] .gr-actions .pg-btn.solid:hover { background: linear-gradient(180deg, #e0bd78, #c9a050); }
+  html[data-look="behind"] .atb-add:hover:not([data-state="busy"]):not([data-state="added"]) { border-color: var(--bz-brass-1); background: linear-gradient(180deg, #46241a, #321a10 60%, #24120b); }
+  html[data-look="behind"] .atb-step:hover:not([aria-disabled="true"]) { border-color: var(--bz-brass-1); color: #f0d596; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-look="behind"] :is(.bh-cta .btn, .gr-actions .pg-btn, .atb-add, .atb-step) { transition: background-color .15s ease-out, color .15s ease-out, border-color .15s ease-out; }
+  html[data-look="behind"] :is(.bh-cta .btn, .gr-actions .pg-btn, .atb-add, .atb-step):active, html[data-look="behind"] .atb-add[data-state] { transform: none; }
+  html[data-look="behind"] .atb-add[data-state="added"] { outline: 2px solid var(--bz-lit); outline-offset: -5px; }
+}
+/* narrow cards: the price sits above, then the selector and the button share one line (or the button drops below the selector) */
+@media (max-width: 560px) {
+  html[data-look="behind"] .pg-buy { flex-direction: column; align-items: stretch; gap: .5rem; }
+  html[data-look="behind"] .pg-buy .pg-btns { width: 100%; }
+  html[data-look="behind"] .pg-buy .atb { display: grid; grid-template-columns: auto minmax(0, 1fr); width: 100%; }
+  html[data-look="behind"] .pg-buy .atb-msg { grid-column: 1 / -1; }
+  html[data-look="behind"] .atb-add { min-width: 0; padding-inline: .8rem; }
+}

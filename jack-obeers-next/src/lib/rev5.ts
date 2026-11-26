@@ -78,9 +78,29 @@ export function initRev5(P: any[], PAIR: Record<string, string> = {}): () => voi
   document.addEventListener('input', function (e) { if (e.target && (e.target.id === 'age-dob' || e.target.id === 'age-ok')) ageNote(); });
 
   var cart = []; try { cart = JSON.parse(ls('jo5_cart') || '[]'); } catch (e) { cart = []; }
-  function saveCart() { ls('jo5_cart', JSON.stringify(cart)); renderCart(); }
+  function saveCart() { ls('jo5_cart', JSON.stringify(cart)); renderCart(); document.dispatchEvent(new CustomEvent('jo:basket')); }
   function count() { return cart.reduce(function (a, l) { return a + l.q; }, 0); }
-  function add(h, q) { var l = cart.filter(function (x) { return x.h === h; })[0]; if (l) l.q += q; else cart.push({ h: h, q: q }); saveCart(); var p = by(h); toast((p ? p.title : 'Item') + ' added to your basket'); }
+  /* Stock Shopify shares for the variant checkout uses (the first one on sale), or null when it is not shared. Never guessed. */
+  function stockOf(p) { var v = p.variants.filter(function (x) { return x.available; })[0] || p.variants[0]; return v && typeof v.stock === 'number' ? v.stock : null; }
+  function inBasket(h) { var l = cart.filter(function (x) { return x.h === h; })[0]; return l ? l.q : 0; }
+  /* How many more can go in: Shopify's stock minus what is already in the basket, or null when there is no verified limit. */
+  function room(h) { var p = by(h), s = p ? stockOf(p) : null; return s === null ? null : Math.max(0, s - inBasket(h)); }
+  /* One action adds the whole quantity. Returns what really happened, checked against the basket after the change. */
+  function add(h, q) {
+    var p = by(h); q = Math.floor(q);
+    if (!p || !(q >= 1)) return { ok: false, why: 'invalid' };
+    var r = room(h), want = q;
+    if (r !== null && q > r) q = r;
+    if (q < 1) return { ok: false, why: 'stock', have: inBasket(h), stock: stockOf(p) };
+    var before = inBasket(h), l = cart.filter(function (x) { return x.h === h; })[0];
+    if (l) l.q += q; else cart.push({ h: h, q: q });
+    saveCart();
+    var after = inBasket(h);
+    if (after !== before + q) return { ok: false, why: 'basket' };
+    toast(p.title + (q > 1 ? ' × ' + q : '') + ' added to your basket');
+    return { ok: true, added: q, line: after, clamped: q < want };
+  }
+  window.joBasket = { room: room };
   /* the delivery bottle: it fills as the basket grows toward free UK delivery (numbers in src/lib/shipping.ts) */
   function freeDelivery(tot) {
     var left = SHIPPING.freeFrom - tot, fill = Math.max(0, Math.min(1, tot / SHIPPING.freeFrom));
@@ -104,6 +124,31 @@ export function initRev5(P: any[], PAIR: Record<string, string> = {}): () => voi
     }
     return '';
   }
+  /* The Add to basket button. Others (strip rows, pairing) have no selector: they add one and spark. The selector button shows a
+     busy state for one frame, never adds twice while busy, and says "Added" only after add() confirms the basket changed. */
+  var resetT = {};
+  function say(a, text, bad) {
+    var box = a.closest('.atb'), m = box && box.querySelector('.atb-msg'); if (!m) return;
+    m.textContent = text; m.classList.toggle('bad', !!bad);
+  }
+  function press(a) {
+    if (!a.hasAttribute('data-atb')) { add(a.dataset.add, +(a.dataset.q || 1)); spark(a); return; }
+    if (a.dataset.state === 'busy') return;
+    var key = a.dataset.add; clearTimeout(resetT[key]);
+    a.dataset.state = 'busy'; a.setAttribute('aria-busy', 'true'); say(a, '');
+    requestAnimationFrame(function () {
+      var res = add(a.dataset.add, +(a.dataset.q || 1));
+      a.removeAttribute('aria-busy');
+      if (res.ok) {
+        a.dataset.state = 'added';
+        say(a, res.clamped ? 'Added ' + res.added + '. That is all we have in stock.' : (res.added > 1 ? res.added + ' added to your basket.' : 'Added to your basket.'), res.clamped);
+      } else {
+        a.dataset.state = 'error';
+        say(a, res.why === 'stock' ? (res.have ? 'All ' + res.have + ' we have are already in your basket.' : 'Sorry, none left in stock.') : 'Could not add to your basket. Please try again.', true);
+      }
+      resetT[key] = setTimeout(function () { a.dataset.state = 'idle'; say(a, ''); }, res.ok ? 1800 : 3500);
+    });
+  }
   function renderCart() {
     $$('[data-count]').forEach(function (n) { n.textContent = count(); });
     var b = $('#cart-body'); if (!b) return;
@@ -113,7 +158,7 @@ export function initRev5(P: any[], PAIR: Record<string, string> = {}): () => voi
   }
   on(document, 'click', function (e) {
     var rm = e.target.closest('[data-rm]'); if (rm) { cart = cart.filter(function (l) { return l.h !== rm.dataset.rm; }); saveCart(); }
-    var a = e.target.closest('[data-add]'); if (a) { add(a.dataset.add, +(a.dataset.q || 1)); spark(a); }
+    var a = e.target.closest('[data-add]'); if (a) press(a);
     var oc = e.target.closest('[data-open-cart]'); if (oc) { e.preventDefault(); $('#cart').showModal(); }
     var cl = e.target.closest('[data-close]'); if (cl) { var d = cl.closest('dialog'); if (d) d.close(); }
   });
@@ -315,5 +360,5 @@ export function initRev5(P: any[], PAIR: Record<string, string> = {}): () => voi
   }
 
   /* the newsletter form is now a React component (NewsletterForm) that posts to /api/newsletter */
-  return function () { delete document.documentElement.dataset.rev5; offs.forEach(function (f) { f(); }); };
+  return function () { delete window.joBasket; delete document.documentElement.dataset.rev5; offs.forEach(function (f) { f(); }); };
 }

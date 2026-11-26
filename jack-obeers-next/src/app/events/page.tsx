@@ -10,6 +10,8 @@ import { MEDIA } from "@/lib/media";
 import { NewsletterForm } from "@/components/NewsletterForm";
 import { turnstileSiteKey } from "@/lib/turnstile";
 import { SHOP } from "@/lib/brand";
+import { AddToBasket } from "@/components/AddToBasket";
+import { stockOf } from "@/lib/cards";
 
 export const metadata = pageMeta({ title: "Events at the shop, Milngavie", description: "Events at Jack O’Beers and Deli, Milngavie, and how to get a ticket. We supplied the bar for 1,500 people at an England match screening at Ilkley Brewery.", path: "/events" });
 export const dynamic = "force-dynamic";
@@ -26,6 +28,7 @@ export default async function Page() {
   const today = new Date().toISOString().slice(0, 10);
   const upcoming = ev.events.filter((e) => !e.sample && e.date && e.date >= today).sort((a, b) => (a.date || "9999").localeCompare(b.date || "9999"));
   const basketHandles = new Set(forBasket(catalogue.all).map((p) => p.handle));
+  const stockByHandle = new Map(forBasket(catalogue.all).map((p) => [p.handle, stockOf(p)] as const));
   const ticketsOn = process.env.CHECKOUT_ENABLED === "true";
   return (
     <>
@@ -55,7 +58,7 @@ export default async function Page() {
                     {e.description && <p>{e.description}</p>}
                     {e.price > 0 && <p className="price">{`£${e.price.toFixed(2)} a ticket`}</p>}
                     <p className="hamper-btns">
-                      {basketHandles.has(e.handle) && e.available && <button type="button" className="pg-btn soft" data-add={e.handle}>Add to basket<span className="vh"> {e.title}</span></button>}
+                      {basketHandles.has(e.handle) && e.available && <AddToBasket handle={e.handle} name={e.title} stock={stockByHandle.get(e.handle) ?? null} />}
                       {ticketsOn && e.available && e.buy ? <a className="btn dk" href={e.buy}>Buy tickets</a> : null}
                     </p>
                   </li>

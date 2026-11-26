@@ -85,12 +85,12 @@ test("new in row shows beers created in the last 30 days", async ({ page }) => {
   await expect(row.locator("li").first()).toContainText(/Waterpistol|Raspberry Sour|Iron Brew|Ba Nyx/i);
 });
 
-test("add to basket spark runs and clears", async ({ page }) => {
+test("add to basket confirms after the basket changes, then resets", async ({ page }) => {
   await page.goto("/beers");
   const btn = page.locator(".pg-card [data-add]").first();
   await btn.click();
-  await expect(btn).toHaveClass(/sparked/);
-  await expect(btn).not.toHaveClass(/sparked/, { timeout: 2000 });
+  await expect(btn).toHaveAttribute("data-state", "added");
+  await expect(btn).toHaveAttribute("data-state", "idle", { timeout: 4000 });
 });
 
 test("opening: plays once per visit, has Skip, never adds a click", async ({ page }) => {

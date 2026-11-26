@@ -19,6 +19,8 @@ export type Card = {
   sample: boolean;
   /** Only set when Shopify says 5 or fewer are left. */
   low: number | null;
+  /** Shopify's stock for the variant that checkout uses, or null when Shopify is not sharing stock. Never invented. */
+  stock: number | null;
 };
 
 /** "Only N left" shows only when Shopify says so: at least 1 and at most 5. Nothing is ever invented. */
@@ -34,6 +36,12 @@ export function tidy(x: string | null | undefined): string {
   if (!t) return "";
   const cased = t === t.toUpperCase() && /[A-Z]/.test(t) ? t.toLowerCase().replace(/(^|[\s(\-/])([a-z])/g, (_m, a, b) => a + b.toUpperCase()) : t;
   return cased.charAt(0).toUpperCase() + cased.slice(1);
+}
+
+/** Shopify's stock for the variant that checkout uses (the first on sale), or null when it is not shared. */
+export function stockOf(p: Product): number | null {
+  const v = p.variants.find((x) => x.available) || p.variants[0];
+  return v && typeof v.stock === "number" ? v.stock : null;
 }
 
 export function toCard(p: Product): Card {
@@ -55,6 +63,7 @@ export function toCard(p: Product): Card {
     pairingConfirmed: !!(p.profile && p.profile.pairingConfirmed),
     sample: !!p.sample,
     low: lowStock(v),
+    stock: v && typeof v.stock === "number" ? v.stock : null,
   };
 }
 
