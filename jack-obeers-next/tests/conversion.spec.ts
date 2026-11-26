@@ -38,7 +38,7 @@ test("google reviews: says 5 star reviews, no count, two links", async ({ page }
   await expect(sec).toContainText("5 star reviews on Google");
   await expect(sec).not.toContainText(/\d+ (Google )?reviews|from \d+|27/);
   await expect(sec.locator("a", { hasText: "Read the reviews" })).toHaveAttribute("href", /maps\.app\.goo\.gl/);
-  await expect(sec.locator("a", { hasText: "Leave a review" })).toHaveAttribute("href", /google|goo\.gl/);
+  await expect(sec.locator("a", { hasText: "Leave a review" })).toHaveAttribute("href", "https://g.page/r/CdfUxddA7FDHEBM/review");
 });
 
 test("low stock tag shows only for 5 or fewer, nothing on others", async ({ page }) => {
