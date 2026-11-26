@@ -47,9 +47,10 @@ test("every page: unique title and description, canonical, Open Graph, one h1, a
 test("Store JSON-LD on every page, with the shop's facts", async ({ page }) => {
   for (const path of [...PAGES, "/product/p6"]) {
     const s = await read(page, path);
-    const store = s.ld.find((x) => [].concat(x["@type"]).includes("LiquorStore"));
+    const types = (t: unknown) => ([] as string[]).concat(t as string | string[]);
+    const store = s.ld.find((x) => types(x["@type"]).includes("LiquorStore"));
     expect(store, `Store at ${path}`).toBeTruthy();
-    expect([].concat(store["@type"])).toContain("Store");
+    expect(types(store["@type"])).toContain("Store");
     expect(store.name).toMatch(/Jack O.Beers and Deli/);
     expect(store.address).toMatchObject({ streetAddress: "13 Station Road", addressLocality: "Milngavie", postalCode: "G62 8PG" });
     expect(store.telephone.replace(/\s/g, "")).toBe("07405480950");
