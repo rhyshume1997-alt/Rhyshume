@@ -387,7 +387,7 @@ dialog::backdrop { background: rgba(15, 7, 4, .75); backdrop-filter: blur(3px); 
 .pg-sec { padding-top: 3rem; }
 .pg-wrap { max-width: 92rem; }
 .pg-chips { display: flex; flex-wrap: wrap; gap: .45rem; position: sticky; top: 4.2rem; z-index: 4; background: var(--cream); padding: .5rem 0; }
-.pg-chip { font: 600 .9rem system-ui, sans-serif; min-height: 2.75rem; padding: .2rem 1rem; border-radius: 99px; border: 2px solid #d9ccb0; background: #fff; color: var(--ink); cursor: pointer; transition: none; }
+.pg-chip { font: 600 .9rem var(--ui); min-height: 2.75rem; padding: .2rem 1rem; border-radius: 99px; border: 2px solid #d9ccb0; background: #fff; color: var(--ink); cursor: pointer; transition: none; }
 .pg-chip[aria-pressed="true"] { background: #1d0f0a; color: #fff; border-color: #1d0f0a; }
 .pg-count { margin: .4rem 0 .8rem; font: 600 .85rem var(--ui); color: #6b5a48; }
 .pg-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr)); gap: .7rem; }
@@ -400,10 +400,10 @@ dialog::backdrop { background: rgba(15, 7, 4, .75); backdrop-filter: blur(3px); 
 .pg-buy { display: flex; justify-content: space-between; align-items: center; gap: .5rem; }
 .pg-price { font: 700 1.05rem var(--serif); }
 .pg-price small { font: 600 .65rem var(--ui); color: #6b5a48; text-transform: none; }
-.pg-more { justify-self: start; background: none; border: 0; padding: 0; min-height: 2.75rem; font: 600 .85rem system-ui; color: #8a4b12; text-decoration: underline; cursor: pointer; }
+.pg-more { justify-self: start; background: none; border: 0; padding: 0; min-height: 2.75rem; font: 600 .85rem var(--ui); color: #8a4b12; text-decoration: underline; cursor: pointer; }
 .pg-detail p { margin: 0 0 .5rem; font-size: .92rem; }
 .pg-flav { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .35rem; }
-.pg-flav li { font: 600 .75rem system-ui; padding: .25rem .6rem; border-radius: 99px; background: #f1e3bd; color: #3a2a18; }
+.pg-flav li { font: 600 .75rem var(--ui); padding: .25rem .6rem; border-radius: 99px; background: #f1e3bd; color: #3a2a18; }
 @media (max-width: 40rem) {
   .pg-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
   .pg-card { padding: .6rem; }
@@ -456,7 +456,7 @@ dialog::backdrop { background: rgba(15, 7, 4, .75); backdrop-filter: blur(3px); 
 .range-head { display: flex; flex-wrap: wrap; align-items: center; gap: .8rem; margin-bottom: .4rem; }
 .range-head .h3 { margin: 0; flex: 1; }
 .range-all { font-weight: 600; color: #8a4b12; }
-.range-close { font: 600 .9rem system-ui; min-height: 2.75rem; padding: .2rem 1rem; border: 2px solid #d9ccb0; background: #fff; border-radius: 99px; cursor: pointer; }
+.range-close { font: 600 .9rem var(--ui); min-height: 2.75rem; padding: .2rem 1rem; border: 2px solid #d9ccb0; background: #fff; border-radius: 99px; cursor: pointer; }
 .range-panel .pg-chips { background: #fff6e3; top: 3.9rem; }
 .keg { margin: .4rem 0 .8rem; padding: .8rem 1rem; background: #fbe9bd; border-radius: 1.1rem; }
 .keg p { margin: 0 0 .4rem; }
@@ -1389,10 +1389,10 @@ html[data-look="behind"] .taps-copy .lede, html[data-look="behind"] .taps .lede 
    price cards under the taps, the deli counter, the awning, Jack). Boxes only where something is physically a box.
    Surfaces, hairline rules and spacing organise the rest. Italics are not a house style. Nothing animates just because it can.
    ===================================================================================================== */
-@font-face { font-family: "Gloock"; font-weight: 400; font-style: normal; font-display: swap; src: url("/fonts/gloock-latin-400-normal.woff2") format("woff2"); }
-@font-face { font-family: "Source Serif 4"; font-weight: 400; font-style: normal; font-display: swap; src: url("/fonts/source-serif-4-latin-400-normal.woff2") format("woff2"); }
-@font-face { font-family: "Source Serif 4"; font-weight: 600; font-style: normal; font-display: swap; src: url("/fonts/source-serif-4-latin-600-normal.woff2") format("woff2"); }
-@font-face { font-family: "Source Serif 4"; font-weight: 400; font-style: italic; font-display: swap; src: url("/fonts/source-serif-4-latin-400-italic.woff2") format("woff2"); }
+@font-face { font-family: "Gloock"; font-weight: 400 900; font-style: normal; font-display: swap; src: url("/fonts/gloock-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Source Serif 4"; font-weight: 300 500; font-style: normal; font-display: swap; src: url("/fonts/source-serif-4-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Source Serif 4"; font-weight: 600 800; font-style: normal; font-display: swap; src: url("/fonts/source-serif-4-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Source Serif 4"; font-weight: 300 500; font-style: italic; font-display: swap; src: url("/fonts/source-serif-4-latin-400-italic.woff2") format("woff2"); }
 @font-face { font-family: "Spectral"; font-weight: 400; font-style: normal; font-display: swap; src: url("/fonts/spectral-latin-400-normal.woff2") format("woff2"); }
 @font-face { font-family: "Spectral"; font-weight: 500; font-style: normal; font-display: swap; src: url("/fonts/spectral-latin-500-normal.woff2") format("woff2"); }
 @font-face { font-family: "Spectral"; font-weight: 600; font-style: normal; font-display: swap; src: url("/fonts/spectral-latin-600-normal.woff2") format("woff2"); }
@@ -1826,3 +1826,24 @@ html[data-look="behind"] .kb-quote::before { content: ""; position: absolute; to
 /* the section's own backdrop: a little darker behind the feature so the fine brass lines and small type stay legible over the bright wall */
 html[data-look="behind"] .taps .taps-cine::after { background: linear-gradient(95deg, rgba(29, 15, 10, .94) 0%, rgba(29, 15, 10, .84) 34%, rgba(29, 15, 10, .6) 68%, rgba(18, 41, 29, .5) 100%), linear-gradient(180deg, rgba(29, 15, 10, .55) 0%, rgba(29, 15, 10, .35) 40%, rgba(29, 15, 10, .9) 100%); }
 html[data-look="behind"] .kb-frame { background: rgba(29, 15, 10, .72); }
+
+
+/* =====================================================================================================
+   REV 10: typography consistency. Gloock for display, Source Serif 4 for everything else, nothing from the system.
+   ===================================================================================================== */
+/* nothing is synthesised: no faux bold on the single-weight display face, no faux italic anywhere */
+html[data-look="behind"] { font-synthesis: none; }
+html[data-look="behind"] :is(h1, h2, h3, h4, .brand, .brand b, .pg-name, .kb-h, .kb-quote, .bh-h1, .svc .nm, .sh-label b) { font-weight: 400; }
+
+/* Cider and Wine filter by the same underlined tabs as Beer (they used pill chips in the system font) */
+html[data-look="behind"] .pg-chips { position: static; display: flex; flex-wrap: wrap; gap: .2rem 1.4rem; padding: 0; margin: .6rem 0 .8rem; background: none; }
+html[data-look="behind"] .pg-chip { flex: none; display: inline-flex; align-items: center; min-height: 2.5rem; padding: .3rem .1rem; border: 0; border-bottom: 3px solid transparent; border-radius: 0; background: none; color: #3a2a18; font: 600 .95rem var(--ui); transition: none; }
+html[data-look="behind"] .pg-chip[aria-pressed="true"] { background: none; color: var(--ink); border-bottom-color: var(--amber); }
+html[data-look="behind"] .pg-chip:active { transform: scale(.97); }
+html[data-look="behind"] .pg-chip:focus-visible { outline: 3px solid #8a4b12; outline-offset: 2px; }
+html[data-look="behind"] .range-panel .pg-chips { background: none; top: auto; }
+
+/* every price is Source Serif 4. These two were still set in the display face (size and weight are unchanged). */
+html[data-look="behind"] :is(.prod-price, .hcard.tier .tier-price b) { font-family: var(--ui); font-weight: 600; font-variant-numeric: lining-nums; }
+/* the product names in the Best sellers strip and the New in row: display face, one weight (the <b> was declared bold) */
+html[data-look="behind"] .newin li a b { font-weight: 400; }

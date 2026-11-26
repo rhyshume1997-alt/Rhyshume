@@ -439,3 +439,177 @@ test.describe("From keg to bottle, reduced motion", () => {
     expect(s.opacity.every((o) => o === "1")).toBe(true);
   });
 });
+
+// ---------------------------------------------------------------------------------------------------------------------
+// Rev 10: typography consistency. Gloock for display, Source Serif 4 for everything else, checked on the rendered pages.
+// ---------------------------------------------------------------------------------------------------------------------
+const TYPE_PAGES = ["/", "/beers", "/ciders", "/wines", "/product/p6", "/about", "/events", "/draught-club", "/members", "/faq", "/west-highland-way"];
+const SELECTED = ["Gloock", "Source Serif 4"];
+const firstFamily = (f: string) => f.split(",")[0].replace(/["']/g, "").trim();
+
+async function openEverything(page: import("@playwright/test").Page, path: string) {
+  await page.goto(path);
+  await page.evaluate(() => sessionStorage.setItem("jo_opened", "1"));
+  await page.waitForTimeout(500);
+  const H = await page.evaluate(() => document.documentElement.scrollHeight);
+  for (let y = 0; y < H; y += 600) { await page.evaluate((yy) => window.scrollTo(0, yy), y); await page.waitForTimeout(30); }
+  if (path === "/") {
+    // the product panels (the cider one has the style filter), Find me a beer, and the basket
+    await page.locator(".sh-item[data-kind=wine]").click().catch(() => {});
+    await page.locator(".sh-item[data-kind=cider]").click().catch(() => {});
+    await page.waitForTimeout(400);
+    await page.locator("[data-add]").first().click().catch(() => {});
+    await page.locator(".cartbtn").first().click().catch(() => {});
+    await page.waitForTimeout(400);
+  }
+}
+
+for (const path of TYPE_PAGES) {
+  test(`typography ${path}: every visible text element and control is Gloock or Source Serif 4`, async ({ page }) => {
+    await openEverything(page, path);
+    const offenders = await page.evaluate((selected) => {
+      const first = (f: string) => f.split(",")[0].replace(/["']/g, "").trim();
+      const bad: string[] = [];
+      const check = (e: Element, what: string) => {
+        if (e.closest("script, style, svg, .vh, [hidden], .cm-panel, .cm-tab, .look-picker")) return;
+        const cs = getComputedStyle(e);
+        if (cs.display === "none" || cs.visibility === "hidden") return;
+        const q = e.getBoundingClientRect();
+        if (!q.width || !q.height) return;
+        const fam = first(cs.fontFamily);
+        if (!selected.includes(fam)) bad.push(`${what} ${e.tagName.toLowerCase()}.${(e.className || "").toString().split(" ")[0]} = ${fam}`);
+        if (e.matches("input, textarea")) { const ph = first(getComputedStyle(e, "::placeholder").fontFamily); if (!selected.includes(ph)) bad.push(`placeholder of ${e.tagName.toLowerCase()} = ${ph}`); }
+      };
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      const seen = new Set<Element>();
+      for (let n = walker.nextNode(); n; n = walker.nextNode()) { const e = n.parentElement; if (e && !seen.has(e) && (n.nodeValue || "").trim()) { seen.add(e); check(e, "text"); } }
+      document.querySelectorAll("input, textarea, select, button, summary").forEach((e) => check(e, "control"));
+      return [...new Set(bad)].slice(0, 12);
+    }, SELECTED);
+    expect(offenders, offenders.join("\n")).toEqual([]);
+  });
+}
+
+test("Cider filter, Beer filter and the homepage panel use the same typography and the same underlined-tab style", async ({ page }) => {
+  const read = async (sel: string) => page.locator(sel).first().evaluate((e) => { const cs = getComputedStyle(e); return { fam: cs.fontFamily.split(",")[0].replace(/["']/g, ""), size: cs.fontSize, weight: cs.fontWeight, radius: cs.borderTopLeftRadius, bg: cs.backgroundColor, bt: cs.borderBottomWidth }; });
+  await page.goto("/beers");
+  const beer = await read(".seg-btn");
+  await page.goto("/ciders");
+  await expect(page.locator(".pg-chip").first()).toBeVisible();
+  const cider = await read(".pg-chip");
+  await page.goto("/");
+  await page.evaluate(() => sessionStorage.setItem("jo_opened", "1"));
+  await page.locator("#shelf").scrollIntoViewIfNeeded();
+  await page.locator(".sh-item[data-kind=cider]").click();
+  await expect(page.locator("#range-panel .pg-chip").first()).toBeVisible();
+  const panel = await read("#range-panel .pg-chip");
+  for (const c of [cider, panel]) {
+    expect(c.fam).toBe("Source Serif 4");
+    expect(c.fam).toBe(beer.fam);
+    expect(c.size).toBe(beer.size);
+    expect(c.weight).toBe(beer.weight);
+    expect(c.radius).toBe(beer.radius); // no pill
+    expect(c.bg).toBe(beer.bg); // no fill
+  }
+  // the selected tab is marked the same way as Beer's (an amber underline)
+  await page.locator("#range-panel .pg-chip").nth(1).click();
+  const sel = await page.locator("#range-panel .pg-chip[aria-pressed='true']").evaluate((e) => ({ c: getComputedStyle(e).borderBottomColor, w: getComputedStyle(e).borderBottomWidth }));
+  expect(sel.w).toBe("3px");
+  expect(sel.c).not.toBe("rgba(0, 0, 0, 0)");
+});
+
+test("the same kind of content has the same typeface on Beer, Cider and Wine, on their pages and in the homepage panel", async ({ page }) => {
+  const sample = async () => page.evaluate(() => {
+    const f = (s: string) => { const e = document.querySelector(s); if (!e) return null; const cs = getComputedStyle(e); return `${cs.fontFamily.split(",")[0].replace(/["']/g, "")}/${cs.fontWeight}/${cs.fontSize}`; };
+    return { h1: f("h1"), name: f(".pg-name"), price: f(".pg-price"), brew: f(".pg-brew"), meta: f(".pg-meta"), add: f(".pg-btn[data-add]"), count: f(".pg-count") };
+  });
+  const pages: Record<string, Awaited<ReturnType<typeof sample>>> = {};
+  for (const k of ["beers", "ciders", "wines"]) { await page.goto("/" + k); await page.waitForTimeout(400); pages[k] = await sample(); }
+  expect(pages.ciders).toEqual(pages.beers);
+  expect(pages.wines).toEqual(pages.beers);
+  const panel: Record<string, Omit<Awaited<ReturnType<typeof sample>>, "h1">> = {};
+  for (const k of ["beer", "cider", "wine"]) {
+    await page.goto("/"); await page.evaluate(() => sessionStorage.setItem("jo_opened", "1"));
+    await page.locator("#shelf").scrollIntoViewIfNeeded();
+    await page.locator(`.sh-item[data-kind=${k}]`).click();
+    await page.waitForTimeout(500);
+    panel[k] = await page.evaluate(() => { const f = (s: string) => { const e = document.querySelector(s); if (!e) return null; const cs = getComputedStyle(e); return `${cs.fontFamily.split(",")[0].replace(/["']/g, "")}/${cs.fontWeight}/${cs.fontSize}`; }; return { name: f("#range-panel .pg-name"), price: f("#range-panel .pg-price"), brew: f("#range-panel .pg-brew"), meta: f("#range-panel .pg-meta"), add: f("#range-panel .pg-btn[data-add]"), count: f("#range-panel .pg-count") }; });
+  }
+  expect(panel.cider).toEqual(panel.beer);
+  expect(panel.wine).toEqual(panel.beer);
+  // and the panel matches the dedicated page for the same content
+  for (const key of ["name", "price", "brew", "meta", "add", "count"] as const) expect(panel.beer[key]).toBe(pages.beers[key]);
+});
+
+test("every price is Source Serif 4, and nothing is synthesised (no faux bold on the display face)", async ({ page }) => {
+  const prices: string[] = [];
+  const weights: string[] = [];
+  for (const path of TYPE_PAGES) {
+    await openEverything(page, path);
+    const r = await page.evaluate(() => {
+      const bad: string[] = [], wt: string[] = [];
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      const seen = new Set<Element>();
+      for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+        const tx = (n.nodeValue || "").trim(); const e = n.parentElement;
+        if (!e || seen.has(e) || !tx || e.closest("script, style, svg, .vh, [hidden], .cm-panel, .cm-tab")) continue;
+        const cs = getComputedStyle(e); if (cs.display === "none" || cs.visibility === "hidden" || !e.getBoundingClientRect().width) continue;
+        seen.add(e);
+        const fam = cs.fontFamily.split(",")[0].replace(/["']/g, "");
+        if (/^[£€]\s?\d/.test(tx) && fam !== "Source Serif 4") bad.push(`${e.tagName.toLowerCase()}.${(e.className || "").toString().split(" ")[0]} "${tx.slice(0, 12)}" = ${fam}`);
+        if (e.matches(".pg-price, .prod-price, .tier-price b, .deli-price") && fam !== "Source Serif 4") bad.push(`price element ${e.className} = ${fam}`);
+        if (fam === "Gloock" && (cs.fontWeight !== "400" || cs.fontStyle !== "normal")) wt.push(`${e.tagName.toLowerCase()}.${(e.className || "").toString().split(" ")[0]} w${cs.fontWeight} ${cs.fontStyle}`);
+      }
+      return { bad, wt, synth: getComputedStyle(document.documentElement).fontSynthesis };
+    });
+    prices.push(...r.bad.map((x) => path + " " + x));
+    weights.push(...r.wt.map((x) => path + " " + x));
+    expect(r.synth).toContain("none");
+  }
+  expect(prices, prices.join("\n")).toEqual([]);
+  expect(weights, weights.join("\n")).toEqual([]);
+});
+
+test("the selected font files load, nothing fails, and the preview settings cannot swap the type system unexpectedly", async ({ page }) => {
+  const failed: string[] = [];
+  page.on("response", (r) => { if (/\.woff2?($|\?)/.test(r.url()) && r.status() >= 400) failed.push(r.status() + " " + r.url()); });
+  await page.goto("/");
+  await page.evaluate(() => sessionStorage.setItem("jo_opened", "1"));
+  await page.reload();
+  await page.waitForTimeout(1200);
+  const loaded = await page.evaluate(async () => { await document.fonts.ready; return [...document.fonts].filter((f) => f.status === "loaded").map((f) => `${f.family.replace(/["']/g, "")} ${f.style}`); });
+  expect(loaded.some((l) => l.startsWith("Gloock"))).toBe(true);
+  expect(loaded.some((l) => l.startsWith("Source Serif 4 normal"))).toBe(true);
+  expect(failed).toEqual([]);
+  // a ?type= comparison applies to that page only: it is not remembered, and a value left in the tab by an earlier visit is cleared
+  await page.evaluate(() => sessionStorage.setItem("jo_type", "b"));
+  await page.goto("/ciders");
+  expect(await page.evaluate(() => sessionStorage.getItem("jo_type"))).toBeNull();
+  expect(await page.evaluate(() => document.documentElement.dataset.type ?? null)).toBeNull();
+  expect(firstFamily(await page.locator("h1").evaluate((e) => getComputedStyle(e).fontFamily))).toBe("Gloock");
+  await page.goto("/?type=b");
+  expect(firstFamily(await page.locator(".bh-l2").evaluate((e) => getComputedStyle(e).fontFamily))).toBe("Bodoni Moda");
+  await page.goto("/beers");
+  expect(await page.evaluate(() => document.documentElement.dataset.type ?? null)).toBeNull();
+  expect(firstFamily(await page.locator("h1").evaluate((e) => getComputedStyle(e).fontFamily))).toBe("Gloock");
+});
+
+test("no text wraps badly or clips after the change: filters, names, prices and basket controls stay on screen", async ({ page }) => {
+  for (const w of [360, 390, 768, 1440]) {
+    await page.setViewportSize({ width: w, height: 900 });
+    for (const path of ["/ciders", "/beers", "/wines"]) {
+      await page.goto(path);
+      await page.waitForTimeout(500);
+      const r = await page.evaluate(() => {
+        const W = document.documentElement.clientWidth;
+        // the New in strip is a deliberate sideways-swipe row, so its cards are allowed to run past the edge
+        const els = [...document.querySelectorAll(".pg-chip, .seg-btn, .pg-name, .pg-price, .pg-btn, .cartbtn")].filter((e) => (e as HTMLElement).offsetParent !== null && !e.closest(".newin"));
+        const off = els.filter((e) => { const q = e.getBoundingClientRect(); return q.right > W + 1 || q.left < -1; }).map((e) => (e.className || "").toString().split(" ")[0]);
+        const clipped = els.filter((e) => (e as HTMLElement).scrollWidth > (e as HTMLElement).clientWidth + 2 && getComputedStyle(e).overflow !== "visible" && !getComputedStyle(e).webkitLineClamp.match(/\d/)).map((e) => (e.textContent || "").trim().slice(0, 20));
+        return { off, clipped, sideways: document.documentElement.scrollWidth > W + 1 };
+      });
+      expect(r.off, `${path} at ${w}`).toEqual([]);
+      expect(r.sideways, `${path} at ${w}`).toBe(false);
+    }
+  }
+});

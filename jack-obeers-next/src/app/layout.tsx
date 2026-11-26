@@ -37,8 +37,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head>
         <link rel="preload" href="/fonts/newsreader-latin.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <link rel="preload" href="/fonts/source-sans-3-latin-400-normal.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        {!isIndexable() && (
+          <>
+            <link rel="preload" href="/fonts/gloock-latin-400-normal.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+            <link rel="preload" href="/fonts/source-serif-4-latin-400-normal.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+            <link rel="preload" href="/fonts/source-serif-4-latin-600-normal.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+          </>
+        )}
         <script dangerouslySetInnerHTML={{ __html: "try{if(sessionStorage.getItem('jo_tr')==='1')document.documentElement.dataset.tr='1'}catch(e){}addEventListener('load',function(){document.documentElement.classList.add('loaded')})" }} />
-        {!isIndexable() && <script dangerouslySetInnerHTML={{ __html: "try{var m=location.search.match(/[?&]look=(behind|original|classic|backbar|cinematic)/),l=m?m[1]:(sessionStorage.getItem('jo_look')||'behind');if(m)sessionStorage.setItem('jo_look',l);document.documentElement.dataset.look=l;var t=location.search.match(/[?&]type=([a-d])/),y=t?t[1]:sessionStorage.getItem('jo_type');if(t)sessionStorage.setItem('jo_type',y);if(y)document.documentElement.dataset.type=y}catch(e){document.documentElement.dataset.look='behind'}" }} />}
+        {!isIndexable() && <script dangerouslySetInnerHTML={{ __html: "try{var m=location.search.match(/[?&]look=(behind|original|classic|backbar|cinematic)/),l=m?m[1]:(sessionStorage.getItem('jo_look')||'behind');if(m)sessionStorage.setItem('jo_look',l);document.documentElement.dataset.look=l;sessionStorage.removeItem('jo_type');var t=location.search.match(/[?&]type=([a-c])/);if(t)document.documentElement.dataset.type=t[1]}catch(e){document.documentElement.dataset.look='behind'}" }} />}
       </head>
       <body>
         <JsonLd data={[storeSchema(), websiteSchema()]} />

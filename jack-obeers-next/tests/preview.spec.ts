@@ -19,3 +19,13 @@ test("live mode keeps the original tap wall section and has no From keg to bottl
   await expect(page.locator("#tp-h")).toContainText("Keg fresh,");
   await expect(page.locator(".taps-old")).toBeVisible();
 });
+
+// Rev 10: the older component rules named the system font. On the live (original) look every control uses the site's own interface font, never system-ui.
+test("live mode: filters, buttons and tags use the site's interface font, not the system font", async ({ page }) => {
+  for (const path of ["/ciders", "/beers"]) {
+    await page.goto(path);
+    const fams = await page.evaluate(() => [...document.querySelectorAll(".pg-chip, .seg-btn, .pg-more, .pg-flav li, .range-close, .pg-btn")].map((e) => getComputedStyle(e).fontFamily.split(",")[0].replace(/["']/g, "")));
+    expect(fams.length).toBeGreaterThan(0);
+    for (const f of fams) expect(f).toBe("Source Sans 3");
+  }
+});
