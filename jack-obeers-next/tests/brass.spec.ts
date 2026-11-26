@@ -37,7 +37,7 @@ test("the selector never goes below 1 and says so to assistive tech", async ({ p
   const c = card(page, "Waterpistol");
   const minus = c.getByRole("button", { name: /one fewer/i });
   await expect(minus).toHaveAttribute("aria-disabled", "true");
-  await minus.click();
+  await minus.click({ force: true }); // aria-disabled, so Playwright would wait forever; a real press must do nothing
   await expect(c.locator(".atb-n")).toHaveText("1");
   await c.getByRole("button", { name: /one more/i }).click();
   await expect(minus).toHaveAttribute("aria-disabled", "false");
@@ -53,7 +53,7 @@ test("verified stock is respected: 3 in stock means 3, then a clear message and 
   await plus.click();
   await expect(c.locator(".atb-n")).toHaveText("3");
   await expect(plus).toHaveAttribute("aria-disabled", "true");
-  await plus.click();
+  await plus.click({ force: true });
   await expect(c.locator(".atb-n")).toHaveText("3");
   await expect(c.locator(".atb-msg")).toHaveText(/Only 3 available/);
   await c.locator("[data-add]").click();
@@ -124,13 +124,13 @@ test("keyboard only: Tab to the selector, Enter on plus, then Enter on Add", asy
   await page.keyboard.press("Enter");
   await expect(page.locator(".atb-n")).toHaveText("2");
   await page.keyboard.press("Tab");
-  await expect(page.locator("[data-add]")).toBeFocused();
-  await expect(page.locator("[data-add]")).toHaveCSS("outline-style", "solid");
+  await expect(page.locator(".atb-add")).toBeFocused();
+  await expect(page.locator(".atb-add")).toHaveCSS("outline-style", "solid");
   await page.keyboard.press("Enter");
-  await expect(page.locator("[data-add]")).toHaveAttribute("data-state", "added");
+  await expect(page.locator(".atb-add")).toHaveAttribute("data-state", "added");
   await expect(count(page)).toHaveText("2");
   // focus stays on the button so a keyboard user does not lose their place
-  await expect(page.locator("[data-add]")).toBeFocused();
+  await expect(page.locator(".atb-add")).toBeFocused();
 });
 
 test("labels read well to a screen reader", async ({ page }) => {
