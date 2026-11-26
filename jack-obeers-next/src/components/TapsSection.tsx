@@ -18,7 +18,7 @@ const CLIPS = [
  */
 export function TapsSection() {
   return (
-    <section className="taps" id="taps" aria-labelledby="tp-h">
+    <section className="taps" id="taps" {...(isIndexable() ? { "aria-labelledby": "tp-h" } : { "aria-label": "From keg to bottle: the tap wall" })}>
       {!isIndexable() && (
         <div className="taps-cine" aria-hidden="true">
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -29,7 +29,8 @@ export function TapsSection() {
       <div className="taps-bg" aria-hidden="true">
         <BgVideo loop={MEDIA.bgTaps} className="taps-video" />
       </div>
-      <div className="wrap">
+      {!isIndexable() && <KegToBottle />}
+      <div className="wrap taps-old">
         <div className="taps-grid">
           <div className="taps-copy">
             <p className="mono">From the tap wall</p>
@@ -56,5 +57,37 @@ export function TapsSection() {
         <KegBlurb label="Bottles to take home" />
       </div>
     </section>
+  );
+}
+
+
+/**
+ * Rev 9: "From keg to bottle". The two existing videos become one printed-menu style feature joined by a fine brass line that
+ * ends in a small amber drop. Preview only (the live site keeps the original block above). The numbers and captions are the
+ * owner's proposed wording; no freshness times or other claims are added. The line draws itself once when the feature comes
+ * into view (LookEffects adds .in); with reduced motion it is already drawn. All styling is in globals.css under .taps-new.
+ */
+function KegToBottle() {
+  return (
+    <div className="wrap taps-new">
+      <header className="kb-head">
+        <h2 className="kb-h" id="kb-h">From keg to bottle.</h2>
+        <p className="kb-intro">Good beer starts at the tap. Explore our 23 taps and we’ll fill your bottle fresh at the counter, ready to take home.</p>
+      </header>
+      <div className="kb-feature">
+        <span className="kb-rail" aria-hidden="true"><i className="kb-collar" /><i className="kb-run" /><i className="kb-ferrule" /><i className="kb-drop" /></span>
+        <figure className="kb-fig kb-a">
+          <p className="kb-no"><b>01</b> Fresh from the tap</p>
+          <div className="kb-frame"><BgVideo loop={MEDIA.takeaway} className="kb-video" /></div>
+          <figcaption>Freshly filled, straight from the tap.</figcaption>
+        </figure>
+        <figure className="kb-fig kb-b">
+          <p className="kb-no"><b>02</b> The perfect pour</p>
+          <div className="kb-frame"><BgVideo loop={MEDIA.pour} className="kb-video" /></div>
+          <figcaption>A good beer deserves a good pour.</figcaption>
+        </figure>
+      </div>
+      <p className="kb-quote">Find something you fancy on the tap wall. We’ll take care of the bottle, so you can enjoy a fresh pour at home.</p>
+    </div>
   );
 }

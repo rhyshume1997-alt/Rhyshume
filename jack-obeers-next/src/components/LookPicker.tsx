@@ -13,7 +13,7 @@ const LOOKS = [
 /** Preview only: the back bar and cinematic scenes slide their words in, the polaroid settles and the beer mats slide out, once, when they come into view. */
 export function LookEffects() {
   useEffect(() => {
-    const els = document.querySelectorAll<HTMLElement>(".look-bb, .cin-scene, .polaroid, .deli-lead");
+    const els = document.querySelectorAll<HTMLElement>(".look-bb, .cin-scene, .polaroid, .deli-lead, .kb-feature");
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) { els.forEach((e) => e.classList.add("in")); return; }
     const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: 0.4 });
     els.forEach((e) => io.observe(e));

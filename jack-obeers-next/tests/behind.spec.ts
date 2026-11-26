@@ -297,3 +297,145 @@ test("the written introduction starts below the finished photographic block", as
     expect(ok, `at ${w}px`).toBe(true);
   }
 });
+
+// ---------------------------------------------------------------------------------------------------------------------
+// Rev 9: "From keg to bottle" (the tap wall section only)
+// ---------------------------------------------------------------------------------------------------------------------
+const KB = {
+  heading: "From keg to bottle.",
+  intro: "Good beer starts at the tap. Explore our 23 taps and we’ll fill your bottle fresh at the counter, ready to take home.",
+  cap1: "Freshly filled, straight from the tap.",
+  cap2: "A good beer deserves a good pour.",
+  quote: "Find something you fancy on the tap wall. We’ll take care of the bottle, so you can enjoy a fresh pour at home.",
+};
+
+test("From keg to bottle: the exact wording, the two numbered details and nothing from the old block", async ({ page }) => {
+  await page.goto("/");
+  const sec = page.locator("#taps .taps-new");
+  await expect(sec.locator(".kb-h")).toHaveText(KB.heading);
+  await expect(sec.locator(".kb-intro")).toHaveText(KB.intro);
+  await expect(sec.locator(".kb-a figcaption")).toHaveText(KB.cap1);
+  await expect(sec.locator(".kb-b figcaption")).toHaveText(KB.cap2);
+  await expect(sec.locator(".kb-quote")).toHaveText(KB.quote);
+  await expect(sec.locator(".kb-a .kb-no")).toHaveText("01 Fresh from the tap");
+  await expect(sec.locator(".kb-b .kb-no")).toHaveText("02 The perfect pour");
+  // no freshness times, storage claims or awards were added
+  expect((await sec.innerText()).toLowerCase()).not.toMatch(/week|days|award|best|guarantee|lasts|keeps for/);
+  // the old block is not shown in this look
+  await expect(page.locator("#taps .taps-old")).toBeHidden();
+  // both existing videos are used, and keep their 16 by 9 shape
+  await expect(sec.locator("video.kb-video")).toHaveCount(2);
+});
+
+test("KegBlurb is unchanged where it is reused: the beer range panel and the beers page", async ({ page }) => {
+  const OLD = "Pick from the taps and we bottle it fresh for you";
+  await page.goto("/");
+  await page.getByRole("link", { name: "Shop drinks" }).first().click();
+  await page.waitForTimeout(1200);
+  await page.locator(".sh-item[data-kind=beer]").click();
+  await expect(page.locator("#range-panel .keg")).toContainText(OLD);
+  await page.goto("/beers");
+  await expect(page.locator(".keg")).toContainText(OLD);
+  // and the new closing statement is not on either of them
+  expect(await page.locator("body").innerText()).not.toContain("Find something you fancy on the tap wall");
+});
+
+for (const [w, h] of [[360, 780], [390, 844], [768, 1024], [1440, 1160]] as const) {
+  test(`From keg to bottle at ${w}px: nothing collides, nothing covers the footage, the shape is kept`, async ({ page }) => {
+    await page.setViewportSize({ width: w, height: h });
+    await page.goto("/");
+    await page.waitForTimeout(900);
+    await page.evaluate(() => document.querySelector(".kb-feature")!.scrollIntoView({ block: "center" }));
+    await page.waitForTimeout(2600);
+    const r = await page.evaluate(() => {
+      const rect = (e: Element) => { const q = e.getBoundingClientRect(); return { l: q.left, r: q.right, t: q.top, b: q.bottom, w: q.width, h: q.height }; };
+      const inter = (a: ReturnType<typeof rect>, b: ReturnType<typeof rect>, tol = 1.5) => a.l < b.r - tol && a.r > b.l + tol && a.t < b.b - tol && a.b > b.t + tol;
+      const vids = [...document.querySelectorAll(".kb-video")].map(rect);
+      const frames = [...document.querySelectorAll(".kb-frame")].map(rect);
+      const texts = [...document.querySelectorAll(".taps-new :is(.kb-h, .kb-intro, .kb-no, figcaption, .kb-quote)")].map((e) => ({ n: (e.textContent || "").slice(0, 22), r: rect(e) }));
+      // the line is drawn by two borders (top and right) of an otherwise empty box, so measure those two strips, not the whole box
+      const rail: ReturnType<typeof rect>[] = [];
+      for (const e of document.querySelectorAll(".kb-rail i")) {
+        if (getComputedStyle(e).display === "none" || e.getBoundingClientRect().width === 0) continue;
+        const q = rect(e);
+        if (e.classList.contains("kb-run")) { rail.push({ ...q, b: q.t + 2, h: 2 }); rail.push({ ...q, l: q.r - 2, w: 2 }); } else rail.push(q);
+      }
+      const textHits: string[] = [];
+      for (let i = 0; i < texts.length; i++) for (let j = i + 1; j < texts.length; j++) if (inter(texts[i].r, texts[j].r, 2)) textHits.push(texts[i].n + " x " + texts[j].n);
+      const textOverFrame = texts.filter((t) => frames.some((f) => inter(t.r, f))).map((t) => t.n);
+      const railOverVideo = rail.some((x) => vids.some((v) => inter(x, v)));
+      const railOverText = rail.some((x) => texts.some((t) => inter(x, t.r)));
+      const bar = document.querySelector(".sticky-bar") as HTMLElement | null;
+      const barTop = bar && getComputedStyle(bar).display !== "none" ? bar.getBoundingClientRect().top : Infinity;
+      const q = rect(document.querySelector(".kb-quote")!);
+      const W = document.documentElement.clientWidth;
+      return {
+        ratios: vids.map((v) => v.w / v.h), textHits, textOverFrame, railOverVideo, railOverText,
+        framesInside: frames.every((f) => f.l >= 0 && f.r <= W + 0.5),
+        sideways: document.documentElement.scrollWidth > W + 1,
+        quoteClearOfBar: q.b <= barTop + 0.5 || barTop === Infinity,
+        railPieces: rail.length,
+        mobileRail: [".kb-a::before", ".kb-a::after", ".kb-b::before", ".kb-b::after"].map((c) => { const [sel, pseudo] = c.split("::"); return getComputedStyle(document.querySelector(sel)!, "::" + pseudo).content; }),
+      };
+    });
+    for (const x of r.ratios) expect(Math.abs(x - 16 / 9)).toBeLessThan(0.03);
+    expect(r.textHits).toEqual([]);
+    expect(r.textOverFrame).toEqual([]);
+    expect(r.railOverVideo).toBe(false);
+    expect(r.railOverText).toBe(false);
+    expect(r.framesInside).toBe(true);
+    expect(r.sideways).toBe(false);
+    if (w >= 864) expect(r.railPieces).toBe(5); // collar, the line (two measured edges), ferrule, drop
+    else expect(r.mobileRail.every((c) => c !== "none" && c !== "normal")).toBe(true); // the same rail, drawn down the left
+  });
+}
+
+test("the fixed phone action bar does not hide the closing statement", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await page.waitForTimeout(800);
+  // scroll the statement as far up as it sits by default when navigated to, then check it clears the bar
+  await page.evaluate(() => document.querySelector(".kb-quote")!.scrollIntoView({ block: "center", behavior: "instant" }));
+  await page.waitForTimeout(600);
+  const g = await page.evaluate(() => {
+    const q = document.querySelector(".kb-quote")!.getBoundingClientRect();
+    const bar = document.querySelector(".sticky-bar")!.getBoundingClientRect();
+    return { qBottom: q.bottom, barTop: bar.top, barVisible: getComputedStyle(document.querySelector(".sticky-bar")!).display !== "none" };
+  });
+  expect(g.barVisible).toBe(true);
+  expect(g.qBottom).toBeLessThan(g.barTop - 8);
+  // and an anchor jump to the end of the statement leaves room above the bar (scroll-margin-bottom)
+  const margin = await page.locator(".kb-quote").evaluate((e) => parseFloat(getComputedStyle(e).scrollMarginBottom));
+  expect(margin).toBeGreaterThanOrEqual(100);
+});
+
+test("From keg to bottle: the line draws once; with reduced motion it is already drawn", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1160 });
+  await page.goto("/");
+  await page.waitForTimeout(800);
+  // before it comes into view the line is held back
+  const before = await page.locator(".kb-run").evaluate((e) => getComputedStyle(e).clipPath);
+  expect(before).not.toBe("none");
+  await page.evaluate(() => document.querySelector(".kb-feature")!.scrollIntoView({ block: "center" }));
+  await expect(page.locator(".kb-feature.in")).toHaveCount(1, { timeout: 3000 });
+  await page.waitForTimeout(2200);
+  const after = await page.evaluate(() => ({ run: getComputedStyle(document.querySelector(".kb-run")!).clipPath, drop: getComputedStyle(document.querySelector(".kb-drop")!).opacity }));
+  expect(after.drop).toBe("1");
+  expect(after.run === "none" || /inset\(0(px)?( 0(px)?){0,3}( 0%)?\)/.test(after.run)).toBe(true);
+});
+
+test.describe("From keg to bottle, reduced motion", () => {
+  test.use({ reducedMotion: "reduce" });
+  test("static: the whole rail is drawn, nothing animates", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 1160 });
+    await page.goto("/");
+    await page.waitForTimeout(600);
+    const s = await page.evaluate(() => {
+      const g = (c: string) => getComputedStyle(document.querySelector(c)!);
+      return { clip: g(".kb-run").clipPath, anim: [".kb-run", ".kb-drop", ".kb-ferrule", ".kb-collar"].map((c) => g(c).animationName), opacity: [".kb-drop", ".kb-ferrule", ".kb-collar"].map((c) => g(c).opacity) };
+    });
+    expect(s.clip).toBe("none");
+    expect(s.anim.every((a) => a === "none")).toBe(true);
+    expect(s.opacity.every((o) => o === "1")).toBe(true);
+  });
+});
