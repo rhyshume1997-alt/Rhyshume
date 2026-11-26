@@ -5,7 +5,7 @@ import { BasketBehaviour } from "@/components/BasketBehaviour";
 import { PHONE_HREF } from "@/lib/site";
 import { getCatalogue } from "@/lib/catalogue";
 
-export const metadata = pageMeta({ title: "The Draught Club subscription", description: "The Draught Club at Jack O’Beers and Deli, Milngavie. Two monthly memberships with 10% off all fills, members-only beers and priority access to events.", path: "/draught-club" });
+export const metadata = pageMeta({ title: "Draught Club beer membership, Milngavie", description: "The Draught Club at Jack O’Beers and Deli, Milngavie: The Regular at £24.99 a month and The Legend at £39.99 a month, with 10% off all fills and members-only beers.", path: "/draught-club" });
 
 /**
  * Tiers, from the shop's Draught Club leaflet. The shop has dropped The Local, so there are two tiers.
@@ -81,6 +81,9 @@ export default async function Page() {
               ))}
             </div>
             <p className="tier-foot"><b>Fresh bottle. Fresh fill. Every time.</b> No oxygen. No foam. Just proper draught beer. Includes a fresh bottle with every fill.</p>
+            <h2 className="h3">What the Draught Club is</h2>
+            <p>The Draught Club is the monthly membership at Jack O’Beers and Deli, 13 Station Road, Milngavie. Members get 10% off all fills from our 23 taps, access to the Beer Club Tap, members-only beers and priority access to events. The Regular is £24.99 a month and The Legend is £39.99 a month.</p>
+            <p>Every fill goes into a fresh bottle, filled straight from the keg with no foam. A sealed bottle keeps for up to two weeks. To join, <a href={PHONE_HREF}>call the shop on 07405 480950</a> or ask at the counter. More in <a href="/faq">questions and answers</a>.</p>
             <p className="note-s">You must be 18 or over to join.</p>
           </div>
         </section>

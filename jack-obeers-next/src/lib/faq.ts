@@ -26,4 +26,19 @@ export const FAQ: Faq[] = [
     a: `Not yet. Online checkout is being set up, and you can add things to your basket now. Until then, come into the shop or call ${PHONE}.`,
     confirm: true,
   },
+  { q: "What is the minimum order?", a: "The minimum order is £35. The basket tells you how much more to add." },
+  {
+    q: "How much is delivery?",
+    a: "UK delivery will be £4.99 on orders under £50 and free from £50, once online ordering opens. The minimum order is £35.",
+    confirm: true,
+  },
+  {
+    q: "Can I collect my order from the shop?",
+    a: `Collection from the shop is pending, we are confirming it with Michael. Until then, come into the shop or call ${PHONE}.`,
+    confirm: true,
+  },
+  {
+    q: "What is the Draught Club?",
+    a: "The Draught Club is our monthly membership. The Regular is £24.99 a month and The Legend is £39.99 a month. Members get 10% off all fills, members-only beers and priority access to events. Ask in the shop or call to join.",
+  },
 ];

@@ -50,3 +50,18 @@ When Michael sends the item, it goes in the place named.
 
 - **Read inventory:** tick this permission on the Storefront API token or "Only N left" never shows.
 - **Best sellers and New in** show only when Shopify has the sales and created dates. They hide themselves otherwise.
+
+## SEO (search and AI answers)
+
+- **Collection from the shop:** the FAQ says collection is "pending, we are confirming it with Michael". Needs: yes or no, and any
+  rules (pay online first, ready in how long, which hours). Change the answer in `src/lib/faq.ts`.
+- **Delivery prices:** the FAQ says UK delivery will be 4.99 pounds under 50 pounds and free from 50 pounds, minimum order 35 pounds.
+  Check these match the Shopify shipping setup before checkout opens.
+- **Gift boxes and hampers:** `/beer-gift-boxes` lists only hampers that exist in Shopify (product type "hampers"). Needs: the real hampers,
+  with a name, a price, a photo and a line on what is inside. Until then the page says there are none listed online.
+- **Draught Club:** how people join (phone only, or in the shop, or online), so the page can say it plainly.
+- **Other listings for `sameAs`:** the web addresses of the Facebook page, Untappd venue, CAMRA WhatPub, Bing Places, Apple Business Connect,
+  TripAdvisor and West Highland Way listings, if they exist. Add them to `SAME_AS` in `src/lib/site.ts`.
+- **Photos for the landing pages:** a photo of a gift hamper, and one of a bottle being filled from the tap, if he wants them used.
+- **Google Business Profile:** check the shop category is bottle shop or liquor store, and that the name, address, phone and hours there
+  match the site (13 Station Road, Milngavie, G62 8PG, 07405 480950, Wednesday to Monday 11am to 7pm).

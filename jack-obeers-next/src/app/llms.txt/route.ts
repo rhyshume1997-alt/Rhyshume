@@ -25,6 +25,9 @@ export function GET() {
 - [Beer](${abs("/beers")}): the beer range with prices and ABV
 - [Cider](${abs("/ciders")}): the cider range
 - [Wine](${abs("/wines")}): the wine range, including Georgian wines
+- [Craft beer in Milngavie](${abs("/craft-beer-milngavie")}): craft beer from the taps and the fridges
+- [Bottle shop in Milngavie](${abs("/bottle-shop-milngavie")}): bottles to take home and fresh fills
+- [Beer gift boxes and hampers](${abs("/beer-gift-boxes")}): the current gift hampers
 - [Walkers on the West Highland Way](${abs("/west-highland-way")}): near the start of the trail
 - [Questions and answers](${abs("/faq")}): short answers about the shop
 - [Events](${abs("/events")}): what is on and how to get a ticket

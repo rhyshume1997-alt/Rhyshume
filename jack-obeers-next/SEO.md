@@ -158,3 +158,13 @@ Checkout and the payment hold rule (`CHECKOUT_ENABLED`, the 18+ declaration, the
 The window says "23 taps from the wall", "craft beer", "cider" and "frizzante", and "Walkers welcome". The site already says
 23 taps (Michael's welcome says it too), so no extra marker was added. There is an old fashioned popcorn machine in the shop. Popcorn is sold at 3.50 pounds, confirmed by Michael, and is in the
 deli copy, the FAQ and `/llms.txt`.
+
+## Round 2 (landing pages and checks)
+
+- New landing pages: `/craft-beer-milngavie`, `/bottle-shop-milngavie`, `/beer-gift-boxes`. `/draught-club` has its own title, description and an
+  explainer. All use only confirmed facts (23 taps, popcorn 3.50, Draught Club 24.99 and 39.99, "5 star reviews on Google" with no count).
+- Store schema is now `["LiquorStore", "Store"]`, with the coordinates and `sameAs` holding the Google shop link and the review link.
+- robots.txt also blocks `/cart`, `/checkout` and `/account` (the shop has no such pages today; they are blocked in case they appear).
+- FAQ gained: minimum order, delivery price, collection (pending) and the Draught Club.
+- `tests/seo.spec.ts` checks every page for a unique title and description, canonical, Open Graph, one h1, alt text, no em dashes, the Store
+  schema, Product and FAQPage schema, the footer address, phone and hours, robots.txt and the sitemap. It runs against the live-mode build.

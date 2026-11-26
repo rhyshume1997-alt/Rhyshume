@@ -13,3 +13,7 @@ export const DELI_CABINET: Photo = { file: "/media/photos/deli-cabinet-1200.webp
 export const TAP_WALL_FULL: Photo = { file: "/media/photos/tap-wall-wide-2400.webp", alt: "The wall of 23 taps", width: 2400, height: 1800 };
 export const MICHAEL_OUTSIDE: Photo = { file: "/media/photos/michael-outside-1200.webp", alt: "Michael outside the shop", width: 1200, height: 675 };
 export const MICHAEL_AT_THE_FRIDGES: Photo = { file: "/media/photos/michael-at-the-fridges-1200.webp", alt: "Michael by the fridges inside the shop", width: 1200, height: 675 };
+export const FRIDGES_WIDE: Photo = { file: "/media/photos/fridges-wide-1200.webp", alt: "Glass-fronted fridges in the shop, stocked with craft beer cans and bottles, wine and deli jars", width: 1200, height: 900 };
+export const FRIDGE_CANS_CLOSE: Photo = { file: "/media/photos/fridge-cans-close-1200.webp", alt: "Close up of a fridge shelved with craft beer cans and bottles, each with a price label", width: 1200, height: 1200 };
+export const WINE_CORNER: Photo = { file: "/media/photos/wine-corner-1200.webp", alt: "A shelf by the brick wall with bottles of red wine, coffee bags and glasses", width: 1200, height: 1200 };
+export const TAPS_NUMBERED_CLOSE: Photo = { file: "/media/photos/taps-numbered-close-1200.webp", alt: "Rows of numbered beer taps on a wooden wall, numbered up to 23", width: 1200, height: 900 };

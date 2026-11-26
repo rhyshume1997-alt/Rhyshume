@@ -7,7 +7,7 @@ import type { Product } from "@/lib/catalogue";
 export function storeSchema() {
   return {
     "@context": "https://schema.org",
-    "@type": "Store",
+    "@type": ["LiquorStore", "Store"],
     "@id": STORE_ID,
     name: NAME,
     url: SITE_URL,
