@@ -1684,3 +1684,60 @@ html[data-look="behind"] .photo-strip .mount-pic .frame img { position: absolute
   html[data-look="behind"] .deli-lead .mount-pic .frame { aspect-ratio: 4 / 3; }
   html[data-look="behind"] .photo-strip .mount-pic .frame { height: 15rem; }
 }
+
+
+/* =====================================================================================================
+   REV 8: the About section recomposed as one editorial block, and the photograph frames made safe at every width.
+   The Polaroid had collapsed to the width of its caption (its picture is absolutely positioned, and the old .about-people
+   grid rules still applied to it). It now has a width of its own, and the old grid rules are switched off for it.
+   ===================================================================================================== */
+html[data-look="behind"] .about-media { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); column-gap: clamp(2.4rem, 5vw, 4.5rem); row-gap: 2.4rem; align-items: start; margin: 0 0 clamp(2.4rem, 5vw, 4rem); }
+/* the polaroid: its own width, never the old two-column rules */
+html[data-look="behind"] .about-media .polaroid.about-people { display: block; grid-template-columns: none; gap: 0; justify-content: normal; width: min(100%, 24rem); max-width: 24rem; margin: clamp(0rem, 2vw, 1.6rem) auto 0; justify-self: center; align-self: start; }
+html[data-look="behind"] .polaroid .pol-pic { padding: .95rem .95rem 4.3rem; }
+html[data-look="behind"] .polaroid .pol-pic::after { bottom: 4.3rem; }
+html[data-look="behind"] .polaroid figcaption { bottom: .7rem; min-height: 3.1rem; font-size: .98rem; line-height: 1.25; padding-right: .2rem; }
+/* Michael's video: mounted like the other pictures, with a caption that matches */
+html[data-look="behind"] .about-vid .frame { --mp: clamp(.7rem, 1.5vw, 1rem); padding: var(--mp); background: #fbf6ea; border-radius: 0; box-shadow: 0 1px 0 rgba(33, 20, 14, .14), 0 .9rem 1.2rem -1rem rgba(0, 0, 0, .6); }
+html[data-look="behind"] .about-vid .frame::before { display: block; inset: calc(var(--mp) - .42rem); border: 1px solid rgba(33, 20, 14, .3); }
+html[data-look="behind"] .about-vid .frame::after { display: none; }
+html[data-look="behind"] .about-vid .frame > video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 0; background: #1d0f0a; position: relative; z-index: 1; }
+html[data-look="behind"] .about-vid figcaption { font: 400 .95rem/1.4 var(--ui); color: var(--ink-2); max-width: 30ch; }
+html[data-look="behind"] .about-vid figcaption::before { content: ""; display: block; width: 1.9rem; height: 2px; margin-bottom: .5rem; background: var(--amber); }
+/* the beer mat stays behind its photograph and inside the gutter beside it */
+html[data-look="behind"] .polaroid .beermat { left: -3rem; bottom: 4.2rem; width: clamp(5rem, 7vw, 6.6rem); }
+/* the written introduction always starts below the finished photographic block */
+html[data-look="behind"] .about-home-grid { margin-top: 0; padding-top: clamp(.4rem, 1vw, .8rem); position: relative; z-index: 1; }
+
+/* deli: the cream mount is a warmer paper against the green so it does not glare */
+html[data-look="behind"] .deli .mount-pic { background: #efe3c3; }
+html[data-look="behind"] .deli .mount-pic::after { border-color: rgba(33, 20, 14, .35); }
+
+@media (max-width: 52rem) {
+  html[data-look="behind"] .about-media { grid-template-columns: minmax(0, 1fr); row-gap: 2.2rem; margin-bottom: 2.8rem; }
+  html[data-look="behind"] .about-media .polaroid.about-people { width: min(100%, 21rem); margin: .4rem auto .6rem; }
+  html[data-look="behind"] .polaroid .beermat { left: -1.15rem; bottom: 4.6rem; width: 4.6rem; }
+}
+@media (max-width: 24rem) {
+  html[data-look="behind"] .polaroid .pol-pic { padding: .8rem .8rem 4.6rem; }
+  html[data-look="behind"] .polaroid .pol-pic::after { left: .8rem; right: .8rem; top: .8rem; bottom: 4.6rem; }
+  html[data-look="behind"] .polaroid figcaption { left: .85rem; right: .85rem; font-size: .92rem; }
+}
+
+/* rev 8 polish: centred against the video on desktop; a mat that shows on a phone, tucked behind the lower corner (below the print, above the text) */
+html[data-look="behind"] .about-media .polaroid.about-people { align-self: center; }
+html[data-look="behind"] .about-vid figcaption { max-width: 44ch; }
+@media (max-width: 52rem) {
+  html[data-look="behind"] .about-media .polaroid.about-people { align-self: start; margin-bottom: 1.4rem; }
+  html[data-look="behind"] .polaroid .beermat { left: auto; right: 1.1rem; bottom: -1.7rem; width: 4.8rem; --mr: 16deg; --mx: 0; --my: -1.4rem; }
+  html[data-look="behind"] .polaroid.in .beermat { --my: 0; }
+  html[data-look="behind"] .about-media { margin-bottom: 3.4rem; }
+}
+@media (prefers-reduced-motion: reduce) { html[data-look="behind"] .polaroid .beermat { --my: 0; } }
+
+/* rev 8: tablet proportions for the deli pictures */
+html[data-look="behind"] .deli-photos .mount { max-width: 40rem; }
+@media (max-width: 53.99rem) and (min-width: 36rem) {
+  html[data-look="behind"] .deli-lead { max-width: 30rem; }
+  html[data-look="behind"] .deli-photos .mount { max-width: 34rem; }
+}

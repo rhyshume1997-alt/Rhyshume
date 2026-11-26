@@ -243,3 +243,57 @@ test.describe("Rev 7 reduced motion", () => {
     expect(parseFloat(await page.locator(".polaroid .beermat").evaluate((e) => getComputedStyle(e).transitionDuration))).toBeLessThan(0.001);
   });
 });
+
+// Rev 8: the Polaroid had collapsed to the width of its caption on every screen size. Never again.
+for (const [w, h] of [[360, 780], [390, 844], [430, 932], [768, 1024], [1440, 900]] as const) {
+  test(`About at ${w}px: the Polaroid is whole, its caption is inside it, nothing overlaps it, and the mat stays behind`, async ({ page }) => {
+    await page.setViewportSize({ width: w, height: h });
+    await page.goto("/");
+    await page.waitForTimeout(1000);
+    await page.locator(".polaroid").scrollIntoViewIfNeeded();
+    await page.waitForTimeout(1400);
+    const r = await page.evaluate(() => {
+      const rect = (e: Element) => { const q = e.getBoundingClientRect(); return { l: q.left, r: q.right, t: q.top, b: q.bottom }; };
+      const pic = document.querySelector(".polaroid .pol-pic")!;
+      const pol = rect(pic), mat = rect(document.querySelector(".polaroid .beermat")!), cap = rect(document.querySelector(".polaroid figcaption")!);
+      const img = document.querySelector(".polaroid .pol-pic img") as HTMLImageElement;
+      const vid = rect(document.querySelector(".about-vid .frame")!);
+      const texts = [...document.querySelectorAll("#about :is(p, h2, h3, li, a, button, small, figcaption)")].filter((e) => !e.closest(".polaroid") && !e.closest(".beermat") && (e.textContent || "").trim() && e.getBoundingClientRect().width > 0);
+      const over = (a: { l: number; r: number; t: number; b: number }) => texts.filter((e) => { const q = e.getBoundingClientRect(); return q.left < a.r && q.right > a.l && q.top < a.b && q.bottom > a.t; }).map((e) => (e.textContent || "").trim().slice(0, 24));
+      const W = document.documentElement.clientWidth;
+      return {
+        polWidth: pol.r - pol.l, imgW: img.getBoundingClientRect().width, imgH: img.getBoundingClientRect().height,
+        capInside: cap.t >= pol.t && cap.b <= pol.b + 1 && cap.l >= pol.l - 1 && cap.r <= pol.r + 1,
+        matOverText: over(mat), polOverText: over(pol),
+        matOverVideo: mat.t < vid.b && mat.b > vid.t && mat.l < vid.r && mat.r > vid.l,
+        matInside: mat.l >= -1 && mat.r <= W + 1, polInside: pol.l >= 0 && pol.r <= W, sideways: document.documentElement.scrollWidth > W + 1,
+      };
+    });
+    expect(r.polWidth, "the polaroid must not collapse").toBeGreaterThan(Math.min(w - 60, 280));
+    expect(r.imgW).toBeGreaterThan(200);
+    expect(Math.abs(r.imgW - r.imgH)).toBeLessThan(3); // a square print
+    expect(r.capInside).toBe(true);
+    expect(r.matOverText).toEqual([]);
+    expect(r.polOverText).toEqual([]);
+    expect(r.matOverVideo).toBe(false);
+    expect(r.matInside).toBe(true);
+    expect(r.polInside).toBe(true);
+    expect(r.sideways).toBe(false);
+  });
+}
+
+test("the written introduction starts below the finished photographic block", async ({ page }) => {
+  for (const w of [390, 1440]) {
+    await page.setViewportSize({ width: w, height: 900 });
+    await page.goto("/");
+    await page.waitForTimeout(800);
+    const ok = await page.evaluate(() => {
+      const pol = document.querySelector(".polaroid .pol-pic")!.getBoundingClientRect();
+      const vid = document.querySelector(".about-vid")!.getBoundingClientRect();
+      const mat = document.querySelector(".polaroid .beermat")!.getBoundingClientRect();
+      const copy = document.querySelector(".about-home-grid")!.getBoundingClientRect();
+      return copy.top >= Math.max(pol.bottom, vid.bottom, mat.bottom) - 1;
+    });
+    expect(ok, `at ${w}px`).toBe(true);
+  }
+});
