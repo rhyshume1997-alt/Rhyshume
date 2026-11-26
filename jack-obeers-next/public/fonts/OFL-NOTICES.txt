@@ -11,3 +11,5 @@ folder. The upstream copyright lines were NOT re-checked here.
 The Dubai font is NOT stored or served anywhere in this project (web licence unverified). Source Sans 3 is used as the closest open match.
 
 Cormorant Garamond (Christian Thalmann, Catharsis Fonts) and Lora (Cyreal): SIL Open Font License 1.1, https://openfontlicense.org. Used in the "back bar" and "cinematic" preview looks.
+
+Gloock, Source Serif 4, Spectral, Bodoni Moda and Lora are each distributed under the SIL Open Font License 1.1 (https://openfontlicense.org), which allows commercial use. They come from the @fontsource packages (Google Fonts). Used in the Rev 6 preview typography: Gloock and Source Serif 4 are selected; Spectral and Bodoni Moda appear only in the ?type= comparison. Check each font's own licence file in its @fontsource package before launch.
