@@ -10,6 +10,8 @@ import { storeSchema, websiteSchema } from "@/lib/schema";
 import { NAME, SITE_URL, isIndexable } from "@/lib/site";
 import { LookEffects } from "@/components/LookPicker";
 import { CommentsPanel } from "@/components/CommentsPanel";
+import { SeasonWatcher } from "@/components/SeasonWatcher";
+import { seasonScript } from "@/lib/season";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -44,6 +46,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <link rel="preload" href="/fonts/source-serif-4-latin-600-normal.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
           </>
         )}
+        <script dangerouslySetInnerHTML={{ __html: seasonScript(!isIndexable()) }} />
         <script dangerouslySetInnerHTML={{ __html: "try{if(sessionStorage.getItem('jo_tr')==='1')document.documentElement.dataset.tr='1'}catch(e){}addEventListener('load',function(){document.documentElement.classList.add('loaded')})" }} />
         {!isIndexable() && <script dangerouslySetInnerHTML={{ __html: "try{var m=location.search.match(/[?&]look=(behind|original|classic|backbar|cinematic)/),l=m?m[1]:(sessionStorage.getItem('jo_look')||'behind');if(m)sessionStorage.setItem('jo_look',l);document.documentElement.dataset.look=l;sessionStorage.removeItem('jo_type');var t=location.search.match(/[?&]type=([a-c])/);if(t)document.documentElement.dataset.type=t[1]}catch(e){document.documentElement.dataset.look='behind'}" }} />}
       </head>
@@ -56,6 +59,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <CartFallback />
         <StickyBar />
         <PageTransition />
+        <SeasonWatcher />
         {!isIndexable() && <><LookEffects /><CommentsPanel /></>}
       </body>
     </html>

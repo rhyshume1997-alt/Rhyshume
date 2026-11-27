@@ -60,6 +60,12 @@ if (process.env.FAKE_SIZES) {
   add('STOCK ZERO ALLOWED ABV 4.0%', 'Beer', 'Stock Test', ['Lager'], 4, { qty: 0 });
   add('STOCK NEGATIVE ALLOWED ABV 4.0%', 'Beer', 'Stock Test', ['Lager'], 4, { qty: -2 });
 }
+// The "this-week" blog Michael writes updates in. Dates are in 2031 so the fixtures never go out of date, and the test sets the browser clock.
+const BLOG = [
+  { id: 'gid://shopify/Article/1', title: 'Fixture update: tasting night', excerpt: 'A fixture, not a real update. Come and try five beers.', content: '', publishedAt: '2030-12-30T10:00:00Z', tags: ['tasting', 'events', 'from:2031-01-13', 'to:2031-01-19'], image: null },
+  { id: 'gid://shopify/Article/2', title: 'Fixture update: new on tap', excerpt: '', content: '<p>A <b>fixture</b> body with markup &amp; no excerpt.</p>', publishedAt: '2031-01-20T09:00:00Z', tags: ['on-tap', 'product:p0'], image: { url: 'http://localhost:4470/fixture.png', altText: 'Fixture picture' } },
+  { id: 'gid://shopify/Article/3', title: 'Fixture update: no dates, published long ago', excerpt: 'Should never show.', content: '', publishedAt: '2020-03-02T09:00:00Z', tags: [], image: null },
+];
 http.createServer((req, res) => {
   let body = '';
   req.on('data', (c) => (body += c));
@@ -75,6 +81,7 @@ http.createServer((req, res) => {
       res.end(JSON.stringify({ data: { cartCreate: { cart: { checkoutUrl: (insecure ? 'http://' : 'https://') + 'shop.test/checkouts/fake-' + lastCart.lines.length }, userErrors: [] } } }));
       return;
     }
+    if (/blog\(/.test(q.query || '')) { res.setHeader('Content-Type', 'application/json'); res.end(JSON.stringify({ data: { blog: q.variables && q.variables.handle === 'this-week' ? { articles: { nodes: BLOG } } : null } })); return; }
     const start = q.variables && q.variables.cursor ? Number(q.variables.cursor) : 0;
     const slice = P.slice(start, start + 100);
     const end = start + slice.length;

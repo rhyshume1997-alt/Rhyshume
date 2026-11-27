@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { SantaHat } from "@/components/SantaHat";
 import { Frame } from "@/components/Frame";
 import { Polaroid } from "@/components/Photo";
 import { Clip } from "@/components/Clip";
@@ -42,7 +43,7 @@ export function AboutSection({ standalone = false }: { standalone?: boolean } = 
           <div className="about-side">
             <Hours />
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="about-logo" src="/media/jack-logo.svg" alt="Jack O’Beers and Deli logo: Jack the bull with a barrel" width={280} height={288} loading="lazy" decoding="async" />
+            <span className="about-logo-wrap"><img className="about-logo" src="/media/jack-logo.svg" alt="Jack O’Beers and Deli logo: Jack the bull with a barrel" width={280} height={288} loading="lazy" decoding="async" /><SantaHat where="about" /></span>
           </div>
         </div>
         <PhotoStrip />

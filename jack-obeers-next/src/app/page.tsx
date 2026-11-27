@@ -16,6 +16,11 @@ import { checkoutOn, getBestSellers } from "@/lib/catalogue";
 import { BackBarHero, CinematicScenes } from "@/components/LookHeroes";
 import { isIndexable } from "@/lib/site";
 import { BehindHero } from "@/components/BehindHero";
+import { ThisWeek, EventsSection, type HomeEvent } from "@/components/HomeLive";
+import { getWeeklyUpdates } from "@/lib/weekly";
+import { getPublicEvents } from "@/lib/events-store";
+import { addDays, londonDate } from "@/lib/london";
+import { XmasDecor, XmasKicker } from "@/components/XmasDecor";
 
 export const metadata = pageMeta({
   title: "Craft beer shop in Milngavie | Jack O’Beers and Deli",
@@ -28,8 +33,16 @@ export default async function Page() {
   const catalogue = await getCatalogue();
   const best = await getBestSellers(catalogue.all);
   const preview = !isIndexable();
+  // The two permanent sections (all year, not tied to Christmas). Dates are judged in the browser in London time, see HomeLive.tsx.
+  const [weekly, ev] = await Promise.all([getWeeklyUpdates(), getPublicEvents()]);
+  const serverToday = londonDate();
+  const homeEvents: HomeEvent[] = ev.events
+    .filter((e): e is typeof e & { date: string } => !e.sample && !!e.date && e.date >= addDays(serverToday, -1))
+    .map((e) => ({ handle: e.handle, title: e.title, description: e.description, image: e.image, price: e.price, date: e.date, time: e.time }));
+  const WEEK = <ThisWeek updates={weekly} events={homeEvents} serverToday={serverToday} />;
+  const EVENTS = <EventsSection events={homeEvents} serverToday={serverToday} />;
   const STAGE = (
-    <section className="stage" aria-label="Opening"><div className="stage-in"><div className="arch logo-arch" aria-hidden="true"><div className="interior"><BgVideo loop={MEDIA.landing} className="enter" priority /><div className="interior-shade" /></div><div className="arch-logo"><div className="jack-charge" /></div><div className="doors"><div className="door l"><span /></div><div className="door r"><span /></div></div></div><div className="hero-copy"><p className="mono">Craft beer &middot; cider &middot; wine &middot; deli &middot; gifts</p><h1 className="big"><span className="w">Welcome,</span>{" "}<span className="acc"><span className="w">come</span>{" "}<span className="w">on</span>{" "}<span className="w">in.</span></span></h1><p className="lede">Independent British drink shop in Milngavie. Come in, have a look along the shelf, and take something good home to enjoy.</p><div className="btns"><a className="btn" href="#shelf" data-come-in="">Come in</a><a className="btn ghost" href="/drinks?c=beers">Shop beers</a></div><OpenNow variant="hero" /></div><aside className="hero-card" aria-label="Where we are"><OpenNow variant="card" /><p className="hc-addr"><b>13 Station Road</b>, Milngavie</p><ul><li>2 minutes from Milngavie station</li><li>200 m from the West Highland Way start</li></ul></aside><div className="counter" aria-hidden="true"></div><button type="button" className="open-skip">Skip</button><p className="scrollcue" aria-hidden="true">Scroll</p></div></section>
+    <section className="stage" aria-label="Opening"><div className="stage-in"><XmasDecor /><div className="arch logo-arch" aria-hidden="true"><div className="interior"><BgVideo loop={MEDIA.landing} className="enter" priority /><div className="interior-shade" /></div><div className="arch-logo"><div className="jack-charge" /></div><div className="doors"><div className="door l"><span /></div><div className="door r"><span /></div></div></div><div className="hero-copy"><XmasKicker /><p className="mono">Craft beer &middot; cider &middot; wine &middot; deli &middot; gifts</p><h1 className="big"><span className="w">Welcome,</span>{" "}<span className="acc"><span className="w">come</span>{" "}<span className="w">on</span>{" "}<span className="w">in.</span></span></h1><p className="lede">Independent British drink shop in Milngavie. Come in, have a look along the shelf, and take something good home to enjoy.</p><div className="btns"><a className="btn" href="#shelf" data-come-in="">Come in</a><a className="btn ghost" href="/drinks?c=beers">Shop beers</a></div><OpenNow variant="hero" /></div><aside className="hero-card" aria-label="Where we are"><OpenNow variant="card" /><p className="hc-addr"><b>13 Station Road</b>, Milngavie</p><ul><li>2 minutes from Milngavie station</li><li>200 m from the West Highland Way start</li></ul></aside><div className="counter" aria-hidden="true"></div><button type="button" className="open-skip">Skip</button><p className="scrollcue" aria-hidden="true">Scroll</p></div></section>
   );
   const TILES = <ShopTiles ranges={{ beer: rangeOf(catalogue.all, "beer"), cider: rangeOf(catalogue.all, "cider"), wine: rangeOf(catalogue.all, "wine") }} events={catalogue.all.filter((p) => p.category === "events").length} subs={catalogue.all.filter((p) => p.category === "subscriptions").length} checkoutOn={checkoutOn()} fancy={preview} />;
   const BEST = <BestSellers products={best} />;
@@ -50,7 +63,9 @@ export default async function Page() {
         <>
           {STAGE}
           {TILES}
+          {WEEK}
           {BEST}
+          {EVENTS}
           <GoogleReviews />
           <AboutSection />
           {TAPS}
@@ -61,10 +76,12 @@ export default async function Page() {
       ) : (
         <>
           {STAGE}
+          {WEEK}
           <GoogleReviews />
           <AboutSection />
           {TILES}
           {BEST}
+          {EVENTS}
           {TAPS}
           {DELI}
           {HAMP}

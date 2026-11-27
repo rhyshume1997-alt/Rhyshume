@@ -51,7 +51,7 @@ export default async function Page() {
             ) : (
               <ul className="events">
                 {upcoming.map((e) => (
-                  <li key={e.handle} className="hcard event">
+                  <li key={e.handle} id={e.handle} className="hcard event">
                     <p className="mono">Event</p>
                     <h2 className="h3">{e.title}</h2>
                     <p className="when">{when(e.date, e.time)}</p>

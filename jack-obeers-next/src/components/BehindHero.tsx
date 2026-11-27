@@ -1,5 +1,7 @@
 import { OpenNow } from "@/components/OpenNow";
 import { ADDRESS } from "@/lib/site";
+import { XmasDecor, XmasKicker } from "@/components/XmasDecor";
+import { SantaHat } from "@/components/SantaHat";
 
 /**
  * "Behind the Counter" opening. The real tap wall is the picture. The headline sits to the left on dark mahogany and
@@ -19,8 +21,10 @@ export function BehindHero() {
         </picture>
         <div className="bh-wash" />
       </div>
+      <XmasDecor />
       <div className="bh-in">
         <div className="bh-copy">
+          <XmasKicker />
           <OpenNow variant="hero" />
           <h1 className="bh-h1"><span className="bh-l1">Welcome,</span> <span className="bh-l2">come on in<i className="bh-dot">.</i></span></h1>
           <p className="bh-lede">Independent British drink shop in Milngavie. Come in, have a look along the shelf, and take something good home to enjoy.</p>
@@ -34,11 +38,13 @@ export function BehindHero() {
         <a className="bh-lying" href="/" aria-label={`Jack O’Beers and Deli, ${ADDRESS.street}, ${ADDRESS.town}`}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/media/jack-logo-lying.png" alt="Jack O’Beers and Deli logo: Jack the bull lying down with a barrel" width={480} height={370} loading="lazy" decoding="async" />
+          <SantaHat where="lying" />
         </a>
         {/* Phone: the supplied vector logo on a cream sign that straddles the edge of the cream shop. */}
         <a className="bh-sign" href="/" aria-label={`Jack O’Beers and Deli, ${ADDRESS.street}, ${ADDRESS.town}`}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/media/jack-logo.svg" alt="Jack O’Beers and Deli logo: Jack the bull with a barrel" width={280} height={288} loading="lazy" decoding="async" />
+          <SantaHat where="sign" />
         </a>
       </div>
     </section>

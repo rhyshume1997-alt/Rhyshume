@@ -83,3 +83,8 @@ When Michael sends the item, it goes in the place named.
 
 - **Privacy notice:** who is responsible for customers' data, what is kept, for how long, and who handles it (see `FOLLOW-UP-REVIEW.md` section 2). It is a legal document for the shop to approve; none was written. The footer link stays hidden until it exists.
 - **Age checks:** whether the online declaration plus photo ID at collection or delivery meets the premises licence conditions. The website does not claim that it does. The date of birth is no longer saved; if staff want it kept for a reason, that reason has to be recorded and the privacy notice must say so.
+
+## Christmas and homepage additions (27 November 2026)
+- Anything festive to feature (drinks, hampers, events, opening times): names, dates, prices and photos, or confirmation that you want none shown. Nothing is named until you send it.
+- Your "What's Happening This Week" updates: each Monday, a short title and one or two lines in the Shopify blog `this-week` (Rhys sets the blog up first). Only real news.
+- For Rhys: the blog `this-week`, the Storefront "Read content" permission, and agreement that this extra work is inside or outside the £2,000 scope.

@@ -44,7 +44,8 @@ Status key: **Done** = built and tested (evidence named). **Partly** = some of i
 | "What's happening this week" with a simple staff process | **Missing, proposed** | No such section or editable source exists. A proposal is in the scope list. Nothing was built. |
 | Owners page to add events | **Not usable today** | The page exists, but Vercel has no `OWNER_USERS`, `SHOPIFY_ADMIN_TOKEN` or `SHOPIFY_PUBLICATION_ID`, so nobody can sign in and events would only be kept in memory. The Shopify event creation code has never been run against a real store. The simplest reliable route is to create the event product in Shopify directly. |
 | Enquiry link, booking link or ticket checkout per event | **Blocked** | Michael's decision per event. |
-| Christmas landing page style, end date | **Scope** | Not built (design freeze). |
+| Christmas look, with an automatic start and end | **Built on the dev branch, scope not confirmed** | 1 Dec 2026 to 1 Jan 2027, London time. Details in `CHRISTMAS-AND-HOMEPAGE.md`. Additional scope for Rhys to agree with Michael: not claimed as inside the £2,000. Not merged or deployed. |
+| Permanent "What's Happening This Week" and "Events" homepage sections | **Built on the dev branch, scope not confirmed** | Weekly section needs a Shopify blog `this-week` and the Storefront "Read content" permission (Rhys, awaiting approval). Events reuses the existing event products. |
 
 ## 5. Keezer rental and events equipment
 
@@ -104,9 +105,9 @@ Full-page screenshots of nine pages at 390 and 1440 wide were taken before and a
 | Restricted or member-only products and pricing | Shopify customer accounts with enforced access (store-level rules or an app); the website alone cannot hide prices securely | New build, depends on Shopify plan and apps |
 | Keezer rental booking, usage charges, payments | Booking calendar, availability, deposits, how consumption is recorded, final charge capture, terms | Large new build, payment and compliance review |
 | New event ticket checkout | Ticket inventory per event, booking links or checkout, confirmation emails | Extends the existing Shopify event products |
-| "What's happening this week" section | A new homepage section (layout change) and an editable source (for example a Shopify page or metaobject) | Small build once the design change is approved |
+| "What's happening this week" section | Built on the dev branch (see `CHRISTMAS-AND-HOMEPAGE.md`); still needs the Shopify blog and permission, and scope approval | Small build, additional to the agreed scope until confirmed |
 | Artwork and merchandise flows | Product types, photos, artist credits, variants, delivery or collection rules | Mostly Shopify content; website work only if new layouts are wanted |
-| Christmas homepage look | Seasonal visual design, dates to switch on and off | Design work (breaks the freeze) |
+| Christmas homepage look | Built on the dev branch with automatic dates; scope and price to agree | Design work, additional to the agreed scope until confirmed |
 | Sponsorship section and third-party logos | Verified names, permissions, a new section | Small design and content build |
 | Automatic substitution or supermarket comparisons | Product matching, price data source, wording approval, accuracy and legal review | New build and ongoing data cost |
 | Trade mark or legal notice changes | Evidence of registration, approved wording | Content only once evidence is supplied |
