@@ -1950,13 +1950,18 @@ html[data-look="behind"] .atb-add[data-state="busy"] .atb-t { opacity: .7; }
   html[data-look="behind"] :is(.bh-cta .btn, .gr-actions .pg-btn, .atb-add, .atb-step):active, html[data-look="behind"] .atb-add[data-state] { transform: none; }
   html[data-look="behind"] .atb-add[data-state="added"] { outline: 2px solid var(--bz-lit); outline-offset: -5px; }
 }
-/* narrow cards: the price sits above, then the selector and the button share one line (or the button drops below the selector) */
+/* narrow cards, every look: the price sits above, then the selector and the button share one line (or the button drops below the selector),
+   and the controls never run past the card's edge */
 @media (max-width: 560px) {
+  .pg-buy { flex-direction: column; align-items: stretch; gap: .5rem; }
+  .pg-buy .pg-btns { width: 100%; }
+  .pg-buy .atb { display: grid; grid-template-columns: auto minmax(0, 1fr); width: 100%; min-width: 0; }
+  .pg-buy .atb-msg { grid-column: 1 / -1; }
+  .atb-add { min-width: 0; padding-inline: .8rem; }
+  /* the Behind the Counter look sets its own .pg-buy row, which would win over the rules above */
   html[data-look="behind"] .pg-buy { flex-direction: column; align-items: stretch; gap: .5rem; }
   html[data-look="behind"] .pg-buy .pg-btns { width: 100%; }
   html[data-look="behind"] .pg-buy .atb { display: grid; grid-template-columns: auto minmax(0, 1fr); width: 100%; }
-  html[data-look="behind"] .pg-buy .atb-msg { grid-column: 1 / -1; }
-  html[data-look="behind"] .atb-add { min-width: 0; padding-inline: .8rem; }
 }
 
 /* Brass scrollbars for the sideways strips (New in, filters, boards): mahogany track, brass thumb. Firefox uses scrollbar-color; Chromium and Safari use the pseudo-elements. */
