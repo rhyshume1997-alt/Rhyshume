@@ -38,7 +38,7 @@ New or changed coverage this round:
 - Everything for products and checkout was tested against the **fake Shopify** (`tests/fake-shopify.cjs`). It mimics the Storefront API for products and `cartCreate`, and records the cart it is given. It does not model Shopify's real checkout, shipping rates, discounts, inventory, taxes, age checks or payment. Nothing was tested against the real store's checkout.
 - The real catalogue was read only through the deployed preview's rendered pages (34 beer, cider and wine products). Stock, selling plans, metafields and Storefront permissions of the real store are unverified; `scripts/shopify-audit.mjs` checks them read-only and must be run by Rhys with the real token.
 - Not tested: Safari, Firefox, real phones, real size variants, selling plans.
-- The tap guide .xlsx itself was not seen, only its Markdown reference.
+- The tap guide .xlsx was received later and checked against the Markdown reference: no differences (see `PRODUCT-RECONCILIATION.md`).
 
 ## Unresolved checkout risks
 
