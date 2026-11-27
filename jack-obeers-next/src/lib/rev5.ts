@@ -179,8 +179,17 @@ export function initRev5(P: any[], PAIR: Record<string, string> = {}): () => voi
     if (cart.some(function (l) { var p = by(l.h); return !p || p.sample; })) { off(); return; } if (!ageOk()) { ageNote(); return; }
     ckb.disabled = true;
     fetch('/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ lines: cart, dob: $('#age-dob').value, ageConfirmed: $('#age-ok').checked }) })
-      .then(function (r) { return r.ok ? r.json() : null; })
-      .then(function (j) { ckb.disabled = !cart.length; if (j && j.ok && j.url) { location.href = j.url; } else { off(); } })
+      .then(function (r) { return r.json().catch(function () { return null; }); })
+      .then(function (j) {
+        ckb.disabled = !cart.length;
+        if (j && j.ok && j.url) { location.href = j.url; return; }
+        /* A refusal that has a reason is explained in the basket. Only a real failure (off, Shopify, origin) shows the pop in or call box. */
+        var say = j && ({ quantity: 'An item is over the limit of ' + MAX_PER_LINE + ' per order. Please lower the quantity and try again.', unavailable: 'Something in your basket is no longer available. Please remove it and try again.', slow: 'Too many tries. Please wait a minute and try again.' })[j.reason];
+        if (say) { var mm = $('#min-msg'); if (mm) mm.textContent = say; return; }
+        if (j && j.reason === 'min') { minNote(); return; }
+        if (j && j.reason === 'age') { ageNote(); return; }
+        off();
+      })
       .catch(function () { ckb.disabled = !cart.length; off(); });
   });
   $$('dialog[closedby="any"]').forEach(function (d) { if (!('closedBy' in HTMLDialogElement.prototype)) d.addEventListener('click', function (e) { if (e.target === d) { var r = d.getBoundingClientRect(); if (!(r.top <= e.clientY && e.clientY <= r.bottom && r.left <= e.clientX && e.clientX <= r.right)) d.close(); } }); });

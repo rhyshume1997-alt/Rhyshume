@@ -182,3 +182,22 @@ test("the basket stops at 24 of one item and says so, and an older bigger basket
   await page.reload();
   await expect(page.locator(".cartbtn .n").first()).toHaveText("24");
 });
+
+test("a refusal with a reason is explained in the basket, not hidden behind the pop in or call box", async ({ page }) => {
+  await seen(page);
+  await page.goto("/");
+  await page.locator("#hampers [data-buy]").first().click();
+  await page.locator("#age-dob").fill("1990-01-01");
+  await page.locator("#age-ok").check();
+  for (const [status, reason, text] of [[409, "unavailable", /no longer available/], [400, "quantity", /over the limit of 24/], [429, "slow", /Too many tries/]] as const) {
+    await page.route("**/api/checkout", (route) => route.fulfill({ status, contentType: "application/json", body: JSON.stringify({ ok: false, reason }) }));
+    await page.locator("#cart-ck").click();
+    await expect(page.locator("#min-msg")).toContainText(text);
+    await expect(page.locator("#demo-ck")).not.toHaveAttribute("open", "");
+    await page.unroute("**/api/checkout");
+  }
+  // a real failure (Shopify unreachable) still shows the pop in or call box
+  await page.route("**/api/checkout", (route) => route.fulfill({ status: 502, contentType: "application/json", body: JSON.stringify({ ok: false, reason: "shopify" }) }));
+  await page.locator("#cart-ck").click();
+  await expect(page.locator("#demo-ck")).toHaveAttribute("open", "");
+});
