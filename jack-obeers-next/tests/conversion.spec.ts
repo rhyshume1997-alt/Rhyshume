@@ -26,7 +26,8 @@ test("delivery bottle fills with the basket and says how much is left", async ({
   await page.locator(".sh-item[data-kind=beer]").click();
   await page.locator("#range-panel .pg-card [data-add]").first().click();
   await page.locator("[data-open-cart]").first().click();
-  await expect(page.locator(".fd-msg")).toContainText(/Add £\d+\.\d\d for free delivery/);
+  await expect(page.locator(".fd-msg")).toContainText(/Add £\d+\.\d\d for free local delivery/);
+  await expect(page.locator(".fd-note, .fd")).toContainText(/Local delivery only: Milngavie, Baljaffray and Strathblane/);
   const fill = await page.locator(".fd").evaluate((e) => Number(getComputedStyle(e).getPropertyValue("--fill")));
   expect(fill).toBeGreaterThan(0);
   expect(fill).toBeLessThan(1);
