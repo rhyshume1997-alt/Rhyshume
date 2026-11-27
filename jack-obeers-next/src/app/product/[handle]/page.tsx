@@ -7,6 +7,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { buyLink, checkoutOn, getCatalogue, safePairings } from "@/lib/catalogue";
 import { lowStock, stockOf } from "@/lib/cards";
 import { AddToBasket } from "@/components/AddToBasket";
+import { pickVariant, sizeManaged, sizesOf } from "@/lib/variants";
 import { breadcrumbSchema, productDescription, productPrice, productSchema } from "@/lib/schema";
 import { pageMeta } from "@/lib/seo";
 
@@ -37,7 +38,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
   const { price, available } = productPrice(p);
   const range = RANGE[p.category as keyof typeof RANGE] || RANGE.beer;
   const link = buyLink(p);
-  const low = lowStock(p.variants.find((x) => x.available) || p.variants[0]);
+  const low = sizeManaged(p.variants) ? null : lowStock(pickVariant(p.variants));
   const pairs = safePairings(p.profile);
   return (
     <>
@@ -68,7 +69,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
               <div className="pg-btns prod-btns">
                 {available ? (
                   <>
-                    <AddToBasket handle={p.handle} name={p.name} stock={stockOf(p)} />
+                    <AddToBasket handle={p.handle} name={p.name} stock={stockOf(p)} sizes={sizesOf(p.variants)} />
                     {checkoutOn() && link ? <a className="pg-btn solid" href={link}>Buy now</a> : null}
                   </>
                 ) : (

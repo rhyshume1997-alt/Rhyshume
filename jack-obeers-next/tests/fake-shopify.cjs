@@ -31,6 +31,17 @@ add('Beer hamper', 'Hamper', 'Jack O’Beers', [], 40);
 add('Deli hamper', 'Hamper', 'Jack O’Beers', [], 35);
 for (let i = 0; i < 3; i++) add(`Tasting Night ${i + 1}`, 'Event Tickets', 'Jack O’Beers', ['date:2031-0' + (1 + i) + '-14', 'time:19:00'], 12.5, { desc: 'An evening of beer.' });
 add('Draught Club: The Regular', 'Subscription Services', 'Jack O’Beers', [], 24.99);
+// Draught products with size variants, only when FAKE_SIZES=1 (the test run sets it), so the default fake and the screenshots stay as they were.
+// The first has 250ml, 500ml and 1 litre (the 250ml must never be offered online). The second has its 500ml sold out.
+if (process.env.FAKE_SIZES) {
+  const sized = (title, sizes) => P.push({
+    handle: 'p' + P.length, title, description: '', productType: 'Beer', vendor: 'Size Test', tags: ['Lager'], featuredImage: null,
+    createdAt: new Date(Date.now() - 400 * day).toISOString(),
+    variants: { nodes: sizes.map(([t, price, avail, qty]) => ({ id: 'gid://shopify/ProductVariant/' + (vid++), title: t, availableForSale: avail, price: { amount: price.toFixed(2) }, quantityAvailable: qty })) },
+  });
+  sized('SIZE TEST DRAUGHT LAGER ABV 4.2%', [['250ml', 3, true, 7], ['500ml', 5.5, true, 7], ['1 litre', 9, true, 7]]);
+  sized('SIZE TEST HALF SOLD OUT ABV 4.0%', [['500ml', 5.5, false, 0], ['1 litre', 9, true, 7]]);
+}
 http.createServer((req, res) => {
   let body = '';
   req.on('data', (c) => (body += c));

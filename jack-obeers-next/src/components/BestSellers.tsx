@@ -16,7 +16,7 @@ export function BestSellers({ products }: { products: Product[] }) {
               <li key={p.handle}>
                 <a href={`/product/${p.handle}`}><b>{c.name}</b></a>
                 <small>{[c.brewery, c.abv !== null ? `${c.abv}% ABV` : ""].filter(Boolean).join(" · ")}</small>
-                <span className="newin-row"><span className="pg-price">£{c.price.toFixed(2)}{c.low !== null && <span className="pg-low">Only {c.low} left</span>}</span><AddToBasket handle={p.handle} name={c.name} stock={c.stock} /></span>
+                <span className="newin-row"><span className="pg-price">£{c.price.toFixed(2)}{c.low !== null && <span className="pg-low">Only {c.low} left</span>}</span><AddToBasket handle={p.handle} name={c.name} stock={c.stock} sizes={c.sizes} /></span>
               </li>
             );
           })}

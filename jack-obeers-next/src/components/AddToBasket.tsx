@@ -17,17 +17,28 @@ declare global {
  * The limit is Shopify's stock for the variant checkout uses minus what is already in the basket; with no verified stock the
  * only limit is NO_STOCK_GUARD per action.
  */
-export function AddToBasket({ handle, name, stock, label = "Add to basket", variant }: { handle: string; name: string; stock: number | null; label?: string; variant?: string }) {
+export type Size = { id: string; label: string; price: number; available: boolean };
+
+/**
+ * `sizes` is empty for every product today, so nothing about the control changes. When Shopify gives a draught product 500ml and 1 litre
+ * variants, a two-button size choice appears first (the same segmented control the beer filters use, prices in the labels), the default
+ * is 500ml, and the chosen variant id travels with the basket line in data-v.
+ */
+export function AddToBasket({ handle, name, stock, label = "Add to basket", variant, sizes = [] }: { handle: string; name: string; stock: number | null; label?: string; variant?: string; sizes?: Size[] }) {
+  const firstSize = (sizes.find((x) => x.label === "500ml" && x.available) || sizes.find((x) => x.available) || sizes[0])?.id;
+  const [size, setSize] = useState<string | undefined>(firstSize);
+  const chosen = sizes.length ? sizes.find((x) => x.id === size) : undefined;
+  const variantId = chosen ? chosen.id : variant;
   const [qty, setQty] = useState(1);
   const [room, setRoom] = useState<number | null>(stock);
   const [note, setNote] = useState("");
 
   useEffect(() => {
-    const sync = () => setRoom(window.joBasket ? window.joBasket.room(handle, variant) : stock);
+    const sync = () => setRoom(window.joBasket ? window.joBasket.room(handle, variantId) : stock);
     sync();
     document.addEventListener("jo:basket", sync);
     return () => document.removeEventListener("jo:basket", sync);
-  }, [handle, stock, variant]);
+  }, [handle, stock, variantId]);
 
   const limit = room === null ? NO_STOCK_GUARD : Math.max(1, room);
   const shown = Math.min(qty, limit);
@@ -51,6 +62,15 @@ export function AddToBasket({ handle, name, stock, label = "Add to basket", vari
 
   return (
     <span className="atb">
+      {sizes.length > 1 && (
+        <span className="seg atb-sizes" role="group" aria-label={`Size of ${name}`} style={{ flexBasis: "100%" }}>
+          {sizes.map((x) => (
+            <button key={x.id} type="button" className="seg-btn" aria-pressed={x.id === variantId} aria-disabled={!x.available} onClick={() => { if (x.available) { setSize(x.id); setNote(""); } }}>
+              {x.label} £{x.price.toFixed(2)}{x.available ? "" : ", sold out"}
+            </button>
+          ))}
+        </span>
+      )}
       <span className="atb-q" role="group" aria-label={`Quantity of ${name}`}>
         <button type="button" className="atb-step" aria-label={`One fewer ${name}`} aria-disabled={atMin} onClick={() => bump(-1)}>
           <span aria-hidden="true">−</span>
@@ -60,11 +80,11 @@ export function AddToBasket({ handle, name, stock, label = "Add to basket", vari
           <span aria-hidden="true">+</span>
         </button>
       </span>
-      <button type="button" className="pg-btn soft atb-add" data-add={handle} data-q={shown} data-v={variant} data-atb="" data-state="idle">
+      <button type="button" className="pg-btn soft atb-add" data-add={handle} data-q={shown} data-v={variantId} data-atb="" data-state="idle">
         <i className="atb-led" aria-hidden="true" />
         <span className="atb-t">{label}</span>
         <span className="atb-d" aria-hidden="true">Added to basket</span>
-        <span className="vh"> {name}{shown > 1 ? `, quantity ${shown}` : ""}</span>
+        <span className="vh"> {name}{chosen ? `, ${chosen.label}` : ""}{shown > 1 ? `, quantity ${shown}` : ""}</span>
       </button>
       <span className="atb-msg" role="status" aria-live="polite">{note}</span>
     </span>

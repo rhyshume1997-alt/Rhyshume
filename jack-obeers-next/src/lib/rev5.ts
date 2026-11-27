@@ -3,7 +3,7 @@
    Temporary: it drives the DOM directly. Next steps are to replace it piece by piece with React components. */
 /* Jack O'Beers Rev 5: shared behaviour. Header, basket, toast, reveals, the opening, the shelf with its beer-bottle cursor, the label panel. */
 import { DELIVERY_AREAS_TEXT, SHIPPING } from "@/lib/shipping";
-import { pickVariant, sizeLabel } from "@/lib/variants";
+import { pickVariant, sizeLabel, sizeManaged } from "@/lib/variants";
 
 export function initRev5(P: any[], PAIR: Record<string, string> = {}): () => void {
   const offs: Array<() => void> = [];
@@ -83,7 +83,7 @@ export function initRev5(P: any[], PAIR: Record<string, string> = {}): () => voi
   function saveCart() { ls('jo5_cart', JSON.stringify(cart)); renderCart(); document.dispatchEvent(new CustomEvent('jo:basket')); }
   function count() { return cart.reduce(function (a, l) { return a + l.q; }, 0); }
   /* Stock Shopify shares for the variant checkout uses (the first one on sale), or null when it is not shared. Never guessed. */
-  function stockOf(p, vid) { var v = pickVariant(p.variants, vid); return v && typeof v.stock === 'number' ? v.stock : null; }
+  function stockOf(p, vid) { if (sizeManaged(p.variants)) return null; var v = pickVariant(p.variants, vid); return v && typeof v.stock === 'number' ? v.stock : null; }
   /* A basket line is one product in one variant. v is empty unless a size was chosen. */
   function same(l, h, v) { return l.h === h && (l.v || '') === (v || ''); }
   function inBasket(h, v) { var l = cart.filter(function (x) { return same(x, h, v); })[0]; return l ? l.q : 0; }

@@ -22,7 +22,7 @@ export default defineConfig({
     { name: "behind-iphone", testIgnore: /checkout\.spec\.ts/, testMatch: /(behind|brass|functional|checkout)\.spec\.ts/, use: { ...iphone, baseURL: "http://localhost:3202", browserName: "chromium" } },
   ],
   webServer: [
-    { command: "node tests/fake-shopify.cjs", port: 4470, reuseExistingServer: true },
+    { command: "node tests/fake-shopify.cjs", port: 4470, reuseExistingServer: true, env: { FAKE_SIZES: "1" } },
     {
       command: "sh -c \"pnpm build && pnpm start -p 3201\"",
       port: 3201,

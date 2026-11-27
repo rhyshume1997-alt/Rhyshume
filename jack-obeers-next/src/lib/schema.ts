@@ -1,6 +1,7 @@
 import { ADDRESS, EMAIL, GEO, NAME, OPENING, PHONE, SAME_AS, SITE_URL, STORE_ID, abs } from "@/lib/site";
 import { LINKS } from "@/lib/brand";
 import type { Product } from "@/lib/catalogue";
+import { isAvailable, pickVariant } from "@/lib/variants";
 
 /** Structured data, built on the server and written into the page as JSON-LD. Only facts the shop has confirmed. */
 
@@ -61,8 +62,8 @@ export function productDescription(p: Product): string {
 }
 
 export function productPrice(p: Product): { price: number; available: boolean } {
-  const v = p.variants.find((x) => x.available) || p.variants[0];
-  return { price: v ? v.price : 0, available: p.variants.some((x) => x.available) };
+  const v = pickVariant(p.variants);
+  return { price: v ? v.price : 0, available: isAvailable(p.variants) };
 }
 
 /** Product with one Offer. Price, currency and availability come from Shopify. Nothing about reviews or ratings. */

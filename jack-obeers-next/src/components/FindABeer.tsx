@@ -76,7 +76,7 @@ export function FindABeer({ cards }: { cards: Card[] }) {
                 <a href={`/product/${c.handle}`}><b>{c.name}</b></a>
                 <small>{[c.brewery, c.abv !== null ? `${c.abv}% ABV` : "", `£${c.price.toFixed(2)}`].filter(Boolean).join(" · ")}{why.length ? ` · ${why.join(", ")}` : ""}</small>
               </div>
-              <AddToBasket handle={c.handle} name={c.name} stock={c.stock} />
+              <AddToBasket handle={c.handle} name={c.name} stock={c.stock} sizes={c.sizes} />
             </div>
           ))}
         </div>

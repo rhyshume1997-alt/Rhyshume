@@ -1,3 +1,4 @@
+import { isAvailable, pickVariant, sizeManaged, sizesOf } from "@/lib/variants";
 import { buyLink, safePairings, STYLE_CHIPS, type Category, type GlassSpec, type Product, type Profile } from "@/lib/catalogue";
 
 export type Card = {
@@ -21,6 +22,8 @@ export type Card = {
   low: number | null;
   /** Shopify's stock for the variant that checkout uses, or null when Shopify is not sharing stock. Never invented. */
   stock: number | null;
+  /** The online sizes (500ml, 1 litre) Shopify offers for this product. Empty for every product today. */
+  sizes: ReturnType<typeof sizesOf>;
 };
 
 /** "Only N left" shows only when Shopify says so: at least 1 and at most 5. Nothing is ever invented. */
@@ -40,12 +43,15 @@ export function tidy(x: string | null | undefined): string {
 
 /** Shopify's stock for the variant that checkout uses (the first on sale), or null when it is not shared. */
 export function stockOf(p: Product): number | null {
-  const v = p.variants.find((x) => x.available) || p.variants[0];
+  // A draught product sold in two sizes draws both from one keg, but Shopify counts stock per size. A per-size figure would be wrong,
+  // so no stock limit or tag is shown for it until Michael chooses a stock model (see SHOPIFY-READINESS.md).
+  if (sizeManaged(p.variants)) return null;
+  const v = pickVariant(p.variants);
   return v && typeof v.stock === "number" ? v.stock : null;
 }
 
 export function toCard(p: Product): Card {
-  const v = p.variants.find((x) => x.available) || p.variants[0];
+  const v = pickVariant(p.variants);
   return {
     handle: p.handle,
     category: p.category,
@@ -55,15 +61,16 @@ export function toCard(p: Product): Card {
     style: tidy(p.style),
     styles: p.styles,
     price: v ? v.price : 0,
-    available: p.variants.some((x) => x.available),
+    available: isAvailable(p.variants),
     buy: buyLink(p),
     glass: p.glass,
     profile: p.profile ? { ...p.profile, blurb: p.blurb || p.profile.blurb, flavour: (p.profile.flavour || []).map(tidy) } : null,
     pairing: safePairings(p.profile),
     pairingConfirmed: !!(p.profile && p.profile.pairingConfirmed),
     sample: !!p.sample,
-    low: lowStock(v),
-    stock: v && typeof v.stock === "number" ? v.stock : null,
+    low: sizeManaged(p.variants) ? null : lowStock(v),
+    stock: stockOf(p),
+    sizes: sizesOf(p.variants),
   };
 }
 

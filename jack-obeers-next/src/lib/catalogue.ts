@@ -1,5 +1,6 @@
 import demo from "@/data/demo-products.json";
 import profiles from "@/data/profiles.json";
+import { pickVariant } from "@/lib/variants";
 
 /** stock is how many Shopify says are left, or null when Shopify is not sharing stock numbers. */
 export type Variant = { id: string; title: string; price: number; available: boolean; stock?: number | null };
@@ -201,7 +202,7 @@ function enrich(r: Raw, sample = false): Product {
   const styles = STYLE_CHIPS.filter((s) => r.tags.some((t) => t.trim().toLowerCase() === s.toLowerCase()));
   const vendor = OWN_NAMES.includes(r.vendor.trim().toLowerCase()) ? "" : r.vendor.trim();
   const style = profile ? profile.style : styles[0] || (category === "beer" ? "" : r.productType.trim());
-  const buy = r.variants.find((v) => v.available) || r.variants[0];
+  const buy = pickVariant(r.variants);
   const blob = [profile ? profile.style : "", ...r.tags, r.title, r.productType].join(" ");
   const col: Record<Category, string> = { beer: "beers", cider: "ciders", wine: "wines", events: "events", subscriptions: "subscriptions", deli: "deli", hampers: "hampers", other: "other" };
   return {

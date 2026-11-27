@@ -10,6 +10,7 @@ const PORT = 3205;
 const BASE = `http://localhost:${PORT}`;
 const FAKE = "http://localhost:4470";
 let server: ChildProcess;
+let visitor = 0;
 
 test.describe.configure({ mode: "serial" });
 
@@ -27,7 +28,7 @@ test.beforeAll(async () => {
 test.afterAll(() => { server?.kill(); });
 
 const post = (body: unknown, origin: string | null = BASE) =>
-  fetch(BASE + "/api/checkout", { method: "POST", headers: { "Content-Type": "application/json", ...(origin ? { Origin: origin } : {}) }, body: JSON.stringify(body) });
+  fetch(BASE + "/api/checkout", { method: "POST", headers: { "Content-Type": "application/json", "X-Forwarded-For": `10.0.0.${++visitor}`, ...(origin ? { Origin: origin } : {}) }, body: JSON.stringify(body) }); // a new visitor each time, so the 8-a-minute limit does not interfere
 const adult = { dob: "1990-01-01", ageConfirmed: true };
 const lastCart = async () => (await fetch(FAKE + "/__last-cart")).json() as Promise<{ lines: { merchandiseId: string; quantity: number }[]; attributes: { key: string; value: string }[] } | null>;
 
@@ -63,4 +64,18 @@ test("handoff refuses: under the £35 minimum, no age declaration, under 18, for
   expect((await post({ lines: [{ h: cheap.handle, q: 20 }], ...adult }, "https://evil.example")).status).toBe(403);
   expect((await (await post({ lines: [{ h: soldOut.handle, q: 20 }], ...adult })).json()).reason).toBe("empty");
   expect((await (await post({ lines: [], ...adult })).json()).reason).toBe("empty");
+});
+
+test("handoff with sizes: the chosen 1 litre variant is sent, a 250ml id falls back to 500ml, never the 250ml", async () => {
+  const all = (await (await fetch(FAKE, { method: "POST", body: JSON.stringify({ query: "{ products { nodes { handle title variants } } }" }) })).json()).data.products.nodes as { handle: string; title: string; variants: { nodes: { id: string; title: string }[] } }[];
+  const p = all.find((n) => /SIZE TEST DRAUGHT LAGER/i.test(n.title))!;
+  const id = (t: string) => p.variants.nodes.find((v) => v.title === t)!.id;
+  let r = await post({ lines: [{ h: p.handle, q: 4, v: id("1 litre") }], ...adult }); // 4 x 9.00 = 36, over the minimum
+  expect((await r.json()).ok).toBe(true);
+  expect((await lastCart())!.lines).toEqual([{ merchandiseId: id("1 litre"), quantity: 4 }]);
+  r = await post({ lines: [{ h: p.handle, q: 7, v: id("250ml") }], ...adult }); // asks for the 250ml: refused as a size, 500ml used
+  expect((await r.json()).ok).toBe(true);
+  expect((await lastCart())!.lines).toEqual([{ merchandiseId: id("500ml"), quantity: 7 }]);
+  r = await post({ lines: [{ h: p.handle, q: 7 }], ...adult }); // no size named: 500ml, the default
+  expect((await lastCart())!.lines[0].merchandiseId).toBe(id("500ml"));
 });
