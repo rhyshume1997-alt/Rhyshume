@@ -58,3 +58,30 @@ Needed, none of it built:
 ## Exact things that need approval before any of this can proceed
 
 See "Shopify configuration actions requiring approval" in `SHOPIFY-READINESS.md`.
+
+## Addendum: enforcing entitlement, included beers and discounts without trusting the frontend
+
+The two cards, their prices and their advertised benefits stay exactly as they are. Shopify's membership configuration does not yet match them (it has an unrelated £11.99 draft, an Appstle lifetime plan on an old event product, and a Beer Club plan on 53 products), and nothing here changes Appstle plans or turns on recurring payments. This is what would have to exist for each benefit to be real. None of it is built, and each item needs Rhys's approval and a price.
+
+The rule for all of it: the browser is only ever allowed to show a benefit. The decision that someone is a member, and every discount or allowance, must be made on a server or in Shopify, from Shopify's own record, every time it is used.
+
+| Benefit on the cards | What enforces it | Can the website alone enforce it? |
+|---|---|---|
+| **Being an active Regular or Legend** | The state of the person's subscription contract in Shopify (active, paused, cancelled, past due), read server-side with a server-only credential for a signed-in customer, checked at each use, never from a cookie or stored flag. Which tool writes that state (Appstle Memberships, Appstle Subscriptions or a customer tag) has to be proven with a test customer, because installing the apps shows nothing about a headless site | **No.** It needs customer sign-in (not built) and a server credential held only in Vercel |
+| **10% off all fills** | In the shop: staff apply it at the till against the customer. Online: a Shopify automatic discount restricted to eligible customers (a customer segment based on a tag or subscription status; whether the plan supports it has to be checked). The website may show the discount; Shopify applies it, so it cannot be gained by editing a page | **No.** Shopify must apply it |
+| **Included beers each month (3 x 500 ml in The Regular, 5 x 500 ml in The Legend)** | Shopify has no monthly allowance. Realistic options: (a) the subscription itself carries the included beers as part of what the monthly charge covers and they are prepared for collection; (b) a monthly store credit or gift-card balance topped up when the contract renews and spent at checkout; (c) counted by hand at the till. Whatever is chosen, the count must live in Shopify or an app, not on the website | **No.** Needs a Shopify mechanism or app, plus an approved rule for unused beers and for cancelling mid-month |
+| **Members-only beers, early access to kegs, event priority** | Hiding a product on the website is not enforcement: anyone with its Shopify address could still buy it. For a real restriction Shopify must refuse the sale unless the customer is eligible (a checkout validation Function or an app; whether a custom Function is allowed depends on the Shopify plan). The website's own `/api/checkout` can also check entitlement before it makes a cart, but that does not stop a direct Shopify link | **Partly.** The website can hide it and refuse its own checkout; only Shopify can stop a direct purchase |
+| **Free event ticket (The Legend)** | A discount or a $0 ticket line tied to the same entitlement and limited to the right events, with a limit of one per customer per event | **No.** Same as above |
+| **Stopping benefits when someone cancels or lapses** | The same live check on every use. Cancellation and pause are handled by the Appstle or Shopify customer portal | **No.** Needs the live check |
+
+### What the website's checkout would need (when approved)
+1. Real customer sign-in through Shopify's customer accounts (the preview-only demo cookie is switched off for the live site and must stay off).
+2. A server-held credential with read access to subscription contracts or customer tags, used only on the server.
+3. In `/api/checkout`: confirm the customer is signed in, look up their current contract status, and then apply the discount through the cart's discount code or leave it to a Shopify automatic discount. The browser sends no price, no discount and no "I am a member".
+4. Recorded on the order (as cart attributes or the contract itself) so Michael can see on each order that a benefit was applied and why.
+
+### Questions that decide the design
+1. Is a tier a recurring monthly charge through an Appstle selling plan, or a different kind of card? (The checklist also describes a one-off, card-style concept. These are two different builds.)
+2. What does "included beers" mean in practice if a member does not collect them, or cancels mid-month?
+3. Is "fills" the in-shop draught fill only, or also bottled products online?
+4. Does the Beer Club plan (10% off a monthly product subscription) stay, change or go? It is not the same offer as either card.
