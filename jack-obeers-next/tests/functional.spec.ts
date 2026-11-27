@@ -206,3 +206,54 @@ test.describe("catalogue edge cases", () => {
     await expect(c).toContainText("£3.00");
   });
 });
+
+/**
+ * Stock the website cannot see or cannot trust. A maximum of 24 per item exists to stop runaway orders. It must never turn "no stock figure"
+ * into "available": whether something can be bought is decided by Shopify's own availableForSale flag, and Shopify's checkout is the final
+ * authority on real stock.
+ */
+test.describe("unknown, zero and negative stock", () => {
+  const open = (page: import("@playwright/test").Page) => page.addInitScript(() => sessionStorage.setItem("jo_opened", "1"));
+  const card = (page: import("@playwright/test").Page, name: string) => page.locator(".pg-card", { hasText: name }).first();
+
+  test("no stock figure and on sale: it can be bought, but only up to 24, with no stock claim", async ({ page }) => {
+    await open(page);
+    await page.goto("/beers");
+    const c = card(page, "Stock Unknown Available");
+    await expect(c.locator("[data-add]")).toHaveCount(1);
+    await expect(c.locator(".pg-low")).toHaveCount(0); // no "Only N left" without a figure
+    const plus = c.getByRole("button", { name: /one more/i });
+    for (let i = 0; i < 23; i++) await plus.click();
+    await expect(c.locator(".atb-n")).toHaveText("24");
+    await plus.click({ force: true });
+    await expect(c.locator(".atb-n")).toHaveText("24"); // the 24 holds
+    await expect(c.locator(".atb-msg")).toHaveText(/Up to 24 of each item per order/);
+  });
+
+  test("no stock figure and NOT on sale: still sold out; the 24 limit does not make it available", async ({ page }) => {
+    await open(page);
+    await page.goto("/beers");
+    const c = card(page, "Stock Unknown Sold Out");
+    await expect(c.getByRole("button", { name: /sold out/i })).toBeDisabled();
+    await expect(c.locator("[data-add]")).toHaveCount(0);
+    await expect(c.locator(".atb")).toHaveCount(0);
+    const href = await c.locator("a[href^='/product/']").first().getAttribute("href");
+    await page.goto(href!);
+    await expect(page.locator(".atb-add")).toHaveCount(0);
+    await expect(page.getByRole("button", { name: /sold out/i })).toBeDisabled();
+    expect(await page.locator("main").innerText()).not.toMatch(/In stock/);
+  });
+
+  test("a stock figure of zero or below is never sold, even if Shopify would allow overselling", async ({ page }) => {
+    await open(page);
+    await page.goto("/beers");
+    for (const name of ["Stock Zero Allowed", "Stock Negative Allowed"]) {
+      const c = card(page, name);
+      await c.locator("[data-add]").click();
+      await expect(c.locator("[data-add]")).toHaveAttribute("data-state", "error");
+      await expect(c.locator(".atb-msg.bad")).toHaveText(/none left in stock/i);
+    }
+    const lines = await page.evaluate(() => JSON.parse(localStorage.getItem("jo5_cart") || "[]") as unknown[]);
+    expect(lines).toEqual([]); // nothing was added
+  });
+});

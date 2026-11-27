@@ -5,7 +5,8 @@ import { isAvailable, pickVariant } from "@/lib/variants";
 /** stock is how many Shopify says are left, or null when Shopify is not sharing stock numbers. */
 export type Variant = { id: string; title: string; price: number; available: boolean; stock?: number | null };
 
-export type Category = "beer" | "cider" | "wine" | "events" | "subscriptions" | "deli" | "hampers" | "other";
+export { categoryOf, type Category } from "@/lib/categories";
+import { categoryOf, hiddenReason, type Category } from "@/lib/categories";
 
 export type Profile = {
   match: string;
@@ -83,19 +84,6 @@ export type Catalogue = {
 
 /** The style chips, most specific first. A tag counts if it equals one of these, ignoring case. */
 export const STYLE_CHIPS = ["Lager", "Pale Ale", "IPA", "Sour", "Stout", "Porter", "Ale", "Cider"] as const;
-
-export function categoryOf(productType: string): Category {
-  const t = productType.trim().toLowerCase();
-  if (!t) return "other";
-  if (t.includes("event") || t.includes("ticket")) return "events";
-  if (t.includes("subscription") || t.includes("membership")) return "subscriptions";
-  if (t.includes("hamper")) return "hampers";
-  if (t.includes("deli") || t.includes("food") || t.includes("snack") || t.includes("cheese") || t.includes("pie") || t.includes("chutney") || t.includes("preserve")) return "deli";
-  if (t.includes("cider")) return "cider";
-  if (t.includes("wine") || t.includes("prosecco") || t.includes("sparkling")) return "wine";
-  if (t.includes("beer") || t.includes("lager") || t.includes("ale") || t.includes("stout") || t.includes("ipa") || t.includes("porter") || t.includes("sour")) return "beer";
-  return "other";
-}
 
 function titleCase(s: string): string {
   const x = s.trim();
@@ -359,6 +347,19 @@ function sampleCatalogue(): Catalogue {
 }
 
 /**
+ * Says, once per change, how many products Shopify returned and which ones the website does not show and why (a line in the server log,
+ * handles and reasons only). Without it a product with a blank or unknown type simply never appears and nobody can tell why.
+ */
+let lastVisibility = "";
+function reportVisibility(returned: number, all: Product[]): void {
+  const today = new Date().toISOString().slice(0, 10);
+  const hidden = all.map((p) => ({ handle: p.handle, why: hiddenReason(p, today) })).filter((x): x is { handle: string; why: string } => !!x.why);
+  const noVariants = returned - all.length;
+  const line = `[catalogue] Shopify returned ${returned} products; ${all.length} have a variant; ${noVariants} dropped for having no variant; ${hidden.length} not shown by design${hidden.length ? ": " + hidden.map((h) => `${h.handle} (${h.why})`).join("; ") : ""}`;
+  if (line !== lastVisibility) { lastVisibility = line; console.info(line); }
+}
+
+/**
  * The only place the site asks for products.
  *
  * With SHOPIFY_STORE_DOMAIN and SHOPIFY_STOREFRONT_TOKEN set, every product comes from the shop's Storefront API
@@ -371,7 +372,9 @@ export async function getCatalogue(): Promise<Catalogue> {
   if (!domain || !token) return sample;
   try {
     const stock = await fetchStock(domain, token);
-    const all = (await fetchAll(domain, token)).map((n) => fromNode(n, stock)).filter((p): p is Product => !!p);
+    const nodes = await fetchAll(domain, token);
+    const all = nodes.map((n) => fromNode(n, stock)).filter((p): p is Product => !!p);
+    reportVisibility(nodes.length, all);
     if (!all.length) return sample;
     const products = all.filter((p) => p.category === "beer" || p.category === "cider" || p.category === "wine");
     return { collections: SAMPLE.collections, products, all, live: true };

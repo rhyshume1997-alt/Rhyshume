@@ -10,33 +10,65 @@ import { MESSAGES, verifyTurnstile } from "@/lib/turnstile";
  *     3 seconds was not typed by a person). Both come from <GuardFields />.
  *  3. For the JSON endpoint: the request must come from this site's own pages, be JSON, and be small.
  *
- * Limits are counted in memory, so on Vercel each running server instance counts for itself. That stops a script
- * hammering one instance, and it is a good first layer. For a hard global limit, switch rateLimit() to a shared store
- * (Upstash Redis through the Vercel Marketplace, or Vercel KV) or add a Vercel Firewall rate-limit rule. The rest of the
- * code does not need to change.
+ * Limits are counted in memory, so on Vercel each running server instance counts for itself. A caller whose requests land on N warm
+ * instances gets about N times the limit, and a new instance starts with an empty count. That stops a script hammering one instance and is a
+ * good first layer, but it is NOT a global limit: measured against two instances, the same visitor was allowed the full limit on each
+ * (see FOLLOW-UP-REVIEW.md). For a hard global limit, switch rateLimit() to a shared store (Upstash Redis through the Vercel Marketplace, or
+ * Vercel KV) or add a Vercel Firewall rate-limit rule. Both change a live service, cost money or both, so they need Rhys's approval. The rest
+ * of the code does not need to change.
  */
 
-const hits = new Map<string, number[]>();
+/**
+ * What the counter keeps for one key: the times of its hits inside the window. The Map keeps insertion order, and a key is moved to the end
+ * each time it is hit, so the front of the Map is always the least recently used.
+ */
+type Entry = { times: number[]; windowMs: number };
+const hits = new Map<string, Entry>();
+
+/** How many different keys one server instance tracks before it starts forgetting the least important ones. */
+export const MAX_TRACKED_KEYS = 20_000;
+
+/**
+ * Forget keys to make room, in this order: keys whose window has fully passed (they are not limiting anyone), then the keys with the FEWEST
+ * hits, oldest first. A key that is sitting at its limit has the most hits, so it is the last to go. This replaces an older rule that
+ * emptied the whole table at 5,000 keys: anyone could send 5,001 requests under made-up names and so wipe every counter, including the
+ * one counting wrong passwords for an owner's account.
+ */
+function makeRoom(now: number): void {
+  for (const [k, e] of hits) if (now - e.times[e.times.length - 1] >= e.windowMs) hits.delete(k);
+  if (hits.size <= MAX_TRACKED_KEYS) return;
+  const order = [...hits.entries()].map(([k, e], i) => ({ k, n: e.times.length, i })).sort((x, y) => x.n - y.n || x.i - y.i);
+  for (const { k } of order) {
+    if (hits.size <= MAX_TRACKED_KEYS * 0.9) break;
+    hits.delete(k);
+  }
+}
 
 export function rateLimit(key: string, limit: number, windowMs: number): { ok: boolean; retryAfterMs: number } {
   const now = Date.now();
-  const recent = (hits.get(key) || []).filter((t) => now - t < windowMs);
+  const recent = (hits.get(key)?.times || []).filter((t) => now - t < windowMs);
+  hits.delete(key); // put it back at the end: most recently used
   if (recent.length >= limit) {
-    hits.set(key, recent);
+    hits.set(key, { times: recent, windowMs });
     return { ok: false, retryAfterMs: windowMs - (now - recent[0]) };
   }
   recent.push(now);
-  hits.set(key, recent);
-  if (hits.size > 5000) {
-    for (const [k, v] of hits) if (!v.some((t) => now - t < windowMs)) hits.delete(k);
-    if (hits.size > 5000) hits.clear();
-  }
+  hits.set(key, { times: recent, windowMs });
+  if (hits.size > MAX_TRACKED_KEYS) makeRoom(now);
   return { ok: true, retryAfterMs: 0 };
 }
 
+/**
+ * The visitor's address, for rate limits. Prefer what the hosting platform sets itself: on Vercel, x-vercel-forwarded-for and x-real-ip
+ * hold the connecting client's address and cannot be chosen by the visitor. The first value of x-forwarded-for CAN be chosen by a visitor on
+ * any host that does not overwrite it, and anyone who changes it per request gets a fresh allowance every time, so it is only the last
+ * resort (local runs and tests, where no platform header exists).
+ */
 export function clientIp(h: Headers): string {
+  const platform = h.get("x-vercel-forwarded-for") || h.get("x-real-ip");
   const fwd = h.get("x-forwarded-for");
-  return (fwd ? fwd.split(",")[0] : h.get("x-real-ip") || "unknown").trim().slice(0, 64);
+  const raw = platform || (fwd ? fwd.split(",")[0] : "") || "unknown";
+  return raw.split(",")[0].trim().slice(0, 64) || "unknown";
 }
 
 export async function visitorIp(): Promise<string> {

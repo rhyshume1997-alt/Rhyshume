@@ -9,7 +9,7 @@ function add(title, type, vendor, tags, price, o = {}) {
   P.push({
     handle: 'p' + P.length, title, description: o.desc || '', productType: type, vendor, tags, featuredImage: null,
     createdAt: new Date(Date.now() - (o.ageDays ?? 400) * day).toISOString(),
-    variants: { nodes: [{ id: 'gid://shopify/ProductVariant/' + (vid++), title: 'Default', availableForSale: o.avail !== false, price: { amount: price.toFixed(2) }, quantityAvailable: o.qty ?? 40 }] },
+    variants: { nodes: [{ id: 'gid://shopify/ProductVariant/' + (vid++), title: 'Default', availableForSale: o.avail !== false, price: { amount: price.toFixed(2) }, quantityAvailable: 'qty' in o ? o.qty : 40 }] },
   });
 }
 add('VAULT CITY RASPBERRY SOUR 440ML ABV 4.5%', 'Beer', 'Vault City', ['Sour'], 4.5, { ageDays: 6, qty: 3, desc: 'Written in Shopify: tart raspberry, brewed in Glasgow.' });
@@ -47,6 +47,12 @@ if (process.env.FAKE_SIZES) {
   add('Expired Test Night', 'Event Tickets', 'Jack O’Beers', ['date:2020-01-01', 'time:19:00'], 10);
   P.push({ handle: 'p' + P.length, title: 'EDGE NO VARIANTS ABV 4.0%', description: '', productType: 'Beer', vendor: '', tags: [], featuredImage: null, createdAt: new Date(Date.now() - 400 * day).toISOString(), variants: { nodes: [] } });
   add('EDGE NO INFO', 'Beer', '', [], 3.2);
+  // Stock cases: Shopify gives no figure (null) for a product it does not track, and can give 0 or a negative number for one that is out
+  // but still allowed to sell. A stock figure of null must never turn into "plenty", and a sold-out product must stay sold out.
+  add('STOCK UNKNOWN AVAILABLE ABV 4.0%', 'Beer', 'Stock Test', ['Lager'], 4, { qty: null });
+  add('STOCK UNKNOWN SOLD OUT ABV 4.0%', 'Beer', 'Stock Test', ['Lager'], 4, { qty: null, avail: false });
+  add('STOCK ZERO ALLOWED ABV 4.0%', 'Beer', 'Stock Test', ['Lager'], 4, { qty: 0 });
+  add('STOCK NEGATIVE ALLOWED ABV 4.0%', 'Beer', 'Stock Test', ['Lager'], 4, { qty: -2 });
 }
 http.createServer((req, res) => {
   let body = '';

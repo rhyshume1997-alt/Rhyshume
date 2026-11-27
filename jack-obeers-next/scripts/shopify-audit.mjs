@@ -15,7 +15,13 @@
  *      subscription plan (such as the Appstle Beer Club plan) is really offered to the headless site, as opposed to only existing in the app.
  *   4. Whether ABV and allergen metafields exist and are exposed to the Storefront API (custom.abv, custom.allergens and a few common names).
  *   5. Whether Storefront cart-related selling plan fields are readable on variants (sellingPlanAllocations).
+ *   6. websiteVisibility: for every product the Storefront API returns, which part of the website shows it, and for any it does NOT show,
+ *      the exact reason (blank or unknown product type, subscription or membership product, undated or past event, no variant). Compare its
+ *      handles with the Shopify admin's list of active products: anything in the admin but missing here is not published to the sales
+ *      channel this token reads, so the website cannot see it.
  */
+import { categoryOf, hiddenReason } from "../src/lib/categories.ts"; // the website's own rule (needs Node 22.18 or newer, which strips types)
+
 const domain = process.env.SHOPIFY_STORE_DOMAIN;
 const token = process.env.SHOPIFY_STOREFRONT_TOKEN;
 if (!domain || !token) { console.error("Set SHOPIFY_STORE_DOMAIN and SHOPIFY_STOREFRONT_TOKEN."); process.exit(1); }
@@ -62,6 +68,23 @@ if (base.ok) {
     withMoreThanOneVariant: multi.length, variantTitles: count(p.flatMap((x) => x.variants.nodes.map((v) => v.title))),
     multiVariantExamples: multi.slice(0, 5).map((x) => ({ handle: x.handle, variants: x.variants.nodes.map((v) => `${v.title} ${v.price.amount} ${v.availableForSale ? "on sale" : "sold out"}`) })),
     note: "Draft and archived products are not returned by the Storefront API, so they cannot appear on the website.",
+  };
+}
+
+if (base.ok) {
+  const today = new Date().toISOString().slice(0, 10);
+  const rows = base.nodes.map((x) => {
+    const category = categoryOf(x.productType || "");
+    const noVariant = x.variants.nodes.length === 0;
+    const why = noVariant ? "no variant (dropped when read)" : hiddenReason({ category, tags: x.tags || [], productType: x.productType || "" }, today);
+    return { handle: x.handle, title: x.title, productType: x.productType || "", category, hiddenBecause: why };
+  });
+  report.websiteVisibility = {
+    returnedByStorefrontApi: rows.length,
+    shownOnWebsite: rows.filter((r) => !r.hiddenBecause).length,
+    byCategory: count(rows.map((r) => r.category)),
+    hiddenByDesign: rows.filter((r) => r.hiddenBecause),
+    note: "The Storefront API returns only products that are active AND published to this token's sales channel. A product that is active in the Shopify admin but missing from this list is not published to that channel, so the website cannot see it.",
   };
 }
 
