@@ -61,9 +61,9 @@ export function AddToBasket({ handle, name, stock, label = "Add to basket", vari
   };
 
   return (
-    <span className="atb">
+    <span className={sizes.length > 1 ? "atb atb-sized" : "atb"}>
       {sizes.length > 1 && (
-        <span className="seg atb-sizes" role="group" aria-label={`Size of ${name}`} style={{ flexBasis: "100%" }}>
+        <span className="seg atb-sizes" role="group" aria-label={`Size of ${name}`}>
           {sizes.map((x) => (
             <button key={x.id} type="button" className="seg-btn" aria-pressed={x.id === variantId} aria-disabled={!x.available} onClick={() => { if (x.available) { setSize(x.id); setNote(""); } }}>
               {x.label} £{x.price.toFixed(2)}{x.available ? "" : ", sold out"}

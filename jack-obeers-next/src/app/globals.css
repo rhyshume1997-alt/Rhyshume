@@ -1966,3 +1966,9 @@ html[data-look="behind"] :is(.newin ul, .seg, .board)::-webkit-scrollbar-track {
 html[data-look="behind"] :is(.newin ul, .seg, .board)::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #dcbc78, #a47b33); border: 2px solid #2a150d; border-radius: 99px; }
 html[data-look="behind"] :is(.newin ul, .seg, .board)::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #e8cb8b, #b2873b); }
 html[data-look="behind"] :is(.newin ul, .seg, .board)::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
+
+/* Online sizes (500ml and 1 litre). No product has sizes today, so none of this applies yet. When one does, the size choice takes its own row
+   above the quantity and the button, so the card's controls stay as narrow as on any other card and the beer name keeps its space. */
+.atb.atb-sized { display: grid; grid-template-columns: auto minmax(0, 1fr); }
+.atb.atb-sized .atb-sizes { grid-column: 1 / -1; justify-self: start; margin: 0 0 .1rem; }
+.atb.atb-sized .atb-msg { grid-column: 1 / -1; }

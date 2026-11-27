@@ -39,6 +39,7 @@ async function all(buildQuery) {
   }
   return { ok: true, nodes: out };
 }
+const onSale = (x) => (typeof x.availableForSale === "boolean" ? x.availableForSale : x.variants.nodes.some((v) => v.availableForSale));
 const count = (arr) => arr.reduce((m, k) => ((m[k] = (m[k] || 0) + 1), m), {});
 
 const BASE = `query($cursor:String){ products(first:100, after:$cursor){ pageInfo{hasNextPage endCursor} nodes{ handle title productType tags availableForSale variants(first:20){ nodes{ title availableForSale price{amount} } } } } }`;
@@ -56,7 +57,7 @@ if (base.ok) {
   const p = base.nodes;
   const multi = p.filter((x) => x.variants.nodes.length > 1);
   report.catalogue = {
-    ok: true, products: p.length, availableForSale: p.filter((x) => x.availableForSale).length, unavailable: p.filter((x) => !x.availableForSale).length,
+    ok: true, products: p.length, availableForSale: p.filter(onSale).length, unavailable: p.filter((x) => !onSale(x)).length,
     byProductType: count(p.map((x) => x.productType || "(none)")),
     withMoreThanOneVariant: multi.length, variantTitles: count(p.flatMap((x) => x.variants.nodes.map((v) => v.title))),
     multiVariantExamples: multi.slice(0, 5).map((x) => ({ handle: x.handle, variants: x.variants.nodes.map((v) => `${v.title} ${v.price.amount} ${v.availableForSale ? "on sale" : "sold out"}`) })),

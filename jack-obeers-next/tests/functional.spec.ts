@@ -20,7 +20,9 @@ test("home page: local delivery only, no UK-wide or international promise, click
 test("basket: the delivery note names the three local areas and says nothing about the UK", async ({ page }) => {
   await page.addInitScript(() => sessionStorage.setItem("jo_opened", "1"));
   await page.goto("/beers");
-  await page.locator(".pg-card [data-add]").first().click();
+  const add = page.locator(".pg-card [data-add]").first();
+  await add.evaluate((e) => e.scrollIntoView({ block: "center" })); // keeps it clear of the fixed Call bar on a phone
+  await add.click();
   await page.locator(".cartbtn").first().click();
   const t = await page.locator("#cart-body").innerText();
   expect(t).toMatch(/Local delivery only: Milngavie, Baljaffray and Strathblane/);
@@ -143,14 +145,14 @@ test.describe("online sizes", () => {
     await expect(page.locator(".atb-add")).toHaveAttribute("data-state", "added");
     const lines = await page.evaluate(() => JSON.parse(localStorage.getItem("jo5_cart") || "[]") as { h: string; q: number; v?: string }[]);
     expect(lines).toHaveLength(2);
-    expect(lines.map((l) => l.q).sort()).toEqual([1, 2]);
+    expect(lines.map((l) => l.q)).toEqual([2, 2]); // the chosen quantity stays after an add, by design
     expect(lines.every((l) => !!l.v)).toBe(true);
     await page.locator(".cartbtn").first().click();
     const body = page.locator("#cart-body");
     await expect(body).toContainText("(1 litre) × 2");
-    await expect(body).toContainText("(500ml) × 1");
-    await expect(body).toContainText("£23.50"); // 2 x 9.00 + 5.50
-    await expect(page.locator(".cartbtn .n").first()).toHaveText("3");
+    await expect(body).toContainText("(500ml) × 2");
+    await expect(body).toContainText("£29.00"); // 2 x 9.00 + 2 x 5.50
+    await expect(page.locator(".cartbtn .n").first()).toHaveText("4");
   });
 
   test("a size that is sold out cannot be chosen, and the other is the default", async ({ page }) => {
