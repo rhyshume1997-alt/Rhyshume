@@ -1962,6 +1962,8 @@ html[data-look="behind"] .atb-add[data-state="busy"] .atb-t { opacity: .7; }
   html[data-look="behind"] .pg-buy { flex-direction: column; align-items: stretch; gap: .5rem; }
   html[data-look="behind"] .pg-buy .pg-btns { width: 100%; }
   html[data-look="behind"] .pg-buy .atb { display: grid; grid-template-columns: auto minmax(0, 1fr); width: 100%; }
+  html[data-look="behind"] .pg-buy .atb-msg { grid-column: 1 / -1; }
+  html[data-look="behind"] .atb-add { min-width: 0; padding-inline: .8rem; }
 }
 
 /* Brass scrollbars for the sideways strips (New in, filters, boards): mahogany track, brass thumb. Firefox uses scrollbar-color; Chromium and Safari use the pseudo-elements. */
