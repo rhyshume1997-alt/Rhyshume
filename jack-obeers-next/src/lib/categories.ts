@@ -17,6 +17,9 @@ export function categoryOf(productType: string): Category {
   if (t.includes("cider")) return "cider";
   if (t.includes("wine") || t.includes("prosecco") || t.includes("sparkling")) return "wine";
   if (t.includes("beer") || t.includes("lager") || t.includes("ale") || t.includes("stout") || t.includes("ipa") || t.includes("porter") || t.includes("sour")) return "beer";
+  // Beer styles whose names contain none of the words above: a product typed Pilsner, Blonde or Bitter is a beer, not "other".
+  // Whole words only, so "Cocktail Bitters" (a mixer) and anything else that merely contains these letters stays excluded.
+  if (/\b(pilsner|pilsener|pils|blonde|bitter)\b/.test(t)) return "beer";
   return "other";
 }
 

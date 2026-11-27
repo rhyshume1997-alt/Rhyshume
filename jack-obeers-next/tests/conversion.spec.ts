@@ -75,7 +75,7 @@ test("find me a beer points at beers from the flavour chips", async ({ page }) =
   await page.getByRole("button", { name: "Dark" }).click();
   await expect(page.locator(".find-pick").first()).toBeVisible();
   await page.getByRole("button", { name: "Fruity", exact: true }).click();
-  await page.getByRole("button", { name: "Bitter" }).click();
+  await page.getByRole("button", { name: "Bitter", exact: true }).click(); // exact: a product called "... Bitter" has buttons with that word too
   expect(await page.locator(".find-pick").count()).toBeLessThanOrEqual(3);
 });
 

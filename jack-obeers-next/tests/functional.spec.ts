@@ -173,6 +173,37 @@ test.describe("online sizes", () => {
   });
 });
 
+/** Beer styles that used to be dropped because the product type held none of the beer keywords. */
+test.describe("Pilsner, Blonde and Bitter products", () => {
+  const open = (page: import("@playwright/test").Page) => page.addInitScript(() => sessionStorage.setItem("jo_opened", "1"));
+  test("Gubernija Pilsner, Ilkley Blonde and Joshua Jane Bitter appear under beers and can be added", async ({ page }) => {
+    await open(page);
+    await page.goto("/beers");
+    for (const name of ["Gubernija Pilsner", "Ilkley Blonde", "Joshua Jane Bitter"]) {
+      const c = page.locator(".pg-card", { hasText: name }).first();
+      await expect(c, name).toBeVisible();
+      await expect(c.locator("[data-add]"), name).toHaveCount(1);
+    }
+    expect(await page.locator("main").innerText()).toMatch(/\d+ beers/);
+  });
+  test("they are not on the cider or wine pages, and Cocktail Bitters and other unrelated products stay excluded everywhere", async ({ page }) => {
+    await open(page);
+    for (const path of ["/beers", "/ciders", "/wines", "/"]) {
+      await page.goto(path);
+      const t = await page.locator("body").innerText();
+      expect(t, path).not.toMatch(/Cocktail Bitters|Tote Bag/i);
+    }
+    for (const path of ["/ciders", "/wines"]) {
+      await page.goto(path);
+      expect(await page.locator("main").innerText(), path).not.toMatch(/Gubernija Pilsner|Ilkley Blonde|Joshua Jane Bitter/);
+    }
+    await page.goto("/");
+    await page.locator(".sh-item[data-kind=beer]").click();
+    await expect(page.locator("#range-panel")).toContainText("Gubernija Pilsner");
+    await expect(page.locator("#range-panel")).not.toContainText(/Cocktail Bitters|Tote Bag/i);
+  });
+});
+
 /** Catalogue behaviour for what Shopify can return: events with no date or in the past, no variants, missing information. */
 test.describe("catalogue edge cases", () => {
   test("events: an undated left-over sample and an expired event never show, a real upcoming one does", async ({ page }) => {

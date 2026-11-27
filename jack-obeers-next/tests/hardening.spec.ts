@@ -54,6 +54,23 @@ test.describe("what the website hides, and why", () => {
     expect(categoryOf("")).toBe("other");
     expect(categoryOf("Gift Card")).toBe("other");
   });
+  test("beer styles with none of the older keywords are beer: Pilsner, Pilsener, Pils, Blonde, Bitter", () => {
+    for (const t of ["Pilsner", "pilsner", "Czech Pilsner", "Pilsener", "Pils", "Blonde", "Blonde Beer", "Golden Blonde", "Bitter", "Best Bitter", "Yorkshire Bitter", "  BITTER  "]) expect(categoryOf(t), t).toBe("beer");
+  });
+  test("look-alikes and everything else keep their old category: Cocktail Bitters and other products stay excluded", () => {
+    for (const t of ["Cocktail Bitters", "Bitters", "Aromatic Bitters", "Pilsners Glass", "Blondes", "Merchandise", "Gift Card", "Artwork", "Spirits", "Soft Drink", "Coffee", ""]) expect(categoryOf(t), JSON.stringify(t)).toBe("other");
+    // the older rules still win where they applied before
+    expect(categoryOf("Bitter Cider")).toBe("cider");
+    expect(categoryOf("Blonde Wine")).toBe("wine");
+    expect(categoryOf("Pilsner Hamper")).toBe("hampers");
+    expect(categoryOf("Pilsner Tickets")).toBe("events");
+    expect(categoryOf("Bitter Ale")).toBe("beer");
+    for (const [t, c] of [["Lager", "beer"], ["IPA", "beer"], ["Hard Cider", "cider"], ["Wine", "wine"], ["Deli", "deli"], ["Hamper", "hampers"], ["Event Tickets", "events"], ["Subscription Services", "subscriptions"]] as const) expect(categoryOf(t)).toBe(c);
+  });
+  test("a product with one of those types is no longer hidden by the website's visibility rule", () => {
+    for (const t of ["Pilsner", "Blonde", "Bitter"]) expect(hiddenReason({ category: categoryOf(t), tags: [], productType: t }, "2026-11-27")).toBeNull();
+    expect(hiddenReason({ category: categoryOf("Cocktail Bitters"), tags: [], productType: "Cocktail Bitters" }, "2026-11-27")).toMatch(/Cocktail Bitters/);
+  });
   test("an unknown or blank product type, a subscription, an undated or past event are hidden with a reason; everything else is shown", () => {
     expect(hiddenReason({ category: "other", tags: [], productType: "Gift Card" }, today)).toMatch(/Gift Card/);
     expect(hiddenReason({ category: "other", tags: [], productType: "" }, today)).toMatch(/blank/);

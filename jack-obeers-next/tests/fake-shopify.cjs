@@ -49,6 +49,12 @@ if (process.env.FAKE_SIZES) {
   add('EDGE NO INFO', 'Beer', '', [], 3.2);
   // Stock cases: Shopify gives no figure (null) for a product it does not track, and can give 0 or a negative number for one that is out
   // but still allowed to sell. A stock figure of null must never turn into "plenty", and a sold-out product must stay sold out.
+  // Product types that are beer styles with none of the older keywords in them, and look-alikes that must stay out.
+  add('GUBERNIJA PILSNER 500ML ABV 4.8%', 'Pilsner', 'Gubernija', [], 3.2);
+  add('ILKLEY BLONDE 500ML ABV 4.0%', 'Blonde', 'Ilkley', [], 3.6);
+  add('JOSHUA JANE BITTER 500ML ABV 3.7%', 'Bitter', 'Ilkley', [], 3.9);
+  add('COCKTAIL BITTERS 100ML', 'Cocktail Bitters', 'Bar Co', [], 8.5);
+  add('JACK O BEERS TOTE BAG', 'Merchandise', 'Jack O’Beers', [], 12);
   add('STOCK UNKNOWN AVAILABLE ABV 4.0%', 'Beer', 'Stock Test', ['Lager'], 4, { qty: null });
   add('STOCK UNKNOWN SOLD OUT ABV 4.0%', 'Beer', 'Stock Test', ['Lager'], 4, { qty: null, avail: false });
   add('STOCK ZERO ALLOWED ABV 4.0%', 'Beer', 'Stock Test', ['Lager'], 4, { qty: 0 });
