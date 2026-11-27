@@ -7,7 +7,7 @@ Date of the Shopify read: 27 November 2026. Nothing here was published, created,
 | Source | What was used | Limit |
 |---|---|---|
 | **Shopify (current source)** | The deployed preview's beer, cider and wine pages, which are rendered from the real store through the Storefront API. This shows exactly what the website can see: published, active products only. 34 products: 23 beers, 6 ciders, 5 wines | Drafts are never returned by the Storefront API, so the 23 drafts reported by the Chrome audit are invisible to the website and were not inspected. Deli, hampers, events and subscriptions were not individually read. Image resolution cannot be checked from here |
-| **Michael's tap guide** | The transcription of the "Tap list" sheet in the checklist document (24 rows: 23 taps and one special: product, ABV, 250 ml and 500 ml price) | **The Excel file itself was not received in this session.** The transcription has no descriptions and no allergen notes, so descriptions and allergens could not be compared. Please send the .xlsx |
+| **Michael's tap guide** | "Tap Guide Reference Rev 1" (Markdown made from Michael's `JackOBeers_Tap_Guide.xlsx`, 27 November 2026): 23 taps and one special, each with ABV, 250 ml and 500 ml price, a description, an allergen note and source links. The checklist's own transcription agrees with it | The .xlsx file itself was not seen, only this reference. Its prices and ABVs are Michael's reference values, not checked against kegs. Its allergen notes all say "check the keg", and several descriptions are marked "Style guide" (generic to the style, not about the product) |
 | **Chrome audit** | Its figures as reported: 60 products, 37 active, 23 drafts | Its product list was not supplied; the numbers were used as stated, not re-verified. 34 of the 37 active products are the beer, cider and wine pages above; the other three (at most) are deli, hamper, event or subscription items that were not read |
 
 Matching rule: a tap and a Shopify product are only called a match when the brewery AND the beer name both appear in the Shopify title (**Confirmed**). Where only the ABV and price agree it is listed as **Probable** for Michael to confirm and is never merged. Everything else is **Not in Shopify**. No automatic or fuzzy matching decided anything.
@@ -58,6 +58,27 @@ Totals: **3 confirmed** (taps 2, 11, 15), **1 probable** (tap 7), **16 not in Sh
 - **Prices differ** on two confirmed taps: Sheppy's Raspberry (guide £5.00, Shopify £4.70) and Sheppy's 200 Medium (guide £5.00, Shopify £4.50). The guide's prices are reference only. Shopify stays the source for published prices, so nothing was changed. Michael to say which is current.
 - Tap 15, Waterpistol: ABV and price agree.
 
+### What the reference adds (none of it published)
+
+**Descriptions.** For the three confirmed matches and the one probable match, Shopify already has a fuller description than the reference, so **no description change is suggested and nothing is overwritten**. For the 16 taps with no Shopify product, the reference text is draft copy for products that do not exist yet. It should only be used after the product is created with approval and its facts are verified. Six descriptions are marked "Style guide" in the reference (taps 3, 4, 7, 17, 18, 23) and the special says "Profile based on the drink name": those describe the style in general, not the actual beer, so they must not be published as product facts.
+
+**ABV needs checking on more than one tap.** The reference itself says: tap 2 "Sheppy's has also listed a 4.0% draught version"; tap 11 "a producer brochure lists 50 L draught at 5.0% and medium-sweet". For tap 11 there are therefore three figures: guide 4.8%, Shopify 4.9%, brochure 5.0%. None should be published until the keg label is read.
+
+**Allergen notes: none can be published.** Every note in the reference says to check the keg or supplier. The ones that matter most:
+
+| Tap | Reference note (summary) | Consequence |
+|---|---|---|
+| 2, 11 | Sulphites declared by Sheppy's | Consistent with the "ALLERGEN ADVICE ... sulphites" text already in Shopify. Keg ABV still to confirm |
+| 15 Waterpistol | "Check keg for the specific cereals" | **Shopify already shows "Contains: Barley, Wheat, Oats, Hops, Yeast, Water" for this beer.** That wording is not yet confirmed for the keg. Michael to verify, since the website publishes it as written |
+| 7 | Check sulphites and any milk or egg residues from fining; producer unknown | Cannot be written until the producer is known |
+| 13 Leith Juice, 19 Alpha Beta | The canned versions are labelled gluten-free | **The gluten-free claim must NOT be repeated for draught** until the keg specification confirms it. Nothing on the website says it |
+| 14 Hawkstone Black | Cans list barley, wheat, oats; FSA wheat notice on certain cans | Confirm with the keg specification |
+| 3, 6 | Obtain the full cereal declaration and check milk or lactose (nitro stouts) | Open |
+| 10, 16, 21 | Producers list barley, wheat, oats (or oats) | Open for the keg |
+| Special spritz | Check the wine, the elderflower mixer and any garnish against the recipe | Recipe not supplied |
+
+**Other points the reference raises:** tap 17's style appears under two names (East Coast IPA and East Coast Hazy Pale) and tap 18's name is uncertain, so neither can be matched or described yet. Tap 16 is Even Bigger Boat, a Triple IPA at 10.0%, which confirms it is a different product from Shopify's Amity Bigger Boat DIPA at 8.0%. The reference also asks to "check current Shopify matches to avoid duplicate products": that is what the table above does, and no product was created.
+
 ### Shopify products tagged "on the wall" that are not in the guide
 These are either off tap now (and should be unpublished or retagged in Shopify, which needs Michael's approval) or the guide is incomplete:
 - Ilkley West Coast IPA Jet Lag, 5.7%, £6.00
@@ -68,12 +89,11 @@ These are either off tap now (and should be unpublished or retagged in Shopify, 
 ### Missing information (needed before any of this is published)
 - Names for taps 5, 12 and 22; whether tap 8 is in use; the exact name on tap 18; the producer, ingredients and recipe for the frizzante and the spritz.
 - **1 litre prices for every draught product.** None exists in the guide or in Shopify. None was invented.
-- ABV for the 16 taps that have no Shopify product, checked against the keg labels, and an allergen declaration for every draught product.
-- The Excel's descriptions and allergen notes (not received).
+- ABV for the 16 taps that have no Shopify product, checked against the keg labels, and a verified allergen declaration for every draught product (the reference says "check the keg" for all of them).
 
 ## 3. Descriptions: what the website shows and what needs a decision
 
-- The website shows the description written in Shopify and never overwrites it. The Excel's wording was not applied anywhere. No description updates are suggested from the Excel because its text was not available.
+- The website shows the description written in Shopify and never overwrites it. The tap guide's wording was not applied anywhere, and no Shopify description was changed.
 - **Allergen wording already exists in some Shopify descriptions.** In the 22 descriptions read, six carry it: Amity Waterpistol ("Contains: Barley, Wheat, Oats, Hops, Yeast, Water"), the three Sheppy's ciders ("ALLERGEN ADVICE ... contain sulphites"), and Švyturys and Ursus ("Contains: Barley Malt (Gluten)"). The other 16 read descriptions have none, and 12 long ones were not read. These statements are published on the website exactly as Shopify has them, and they have not been checked against labels. Michael must verify them; the website cannot.
 - **A fix made in this round:** the website used to cut a description at about 400 characters. These allergen sentences sit at the end, so a cut would have hidden them. Descriptions are now shown in full.
 - Copy to tidy in Shopify (Michael's approval): the Švyturys and Ursus descriptions start with the stray word "Description"; the Sheppy's descriptions run "ALLERGEN ADVICE" into the sentence before it with no space; Jet Lag says "1L bottles may be used for larger orders", which will conflict once real 1 litre variants exist.
