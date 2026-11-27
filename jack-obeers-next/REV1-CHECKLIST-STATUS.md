@@ -111,3 +111,14 @@ Full-page screenshots of nine pages at 390 and 1440 wide were taken before and a
 | Automatic substitution or supermarket comparisons | Product matching, price data source, wording approval, accuracy and legal review | New build and ongoing data cost |
 | Trade mark or legal notice changes | Evidence of registration, approved wording | Content only once evidence is supplied |
 | Custom delivery rules beyond Shopify settings (postcode enforcement by custom logic, time slots) | A Shopify Function or an app, depending on plan | New build, see `DELIVERY-PLAN.md` |
+
+## Addendum: second Shopify audit (27 November 2026)
+
+Full detail is in `SHOPIFY-READINESS.md` (findings, checkout bypasses, blockers, and the exact Shopify actions needing approval) and `MEMBERSHIP-INTEGRATION.md`. Changes to the statuses above:
+
+- **500 ml and 1 litre sizes: Partly (was Partly, Blocked).** The website now shows a two-button size choice, buys the chosen size, prices each line and sends that variant to Shopify, but only when a product has those variants. Today none does, so nothing looks different. 250 ml is never offered. No variant or price was created. Tested in the browser and at checkout against the test shop. Not tested against real size variants (none exist).
+- **One keg, two sizes:** per-size stock would be false, so size products show no stock figure and apply no stock limit. Stock model decision for Michael (options A, B, C in the readiness report).
+- **Postcode eligibility: Prepared, not wired.** `src/lib/delivery-areas.ts` takes an approved list later (empty today, answers "unconfigured"), is unit tested, and is not described anywhere as enforcement.
+- **Membership and selling plans: assessed, not built.** Whether the 53-product Appstle plan is available to this website is NOT confirmed; `scripts/shopify-audit.mjs` tests it read-only with the real token and must be run by Rhys.
+- **Checkout bypasses found** (checkout is off): Buy now permalink, Shopify's own cart URLs, no Shopify-side minimum, no age verification, discounts after the £35 check, and a 24 versus 99 quantity mismatch. See the readiness report.
+- **Fixed on the way:** on a phone the Add button ran 30 to 60 px past its card in the non-preview (live) look, which also made the page wider than the screen. Now contained in every look.
