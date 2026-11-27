@@ -64,7 +64,9 @@ http.createServer((req, res) => {
     if (/cartCreate/.test(q.query || '')) {
       lastCart = { lines: (q.variables && q.variables.lines) || [], attributes: (q.variables && q.variables.attributes) || [] };
       res.setHeader('Content-Type', 'application/json');
-      res.end(JSON.stringify({ data: { cartCreate: { cart: { checkoutUrl: 'https://shop.test/checkouts/fake-' + lastCart.lines.length }, userErrors: [] } } }));
+      // a quantity of 17 makes this fake answer with an insecure address, to prove the route will not send a customer to one
+      const insecure = lastCart.lines.some((l) => l.quantity === 17);
+      res.end(JSON.stringify({ data: { cartCreate: { cart: { checkoutUrl: (insecure ? 'http://' : 'https://') + 'shop.test/checkouts/fake-' + lastCart.lines.length }, userErrors: [] } } }));
       return;
     }
     const start = q.variables && q.variables.cursor ? Number(q.variables.cursor) : 0;

@@ -38,11 +38,15 @@ export async function POST(req: Request) {
   }
 
   // Age declaration is checked on the server too. Photo ID is still checked at collection or delivery.
-  const dob = new Date(`${body.dob || ""}T00:00:00Z`);
+  // The date must be exactly YYYY-MM-DD, a real calendar day, and a believable age (18 to 120). Anything else is refused: the text is
+  // later saved on the Shopify cart, so only a clean date is ever allowed through.
+  const dobText = typeof body.dob === "string" ? body.dob : "";
+  const dob = new Date(`${dobText}T00:00:00Z`);
+  const cleanDate = /^\d{4}-\d{2}-\d{2}$/.test(dobText) && !Number.isNaN(dob.getTime()) && dob.toISOString().slice(0, 10) === dobText;
   const now = new Date();
-  let age = Number.isNaN(dob.getTime()) ? -1 : now.getUTCFullYear() - dob.getUTCFullYear();
+  let age = cleanDate ? now.getUTCFullYear() - dob.getUTCFullYear() : -1;
   if (age >= 0 && (now.getUTCMonth() < dob.getUTCMonth() || (now.getUTCMonth() === dob.getUTCMonth() && now.getUTCDate() < dob.getUTCDate()))) age--;
-  if (body.ageConfirmed !== true || age < 18) return NextResponse.json({ ok: false, reason: "age" }, { status: 400 });
+  if (body.ageConfirmed !== true || age < 18 || age > 120) return NextResponse.json({ ok: false, reason: "age" }, { status: 400 });
 
   const catalogue = await getCatalogue();
   if (!catalogue.live) return NextResponse.json({ ok: false, reason: "off" }, { status: 503 });
@@ -77,11 +81,12 @@ export async function POST(req: Request) {
   const res = await fetch(endpoint(domain), {
     method: "POST",
     headers: { "Content-Type": "application/json", "X-Shopify-Storefront-Access-Token": token },
-    body: JSON.stringify({ query: CART_CREATE, variables: { lines, attributes: [{ key: "age_declared_dob", value: String(body.dob) }, { key: "id_check", value: "Photo ID required at collection or delivery. 18+ only." }] } }),
+    body: JSON.stringify({ query: CART_CREATE, variables: { lines, attributes: [{ key: "age_declared_dob", value: dobText }, { key: "id_check", value: "Photo ID required at collection or delivery. 18+ only." }] } }),
     cache: "no-store",
   });
   const json: { data?: { cartCreate?: { cart?: { checkoutUrl?: string }; userErrors?: unknown[] } } } = await res.json();
   const url = json.data?.cartCreate?.cart?.checkoutUrl;
-  if (!res.ok || !url) return NextResponse.json({ ok: false, reason: "shopify" }, { status: 502 });
+  // The customer is sent to this address, so it must be a secure web address.
+  if (!res.ok || !url || !/^https:\/\//i.test(url)) return NextResponse.json({ ok: false, reason: "shopify" }, { status: 502 });
   return NextResponse.json({ ok: true, url });
 }

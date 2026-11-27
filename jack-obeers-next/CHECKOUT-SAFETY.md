@@ -28,8 +28,8 @@ The basket let a customer add 99 of an item while checkout silently cut each lin
 4. **UK shipping rates are still configured in Shopify, blocker.** The website says local delivery only, but a Shopify checkout would still offer UK rates until they are removed (an approved Shopify change).
 5. **Direct Shopify links, blocker.** See entry 5 above and item 1.
 6. **A £0.00 price.** The website would sell a published product at £0.00. Drafts never reach the website, so today nothing is affected. A guard is a business-rule decision (see `PRODUCT-RECONCILIATION.md`).
-7. **The date of birth goes to Shopify as a cart attribute (`age_declared_dob`).** That is personal data stored on orders. Privacy wording is needed; a simpler "18 or over confirmed" note would store less. Decision for Rhys and Michael.
-8. **The rate limit (8 checkouts a minute per visitor) is kept in memory on each server instance.** On serverless hosting it is weak protection. It stops casual abuse, not a determined one.
+7. **The date of birth goes to Shopify as a cart attribute (`age_declared_dob`).** That is personal data stored on orders. It is now validated strictly (a clean real date, age 18 to 120), but it is still stored. A simpler "18 or over declared" note would store less and is recommended; privacy wording is needed either way. See `FOLLOW-UP-REVIEW.md` section 2. Decision for Rhys.
+8. **The rate limit (8 checkouts a minute per visitor) is kept in memory on each server instance.** Measured: the same visitor got 16 allowed across two instances. The visitor-address and counter-wipe weaknesses were fixed; the per-instance count needs a shared store or a Vercel Firewall rule (Rhys's approval). See `FOLLOW-UP-REVIEW.md` section 3.
 9. **The basket lives in the visitor's browser.** Prices and variants are never taken from it (the server re-reads both from Shopify), so changing it cannot change a price, but it can be edited. The server checks every line.
 
 ## Limitations of this evidence

@@ -201,3 +201,27 @@ test("a refusal with a reason is explained in the basket, not hidden behind the 
   await page.locator("#cart-ck").click();
   await expect(page.locator("#demo-ck")).toHaveAttribute("open", "");
 });
+
+test("the date of birth must be a clean real date and a believable age; nothing else is passed to Shopify", async () => {
+  const all = (await (await fetch(FAKE, { method: "POST", body: JSON.stringify({ query: "{ products { nodes { handle title } } }" }) })).json()).data.products.nodes as { handle: string; title: string }[];
+  const beer = all.find((n) => /BEER HAMPER|Beer hamper/i.test(n.title))!;
+  const lines = [{ h: beer.handle, q: 1 }];
+  const soon = new Date(); soon.setUTCFullYear(soon.getUTCFullYear() - 17); // 17 years old
+  for (const dob of ["1990-1-1", "19900101", "0001-01-01", "1850-01-01", "2000-02-31", "1990-01-01T00:00:00Z", "1990-01-01 ", "x'); DROP TABLE orders;--", "<script>1</script>", "", soon.toISOString().slice(0, 10), 19900101 as unknown as string, null as unknown as string]) {
+    const r = await post({ lines, dob, ageConfirmed: true });
+    expect(r.status, JSON.stringify(dob)).toBe(400);
+    expect((await r.json()).reason).toBe("age");
+  }
+  expect((await post({ lines, dob: "1990-01-01", ageConfirmed: false })).status).toBe(400);
+  const ok = await post({ lines, dob: "1990-01-01", ageConfirmed: true });
+  expect((await ok.json()).ok).toBe(true);
+  expect((await lastCart())!.attributes.find((a) => a.key === "age_declared_dob")!.value).toBe("1990-01-01");
+});
+
+test("the customer is only ever sent to a secure (https) Shopify address", async () => {
+  const all = (await (await fetch(FAKE, { method: "POST", body: JSON.stringify({ query: "{ products { nodes { handle title } } }" }) })).json()).data.products.nodes as { handle: string; title: string }[];
+  const beer = all.find((n) => /BEER HAMPER|Beer hamper/i.test(n.title))!;
+  const r = await post({ lines: [{ h: beer.handle, q: 17 }], ...adult }); // the fake answers this one with an http:// address
+  expect(r.status).toBe(502);
+  expect((await r.json()).reason).toBe("shopify");
+});
