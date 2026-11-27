@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Description } from "@/components/Description";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Frame } from "@/components/Frame";
@@ -59,7 +60,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
                 {p.style && <span>{p.style}</span>}
               </p>
               <p className="prod-price">£{price.toFixed(2)} <small>{available ? (stockOf(p) !== null && (stockOf(p) as number) >= 1 ? "In stock" : "Available") : "Sold out"}</small>{low !== null && <span className="pg-low">Only {low} left</span>}</p>
-              {p.blurb && <p className="lede">{p.blurb}</p>}
+              {p.blurb && <div className="lede"><Description text={p.blurb} /></div>}
               {p.profile && (
                 <ul className="pg-flav" aria-label="Flavours">
                   {p.profile.flavour.map((f) => <li key={f}>{f}</li>)}

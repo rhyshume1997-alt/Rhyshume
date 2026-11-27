@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Description } from "@/components/Description";
 import { FindABeer } from "@/components/FindABeer";
 import { Glass } from "@/components/Glass";
 import type { Card } from "@/lib/cards";
@@ -95,7 +96,7 @@ export function ProductGrid({ cards, chips, checkoutOn, noun, intro, segmented =
                   </button>
                   {isOpen && (
                     <div className="pg-detail">
-                      <p>{c.profile.blurb}</p>
+                      <Description text={c.profile.blurb} />
                       <ul className="pg-flav" aria-label="Flavours">
                         {c.profile.flavour.map((f) => <li key={f}>{f}</li>)}
                       </ul>

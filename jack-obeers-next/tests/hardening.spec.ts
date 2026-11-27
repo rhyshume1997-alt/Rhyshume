@@ -6,6 +6,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { categoryOf, eventDate, hiddenReason } from "../src/lib/categories";
 import { sizesOf } from "../src/lib/variants";
+import { describeBlocks } from "../src/lib/describe";
 
 /** Rate limit, what the website hides, and stock: logic that does not need a browser. */
 
@@ -166,4 +167,30 @@ test("audit script: given the admin's product export, it names every active prod
   expect(by[pick(/Draught Club/i).handle]).toMatch(/subscription/);
   expect(by[pick(/Undated Sample Event/i).handle]).toMatch(/no date/);
   expect(JSON.stringify(report)).not.toMatch(/dummy/); // the token is never printed
+});
+
+test.describe("product descriptions are split into short labelled parts", () => {
+  const real = "DescriptionŠvyturys Ekstra is Lithuania’s most iconic beer, a world-class Dortmunder-style lager. Brewed since 1995, it remains a gold-standard lager. Tasting Notes Appearance: Deep gold, crystal clear. Aroma: Fresh hops with subtle bready malt notes. Palate: A rich, malty sweetness. Finish: Clean, crisp, and exceptionally refreshing. Allergens & Dietary Information Contains: Barley Malt (Gluten). Ingredients: Water, Barley Malt, Rice, Hops, Yeast. Suitability: Traditionally vegan-friendly. Food PairingsThis versatile lager pairs perfectly with grilled chicken. Manufacturer Information Brewery: Aldaris (founded in 1865 in Riga, Latvia). Parent Company: Carlsberg Group.";
+
+  test("the word Description is dropped and every label gets its own line", () => {
+    const b = describeBlocks(real);
+    expect(b[0]).toEqual({ kind: "text", text: expect.stringMatching(/^Švyturys Ekstra is Lithuania/) });
+    expect(b.some((x) => x.text.startsWith("Description"))).toBe(false);
+    const fields = b.filter((x) => x.kind === "field").map((x) => x.label);
+    expect(fields).toEqual(["Appearance", "Aroma", "Palate", "Finish", "Contains", "Ingredients", "Suitability", "Brewery", "Parent Company"]);
+    expect(b.filter((x) => x.kind === "heading").map((x) => x.text)).toEqual(["Tasting Notes", "Allergens & Dietary Information", "Food Pairings", "Manufacturer Information"]);
+    expect(b.find((x) => x.label === "Contains")?.text).toBe("Barley Malt (Gluten).");
+    expect(b[b.findIndex((x) => x.text === "Food Pairings") + 1].text).toMatch(/^This versatile lager/);
+  });
+
+  test("no words are lost or changed (allergen wording stays exact)", () => {
+    const flat = describeBlocks(real).map((x) => (x.label ? x.label + ": " : "") + x.text).join(" ").replace(/\s+/g, "");
+    expect(flat).toBe(real.replace(/^Description/, "").replace(/\s+/g, ""));
+  });
+
+  test("a plain description stays one paragraph, and empty gives nothing", () => {
+    expect(describeBlocks("A crisp lager with a dry finish: lovely.")).toEqual([{ kind: "text", text: "A crisp lager with a dry finish: lovely." }]);
+    expect(describeBlocks("")).toEqual([]);
+    expect(describeBlocks(null)).toEqual([]);
+  });
 });

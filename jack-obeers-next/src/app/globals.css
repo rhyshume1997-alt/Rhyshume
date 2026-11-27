@@ -2038,3 +2038,7 @@ html[data-xmas="on"] .xkicker::before { content: ""; width: .5rem; height: .5rem
 .evsec .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 @media (max-width: 40rem) { .week-card { padding: 1rem; } .evsec-card img { height: 9.5rem; } }
 
+/* ---- product descriptions split into short parts; Jack's push never sits on the words ---- */
+.desc p { margin: 0 0 .45rem; }
+.pg-dh { margin: .85rem 0 .25rem; font: 700 .76rem var(--ui); letter-spacing: .08em; text-transform: uppercase; color: #8a4b12; }
+.pg-card[data-side="l"] .pg-glassbox { width: 6.1rem; }
