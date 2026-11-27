@@ -2,7 +2,8 @@
 /* Lifted from the Rev 5 static preview (rev5.js) so the design behaves the same in Next.js.
    Temporary: it drives the DOM directly. Next steps are to replace it piece by piece with React components. */
 /* Jack O'Beers Rev 5: shared behaviour. Header, basket, toast, reveals, the opening, the shelf with its beer-bottle cursor, the label panel. */
-import { SHIPPING } from "@/lib/shipping";
+import { DELIVERY_AREAS_TEXT, SHIPPING } from "@/lib/shipping";
+import { pickVariant, sizeLabel } from "@/lib/variants";
 
 export function initRev5(P: any[], PAIR: Record<string, string> = {}): () => void {
   const offs: Array<() => void> = [];
@@ -43,7 +44,8 @@ export function initRev5(P: any[], PAIR: Record<string, string> = {}): () => voi
   var SHELVES = { beers: 'Beers', ciders: 'Ciders', wines: 'Wines', kegs: 'Kegs' };
   var COL = { 'Amber ale': '#c97a1c', Stout: '#2a140c', Lager: '#e8c25a', 'Fruit beer': '#b5502a', IPA: '#d8962a', 'Dry cider': '#e3c36a', 'Medium cider': '#dcb24f', 'Fruit cider': '#c46a4a', 'Red wine': '#5a1424', 'White wine': '#e6d98f', 'Rose wine': '#d98a8a', 'Rosé wine': '#d98a8a', 'Pale Ale': '#d8962a', Pilsner: '#e8c25a', Porter: '#3a1c10', Sour: '#c46a4a', NEIPA: '#e0b04a', Bitter: '#b8741c', Blonde: '#ecc860', Ale: '#c97a1c', Heavy: '#8a4a18', Cider: '#e3c36a', 'Cherry beer': '#9a2a2a', 'Sparkling wine': '#ecdc9a', IPL: '#e8c25a' };
   function colour(p) { return COL[p.productType] || (p.kind === 'keg' ? '#c97a1c' : '#d9992b'); }
-  function price(p) { return Math.min.apply(null, p.variants.map(function (v) { return v.price; })); }
+  /* The price is the price of the variant the customer buys (see src/lib/variants.ts), the same one checkout sends to Shopify. */
+  function price(p, vid) { var v = pickVariant(p.variants, vid); return v ? v.price : 0; }
   function by(h) { return P.filter(function (p) { return p.handle === h; })[0]; }
   var uid = 0;
   function photo(p, cls) {
@@ -69,7 +71,7 @@ export function initRev5(P: any[], PAIR: Record<string, string> = {}): () => voi
 
   /* ---- basket ---- */
   var MIN_ORDER = 35;
-  function subtotal() { return cart.reduce(function (a, l) { var p = by(l.h); return a + (p ? price(p) * l.q : 0); }, 0); }
+  function subtotal() { return cart.reduce(function (a, l) { var p = by(l.h); return a + (p ? price(p, l.v) * l.q : 0); }, 0); }
   function minOk() { return subtotal() >= MIN_ORDER; }
   function minNote() { var m = $('#min-msg'); if (!m) return; var s = subtotal(); m.textContent = (cart.length && s < MIN_ORDER) ? 'Minimum order is ' + money(MIN_ORDER) + '. Add ' + money(MIN_ORDER - s) + ' more to check out.' : 'Minimum order ' + money(MIN_ORDER) + '.'; }
   function ageOf(v) { if (!v) return -1; var d = new Date(v + 'T00:00:00'); if (isNaN(d)) return -1; var n = new Date(), a = n.getFullYear() - d.getFullYear(), m = n.getMonth() - d.getMonth(); if (m < 0 || (m === 0 && n.getDate() < d.getDate())) a--; return a; }
@@ -81,31 +83,33 @@ export function initRev5(P: any[], PAIR: Record<string, string> = {}): () => voi
   function saveCart() { ls('jo5_cart', JSON.stringify(cart)); renderCart(); document.dispatchEvent(new CustomEvent('jo:basket')); }
   function count() { return cart.reduce(function (a, l) { return a + l.q; }, 0); }
   /* Stock Shopify shares for the variant checkout uses (the first one on sale), or null when it is not shared. Never guessed. */
-  function stockOf(p) { var v = p.variants.filter(function (x) { return x.available; })[0] || p.variants[0]; return v && typeof v.stock === 'number' ? v.stock : null; }
-  function inBasket(h) { var l = cart.filter(function (x) { return x.h === h; })[0]; return l ? l.q : 0; }
+  function stockOf(p, vid) { var v = pickVariant(p.variants, vid); return v && typeof v.stock === 'number' ? v.stock : null; }
+  /* A basket line is one product in one variant. v is empty unless a size was chosen. */
+  function same(l, h, v) { return l.h === h && (l.v || '') === (v || ''); }
+  function inBasket(h, v) { var l = cart.filter(function (x) { return same(x, h, v); })[0]; return l ? l.q : 0; }
   /* How many more can go in: Shopify's stock minus what is already in the basket, or null when there is no verified limit. */
-  function room(h) { var p = by(h), s = p ? stockOf(p) : null; return s === null ? null : Math.max(0, s - inBasket(h)); }
+  function room(h, v) { var p = by(h), s = p ? stockOf(p, v) : null; return s === null ? null : Math.max(0, s - inBasket(h, v)); }
   /* One action adds the whole quantity. Returns what really happened, checked against the basket after the change. */
-  function add(h, q) {
-    var p = by(h); q = Math.floor(q);
+  function add(h, q, v) {
+    var p = by(h); q = Math.floor(q); v = v || '';
     if (!p || !(q >= 1)) return { ok: false, why: 'invalid' };
-    var r = room(h), want = q;
+    var r = room(h, v), want = q;
     if (r !== null && q > r) q = r;
-    if (q < 1) return { ok: false, why: 'stock', have: inBasket(h), stock: stockOf(p) };
-    var before = inBasket(h), l = cart.filter(function (x) { return x.h === h; })[0];
-    if (l) l.q += q; else cart.push({ h: h, q: q });
+    if (q < 1) return { ok: false, why: 'stock', have: inBasket(h, v), stock: stockOf(p, v) };
+    var before = inBasket(h, v), l = cart.filter(function (x) { return same(x, h, v); })[0];
+    if (l) l.q += q; else cart.push(v ? { h: h, q: q, v: v } : { h: h, q: q });
     saveCart();
-    var after = inBasket(h);
+    var after = inBasket(h, v);
     if (after !== before + q) return { ok: false, why: 'basket' };
     toast(p.title + (q > 1 ? ' × ' + q : '') + ' added to your basket');
     return { ok: true, added: q, line: after, clamped: q < want };
   }
   window.joBasket = { room: room };
-  /* the delivery bottle: it fills as the basket grows toward free UK delivery (numbers in src/lib/shipping.ts) */
+  /* the delivery bottle: it fills as the basket grows toward free local delivery (numbers in src/lib/shipping.ts) */
   function freeDelivery(tot) {
     var left = SHIPPING.freeFrom - tot, fill = Math.max(0, Math.min(1, tot / SHIPPING.freeFrom));
-    var msg = left > 0 ? 'Add ' + money(Math.ceil(left * 100) / 100) + ' for free delivery' : 'You have free UK delivery';
-    var note = left > 0 ? 'UK delivery is ' + money(SHIPPING.standard) + ' under ' + money(SHIPPING.freeFrom) + '.' : 'UK delivery is free from ' + money(SHIPPING.freeFrom) + '.';
+    var msg = left > 0 ? 'Add ' + money(Math.ceil(left * 100) / 100) + ' for free local delivery' : 'You have free local delivery';
+    var note = 'Local delivery only: ' + DELIVERY_AREAS_TEXT + '. The delivery price is shown at checkout.';
     return '<div class="fd" style="--fill:' + fill.toFixed(3) + '"><svg class="fd-bottle" viewBox="0 0 60 170" width="36" height="102" aria-hidden="true" focusable="false"><defs><clipPath id="fdc"><path d="M24 10h12v38c0 8 14 14 14 32v76c0 4-3 6-6 6H16c-3 0-6-2-6-6V80c0-18 14-24 14-32z"/></clipPath></defs><g clip-path="url(#fdc)"><rect class="fd-liq" x="0" y="10" width="60" height="150" fill="#E0A030"/></g><path d="M24 10h12v38c0 8 14 14 14 32v76c0 4-3 6-6 6H16c-3 0-6-2-6-6V80c0-18 14-24 14-32z" fill="none" stroke="#2a1a10" stroke-width="3" stroke-linejoin="round"/><rect x="22" y="3" width="16" height="10" rx="3" fill="#B98A3E" stroke="#2a1a10" stroke-width="2.4"/></svg><div><p class="fd-msg" role="status">' + msg + '</p><p class="fd-note">' + note + '</p></div></div>';
   }
   /* a small spark on the button that was pressed: 150 ms, ease-out. With reduced motion it is a still ring for a moment. */
@@ -132,12 +136,12 @@ export function initRev5(P: any[], PAIR: Record<string, string> = {}): () => voi
     m.textContent = text; m.classList.toggle('bad', !!bad);
   }
   function press(a) {
-    if (!a.hasAttribute('data-atb')) { add(a.dataset.add, +(a.dataset.q || 1)); spark(a); return; }
+    if (!a.hasAttribute('data-atb')) { add(a.dataset.add, +(a.dataset.q || 1), a.dataset.v); spark(a); return; }
     if (a.dataset.state === 'busy') return;
     var key = a.dataset.add; clearTimeout(resetT[key]);
     a.dataset.state = 'busy'; a.setAttribute('aria-busy', 'true'); say(a, '');
     requestAnimationFrame(function () {
-      var res = add(a.dataset.add, +(a.dataset.q || 1));
+      var res = add(a.dataset.add, +(a.dataset.q || 1), a.dataset.v);
       a.removeAttribute('aria-busy');
       if (res.ok) {
         a.dataset.state = 'added';
@@ -153,11 +157,11 @@ export function initRev5(P: any[], PAIR: Record<string, string> = {}): () => voi
     $$('[data-count]').forEach(function (n) { n.textContent = count(); });
     var b = $('#cart-body'); if (!b) return;
     var tot = 0;
-    b.innerHTML = cart.length ? '<ul>' + cart.map(function (l) { var p = by(l.h); if (!p) return ''; tot += price(p) * l.q; return '<li style="display:flex;justify-content:space-between;gap:1rem;padding:.6rem 0;border-bottom:1px solid var(--line)"><span><b>' + esc(p.title) + '</b> × ' + l.q + '<br><button class="rm" data-rm="' + esc(l.h) + '" style="background:none;border:0;text-decoration:underline;min-height:2.75rem;padding:0">Remove</button></span><span class="price">' + money(price(p) * l.q) + '</span></li>'; }).join('') + '</ul><p class="price" style="margin-top:1rem;display:flex;justify-content:space-between"><span>Subtotal' + (cart.some(function (l) { var q = by(l.h); return q && q.sample; }) ? ' (sample prices)' : '') + '</span><span>' + money(tot) + '</span></p>' + pairing() + freeDelivery(tot) : '<p>Your basket is empty. Find something good on the shelf.</p>';
+    b.innerHTML = cart.length ? '<ul>' + cart.map(function (l) { var p = by(l.h); if (!p) return ''; tot += price(p, l.v) * l.q; var sz = l.v ? sizeLabel(pickVariant(p.variants, l.v), p.variants) : ''; return '<li style="display:flex;justify-content:space-between;gap:1rem;padding:.6rem 0;border-bottom:1px solid var(--line)"><span><b>' + esc(p.title) + '</b>' + (sz ? ' (' + esc(sz) + ')' : '') + ' × ' + l.q + '<br><button class="rm" data-rm="' + esc(l.h) + '" data-rv="' + esc(l.v || '') + '" style="background:none;border:0;text-decoration:underline;min-height:2.75rem;padding:0">Remove</button></span><span class="price">' + money(price(p, l.v) * l.q) + '</span></li>'; }).join('') + '</ul><p class="price" style="margin-top:1rem;display:flex;justify-content:space-between"><span>Subtotal' + (cart.some(function (l) { var q = by(l.h); return q && q.sample; }) ? ' (sample prices)' : '') + '</span><span>' + money(tot) + '</span></p>' + pairing() + freeDelivery(tot) : '<p>Your basket is empty. Find something good on the shelf.</p>';
     var ck = $('#cart-ck'); if (ck) ck.disabled = !cart.length || !ageOk() || !minOk(); minNote();
   }
   on(document, 'click', function (e) {
-    var rm = e.target.closest('[data-rm]'); if (rm) { cart = cart.filter(function (l) { return l.h !== rm.dataset.rm; }); saveCart(); }
+    var rm = e.target.closest('[data-rm]'); if (rm) { cart = cart.filter(function (l) { return !same(l, rm.dataset.rm, rm.dataset.rv); }); saveCart(); }
     var a = e.target.closest('[data-add]'); if (a) press(a);
     var oc = e.target.closest('[data-open-cart]'); if (oc) { e.preventDefault(); $('#cart').showModal(); }
     var cl = e.target.closest('[data-close]'); if (cl) { var d = cl.closest('dialog'); if (d) d.close(); }

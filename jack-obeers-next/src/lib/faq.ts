@@ -28,13 +28,13 @@ export const FAQ: Faq[] = [
   },
   { q: "What is the minimum order?", a: "The minimum order is £35. The basket tells you how much more to add." },
   {
-    q: "How much is delivery?",
-    a: "UK delivery will be £4.99 on orders under £50 and free from £50, once online ordering opens. The minimum order is £35.",
+    q: "Do you deliver?",
+    a: "We are setting up local delivery to Milngavie, Baljaffray and Strathblane. We do not deliver across the UK or abroad. Delivery days, times and charges will be confirmed before online ordering opens. The minimum order is £35.",
     confirm: true,
   },
   {
     q: "Can I collect my order from the shop?",
-    a: `Collection from the shop is pending, we are confirming it with Michael. Until then, come into the shop or call ${PHONE}.`,
+    a: `Yes. Click and collect stays as an option: order online, then collect from 13 Station Road in opening hours. Photo ID may be asked for when you collect alcohol. Online ordering is not open yet, so until then come into the shop or call ${PHONE}.`,
     confirm: true,
   },
   {

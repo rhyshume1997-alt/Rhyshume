@@ -7,7 +7,7 @@ export const NO_STOCK_GUARD = 99;
 
 declare global {
   interface Window {
-    joBasket?: { room: (handle: string) => number | null };
+    joBasket?: { room: (handle: string, variant?: string) => number | null };
   }
 }
 
@@ -17,17 +17,17 @@ declare global {
  * The limit is Shopify's stock for the variant checkout uses minus what is already in the basket; with no verified stock the
  * only limit is NO_STOCK_GUARD per action.
  */
-export function AddToBasket({ handle, name, stock, label = "Add to basket" }: { handle: string; name: string; stock: number | null; label?: string }) {
+export function AddToBasket({ handle, name, stock, label = "Add to basket", variant }: { handle: string; name: string; stock: number | null; label?: string; variant?: string }) {
   const [qty, setQty] = useState(1);
   const [room, setRoom] = useState<number | null>(stock);
   const [note, setNote] = useState("");
 
   useEffect(() => {
-    const sync = () => setRoom(window.joBasket ? window.joBasket.room(handle) : stock);
+    const sync = () => setRoom(window.joBasket ? window.joBasket.room(handle, variant) : stock);
     sync();
     document.addEventListener("jo:basket", sync);
     return () => document.removeEventListener("jo:basket", sync);
-  }, [handle, stock]);
+  }, [handle, stock, variant]);
 
   const limit = room === null ? NO_STOCK_GUARD : Math.max(1, room);
   const shown = Math.min(qty, limit);
@@ -60,7 +60,7 @@ export function AddToBasket({ handle, name, stock, label = "Add to basket" }: { 
           <span aria-hidden="true">+</span>
         </button>
       </span>
-      <button type="button" className="pg-btn soft atb-add" data-add={handle} data-q={shown} data-atb="" data-state="idle">
+      <button type="button" className="pg-btn soft atb-add" data-add={handle} data-q={shown} data-v={variant} data-atb="" data-state="idle">
         <i className="atb-led" aria-hidden="true" />
         <span className="atb-t">{label}</span>
         <span className="atb-d" aria-hidden="true">Added to basket</span>

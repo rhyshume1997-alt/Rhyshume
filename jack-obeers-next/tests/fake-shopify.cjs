@@ -2,6 +2,7 @@
 // (quantityAvailable) and created dates. Never used by the live site.
 const http = require('http');
 const P = [];
+let lastCart = null;
 let vid = 1000;
 const day = 86400000;
 function add(title, type, vendor, tags, price, o = {}) {
@@ -11,7 +12,7 @@ function add(title, type, vendor, tags, price, o = {}) {
     variants: { nodes: [{ id: 'gid://shopify/ProductVariant/' + (vid++), title: 'Default', availableForSale: o.avail !== false, price: { amount: price.toFixed(2) }, quantityAvailable: o.qty ?? 40 }] },
   });
 }
-add('VAULT CITY RASPBERRY SOUR 440ML ABV 4.5%', 'Beer', 'Vault City', ['Sour'], 4.5, { ageDays: 6, qty: 3 });
+add('VAULT CITY RASPBERRY SOUR 440ML ABV 4.5%', 'Beer', 'Vault City', ['Sour'], 4.5, { ageDays: 6, qty: 3, desc: 'Written in Shopify: tart raspberry, brewed in Glasgow.' });
 add('VAULT CITY IRON BREW SOUR 440ML ABV 4.0%', 'Beer', 'Vault City', ['Sour'], 4.5, { ageDays: 9 });
 add('OTHERWORLD BLOSSOM NEIPA 440ML ABV 6.2%', 'Beer', 'Otherworld', ['IPA'], 5.2, { qty: 5 });
 add('ILKLEY JOSHUA JANE 500ML ABV 3.7%', 'Beer', 'Ilkley', ['Ale'], 3.9);
@@ -34,7 +35,15 @@ http.createServer((req, res) => {
   let body = '';
   req.on('data', (c) => (body += c));
   req.on('end', () => {
+    if (req.method === 'GET' && req.url === '/__last-cart') { res.setHeader('Content-Type', 'application/json'); res.end(JSON.stringify(lastCart)); return; }
     let q = {}; try { q = JSON.parse(body); } catch (e) {}
+    // Shopify's cartCreate, as the site's checkout route calls it. The lines are kept so a test can read back what was handed over.
+    if (/cartCreate/.test(q.query || '')) {
+      lastCart = { lines: (q.variables && q.variables.lines) || [], attributes: (q.variables && q.variables.attributes) || [] };
+      res.setHeader('Content-Type', 'application/json');
+      res.end(JSON.stringify({ data: { cartCreate: { cart: { checkoutUrl: 'https://shop.test/checkouts/fake-' + lastCart.lines.length }, userErrors: [] } } }));
+      return;
+    }
     const start = q.variables && q.variables.cursor ? Number(q.variables.cursor) : 0;
     const slice = P.slice(start, start + 100);
     const end = start + slice.length;

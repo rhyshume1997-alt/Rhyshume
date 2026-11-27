@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { clientIp, rateLimit, sameOrigin } from "@/lib/antispam";
-import { forBasket, getCatalogue } from "@/lib/catalogue";
+import { endpoint, forBasket, getCatalogue } from "@/lib/catalogue";
+import { pickVariant } from "@/lib/variants";
 
 // Checkout is OFF unless CHECKOUT_ENABLED is exactly "true" in Vercel.
 // Do not turn it on until the licence and age-check for selling alcohol are confirmed.
 const MIN_ORDER_GBP = 35;
-const API_VERSION = "2025-07";
 
 const CART_CREATE = `
 mutation CartCreate($lines: [CartLineInput!]!, $attributes: [AttributeInput!]) {
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
   const limit = rateLimit(`checkout:${clientIp(req.headers)}`, 8, 60_000);
   if (!limit.ok) return NextResponse.json({ ok: false, reason: "slow" }, { status: 429, headers: { "Retry-After": String(Math.ceil(limit.retryAfterMs / 1000)) } });
 
-  let body: { lines?: { h?: string; q?: number }[]; dob?: string; ageConfirmed?: boolean };
+  let body: { lines?: { h?: string; q?: number; v?: string }[]; dob?: string; ageConfirmed?: boolean };
   try {
     body = await req.json();
   } catch {
@@ -52,7 +52,9 @@ export async function POST(req: Request) {
   let subtotal = 0;
   for (const l of (body.lines || []).slice(0, 50)) {
     const p = forBasket(catalogue.all).find((x) => x.handle === l.h);
-    const v = p && (p.variants.find((x) => x.available) || null);
+    // The size comes from the basket line when it names one of this product's variants that is on sale, otherwise the first on sale.
+    const picked = p ? pickVariant(p.variants, typeof l.v === "string" ? l.v : null) : undefined;
+    const v = picked && picked.available ? picked : null;
     const q = Math.max(1, Math.min(24, Math.floor(Number(l.q) || 1)));
     if (v) {
       lines.push({ merchandiseId: v.id, quantity: q });
@@ -63,7 +65,7 @@ export async function POST(req: Request) {
 
   if (subtotal < MIN_ORDER_GBP) return NextResponse.json({ ok: false, reason: "min" }, { status: 400 });
 
-  const res = await fetch(`https://${domain}/api/${API_VERSION}/graphql.json`, {
+  const res = await fetch(endpoint(domain), {
     method: "POST",
     headers: { "Content-Type": "application/json", "X-Shopify-Storefront-Access-Token": token },
     body: JSON.stringify({ query: CART_CREATE, variables: { lines, attributes: [{ key: "age_declared_dob", value: String(body.dob) }, { key: "id_check", value: "Photo ID required at collection or delivery. 18+ only." }] } }),

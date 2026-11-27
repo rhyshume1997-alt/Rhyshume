@@ -97,14 +97,15 @@ test("sitemap.xml lists the landing pages", async ({ request }) => {
   expect(x).not.toContain("/cart");
 });
 
-test("FAQ answers hours, location, delivery, pickup (pending), Draught Club and the £35 minimum, without inventing", async ({ page }) => {
+test("FAQ answers hours, location, delivery, click and collect, Draught Club and the £35 minimum, without inventing", async ({ page }) => {
   await page.goto("/faq");
   const t = await page.locator("main").innerText();
   expect(t).toMatch(/Wednesday to Monday, 11am to 7pm/);
   expect(t).toMatch(/13 Station Road/);
   expect(t).toMatch(/minimum order is £35/i);
-  expect(t).toMatch(/£4\.99/);
-  expect(t).toMatch(/Collection from the shop is pending/i);
+  expect(t).toMatch(/local delivery to Milngavie, Baljaffray and Strathblane/i);
+  expect(t).toMatch(/Click and collect stays/i);
+  expect(t).not.toMatch(/UK delivery|£4\.99/);
   expect(t).toMatch(/£24\.99/);
   expect(t).toMatch(/£39\.99/);
 });

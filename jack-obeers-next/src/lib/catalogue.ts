@@ -182,6 +182,18 @@ type Raw = {
 
 const OWN_NAMES = ["jack o' beers", "jack o’beers", "jack o'beers", "jack o’ beers", "jack o beers", "jack o' beers & deli", "jack o’beers & deli"];
 
+/**
+ * The text shown under a product's name. Shopify's own description wins, so Michael changes it in Shopify (Products, the
+ * Description box) and the site follows. The built-in blurb in src/data/profiles.json is only a fallback for products that
+ * have no description yet. Shopify sends plain text. Long descriptions are cut at a word at about 400 characters.
+ */
+export const DESCRIPTION_MAX = 400;
+export function clipDescription(text: string | null | undefined): string {
+  const t = (text || "").replace(/\s+/g, " ").trim();
+  if (t.length <= DESCRIPTION_MAX) return t;
+  return t.slice(0, DESCRIPTION_MAX).replace(/\s+\S*$/, "") + "...";
+}
+
 function enrich(r: Raw, sample = false): Product {
   const category = categoryOf(r.productType);
   const { abv, rest } = parseAbv(r.title);
@@ -207,7 +219,7 @@ function enrich(r: Raw, sample = false): Product {
     allergens: "",
     image: r.image,
     variants: r.variants,
-    blurb: profile ? profile.blurb : undefined,
+    blurb: clipDescription(r.description) || (profile ? profile.blurb : undefined),
     sample,
     category,
     name: titleCase(rest) || r.title.trim(),
@@ -300,7 +312,7 @@ type ShopifyProduct = {
 type Page = { errors?: unknown; data: { products: { nodes: ShopifyProduct[]; pageInfo: { hasNextPage: boolean; endCursor: string | null } } } };
 
 /** Where the Storefront API lives. SHOPIFY_API_BASE exists only so tests can point at a fake server. */
-function endpoint(domain: string): string {
+export function endpoint(domain: string): string {
   return `${process.env.SHOPIFY_API_BASE || `https://${domain}`}/api/${API_VERSION}/graphql.json`;
 }
 

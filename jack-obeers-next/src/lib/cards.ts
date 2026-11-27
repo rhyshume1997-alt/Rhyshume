@@ -58,7 +58,7 @@ export function toCard(p: Product): Card {
     available: p.variants.some((x) => x.available),
     buy: buyLink(p),
     glass: p.glass,
-    profile: p.profile ? { ...p.profile, flavour: (p.profile.flavour || []).map(tidy) } : null,
+    profile: p.profile ? { ...p.profile, blurb: p.blurb || p.profile.blurb, flavour: (p.profile.flavour || []).map(tidy) } : null,
     pairing: safePairings(p.profile),
     pairingConfirmed: !!(p.profile && p.profile.pairingConfirmed),
     sample: !!p.sample,

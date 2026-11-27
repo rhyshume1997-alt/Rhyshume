@@ -58,7 +58,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
                 {p.style && <span>{p.style}</span>}
               </p>
               <p className="prod-price">£{price.toFixed(2)} <small>{available ? "In stock" : "Sold out"}</small>{low !== null && <span className="pg-low">Only {low} left</span>}</p>
-              {p.profile && <p className="lede">{p.profile.blurb}</p>}
+              {p.blurb && <p className="lede">{p.blurb}</p>}
               {p.profile && (
                 <ul className="pg-flav" aria-label="Flavours">
                   {p.profile.flavour.map((f) => <li key={f}>{f}</li>)}

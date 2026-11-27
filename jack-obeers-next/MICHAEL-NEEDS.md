@@ -65,3 +65,16 @@ When Michael sends the item, it goes in the place named.
 - **Photos for the landing pages:** a photo of a gift hamper, and one of a bottle being filled from the tap, if he wants them used.
 - **Google Business Profile:** check the shop category is bottle shop or liquor store, and that the name, address, phone and hours there
   match the site (13 Station Road, Milngavie, G62 8PG, 07405 480950, Wednesday to Monday 11am to 7pm).
+
+## Website updates checklist, Rev 1 (27 November 2026)
+
+- **Draught tap guide:** names for taps 5, 12 and 22; whether tap 8 is in use; tap 18 exact name; the frizzante producer, ingredients and the spritz recipe; draught ABVs and prices to be checked against labels and current kegs; allergen declarations from labels or supplier specifications; which tap products are sold online. Nothing from the guide has been published.
+- **Sizes:** 500 ml and 1 litre prices for each draught product, and whether 250 ml is still sold. The guide only has 250 ml and 500 ml prices.
+- **Local delivery:** the complete postcode list (Milngavie, Baljaffray, Strathblane and any other areas), delivery days and hours, delivery charge, free-delivery threshold, minimum order, cut-off time, failed-delivery arrangement. See `DELIVERY-PLAN.md`.
+- **What "postcode acceptance at delivery" means:** a check before payment, a confirmation at the door, or both.
+- **International delivery:** wanted or not. The website now says local only.
+- **Licensing and age checks:** the premises licence and operating plan for alcohol delivery and collection, the delivery window of 3 pm to 9 pm, and who checks age at checkout, collection and the door.
+- **Click and collect:** whether a pickup location is set up in Shopify, and when an order is ready.
+- **Events:** dates, venues, ticket prices or booking links, and for each whether it is an enquiry link, an external booking or a ticket checkout; weekly announcement text.
+- **Launch scope:** which items are essential for the first release (membership, keezer, artwork and merchandise, sponsorship, Christmas, supermarket comparisons are all not built and need separate approval, see `REV1-CHECKLIST-STATUS.md`).
+- **Brand and trust:** trade mark evidence (the site makes no registered claim), copyright wording, sponsorship names and permissions.
