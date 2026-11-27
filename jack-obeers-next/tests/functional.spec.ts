@@ -244,6 +244,22 @@ test.describe("unknown, zero and negative stock", () => {
     expect(await page.locator("main").innerText()).not.toMatch(/In stock/);
   });
 
+  test("the product page says In stock only when a stock figure exists; with only Shopify's for-sale flag it says Available", async ({ page }) => {
+    await open(page);
+    await page.goto("/beers");
+    const unknown = await card(page, "Stock Unknown Available").locator("a[href^='/product/']").first().getAttribute("href");
+    await page.goto(unknown!);
+    const t1 = await page.locator(".prod-price").innerText();
+    expect(t1).toMatch(/Available/);
+    expect(t1).not.toMatch(/In stock/);
+    await page.goto("/product/p6"); // the test shop shares 40 for this one
+    expect(await page.locator(".prod-price").innerText()).toMatch(/In stock/);
+    await page.goto("/beers");
+    const sized = await card(page, "Size Test Draught").locator("a[href^='/product/']").first().getAttribute("href");
+    await page.goto(sized!); // sizes: no per-size figure is shown, so no claim
+    expect(await page.locator(".prod-price").innerText()).not.toMatch(/In stock/);
+  });
+
   test("a stock figure of zero or below is never sold, even if Shopify would allow overselling", async ({ page }) => {
     await open(page);
     await page.goto("/beers");

@@ -15,12 +15,18 @@
  *      subscription plan (such as the Appstle Beer Club plan) is really offered to the headless site, as opposed to only existing in the app.
  *   4. Whether ABV and allergen metafields exist and are exposed to the Storefront API (custom.abv, custom.allergens and a few common names).
  *   5. Whether Storefront cart-related selling plan fields are readable on variants (sellingPlanAllocations).
+ *   7. adminComparison (optional): add  --admin-csv products_export.csv  (Shopify admin, Products, Export, "All products", CSV for Excel) and
+ *      the script names every product that is ACTIVE in the admin but not shown on the website, and says why for each: not returned by the
+ *      Storefront API (not published to the channel this token reads), or returned but hidden by design (type, subscription, event date).
+ *      It reads the file only. It needs no extra credential and changes nothing.
  *   6. websiteVisibility: for every product the Storefront API returns, which part of the website shows it, and for any it does NOT show,
  *      the exact reason (blank or unknown product type, subscription or membership product, undated or past event, no variant). Compare its
  *      handles with the Shopify admin's list of active products: anything in the admin but missing here is not published to the sales
  *      channel this token reads, so the website cannot see it.
  */
 import { categoryOf, hiddenReason } from "../src/lib/categories.ts"; // the website's own rule (needs Node 22.18 or newer, which strips types)
+
+import { readFileSync } from "node:fs";
 
 const domain = process.env.SHOPIFY_STORE_DOMAIN;
 const token = process.env.SHOPIFY_STOREFRONT_TOKEN;
@@ -71,9 +77,10 @@ if (base.ok) {
   };
 }
 
+let visRows = [];
 if (base.ok) {
   const today = new Date().toISOString().slice(0, 10);
-  const rows = base.nodes.map((x) => {
+  const rows = visRows = base.nodes.map((x) => {
     const category = categoryOf(x.productType || "");
     const noVariant = x.variants.nodes.length === 0;
     const why = noVariant ? "no variant (dropped when read)" : hiddenReason({ category, tags: x.tags || [], productType: x.productType || "" }, today);
@@ -86,6 +93,47 @@ if (base.ok) {
     hiddenByDesign: rows.filter((r) => r.hiddenBecause),
     note: "The Storefront API returns only products that are active AND published to this token's sales channel. A product that is active in the Shopify admin but missing from this list is not published to that channel, so the website cannot see it.",
   };
+}
+
+/* ---- optional: compare with the admin's own product export, to name every active product the website does not show ---- */
+const csvAt = process.argv.indexOf("--admin-csv");
+if (csvAt > 0 && process.argv[csvAt + 1]) {
+  const parse = (text) => {
+    const out = []; let row = [], cell = "", q = false;
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+      if (q) { if (c === '"' && text[i + 1] === '"') { cell += '"'; i++; } else if (c === '"') q = false; else cell += c; }
+      else if (c === '"') q = true;
+      else if (c === ",") { row.push(cell); cell = ""; }
+      else if (c === "\n") { row.push(cell.replace(/\r$/, "")); out.push(row); row = []; cell = ""; }
+      else cell += c;
+    }
+    if (cell || row.length) { row.push(cell); out.push(row); }
+    return out;
+  };
+  const table = parse(readFileSync(process.argv[csvAt + 1], "utf8").replace(/^\uFEFF/, ""));
+  const head = table[0].map((h) => h.trim().toLowerCase());
+  const col = (n) => head.indexOf(n);
+  const [cH, cT, cType, cPub, cSt] = [col("handle"), col("title"), col("type"), col("published"), col("status")];
+  if (cH < 0 || cSt < 0) report.adminComparison = { error: "The file has no Handle and Status columns. Use the admin's Products export (CSV for Excel)." };
+  else if (!base.ok) report.adminComparison = { error: "The catalogue could not be read, so nothing to compare with." };
+  else {
+    const seen = new Map();
+    for (const r of table.slice(1)) {
+      const h = (r[cH] || "").trim();
+      if (!h || seen.has(h)) continue; // only the first row of each product carries its title, type and status
+      seen.set(h, { handle: h, title: r[cT] || "", type: r[cType] || "", published: String(r[cPub] || "").trim().toUpperCase() === "TRUE", status: (r[cSt] || "").trim().toLowerCase() });
+    }
+    const active = [...seen.values()].filter((p) => p.status === "active");
+    const returned = new Map(visRows.map((r) => [r.handle, r]));
+    const missing = [];
+    for (const p of active) {
+      const r = returned.get(p.handle);
+      if (!r) missing.push({ title: p.title, handle: p.handle, productType: p.type, why: p.published ? "ACTIVE and marked published to the Online Store, but the Storefront API did not return it: publish it to the sales channel this website's token was created for (Shopify admin, product, Sales channels), or it has no usable variant" : "ACTIVE but NOT published to the Online Store sales channel (Published is FALSE in the export): the Storefront API only returns products published to the channel the token reads, so the website cannot see it" });
+      else if (r.hiddenBecause) missing.push({ title: p.title, handle: p.handle, productType: p.type, why: "returned by Shopify but hidden by design: " + r.hiddenBecause });
+    }
+    report.adminComparison = { activeInAdminExport: active.length, shownOnWebsite: active.length - missing.length, notShownOnWebsite: missing.length, notShown: missing, draftsOrArchivedIgnored: seen.size - active.length };
+  }
 }
 
 const stock = await all(STOCK);

@@ -54,7 +54,7 @@ test("handoff: a valid basket becomes a Shopify cart and the customer is sent to
   const cart = await lastCart();
   // the variant and quantity come from the site's own catalogue (Shopify's), the browser only names the product and a quantity
   expect(cart!.lines).toEqual([{ merchandiseId: beer.variants.nodes[0].id, quantity: 2 }]);
-  expect(cart!.attributes.map((a) => a.key)).toContain("age_declared_dob");
+  expect(cart!.attributes.map((a) => a.key)).toContain("age_declaration"); // a record that the declaration was made, never the date of birth
 });
 
 test("handoff refuses: under the £35 minimum, no age declaration, under 18, foreign origin, sold out, empty", async () => {
@@ -215,7 +215,46 @@ test("the date of birth must be a clean real date and a believable age; nothing 
   expect((await post({ lines, dob: "1990-01-01", ageConfirmed: false })).status).toBe(400);
   const ok = await post({ lines, dob: "1990-01-01", ageConfirmed: true });
   expect((await ok.json()).ok).toBe(true);
-  expect((await lastCart())!.attributes.find((a) => a.key === "age_declared_dob")!.value).toBe("1990-01-01");
+  // the date was used to check the age and is NOT kept: see the privacy tests below
+  expect((await lastCart())!.attributes.find((a) => a.key === "age_declared_dob")).toBeUndefined();
+});
+
+test("privacy: no date of birth, and no part of one, is saved on the Shopify cart; only a record that an 18+ declaration was made", async () => {
+  const all = (await (await fetch(FAKE, { method: "POST", body: JSON.stringify({ query: "{ products { nodes { handle title } } }" }) })).json()).data.products.nodes as { handle: string; title: string }[];
+  const beer = all.find((n) => /BEER HAMPER|Beer hamper/i.test(n.title))!;
+  const dob = "1985-03-04";
+  const r = await post({ lines: [{ h: beer.handle, q: 1 }], dob, ageConfirmed: true });
+  expect((await r.json()).ok).toBe(true);
+  const cart = (await lastCart())!;
+  const everything = JSON.stringify(cart);
+  expect(everything).not.toContain(dob);
+  expect(everything).not.toMatch(/1985|03-04|dob|birth/i);
+  expect(cart.attributes.map((a) => a.key).sort()).toEqual(["age_declaration", "id_check"]);
+  const decl = cart.attributes.find((a) => a.key === "age_declaration")!.value;
+  expect(decl).toMatch(/declared online on \d{4}-\d{2}-\d{2} that they are 18 or over/);
+  expect(decl).toMatch(/not verified/i); // it does not claim proof of age
+  expect(cart.attributes.find((a) => a.key === "id_check")!.value).toMatch(/Photo ID required at collection or delivery/);
+  // a refused request (under 18) saves nothing either
+  const kid = new Date(); kid.setUTCFullYear(kid.getUTCFullYear() - 16);
+  await post({ lines: [{ h: beer.handle, q: 1 }], dob: kid.toISOString().slice(0, 10), ageConfirmed: true });
+  expect(JSON.stringify(await lastCart())).not.toContain(kid.toISOString().slice(0, 10));
+});
+
+test("privacy: the browser keeps no date of birth after checkout is pressed (no storage, no cookie)", async ({ page }) => {
+  await seen(page);
+  await page.goto("/");
+  await page.locator("#hampers [data-buy]").first().click();
+  await page.locator("#age-dob").fill("1985-03-04");
+  await page.locator("#age-ok").check();
+  await page.route("**/api/checkout", (route) => route.fulfill({ status: 502, contentType: "application/json", body: JSON.stringify({ ok: false, reason: "shopify" }) }));
+  await page.locator("#cart-ck").click();
+  await expect(page.locator("#demo-ck")).toHaveAttribute("open", "");
+  await page.reload();
+  const kept = await page.evaluate(() => JSON.stringify({ local: { ...localStorage }, session: { ...sessionStorage }, cookie: document.cookie }));
+  expect(kept).not.toMatch(/1985|03-04/);
+  expect(await page.locator("#age-dob").inputValue()).toBe(""); // and the field is empty again after a reload
+  // the basket tells the customer what happens to it
+  await expect(page.locator("#cart")).toContainText("We use your date of birth once, to check you are 18 or over. We do not save it.");
 });
 
 test("the customer is only ever sent to a secure (https) Shopify address", async () => {

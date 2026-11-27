@@ -23,6 +23,15 @@ What I added so nobody has to guess again:
 - **A visibility report in `scripts/shopify-audit.mjs`** (`websiteVisibility`): every product the Storefront API returns, which part of the website shows it, and the exact reason for any it hides. Rhys runs it with the real token (read-only), then compares its handles with the Shopify admin's 37 active products. Anything in the admin but missing from the report is case 1.
 - Tested (`tests/hardening.spec.ts`) and dry-run against the test shop.
 
+**Naming the three: not possible from this environment, and one command will do it.** The Storefront token is encrypted in Vercel and I did not decrypt it, the sandbox cannot reach Shopify, and the Chrome audit's list of active products was not supplied. The audit script now also takes the admin's own product export and names every active product the website does not show, with the reason for each:
+
+```bash
+# Shopify admin: Products, Export, "All products", CSV for Excel. Then, with the two values from Vercel:
+SHOPIFY_STORE_DOMAIN=... SHOPIFY_STOREFRONT_TOKEN=... node scripts/shopify-audit.mjs --admin-csv products_export.csv
+```
+
+The `adminComparison` section lists each active product that is not shown, as one of: not published to the sales channel the token reads (the export's Published column is FALSE, or the Storefront API did not return it), or returned but hidden by design (unknown product type, subscription, undated or past event). It reads the file only and needs no credential beyond the token the site already uses. Tested against the test shop with an export file (`tests/hardening.spec.ts`). If Rhys sends the export (or the Chrome audit's product names) the three can be named without any credential.
+
 **Decision needed (not Michael's business decision; a scope question for Rhys):** if the three turn out to be artwork, merchandise or gift cards, showing them needs a page design and a basket rule, which is the "artwork and merchandise flows" scope item. Nothing was built.
 
 A latent risk I noticed and did **not** change: the category rule matches words inside the product type (for example "ale" also matches inside a type like "Wholesale", which would then be treated as beer). The real types are fine today. Tightening it could reclassify real products, so it is left for review.
@@ -44,7 +53,11 @@ A latent risk I noticed and did **not** change: the category rule matches words 
 - The site has no privacy notice (the footer link is hidden until the page exists), so customers are not told what happens to it.
 - Collecting less is the safer default: data that is never stored cannot leak.
 
-**Recommended approach (decision for Rhys and Michael, not made):** keep the date box and the server check, but save only "Customer declared 18 or over on 27 Nov 2026 (not verified). Photo ID required at collection or delivery." and discard the date. Add the privacy notice before checkout opens. If staff do want the date, that is a recorded business reason and the notice must say so. The change is three lines in `src/app/api/checkout/route.ts` and one test.
+**Done in the final round.** The date box and the server check are unchanged. The date is now used once to work out "18 or over?" and dropped. What Shopify receives about age is only two cart attributes: `age_declaration` ("Customer declared online on <today> that they are 18 or over. Declaration only, not verified.") and `id_check` ("Photo ID required at collection or delivery. 18+ only."). `age_declared_dob` is gone. The route never logs the request body. The basket now says: "We use your date of birth once, to check you are 18 or over. We do not save it." (a statement about this website's code; hosting-platform logs were not inspected). Regression tests: the cart sent to Shopify contains no date of birth or part of one and only those two attributes; a refused under-18 request saves nothing; after pressing Checkout and reloading, the browser holds no date of birth in local storage, session storage or cookies and the field is empty; a source test fails if any code writes a date of birth to a cart, log, storage or cookie.
+
+**What this does and does not claim.** An online declaration is not age verification and this change does not claim it satisfies alcohol licensing requirements. Whether the declaration, the photo ID rule and the 18+ wording meet the shop's licence conditions is for the licence holder and a licensing adviser to confirm. One thing outside our control: the date field uses the browser's standard "birthday" autofill hint (it helps accessibility), so a browser may offer to fill it from the user's own saved profile. That is stored by the user's browser, not by the website.
+
+**Privacy notices: what exists and what is missing.** Existing: the newsletter consent line ("Yes, send me news and offers. I can unsubscribe at any time."), the basket's age wording and the new line above. **Missing:** a privacy notice page (the footer link is hidden until one exists). It would need, from the shop and not from me: who is responsible for the data; what is collected (newsletter email; at checkout, order details held by Shopify; the date of birth used once); why; how long Shopify keeps orders; which services handle data (Shopify, Vercel hosting, Cloudflare Turnstile on forms, the newsletter provider once chosen, Google for maps and reviews); and how to ask for data to be removed. Also missing: a note on what the browser keeps for the site to work (the basket in local storage, a session flag that skips the opening, sign-in cookies for the owners and members areas). No privacy text was written, because it is a legal document for the shop to approve.
 
 **Done now (no policy change):** the route accepts only a clean, real `YYYY-MM-DD` date for an age of 18 to 120, and saves exactly that text. Before, any text that happened to parse as a date was accepted, an impossible age such as the year 0001 passed, and the text was saved as typed. Tested (`tests/checkout.spec.ts`): 13 bad inputs refused, including malformed, impossible, too old, 17 years old, text with markup or SQL, numbers and null.
 
@@ -64,7 +77,14 @@ A latent risk I noticed and did **not** change: the category rule matches words 
 2. **Anyone could wipe every counter.** When the table passed 5,000 keys the old code emptied it completely, so 5,001 requests under made-up names would clear every other counter, including the one counting wrong passwords on an owner's account. **Fixed:** the table is capped at 20,000 keys and, when full, forgets finished windows first and then the least-hit keys, so a counter that is at its limit is the last to go. Tested: a counter at its limit survives 30,000 made-up keys.
 3. **Several instances multiply the limit (case B). Not fixed, and cannot be fixed in code alone.** Each instance counts for itself, so a visitor whose requests reach N warm instances gets about N times the limit, and a fresh instance starts at zero. Real fixes are a shared store (Upstash Redis or Vercel KV) or a Vercel Firewall rate-limit rule. Both change a live service and may cost money, so they need Rhys's approval. Checkout is off, and every request it would let through still has to pass the minimum, age and basket checks, so the practical harm is Shopify carts being created in bulk, which Shopify rate-limits itself.
 
+4. **IPv6 visitors rotated addresses freely (fixed in the final round).** An IPv6 visitor normally owns a whole /64 range, so counting each address separately gave them a new allowance for every request. IPv6 addresses are now counted by /64 prefix (IPv4-mapped addresses count as the IPv4 one). Tested: 20 requests from different addresses in one /64 get 8 allowed, not 20.
+
 The limits themselves (8 a minute, 5 login tries and so on) are unchanged: commercial policy was not touched.
+
+**Why an in-memory limiter does not protect every deployment, and what would.** Each running server instance counts for itself, so the same visitor got 16 allowed across two instances and a new instance starts at zero. Nothing in code alone changes that. The options, none activated:
+- **Vercel Firewall rate-limiting rule** (a project setting; no code change). It counts across all instances at Vercel's edge, before the request reaches the site. Whether it is included in Rhys's current Vercel plan, and its limits, were not checked and are unverified. Changing it alters a live project setting, so it needs Rhys's approval.
+- **A shared counter in a hosted store** (for example Upstash Redis through the Vercel Marketplace). The limiter's single function would call the store with an atomic increment and an expiry. It adds a service, a credential and a small delay to each checkout request, and may have a free tier; its current free-tier limits and any charge were not verified. It would need Rhys's approval and a test against the real service, which cannot be done here.
+- Either way the existing in-memory limiter is still useful as a first layer and for the forms.
 
 ## 4. Unknown stock and the maximum of 24
 
@@ -76,7 +96,7 @@ The limits themselves (8 a minute, 5 login tries and so on) are unchanged: comme
 - Shopify's checkout remains the final authority on real stock.
 - Tested with four fixtures (unknown and on sale, unknown and sold out, zero, negative), in the browser.
 
-**One wording note, not changed (design-frozen text):** the product page says "In stock" whenever Shopify says a product is for sale. With no stock figure that is Shopify's statement of availability, not a count. "Available" would be more accurate. A wording decision for Rhys.
+**Wording fixed in the final round:** the product page said "In stock" whenever Shopify said a product was for sale. With no stock figure that is Shopify's availability flag, not a count, so it now says "In stock" only when Shopify shares a stock figure of 1 or more, and "Available" otherwise (and "Sold out" when not for sale). Today no real product has a stock figure, so the real preview would show "Available" everywhere. Products with sizes show no stock claim. Tested. No other wording of this kind exists on the site (the basket messages only talk about stock when a figure exists).
 
 ## 5. Every way a purchase can start
 
@@ -109,9 +129,8 @@ Checked again by reading all source and now **enforced by a test** (`tests/entry
 - Optionally tighten the category rule's word matching (risk of reclassifying real products, so review first).
 
 **Decisions that are Rhys's (not Michael's business decisions):**
-- Save "18 or over declared" instead of the date of birth, and add the privacy notice before checkout opens (section 2).
+- Approve the privacy notice and cookie/storage wording before checkout opens (section 2). The date of birth is already no longer saved.
 - Pay for a shared rate limit store or a Vercel Firewall rule (section 3).
-- "In stock" versus "Available" wording (section 4).
 - If the hidden three are artwork, merchandise or gift cards: whether to build a page and basket rule for them (additional scope).
 
 **Michael's information (unchanged, still blocking):** tap names, keg-label ABVs, verified allergens, 1 litre prices, the postcode list and delivery details, licensing and who checks age, collection rules, events, and which Shopify mechanism backs the Regular and the Legend.

@@ -58,7 +58,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
                 {p.abvNum !== null && <span>{p.abvNum}% ABV</span>}
                 {p.style && <span>{p.style}</span>}
               </p>
-              <p className="prod-price">£{price.toFixed(2)} <small>{available ? "In stock" : "Sold out"}</small>{low !== null && <span className="pg-low">Only {low} left</span>}</p>
+              <p className="prod-price">£{price.toFixed(2)} <small>{available ? (stockOf(p) !== null && (stockOf(p) as number) >= 1 ? "In stock" : "Available") : "Sold out"}</small>{low !== null && <span className="pg-low">Only {low} left</span>}</p>
               {p.blurb && <p className="lede">{p.blurb}</p>}
               {p.profile && (
                 <ul className="pg-flav" aria-label="Flavours">

@@ -42,7 +42,7 @@ New or changed coverage this round:
 
 ## Unresolved checkout risks
 
-Blockers (checkout stays off until each is settled): (1) no minimum order in Shopify, so direct Shopify links skip the £35; (2) age verification not configured in Shopify; (3) UK shipping rates still configured; (4) direct Shopify cart or checkout links cannot be blocked by the website. Also: discounts and plans lower the paid total after the £35 check; a £0.00 published price would be sold at £0.00; the date of birth is stored on the order as a cart attribute; the rate limit is per server instance. Details in `CHECKOUT-SAFETY.md`.
+Blockers (checkout stays off until each is settled): (1) no minimum order in Shopify, so direct Shopify links skip the £35; (2) age verification not configured in Shopify; (3) UK shipping rates still configured; (4) direct Shopify cart or checkout links cannot be blocked by the website. Also: discounts and plans lower the paid total after the £35 check; a £0.00 published price would be sold at £0.00; the rate limit is per server instance. (The date of birth is no longer stored on the order: see `FOLLOW-UP-REVIEW.md`.) Details in `CHECKOUT-SAFETY.md`.
 
 ## What is left, in four lists
 

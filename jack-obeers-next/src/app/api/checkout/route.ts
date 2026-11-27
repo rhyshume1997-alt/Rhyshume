@@ -15,6 +15,18 @@ mutation CartCreate($lines: [CartLineInput!]!, $attributes: [AttributeInput!]) {
   }
 }`;
 
+/**
+ * What is saved on the Shopify cart (and so the order) about age. NO date of birth: the check only needs to know "18 or over", and a typed
+ * date adds nothing to the photo ID that staff look at in person. This is a record that a declaration was made, not proof of age, and it
+ * does not by itself satisfy any licensing requirement (that is for the shop's licence holder to decide).
+ */
+function ageAttributes(now: Date): { key: string; value: string }[] {
+  return [
+    { key: "age_declaration", value: `Customer declared online on ${now.toISOString().slice(0, 10)} that they are 18 or over. Declaration only, not verified.` },
+    { key: "id_check", value: "Photo ID required at collection or delivery. 18+ only." },
+  ];
+}
+
 export async function POST(req: Request) {
   if (process.env.CHECKOUT_ENABLED !== "true") {
     return NextResponse.json({ ok: false, reason: "off" }, { status: 503 });
@@ -38,8 +50,8 @@ export async function POST(req: Request) {
   }
 
   // Age declaration is checked on the server too. Photo ID is still checked at collection or delivery.
-  // The date must be exactly YYYY-MM-DD, a real calendar day, and a believable age (18 to 120). Anything else is refused: the text is
-  // later saved on the Shopify cart, so only a clean date is ever allowed through.
+  // The date must be exactly YYYY-MM-DD, a real calendar day, and a believable age (18 to 120). It is used here, once, to work out whether
+  // the customer is 18 or over, and then dropped: it is never saved on the Shopify cart or order, never logged and never stored anywhere.
   const dobText = typeof body.dob === "string" ? body.dob : "";
   const dob = new Date(`${dobText}T00:00:00Z`);
   const cleanDate = /^\d{4}-\d{2}-\d{2}$/.test(dobText) && !Number.isNaN(dob.getTime()) && dob.toISOString().slice(0, 10) === dobText;
@@ -81,7 +93,7 @@ export async function POST(req: Request) {
   const res = await fetch(endpoint(domain), {
     method: "POST",
     headers: { "Content-Type": "application/json", "X-Shopify-Storefront-Access-Token": token },
-    body: JSON.stringify({ query: CART_CREATE, variables: { lines, attributes: [{ key: "age_declared_dob", value: dobText }, { key: "id_check", value: "Photo ID required at collection or delivery. 18+ only." }] } }),
+    body: JSON.stringify({ query: CART_CREATE, variables: { lines, attributes: ageAttributes(now) } }),
     cache: "no-store",
   });
   const json: { data?: { cartCreate?: { cart?: { checkoutUrl?: string }; userErrors?: unknown[] } } } = await res.json();

@@ -78,3 +78,8 @@ When Michael sends the item, it goes in the place named.
 - **Events:** dates, venues, ticket prices or booking links, and for each whether it is an enquiry link, an external booking or a ticket checkout; weekly announcement text.
 - **Launch scope:** which items are essential for the first release (membership, keezer, artwork and merchandise, sponsorship, Christmas, supermarket comparisons are all not built and need separate approval, see `REV1-CHECKLIST-STATUS.md`).
 - **Brand and trust:** trade mark evidence (the site makes no registered claim), copyright wording, sponsorship names and permissions.
+
+## Privacy and age checks (final round)
+
+- **Privacy notice:** who is responsible for customers' data, what is kept, for how long, and who handles it (see `FOLLOW-UP-REVIEW.md` section 2). It is a legal document for the shop to approve; none was written. The footer link stays hidden until it exists.
+- **Age checks:** whether the online declaration plus photo ID at collection or delivery meets the premises licence conditions. The website does not claim that it does. The date of birth is no longer saved; if staff want it kept for a reason, that reason has to be recorded and the privacy notice must say so.

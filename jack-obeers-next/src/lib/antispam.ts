@@ -68,7 +68,25 @@ export function clientIp(h: Headers): string {
   const platform = h.get("x-vercel-forwarded-for") || h.get("x-real-ip");
   const fwd = h.get("x-forwarded-for");
   const raw = platform || (fwd ? fwd.split(",")[0] : "") || "unknown";
-  return raw.split(",")[0].trim().slice(0, 64) || "unknown";
+  return ipBucket(raw.split(",")[0].trim().slice(0, 64) || "unknown");
+}
+
+/**
+ * What one visitor counts as. An IPv4 address is one visitor. An IPv6 visitor normally has a whole /64 range (about 18 quintillion
+ * addresses) and can switch between them freely, so counting each address separately would give them a fresh allowance every time.
+ * IPv6 addresses are therefore counted by their /64 prefix (the first four groups). An IPv4-mapped IPv6 address counts as the IPv4 one.
+ */
+export function ipBucket(ip: string): string {
+  const plain = ip.replace(/%.*$/, "").toLowerCase();
+  const mapped = /^::ffff:(\d{1,3}(?:\.\d{1,3}){3})$/.exec(plain);
+  if (mapped) return mapped[1];
+  if (!plain.includes(":")) return plain;
+  const [head, tail = ""] = plain.split("::");
+  const a = head ? head.split(":") : [];
+  const b = tail ? tail.split(":") : [];
+  const full = plain.includes("::") ? [...a, ...Array(Math.max(0, 8 - a.length - b.length)).fill("0"), ...b] : a;
+  if (full.length !== 8 || full.some((g) => !/^[0-9a-f]{1,4}$/.test(g))) return plain; // not a valid IPv6 address: count it as it is
+  return full.slice(0, 4).map((g) => g.replace(/^0+(?=.)/, "")).join(":") + "::/64";
 }
 
 export async function visitorIp(): Promise<string> {
