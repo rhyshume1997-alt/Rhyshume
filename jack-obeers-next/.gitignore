@@ -8,3 +8,4 @@ next-env.d.ts
 
 # Playwright output
 test-results/
+.next-seo
