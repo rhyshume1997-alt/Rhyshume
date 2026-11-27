@@ -78,7 +78,7 @@ export function ProductGrid({ cards, chips, checkoutOn, noun, intro, segmented =
                   <span className="pg-btns">
                     <AddToBasket handle={c.handle} name={c.name} stock={c.stock} sizes={c.sizes} />
                     {checkoutOn && c.buy ? (
-                      <a className="pg-btn solid" href={c.buy}>Buy now<span className="vh"> {c.name}</span></a>
+                      <button type="button" className="pg-btn solid" data-buy={c.handle}>Buy now<span className="vh"> {c.name}</span></button>
                     ) : null}
                   </span>
                 )}

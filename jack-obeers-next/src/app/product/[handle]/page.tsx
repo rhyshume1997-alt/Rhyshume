@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { Frame } from "@/components/Frame";
 import { BasketBehaviour } from "@/components/BasketBehaviour";
 import { JsonLd } from "@/components/JsonLd";
-import { buyLink, checkoutOn, getCatalogue, safePairings } from "@/lib/catalogue";
+import { canBuyNow, checkoutOn, getCatalogue, safePairings } from "@/lib/catalogue";
 import { lowStock, stockOf } from "@/lib/cards";
 import { AddToBasket } from "@/components/AddToBasket";
 import { pickVariant, sizeManaged, sizesOf } from "@/lib/variants";
@@ -37,7 +37,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
   const path = `/product/${p.handle}`;
   const { price, available } = productPrice(p);
   const range = RANGE[p.category as keyof typeof RANGE] || RANGE.beer;
-  const link = buyLink(p);
+  const buyNow = canBuyNow(p);
   const low = sizeManaged(p.variants) ? null : lowStock(pickVariant(p.variants));
   const pairs = safePairings(p.profile);
   return (
@@ -70,7 +70,7 @@ export default async function Page({ params }: { params: Promise<{ handle: strin
                 {available ? (
                   <>
                     <AddToBasket handle={p.handle} name={p.name} stock={stockOf(p)} sizes={sizesOf(p.variants)} />
-                    {checkoutOn() && link ? <a className="pg-btn solid" href={link}>Buy now</a> : null}
+                    {checkoutOn() && buyNow ? <button type="button" className="pg-btn solid" data-buy={p.handle}>Buy now</button> : null}
                   </>
                 ) : (
                   <button type="button" className="pg-btn solid" disabled>Sold out</button>

@@ -41,6 +41,12 @@ if (process.env.FAKE_SIZES) {
   });
   sized('SIZE TEST DRAUGHT LAGER ABV 4.2%', [['250ml', 3, true, 7], ['500ml', 5.5, true, 7], ['1 litre', 9, true, 7]]);
   sized('SIZE TEST HALF SOLD OUT ABV 4.0%', [['500ml', 5.5, false, 0], ['1 litre', 9, true, 7]]);
+  // Edge cases seen in the real shop's audit: an event with no date (a left-over sample), an expired event, a product with no variants
+  // (Shopify can return one), and a product with no description, ABV, vendor, tags or image.
+  add('Undated Sample Event', 'Event Tickets', 'Jack O’Beers', [], 0);
+  add('Expired Test Night', 'Event Tickets', 'Jack O’Beers', ['date:2020-01-01', 'time:19:00'], 10);
+  P.push({ handle: 'p' + P.length, title: 'EDGE NO VARIANTS ABV 4.0%', description: '', productType: 'Beer', vendor: '', tags: [], featuredImage: null, createdAt: new Date(Date.now() - 400 * day).toISOString(), variants: { nodes: [] } });
+  add('EDGE NO INFO', 'Beer', '', [], 3.2);
 }
 http.createServer((req, res) => {
   let body = '';

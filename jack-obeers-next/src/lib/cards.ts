@@ -1,5 +1,5 @@
 import { isAvailable, pickVariant, sizeManaged, sizesOf } from "@/lib/variants";
-import { buyLink, safePairings, STYLE_CHIPS, type Category, type GlassSpec, type Product, type Profile } from "@/lib/catalogue";
+import { canBuyNow, safePairings, STYLE_CHIPS, type Category, type GlassSpec, type Product, type Profile } from "@/lib/catalogue";
 
 export type Card = {
   handle: string;
@@ -11,7 +11,7 @@ export type Card = {
   styles: string[];
   price: number;
   available: boolean;
-  buy: string | null;
+  buy: boolean;
   glass: GlassSpec;
   profile: Profile | null;
   /** Deli items only, from the allowed list. Suggestions until pairingConfirmed is true. */
@@ -62,7 +62,7 @@ export function toCard(p: Product): Card {
     styles: p.styles,
     price: v ? v.price : 0,
     available: isAvailable(p.variants),
-    buy: buyLink(p),
+    buy: canBuyNow(p),
     glass: p.glass,
     profile: p.profile ? { ...p.profile, blurb: p.blurb || p.profile.blurb, flavour: (p.profile.flavour || []).map(tidy) } : null,
     pairing: safePairings(p.profile),

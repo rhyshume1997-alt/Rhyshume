@@ -1,6 +1,6 @@
 import demo from "@/data/demo-products.json";
 import profiles from "@/data/profiles.json";
-import { pickVariant } from "@/lib/variants";
+import { isAvailable, pickVariant } from "@/lib/variants";
 
 /** stock is how many Shopify says are left, or null when Shopify is not sharing stock numbers. */
 export type Variant = { id: string; title: string; price: number; available: boolean; stock?: number | null };
@@ -186,9 +186,13 @@ const OWN_NAMES = ["jack o' beers", "jack o’beers", "jack o'beers", "jack o’
 /**
  * The text shown under a product's name. Shopify's own description wins, so Michael changes it in Shopify (Products, the
  * Description box) and the site follows. The built-in blurb in src/data/profiles.json is only a fallback for products that
- * have no description yet. Shopify sends plain text. Long descriptions are cut at a word at about 400 characters.
+ * have no description yet. Shopify sends plain text.
+ *
+ * It is shown in FULL. Real descriptions put their allergen wording (for example "Contains: Barley Malt (Gluten)" or "ALLERGEN ADVICE
+ * ... sulphites") at the END, so cutting them short would hide an allergen warning while the page looked complete. The cap below is only a
+ * guard against an absurdly long paste, and is far beyond any real description.
  */
-export const DESCRIPTION_MAX = 400;
+export const DESCRIPTION_MAX = 3000;
 export function clipDescription(text: string | null | undefined): string {
   const t = (text || "").replace(/\s+/g, " ").trim();
   if (t.length <= DESCRIPTION_MAX) return t;
@@ -381,11 +385,12 @@ export async function getCatalogue(): Promise<Catalogue> {
 export const BASKET_CATEGORIES: Category[] = ["beer", "cider", "wine", "deli", "hampers", "events"];
 export const forBasket = (all: Product[]): Product[] => all.filter((p) => BASKET_CATEGORIES.includes(p.category));
 
-/** The link that puts one of a variant in a cart and goes straight to Shopify checkout. */
-export function buyLink(p: Product): string | null {
-  const domain = process.env.SHOPIFY_STORE_DOMAIN;
-  if (!domain || !p.variantNumericId) return null;
-  return `https://${domain}/cart/${p.variantNumericId}:1`;
+/**
+ * Whether a "Buy now" button may show for a product. It NEVER builds a Shopify cart link (the old /cart/VARIANT:1 permalink skipped the
+ * website's minimum order and age declaration). Buy now puts the item in the website basket and opens it, so those checks always apply.
+ */
+export function canBuyNow(p: Product): boolean {
+  return !!process.env.SHOPIFY_STORE_DOMAIN && BASKET_CATEGORIES.includes(p.category) && isAvailable(p.variants);
 }
 
 /** Checkout stays off until CHECKOUT_ENABLED is exactly "true". It is the same switch the older checkout uses. */
@@ -408,8 +413,8 @@ export type ShopEvent = {
   date: string | null;
   /** HH:MM, from a tag written as time:19:00 */
   time: string | null;
-  /** Cart permalink, when the product has a variant */
-  buy?: string | null;
+  /** True when a Buy now button may show (it opens the website basket; there is no Shopify cart link) */
+  buy?: boolean;
   sample?: boolean;
 };
 
@@ -439,7 +444,7 @@ export async function getEvents(): Promise<{ events: ShopEvent[]; live: boolean 
         available: v.some((x) => x.available),
         date: date ? date[1] : null,
         time: time ? time[1] : null,
-        buy: buyLink(p),
+        buy: canBuyNow(p),
       };
     });
   return { events, live: true };

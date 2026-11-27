@@ -59,7 +59,7 @@ export default async function Page() {
                     {e.price > 0 && <p className="price">{`£${e.price.toFixed(2)} a ticket`}</p>}
                     <p className="hamper-btns">
                       {basketHandles.has(e.handle) && e.available && <AddToBasket handle={e.handle} name={e.title} stock={stockByHandle.get(e.handle) ?? null} />}
-                      {ticketsOn && e.available && e.buy ? <a className="btn dk" href={e.buy}>Buy tickets</a> : null}
+                      {ticketsOn && e.available && e.buy ? <button type="button" className="btn dk" data-buy={e.handle}>Buy tickets</button> : null}
                     </p>
                   </li>
                 ))}

@@ -4,7 +4,7 @@ import { isIndexable } from "@/lib/site";
 import { BgVideo } from "@/components/BgVideo";
 import { MEDIA } from "@/lib/media";
 import { DELI_CABINET, DELI_COUNTER } from "@/lib/photos";
-import { ALLOWED_PAIRINGS, buyLink, type Product } from "@/lib/catalogue";
+import { ALLOWED_PAIRINGS, canBuyNow, type Product } from "@/lib/catalogue";
 import { AddToBasket } from "@/components/AddToBasket";
 import { stockOf } from "@/lib/cards";
 
@@ -78,7 +78,7 @@ export function HampersSection({ products, checkoutOn }: { products: Product[]; 
         <div className="hlist hamper-list">
           {hampers.map((p) => {
             const v = p.variants.some((x) => x.available);
-            const link = buyLink(p);
+            const buyNow = canBuyNow(p);
             return (
               <article key={p.handle} className="hcard rv">
                 {p.image && /* eslint-disable-next-line @next/next/no-img-element */ <img className="hamper-img" src={p.image} alt={p.name} width={320} height={320} loading="lazy" />}
@@ -86,7 +86,7 @@ export function HampersSection({ products, checkoutOn }: { products: Product[]; 
                 {priceOf(p) !== null && <p>{money(priceOf(p) as number)}</p>}
                 <p className="hamper-btns">
                   {v && <AddToBasket handle={p.handle} name={p.name} stock={stockOf(p)} />}
-                  {checkoutOn && v && link ? <a className="pg-btn solid" href={link}>Buy now</a> : !v ? <span>Sold out</span> : null}
+                  {checkoutOn && v && buyNow ? <button type="button" className="pg-btn solid" data-buy={p.handle}>Buy now</button> : !v ? <span>Sold out</span> : null}
                 </p>
               </article>
             );

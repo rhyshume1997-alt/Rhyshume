@@ -4,6 +4,7 @@
 /* Jack O'Beers Rev 5: shared behaviour. Header, basket, toast, reveals, the opening, the shelf with its beer-bottle cursor, the label panel. */
 import { DELIVERY_AREAS_TEXT, SHIPPING } from "@/lib/shipping";
 import { pickVariant, sizeLabel, sizeManaged } from "@/lib/variants";
+import { MAX_PER_LINE, MIN_ORDER_GBP } from "@/lib/limits";
 
 export function initRev5(P: any[], PAIR: Record<string, string> = {}): () => void {
   const offs: Array<() => void> = [];
@@ -70,7 +71,7 @@ export function initRev5(P: any[], PAIR: Record<string, string> = {}): () => voi
   }
 
   /* ---- basket ---- */
-  var MIN_ORDER = 35;
+  var MIN_ORDER = MIN_ORDER_GBP; /* the website's minimum (src/lib/limits.ts). Not enforced in Shopify. */
   function subtotal() { return cart.reduce(function (a, l) { var p = by(l.h); return a + (p ? price(p, l.v) * l.q : 0); }, 0); }
   function minOk() { return subtotal() >= MIN_ORDER; }
   function minNote() { var m = $('#min-msg'); if (!m) return; var s = subtotal(); m.textContent = (cart.length && s < MIN_ORDER) ? 'Minimum order is ' + money(MIN_ORDER) + '. Add ' + money(MIN_ORDER - s) + ' more to check out.' : 'Minimum order ' + money(MIN_ORDER) + '.'; }
@@ -80,6 +81,8 @@ export function initRev5(P: any[], PAIR: Record<string, string> = {}): () => voi
   document.addEventListener('input', function (e) { if (e.target && (e.target.id === 'age-dob' || e.target.id === 'age-ok')) ageNote(); });
 
   var cart = []; try { cart = JSON.parse(ls('jo5_cart') || '[]'); } catch (e) { cart = []; }
+  /* a basket saved before the 24-per-line limit may hold more: bring it in line, so the basket never shows more than checkout will take */
+  cart.forEach(function (l) { if (!(l.q >= 1)) l.q = 1; if (l.q > MAX_PER_LINE) l.q = MAX_PER_LINE; });
   function saveCart() { ls('jo5_cart', JSON.stringify(cart)); renderCart(); document.dispatchEvent(new CustomEvent('jo:basket')); }
   function count() { return cart.reduce(function (a, l) { return a + l.q; }, 0); }
   /* Stock Shopify shares for the variant checkout uses (the first one on sale), or null when it is not shared. Never guessed. */
@@ -88,23 +91,26 @@ export function initRev5(P: any[], PAIR: Record<string, string> = {}): () => voi
   function same(l, h, v) { return l.h === h && (l.v || '') === (v || ''); }
   function inBasket(h, v) { var l = cart.filter(function (x) { return same(x, h, v); })[0]; return l ? l.q : 0; }
   /* How many more can go in: Shopify's stock minus what is already in the basket, or null when there is no verified limit. */
-  function room(h, v) { var p = by(h), s = p ? stockOf(p, v) : null; return s === null ? null : Math.max(0, s - inBasket(h, v)); }
+  /* How many more of this product and size can go in. Never unlimited: the line cap always applies, and Shopify's stock figure too when it is shared. */
+  function stockRoom(h, v) { var p = by(h), s = p ? stockOf(p, v) : null; return s === null ? null : Math.max(0, s - inBasket(h, v)); }
+  function room(h, v) { var cap = Math.max(0, MAX_PER_LINE - inBasket(h, v)), r = stockRoom(h, v); return r === null ? cap : Math.min(cap, r); }
+  function limitInfo(h, v) { var sr = stockRoom(h, v), cap = Math.max(0, MAX_PER_LINE - inBasket(h, v)); return { room: room(h, v), byStock: sr !== null && sr < cap }; }
   /* One action adds the whole quantity. Returns what really happened, checked against the basket after the change. */
   function add(h, q, v) {
     var p = by(h); q = Math.floor(q); v = v || '';
     if (!p || !(q >= 1)) return { ok: false, why: 'invalid' };
-    var r = room(h, v), want = q;
-    if (r !== null && q > r) q = r;
-    if (q < 1) return { ok: false, why: 'stock', have: inBasket(h, v), stock: stockOf(p, v) };
+    var r = room(h, v), want = q, byStock = limitInfo(h, v).byStock;
+    if (q > r) q = r;
+    if (q < 1) return { ok: false, why: byStock ? 'stock' : 'max', have: inBasket(h, v), stock: stockOf(p, v) };
     var before = inBasket(h, v), l = cart.filter(function (x) { return same(x, h, v); })[0];
     if (l) l.q += q; else cart.push(v ? { h: h, q: q, v: v } : { h: h, q: q });
     saveCart();
     var after = inBasket(h, v);
     if (after !== before + q) return { ok: false, why: 'basket' };
     toast(p.title + (q > 1 ? ' × ' + q : '') + ' added to your basket');
-    return { ok: true, added: q, line: after, clamped: q < want };
+    return { ok: true, added: q, line: after, clamped: q < want, byStock: byStock };
   }
-  window.joBasket = { room: room };
+  window.joBasket = { room: room, info: limitInfo };
   /* the delivery bottle: it fills as the basket grows toward free local delivery (numbers in src/lib/shipping.ts) */
   function freeDelivery(tot) {
     var left = SHIPPING.freeFrom - tot, fill = Math.max(0, Math.min(1, tot / SHIPPING.freeFrom));
@@ -145,10 +151,10 @@ export function initRev5(P: any[], PAIR: Record<string, string> = {}): () => voi
       a.removeAttribute('aria-busy');
       if (res.ok) {
         a.dataset.state = 'added';
-        say(a, res.clamped ? 'Added ' + res.added + '. That is all we have in stock.' : (res.added > 1 ? res.added + ' added to your basket.' : 'Added to your basket.'), res.clamped);
+        say(a, res.clamped ? 'Added ' + res.added + (res.byStock ? '. That is all we have in stock.' : '. Up to ' + MAX_PER_LINE + ' of each item per order.') : (res.added > 1 ? res.added + ' added to your basket.' : 'Added to your basket.'), res.clamped);
       } else {
         a.dataset.state = 'error';
-        say(a, res.why === 'stock' ? (res.have ? 'All ' + res.have + ' we have are already in your basket.' : 'Sorry, none left in stock.') : 'Could not add to your basket. Please try again.', true);
+        say(a, res.why === 'stock' ? (res.have ? 'All ' + res.have + ' we have are already in your basket.' : 'Sorry, none left in stock.') : res.why === 'max' ? 'Your basket already has ' + MAX_PER_LINE + ', the most of one item in an order.' : 'Could not add to your basket. Please try again.', true);
       }
       resetT[key] = setTimeout(function () { a.dataset.state = 'idle'; say(a, ''); }, res.ok ? 1800 : 3500);
     });
@@ -163,6 +169,8 @@ export function initRev5(P: any[], PAIR: Record<string, string> = {}): () => voi
   on(document, 'click', function (e) {
     var rm = e.target.closest('[data-rm]'); if (rm) { cart = cart.filter(function (l) { return !same(l, rm.dataset.rm, rm.dataset.rv); }); saveCart(); }
     var a = e.target.closest('[data-add]'); if (a) press(a);
+    /* Buy now: no Shopify cart link. The item goes in this basket and the basket opens, so the minimum order and age checks always apply. */
+    var bn = e.target.closest('[data-buy]'); if (bn) { add(bn.dataset.buy, 1, bn.dataset.v); var dlg = $('#cart'); if (dlg && !dlg.open) dlg.showModal(); }
     var oc = e.target.closest('[data-open-cart]'); if (oc) { e.preventDefault(); $('#cart').showModal(); }
     var cl = e.target.closest('[data-close]'); if (cl) { var d = cl.closest('dialog'); if (d) d.close(); }
   });

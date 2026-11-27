@@ -1,21 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { MAX_PER_LINE } from "@/lib/limits";
 
-/** A guard for one action when Shopify is not sharing stock. It is not a stock claim and is never shown as one. */
-export const NO_STOCK_GUARD = 99;
 
 declare global {
   interface Window {
-    joBasket?: { room: (handle: string, variant?: string) => number | null };
+    joBasket?: { room: (handle: string, variant?: string) => number; info: (handle: string, variant?: string) => { room: number; byStock: boolean } };
   }
 }
 
 /**
  * Quantity selector plus the Add to basket button. The button keeps data-add and carries the chosen quantity in data-q, so the
  * one basket script (src/lib/rev5.ts) adds the whole quantity in a single action and drives the button's state and message.
- * The limit is Shopify's stock for the variant checkout uses minus what is already in the basket; with no verified stock the
- * only limit is NO_STOCK_GUARD per action.
+ * The limit is the smaller of Shopify's stock for the variant (when Shopify shares it) and MAX_PER_LINE minus what the basket already has.
+ * Missing stock data is never read as unlimited: MAX_PER_LINE always applies (src/lib/limits.ts).
  */
 export type Size = { id: string; label: string; price: number; available: boolean };
 
@@ -30,17 +29,18 @@ export function AddToBasket({ handle, name, stock, label = "Add to basket", vari
   const chosen = sizes.length ? sizes.find((x) => x.id === size) : undefined;
   const variantId = chosen ? chosen.id : variant;
   const [qty, setQty] = useState(1);
-  const [room, setRoom] = useState<number | null>(stock);
+  const startRoom = stock === null ? MAX_PER_LINE : Math.min(MAX_PER_LINE, stock);
+  const [lim, setLim] = useState<{ room: number; byStock: boolean }>({ room: startRoom, byStock: stock !== null && stock < MAX_PER_LINE });
   const [note, setNote] = useState("");
 
   useEffect(() => {
-    const sync = () => setRoom(window.joBasket ? window.joBasket.room(handle, variantId) : stock);
+    const sync = () => setLim(window.joBasket ? window.joBasket.info(handle, variantId) : { room: startRoom, byStock: stock !== null && stock < MAX_PER_LINE });
     sync();
     document.addEventListener("jo:basket", sync);
     return () => document.removeEventListener("jo:basket", sync);
-  }, [handle, stock, variantId]);
+  }, [handle, stock, variantId, startRoom]);
 
-  const limit = room === null ? NO_STOCK_GUARD : Math.max(1, room);
+  const limit = Math.max(1, lim.room);
   const shown = Math.min(qty, limit);
   const atMin = shown <= 1;
   const atMax = shown >= limit;
@@ -53,7 +53,7 @@ export function AddToBasket({ handle, name, stock, label = "Add to basket", vari
     const next = shown + d;
     if (next < 1) return;
     if (next > limit) {
-      setNote(room === null ? `Up to ${NO_STOCK_GUARD} at a time.` : `Only ${room} available.`);
+      setNote(lim.byStock ? `Only ${lim.room} available.` : `Up to ${MAX_PER_LINE} of each item per order.`);
       return;
     }
     setNote("");

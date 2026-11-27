@@ -41,12 +41,17 @@ test("the Shopify description shows on the product page and beats the built-in b
   expect(await page.locator("main").innerText()).not.toMatch(/allergen/i);
 });
 
-test("descriptions are plain text, tidied, and cut at a word", () => {
+test("descriptions are plain text, tidied, shown in full (allergen wording survives), and only an absurd paste is cut", () => {
   expect(clipDescription("  Hello \n  world  ")).toBe("Hello world");
   expect(clipDescription("")).toBe("");
-  const long = ("word ").repeat(200);
-  const c = clipDescription(long);
-  expect(c.length).toBeLessThanOrEqual(404);
+  // a real-length description with its allergen wording at the end is NOT cut: the warning must survive
+  const real = "A crisp lager. ".repeat(60) + "Allergens: Contains: Barley Malt (Gluten).";
+  expect(clipDescription(real)).toBe(real.replace(/\s+/g, " ").trim());
+  expect(clipDescription(real)).toContain("Contains: Barley Malt (Gluten).");
+  // only an absurdly long paste is cut, at a word
+  const huge = ("word ").repeat(800);
+  const c = clipDescription(huge);
+  expect(c.length).toBeLessThanOrEqual(3004);
   expect(c.endsWith("...")).toBe(true);
 });
 
@@ -165,5 +170,39 @@ test.describe("online sizes", () => {
     await expect(sizes.getByRole("button", { name: /1 litre/ })).toHaveAttribute("aria-pressed", "true");
     await sizes.getByRole("button", { name: /500ml/ }).click({ force: true });
     await expect(sizes.getByRole("button", { name: /1 litre/ })).toHaveAttribute("aria-pressed", "true");
+  });
+});
+
+/** Catalogue behaviour for what Shopify can return: events with no date or in the past, no variants, missing information. */
+test.describe("catalogue edge cases", () => {
+  test("events: an undated left-over sample and an expired event never show, a real upcoming one does", async ({ page }) => {
+    await page.addInitScript(() => sessionStorage.setItem("jo_opened", "1"));
+    await page.goto("/events");
+    const t = await page.locator("main").innerText();
+    expect(t).toContain("Tasting Night");
+    expect(t).not.toMatch(/Undated Sample Event|Expired Test Night/);
+  });
+
+  test("a product Shopify returns with no variants is left out, and one with no information still renders without undefined, NaN or null", async ({ page }) => {
+    await page.addInitScript(() => sessionStorage.setItem("jo_opened", "1"));
+    await page.goto("/beers");
+    expect(await page.locator("main").innerText()).not.toMatch(/No Variants/i);
+    const href = await page.locator(".pg-card", { hasText: "Edge No Info" }).first().locator("a[href^='/product/']").first().getAttribute("href");
+    await page.goto(href!);
+    const t = await page.locator("main").innerText();
+    expect(t).toMatch(/Edge No Info/i);
+    expect(t).toMatch(/£3\.20/);
+    expect(t).not.toMatch(/\bundefined\b|\bNaN\b|\bnull\b/);
+    expect(t).not.toMatch(/allergen|ABV: ?%/i); // nothing is invented for a product with no information
+    await expect(page.locator("h1")).toHaveCount(1);
+  });
+
+  test("a sold-out product shows Sold out and cannot be added, and the card keeps its price", async ({ page }) => {
+    await page.addInitScript(() => sessionStorage.setItem("jo_opened", "1"));
+    await page.goto("/beers");
+    const c = page.locator(".pg-card", { hasText: "Sold Out Lager" }).first();
+    await expect(c.getByRole("button", { name: /sold out/i })).toBeDisabled();
+    await expect(c.locator("[data-add]")).toHaveCount(0);
+    await expect(c).toContainText("£3.00");
   });
 });

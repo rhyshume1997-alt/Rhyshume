@@ -8,7 +8,7 @@ This guide was written from the code, and the website side of each step was test
 
 ## In Shopify
 
-**Change a product description.** Products, open the product, edit the Description box. Write plain text. The site shows the first 400 or so characters. Your description is used instead of the standard wording the site has for some beers. If the box is empty, the site falls back to that standard wording for those beers, so leave the box empty if you want that.
+**Change a product description.** Products, open the product, edit the Description box. Write plain text. The site shows the whole description (put allergen information in it only once it has been checked against the label or supplier sheet). Your description is used instead of the standard wording the site has for some beers. If the box is empty, the site falls back to that standard wording for those beers, so leave the box empty if you want that.
 
 **Change a price.** Products, open the product, change the Price of the variant, Save. The site always shows Shopify's price. Nothing on the website is typed in by hand.
 

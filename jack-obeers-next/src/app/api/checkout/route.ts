@@ -2,10 +2,10 @@ import { NextResponse } from "next/server";
 import { clientIp, rateLimit, sameOrigin } from "@/lib/antispam";
 import { endpoint, forBasket, getCatalogue } from "@/lib/catalogue";
 import { pickVariant } from "@/lib/variants";
+import { MAX_PER_LINE, MIN_ORDER_GBP } from "@/lib/limits";
 
 // Checkout is OFF unless CHECKOUT_ENABLED is exactly "true" in Vercel.
 // Do not turn it on until the licence and age-check for selling alcohol are confirmed.
-const MIN_ORDER_GBP = 35;
 
 const CART_CREATE = `
 mutation CartCreate($lines: [CartLineInput!]!, $attributes: [AttributeInput!]) {
@@ -47,19 +47,28 @@ export async function POST(req: Request) {
   const catalogue = await getCatalogue();
   if (!catalogue.live) return NextResponse.json({ ok: false, reason: "off" }, { status: 503 });
 
-  // Prices and variants always come from Shopify, never from the browser.
+  // Prices and variants always come from Shopify, never from the browser. Nothing is quietly dropped or cut: a basket this route
+  // cannot sell exactly as it stands is refused with a reason, so the customer is never checked out with something different.
   const lines: { merchandiseId: string; quantity: number }[] = [];
+  const perVariant = new Map<string, number>();
   let subtotal = 0;
-  for (const l of (body.lines || []).slice(0, 50)) {
+  if ((body.lines || []).length > 50) return NextResponse.json({ ok: false, reason: "quantity" }, { status: 400 });
+  const wanted = body.lines || [];
+  for (const l of wanted) {
+    const q = Number(l.q);
+    if (!Number.isInteger(q) || q < 1 || q > MAX_PER_LINE) return NextResponse.json({ ok: false, reason: "quantity" }, { status: 400 });
     const p = forBasket(catalogue.all).find((x) => x.handle === l.h);
-    // The size comes from the basket line when it names one of this product's variants that is on sale, otherwise the first on sale.
-    const picked = p ? pickVariant(p.variants, typeof l.v === "string" ? l.v : null) : undefined;
-    const v = picked && picked.available ? picked : null;
-    const q = Math.max(1, Math.min(24, Math.floor(Number(l.q) || 1)));
-    if (v) {
-      lines.push({ merchandiseId: v.id, quantity: q });
-      subtotal += v.price * q;
-    }
+    // The size comes from the basket line when it names one of this product's online sizes that is on sale, otherwise the default.
+    // A line that names a size we do not offer (or that is sold out) is refused, never swapped for another size.
+    const named = typeof l.v === "string" && l.v ? l.v : null;
+    const picked = p ? pickVariant(p.variants, named) : undefined;
+    if (!p || !picked || !picked.available || (named && picked.id !== named)) return NextResponse.json({ ok: false, reason: "unavailable" }, { status: 409 });
+    // The same product and size in two lines still counts as one: the cap applies to the total.
+    const total = (perVariant.get(picked.id) || 0) + q;
+    if (total > MAX_PER_LINE) return NextResponse.json({ ok: false, reason: "quantity" }, { status: 400 });
+    perVariant.set(picked.id, total);
+    lines.push({ merchandiseId: picked.id, quantity: q });
+    subtotal += picked.price * q;
   }
   if (!lines.length) return NextResponse.json({ ok: false, reason: "empty" }, { status: 400 });
 
