@@ -80,7 +80,7 @@ Shopify counts stock per variant, so selling a 1 litre does not reduce the 500ml
 8. **Report updated.** This file, `REV1-CHECKLIST-STATUS.md` (addendum) and `MICHAEL-NEEDS.md`.
 
 ## Evidence
-(see the end of this file)
+(see the section at the end of this file)
 
 ## Blockers
 
@@ -109,3 +109,22 @@ Shopify counts stock per variant, so selling a 1 litre does not reduce the 500ml
 | 10 | Confirm the Beer Club plan group is available to the Storefront channel; decide which mechanism sells The Regular and The Legend; clean up the £11.99 draft and the lifetime plan | Michael and Rhys; nothing deleted without approval |
 | 11 | Pickeasy: grant the requested data access, if inspection is wanted | Rhys. No trial, no install |
 | 12 | Set `CHECKOUT_ENABLED=true` in Vercel (last step) | Everything above settled and a full test order passed |
+
+## Evidence
+
+**Complete test suite, final run on this branch:** 263 passed, 3 skipped by design, 0 failed (desktop and iPhone, live-mode build and preview build, run against the test shop). The earlier runs in this round found and I fixed: two size-test expectations (quantity stays after an add, by design), and a real layout bug (below).
+
+New tests this round:
+- Sizes in the browser: two sizes show with 500ml first and selected; 250ml never offered; no stock figure or cap; the chosen size is what enters the basket; each size is its own line, priced separately (2 x £9.00 + 2 x £5.50 = £29.00 shown); a sold-out size cannot be chosen and the other becomes the default.
+- Sizes at checkout: the chosen 1 litre variant is the one handed to Shopify; a 250ml id falls back to 500ml; no size named gives 500ml.
+- Size rules as pure functions, including a lone "750ml" wine and "Default Title" products behaving as before.
+- Postcode check: unconfigured until a list is supplied; whole postcode, sector ("G61 4") and district ("G63") matching; "G6" is not "G63"; "G6 1" is not "G61"; the shipped list is empty.
+- Checkout handoff against the FAKE Shopify: off by default; valid basket handed over with the right variant and quantity; refused for under £35, no or under-18 age declaration, foreign origin, sold-out product and empty basket.
+
+**Visual regression:** nine pages (home, beers, product, FAQ, events, Draught Club, About, craft beer, gift boxes) at 390 and 1440 wide were photographed before and after this round and compared pixel by pixel: 18 of 18 identical. The membership cards, homepage layout, animations, styling and navigation are untouched. The screenshots use the standard test shop, so no size products appear in them.
+
+**Size layout check:** the size choice was photographed at 360, 390, 768 and 1440 wide with a test product (`sz-all.png`, sent with the delivery message). At 1440 the first version squeezed the beer name to a few letters; fixed with a small rule that applies only to cards that have sizes.
+
+**A bug found and fixed on the way:** in the non-preview (live) look on a phone, the Add button ran 30 px (390 wide) to 60 px (360 wide) past its card, and the page became 411 px wide on a 390 px phone. Contained in every look; the preview look is unchanged (pixel-identical above).
+
+**Not tested, stated plainly:** anything against the real Shopify store; real size variants; selling plans; metafields; real checkout; Safari, Firefox and real phones.
