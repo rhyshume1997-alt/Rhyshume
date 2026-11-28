@@ -43,7 +43,7 @@ export function FindABeer({ cards }: { cards: Card[] }) {
   const picks = useMemo(() => {
     if (!answered) return [];
     return cards
-      .filter((c) => c.profile && c.available)
+      .filter((c) => c.profile && c.profile.flavour.length > 0 && c.available)
       .map((c) => ({ c, ...scoreBeer(c.profile!.flavour, a) }))
       .filter((r) => r.score >= Math.min(answered, 2))
       .sort((x, y) => y.score - x.score || x.c.name.localeCompare(y.c.name))

@@ -6,6 +6,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { categoryOf, eventDate, hiddenReason } from "../src/lib/categories";
 import { sizesOf } from "../src/lib/variants";
+import { toCard } from "../src/lib/cards";
 import { describeBlocks } from "../src/lib/describe";
 
 /** Rate limit, what the website hides, and stock: logic that does not need a browser. */
@@ -212,5 +213,22 @@ test.describe("product descriptions are split into short labelled parts", () => 
     expect(describeBlocks("A crisp lager with a dry finish: lovely.")).toEqual([{ kind: "text", text: "A crisp lager with a dry finish: lovely." }]);
     expect(describeBlocks("")).toEqual([]);
     expect(describeBlocks(null)).toEqual([]);
+  });
+});
+
+test.describe("every beer with a Shopify description gets See flavour profile", () => {
+  const base = {
+    handle: "x", category: "beer", name: "Gubernija 360 Pilsner", brewery: "Gubernija", abvNum: 4.6, style: "Pilsner", styles: ["Lager"],
+    variants: [{ id: "v1", title: "Default Title", availableForSale: true, price: 3.2, stock: null }], glass: { colour: "#e0b040", head: "#fff", haze: 0 },
+    profile: null, sample: false,
+  };
+  test("no built-in profile but a description: the card opens Shopify's text, with no flavour words made up", () => {
+    const c = toCard({ ...base, blurb: "Gubernija 360 is a classic pilsner. Tasting Notes Appearance: Pale gold." } as never);
+    expect(c.profile).not.toBeNull();
+    expect(c.profile!.blurb).toMatch(/^Gubernija 360 is a classic pilsner/);
+    expect(c.profile!.flavour).toEqual([]);
+  });
+  test("no profile and no description: no toggle", () => {
+    expect(toCard({ ...base, blurb: undefined } as never).profile).toBeNull();
   });
 });

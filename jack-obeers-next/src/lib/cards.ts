@@ -64,7 +64,13 @@ export function toCard(p: Product): Card {
     available: isAvailable(p.variants),
     buy: canBuyNow(p),
     glass: p.glass,
-    profile: p.profile ? { ...p.profile, blurb: p.blurb || p.profile.blurb, flavour: (p.profile.flavour || []).map(tidy) } : null,
+    // A product with no built-in profile still gets "See flavour profile" when Shopify has a description: it opens that description,
+    // with no flavour words made up for it.
+    profile: p.profile
+      ? { ...p.profile, blurb: p.blurb || p.profile.blurb, flavour: (p.profile.flavour || []).map(tidy) }
+      : p.blurb
+        ? { match: "", brewery: p.brewery || "", style: p.style || "", blurb: p.blurb, flavour: [] }
+        : null,
     pairing: safePairings(p.profile),
     pairingConfirmed: !!(p.profile && p.profile.pairingConfirmed),
     sample: !!p.sample,

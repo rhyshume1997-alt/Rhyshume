@@ -86,7 +86,7 @@ export function ProductGrid({ cards, chips, checkoutOn, noun, intro, segmented =
               </div>
               {c.profile && (
                 <>
-                  {!isOpen && (
+                  {!isOpen && c.profile.flavour.length > 0 && (
                     <ul className="pg-flav pg-flav-mini" aria-label="Flavours">
                       {c.profile.flavour.slice(0, 3).map((f) => <li key={f}>{f}</li>)}
                     </ul>
@@ -97,9 +97,11 @@ export function ProductGrid({ cards, chips, checkoutOn, noun, intro, segmented =
                   {isOpen && (
                     <div className="pg-detail">
                       <Description text={c.profile.blurb} />
-                      <ul className="pg-flav" aria-label="Flavours">
-                        {c.profile.flavour.map((f) => <li key={f}>{f}</li>)}
-                      </ul>
+                      {c.profile.flavour.length > 0 && (
+                        <ul className="pg-flav" aria-label="Flavours">
+                          {c.profile.flavour.map((f) => <li key={f}>{f}</li>)}
+                        </ul>
+                      )}
                       {c.pairing.length > 0 && (
                         <p className="pg-goes">
                           <b>Suggested with</b> {c.pairing.join(", ")}
