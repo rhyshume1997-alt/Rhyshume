@@ -1,0 +1,146 @@
+[
+ {
+  "brewery": "71 Brewing",
+  "name": "71 Lager",
+  "style": "Pilsner",
+  "abv": 4.4,
+  "p250": 2.85,
+  "p500": 5.7,
+  "desc": "Crisp golden lager with soft bready malt, gently spicy Saaz hops and a refreshing finish."
+ },
+ {
+  "brewery": "Sheppy’s",
+  "name": "Cider with Raspberry",
+  "style": "",
+  "abv": 3.4,
+  "p250": 2.5,
+  "p500": 5,
+  "desc": "Somerset cider apples blended with raspberry juice. Juicy berry, fresh apple and a gently tart finish."
+ },
+ {
+  "brewery": "Datum Attitude",
+  "name": "Airspace",
+  "style": "Essex Nitro Stout",
+  "abv": 4.2,
+  "p250": 3.1,
+  "p500": 6.2,
+  "desc": "Smooth, creamy dark stout with roasted malt, coffee and cocoa notes."
+ },
+ {
+  "brewery": "Ilkley",
+  "name": "Fridge Over Troubled Water",
+  "style": "India Pale Lager",
+  "abv": 5.0,
+  "p250": 3,
+  "p500": 6,
+  "desc": "Clean, crisp lager texture with a brighter hop aroma and firmer finish than a classic lager."
+ },
+ {
+  "brewery": "Wylam",
+  "name": "Peggy’s Drift",
+  "style": "Nitro Stout",
+  "abv": 4.0,
+  "p250": 2.9,
+  "p500": 5.8,
+  "desc": "Deep, toasty and balanced, with a smooth nitro pour and soft roast."
+ },
+ {
+  "brewery": "Bini Brew Co",
+  "name": "Feeling Strangely Fine",
+  "style": "Double IPA",
+  "abv": 8.0,
+  "p250": 3.5,
+  "p500": 7,
+  "desc": "Cloudy golden double IPA with an orange-led impression in a draught tasting and a fuller body."
+ },
+ {
+  "brewery": "Amity",
+  "name": "Six Summers",
+  "style": "Double Dry-Hopped IPA",
+  "abv": 6.6,
+  "p250": 3.25,
+  "p500": 6.5,
+  "desc": "Ripe mango, passionfruit and guava. Citra and Strata hops in Amity’s sixth-birthday beer."
+ },
+ {
+  "brewery": "Campervan",
+  "name": "Leith Juice",
+  "style": "Session IPA",
+  "abv": 4.7,
+  "p250": 3,
+  "p500": 6,
+  "desc": "Bright grapefruit and orange zest, with a tropical edge from Simcoe and Cascade."
+ },
+ {
+  "brewery": "Hawkstone",
+  "name": "Black",
+  "style": "Nitro Stout",
+  "abv": 4.2,
+  "p250": 3,
+  "p500": 6,
+  "desc": "Creamy dark stout with roasted coffee, dark chocolate and a clean bitterness from Target and Goldings."
+ },
+ {
+  "brewery": "Amity",
+  "name": "Waterpistol",
+  "style": "Juicy Pale Ale",
+  "abv": 4.6,
+  "p250": 2.75,
+  "p500": 5.5,
+  "desc": "Hazy, juicy and easy-drinking, with a bright tropical hop character."
+ },
+ {
+  "brewery": "Amity",
+  "name": "Even Bigger Boat",
+  "style": "Triple IPA",
+  "abv": 10.0,
+  "p250": 4.25,
+  "p500": 8.5,
+  "desc": "Ripe pineapple, mango and lychee over a silky body, with bright citrus and a warming finish."
+ },
+ {
+  "brewery": "Ilkley",
+  "name": "Easy Landing",
+  "style": "East Coast Hazy Pale",
+  "abv": 4.6,
+  "p250": 2.9,
+  "p500": 5.8,
+  "desc": "Soft, hazy and fruit-forward with a rounded finish. Listed as East Coast IPA on the tap sheet and East Coast Hazy Pale on the."
+ },
+ {
+  "brewery": "Ilkley",
+  "name": "Alpha Beta",
+  "style": "Session IPA",
+  "abv": 4.5,
+  "p250": 2.8,
+  "p500": 5.6,
+  "desc": "Grapefruit on the nose, juicy tropical hops on the palate and a light, easy finish."
+ },
+ {
+  "brewery": "Datum Attitude",
+  "name": "Wokka Wokka",
+  "style": "New England Pale",
+  "abv": 4.8,
+  "p250": 2.75,
+  "p500": 5.5,
+  "desc": "Hazy pale with bright citrus from Citra Cryo and a piney, resinous edge from Chinook Cryo."
+ },
+ {
+  "brewery": "Wylam",
+  "name": "Jakehead",
+  "style": "IPA",
+  "abv": 6.3,
+  "p250": 3.1,
+  "p500": 6.2,
+  "desc": "Amber IPA with bold American hop aromas, a rounded malt body and firm bitterness."
+ },
+ {
+  "brewery": "Datum Attitude",
+  "name": "Velocity Never Exceed",
+  "style": "West Coast IPA",
+  "abv": 6.0,
+  "p250": 3,
+  "p500": 6,
+  "desc": "Citrus peel, pine and a dry, firmly bitter finish."
+ }
+]

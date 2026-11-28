@@ -13,6 +13,7 @@ const PAGES: { path: string; priority: number; changeFrequency: "daily" | "weekl
   { path: "/beers", priority: 0.9, changeFrequency: "daily" },
   { path: "/ciders", priority: 0.8, changeFrequency: "daily" },
   { path: "/wines", priority: 0.8, changeFrequency: "daily" },
+  { path: "/on-tap", priority: 0.7, changeFrequency: "weekly" },
   { path: "/craft-beer-milngavie", priority: 0.8, changeFrequency: "monthly" },
   { path: "/bottle-shop-milngavie", priority: 0.8, changeFrequency: "monthly" },
   { path: "/beer-gift-boxes", priority: 0.7, changeFrequency: "weekly" },

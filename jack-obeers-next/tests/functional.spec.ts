@@ -304,3 +304,21 @@ test.describe("unknown, zero and negative stock", () => {
     expect(lines).toEqual([]); // nothing was added
   });
 });
+
+test.describe("On tap page (from Michael's tap guide)", () => {
+  test("lists the confirmed taps with ABV and prices, nothing can be bought, and unconfirmed notes are not shown", async ({ page }) => {
+    await page.addInitScript(() => sessionStorage.setItem("jo_opened", "1"));
+    await page.goto("/on-tap");
+    await expect(page.locator("h1")).toContainText("On tap");
+    await expect(page.locator(".pg-card")).toHaveCount(16);
+    await expect(page.locator("[data-add], [data-buy], .pg-btn")).toHaveCount(0);
+    const t = await page.locator("main").innerText();
+    expect(t).toMatch(/Waterpistol/);
+    expect(t).toMatch(/£5\.50 for 500ml/);
+    expect(t).not.toMatch(/Style guide|Confirm|check keg|Awaiting keg|Product name missing|Ricky Stien|Frizzante|Spritz/i);
+  });
+  test("the Shop menu links to it", async ({ page }) => {
+    await page.goto("/");
+    expect(await page.locator('a[href="/on-tap"]').count()).toBeGreaterThan(0);
+  });
+});
