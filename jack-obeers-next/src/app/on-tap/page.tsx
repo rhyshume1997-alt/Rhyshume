@@ -29,27 +29,22 @@ export default function Page() {
         <section className="cream pg-sec" style={{ background: "var(--cream)" }}>
           <div className="wrap pg-wrap">
             <p className="lede">From our tap guide of 27 November 2026. Taps change, so ask in the shop for what is on today. Please ask a member of the team about allergens before you order.</p>
-            <ul className="pg-grid">
+            <ul className="ot-list">
               {list.map((t) => (
-                <li key={t.name} className="pg-card" data-cat="beer">
-                  <div className="pg-top">
-                    <div className="pg-text">
-                      <h2 className="pg-name">{t.name}</h2>
-                      {t.brewery && <p className="pg-brew">{t.brewery}</p>}
-                      <p className="pg-meta">
-                        <span>{t.abv}% ABV</span>
-                        {t.style && <span>{t.style}</span>}
-                      </p>
-                    </div>
+                <li key={t.name} className="ot-item">
+                  <div className="ot-head">
+                    <h2 className="ot-name">{t.name}</h2>
+                    <p className="ot-price">
+                      {t.p250 !== null && <span>{money(t.p250)} <small>250ml</small></span>}
+                      {t.p500 !== null && <span>{money(t.p500)} <small>500ml</small></span>}
+                    </p>
                   </div>
-                  <div className="pg-buy">
-                    <span className="pg-price">
-                      {t.p250 !== null && <span>{money(t.p250)} for 250ml</span>}
-                      {t.p250 !== null && t.p500 !== null && " · "}
-                      {t.p500 !== null && <span>{money(t.p500)} for 500ml</span>}
-                    </span>
-                  </div>
-                  <p>{t.desc}</p>
+                  <p className="ot-meta">
+                    {t.brewery && <span>{t.brewery}</span>}
+                    <span>{t.abv}% ABV</span>
+                    {t.style && <span>{t.style}</span>}
+                  </p>
+                  <p className="ot-desc">{t.desc}</p>
                 </li>
               ))}
             </ul>
