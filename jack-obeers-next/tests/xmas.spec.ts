@@ -22,7 +22,6 @@ test("on: hats on the logos, the headline, lights and garland show; nothing cove
   await expect(page.locator(".bh-hero .xcorner-hero")).toBeVisible();
   await expect(page.locator("#this-week .xsec-corner")).toBeAttached();
   await expect(page.locator("#events-home .xsec-sprig")).toBeAttached();
-  if (isMobile) await expect(page.locator(".bh-hero .xtree-hero")).toBeHidden(); else await expect(page.locator(".bh-hero .xtree-hero")).toBeVisible();
   // decoration never catches a click and is hidden from assistive technology
   expect(await page.locator(".bh-hero .xdecor").evaluate((el) => getComputedStyle(el).pointerEvents)).toBe("none");
   await expect(page.locator(".xdecor").first()).toHaveAttribute("aria-hidden", "true");
@@ -36,7 +35,7 @@ test("the original logo files are untouched and still the ones in the page; the 
   const xs = await page.locator("img.xlogo").evaluateAll((a) => a.map((i) => (i as HTMLImageElement).getAttribute("src")));
   expect(xs.sort()).toEqual(["/media/jack-christmas-lying.png", "/media/jack-christmas-mascot.png", "/media/jack-christmas-standing.png", "/media/jack-christmas-standing.png"]);
   // the decorations are not downloaded either
-  expect(await page.locator(".xsparkle, .xcorner, .xtree").evaluateAll((a) => a.every((i) => !(i as HTMLImageElement).currentSrc))).toBe(true);
+  expect(await page.locator(".xsparkle, .xcorner").evaluateAll((a) => a.every((i) => !(i as HTMLImageElement).currentSrc))).toBe(true);
   // off: the Christmas logos are not shown and not downloaded
   await expect(page.locator("img.xlogo:visible")).toHaveCount(0);
   expect(await page.locator("img.xlogo").evaluateAll((a) => a.every((i) => !(i as HTMLImageElement).currentSrc))).toBe(true);
@@ -45,7 +44,7 @@ test("the original logo files are untouched and still the ones in the page; the 
 test("off: no hat, no decoration, no headline", async ({ page }) => {
   await page.goto("/?xmas=off");
   await expect(page.locator(".xlogo:visible, .xdecor:visible, .xkicker:visible")).toHaveCount(0);
-  await expect(page.locator(".xcorner:visible, .xtree:visible, .xsparkle:visible")).toHaveCount(0);
+  await expect(page.locator(".xcorner:visible, .xsparkle:visible")).toHaveCount(0);
   await expect(page.locator(".brand img:not(.xlogo)")).toBeVisible();
   await expect(page.locator("#this-week")).toBeVisible();
   await expect(page.locator("#events-home")).toBeVisible();
@@ -112,10 +111,6 @@ test("decorations never cover text, buttons or the navigation", async ({ page, i
   const corner = await hit(".bh-hero .xcorner-hero");
   expect(corner.y).toBeGreaterThanOrEqual(hdr!.y + hdr!.height - 1); // starts below the header
   for (const sel of [".bh-h1", ".bh-cta", ".bh-copy .xkicker"]) expect(overlaps(corner, await hit(sel)), `corner vs ${sel}`).toBe(false);
-  if (!isMobile) {
-    const tree = await hit(".bh-hero .xtree-hero");
-    for (const sel of [".bh-h1", ".bh-cta", ".bh-lede", ".bh-lying img.xlogo", ".hdr"]) expect(overlaps(tree, await hit(sel)), `tree vs ${sel}`).toBe(false);
-  }
   // the section decorations stay clear of the headings and buttons
   for (const [sec, deco, avoid] of [["#this-week", ".xsec-corner", "h2"], ["#events-home", ".xsec-sprig", ".btn"]] as const) {
     await page.locator(sec).scrollIntoViewIfNeeded();
@@ -130,7 +125,7 @@ test("decorations never cover text, buttons or the navigation", async ({ page, i
 
 test("the Christmas pictures are genuinely transparent and light", async ({ page }) => {
   await page.goto("/?xmas=on");
-  const files = ["christmas-tree", "christmas-sparkles", "christmas-sprig", "christmas-corner"];
+  const files = ["christmas-sparkles", "christmas-sprig", "christmas-corner"];
   for (const f of files) {
     const r = await page.evaluate(async (u) => {
       const img = new Image(); img.src = u; await img.decode();

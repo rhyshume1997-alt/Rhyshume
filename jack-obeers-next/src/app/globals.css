@@ -1990,15 +1990,11 @@ html[data-xmas="on"] .bh-lying img.xlogo { filter: drop-shadow(0 .5rem .7rem rgb
 @media (max-width: 40rem) { html[data-xmas="on"] .brand img.xlogo { width: 2.7rem; height: 2.7rem; } }
 html[data-xmas="on"] .xdecor { display: block; position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
 .xsparkle { position: absolute; right: 0; top: 4%; width: 58%; height: auto; mix-blend-mode: screen; opacity: .4; animation: xdrift 16s ease-in-out infinite alternate; }
-.xcorner, .xtree { position: absolute; pointer-events: none; height: auto; display: none; }
+.xcorner { position: absolute; pointer-events: none; height: auto; display: none; }
 html[data-xmas="on"] .xcorner { display: block; }
 .xcorner-hero { right: 0; top: var(--hdr, 4rem); width: clamp(7rem, 19vw, 16rem); }
 .xsec-corner { right: 0; top: 0; width: clamp(4.5rem, 15vw, 12rem); z-index: 1; }
 .xsec-sprig { right: clamp(.5rem, 3vw, 3rem); bottom: 1.4rem; width: clamp(6rem, 14vw, 12rem); z-index: 1; }
-/* The tree stands near the right edge of the hero, to the left of the logo, only where there is clear space. */
-.xtree-hero { right: calc(var(--gut) + clamp(10rem, 18vw, 16.5rem) + 1.2rem); bottom: 1.2rem; height: clamp(13rem, 25vw, 21rem); width: auto; filter: drop-shadow(0 .6rem .9rem rgba(0, 0, 0, .55)); }
-@media (min-width: 70rem) { html[data-xmas="on"] .xtree-hero { display: block; } }
-.stage-in > .xdecor .xtree-hero { display: none !important; }
 @keyframes xdrift { from { transform: translateY(-.6%); opacity: .28; } to { transform: translateY(.6%); opacity: .4; } }
 html[data-xmas="on"] .xkicker { display: inline-flex; align-items: center; gap: .5rem; margin: 0; padding: .3rem .95rem; border-radius: 99px; background: #1f5a34; color: #fbf7ec; border: 1.5px solid #e8b13c; font: 700 .82rem/1.2 var(--ui); letter-spacing: .02em; position: relative; z-index: 2; }
 html[data-xmas="on"] .xkicker::before { content: ""; width: .5rem; height: .5rem; background: #e8b13c; clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); }

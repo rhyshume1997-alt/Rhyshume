@@ -1,7 +1,7 @@
 /**
  * Christmas decoration for the homepage hero. All of it is hidden unless <html data-xmas="on"> (see lib/season.ts), so in
  * the other eleven months it adds nothing to the page and the pictures are never downloaded (lazy images that are not displayed).
- * A light evergreen corner, a few gold sparkles and snowflakes, and a decorated tree standing near the hero edge on wide screens. Decoration only: hidden from
+ * A light evergreen corner, a few gold sparkles and snowflakes. Decoration only: hidden from
  * assistive technology, never catches a click, and sits behind the headline. The sparkles drift very slowly and stops
  * with reduced motion.
  */
@@ -12,8 +12,6 @@ export function XmasDecor() {
       <img className="xsparkle" src="/media/christmas-sparkles.webp" alt="" width={1000} height={663} loading="lazy" decoding="async" />
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img className="xcorner xcorner-hero" src="/media/christmas-corner.webp" alt="" width={760} height={629} loading="lazy" decoding="async" />
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img className="xtree xtree-hero" src="/media/christmas-tree.webp" alt="" width={420} height={716} loading="lazy" decoding="async" />
     </div>
   );
 }
