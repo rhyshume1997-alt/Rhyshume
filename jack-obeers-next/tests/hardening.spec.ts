@@ -172,6 +172,17 @@ test("audit script: given the admin's product export, it names every active prod
 test.describe("product descriptions are split into short labelled parts", () => {
   const real = "DescriptionŠvyturys Ekstra is Lithuania’s most iconic beer, a world-class Dortmunder-style lager. Brewed since 1995, it remains a gold-standard lager. Tasting Notes Appearance: Deep gold, crystal clear. Aroma: Fresh hops with subtle bready malt notes. Palate: A rich, malty sweetness. Finish: Clean, crisp, and exceptionally refreshing. Allergens & Dietary Information Contains: Barley Malt (Gluten). Ingredients: Water, Barley Malt, Rice, Hops, Yeast. Suitability: Traditionally vegan-friendly. Food PairingsThis versatile lager pairs perfectly with grilled chicken. Manufacturer Information Brewery: Aldaris (founded in 1865 in Riga, Latvia). Parent Company: Carlsberg Group.";
 
+    test("DescriptionAldaris glued on, Tasting Notes: with a colon, and Flavour / Quick Specs on their own lines", () => {
+    const a = describeBlocks("DescriptionAldaris Kiršu is a premium fruit beer. Tasting Notes Appearance: Striking ruby red. Finish: Refreshing.");
+    expect(a[0]).toEqual({ kind: "text", text: "Aldaris Kiršu is a premium fruit beer." });
+    const s = describeBlocks("Sync Rate is a vibrant Red Ale. Tasting Notes: Appearance: Deep ruby red. Aroma: Warm red berries. Flavour: Rich layers of caramel. Finish: Clean and crisp. Quick Specs: Style: American Red Ale ABV: 4.8% Format: 440ml Can Vibe: Balanced, vibrant, and incredibly \"moreish.\"");
+    expect(s.some((x) => x.text.trim() === ":" || x.text.startsWith(":"))).toBe(false);
+    expect(s.filter((x) => x.kind === "heading").map((x) => x.text)).toEqual(["Tasting Notes", "Quick Specs"]);
+    expect(s.filter((x) => x.kind === "field").map((x) => x.label)).toEqual(["Appearance", "Aroma", "Flavour", "Finish", "Style", "ABV", "Format", "Vibe"]);
+    expect(s.find((x) => x.label === "ABV")?.text).toBe("4.8%");
+    expect(s.find((x) => x.label === "Vibe")?.text).toBe('Balanced, vibrant, and incredibly "moreish."');
+  });
+
   test("the word Description is dropped and every label gets its own line", () => {
     const b = describeBlocks(real);
     expect(b[0]).toEqual({ kind: "text", text: expect.stringMatching(/^Švyturys Ekstra is Lithuania/) });

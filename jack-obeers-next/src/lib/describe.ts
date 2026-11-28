@@ -7,12 +7,12 @@
 export type DescBlock = { kind: "text" | "heading" | "field"; label?: string; text: string };
 
 const HEADINGS = ["Tasting Notes", "Allergens & Dietary Information", "Allergens and Dietary Information", "Food Pairings", "Manufacturer Information"];
-const FIELDS = ["Appearance", "Aroma", "Palate", "Finish", "Taste", "Contains", "Ingredients", "Dietary", "Suitability", "Brewery", "Parent Company"];
+const FIELDS = ["Appearance", "Aroma", "Palate", "Finish", "Taste", "Contains", "Ingredients", "Dietary", "Suitability", "Brewery", "Parent Company", "Flavour", "Quick Specs", "Style", "ABV", "Format", "Vibe", "Key Details", "Tasting Profile", "Product Details", "Flavor Profile", "Food Pairing", "Experience", "Cheeses", "Desserts", "Producer", "Region", "Grapes", "Grape"];
 const esc = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const TOKEN = new RegExp(`(${HEADINGS.map(esc).join("|")}|(?:${FIELDS.map(esc).join("|")}):)`, "g");
 
 export function describeBlocks(raw: string | null | undefined): DescBlock[] {
-  const t = (raw || "").replace(/\s+/g, " ").trim().replace(/^Description\b:?\s*/, "");
+  const t = (raw || "").replace(/\s+/g, " ").trim().replace(/^Description(?=[\p{Lu}:\s]|$):?\s*/u, "");
   if (!t) return [];
   const parts = t.split(TOKEN);
   const out: DescBlock[] = [];
@@ -20,8 +20,9 @@ export function describeBlocks(raw: string | null | undefined): DescBlock[] {
   if (intro) out.push({ kind: "text", text: intro });
   for (let i = 1; i < parts.length; i += 2) {
     const token = parts[i];
-    const body = (parts[i + 1] || "").trim();
-    if (token.endsWith(":")) out.push({ kind: "field", label: token.slice(0, -1), text: body });
+    const body = (parts[i + 1] || "").replace(/^\s*:\s*/, "").trim();
+    if (token.endsWith(":") && !body) out.push({ kind: "heading", text: token.slice(0, -1) });
+    else if (token.endsWith(":")) out.push({ kind: "field", label: token.slice(0, -1), text: body });
     else {
       out.push({ kind: "heading", text: token });
       if (body) out.push({ kind: "text", text: body });
