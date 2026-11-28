@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { statSync, readdirSync } from "fs";
 
 /**
  * The Christmas look, on the preview build (where ?xmas=on|off is allowed for testing before December).
@@ -19,8 +20,9 @@ test("on: hats on the logos, the headline, lights and garland show; nothing cove
   await expect(page.locator(".bh-copy .xkicker")).toHaveText("Christmas at Jack O’Beers");
   await expect(page.locator(".bh-hero .xsparkle")).toBeVisible();
   await expect(page.locator(".bh-hero .xcorner-hero")).toBeVisible();
-  await expect(page.locator("#events-home .xcorner-sec")).toBeVisible();
-  await expect(page.locator(".bh-hero .xgarland")).toBeVisible();
+  await expect(page.locator("#this-week .xsec-corner")).toBeAttached();
+  await expect(page.locator("#events-home .xsec-sprig")).toBeAttached();
+  if (isMobile) await expect(page.locator(".bh-hero .xtree-hero")).toBeHidden(); else await expect(page.locator(".bh-hero .xtree-hero")).toBeVisible();
   // decoration never catches a click and is hidden from assistive technology
   expect(await page.locator(".bh-hero .xdecor").evaluate((el) => getComputedStyle(el).pointerEvents)).toBe("none");
   await expect(page.locator(".xdecor").first()).toHaveAttribute("aria-hidden", "true");
@@ -34,7 +36,7 @@ test("the original logo files are untouched and still the ones in the page; the 
   const xs = await page.locator("img.xlogo").evaluateAll((a) => a.map((i) => (i as HTMLImageElement).getAttribute("src")));
   expect(xs.sort()).toEqual(["/media/jack-christmas-lying.png", "/media/jack-christmas-mascot.png", "/media/jack-christmas-standing.png", "/media/jack-christmas-standing.png"]);
   // the decorations are not downloaded either
-  expect(await page.locator(".xgarland, .xsparkle, .xcorner").evaluateAll((a) => a.every((i) => !(i as HTMLImageElement).currentSrc))).toBe(true);
+  expect(await page.locator(".xsparkle, .xcorner, .xtree").evaluateAll((a) => a.every((i) => !(i as HTMLImageElement).currentSrc))).toBe(true);
   // off: the Christmas logos are not shown and not downloaded
   await expect(page.locator("img.xlogo:visible")).toHaveCount(0);
   expect(await page.locator("img.xlogo").evaluateAll((a) => a.every((i) => !(i as HTMLImageElement).currentSrc))).toBe(true);
@@ -43,7 +45,7 @@ test("the original logo files are untouched and still the ones in the page; the 
 test("off: no hat, no decoration, no headline", async ({ page }) => {
   await page.goto("/?xmas=off");
   await expect(page.locator(".xlogo:visible, .xdecor:visible, .xkicker:visible")).toHaveCount(0);
-  await expect(page.locator(".xcorner:visible, .xgarland:visible, .xsparkle:visible")).toHaveCount(0);
+  await expect(page.locator(".xcorner:visible, .xtree:visible, .xsparkle:visible")).toHaveCount(0);
   await expect(page.locator(".brand img:not(.xlogo)")).toBeVisible();
   await expect(page.locator("#this-week")).toBeVisible();
   await expect(page.locator("#events-home")).toBeVisible();
@@ -98,4 +100,48 @@ test("festive details on other pages are small: Christmas logo in the header, no
   await expect(page.locator(".brand img.xlogo")).toBeVisible();
   await expect(page.locator(".xdecor:visible")).toHaveCount(0);
   await expect(page.locator(".pcard .xlogo, .cartbtn .xlogo")).toHaveCount(0);
+});
+
+test("decorations never cover text, buttons or the navigation", async ({ page, isMobile }) => {
+  await page.goto("/?xmas=on");
+  await page.locator("#this-week").scrollIntoViewIfNeeded();
+  await page.evaluate(() => window.scrollTo(0, 0));
+  const hdr = await page.locator(".hdr").boundingBox();
+  const hit = async (sel: string) => (await page.locator(sel).first().boundingBox())!;
+  const overlaps = (a: { x: number; y: number; width: number; height: number }, b: { x: number; y: number; width: number; height: number }) => !(a.x + a.width <= b.x || b.x + b.width <= a.x || a.y + a.height <= b.y || b.y + b.height <= a.y);
+  const corner = await hit(".bh-hero .xcorner-hero");
+  expect(corner.y).toBeGreaterThanOrEqual(hdr!.y + hdr!.height - 1); // starts below the header
+  for (const sel of [".bh-h1", ".bh-cta", ".bh-copy .xkicker"]) expect(overlaps(corner, await hit(sel)), `corner vs ${sel}`).toBe(false);
+  if (!isMobile) {
+    const tree = await hit(".bh-hero .xtree-hero");
+    for (const sel of [".bh-h1", ".bh-cta", ".bh-lede", ".bh-lying img.xlogo", ".hdr"]) expect(overlaps(tree, await hit(sel)), `tree vs ${sel}`).toBe(false);
+  }
+  // the section decorations stay clear of the headings and buttons
+  for (const [sec, deco, avoid] of [["#this-week", ".xsec-corner", "h2"], ["#events-home", ".xsec-sprig", ".btn"]] as const) {
+    await page.locator(sec).scrollIntoViewIfNeeded();
+    const d = await hit(`${sec} ${deco}`);
+    for (const el of await page.locator(`${sec} ${avoid}`).all()) {
+      // measure the words, not the full-width box around them
+      const box = await el.evaluate((n) => { const r = document.createRange(); r.selectNodeContents(n); const b = r.getBoundingClientRect(); return { x: b.x, y: b.y, width: b.width, height: b.height }; });
+      expect(overlaps(d, box), `${sec} ${deco} vs ${avoid}`).toBe(false);
+    }
+  }
+});
+
+test("the Christmas pictures are genuinely transparent and light", async ({ page }) => {
+  await page.goto("/?xmas=on");
+  const files = ["christmas-tree", "christmas-sparkles", "christmas-sprig", "christmas-corner"];
+  for (const f of files) {
+    const r = await page.evaluate(async (u) => {
+      const img = new Image(); img.src = u; await img.decode();
+      const c = document.createElement("canvas"); c.width = img.naturalWidth; c.height = img.naturalHeight;
+      const x = c.getContext("2d")!; x.drawImage(img, 0, 0);
+      const d = x.getImageData(0, 0, c.width, c.height).data; let clear = 0; for (let i = 3; i < d.length; i += 4) if (d[i] === 0) clear++;
+      return { corners: [d[3], d[(c.width - 1) * 4 + 3], d[(c.height - 1) * c.width * 4 + 3], d[d.length - 1]], clear: clear / (d.length / 4) };
+    }, `/media/${f}.webp`);
+    expect(r.corners, f).toEqual([0, 0, 0, 0]);
+    expect(r.clear, f).toBeGreaterThan(0.4);
+  }
+  const bytes = readdirSync("public/media").filter((n) => /^(christmas-|jack-christmas-)/.test(n)).reduce((t, n) => t + statSync(`public/media/${n}`).size, 0);
+  expect(bytes).toBeLessThan(1_800_000); // all the Christmas pictures together; none is downloaded outside December
 });

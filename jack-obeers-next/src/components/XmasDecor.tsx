@@ -1,27 +1,29 @@
 /**
  * Christmas decoration for the homepage hero. All of it is hidden unless <html data-xmas="on"> (see lib/season.ts), so in
  * the other eleven months it adds nothing to the page and the pictures are never downloaded (lazy images that are not displayed).
- * A garland with fairy lights across the top, a sparkle-and-snowflake layer, and a holly corner. Decoration only: hidden from
- * assistive technology, never catches a click, and sits behind the headline. The sparkle layer drifts very slowly and stops
+ * A light evergreen corner, a few gold sparkles and snowflakes, and a decorated tree standing near the hero edge on wide screens. Decoration only: hidden from
+ * assistive technology, never catches a click, and sits behind the headline. The sparkles drift very slowly and stops
  * with reduced motion.
  */
 export function XmasDecor() {
   return (
     <div className="xdecor" aria-hidden="true">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img className="xgarland" src="/media/christmas-garland.png" alt="" width={1200} height={200} loading="lazy" decoding="async" />
+      <img className="xsparkle" src="/media/christmas-sparkles.webp" alt="" width={1000} height={663} loading="lazy" decoding="async" />
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img className="xsparkle" src="/media/christmas-sparkles.png" alt="" width={1200} height={675} loading="lazy" decoding="async" />
+      <img className="xcorner xcorner-hero" src="/media/christmas-corner.webp" alt="" width={760} height={629} loading="lazy" decoding="async" />
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img className="xcorner xcorner-hero" src="/media/christmas-corner.png" alt="" width={560} height={560} loading="lazy" decoding="async" />
+      <img className="xtree xtree-hero" src="/media/christmas-tree.webp" alt="" width={420} height={716} loading="lazy" decoding="async" />
     </div>
   );
 }
 
-/** A holly corner for the two permanent sections, in the Christmas season only. */
-export function XmasCorner() {
+/** Small evergreen and holly arrangements for the two permanent sections, in the Christmas season only. */
+export function XmasSectionDecor({ kind }: { kind: "corner" | "sprig" }) {
+  const src = kind === "corner" ? "/media/christmas-corner.webp" : "/media/christmas-sprig.webp";
+  const [w, h] = kind === "corner" ? [760, 629] : [560, 316];
   // eslint-disable-next-line @next/next/no-img-element
-  return <img className="xcorner xcorner-sec" src="/media/christmas-corner.png" alt="" aria-hidden="true" width={560} height={560} loading="lazy" decoding="async" />;
+  return <img className={`xcorner xsec-${kind}`} src={src} alt="" aria-hidden="true" width={w} height={h} loading="lazy" decoding="async" />;
 }
 
 /** The small headline above the hero heading. */

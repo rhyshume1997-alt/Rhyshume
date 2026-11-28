@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { londonDate, londonWeek, weekLabel, prettyDate } from "@/lib/london";
-import { XmasCorner } from "@/components/XmasDecor";
+import { XmasSectionDecor } from "@/components/XmasDecor";
 import { inWeek, type WeeklyUpdate } from "@/lib/weekly";
 
 /**
@@ -33,6 +33,7 @@ export function ThisWeek({ updates, events, serverToday }: { updates: WeeklyUpda
   const onThisWeek = events.filter((e) => e.date >= wk.start && e.date <= wk.end && e.date >= today).sort((a, b) => a.date.localeCompare(b.date));
   return (
     <section className="week" id="this-week" aria-labelledby="week-h">
+      <XmasSectionDecor kind="corner" />
       <div className="wrap">
         <p className="mono" data-week-range="">{weekLabel(wk)}</p>
         <h2 className="h2" id="week-h">What&rsquo;s Happening This Week</h2>
@@ -68,7 +69,7 @@ export function EventsSection({ events, serverToday }: { events: HomeEvent[]; se
   const upcoming = events.filter((e) => e.date >= today).sort((a, b) => a.date.localeCompare(b.date) || (a.time || "").localeCompare(b.time || "")).slice(0, 3);
   return (
     <section className="evsec" id="events-home" aria-labelledby="evsec-h">
-      <XmasCorner />
+      <XmasSectionDecor kind="sprig" />
       <div className="wrap">
         <p className="mono">At the shop</p>
         <h2 className="h2" id="evsec-h">Events</h2>
