@@ -183,6 +183,15 @@ test.describe("product descriptions are split into short labelled parts", () => 
     expect(s.find((x) => x.label === "Vibe")?.text).toBe('Balanced, vibrant, and incredibly "moreish."');
   });
 
+  test("a glued Description in the middle of the text is dropped, the title before it stays its own line", () => {
+    const b = describeBlocks("Ursus Premium Blonde Beer 500ml Can (5.0% ABV) DescriptionThe \"King of Beer\" in Romania. Tasting Notes Appearance: Bright gold.");
+    expect(b[0]).toEqual({ kind: "text", text: "Ursus Premium Blonde Beer 500ml Can (5.0% ABV)" });
+    expect(b[1]).toEqual({ kind: "text", text: 'The "King of Beer" in Romania.' });
+    expect(b.some((x) => /Description/.test(x.text))).toBe(false);
+    expect(b.find((x) => x.label === "Appearance")?.text).toBe("Bright gold.");
+    expect(describeBlocks("A fine description of the beer.")).toEqual([{ kind: "text", text: "A fine description of the beer." }]);
+  });
+
   test("the word Description is dropped and every label gets its own line", () => {
     const b = describeBlocks(real);
     expect(b[0]).toEqual({ kind: "text", text: expect.stringMatching(/^Švyturys Ekstra is Lithuania/) });

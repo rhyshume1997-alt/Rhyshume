@@ -14,6 +14,12 @@ const TOKEN = new RegExp(`(${HEADINGS.map(esc).join("|")}|(?:${FIELDS.map(esc).j
 export function describeBlocks(raw: string | null | undefined): DescBlock[] {
   const t = (raw || "").replace(/\s+/g, " ").trim().replace(/^Description(?=[\p{Lu}:\s]|$):?\s*/u, "");
   if (!t) return [];
+  // "Title (5.0% ABV) DescriptionThe King of..." : a glued "Description" later in the text is dropped and the text before it stays its own paragraph.
+  const segs = t.split(/\s*\bDescription(?=[\p{Lu}])/u).map((x) => x.trim()).filter(Boolean);
+  return segs.flatMap(splitSegment);
+}
+
+function splitSegment(t: string): DescBlock[] {
   const parts = t.split(TOKEN);
   const out: DescBlock[] = [];
   const intro = (parts[0] || "").trim();
