@@ -95,7 +95,7 @@ test.describe("Permanent sections", () => {
     await expect(page.locator("html")).toHaveAttribute("data-xmas", "off");
     await expect(page.getByRole("heading", { name: "What’s Happening This Week", level: 2 })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Events", level: 2, exact: true })).toBeVisible();
-    await expect(page.locator(".xhat:visible")).toHaveCount(0);
+    await expect(page.locator(".xlogo:visible, .xcorner:visible")).toHaveCount(0);
     await expect(page.locator(".xkicker:visible")).toHaveCount(0);
     await expect(page.getByRole("link", { name: "View All Events" })).toHaveAttribute("href", "/events");
   });

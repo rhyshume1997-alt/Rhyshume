@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { londonDate, londonWeek, weekLabel, prettyDate } from "@/lib/london";
+import { XmasCorner } from "@/components/XmasDecor";
 import { inWeek, type WeeklyUpdate } from "@/lib/weekly";
 
 /**
@@ -67,6 +68,7 @@ export function EventsSection({ events, serverToday }: { events: HomeEvent[]; se
   const upcoming = events.filter((e) => e.date >= today).sort((a, b) => a.date.localeCompare(b.date) || (a.time || "").localeCompare(b.time || "")).slice(0, 3);
   return (
     <section className="evsec" id="events-home" aria-labelledby="evsec-h">
+      <XmasCorner />
       <div className="wrap">
         <p className="mono">At the shop</p>
         <h2 className="h2" id="evsec-h">Events</h2>

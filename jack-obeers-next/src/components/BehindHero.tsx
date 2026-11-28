@@ -1,7 +1,6 @@
 import { OpenNow } from "@/components/OpenNow";
 import { ADDRESS } from "@/lib/site";
 import { XmasDecor, XmasKicker } from "@/components/XmasDecor";
-import { SantaHat } from "@/components/SantaHat";
 
 /**
  * "Behind the Counter" opening. The real tap wall is the picture. The headline sits to the left on dark mahogany and
@@ -38,13 +37,16 @@ export function BehindHero() {
         <a className="bh-lying" href="/" aria-label={`Jack O’Beers and Deli, ${ADDRESS.street}, ${ADDRESS.town}`}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/media/jack-logo-lying.png" alt="Jack O’Beers and Deli logo: Jack the bull lying down with a barrel" width={480} height={370} loading="lazy" decoding="async" />
-          <SantaHat where="lying" />
+          {/* Christmas version of the same logo: hidden unless html[data-xmas="on"], see lib/season.ts. It is not fetched in the other months. */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="xlogo" src="/media/jack-christmas-lying.png" alt="Jack O’Beers and Deli Christmas logo: Jack the bull in a Santa hat, lying down with a barrel" width={720} height={565} loading="lazy" decoding="async" />
         </a>
         {/* Phone: the supplied vector logo on a cream sign that straddles the edge of the cream shop. */}
         <a className="bh-sign" href="/" aria-label={`Jack O’Beers and Deli, ${ADDRESS.street}, ${ADDRESS.town}`}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/media/jack-logo.svg" alt="Jack O’Beers and Deli logo: Jack the bull with a barrel" width={280} height={288} loading="lazy" decoding="async" />
-          <SantaHat where="sign" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="xlogo" src="/media/jack-christmas-standing.png" alt="Jack O’Beers and Deli Christmas logo: Jack the bull in a Santa hat with a barrel" width={640} height={712} loading="lazy" decoding="async" />
         </a>
       </div>
     </section>

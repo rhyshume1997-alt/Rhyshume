@@ -1981,29 +1981,24 @@ html[data-look="behind"] :is(.newin ul, .seg, .board)::-webkit-scrollbar-button 
 .atb.atb-sized .atb-msg { grid-column: 1 / -1; }
 
 /* ===== Christmas (temporary). Everything below only shows when <html data-xmas="on">, see src/lib/season.ts. ===== */
-.xhat, .xdecor, .xkicker { display: none; }
-.brand, .about-logo-wrap { position: relative; }
-.about-logo-wrap { display: block; width: fit-content; }
-.xhat { position: absolute; pointer-events: none; transform: rotate(-8deg); transform-origin: 50% 100%; z-index: 5; }
-.xhat-brand { left: .5rem; top: -.5rem; width: 1.55rem; }
-.xhat-lying { left: 23%; top: 0; width: 21%; }
-.xhat-sign { left: 27%; top: 5%; width: 29%; }
-.xhat-about { left: 19%; top: 4%; width: 30%; }
-@media (max-width: 40rem) { .xhat-brand { left: .4rem; top: -.45rem; width: 1.4rem; } }
-html[data-xmas="on"] .xhat { display: block; }
+.xlogo, .xdecor, .xkicker { display: none; }
+/* The Christmas logo replaces the normal one (both are in the page; only one shows). The normal logo files are never edited. */
+html[data-xmas="on"] .xlogo { display: block; }
+html[data-xmas="on"] :is(.brand, .bh-lying, .bh-sign) img:not(.xlogo), html[data-xmas="on"] .about-side img.about-logo:not(.xlogo) { display: none; }
+html[data-xmas="on"] .brand img.xlogo { width: 3rem; height: 3rem; padding: 0; border-radius: 0; background: none; box-shadow: none; object-fit: contain; }
+html[data-xmas="on"] .bh-lying img.xlogo { filter: drop-shadow(0 .5rem .7rem rgba(0, 0, 0, .5)); }
+@media (max-width: 40rem) { html[data-xmas="on"] .brand img.xlogo { width: 2.7rem; height: 2.7rem; } }
 html[data-xmas="on"] .xdecor { display: block; position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-.xgarland { position: absolute; left: 0; top: var(--hdr, 4rem); width: 100%; height: 3.4rem; opacity: .95; }
-.xlights { position: absolute; left: 0; right: 0; top: calc(var(--hdr, 4rem) + .9rem); display: flex; justify-content: space-between; padding: 0 2%; margin: 0; list-style: none; }
-.xlights li { width: .55rem; height: .8rem; border-radius: 50% 50% 55% 55%; background: var(--c); box-shadow: 0 0 .7rem .15rem color-mix(in srgb, var(--c) 55%, transparent); animation: xtwinkle 3.2s ease-in-out infinite; animation-delay: var(--d); }
-.xlights li:nth-child(odd) { margin-top: .55rem; }
-.xstar { position: absolute; width: .5rem; height: .5rem; background: #f7dc8a; clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); opacity: .8; }
-.xs1 { left: 9%; top: 24%; } .xs2 { left: 47%; top: 17%; width: .38rem; height: .38rem; } .xs3 { left: 86%; top: 30%; width: .44rem; height: .44rem; }
-.xsnow { position: absolute; inset: 0; opacity: .55; background-image: radial-gradient(circle, #fff 0 1.6px, transparent 2.4px), radial-gradient(circle, #fff 0 1.2px, transparent 2px), radial-gradient(circle, #fff 0 2px, transparent 3px); background-size: 220px 260px, 170px 210px, 310px 340px; background-position: 0 0, 60px 90px, 120px 40px; animation: xsnow 38s linear infinite; }
-@keyframes xtwinkle { 0%, 100% { opacity: 1; } 50% { opacity: .55; } }
-@keyframes xsnow { to { background-position: 0 260px, 60px 300px, 120px 380px; } }
+.xgarland { position: absolute; left: 0; top: var(--hdr, 4rem); width: 100%; height: clamp(3.5rem, 9vw, 7.5rem); object-fit: cover; object-position: 50% 0; -webkit-mask-image: linear-gradient(#000 72%, transparent); mask-image: linear-gradient(#000 72%, transparent); }
+.xsparkle { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; mix-blend-mode: screen; opacity: .75; animation: xdrift 14s ease-in-out infinite alternate; }
+.xcorner { position: absolute; pointer-events: none; height: auto; }
+.xcorner-hero { right: 0; top: calc(var(--hdr, 4rem) + clamp(3.5rem, 9vw, 7.5rem) - 1.6rem); width: clamp(5.5rem, 13vw, 12rem); transform: scaleX(-1); }
+.xcorner-sec { display: none; right: 0; top: 0; width: clamp(4.5rem, 11vw, 9rem); transform: scaleX(-1); z-index: 1; }
+html[data-xmas="on"] .xcorner-sec { display: block; }
+@keyframes xdrift { from { transform: translateY(-.6%); opacity: .6; } to { transform: translateY(.6%); opacity: .85; } }
 html[data-xmas="on"] .xkicker { display: inline-flex; align-items: center; gap: .5rem; margin: 0; padding: .3rem .95rem; border-radius: 99px; background: #1f5a34; color: #fbf7ec; border: 1.5px solid #e8b13c; font: 700 .82rem/1.2 var(--ui); letter-spacing: .02em; position: relative; z-index: 2; }
 html[data-xmas="on"] .xkicker::before { content: ""; width: .5rem; height: .5rem; background: #e8b13c; clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); }
-@media (prefers-reduced-motion: reduce) { .xlights li, .xsnow { animation: none; } .xsnow { opacity: .35; } }
+@media (prefers-reduced-motion: reduce) { .xsparkle { animation: none; opacity: .6; } }
 
 /* ===== Permanent homepage sections: "What's Happening This Week" and "Events". They show all year. ===== */
 .week, .evsec { position: relative; padding-block: clamp(3rem, 7vw, 5.5rem); }
