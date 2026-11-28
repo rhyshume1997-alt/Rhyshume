@@ -315,7 +315,7 @@ test.describe("On tap page (from Michael's tap guide)", () => {
     const t = await page.locator("main").innerText();
     expect(t).toMatch(/Waterpistol/);
     expect(t).toMatch(/£5\.50\s*500ml/);
-    expect(t).not.toMatch(/Style guide|Confirm|check keg|Awaiting keg|Product name missing|Ricky Stien|Frizzante|Spritz/i);
+    expect(t).not.toMatch(/Style guide|Listed as|tap sheet|Confirm|check keg|Awaiting keg|Product name missing|Ricky Stien|Frizzante|Spritz/i);
   });
   test("the Shop menu links to it", async ({ page }) => {
     await page.goto("/");
