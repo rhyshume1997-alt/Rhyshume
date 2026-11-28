@@ -1990,6 +1990,18 @@ html[data-xmas="on"] .bh-lying img.xlogo { filter: drop-shadow(0 .5rem .7rem rgb
 @media (max-width: 40rem) { html[data-xmas="on"] .brand img.xlogo { width: 2.7rem; height: 2.7rem; } }
 html[data-xmas="on"] .xdecor { display: block; position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
 .xsparkle { position: absolute; right: 0; top: 4%; width: 58%; height: auto; mix-blend-mode: screen; opacity: .4; animation: xdrift 16s ease-in-out infinite alternate; }
+/* Falling snow: three layers of small flakes, far (tiny, faint, slow) to near (larger, brighter, quicker). Each layer is one element
+   moved with transform by exactly one repeat of its pattern, so the loop has no seam and nothing is repainted. */
+.xsnow { position: absolute; inset: 0; overflow: hidden; }
+.xsnow i { position: absolute; left: 0; width: 100%; will-change: transform; animation: xfall linear infinite; background-repeat: repeat; }
+.xsnow i:nth-child(1) { --d: 600px; top: -600px; height: calc(100% + 600px); animation-duration: 50s; opacity: .5;
+  background-image: radial-gradient(circle, #fff 0 .9px, transparent 1.4px), radial-gradient(circle, #fff 0 .8px, transparent 1.3px), radial-gradient(circle, #fff 0 1px, transparent 1.5px); background-size: 100px 100px, 150px 150px, 200px 200px; background-position: 12px 20px, 70px 90px, 130px 40px; }
+.xsnow i:nth-child(2) { --d: 720px; top: -720px; height: calc(100% + 720px); animation-duration: 33s; opacity: .65;
+  background-image: radial-gradient(circle, #fff 0 1.3px, transparent 2px), radial-gradient(circle, #fff 0 1.1px, transparent 1.8px), radial-gradient(circle, #fff 0 1.5px, transparent 2.2px); background-size: 120px 120px, 180px 180px, 240px 240px; background-position: 40px 10px, 110px 130px, 20px 170px; }
+.xsnow i:nth-child(3) { --d: 840px; top: -840px; height: calc(100% + 840px); animation-duration: 23s; opacity: .8;
+  background-image: radial-gradient(circle, #fff 0 1.9px, transparent 2.7px), radial-gradient(circle, #fff 0 1.6px, transparent 2.4px); background-size: 210px 210px, 280px 280px; background-position: 60px 50px, 190px 120px; }
+@keyframes xfall { to { transform: translate3d(0, var(--d), 0); } }
+@media (max-width: 40rem) { .xsnow i:nth-child(2) { display: none; } } /* two layers on phones */
 .xcorner { position: absolute; pointer-events: none; height: auto; display: none; }
 html[data-xmas="on"] .xcorner { display: block; }
 .xcorner-hero { right: 0; top: var(--hdr, 4rem); width: clamp(7rem, 19vw, 16rem); }
@@ -1998,7 +2010,7 @@ html[data-xmas="on"] .xcorner { display: block; }
 @keyframes xdrift { from { transform: translateY(-.6%); opacity: .28; } to { transform: translateY(.6%); opacity: .4; } }
 html[data-xmas="on"] .xkicker { display: inline-flex; align-items: center; gap: .5rem; margin: 0; padding: .3rem .95rem; border-radius: 99px; background: #1f5a34; color: #fbf7ec; border: 1.5px solid #e8b13c; font: 700 .82rem/1.2 var(--ui); letter-spacing: .02em; position: relative; z-index: 2; }
 html[data-xmas="on"] .xkicker::before { content: ""; width: .5rem; height: .5rem; background: #e8b13c; clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); }
-@media (prefers-reduced-motion: reduce) { .xsparkle { animation: none; opacity: .32; } }
+@media (prefers-reduced-motion: reduce) { .xsnow { display: none; } .xsparkle { animation: none; opacity: .32; } }
 
 /* ===== Permanent homepage sections: "What's Happening This Week" and "Events". They show all year. ===== */
 .week, .evsec { position: relative; padding-block: clamp(3rem, 7vw, 5.5rem); }

@@ -1,13 +1,14 @@
 /**
  * Christmas decoration for the homepage hero. All of it is hidden unless <html data-xmas="on"> (see lib/season.ts), so in
  * the other eleven months it adds nothing to the page and the pictures are never downloaded (lazy images that are not displayed).
- * A light evergreen corner, a few gold sparkles and snowflakes. Decoration only: hidden from
+ * Light falling snow (three slow CSS layers, no images, only transform animated so it stays smooth on phones), a light evergreen corner, a few gold sparkles and snowflakes. Decoration only: hidden from
  * assistive technology, never catches a click, and sits behind the headline. The sparkles drift very slowly and stops
  * with reduced motion.
  */
 export function XmasDecor() {
   return (
     <div className="xdecor" aria-hidden="true">
+      <div className="xsnow"><i /><i /><i /></div>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img className="xsparkle" src="/media/christmas-sparkles.webp" alt="" width={1000} height={663} loading="lazy" decoding="async" />
       {/* eslint-disable-next-line @next/next/no-img-element */}

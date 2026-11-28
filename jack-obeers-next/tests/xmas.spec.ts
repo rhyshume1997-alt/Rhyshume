@@ -140,3 +140,17 @@ test("the Christmas pictures are genuinely transparent and light", async ({ page
   const bytes = readdirSync("public/media").filter((n) => /^(christmas-|jack-christmas-)/.test(n)).reduce((t, n) => t + statSync(`public/media/${n}`).size, 0);
   expect(bytes).toBeLessThan(1_800_000); // all the Christmas pictures together; none is downloaded outside December
 });
+
+test("falling snow: slow, three layers, on only in the season, off for reduced motion", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/?xmas=on");
+  const layers = page.locator(".bh-hero .xsnow i");
+  expect(await layers.count()).toBe(3);
+  expect(await layers.first().evaluate((el) => getComputedStyle(el).animationName)).toBe("xfall");
+  for (const i of [0, 1, 2]) expect(await layers.nth(i).evaluate((el) => parseFloat(getComputedStyle(el).animationDuration))).toBeGreaterThanOrEqual(20); // slow
+  expect(await page.locator(".bh-hero .xsnow").evaluate((el) => getComputedStyle(el.parentElement!).pointerEvents)).toBe("none");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(page.locator(".bh-hero .xsnow")).toBeHidden();
+  await page.goto("/?xmas=off");
+  await expect(page.locator(".xsnow:visible")).toHaveCount(0);
+});
